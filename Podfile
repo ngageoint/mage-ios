@@ -15,7 +15,6 @@ def common_pods
   pod 'MDFInternationalization'
   pod 'PureLayout'
   pod "AFNetworking", "~> 4.0.1"
-  pod "DateTools", "~> 2.0.0"
   pod "MagicalRecord", "~> 2.3.2"
   pod 'geopackage-ios', '~> 8.0.6'
   pod 'PROJ', :modular_headers => false

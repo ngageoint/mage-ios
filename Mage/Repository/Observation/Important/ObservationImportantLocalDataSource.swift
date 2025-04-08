@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import OSLog
 
 private struct ObservationImportantDataSourceProviderKey: InjectionKey {
     static var currentValue: ObservationImportantLocalDataSource = ObservationImportantCoreDataDataSource()
@@ -128,9 +129,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     important.important = true;
                     important.userId = userRemoteId;
                     important.reason = reason
-                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
                     important.timestamp = Date();
-                    print("Important existed, updating it")
                 } else {
                     let important = ObservationImportant(context: context)
                     important.observation = observation
@@ -139,18 +138,14 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     important.important = true;
                     important.userId = userRemoteId;
                     important.reason = reason
-                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
                     important.timestamp = Date();
                     try? context.obtainPermanentIDs(for: [important])
-                    print("Important created")
                 }
             }
-            print("Saving the flagged important")
             do {
                 try context.save()
-                print("Saved")
             } catch {
-                print("Error saving important \(error)")
+                os_log("Error: \(error)")
             }
         }
     }
@@ -219,6 +214,8 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
         return false
     }
     
+    // TODO: Random failure in here while testing
+    /// `Thread 1: "Object 0x9efe727cff74d814 <x-coredata://0275D695-CA3D-4ADC-B6D5-F48ADAD1FF67/ObservationImportant/p1> persistent store is not reachable from this NSManagedObjectContext's coordinator"`
     func handleServerPushResponse(important: ObservationImportantModel, response: [AnyHashable: Any]) {
         // verify that the current state in our data is the same as returned from the server
         guard let context = context else { return }
@@ -238,18 +235,16 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     localImportant.managedObjectContext?.refresh(observation, mergeChanges: false);
                 }
             }
-            try? context.save()
+            try? context.save()  // Error happened here.
         }
     }
 }
 
 extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("fetch controller found a thing \(anObject)")
         if let observationImportant = anObject as? ObservationImportant {
             switch type {
             case .insert:
-                NSLog("important inserted, push em")
                 if observationImportant.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
                 }
@@ -258,7 +253,6 @@ extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDele
             case .move:
                 break
             case .update:
-                NSLog("important updated, push em")
                 if observationImportant.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
                 }

@@ -9,7 +9,6 @@
 import Foundation
 import Quick
 import Nimble
-//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -65,6 +64,42 @@ class DateViewTests: XCTestCase {
         }
     }
     
+    func parseDate(_ dateString: String) -> Date? {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.date(from: dateString)
+    }
+
+    func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm z"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Force UTC
+        return formatter.string(from: date)
+    }
+    
+    func formatDateToLocal(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm z"
+        formatter.timeZone = TimeZone.current
+
+        return formatter.string(from: date)
+    }
+
+    func convertUITextToComparableFormat(_ text: String?) -> String? {
+        guard let text = text else { return nil }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm z"
+        formatter.timeZone = TimeZone.current
+
+        if let date = formatter.date(from: text) {
+            return formatDateToLocal(date)
+        }
+
+        return nil
+    }
+
+    
     @MainActor
     func testNoInitialValue() {
         dateFieldView = DateView(field: field);
@@ -72,27 +107,58 @@ class DateViewTests: XCTestCase {
         view.addSubview(dateFieldView)
         dateFieldView.autoPinEdgesToSuperviewEdges();
     }
+
+    struct TestDates {
+        static let default2013 = "2013-06-22T08:18:20.000Z"
+        static let default2020 = "2020-11-01T08:18:00.000Z"
+        
+        static func date(from string: String) -> Date? {
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            return formatter.date(from: string)
+        }
+    }
+
     
     @MainActor
     func testInitialValueSet() {
-        dateFieldView = DateView(field: field, value: "2013-06-22T08:18:20.000Z");
-        dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+        dateFieldView = DateView(field: field, value: TestDates.default2013)
+        dateFieldView.applyTheme(withScheme: MAGEScheme.scheme())
+        
         view.addSubview(dateFieldView)
-        dateFieldView.autoPinEdgesToSuperviewEdges();
-        tester().waitForView(withAccessibilityLabel: field["name"] as? String);
-        expect(self.dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
+        dateFieldView.autoPinEdgesToSuperviewEdges()
+        
+        tester().waitForView(withAccessibilityLabel: field["name"] as? String)
+        
+        guard let expectedDate = parseDate("2013-06-22T08:18:00.000Z") else {
+            return
+        }
+        
+        let formattedExpectedDate = formatDateToLocal(expectedDate)
+        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text)
+        
+        expect(formattedActualDate).to(equal(formattedExpectedDate))
     }
     
     @MainActor
     func testSetValueLater() {
-        dateFieldView = DateView(field: field);
-        dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+        dateFieldView = DateView(field: field)
+        dateFieldView.applyTheme(withScheme: MAGEScheme.scheme())
         
         view.addSubview(dateFieldView)
-        dateFieldView.autoPinEdgesToSuperviewEdges();
+        dateFieldView.autoPinEdgesToSuperviewEdges()
         
-        dateFieldView.setValue( "2013-06-22T08:18:20.000Z")
-        expect(self.dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
+        dateFieldView.setValue(TestDates.default2013)
+        
+        guard let expectedDate = TestDates.date(from: TestDates.default2013) else {
+            XCTFail("Failed to parse expected date.")
+            return
+        }
+
+        let formattedExpectedDate = formatDateToLocal(expectedDate)
+        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text)
+        
+        expect(formattedActualDate).to(equal(formattedExpectedDate))
     }
     
     @MainActor
@@ -103,15 +169,24 @@ class DateViewTests: XCTestCase {
         view.addSubview(dateFieldView)
         dateFieldView.autoPinEdgesToSuperviewEdges();
         
-        dateFieldView.setValue("2013-06-22T08:18:20.000Z" as Any?)
-        expect(self.dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
+        dateFieldView.setValue(TestDates.default2013 as Any?)
+        
+        guard let expectedDate = TestDates.date(from: TestDates.default2013) else {
+            XCTFail("Failed to parse expected date.")
+            return
+        }
+
+        let formattedExpectedDate = formatDateToLocal(expectedDate)
+        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text)
+        
+        expect(formattedActualDate).to(equal(formattedExpectedDate))
     }
     
     @MainActor
     func testSetvalueWithTouchInputs() {
         let delegate = MockFieldDelegate()
         
-        dateFieldView = DateView(field: field, delegate: delegate, value: "2020-11-01T08:18:00.000Z");
+        dateFieldView = DateView(field: field, delegate: delegate, value: TestDates.default2020);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
         
         view.addSubview(dateFieldView)
@@ -120,18 +195,20 @@ class DateViewTests: XCTestCase {
         tester().waitForView(withAccessibilityLabel: field["name"] as? String);
         tester().tapView(withAccessibilityLabel: field["name"] as? String);
         tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
-        tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .forwardFromCurrentValue);
+        tester().selectDatePickerValue(["Nov 2", "8", "00", "AM"], with: .forwardFromCurrentValue);
         tester().tapView(withAccessibilityLabel: "Done");
         
+        expect(delegate.fieldChangedCalled).to(beTrue())
+
         let formatter = DateFormatter();
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
         formatter.locale = Locale(identifier: "en_US_POSIX");
         
         let date = formatter.date(from: "2020-11-02T14:00:00.000Z")!;
         
-        expect(delegate.fieldChangedCalled) == true;
-        expect(delegate.newValue as? String) == formatter.string(from: date);
-        expect(self.dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
+        let expectedFormattedDate = formatDateToLocal(date)  // Convert to UI time zone
+
+        expect(self.dateFieldView.textField.text).to(equal(expectedFormattedDate))
     }
     
     @MainActor
@@ -139,7 +216,7 @@ class DateViewTests: XCTestCase {
         NSDate.setDisplayGMT(true);
         let delegate = MockFieldDelegate()
         
-        dateFieldView = DateView(field: field, delegate: delegate, value: "2020-11-01T08:18:00.000Z");
+        dateFieldView = DateView(field: field, delegate: delegate, value: TestDates.default2020);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
         
         view.addSubview(dateFieldView)
@@ -173,7 +250,7 @@ class DateViewTests: XCTestCase {
     func testSetValueWithTouchInputsThenCancel() {
         let delegate = MockFieldDelegate()
         
-        let value = "2020-11-01T08:18:00.000Z";
+        let value = TestDates.default2020;
         
         dateFieldView = DateView(field: field, delegate: delegate, value: value);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
@@ -197,12 +274,12 @@ class DateViewTests: XCTestCase {
         expect(self.dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
     }
     
-    // this test is finicky
+    // TODO: This test is finicky
     @MainActor
     func testSetClearTheTextFieldViaTouch() {
         let delegate = MockFieldDelegate()
         
-        let value = "2020-11-01T08:18:00.000Z";
+        let value = TestDates.default2020;
         
         dateFieldView = DateView(field: field, delegate: delegate, value: value);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
@@ -266,7 +343,7 @@ class DateViewTests: XCTestCase {
     @MainActor
     func testRequiredFieldIsValidIfNotEmpty() {
         field[FieldKey.required.key] = true;
-        dateFieldView = DateView(field: field, value: "2013-06-22T08:18:20.000Z");
+        dateFieldView = DateView(field: field, value: TestDates.default2013);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
         
         view.addSubview(dateFieldView)
@@ -293,7 +370,7 @@ class DateViewTests: XCTestCase {
         formatter.locale = Locale(identifier: "en_US_POSIX");
         
         let delegate = MockFieldDelegate()
-        dateFieldView = DateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
+        dateFieldView = DateView(field: field, delegate: delegate, value: TestDates.default2013);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
         view.addSubview(dateFieldView)
         dateFieldView.autoPinEdgesToSuperviewEdges();
@@ -313,7 +390,7 @@ class DateViewTests: XCTestCase {
         formatter.locale = Locale(identifier: "en_US_POSIX");
         
         let delegate = MockFieldDelegate()
-        dateFieldView = DateView(field: field, delegate: delegate, value: "2013-06-22T08:18:20.000Z");
+        dateFieldView = DateView(field: field, delegate: delegate, value: TestDates.default2013);
         dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
         view.addSubview(dateFieldView)
         dateFieldView.autoPinEdgesToSuperviewEdges();

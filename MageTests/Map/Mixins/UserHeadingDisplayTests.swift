@@ -33,6 +33,7 @@ extension UserHeadingDisplayTestImpl : MKMapViewDelegate {
     }
 }
 
+// TODO: THESE TESTS ARE FLAKY
 class UserHeadingDisplayTests: AsyncMageCoreDataTestCase {
     
     var navController: UINavigationController!

@@ -11,6 +11,7 @@ import MagicalRecord
 import Nimble
 import Kingfisher
 
+import XCTest
 @testable import MAGE
 
 extension XCTestCase {
@@ -30,16 +31,75 @@ extension XCTestCase {
 
 class TestHelpers {
     @MainActor
+    public static func setupAuthenticatedSession() {
+        MageSessionManager.shared()?.setToken("TOKEN")
+        StoredPassword.persistToken(toKeyChain: "TOKEN")
+        UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl")
+        UserDefaults.standard.set(true, forKey: "deviceRegistered")
+    }
+    
+    @MainActor
+    public static func setupNavigationController() -> UINavigationController {
+        let navigationController = UINavigationController()
+        let window = TestHelpers.getKeyWindowVisible()
+        window.rootViewController = navigationController
+        return navigationController
+    }
+    
+    @MainActor
+    public static func setupTestSession() {
+        setupAuthenticatedSession()
+        MockMageServer.stubAPIResponses()
+    }
+    
+    @MainActor
+    public static func initializeTestNavigation() -> UINavigationController {
+        return setupNavigationController()
+    }
+
+    @MainActor
+    public static func executeTestLogin(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation? = nil) {
+        let loginDelegate = coordinator as! LoginDelegate
+        let parameters: [String: Any] = [
+            "username": "test",
+            "password": "test",
+            "uid": "uuid",
+            "strategy": ["identifier": "local"],
+            "appVersion": "6.0.0"
+        ]
+
+        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "Authentication failed")
+            expectation?.fulfill()
+        }
+    }
+
+    
+    @MainActor
+    public static func handleDisclaimerAcceptance(coordinator: AuthenticationCoordinator, navigationController: UINavigationController) async {
+        await waitForCondition({
+            navigationController.topViewController is DisclaimerViewController
+        }, timeout: 2, message: "Disclaimer screen never appeared")
+
+        let disclaimerDelegate = coordinator as! DisclaimerDelegate
+        disclaimerDelegate.disclaimerAgree()
+    }
+
+    @MainActor
+    public static func waitForAuthenticationSuccess(delegate: MockAuthenticationCoordinatorDelegate) async {
+        await waitForCondition({
+            delegate.authenticationSuccessfulCalled
+        }, timeout: 2, message: "authenticationSuccessful was never called")
+    }
+
+    
+    @MainActor
     public static func getKeyWindowVisibleMainActor() -> UIWindow {
         var window: UIWindow;
         if (UIApplication.shared.windows.count == 0) {
             window = UIWindow(forAutoLayout: ());
             window.autoSetDimensions(to: UIScreen.main.bounds.size);
         } else {
-            NSLog("There are \(UIApplication.shared.windows.count) windows");
-            if (UIApplication.shared.windows.count != 1) {
-                NSLog("Windows are \(UIApplication.shared.windows)")
-            }
             window = UIApplication.shared.windows[0];
         }
         window.backgroundColor = .systemBackground;
@@ -53,10 +113,6 @@ class TestHelpers {
             window = UIWindow(forAutoLayout: ());
             window.autoSetDimensions(to: UIScreen.main.bounds.size);
         } else {
-            NSLog("There are \(UIApplication.shared.windows.count) windows");
-            if (UIApplication.shared.windows.count != 1) {
-                NSLog("Windows are \(UIApplication.shared.windows)")
-            }
             window = UIApplication.shared.windows[0];
         }
         window.backgroundColor = .systemBackground;
@@ -94,7 +150,6 @@ class TestHelpers {
     public static func getAllAccessibilityLabelsInWindows() -> [String]! {
         var labelArray = [String]()
         for  window in UIApplication.shared.windowsWithKeyWindow() {
-            print("window \(window)")
             labelArray += getAllAccessibilityLabels(window as! UIWindow )
         }
         
@@ -103,7 +158,6 @@ class TestHelpers {
     
     public static func printAllAccessibilityLabelsInWindows() {
         let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
-        NSLog("labelArray = \(labelArray ?? [])")
     }
     
     public static func clearImageCache() {
@@ -125,25 +179,25 @@ class TestHelpers {
             do {
                 try FileManager.default.removeItem(at: attachmentsDirectory);
             } catch {
-                print("Failed to remove attachments directory.  Moving on.")
+                os_log("Failed to remove attachments directory.  Moving on.")
             }
             
             do {
                 try FileManager.default.removeItem(at: eventsDirectory);
             } catch {
-                print("Failed to remove events directory.  Moving on.")
+                os_log("Failed to remove events directory.  Moving on.")
             }
             
             do {
                 try FileManager.default.removeItem(at: geopackagesDirectory);
             } catch {
-                print("Failed to remove geopackages directory.  Moving on.")
+                os_log("Failed to remove geopackages directory.  Moving on.")
             }
             
             do {
                 try FileManager.default.removeItem(at: mapCacheDirectory);
             } catch {
-                print("Failed to remove geopackages directory.  Moving on.")
+                os_log("Failed to remove geopackages directory.  Moving on.")
             }
         }
         
@@ -151,14 +205,6 @@ class TestHelpers {
     
     static var coreDataStack: TestCoreDataStack?
     static var context: NSManagedObjectContext?
-    
-//    @discardableResult
-//    public static func clearAndSetUpStack() -> [String: Bool] {
-//        TestHelpers.clearDocuments();
-//        TestHelpers.clearImageCache();
-//        TestHelpers.resetUserDefaults();
-//        return [:]
-//    }
     
     public static func cleanUpStack() {
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
@@ -174,9 +220,6 @@ class TestHelpers {
         InjectedValues[\.nsManagedObjectContext] = nil
         coreDataStack!.reset()
         
-//        if (NSManagedObjectContext.mr_default() != nil) {
-//            NSManagedObjectContext.mr_default().reset();
-//        }
         MagicalRecord.cleanUp();
     }
     
@@ -314,5 +357,113 @@ class TestHelpers {
     static func defaultObservationIconInjection() {
         InjectedValues[\.observationIconLocalDataSource] = ObservationIconCoreDataDataSource()
         InjectedValues[\.observationIconRepository] = ObservationIconRepository()
+    }
+}
+
+extension TestHelpers {
+    @MainActor
+    static func waitForCondition(_ condition: @escaping () -> Bool, timeout: TimeInterval, message: String) async {
+        let startTime = Date()
+        while !condition() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail(message)
+                return
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s delay
+        }
+    }
+
+    @MainActor
+    static func awaitBlockTrue(block: @escaping () -> Bool, timeout: TimeInterval) async {
+        let startTime = Date()
+        
+        while !block() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timeout waiting for condition to be true")
+                return
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds delay
+        }
+    }
+
+    @MainActor
+    static func waitForLoginScreen(navigationController: UINavigationController, timeout: TimeInterval = 2) async {
+        await awaitBlockTrue(block: {
+            navigationController.topViewController is LoginViewController
+        }, timeout: timeout)
+    }
+
+    static func getTestServer() async -> MageServer {
+        let url = MageServer.baseURL()
+        return await withCheckedContinuation { continuation in
+            MageServer.server(url: url) { server in
+                continuation.resume(returning: server)
+            } failure: { error in
+                XCTFail("Failed to create test MageServer instance")
+            }
+        }
+    }
+}
+
+extension TestHelpers {
+    static func executeTestLoginForRegistration(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation) {
+        let loginDelegate = coordinator as! LoginDelegate
+        let parameters: [String: Any] = [
+            "username": "test",
+            "password": "test",
+            "uid": "uuid",
+            "strategy": ["identifier": "local"],
+            "appVersion": "6.0.0"
+        ]
+
+        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
+            let token = StoredPassword.retrieveStoredToken()
+            let mageSessionToken = MageSessionManager.shared().getToken()
+            XCTAssertEqual(token, "TOKEN")
+            XCTAssertEqual(token, mageSessionToken)
+            expectation.fulfill()
+        }
+    }
+}
+
+extension TestHelpers {
+    @MainActor
+    static func waitForDisclaimerScreen(navigationController: UINavigationController) async {
+        await waitForCondition({
+            navigationController.topViewController is DisclaimerViewController
+        }, timeout: 2, message: "Disclaimer screen never appeared")
+
+        await waitForCondition({
+            guard let topView = navigationController.topViewController?.view else { return false }
+            return viewHasAccessibilityLabel(topView, label: "disclaimer title") &&
+                   viewHasAccessibilityLabel(topView, label: "disclaimer text")
+        }, timeout: 2, message: "Disclaimer text/title not found")
+    }
+
+    private static func viewHasAccessibilityLabel(_ view: UIView, label: String) -> Bool {
+        if view.accessibilityLabel == label {
+            return true
+        }
+        for subview in view.subviews {
+            if viewHasAccessibilityLabel(subview, label: label) {
+                return true
+            }
+        }
+        return false
+    }
+}
+
+extension TestHelpers {
+    static func defaultLoginParameters(username: String = "test", password: String = "test") -> [String: Any] {
+        return [
+            "username": username,
+            "password": password,
+            "uid": "uuid",
+            "strategy": [
+                "identifier": "local"
+            ],
+            "appVersion": "6.0.0"
+        ]
     }
 }
