@@ -57,6 +57,8 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
         localDataSource.toggleFavorite(observationUri: observationUri, userRemoteId: userRemoteId)
     }
     
+    // TODO: There is some sort of bug causing a crash here.
+    // BRENT: 03/21/2025
     func pushFavorites(favorites: [ObservationFavoriteModel]?) async {
         MageLogger.misc.debug("XXX push favorites \(String(describing: favorites))")
         guard let favorites = favorites, !favorites.isEmpty else {
@@ -68,7 +70,7 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
             return
         }
         
-        // only push favorites that haven't already been told to be pushed
+        // Only push favorites that haven't already been told to be pushed
         var favoritesToPush: [URL : ObservationFavoriteModel] = [:]
         for favorite in favorites {
             if pushingFavorites[favorite.observationFavoriteUri] == nil {

@@ -248,7 +248,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -259,7 +259,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: countriesGeoPackagePath)
         
         let manager = GPKGGeoPackageFactory.manager()!
-        NSLog("Countries GeoPackage path \(countriesGeoPackagePath.absoluteString)")
+        os_log("Countries GeoPackage path \(countriesGeoPackagePath.absoluteString)")
         
         if !manager.exists("countries2") {
             manager.importGeoPackage(fromPath: countriesGeoPackagePath.path())
@@ -281,7 +281,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         let countriesGeoPackagePath2 = URL(fileURLWithPath: "\(documentsDirectory)/2/countries2.gpkg")
@@ -369,7 +369,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -380,7 +380,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: countriesGeoPackagePath)
         
         let manager = GPKGGeoPackageFactory.manager()!
-        NSLog("Countries GeoPackage path \(countriesGeoPackagePath.absoluteString)")
+        os_log("Countries GeoPackage path \(countriesGeoPackagePath.absoluteString)")
         
         if !manager.exists("countries2") {
             manager.importGeoPackage(fromPath: countriesGeoPackagePath.path())
@@ -402,7 +402,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         let countriesGeoPackagePath2 = URL(fileURLWithPath: "\(documentsDirectory)/2/countries2.gpkg")
@@ -534,7 +534,6 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations.count, 0)
         
         let cacheOverlays = await CacheOverlays.getInstance().getOverlays()
-        print("CAche Overlays: \(cacheOverlays)")
         
         let initialOverlay = await CacheOverlays.getInstance().getOverlays()[0]
         let initialGeoPackageOverlay = overlays[0]
@@ -604,7 +603,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -746,6 +745,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations2.count, 0)
     }
     
+    // TODO: Fails
     @MainActor
     func testAddGeoPackageTileLayerThenReAdd() async throws {
         
@@ -815,7 +815,6 @@ final class GeoPackageTests: MageCoreDataTestCase {
 
         let predicateExpectation2 = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             let overlays = self.getMapOverlays()
-            print("XXX overlays \(overlays)")
             return overlays[0] as? GPKGBoundedOverlay != initialGeoPackageOverlay as? GPKGBoundedOverlay
         }), object: nil)
         await fulfillment(of: [predicateExpectation2], timeout: 5)
@@ -826,6 +825,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations2.count, 0)
     }
     
+    // TODO: FAILS. Looks like data leakage is causing it
     @MainActor
     func testGetFeatureKeys() async throws {
         UserDefaults.standard.geoPackageFeaturesMaxFeaturesPerTable = 1000000
@@ -840,7 +840,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         

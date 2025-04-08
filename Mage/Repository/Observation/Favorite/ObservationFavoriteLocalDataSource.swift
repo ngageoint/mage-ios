@@ -79,10 +79,23 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
     }
     
     func getFavoritesToPush() -> [ObservationFavoriteModel] {
-        return self.favoritesFetchedResultsController?.fetchedObjects?.map({ favorite in
-            ObservationFavoriteModel(favorite: favorite)
-        }) ?? []
+        guard let favorites = self.favoritesFetchedResultsController?.fetchedObjects else { return [] }
+
+        return favorites.compactMap { favorite in
+            guard let context = favorite.managedObjectContext else {
+                return nil
+            }
+
+            let objectID = favorite.objectID
+            return context.performAndWait {
+                if let refreshedFavorite = context.object(with: objectID) as? ObservationFavorite {
+                    return ObservationFavoriteModel(favorite: refreshedFavorite)
+                }
+                return nil
+            }
+        }
     }
+
     
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<[ObservationFavoriteModel?], Never>? {
         guard let observationUri = observationUri else {
@@ -166,6 +179,7 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
                 MageLogger.misc.debug("favorite inserted, push em")
                 if favorite.observation?.remoteId != nil {
                     MageLogger.misc.debug("sending favorite to push subject")
+
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }
             case .delete:
@@ -174,6 +188,7 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
                 break
             case .update:
                 MageLogger.misc.debug("favorite updated, push em")
+
                 if favorite.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }

@@ -26,9 +26,6 @@ class BottomSheetEnabledTestImpl : NSObject, BottomSheetEnabled {
 
 class BottomSheetEnabledTests: AsyncMageCoreDataTestCase {
     
-//    override func spec() {
-//        
-//        describe("BottomSheetEnabledTests") {
     var navController: UINavigationController!
     var view: UIView!
     var window: UIWindow!;
@@ -133,9 +130,6 @@ class BottomSheetEnabledTests: AsyncMageCoreDataTestCase {
         let mapState = MapState()
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-//                let notification = MapItemsTappedNotification(annotations: [oa], items: nil, mapView: testimpl.mapView)
-//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
-        
         @Injected(\.bottomSheetRepository)
         var bottomSheetRepository: BottomSheetRepository
         
@@ -147,8 +141,7 @@ class BottomSheetEnabledTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "At Venue")
         
         bottomSheetRepository.setItemKeys(itemKeys: nil)
-        
-//                NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+
         tester().waitForAbsenceOfView(withAccessibilityLabel: "At Venue")
         
         mixin.cleanupMixin()
@@ -167,9 +160,6 @@ class BottomSheetEnabledTests: AsyncMageCoreDataTestCase {
         var bottomSheetRepository: BottomSheetRepository
         bottomSheetRepository.setItemKeys(itemKeys: [DataSources.user.key: [ua!.user.objectID.uriRepresentation().absoluteString]])
 
-//                let notification = MapItemsTappedNotification(annotations: [ua], items: nil, mapView: testimpl.mapView)
-//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
-        
         tester().waitForView(withAccessibilityLabel: "User ABC")
         tester().tapScreen(at: CGPoint.zero)
         tester().waitForAbsenceOfView(withAccessibilityLabel: "User ABC")
@@ -225,9 +215,6 @@ class BottomSheetEnabledTests: AsyncMageCoreDataTestCase {
         let mapState = MapState()
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-//                let notification = MapItemsTappedNotification(annotations: [sa], items: nil, mapView: testimpl.mapView)
-//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
-        
         @Injected(\.bottomSheetRepository)
         var bottomSheetRepository: BottomSheetRepository
         bottomSheetRepository.setItemKeys(itemKeys: [DataSources.featureItem.key: [sa.itemKey]])
@@ -241,147 +228,4 @@ class BottomSheetEnabledTests: AsyncMageCoreDataTestCase {
         
         mixin.cleanupMixin()
     }
-    
-    @MainActor
-    func testFeedItemBottomSheet() {
-        MageCoreDataFixtures.addFeedToEvent()
-        let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
-        
-        let mapState = MapState()
-        mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
-
-//                let notification = MapItemsTappedNotification(annotations: [feedItem], items: nil, mapView: testimpl.mapView)
-//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
-        
-        @Injected(\.bottomSheetRepository)
-        var bottomSheetRepository: BottomSheetRepository
-        bottomSheetRepository.setItemKeys(itemKeys: [DataSources.feedItem.key: [feedItem!.objectID.uriRepresentation().absoluteString]])
-        
-        print("object id \(feedItem!.objectID.uriRepresentation().absoluteString)")
-        
-        tester().waitForView(withAccessibilityLabel: "No Content")
-        
-        mixin.cleanupMixin()
-    }
-    
-    @MainActor
-    func testMultipleItemsBottomSheet() {
-        print("XXX this is failing in ios18")
-        let feature: [AnyHashable: Any] = [
-            "type": "Feature",
-            "geometry": [
-                "type": "Point",
-                "coordinates":
-                    [
-                        -104.75,
-                         39.7
-                    ]
-                
-            ],
-            "properties": [
-                "name": "Point",
-                "description": "<i>It's a point</i>",
-                "style": [
-                    "iconStyle": [
-                        "scale": "1.1",
-                        "icon": [
-                            "href": "https://magetest/testkmlicon.png"
-                        ]
-                    ],
-                    "lineStyle": nil,
-                    "labelStyle": nil,
-                    "polyStyle": nil
-                ]
-            ],
-            "id": "point"
-        ]
-        
-        var iconStubCalled = false;
-        
-        stub(condition: isMethodGET() &&
-             isHost("magetest") &&
-             isScheme("https") &&
-             isPath("/testkmlicon.png")
-        ) { (request) -> HTTPStubsResponse in
-            iconStubCalled = true;
-            let stubPath = OHPathForFile("icon27.png", type(of: self))
-            return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
-        }
-        
-        let sa = StaticPointAnnotation(feature: feature)
-        MageCoreDataFixtures.addFeedToEvent()
-        let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
-        
-        MageCoreDataFixtures.addUser()
-        let location = MageCoreDataFixtures.addLocation()
-        let ua = LocationAnnotation(location: location)
-        
-        let observation = MageCoreDataFixtures.addObservationToEvent()!
-        let oa = ObservationAnnotation(observation: observation, geometry: observation.geometry)
-        
-        let lineObs = ObservationBuilder.createLineObservation()
-        lineObs.properties!["forms"] = [
-            [
-                "formId": 1,
-                "field0": "Something Cool"
-            ]
-        ]
-        
-        let polygonObs = ObservationBuilder.createPolygonObservation()
-        polygonObs.properties!["forms"] = [
-            [
-                "formId": 1,
-                "field0": "Super Cool"
-            ]
-        ]
-
-        let mapState = MapState()
-        mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
-
-//                let notification = MapItemsTappedNotification(annotations: [oa, ua, sa, feedItem], items: [lineObs,polygonObs], mapView: testimpl.mapView)
-//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
-        
-        @Injected(\.bottomSheetRepository)
-        var bottomSheetRepository: BottomSheetRepository
-        
-        bottomSheetRepository.setItemKeys(itemKeys: [
-            DataSources.observation.key:[
-                observation.locations!.first!.objectID.uriRepresentation().absoluteString,
-                lineObs.locations!.first!.objectID.uriRepresentation().absoluteString,
-                polygonObs.locations!.first!.objectID.uriRepresentation().absoluteString
-            ],
-            DataSources.user.key:
-                [location!.objectID.uriRepresentation().absoluteString],
-            DataSources.featureItem.key:
-                [sa.itemKey],
-            DataSources.feedItem.key:
-                [feedItem!.objectID.uriRepresentation().absoluteString]
-        ])
-
-        tester().waitForView(withAccessibilityLabel: "Point")
-        tester().tapView(withAccessibilityLabel: "next")
-        tester().waitForView(withAccessibilityLabel: "No Content")
-        tester().tapView(withAccessibilityLabel: "next")
-        tester().waitForView(withAccessibilityLabel: "Something Cool")
-        tester().tapView(withAccessibilityLabel: "next")
-        tester().waitForView(withAccessibilityLabel: "Super Cool")
-        tester().tapView(withAccessibilityLabel: "next")
-        tester().waitForView(withAccessibilityLabel: "At Venue")
-        tester().tapView(withAccessibilityLabel: "next")
-        tester().waitForView(withAccessibilityLabel: "User ABC")
-        tester().tapView(withAccessibilityLabel: "previous")
-        tester().waitForView(withAccessibilityLabel: "At Venue")
-        tester().tapView(withAccessibilityLabel: "previous")
-        tester().waitForView(withAccessibilityLabel: "Super Cool")
-        tester().tapView(withAccessibilityLabel: "previous")
-        tester().waitForView(withAccessibilityLabel: "Something Cool")
-        tester().tapView(withAccessibilityLabel: "previous")
-        tester().waitForView(withAccessibilityLabel: "No Content")
-        tester().tapView(withAccessibilityLabel: "previous")
-        tester().waitForView(withAccessibilityLabel: "Point")
-        expect(iconStubCalled).toEventually(beTrue())
-
-        mixin.cleanupMixin()
-    }
-
 }

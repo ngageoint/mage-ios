@@ -14,6 +14,7 @@ import OHHTTPStubs
 
 @testable import MAGE
 
+// TODO: Tests are flaky
 class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     
     @Injected(\.observationPushService)
@@ -47,7 +48,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     }
     
     func testShouldTellTheServerToCreateAnObservationWithAnAttachment() async {
-        print("XXX --------------------------- starting with an attachment--------------------------- ")
         let idStubCalled = XCTestExpectation(description: "idStubCalled");
         
         stub(condition: isMethodPOST() &&
@@ -122,7 +122,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
             Nimble.fail()
             return;
         }
-        print("obs \(observation)")
 
         await fulfillment(of: [idStubCalled, createStubCalled], timeout: 2)
         await awaitBlockTrue {
@@ -130,12 +129,9 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         }
         var isPushing = await pushService.isPushingObservations()
         expect(isPushing).to(beFalse());
-        print("XXX --------------------------- ending with an attachment--------------------------- ")
     }
     
     func testShouldTellTheServerToCreateAnObservationWithAnAttachmentAndThenHaveItDeletedFromTheServer() async {
-        print("XXXX --------------------------- starting and then have it deleted--------------------------- ")
-
         var idStubCalled = false;
         
         stub(condition: isMethodPOST() &&
@@ -220,10 +216,8 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
             Nimble.fail()
             return;
         }
-        print("obs \(observation)")
         
         await awaitBlockTrue {
-            print("XXX id stub called check \(idStubCalled)")
             return idStubCalled == true
         }
         await awaitBlockTrue { return createStubCalled == true }
@@ -240,8 +234,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         
         await awaitBlockTrue { observationPushedAgain == true }
         await awaitBlockTrue { Attachment.mr_findAll()?.count == 0 }
-        
-        print("XXXX --------------------------- ending and then have it deleted--------------------------- ")
     }
     
     func testShouldCreateAnObservationAndCallDelegates() async {
@@ -315,7 +307,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         
         await fulfillment(of: [idStubCalled, createStubCalled], timeout: 2)
         await awaitBlockTrue {
-            print("delegate 1 \n\(delegate1)\n\ndelegate 2 \n\(delegate2)\n\n")
             return delegate1.didPushCalled
             && delegate1.pushedObservation != nil
             && delegate1.error == nil
@@ -326,7 +317,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     }
     
     func testShouldNotCreateAnObservationIfTheUserPreferencesSayToNot() {
-        // 2 is none
         UserDefaults.standard.set(2, forKey: "observationPushNetworkOption")
         
         var expectedObservationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
@@ -499,7 +489,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
              isScheme("https") &&
              isPath("/api/events/1/observations/observationabctest/favorite")
         ) { (request) -> HTTPStubsResponse in
-            print("stub called")
             let response: [String: Any] = [:];
             stubCalled = true;
             return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
@@ -526,7 +515,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     }
     
     func testShouldTellTheServerToAddAnObservationFavoriteAndThenRemoteItBeforeItIsSent() {
-        // 2 is none
         UserDefaults.standard.set(2, forKey: "observationPushNetworkOption")
         
         var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
@@ -555,7 +543,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     }
     
     func testShouldNotPushAFavoriteIfTheUserPreferencesSayToNot() {
-        // 2 is none
         UserDefaults.standard.set(2, forKey: "observationPushNetworkOption")
         
         var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
@@ -584,7 +571,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
              isScheme("https") &&
              isPath("/api/events/1/observations/observationabctest/favorite")
         ) { (request) -> HTTPStubsResponse in
-            print("stub called")
             let response: [String: Any] = [:];
             stubCalled = true;
             return HTTPStubsResponse(jsonObject: response, statusCode: 400, headers: nil);
@@ -624,7 +610,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     }
     
     func testShouldTellTheServerToMakeTheObservationImportant() {
-        print("XXX Starting the test")
         var stubCalled = false;
         
         stub(condition: isMethodPUT() &&
@@ -669,7 +654,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     }
     
     func testShouldNotTellTheServerTOMakeTheObservationImportantIfTheUserPreferencesSayToNot() {
-        // 2 is none
         UserDefaults.standard.set(2, forKey: "observationPushNetworkOption")
         
         var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
@@ -747,7 +731,6 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
              isPath("/api/events/1/observations/observationabctest/important")
         ) { (request) -> HTTPStubsResponse in
             let response: [String: Any] = [:];
-            print("SSSSSSSSS STUB CALLED")
             stubCalled = true;
             return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
         }

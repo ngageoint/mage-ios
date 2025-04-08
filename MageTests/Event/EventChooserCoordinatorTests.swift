@@ -22,9 +22,10 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
     }
 }
 
+// TODO: FLAKY TESTS
+// BRENT: These tests sometimes CRASH.
 class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
     override open func setUp() async throws {
-        print("XXX set up")
         try await super.setUp()
         await setUpViews()
         UserDefaults.standard.baseServerUrl = "https://magetest"
@@ -32,7 +33,6 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
     }
     
     override open func tearDown() async throws {
-        print("XXX tear down")
         try await super.tearDown()
         await tearDownViews()
     }
@@ -329,12 +329,9 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         
         coordinator?.start()
         
-        // first the coordinator will go load 2 events and be fine
-        // then it should load the three different events and present a refresh button which will update the event list
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
         tester().waitForView(withAccessibilityLabel: "OTHER EVENTS (2)")
         tester().waitForView(withAccessibilityLabel: "Event 2")
-        
         tester().waitForView(withAccessibilityLabel: "Refresh Events")
         tester().wait(forTimeInterval: 5)
         tester().waitForCell(at: IndexPath(row: 1, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
@@ -376,12 +373,9 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         
         coordinator?.start()
         
-        // first the coordinator will go load 2 events and be fine
-        // then it should load one event and present a refresh button which will update the event list
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
         tester().waitForView(withAccessibilityLabel: "OTHER EVENTS (2)")
         tester().waitForView(withAccessibilityLabel: "Event 2")
-        
         tester().waitForView(withAccessibilityLabel: "Refresh Events")
         tester().wait(forTimeInterval: 5)
         tester().waitForCell(at: IndexPath(row: 1, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")

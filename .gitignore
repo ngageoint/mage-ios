@@ -18,3 +18,5 @@ Mage.xcworkspace
 MAGE.xcworkspace
 
 Pods
+sonar-project.properties
+.sonar_lock
