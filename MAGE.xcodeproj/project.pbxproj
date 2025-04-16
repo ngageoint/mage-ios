@@ -5588,7 +5588,7 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 4.0.8;
+				MARKETING_VERSION = 4.0.9;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/geopackage_ios/geopackage-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/ogc_api_features_json_ios/ogc-api-features-json-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_geojson_ios/sf-geojson-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_ios/sf-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_proj_ios/sf-proj-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkb_ios/sf-wkb-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkt_ios/sf-wkt-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/tiff_ios/tiff-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
@@ -5597,6 +5597,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = NO;
 				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5621,7 +5623,7 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 4.0.8;
+				MARKETING_VERSION = 4.0.9;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
@@ -5629,6 +5631,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = NO;
 				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
 			};
