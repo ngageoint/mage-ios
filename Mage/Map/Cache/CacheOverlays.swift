@@ -67,7 +67,7 @@ import Foundation
             overlayNames.append(cacheName)
         }
         
-        overlays[cacheName] = overlay
+        overlays[cacheName] = overlay // !!! CRASHED HERE (Modifying SHARED Mutable state!)
     }
     
     func addCacheOverlay(overlay: CacheOverlay) async {
