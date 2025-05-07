@@ -10,6 +10,7 @@ import XCTest
 import OHHTTPStubs
 import Nimble
 import geopackage_ios
+import OSLog
 
 @testable import MAGE
 

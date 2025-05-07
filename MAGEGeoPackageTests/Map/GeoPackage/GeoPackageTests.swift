@@ -9,6 +9,7 @@
 import XCTest
 import OHHTTPStubs
 import geopackage_ios
+import OSLog
 
 @testable import MAGE
 
