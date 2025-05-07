@@ -114,7 +114,7 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
     [self.tableView endUpdates];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:on forKey:@"attachmentFetchEnabled"];
+    [defaults setObject: on ? @"YES" : @"NO" forKey:@"attachmentFetchEnabled"];
     [defaults synchronize];
 }
 
