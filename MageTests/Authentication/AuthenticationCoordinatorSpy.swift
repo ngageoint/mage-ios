@@ -9,6 +9,7 @@
 import Foundation
 import XCTest
 @testable import MAGE
+import OSLog
 
 class AuthenticationCoordinatorSpy: AuthenticationCoordinator {
     

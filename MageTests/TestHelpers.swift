@@ -10,6 +10,7 @@ import Foundation
 import MagicalRecord
 import Nimble
 import Kingfisher
+import OSLog
 
 import XCTest
 @testable import MAGE
