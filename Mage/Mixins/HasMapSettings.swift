@@ -65,7 +65,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
             return
         }
         rootView?.insertSubview(mapSettingsButton, aboveSubview: mapView)
-        mapSettingsButton.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
+        mapSettingsButton.autoPinEdge(.top, to: .top, of: mapView, withOffset: 75)
         mapSettingsButton.autoPinEdge(toSuperviewMargin: .right)
         
         setupMapSettingsButton()
