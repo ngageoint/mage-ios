@@ -31,10 +31,6 @@
 @property (nonatomic) BOOL applicationStarted;
 @property (nonatomic, strong) GeoPackageImporter *gpImporter;
 @property (nonatomic, strong) NSManagedObjectContext *context;
-//@property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
-//@property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
-//@property (nonatomic, strong) GPKGGeoPackage *backgroundGeoPackage;
-//@property (nonatomic, strong) GPKGGeoPackage *darkBackgroundGeoPackage;
 @end
 
 @implementation AppDelegate
