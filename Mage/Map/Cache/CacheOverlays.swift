@@ -13,7 +13,7 @@ import Foundation
 }
 
 // TODO: This should be an actor
-@objc class CacheOverlays: NSObject {
+actor CacheOverlays: NSObject {
     @Injected(\.layerRepository)
     var layerRepository: LayerRepository
     
@@ -30,7 +30,7 @@ import Foundation
     
     @objc func register(_ listener: CacheOverlayListener) async {
         listeners.append(listener)
-        await listener.cacheOverlaysUpdated(getOverlays())
+        listener.cacheOverlaysUpdated(await getOverlays())
     }
     
     func unregisterListener(_ listener: CacheOverlayListener) {
@@ -53,20 +53,14 @@ import Foundation
     func addCacheOverlayHelper(overlay: CacheOverlay) {
         let cacheName = overlay.name
         if let existingOverlay = overlays[cacheName] {
-            // Set existing cache overlays to their current enabled state
             overlay.enabled = existingOverlay.enabled
-            // if a new version of an existing cache overlay was added
+
             if overlay.added {
-                if existingOverlay.replaced != nil {
-                    overlay.replaced = existingOverlay.replaced
-                } else {
-                    overlay.replaced = existingOverlay
-                }
+                overlay.replaced = existingOverlay.replaced ?? existingOverlay
             }
         } else {
             overlayNames.append(cacheName)
         }
-        
         overlays[cacheName] = overlay // !!! CRASHED HERE (Modifying SHARED Mutable state!)
     }
     
@@ -80,9 +74,11 @@ import Foundation
     }
     
     @objc func notifyListenersExceptCaller(caller: (any CacheOverlayListener)?) async {
+        let overlaySnapshot = await getOverlays()
+        
         for listener in listeners {
             if caller == nil || !listener.isEqual(caller) {
-                await listener.cacheOverlaysUpdated(getOverlays())
+                listener.cacheOverlaysUpdated(overlaySnapshot)
             }
         }
     }
@@ -91,22 +87,19 @@ import Foundation
         var overlaysInCurrentEvent: [CacheOverlay] = []
         
         for cacheOverlayName in overlayNames.sorted() {
-            let cacheOverlay = overlays[cacheOverlayName]
-            if let cacheOverlay = cacheOverlay as? GeoPackageCacheOverlay,
-               let layerId = cacheOverlay.layerId
+            guard let cacheOverlay = overlays[cacheOverlayName] else { continue }
+            
+            if let geoOverlay = cacheOverlay as? GeoPackageCacheOverlay,
+               let layerId = geoOverlay.layerId,
+               let layerIdInt = Int(layerId),
+               let currentEventId = Server.currentEventId()
             {
-                // check if this layer is in the event
-                @Injected(\.nsManagedObjectContext)
-                var context: NSManagedObjectContext?
-                if let layerIdInt = Int(layerId),
-                   let currentEventId = Server.currentEventId()
-                {
-                    let count = await layerRepository.count(eventId: currentEventId, layerId: layerIdInt)
-                    if count != 0 {
-                        overlaysInCurrentEvent.append(cacheOverlay)
-                    }
+                let count = await layerRepository.count(eventId: currentEventId, layerId: layerIdInt)
+                
+                if count != 0 {
+                    overlaysInCurrentEvent.append(cacheOverlay)
                 }
-            } else if let cacheOverlay = cacheOverlay {
+            } else {
                 overlaysInCurrentEvent.append(cacheOverlay)
             }
         }
@@ -122,7 +115,7 @@ import Foundation
         overlays[overlayNames[index]]
     }
     
-    @objc func getByCacheName(_ cacheName: String?) -> CacheOverlay? {
+    func getByCacheName(_ cacheName: String?) -> CacheOverlay? {
         guard let cacheName = cacheName else { return nil }
         return overlays[cacheName]
     }
@@ -152,7 +145,7 @@ import Foundation
         await notifyListeners()
     }
     
-    @objc func getProcessing() -> [String] {
+    func getProcessing() -> [String] {
         processing
     }
     

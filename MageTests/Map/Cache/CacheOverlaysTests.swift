@@ -96,17 +96,21 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 2)
         
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 2)
+        let count = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(count, 2)
         
-        XCTAssertEqual(CacheOverlays.getInstance().atIndex(index: 0)?.name, "xyz")
-        XCTAssertEqual(CacheOverlays.getInstance().atIndex(index: 1)?.name, "xyz2")
+        let overlay0 = await CacheOverlays.getInstance().atIndex(index: 0)?.name
+        let overlay1 = await CacheOverlays.getInstance().atIndex(index: 1)?.name
+        XCTAssertEqual(overlay0, "xyz")
+        XCTAssertEqual(overlay1, "xyz2")
         
         await CacheOverlays.getInstance().setCacheOverlays(overlays: [XYZDirectoryCacheOverlay(name: "xyz3", directory: "directory3")])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 4)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
         
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 1)
+        let countAfter = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(countAfter, 1)
     }
     
     func testUpdateOverlay() async {
@@ -140,7 +144,8 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         XCTAssertTrue(overlay3.enabled)
         XCTAssertNotNil(overlay3.replaced)
         
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 1)
+        let countAfter = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(countAfter, 1)
     }
     
     func testRemoveByCacheName() async {
@@ -158,18 +163,29 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 2)
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 2)
         
-        XCTAssertNotNil(CacheOverlays.getInstance().getByCacheName("xyz"))
-        XCTAssertNotNil(CacheOverlays.getInstance().getByCacheName("xyz2"))
+        let count = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(count, 2)
+        
+        let overlay0 = await CacheOverlays.getInstance().getByCacheName("xyz")
+        let overlay1 = await CacheOverlays.getInstance().getByCacheName("xyz2")
+        XCTAssertEqual(overlay0?.name, "xyz")
+        XCTAssertEqual(overlay1?.name, "xyz2")
+
         
         await CacheOverlays.getInstance().remove(byCacheName: "xyz2")
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 4)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
-        XCTAssertNotNil(CacheOverlays.getInstance().getByCacheName("xyz"))
-        XCTAssertNil(CacheOverlays.getInstance().getByCacheName("xyz2"))
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 1)
+        
+        let remainingOverlay = await CacheOverlays.getInstance().getByCacheName("xyz")
+        let removedOverlay = await CacheOverlays.getInstance().getByCacheName("xyz2")
+        
+        XCTAssertNotNil(remainingOverlay)
+        XCTAssertNil(removedOverlay)
+        
+        let countAfter = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(countAfter, 1)
     }
     
     func testRemoveByOverlay() async {
@@ -188,20 +204,27 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 2)
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 2)
+
+        let count = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(count, 2)
         
-        XCTAssertNotNil(CacheOverlays.getInstance().getByCacheName("xyz"))
-        XCTAssertNotNil(CacheOverlays.getInstance().getByCacheName("xyz2"))
+        let overlay0 = await CacheOverlays.getInstance().getByCacheName("xyz")
+        let overlay1 = await CacheOverlays.getInstance().getByCacheName("xyz2")
+        XCTAssertNotNil(overlay0)
+        XCTAssertNotNil(overlay1)
         
         await CacheOverlays.getInstance().removeCacheOverlay(overlay: cache2)
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 4)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
         
-        XCTAssertNotNil(CacheOverlays.getInstance().getByCacheName("xyz"))
-        XCTAssertNil(CacheOverlays.getInstance().getByCacheName("xyz2"))
+        let overlay3 = await CacheOverlays.getInstance().getByCacheName("xyz")
+        let overlay4 = await CacheOverlays.getInstance().getByCacheName("xyz2")
+        XCTAssertNotNil(overlay3)
+        XCTAssertNil(overlay4)
         
-        XCTAssertEqual(CacheOverlays.getInstance().count(), 1)
+        let countAfter = await CacheOverlays.getInstance().count()
+        XCTAssertEqual(countAfter, 1)
     }
     
     func testProcessing() async {
@@ -213,22 +236,33 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         await CacheOverlays.getInstance().addProcessing(name: "xyz")
 
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing().count, 1)
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing().first!, "xyz")
+        let count1 = await CacheOverlays.getInstance().getProcessing().count
+        XCTAssertEqual(count1, 1)
+
+        let overlay1 = await CacheOverlays.getInstance().getProcessing().first!
+        XCTAssertEqual(overlay1, "xyz")
                 
         let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2")
         await CacheOverlays.getInstance().addProcessing(from: [cache2.name])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing().count, 2)
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing().first!, "xyz")
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing()[1] , "xyz2")
+        
+        let count2 = await CacheOverlays.getInstance().getProcessing().count
+        XCTAssertEqual(count2, 2)
+
+        let overlay2 = await CacheOverlays.getInstance().getProcessing()[0]
+        let overlay3 = await CacheOverlays.getInstance().getProcessing()[1]
+        XCTAssertEqual(overlay2, "xyz")
+        XCTAssertEqual(overlay3, "xyz2")
         
         await CacheOverlays.getInstance().removeProcessing(cache2.name)
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 4)
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing().count, 1)
-        XCTAssertEqual(CacheOverlays.getInstance().getProcessing().first!, "xyz")
+        let overlay4 = await CacheOverlays.getInstance().getProcessing().first!
+        XCTAssertEqual(overlay4, "xyz")
+
+        let count3 = await CacheOverlays.getInstance().getProcessing().count
+        XCTAssertEqual(count3, 1)
     }
     
     func testGetOverlaysXYZ() async {

@@ -219,7 +219,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations.count, 0)
         
         UserDefaults.standard.selectedCaches = []
-        let cacheOverlay = CacheOverlays.getInstance().getByCacheName("gpkgWithMedia_1_from_server")!
+        let cacheOverlay = await CacheOverlays.getInstance().getByCacheName("gpkgWithMedia_1_from_server")!
         cacheOverlay.enabled = false
         await CacheOverlays.getInstance().addCacheOverlay(overlay: cacheOverlay)
         await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
