@@ -61,7 +61,7 @@ actor CacheOverlays: NSObject {
         } else {
             overlayNames.append(cacheName)
         }
-        overlays[cacheName] = overlay // !!! CRASHED HERE (Modifying SHARED Mutable state!)
+        overlays[cacheName] = overlay
     }
     
     func addCacheOverlay(overlay: CacheOverlay) async {
