@@ -54,7 +54,9 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     }
     
     func cleanupMixin() {
-        CacheOverlays.getInstance().unregisterListener(self)
+        Task {
+            await CacheOverlays.shared.unregisterListener(self)
+        }
         if let geopackageImportedObserver = geopackageImportedObserver {
             NotificationCenter.default.removeObserver(geopackageImportedObserver)
         }
