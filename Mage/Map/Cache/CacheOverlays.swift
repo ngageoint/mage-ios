@@ -86,25 +86,32 @@ actor CacheOverlays: NSObject {
     @objc func getOverlays() async -> [CacheOverlay] {
         var overlaysInCurrentEvent: [CacheOverlay] = []
         
-        for cacheOverlayName in overlayNames.sorted() {
-            guard let cacheOverlay = overlays[cacheOverlayName] else { continue }
+        let sortedNames = overlayNames.sorted()
+        
+        for name in sortedNames {
+            guard let overlay = overlays[name] else { continue }
             
-            if let geoOverlay = cacheOverlay as? GeoPackageCacheOverlay,
-               let layerId = geoOverlay.layerId,
-               let layerIdInt = Int(layerId),
-               let currentEventId = Server.currentEventId()
-            {
-                let count = await layerRepository.count(eventId: currentEventId, layerId: layerIdInt)
-                
-                if count != 0 {
-                    overlaysInCurrentEvent.append(cacheOverlay)
-                }
-            } else {
+            if shouldIncludeOverlay(overlay) {
                 overlaysInCurrentEvent.append(cacheOverlay)
             }
         }
         
         return overlaysInCurrentEvent
+    }
+    
+    private func shouldIncludeOverlay(_ overlay: CacheOverlay) -> Bool {
+        // If it's a GeoPackage overlay, validate it against the current event
+        if let geoOverlay = cacheOverlay as? GeoPackageCacheOverlay,
+           let layerId = geoOverlay.layerId,
+           let layerIdInt = Int(layerId),
+           let currentEventId = Server.currentEventId()
+        {
+            let count = await layerRepository.count(eventId: currentEventId, layerId: layerIdInt)
+            return count != 0
+        }
+
+        // All non-GeoPackage overlays are always included
+        return true
     }
     
     func count() -> Int {
