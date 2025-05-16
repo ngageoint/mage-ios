@@ -91,17 +91,17 @@ actor CacheOverlays: NSObject {
         for name in sortedNames {
             guard let overlay = overlays[name] else { continue }
             
-            if shouldIncludeOverlay(overlay) {
-                overlaysInCurrentEvent.append(cacheOverlay)
+            if await shouldIncludeOverlay(overlay) {
+                overlaysInCurrentEvent.append(overlay)
             }
         }
         
         return overlaysInCurrentEvent
     }
     
-    private func shouldIncludeOverlay(_ overlay: CacheOverlay) -> Bool {
+    private func shouldIncludeOverlay(_ overlay: CacheOverlay) async -> Bool {
         // If it's a GeoPackage overlay, validate it against the current event
-        if let geoOverlay = cacheOverlay as? GeoPackageCacheOverlay,
+        if let geoOverlay = overlay as? GeoPackageCacheOverlay,
            let layerId = geoOverlay.layerId,
            let layerIdInt = Int(layerId),
            let currentEventId = Server.currentEventId()
