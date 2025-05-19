@@ -70,7 +70,8 @@ enum MageLogger {
         guard let localContext = localContext else { return [:] }
         
         // clear server specific selected layers
-        if let events = Event.mr_findAll(in:localContext) as? [Event] {
+        let fetchRequest = NSFetchRequest<Event>(entityName: "Event")
+        if let events = try? localContext.fetch(fetchRequest) {
             for event in events {
                 UserDefaults.standard.removeObject(forKey: "selectedFeeds-\(event.remoteId ?? -1)")
             }
@@ -78,28 +79,39 @@ enum MageLogger {
         UserDefaults.standard.removeObject(forKey: "selectedStaticLayers")
         UserDefaults.standard.removeObject(forKey: "selectedOnlineLayers")
         
+        func batchDelete<T: NSManagedObject>(_ entityClass: T.Type, predicate: NSPredicate? = nil, context: NSManagedObjectContext) -> Bool {
+            let fetchRequest = T.fetchRequest()
+            if let predicate = predicate {
+                fetchRequest.predicate = predicate
+            }
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            do {
+                try context.execute(deleteRequest)
+                return true
+            } catch {
+                NSLog("Could not batch delete \(T.self): \(error)")
+                return false
+            }
+        }
         var cleared = [
-            String(describing: Attachment.self): Attachment.mr_truncateAll(in: localContext),
-            String(describing: Event.self): Event.mr_truncateAll(in: localContext),
-            String(describing: Feed.self): Feed.mr_truncateAll(in: localContext),
-            String(describing: FeedItem.self): FeedItem.mr_truncateAll(in: localContext),
-            String(describing: Form.self): Form.mr_truncateAll(in: localContext),
-            String(describing: FormJson.self): FormJson.mr_truncateAll(in: localContext),
-            String(describing: GPSLocation.self): GPSLocation.mr_truncateAll(in: localContext),
-            String(describing: Location.self): Location.mr_truncateAll(in: localContext),
-            String(describing: Observation.self): Observation.mr_truncateAll(in: localContext),
-            String(describing: ObservationFavorite.self): ObservationFavorite.mr_truncateAll(in: localContext),
-            String(describing: ObservationImportant.self): ObservationImportant.mr_truncateAll(in: localContext),
-            String(describing: Role.self): Role.mr_truncateAll(in: localContext),
-            String(describing: Server.self): Server.mr_truncateAll(in: localContext),
-            String(describing: Team.self): Team.mr_truncateAll(in: localContext),
-            String(describing: User.self): User.mr_truncateAll(in: localContext)
-        ];
-        
-        // we want to keep the GeoPackages around that were imported, those all have an event of -1
-        cleared[String(describing: Layer.self)] = Layer.mr_deleteAll(matching: NSPredicate(format: "eventId != -1"), in: localContext)
-        
-        localContext.mr_saveToPersistentStoreAndWait();
+            String(describing: Attachment.self): batchDelete(Attachment.self, context: localContext),
+            String(describing: Event.self): batchDelete(Event.self, context: localContext),
+            String(describing: Feed.self): batchDelete(Feed.self, context: localContext),
+            String(describing: FeedItem.self): batchDelete(FeedItem.self, context: localContext),
+            String(describing: Form.self): batchDelete(Form.self, context: localContext),
+            String(describing: FormJson.self): batchDelete(FormJson.self, context: localContext),
+            String(describing: GPSLocation.self): batchDelete(GPSLocation.self, context: localContext),
+            String(describing: Location.self): batchDelete(Location.self, context: localContext),
+            String(describing: Observation.self): batchDelete(Observation.self, context: localContext),
+            String(describing: ObservationFavorite.self): batchDelete(ObservationFavorite.self, context: localContext),
+            String(describing: ObservationImportant.self): batchDelete(ObservationImportant.self, context: localContext),
+            String(describing: Role.self): batchDelete(Role.self, context: localContext),
+            String(describing: Server.self): batchDelete(Server.self, context: localContext),
+            String(describing: Team.self): batchDelete(Team.self, context: localContext),
+            String(describing: User.self): batchDelete(User.self, context: localContext)
+        ]
+        cleared[String(describing: Layer.self)] = batchDelete(Layer.self, predicate: NSPredicate(format: "eventId != -1"), context: localContext)
+        try? localContext.save()
         
         return cleared;
     }

@@ -9,7 +9,7 @@
 #import "IdpAuthentication.h"
 #import "MageSessionManager.h"
 #import "NSDate+Iso8601.h"
-#import "MagicalRecord+MAGE.h"
+#import "CoreDataManager.h"
 #import "StoredPassword.h"
 #import "MAGE-Swift.h"
 #import <AFNetworking/AFNetworking.h>
@@ -75,7 +75,7 @@
     NSDictionary *userJson = [self.response objectForKey:@"user"];
     NSString *userId = [userJson objectForKey:@"id"];
     
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+    [CoreDataManager saveWithBlock:^(NSManagedObjectContext *localContext) {
         User *user = [User fetchUserWithUserId:userId context:localContext];
         if (!user) {
             [User insertWithJson:userJson context:localContext];

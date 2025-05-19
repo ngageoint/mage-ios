@@ -39,10 +39,10 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     var scheme: MDCContainerScheming?;
     
     private lazy var managedObjectContext: NSManagedObjectContext = {
-        var managedObjectContext: NSManagedObjectContext = .mr_newMainQueue();
-        managedObjectContext.parent = .mr_rootSaving();
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType);
+        managedObjectContext.parent = [MageInitializer setupCoreData];
         managedObjectContext.stalenessInterval = 0.0;
-        managedObjectContext.mr_setWorkingName(newObservation ? "Observation New Context" : "Observation Edit Context");
+        managedObjectContext.name = newObservation ? "Observation New Context" : "Observation Edit Context";
         return managedObjectContext;
     } ()
     
@@ -235,18 +235,12 @@ extension ObservationEditCoordinator: ObservationFormReorderDelegate {
             self.navigationController?.popViewController(animated: true);
 
         } else {
-            self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
-                if (!contextDidSave) {
-                    MageLogger.misc.error("Error saving observation to persistent store, context did not save");
-                }
-                
-                if let safeError = error {
-                    MageLogger.misc.error("Error saving observation to persistent store \(safeError)");
-                }
-                
+            do {
+                try self.managedObjectContext.save()
                 delegate?.editComplete(self.observation!, coordinator: self as NSObject);
-
                 self.navigationController?.dismiss(animated: true, completion: nil);
+            } catch {
+                MageLogger.misc.error("Error saving observation to persistent store \(error)");
             }
         }
     }
@@ -281,21 +275,16 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
         if let user = user {
             self.observation!.userId = user.remoteId;
         }
-        self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
-            if (!contextDidSave) {
-                MageLogger.misc.error("Error saving observation to persistent store, context did not save");
-            }
-            
-            if let safeError = error {
-                MageLogger.misc.error("Error saving observation to persistent store \(safeError)");
-            }
-            
+        do {
+            try self.managedObjectContext.save()
             MageLogger.misc.debug("Saved the observation \(observation.remoteId ?? "")");
             observation.createObservationLocations(context: self.managedObjectContext)
-            try? self.managedObjectContext.save()
+            try self.managedObjectContext.save()
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
             observationEditController = nil;
+        } catch {
+            MageLogger.misc.error("Error saving observation to persistent store \(error)");
         }
     }
     

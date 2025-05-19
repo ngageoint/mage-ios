@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 import CoreLocation
 import sf_ios
-import MagicalRecord
 
 @objc public class Location: NSManagedObject, Navigable {
     
@@ -137,7 +136,7 @@ import MagicalRecord
             
             let saveStart = Date()
             MageLogger.misc.debug("TIMING Saving Locations /api/events/\(currentEventId)/locations/users @ \(saveStart)")
-            MagicalRecord.save { localContext in
+            CoreDataManager.sharedManager.saveContext { localContext in
                 let currentUser = User.fetchCurrentUser(context: localContext);
                 
                 var userIds: [String] = [];

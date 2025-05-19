@@ -13,7 +13,6 @@
 #import "IDPCoordinator.h"
 #import "MAGE-Swift.h"
 #import "MageOfflineObservationManager.h"
-#import "MagicalRecord+MAGE.h"
 #import "FadeTransitionSegue.h"
 #import "MageSessionManager.h"
 #import "AppDelegate.h"

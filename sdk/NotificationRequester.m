@@ -60,7 +60,8 @@
 
 + (void) observationPulled: (Observation *) observationOld {
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_context];
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    context.parentContext = [MageInitializer setupCoreData];
     
     
     [context performBlockAndWait:^{

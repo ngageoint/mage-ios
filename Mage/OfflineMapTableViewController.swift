@@ -6,7 +6,6 @@
 
 import Foundation
 import UIKit
-import MagicalRecord
 import geopackage_ios
 
 @objc class OfflineMapTableViewController: UITableViewController, CacheOverlayListener {
@@ -79,17 +78,23 @@ import geopackage_ios
     }
     
     @objc func reloadData() {
-        mapsFetchedResultsController = Layer.mr_fetchAllGrouped(
-            by: "loaded",
-            with: NSPredicate(
-                format: "(eventId == %@ OR eventId == -1) AND (type == %@ OR type == %@ OR type == %@)",
-                argumentArray: [Server.currentEventId() ?? -1, "GeoPackage", "Local_XYZ", "Feature"]
-            ),
-            sortedBy: "loaded,name:YES",
-            ascending: false,
-            delegate: self,
-            in: context
+        let fetchRequest = NSFetchRequest<Layer>(entityName: "Layer")
+        fetchRequest.predicate = NSPredicate(
+            format: "(eventId == %@ OR eventId == -1) AND (type == %@ OR type == %@ OR type == %@)",
+            argumentArray: [Server.currentEventId() ?? -1, "GeoPackage", "Local_XYZ", "Feature"]
         )
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "loaded", ascending: false),
+            NSSortDescriptor(key: "name", ascending: true)
+        ]
+        
+        mapsFetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: "loaded",
+            cacheName: nil
+        )
+        mapsFetchedResultsController?.delegate = self
         try? mapsFetchedResultsController?.performFetch()
         
         selectedStaticLayers = Set(UserDefaults.standard.array(forKey: "selectedStaticLayers.\(Server.currentEventId() ?? -1)") as? [NSNumber] ?? [])
@@ -620,7 +625,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
     
     
     func startGeoPackageDownload(layer: Layer) {
-        MagicalRecord.save { context in
+        CoreDataManager.shared().saveContext { context in
             let localLayer = layer.mr_(in: context)
             localLayer?.downloading = true
             localLayer?.downloadedBytes = 0
@@ -630,9 +635,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             } failure: { error in
                 
             }
-
         }
-
     }
     
     func cancelGeoPackageDownload(layer: Layer) {
@@ -713,7 +716,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                 if let staticLayer = editedLayer as? StaticLayer {
                     staticLayer.removeStaticLayerData()
                 } else {
-                    MagicalRecord.save { context in
+                    CoreDataManager.shared().saveContext { context in
                         let layers: [Layer] = Layer.mr_findAll(
                             with: NSPredicate(
                                 format: "remoteId == %@",
@@ -733,16 +736,15 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                             self?.tableView.reloadData()
                         }
                     }
-
                 }
             } else if section == Sections.MY_MAPS_SECTION.rawValue {
                 if let localOverlay = CacheOverlays.shared.getByCacheName(editedLayer.name) {
                     Task {
                         await deleteCacheOverlay(localOverlay)
-                        MagicalRecord.save(blockAndWait: { context in
+                        CoreDataManager.shared().saveContext { context in
                             let localLayer = editedLayer.mr_(in: context)
                             localLayer?.mr_deleteEntity()
-                        })
+                        }
                     }
                 }
             }

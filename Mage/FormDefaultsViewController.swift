@@ -25,10 +25,10 @@ class FormDefaultsViewController: UIViewController {
     let image = UIImageView(image: UIImage(systemName: "doc.text.fill"));
     
     private lazy var managedObjectContext: NSManagedObjectContext = {
-        var managedObjectContext: NSManagedObjectContext = .mr_newMainQueue();
-        managedObjectContext.parent = .mr_rootSaving();
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType);
+        managedObjectContext.parent = [MageInitializer setupCoreData];
         managedObjectContext.stalenessInterval = 0.0;
-        managedObjectContext.mr_setWorkingName("Form Default Temporary Context");
+        managedObjectContext.name = "Form Default Temporary Context";
         return managedObjectContext;
     } ()
     

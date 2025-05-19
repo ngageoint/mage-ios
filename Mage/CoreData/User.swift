@@ -139,7 +139,7 @@ import Kingfisher
                 return;
             }
             
-            MagicalRecord.save { localContext in
+            CoreDataManager.sharedManager.saveContext { localContext in
                 if let userId = userJson[UserKey.id.key] as? String {
                     
                     if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: localContext) {

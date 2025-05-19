@@ -11,7 +11,7 @@
 #import "LoginViewController.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import "MageSessionManager.h"
-#import "MagicalRecord+MAGE.h"
+#import "CoreDataManager.h"
 #import "GPKGGeoPackageFactory.h"
 #import "MageConstants.h"
 #import "MageOfflineObservationManager.h"
@@ -82,7 +82,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
     
     [MageInitializer initializePreferences];
-    self.context = [MageInitializer setupCoreData];
+    self.context = [CoreDataManager sharedManager].managedObjectContext;
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
@@ -92,7 +92,7 @@
     }];
 }
 
-- (BOOL)application:(UIApplication *)app
+- (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
             options:(NSDictionary *)options {
     
@@ -142,35 +142,38 @@
     __weak typeof(self) weakSelf = self;
 
     // do a canary save
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        Canary *canary = [Canary MR_findFirstInContext:localContext];
-        if (!canary) {
-            canary = [Canary MR_createEntityInContext:localContext];
-        }
-        canary.launchDate = [NSDate date];
-        NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
-        // error should be null and contextDidSave should be true
-        if (contextDidSave && error == NULL) {
-            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme] context: self.context];
-            [self.appCoordinator start];
-            [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
-                
-            }];
-        } else {
-            NSLog(@"Could not read or write from the database %@", error);
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
-                                                                           message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
+    NSManagedObjectContext *context = [CoreDataManager sharedManager].managedObjectContext;
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Canary"];
+    Canary *canary = [[context executeFetchRequest:fetchRequest error:nil] firstObject];
+    
+    if (!canary) {
+        canary = [NSEntityDescription insertNewObjectForEntityForName:@"Canary" inManagedObjectContext:context];
+    }
+    canary.launchDate = [NSDate date];
+    NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
+    
+    NSError *error = nil;
+    BOOL contextDidSave = [context save:&error];
+    NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
+    // error should be null and contextDidSave should be true
+    if (contextDidSave && error == NULL) {
+        self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme] context: self.context];
+        [self.appCoordinator start];
+        [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
             
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
-            [MagicalRecord cleanUp];
-            weakSelf.applicationStarted = NO;
-        }
-    }];
+        }];
+    } else {
+        NSLog(@"Could not read or write from the database %@", error);
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
+                                                                       message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        [self.rootViewController presentViewController:alert animated:YES completion:nil];
+        weakSelf.applicationStarted = NO;
+    }
 }
 
 - (void) createRootView {
@@ -252,36 +255,41 @@
     
     if (protectedDataAvailable) {
         // do a canary save
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-            Canary *canary = [Canary MR_findFirstInContext:localContext];
-            if (!canary) {
-                canary = [Canary MR_createEntityInContext:localContext];
+        NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        localContext.parentContext = [CoreDataManager sharedManager].managedObjectContext;
+        
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Canary"];
+        Canary *canary = [[localContext executeFetchRequest:fetchRequest error:nil] firstObject];
+        
+        if (!canary) {
+            canary = [NSEntityDescription insertNewObjectForEntityForName:@"Canary" inManagedObjectContext:localContext];
+        }
+        canary.launchDate = [NSDate date];
+        NSLog(@"applicationDidBecomeActive Canary launch date %@", canary.launchDate);
+        
+        NSError *error = nil;
+        BOOL contextDidSave = [localContext save:&error];
+        NSLog(@"applicationDidBecomeActive canary save success? %d with error %@", contextDidSave, error);
+        // error should be null and contextDidSave should be true
+        if (error == NULL) {
+            if(self.splashView != nil) {
+                [self.splashView.view removeFromSuperview];
+                self.splashView = nil;
             }
-            canary.launchDate = [NSDate date];
-            NSLog(@"applicationDidBecomeActive Canary launch date %@", canary.launchDate);
-        } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-            NSLog(@"applicationDidBecomeActive canary save success? %d with error %@", contextDidSave, error);
-            // error should be null and contextDidSave should be true
-            if (error == NULL) {
-                if(self.splashView != nil) {
-                    [self.splashView.view removeFromSuperview];
-                    self.splashView = nil;
-                }
+            
+            [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
                 
-                [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
-                    
-                }];
-            } else {
-                NSLog(@"Could not read or write from the database %@", error);
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
-                                                                               message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                
-                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-                
-                [self.rootViewController presentViewController:alert animated:YES completion:nil];
-            }
-        }];
+            }];
+        } else {
+            NSLog(@"Could not read or write from the database %@", error);
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
+                                                                           message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            
+            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+        }
     }
     
 }
@@ -304,8 +312,6 @@
 
 - (void) applicationWillTerminate:(UIApplication *) application {
     NSLog(@"applicationWillTerminate");
-
-    [MagicalRecord cleanUp];
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {

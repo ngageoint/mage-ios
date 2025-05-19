@@ -51,7 +51,7 @@ static const NSInteger LEGAL_SECTION = 8;
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];
 
         if (recentEventIds != nil) {
-            NSFetchRequest *recentRequest = [Event MR_requestAllInContext:context];
+            NSFetchRequest *recentRequest = [Event fetchRequest];
             [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
             [recentRequest setIncludesSubentities:NO];
             NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];

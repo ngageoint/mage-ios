@@ -7,6 +7,7 @@
 #import "LocationService.h"
 #import "MageSessionManager.h"
 #import "MAGE-Swift.h"
+#import "CoreDataManager.h"
 
 NSString * const kReportLocationKey = @"reportLocation";
 NSString * const kGPSDistanceFilterKey = @"gpsDistanceFilter";
@@ -100,7 +101,7 @@ NSInteger const kLocationPushLimit = 100;
     __block NSTimeInterval interval;
     __weak typeof(self) weakSelf = self;
 
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+    [[CoreDataManager sharedManager] saveContext:^(NSManagedObjectContext *localContext) {
         if ([[Event getCurrentEventWithContext:localContext] isUserInEventWithUser:[User fetchCurrentUserWithContext:localContext]]) {
             NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
             for (CLLocation *location in locations) {
@@ -150,17 +151,11 @@ NSInteger const kLocationPushLimit = 100;
                 NSError *error = nil;
                 [weakSelf.context save:&error];
             }];
-//            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-//                for (GPSLocation *location in locations) {
-//                    [location MR_deleteEntityInContext:localContext];
-//                }
-//            } completion:^(BOOL contextDidSave, NSError *error) {
-                self.isPushingLocations = NO;
-                
-                if ([locations count] == kLocationPushLimit) {
-                    [weakSelf pushLocations];
-                }
-//            }];
+            self.isPushingLocations = NO;
+            
+            if ([locations count] == kLocationPushLimit) {
+                [weakSelf pushLocations];
+            }
         } failure:^(NSError * _Nonnull error) {
             NSLog(@"Failure to push GPS locations to the server");
             self.isPushingLocations = NO;

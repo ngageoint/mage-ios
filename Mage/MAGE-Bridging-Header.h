@@ -1,10 +1,13 @@
 //
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "ObjC.h"
 
 #import "AppDelegate.h"
 #import "StoredPassword.h"
+#import "MageInitializer.h"
 
 #import "ObservationFields.h"
 #import "ObservationAccuracy.h"
@@ -20,7 +23,6 @@
 #import "MAGERoutes.h"
 #import "NotificationRequester.h"
 #import "FadeTransitionSegue.h"
-#import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "SettingsTableViewController.h"
 #import "NSDate+display.h"

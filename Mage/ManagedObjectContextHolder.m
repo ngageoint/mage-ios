@@ -6,11 +6,12 @@
 
 #import "ManagedObjectContextHolder.h"
 #import "AppDelegate.h"
+#import "MAGE-Swift.h"
 
 @implementation ManagedObjectContextHolder
 
 - (NSManagedObjectContext *) managedObjectContext {
-    return [NSManagedObjectContext MR_defaultContext];
+    return [MageInitializer setupCoreData];
 }
 
 @end

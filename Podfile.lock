@@ -30,13 +30,10 @@ PODS:
     - color-ios (~> 1.0.2)
     - sf-ios (~> 4.1.4)
   - HexColors (4.0.0)
-  - KIF (3.8.9):
-    - KIF/Core (= 3.8.9)
-  - KIF/Core (3.8.9)
+  - KIF (3.10.0):
+    - KIF/Core (= 3.10.0)
+  - KIF/Core (3.10.0)
   - libPhoneNumber-iOS (0.9.15)
-  - MagicalRecord (2.3.2):
-    - MagicalRecord/Core (= 2.3.2)
-  - MagicalRecord/Core (2.3.2)
   - MaterialComponents (124.2.0):
     - MaterialComponents/ActionSheet (= 124.2.0)
     - "MaterialComponents/ActionSheet+Theming (= 124.2.0)"
@@ -685,7 +682,7 @@ PODS:
     - MotionInterchange (~> 3.0)
   - MotionInterchange (3.0.0)
   - Nimble (9.2.1)
-  - OCMock (3.9.3)
+  - OCMock (3.9.4)
   - ogc-api-features-json-ios (4.2.5):
     - sf-geojson-ios (~> 4.2.5)
   - OHHTTPStubs (9.1.0):
@@ -733,7 +730,6 @@ DEPENDENCIES:
   - HexColors (~> 4.0.0)
   - KIF
   - libPhoneNumber-iOS (~> 0.9.15)
-  - MagicalRecord (~> 2.3.2)
   - MaterialComponents
   - MDFInternationalization
   - mgrs-ios (~> 1.1.6)
@@ -759,7 +755,6 @@ SPEC REPOS:
     - HexColors
     - KIF
     - libPhoneNumber-iOS
-    - MagicalRecord
     - MaterialComponents
     - MDFInternationalization
     - MDFTextAccessibility
@@ -793,9 +788,8 @@ SPEC CHECKSUMS:
   geopackage-ios: 8a61864c1f6e7433ddcd00854a27e23f78267b20
   grid-ios: 4aa398fd164bb8acac9d587cf61016cc6523defb
   HexColors: 5f95843ef89aff6a72e1fd3a8ebabf205cc43379
-  KIF: 7660c626b0f2d4562533590960db70a36d640558
+  KIF: e0d42181aac4f5de06aa986ccf514588ab4ffe2f
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
-  MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   MDFInternationalization: d697c55307816222a55685c4ccb1044ffb030c12
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
@@ -803,7 +797,7 @@ SPEC CHECKSUMS:
   MotionAnimator: 5f99d7c9592928c0f28a66283eda9c3b657dc480
   MotionInterchange: 13adae439b377e31d1674cc165539d50e1d1566a
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
-  OCMock: 300b1b1b9155cb6378660b981c2557448830bdc6
+  OCMock: 589f2c84dacb1f5aaf6e4cec1f292551fe748e74
   ogc-api-features-json-ios: b53280f9036da5a7dc1699ea3a6cd90cdff0bfc9
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   PROJ: ca410c9aed8a01baf99746dad3d7c535a2dddaf0
@@ -820,6 +814,6 @@ SPEC CHECKSUMS:
   tiff-ios: 1ad6750cd8bb3db75bd2977e40145813389786b9
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 6bf6e8beed482c01a9482c97a00981e88ede0c74
+PODFILE CHECKSUM: b3e4dfd9831e53c59be7b8050b752dd863974523
 
 COCOAPODS: 1.16.2

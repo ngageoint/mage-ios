@@ -57,7 +57,7 @@ class ObservationEditCoordinatorTests: AsyncMageCoreDataTestCase {
         let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
         
         expect(coordinator.observation?.managedObjectContext?.mr_workingName()).to(equal("Observation New Context"));
-        expect(coordinator.observation?.managedObjectContext?.parent).to(equal(NSManagedObjectContext.mr_rootSaving()));
+        expect(coordinator.observation?.managedObjectContext?.parent).to(equal([MageInitializer setupCoreData]));
         expect(coordinator.newObservation).to(beTrue());
         
         expect(coordinator.rootViewController).to(equal(controller));
@@ -81,7 +81,7 @@ class ObservationEditCoordinatorTests: AsyncMageCoreDataTestCase {
 
         expect(coordinator.observation?.managedObjectContext).toNot(equal(initialContext));
         expect(coordinator.observation?.managedObjectContext?.mr_workingName()).to(equal("Observation Edit Context"));
-        expect(coordinator.observation?.managedObjectContext?.parent).to(equal(NSManagedObjectContext.mr_rootSaving()));
+        expect(coordinator.observation?.managedObjectContext?.parent).to(equal([MageInitializer setupCoreData]));
         expect(coordinator.newObservation).to(beFalse());
         expect(coordinator.rootViewController).to(equal(controller));
         expect(coordinator.delegate).toNot(beNil());

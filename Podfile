@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '13.0'
+platform :ios, '16.0'
 
 workspace 'MAGE'
 project 'MAGE.xcodeproj'
@@ -15,7 +15,6 @@ def common_pods
   pod 'MDFInternationalization'
   pod 'PureLayout'
   pod "AFNetworking", "~> 4.0.1"
-  pod "MagicalRecord", "~> 2.3.2"
   pod 'geopackage-ios', '~> 8.0.6'
   pod 'PROJ', :modular_headers => false
   pod 'mgrs-ios', '~> 1.1.6'
@@ -33,17 +32,17 @@ def test_pods
 end
 
 target 'MAGE' do
+  common_pods
+  target 'MAGETests' do
+    inherit! :search_paths
     common_pods
-    target 'MAGETests' do
-      inherit! :search_paths
-      common_pods
-      test_pods
-    end
-    target 'MAGEGeoPackageTests' do
-      inherit! :search_paths
-      common_pods
-      test_pods
-    end
+    test_pods
+  end
+  target 'MAGEGeoPackageTests' do
+    inherit! :search_paths
+    common_pods
+    test_pods
+  end
 end
 
 post_install do |installer|

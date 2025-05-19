@@ -66,58 +66,60 @@
 
 + (Observations *) observations: (NSManagedObjectContext *) context {
     NSMutableArray *predicates = [Observations getPredicatesForObservations: context];
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    NSFetchRequest *fetchRequest = [Observation fetchRequest];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context
                                                                                                  sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
-    
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (Observations *) observationsForMap: (NSManagedObjectContext *) context {
     NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap: context];
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:YES withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
+    NSFetchRequest *fetchRequest = [Observation fetchRequest];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context
                                                                                                  sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
-    
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (Observations *) hideObservations: (NSManagedObjectContext *) context {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithValue:NO]];
+    NSFetchRequest *fetchRequest = [Observation fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithValue:NO];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context
                                                                                                  sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
-    
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (Observations *) observationsForUser:(User *) user context: (NSManagedObjectContext *) context {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"dirty,timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
+    NSFetchRequest *fetchRequest = [Observation fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dirty" ascending:NO], [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context
                                                                                                  sectionNameKeyPath:@"dirtySection"
                                                                                                           cacheName:nil];
-    
-    
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (Observations *) observationsForObservation:(Observation *) observation context: (NSManagedObjectContext *) context {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
+    NSFetchRequest *fetchRequest = [Observation fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(self = %@)", observation];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context
                                                                                                  sectionNameKeyPath:nil
                                                                                                           cacheName:nil];
-    
-    
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
-
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController {
     if (self = [super init]) {

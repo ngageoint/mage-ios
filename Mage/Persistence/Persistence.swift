@@ -8,9 +8,10 @@
 
 import Foundation
 import Combine
+import CoreData
 
 private actor PersistenceProviderKey: InjectionKey {
-    static var currentValue: Persistence = MagicalRecordPersistence()
+    static var currentValue: Persistence = CoreDataPersistence()
 }
 
 extension InjectedValues {
@@ -41,8 +42,9 @@ protocol Persistence {
     }
 }
 
-class MagicalRecordPersistence: Persistence {
+class CoreDataPersistence: Persistence {
     var refreshSubject: PassthroughSubject<Date, Never> = PassthroughSubject<Date, Never>()
+    private var persistentContainer: NSPersistentContainer?
     
     var contextChange: AnyPublisher<Date, Never> {
         refreshSubject.eraseToAnyPublisher()
@@ -53,37 +55,92 @@ class MagicalRecordPersistence: Persistence {
     }
     
     func setupStack() {
-        MagicalRecord.setupMageCoreDataStack();
-        let context = NSManagedObjectContext.mr_default()
-        InjectedValues[\.nsManagedObjectContext] = context
+        let container = NSPersistentContainer(name: "Mage")
+        
+        // Configure SQLite store with WAL journal mode
+        let description = NSPersistentStoreDescription()
+        description.type = NSSQLiteStoreType
+        description.shouldAddStoreAsynchronously = false
+        
+        // Add SQLite pragmas for WAL mode
+        let sqliteOptions = [
+            "journal_mode": "WAL"
+        ]
+        description.setOption(sqliteOptions as NSDictionary, forKey: NSSQLitePragmasOption)
+        
+        // Add migration options
+        description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+        description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+        
+        // Add file protection
+        #if os(iOS)
+        description.setOption(FileProtectionType.completeUnlessOpen.rawValue as NSString, forKey: NSPersistentStoreFileProtectionKey)
+        #endif
+        
+        container.persistentStoreDescriptions = [description]
+        
+        container.loadPersistentStores { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+        
+        // Configure view context
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        // Prevent MAGE database from being backed up
+        if let storeURL = container.persistentStoreDescriptions.first?.url {
+            do {
+                try (storeURL.deletingLastPathComponent() as NSURL).setResourceValue(true, forKey: URLResourceKey.isExcludedFromBackupKey)
+            } catch {
+                print("Error excluding database from backup: \(error)")
+            }
+        }
+        
+        self.persistentContainer = container
+        InjectedValues[\.nsManagedObjectContext] = container.viewContext
         refreshSubject.send(Date())
-        MagicalRecord.setLoggingLevel(.verbose);
     }
     
     func getContext() -> NSManagedObjectContext {
-        return NSManagedObjectContext.mr_default()
+        return persistentContainer?.viewContext ?? NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     }
     
     func getRootContext() -> NSManagedObjectContext {
-        NSManagedObjectContext.mr_rootSaving()
+        return persistentContainer?.newBackgroundContext() ?? NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     }
     
     func getNewBackgroundContext(name: String?) -> NSManagedObjectContext {
-        let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
-        let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
+        let backgroundContext = persistentContainer?.newBackgroundContext() ?? NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        backgroundContext.parent = getRootContext()
+        
         if let name = name {
-            localContext.mr_setWorkingName(name)
+            backgroundContext.name = name
         }
-        return localContext
+        
+        return backgroundContext
     }
     
     func clearAndSetupStack() {
-        MagicalRecord.deleteAndSetupMageCoreDataStack()
-        let context = NSManagedObjectContext.mr_default()
-        InjectedValues[\.nsManagedObjectContext] = context
+        guard let container = persistentContainer else { return }
         
-        refreshSubject.send(Date())
-        MagicalRecord.setLoggingLevel(.verbose)
-//        NSManagedObject.mr_setDefaultBatchSize(20);
+        // Remove existing stores
+        for store in container.persistentStoreCoordinator.persistentStores {
+            do {
+                try container.persistentStoreCoordinator.remove(store)
+                if let storeURL = store.url {
+                    try container.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, type: .sqlite)
+                }
+            } catch {
+                print("Error removing store: \(error)")
+            }
+        }
+        
+        // Reset the container
+        persistentContainer = nil
+        
+        // Setup the stack again
+        setupStack()
     }
 }

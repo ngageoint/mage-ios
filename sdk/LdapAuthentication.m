@@ -9,7 +9,7 @@
 #import "LdapAuthentication.h"
 #import "MageSessionManager.h"
 #import "NSDate+Iso8601.h"
-#import "MagicalRecord+MAGE.h"
+#import "CoreDataManager.h"
 #import "StoredPassword.h"
 #import "MAGE-Swift.h"
 
@@ -100,43 +100,43 @@
     NSDictionary *userJson = [self.response objectForKey:@"user"];
     NSString *userId = [userJson objectForKey:@"id"];
     
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        User *user = [User fetchUserWithUserId:userId context:localContext];
+    [[CoreDataManager sharedManager] saveContext:^(NSManagedObjectContext *localContext) {
+        User *user = [User fetchUser:userId context:localContext];
         if (!user) {
-            [User insertWithJson:userJson context:localContext];
+            [User insert:userJson context:localContext];
         } else {
-            [user updateWithJson:userJson context:localContext];
+            [user update:userJson context:localContext];
         }
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        NSString *token = [self.response objectForKey:@"token"];
-        // Always use this locale when parsing fixed format date strings
-        NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.response objectForKey:@"expirationDate"]];
-        
-        [MageSessionManager sharedManager].token = token;
-        
-        [[UserUtility singleton] resetExpiration];
-        
-        NSDictionary *loginParameters = @{
-                                          @"serverUrl": [[MageServer baseURL] absoluteString],
-                                          @"tokenExpirationDate": tokenExpirationDate
-                                          };
-        
-        [defaults setObject:loginParameters forKey:@"loginParameters"];
-        
-        NSDictionary *userJson = [self.response objectForKey:@"user"];
-        NSString *userId = [userJson objectForKey:@"id"];
-        [defaults setObject: userId forKey:@"currentUserId"];
-        
-        NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
-        [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
-        [defaults setBool:YES forKey:@"deviceRegistered"];
-        NSDictionary *strategy = [loginParameters objectForKey:@"strategy"];
-        [defaults setValue:[strategy objectForKey:@"identifier"] forKey:@"loginType"];
-        [defaults synchronize];
-        [StoredPassword persistTokenToKeyChain:token];
-        
-        complete(AUTHENTICATION_SUCCESS, nil, nil);
     }];
+    
+    NSString *token = [self.response objectForKey:@"token"];
+    // Always use this locale when parsing fixed format date strings
+    NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.response objectForKey:@"expirationDate"]];
+    
+    [MageSessionManager sharedManager].token = token;
+    
+    [[UserUtility singleton] resetExpiration];
+    
+    NSDictionary *loginParameters = @{
+                                      @"serverUrl": [[MageServer baseURL] absoluteString],
+                                      @"tokenExpirationDate": tokenExpirationDate
+                                      };
+    
+    [defaults setObject:loginParameters forKey:@"loginParameters"];
+    
+    NSDictionary *userJson = [self.response objectForKey:@"user"];
+    NSString *userId = [userJson objectForKey:@"id"];
+    [defaults setObject: userId forKey:@"currentUserId"];
+    
+    NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
+    [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    NSDictionary *strategy = [loginParameters objectForKey:@"strategy"];
+    [defaults setValue:[strategy objectForKey:@"identifier"] forKey:@"loginType"];
+    [defaults synchronize];
+    [StoredPassword persistTokenToKeyChain:token];
+    
+    complete(AUTHENTICATION_SUCCESS, nil, nil);
 }
 
 - (void) authorize:(NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {

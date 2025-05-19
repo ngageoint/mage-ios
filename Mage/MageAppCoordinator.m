@@ -15,7 +15,6 @@
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "MAGE-Swift.h"
-#import "MagicalRecord+MAGE.h"
 
 @interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationDelegate, EventChooserDelegate, ServerURLDelegate>
 

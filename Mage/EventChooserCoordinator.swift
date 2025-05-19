@@ -75,7 +75,7 @@ extension EventChooserCoordinator : EventSelectionDelegate {
         if let remoteId = event.remoteId {
             Server.setCurrentEventId(remoteId)
         }
-        MagicalRecord.save { localContext in
+        CoreDataManager.sharedManager.saveContext { localContext in
             // Save this event as the most recent one
             // this will get changed once it re-pulls form the server but that is fine
             let localEvent = event.mr_(in: localContext)

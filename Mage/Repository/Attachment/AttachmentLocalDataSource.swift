@@ -122,14 +122,13 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
             return
         }
         
-        MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
+        CoreDataManager.sharedManager.saveContext { localContext in
             if let id = localContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: attachmentUri) {
                 if let attachment = try? localContext.existingObject(with: id) as? Attachment {
                     attachment.localPath = localPath;
                 }
             }
-        }) { (success, error) in
-        };
+        }
     }
     
     func markForDeletion(attachmentUri: URL?) {
@@ -138,15 +137,14 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
             return
         }
         
-        MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
+        CoreDataManager.sharedManager.saveContext { localContext in
             if let id = localContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: attachmentUri) {
                 if let attachment = try? localContext.existingObject(with: id) as? Attachment {
                     attachment.markedForDeletion = true;
                     attachment.dirty = true;
                 }
             }
-        }) { (success, error) in
-        };
+        }
     }
     
     func undelete(attachmentUri: URL?) {
@@ -155,14 +153,13 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
             return
         }
         
-        MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
+        CoreDataManager.sharedManager.saveContext { localContext in
             if let id = localContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: attachmentUri) {
                 if let attachment = try? localContext.existingObject(with: id) as? Attachment {
                     attachment.markedForDeletion = false;
                     attachment.dirty = false;
                 }
             }
-        }) { (success, error) in
-        };
+        }
     }
 }

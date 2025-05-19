@@ -31,42 +31,37 @@
 }
 
 + (Locations *) locationsForAllUsers: (NSManagedObjectContext*) context {
-    
-    
-    NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
-                        ascending:NO
-                    withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocations]]
-                          groupBy:nil
-                         delegate:nil
-                        inContext:context];
-    
-    
+    NSFetchRequest *fetchRequest = [Location fetchRequest];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocations]];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:context
+                                                                                                 sectionNameKeyPath:nil
+                                                                                                          cacheName:nil];
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (Locations *) locationsForMap: (NSManagedObjectContext*) context {
-    NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
-                                                                               ascending:NO
-                                                                           withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocationsForMap]]
-                                                                                 groupBy:nil
-                                                                                delegate:nil
-                                                                               inContext:context];
-    
-    
+    NSFetchRequest *fetchRequest = [Location fetchRequest];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocationsForMap]];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:context
+                                                                                                 sectionNameKeyPath:nil
+                                                                                                          cacheName:nil];
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
 + (Locations *) locationsForUser:(User *) user context: (NSManagedObjectContext*) context {
-    NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
-                                                                               ascending:NO
-                                                                           withPredicate:[NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", user, [Server currentEventId]]
-                                                                                 groupBy:nil
-                                                                                delegate:nil
-                                                                               inContext:context];
-    
+    NSFetchRequest *fetchRequest = [Location fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", user, [Server currentEventId]];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:context
+                                                                                                 sectionNameKeyPath:nil
+                                                                                                          cacheName:nil];
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
-
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController {
     if (self = [super init]) {

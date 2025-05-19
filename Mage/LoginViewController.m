@@ -7,7 +7,6 @@
 //
 
 #import "LoginViewController.h"
-#import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "IDPLoginView.h"
 #import "LocalLoginView.h"

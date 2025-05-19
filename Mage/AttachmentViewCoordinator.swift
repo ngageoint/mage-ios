@@ -7,7 +7,6 @@
 //
 
 import AVKit;
-import MagicalRecord;
 import Kingfisher
 import QuickLook
 

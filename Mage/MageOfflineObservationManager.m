@@ -23,19 +23,29 @@
         _delegate = delegate;
         _context = context;
         
-        _observationFetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
-                                                                      ascending:NO
-                                                                  withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND error != nil", [Server currentEventId]]
-                                                                        groupBy:nil
-                                                                       delegate:self
-                                                                      inContext:context];
+        NSFetchRequest *request = [Observation fetchRequest];
+        request.predicate = [NSPredicate predicateWithFormat:@"eventId == %@ AND error != nil", [Server currentEventId]];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
+        
+        _observationFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
+                                                                                  managedObjectContext:context
+                                                                                    sectionNameKeyPath:nil
+                                                                                             cacheName:nil];
+        _observationFetchedResultsController.delegate = self;
     }
     
     return self;
 }
 
 + (NSUInteger) offlineObservationCount {
-    NSUInteger count = [Observation MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"error != nil"]];
+    NSFetchRequest *request = [Observation fetchRequest];
+    request.predicate = [NSPredicate predicateWithFormat:@"error != nil"];
+    NSError *error = nil;
+    NSUInteger count = [[NSManagedObjectContext defaultContext] countForFetchRequest:request error:&error];
+    if (error) {
+        NSLog(@"Error counting offline observations: %@", error);
+        return 0;
+    }
     return count;
 }
 

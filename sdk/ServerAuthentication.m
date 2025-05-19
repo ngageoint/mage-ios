@@ -191,39 +191,29 @@
     NSDictionary *userJson = [self.response objectForKey:@"user"];
     NSString *userId = [userJson objectForKey:@"id"];
     
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        User *user = [User fetchUserWithUserId:userId context:localContext];
-        if (!user) {
-            [User insertWithJson:userJson context:localContext];
-        } else {
-            [user updateWithJson:userJson context:localContext];
-        }
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        [MageSessionManager sharedManager].token = token;
-        
-        [[UserUtility singleton] resetExpiration];
-        
-        NSDictionary *loginParameters = @{
-                                          @"username": username,
-                                          @"serverUrl": [[MageServer baseURL] absoluteString],
-                                          @"tokenExpirationDate": tokenExpirationDate
-                                          };
-        
-        [defaults setObject:loginParameters forKey:@"loginParameters"];
-        
-        NSString *userId = [userJson objectForKey:@"id"];
-        [defaults setObject: userId forKey:@"currentUserId"];
-        
-        NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
-        [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
-        [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:@"local" forKey:@"loginType"];
-        [defaults synchronize];
-        [StoredPassword persistPasswordToKeyChain:password];
-        [StoredPassword persistTokenToKeyChain:token];
-        
-        complete(AUTHENTICATION_SUCCESS, nil, nil);
-    }];
+    [MageSessionManager sharedManager].token = token;
+    
+    [[UserUtility singleton] resetExpiration];
+    
+    NSDictionary *loginParameters = @{
+                                      @"username": username,
+                                      @"serverUrl": [[MageServer baseURL] absoluteString],
+                                      @"tokenExpirationDate": tokenExpirationDate
+                                      };
+    
+    [defaults setObject:loginParameters forKey:@"loginParameters"];
+    
+    [defaults setObject: userId forKey:@"currentUserId"];
+    
+    NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
+    [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
+    [defaults setBool:YES forKey:@"deviceRegistered"];
+    [defaults setValue:@"local" forKey:@"loginType"];
+    [defaults synchronize];
+    [StoredPassword persistPasswordToKeyChain:password];
+    [StoredPassword persistTokenToKeyChain:token];
+    
+    complete(AUTHENTICATION_SUCCESS, nil, nil);
 }
 
 @end

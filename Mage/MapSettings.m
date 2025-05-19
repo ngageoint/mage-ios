@@ -9,6 +9,7 @@
 #import "GridTypeTableViewCell.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
+#import "CoreDataManager.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate, GridTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
@@ -313,43 +314,41 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) trafficSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:sender.on forKey:@"mapShowTraffic"];
+    [defaults setBool:sender.isOn forKey:@"mapShowTraffic"];
     [defaults synchronize];
+    [self.delegate mapSettingsChanged:self];
 }
 
 - (void) observationSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    defaults.hideObservations = !sender.on;
+    defaults.hideObservations = !sender.isOn;
     [defaults synchronize];
+    [self.delegate mapSettingsChanged:self];
 }
 
-- (void) peopleSwitchChanged: (UISwitch *) sender {
+- (void) peopleSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:!sender.on forKey:@"hidePeople"];
+    [defaults setBool:!sender.isOn forKey:@"hidePeople"];
     [defaults synchronize];
+    [self.delegate mapSettingsChanged:self];
 }
 
 - (void) feedSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    Feed* feed = (Feed *)[Feed MR_findFirstByAttribute:@"tag" withValue:[NSNumber numberWithInteger: sender.tag]];
-    NSMutableArray *selectedFeedsForEvent = [[defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]] mutableCopy];
-    if (sender.on) {
-        [selectedFeedsForEvent addObject:feed.remoteId];
-    } else {
-        [selectedFeedsForEvent removeObject:feed.remoteId];
+    NSMutableArray *selectedFeeds = [[defaults arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]] mutableCopy];
+    if (!selectedFeeds) {
+        selectedFeeds = [NSMutableArray array];
     }
-    [defaults setObject:selectedFeedsForEvent forKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
-    [defaults synchronize];
     
-    BOOL isOn = sender.on;
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        Feed *localFeed = [feed MR_inContext:localContext];
-        [localFeed setSelected:isOn];
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        
-    }];
-
+    if (sender.isOn) {
+        [selectedFeeds addObject:@(sender.tag)];
+    } else {
+        [selectedFeeds removeObject:@(sender.tag)];
+    }
+    
+    [defaults setObject:selectedFeeds forKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
+    [defaults synchronize];
+    [self.delegate mapSettingsChanged:self];
 }
 
 @end

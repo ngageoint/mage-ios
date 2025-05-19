@@ -11,7 +11,6 @@ import CoreData
 import Combine
 import UIKit
 import BackgroundTasks
-import MagicalRecord
 import NSManagedObjectContextExtensions
 
 private struct FormLocalDataSourceProviderKey: InjectionKey {
