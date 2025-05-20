@@ -244,20 +244,32 @@ enum ObservationState: Int, CustomStringConvertible {
                             MageLogger.misc.error("Error saving observations: \(error)")
                         }
                         MageLogger.misc.debug("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
+
                     }
+                    
+                    localContext.reset();
+                    MageLogger.misc.debug("TIMING reset the local context for chunk \(chunks.count)")
+                    MageLogger.misc.debug("Saved chunk \(chunks.count)")
                 }
                 
-                MageLogger.misc.debug("TIMING Saved all observations. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-                if let observation = observationToNotifyAbout {
-                    NotificationCenter.default.post(name: .ObservationFetched, object: observation)
+                MageLogger.misc.debug("Received \(newObservationCount) new observations and send bulk is \(initial)")
+                if ((initial && newObservationCount > 0) || newObservationCount > 1) {
+                    NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
+                } else if let observationToNotifyAbout = observationToNotifyAbout {
+                    NotificationRequester.observationPulled(observationToNotifyAbout);
                 }
-                success?(task, responseObject)
+                
+                MageLogger.misc.debug("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+                DispatchQueue.main.async {
+                    success?(task, responseObject);
+                }
             }
         }, failure: { task, error in
-            failure?(task, error)
+            MageLogger.misc.error("Error \(error)")
+            failure?(task, error);
         })
         
-        return task
+        return task;
     }
     
     @objc public static func operationToPushObservation(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error?) -> Void)?) -> URLSessionDataTask? {
@@ -316,8 +328,13 @@ enum ObservationState: Int, CustomStringConvertible {
         
         return manager?.post_TASK(deleteMethod.route, parameters: deleteMethod.parameters, progress: nil, success: { task, responseObject in
             // if the delete worked, remove the observation from the database on the phone
-            CoreDataManager.shared().managedObjectContext.mr_deleteEntity(observation);
-            success?(task, nil);
+            MagicalRecord.save { context in
+                observation.mr_deleteEntity(in: context);
+            } completion: { contextDidSave, error in
+                // TODO: why are we calling failure here?
+                // I think because the ObservationPushService is going to try to parse the response and update the observation which we do not want
+                failure?(task, nil);
+            }
         }, failure: { task, error in
             MageLogger.misc.error("Failure to delete")
             let error = error as NSError
@@ -327,8 +344,13 @@ enum ObservationState: Int, CustomStringConvertible {
                 if let response = task?.response as? HTTPURLResponse {
                     if (response.statusCode == 404) {
                         // Observation does not exist on the server, delete it
-                        CoreDataManager.shared().managedObjectContext.mr_deleteEntity(observation);
-                        success?(task, nil);
+                        MagicalRecord.save { context in
+                            observation.mr_deleteEntity(in: context);
+                        } completion: { contextDidSave, error in
+                            // TODO: why are we calling failure here?
+                            // I think because the ObservationPushService is going to try to parse the response and update the observation which we do not want
+                            failure?(task, nil);
+                        }
                     }
                 } else {
                     failure?(task, error);
@@ -367,11 +389,13 @@ enum ObservationState: Int, CustomStringConvertible {
             guard let response = response as? [AnyHashable : Any], let observationUrl = response[ObservationKey.url.key] as? String, let remoteId = response[ObservationKey.id.key] as? String else {
                 return;
             }
-            CoreDataManager.shared().managedObjectContext.mr_setWorkingName(#function)
-            let localObservation = observation.mr_(in: CoreDataManager.shared().managedObjectContext)
-            localObservation.remoteId = remoteId
-            localObservation.url = observationUrl;
-            CoreDataManager.shared().managedObjectContext.mr_saveToPersistentStore(completion: { contextDidSave, error in
+            MagicalRecord.save { context in
+                guard let localObservation = observation.mr_(in: context) else {
+                    return;
+                }
+                localObservation.remoteId = remoteId
+                localObservation.url = observationUrl;
+            } completion: { contextDidSave, error in
                 if !contextDidSave {
                     MageLogger.misc.error("Failed to save observation to DB after getting an ID")
                 }
@@ -385,13 +409,14 @@ enum ObservationState: Int, CustomStringConvertible {
                     MageLogger.misc.error("failure");
                 });
                 manager?.addTask(putTask);
-            })
+            }
         }, failure: failure)
         return task;
     }
     
     func fieldNameToField(formId: NSNumber, name: String) -> [AnyHashable : Any]? {
-        if let managedObjectContext = managedObjectContext, let form: Form = try? managedObjectContext.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", formId)) {
+        if let managedObjectContext = managedObjectContext, let form: Form =
+            try? managedObjectContext.fetchFirst(Form.self, predicate: NSPredicate(format: "\(FormKey.formId.key) == %@", formId)) {
             return form.getFieldByName(name: name)
         }
         return nil
@@ -512,13 +537,14 @@ enum ObservationState: Int, CustomStringConvertible {
     @objc public static func fetchLastObservationDate(context: NSManagedObjectContext) -> Date? {
         let user = User.fetchCurrentUser(context: context);
         if let userRemoteId = user?.remoteId, let currentEventId = Server.currentEventId() {
-            let fetchRequest = NSFetchRequest<Observation>(entityName: "Observation")
-            fetchRequest.predicate = NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", currentEventId, userRemoteId)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: ObservationKey.lastModified.key, ascending: false)]
-            let observation = try? context.fetch(fetchRequest).first
-            return observation?.lastModified;
+            let observation = try? context.fetchFirst(
+                Observation.self,
+                sortBy: [NSSortDescriptor(key: ObservationKey.lastModified.key, ascending: false)],
+                predicate: NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", currentEventId, userRemoteId)
+            )
+            return observation?.lastModified
         }
-        return nil;
+        return nil
     }
     
     @discardableResult
@@ -1322,5 +1348,21 @@ enum ObservationState: Int, CustomStringConvertible {
             }
         }
         self.locations = observationLocations
+    }
+}
+
+extension Observation { // Helper methods
+    
+    static func findFirst(byAttribute attribute: ObservationKey, withValue: NSObject, in context: NSManagedObjectContext) -> Observation? {
+        let fetchRequest = Observation.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "\(attribute.key) == %@", withValue)
+        fetchRequest.fetchLimit = 1
+        return try? context.fetch(fetchRequest).first
+    }
+    
+    static func findFirst(in context: NSManagedObjectContext) -> Observation? {
+        let fetchRequest = Observation.fetchRequest()
+        fetchRequest.fetchLimit = 1
+        return try? context.fetch(fetchRequest).first
     }
 }

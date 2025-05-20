@@ -114,9 +114,8 @@ class EventTableDataSource: NSObject {
         var context: NSManagedObjectContext?
         
         guard let context = context else { return }
-        guard let recentRequest: NSFetchRequest<Event> = Event.mr_requestAll(in: context) as? NSFetchRequest<Event> else {
-            return
-        }
+        let recentRequest = Event.fetchRequest()
+        
         recentRequest.predicate = NSPredicate(format: "(remoteId IN %@)", recentEventIds)
         recentRequest.includesSubentities = false
         let sortBy = NSSortDescriptor(key: "recentSortOrder", ascending: true)

@@ -26,7 +26,7 @@ class FormDefaultsViewController: UIViewController {
     
     private lazy var managedObjectContext: NSManagedObjectContext = {
         var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType);
-        managedObjectContext.parent = [MageInitializer setupCoreData];
+        managedObjectContext.parent = MageInitializer.setupCoreData()
         managedObjectContext.stalenessInterval = 0.0;
         managedObjectContext.name = "Form Default Temporary Context";
         return managedObjectContext;

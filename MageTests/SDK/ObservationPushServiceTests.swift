@@ -118,7 +118,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
             try? context.save()
         }
         
-        guard let observation: Observation = Observation.mr_findFirst(in: context) else {
+        guard let observation: Observation = Observation.findFirst(in: context) else {
             Nimble.fail()
             return;
         }
@@ -212,7 +212,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
             }
         }
         
-        guard let observation: Observation = Observation.mr_findFirst(in: context) else {
+        guard let observation: Observation = Observation.findFirst(in: context) else {
             Nimble.fail()
             return;
         }
@@ -298,7 +298,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
         
         MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-            guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
+            guard let observation: Observation = Observation.findFirst(in: localContext) else {
                 Nimble.fail()
                 return;
             }
@@ -344,14 +344,14 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
         
         MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-            guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
+            guard let observation: Observation = Observation.findFirst(in: localContext) else {
                 Nimble.fail()
                 return;
             }
             observation.dirty = true;
         });
         
-        expect(Observation.mr_findFirst()?.dirty).toEventually(beTrue());
+        expect(Observation.findFirst()?.dirty).toEventually(beTrue());
     }
     
     @MainActor
@@ -461,7 +461,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
         
         MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-            guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
+            guard let observation: Observation = Observation.findFirst(in: localContext) else {
                 Nimble.fail()
                 return;
             }
@@ -535,7 +535,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationFavorite.mr_findFirst()?.favorite).toEventually(beTrue());
         
-        expect(Observation.mr_findFirst()?.favoritesMap).toEventuallyNot(beEmpty());
+        expect(Observation.findFirst()?.favoritesMap).toEventuallyNot(beEmpty());
         
         repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
         expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beTrue());
@@ -646,7 +646,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         var repository: ObservationImportantRepository
         repository.flagImportant(observationUri: localObservation.objectID.uriRepresentation(), reason: "new important")
         
-        expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+        expect(Observation.findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
         
         expect(stubCalled).toEventually(beTrue());
         
@@ -677,7 +677,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         var repository: ObservationImportantRepository
         repository.flagImportant(observationUri: observation.objectID.uriRepresentation(), reason: "new important")
         
-        expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+        expect(Observation.findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
         expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }
@@ -717,7 +717,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         repository.flagImportant(observationUri: observation.objectID.uriRepresentation(), reason: "new important")
         
         expect(stubCalled).toEventually(beTrue());
-        expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+        expect(Observation.findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
         expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }
@@ -757,7 +757,7 @@ class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
         repository.flagImportant(observationUri: observation.objectID.uriRepresentation(), reason: "new important")
         
         expect(stubCalled).toEventually(beTrue());
-        expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+        expect(Observation.findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
         expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }

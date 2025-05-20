@@ -34,52 +34,43 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
     
     var pushSubject: PassthroughSubject<ObservationImportantModel, Never>? = PassthroughSubject<ObservationImportantModel, Never>()
     var importantFetchedResultsController: NSFetchedResultsController<ObservationImportant>?
-    
+        
     override init() {
         super.init()
         persistence.contextChange
             .sink { [weak self] _ in
-                @Injected(\.nsManagedObjectContext)
-                var context: NSManagedObjectContext?
-                guard let context else { return }
-                context.performAndWait { [weak self] in
-                    self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
-                        by: "observation.\(ObservationKey.timestamp.key)",
-                        ascending: false,
-                        with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                        groupBy: nil,
-                        delegate: self,
-                        in: context
-                    ) as? NSFetchedResultsController<ObservationImportant>
-                }
-                for observationImportant in self?.importantFetchedResultsController?.fetchedObjects ?? [] {
-                    if observationImportant.observation?.remoteId != nil {
-                        self?.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
-                    }
-                }
-        }
-        .store(in: &cancellables)
+                self?.fetchObservationImportant()
+            }
+            .store(in: &cancellables)
         
+        fetchObservationImportant()
+    }
+    
+    func fetchObservationImportant() {
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         guard let context else { return }
         context.performAndWait { [weak self] in
-            self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
-                by: "observation.\(ObservationKey.timestamp.key)",
-                ascending: false,
-                with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                groupBy: nil,
-                delegate: self,
-                in: context
-            ) as? NSFetchedResultsController<ObservationImportant>
+            let fetchRequest: NSFetchRequest<ObservationImportant> = ObservationImportant.fetchRequest()
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "observation.\(ObservationKey.timestamp.key)", ascending: false)]
+            fetchRequest.predicate = NSPredicate(format: "\(ObservationKey.dirty.key) == true")
+            self?.importantFetchedResultsController = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            self?.importantFetchedResultsController?.delegate = self
+            try? self?.importantFetchedResultsController?.performFetch()
         }
+        
         for observationImportant in self.importantFetchedResultsController?.fetchedObjects ?? [] {
             if observationImportant.observation?.remoteId != nil {
                 self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
             }
         }
     }
-    
+
     func getImportantsToPush() -> [ObservationImportantModel] {
         return self.importantFetchedResultsController?.fetchedObjects?.map({ important in
             ObservationImportantModel(observationImportant: important)
