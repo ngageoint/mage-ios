@@ -11,10 +11,10 @@ import CoreData
 
 @objc public class Team: NSManagedObject {
     
-    @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Team? {
-        let team = Team.mr_createEntity(in: context);
-        team?.update(json: json, context: context);
-        return team;
+    @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Team {
+        let team = Team(context: context)
+        team.update(json: json, context: context)
+        return team
     }
     
     @objc public func update(json: [AnyHashable : Any], context: NSManagedObjectContext) {
@@ -29,10 +29,9 @@ import CoreData
                 if let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId) {
                     teamUsers.insert(user);
                 } else {
-                    if let user = User.mr_createEntity(in: context) {
-                        user.remoteId = userId;
-                        teamUsers.insert(user);
-                    }
+                    let user = User(context: context)
+                    user.remoteId = userId;
+                    teamUsers.insert(user);
                 }
             }
         }

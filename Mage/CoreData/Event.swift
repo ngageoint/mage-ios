@@ -167,9 +167,8 @@ import CoreData
                         team.update(json: teamJson, context: context);
                         self.addToTeams(team);
                     } else {
-                        if let team = Team.insert(json: teamJson, context: context) {
-                            self.addToTeams(team);
-                        }
+                        let team = Team.insert(json: teamJson, context: context)
+                        self.addToTeams(team)
                     }
                 }
             }
