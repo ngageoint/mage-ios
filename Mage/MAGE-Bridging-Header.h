@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "StoredPassword.h"
 #import "MageInitializer.h"
+#import "CoreDataManager.h"
 
 #import "ObservationFields.h"
 #import "ObservationAccuracy.h"
