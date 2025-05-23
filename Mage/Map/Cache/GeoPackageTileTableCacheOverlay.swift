@@ -6,7 +6,7 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import geopackage_ios
+import GeoPackage
 
 class GeoPackageTileTableCacheOverlay: GeoPackageTableCacheOverlay {
     public var featureOverlayQueries: [GPKGFeatureOverlayQuery] = []

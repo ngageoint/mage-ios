@@ -8,8 +8,7 @@
 
 #import "TestingAppDelegate.h"
 #import "MagicalRecord+MAGE.h"
-#import "GPKGGeoPackageManager.h"
-#import "GPKGGeoPackageFactory.h"
+@import GeoPackage;
 #import "MAGE-Swift.h"
 
 @interface TestingAppDelegate ()

@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import geopackage_ios
+import GeoPackage
 import DataSourceDefinition
 import MapFramework
 

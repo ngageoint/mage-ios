@@ -7,8 +7,8 @@
 
 import Foundation
 import MapKit
-import gars_ios
-import mgrs_ios
+import GARS
+import MGRS
 import CLLocationCoordinate2DExtensions
 
 enum CoordinateDisplayType: Int, CustomStringConvertible {

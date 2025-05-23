@@ -7,9 +7,9 @@
 
 import Foundation
 import MapKit
-import sf_wkt_ios
+import SimpleFeaturesWKT
 import MapFramework
-import geopackage_ios
+import GeoPackage
 
 extension MKShape {
     static func fromWKT(wkt: String, distance: Double?) -> MKShape? {

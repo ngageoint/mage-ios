@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "SFPolygon.h"
+@import SimpleFeatures;
 
 /**
  * Map utilities

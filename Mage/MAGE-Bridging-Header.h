@@ -12,11 +12,6 @@
 #import "MapObservation.h"
 #import "MapObservationManager.h"
 
-// Not sure why this isn't getting added via the geopackage pod...
-#import "GPKGMapShapeConverter.h"
-#import "GPKGFeatureRowData.h"
-#import "GPKGFeatureOverlay.h"
-
 #import "MAGERoutes.h"
 #import "NotificationRequester.h"
 #import "FadeTransitionSegue.h"
@@ -26,7 +21,6 @@
 #import "NSDate+display.h"
 #import "Locations.h"
 #import "Observations.h"
-#import "SFGeometryUtils.h"
 #import "ExternalDevice.h"
 #import "MageSessionManager.h"
 #import "MapSettings.h"
@@ -37,7 +31,6 @@
 #import "SignUpViewController_Server5.h"
 #import "ChangePasswordViewController.h"
 #import "LocalLoginView.h"
-//#import "DeviceUUID.h"
 #import "Authentication.h"
 #import "FormDefaults.h"
 #import "AttachmentCollectionDataStore.h"
@@ -66,7 +59,3 @@
 #import "WMSTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
-//#import "XYZDirectoryCacheOverlay.h"
-//#import "GeoPackageCacheOverlay.h"
-//#import "GeoPackageFeatureTableCacheOverlay.h"
-//#import "CacheOverlayTypes.h"

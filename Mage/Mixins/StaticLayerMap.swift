@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import MapFramework
 import CoreData
-import geopackage_ios
+import GeoPackage
 import DataSourceDefinition
 
 protocol StaticLayerMap {

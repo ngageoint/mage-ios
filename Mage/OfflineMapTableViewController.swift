@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 import MagicalRecord
-import geopackage_ios
+import GeoPackage
 
 @objc class OfflineMapTableViewController: UITableViewController, CacheOverlayListener {
     

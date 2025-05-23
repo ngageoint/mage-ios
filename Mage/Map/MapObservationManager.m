@@ -7,8 +7,8 @@
 //
 
 #import "MapObservationManager.h"
-#import "SFGeometryUtils.h"
-#import "GPKGMapShapeConverter.h"
+@import SimpleFeatures;
+@import GeoPackage;
 #import "MapShapeObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MAGE-Swift.h"

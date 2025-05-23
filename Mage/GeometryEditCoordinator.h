@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MaterialComponents/MaterialContainerScheme.h>
-#import "SFGeometry.h"
+@import SimpleFeatures;
 #import <MapKit/MapKit.h>
 
 @protocol GeometryEditDelegate
