@@ -7,7 +7,7 @@
 //
 //
 
-import geopackage_ios
+import GeoPackage
 import ExceptionCatcher
 
 extension GPKGFeatureIndexResults: Sequence {

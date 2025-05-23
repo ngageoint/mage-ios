@@ -8,10 +8,10 @@
 
 import Foundation
 import CoreData
-import sf_ios
+import SimpleFeatures
 import UIKit
 import MagicalRecord
-import geopackage_ios
+import GeoPackage
 
 enum ObservationState: Int, CustomStringConvertible {
     case Archive, Active

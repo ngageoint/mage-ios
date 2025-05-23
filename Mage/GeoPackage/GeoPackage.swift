@@ -14,9 +14,9 @@
 
 import Foundation
 import ExceptionCatcher
-import geopackage_ios
-import sf_ios
-import sf_proj_ios
+import GeoPackage
+import SimpleFeatures
+import SimpleFeaturesProjections
 
 @objc actor GeoPackage: NSObject {
     
@@ -323,7 +323,7 @@ import sf_proj_ios
                         if featureTableCacheOverlay.indexed {
                             let featureTiles = GPKGFeatureTiles(geoPackage: geoPackage, andFeatureDao: featureDao)
                             var maxFeaturesPerTile = UserDefaults.standard.geoPackageFeatureTilesMaxFeaturesPerTile
-                            if featureDao.geometryType() == SF_POINT {
+                            if featureDao.geometryType() == .POINT {
                                 maxFeaturesPerTile = UserDefaults.standard.geoPackageFeatureTilesMaxPointsPerTile
                             }
                             featureTiles?.maxFeaturesPerTile = NSNumber(value: maxFeaturesPerTile)
@@ -354,7 +354,7 @@ import sf_proj_ios
                         } else {
                             // Not indexed, add the features to the map
                             var maxFeaturesPerTable = UserDefaults.standard.geoPackageFeaturesMaxFeaturesPerTable
-                            if featureDao.geometryType() == SF_POINT {
+                            if featureDao.geometryType() == .POINT {
                                 maxFeaturesPerTable = UserDefaults.standard.geoPackageFeaturesMaxPointsPerTable
                             }
                             if let projection = featureDao.projection,
