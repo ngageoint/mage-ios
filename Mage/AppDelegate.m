@@ -139,7 +139,8 @@
 
     // do a canary save
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        Canary *canary = [Canary MR_findFirstInContext:localContext];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Canary"];
+        Canary *canary = [[localContext executeFetchRequest:request error:nil] firstObject];
         if (!canary) {
             canary = [Canary MR_createEntityInContext:localContext];
         }
@@ -249,7 +250,8 @@
     if (protectedDataAvailable) {
         // do a canary save
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-            Canary *canary = [Canary MR_findFirstInContext:localContext];
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Canary"];
+            Canary *canary = [[localContext executeFetchRequest:request error:nil] firstObject];
             if (!canary) {
                 canary = [Canary MR_createEntityInContext:localContext];
             }
