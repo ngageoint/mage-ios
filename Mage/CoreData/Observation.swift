@@ -416,8 +416,14 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     func fieldNameToField(formId: NSNumber, name: String) -> [AnyHashable : Any]? {
-        if let managedObjectContext = managedObjectContext, let form : Form = Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext) {
-            return form.getFieldByName(name: name)
+        if let managedObjectContext = managedObjectContext {
+            do {
+                if let form: Form = try managedObjectContext.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", formId)) {
+                    return form.getFieldByName(name: name)
+                }
+            } catch {
+                print("Error fetching form: \(error)")
+            }
         }
         return nil
     }
@@ -537,7 +543,7 @@ enum ObservationState: Int, CustomStringConvertible {
     @objc public static func fetchLastObservationDate(context: NSManagedObjectContext) -> Date? {
         let user = User.fetchCurrentUser(context: context);
         if let userRemoteId = user?.remoteId, let currentEventId = Server.currentEventId() {
-            let observation = Observation.mr_findFirst(with: NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", currentEventId, userRemoteId), sortedBy: ObservationKey.lastModified.key, ascending: false, in:context);
+            let observation = try? context.fetchFirst(Observation.self, predicate: NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", currentEventId, userRemoteId))
             return observation?.lastModified;
         }
         return nil;
@@ -595,7 +601,7 @@ enum ObservationState: Int, CustomStringConvertible {
         
         let state = Observation.stateFromJson(json: feature);
         
-        if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
+        if let remoteId = remoteId, let existingObservation = try? context.fetchFirst(Observation.self, predicate: NSPredicate(format: "\(ObservationKey.remoteId.key) == %@", remoteId)) {
             // if the observation is archived, delete it
             if state == .Archive {
                 MageLogger.misc.debug("Deleting archived observation with id: \(String(describing: remoteId))")
@@ -615,7 +621,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 
                 existingObservation.populate(json: feature, eventForms: eventForms);
                 if let userId = existingObservation.userId {
-                    if let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context) {
+                    if let user = try? context.fetchFirst(User.self, predicate: NSPredicate(format: "\(UserKey.remoteId.key) == %@", userId)) {
                         existingObservation.user = user
                         if user.lastUpdated == nil {
                             // new user, go fetch
@@ -634,7 +640,7 @@ enum ObservationState: Int, CustomStringConvertible {
                         
                         let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
                             MageLogger.misc.debug("Fetched user \(userId) successfully.")
-                            existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
+                            existingObservation.user = try? context.fetchFirst(User.self, predicate: NSPredicate(format: "\(ObservationKey.remoteId.key) == %@", userId))
                         } failure: { task, error in
                             MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                         }
@@ -719,7 +725,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 if let observation = Observation.mr_createEntity(in: context) {
                     observation.populate(json: feature, eventForms: eventForms);
                     if let userId = observation.userId {
-                        if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
+                        if let user = try? context.fetchFirst(User.self, predicate: NSPredicate(format: "\(UserKey.remoteId.key) == %@", userId)) {
                             observation.user = user
                             // this could happen if we pulled the teams and know this user belongs on a team
                             // but did not pull the user information because the bulk user pull failed
@@ -740,7 +746,7 @@ enum ObservationState: Int, CustomStringConvertible {
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
                                 MageLogger.misc.debug("Fetched user \(userId) successfully.")
-                                observation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
+                                observation.user = try? context.fetchFirst(User.self, predicate: NSPredicate(format: "\(ObservationKey.remoteId.key) == %@", userId))
                             } failure: { task, error in
                                 MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
@@ -860,7 +866,7 @@ enum ObservationState: Int, CustomStringConvertible {
                             var formFields: [[String: AnyHashable]]? = nil
                             if let eventForms = eventForms {
                                 formFields = eventForms[formId]
-                            } else if let managedObjectContext = managedObjectContext, let fetchedForm : Form = Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext) {
+                            } else if let managedObjectContext = managedObjectContext, let fetchedForm : Form = try? managedObjectContext.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", formId)) {
                                 formFields = fetchedForm.json?.json?[FormKey.fields.key] as? [[String: AnyHashable]]
                             }
                             
@@ -1068,7 +1074,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 
                 guard let context = managedObjectContext ?? context else { return nil }
                 return (context).performAndWait {
-                    return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
+                    return try? context.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", formId))
                 }
             }
             return nil;
@@ -1246,11 +1252,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 observationLocation.fieldName = Observation.PRIMARY_OBSERVATION_GEOMETRY
                 observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
                 
-                let eventForm = Form.mr_findFirst(
-                    byAttribute: "formId",
-                    withValue: observationLocation.formId,
-                    in: context
-                )
+                let eventForm = try? context.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", observationLocation.formId))
                 
                 if let form = primaryObservationForm,
                    let eventForm = eventForm,
@@ -1314,11 +1316,7 @@ enum ObservationState: Int, CustomStringConvertible {
                                 observationLocation.formId = eventFormId.int64Value
                                 observationLocation.observationFormId = form[FormKey.id.key] as? String
                                 
-                                let eventForm = Form.mr_findFirst(
-                                    byAttribute: "formId",
-                                    withValue: observationLocation.formId,
-                                    in: context
-                                )
+                                let eventForm = try? context.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", observationLocation.formId))
                                 
                                 if let eventForm = eventForm,
                                    let primaryField = eventForm.primaryMapField,

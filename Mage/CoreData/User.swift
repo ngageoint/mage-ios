@@ -142,7 +142,7 @@ import Kingfisher
             MagicalRecord.save { localContext in
                 if let userId = userJson[UserKey.id.key] as? String {
                     
-                    if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: localContext) {
+                    if let user = try? localContext.fetchFirst(User.self, predicate: NSPredicate(format: "\(UserKey.remoteId.key) == %@", userId)) {
                         // already exists in core data, lets update the object we have
                         MageLogger.misc.debug("Updating user in the database \(user.name ?? "")");
                         user.update(json: userJson, context: localContext);
