@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 enum MapSearchType: Int32 {
     case none
@@ -22,7 +23,14 @@ enum MapSearchType: Int32 {
     }
     
     @objc public static func getSettings() -> Settings? {
-        return Settings.mr_findFirst()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else {
+            return nil
+        }
+        
+        return try? context.fetchFirst(Settings.self)
     }
     
     @objc public func populate(_ json: [AnyHashable : Any]) {
