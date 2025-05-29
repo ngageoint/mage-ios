@@ -22,6 +22,10 @@ public extension NSManagedObjectContext {
         let fetchedResult = try self.fetch(request)
         return fetchedResult
     }
+    
+    func delete<T: NSManagedObject>(object: T) {
+        self.delete(object)
+    }
 
     // Returns the count of objects for the given entity
     func countOfObjects<T: NSManagedObject>(_ entityClass: T.Type, predicate: NSPredicate? = nil) throws -> Int? {

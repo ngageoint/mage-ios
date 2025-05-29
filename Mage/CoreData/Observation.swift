@@ -1,5 +1,5 @@
 //
-//  Observation.m
+//  Observation.swift
 //  mage-ios-sdk
 //
 //  Created by William Newman on 4/13/16.
@@ -330,7 +330,7 @@ enum ObservationState: Int, CustomStringConvertible {
         return manager?.post_TASK(deleteMethod.route, parameters: deleteMethod.parameters, progress: nil, success: { task, responseObject in
             // if the delete worked, remove the observation from the database on the phone
             MagicalRecord.save { context in
-                observation.mr_deleteEntity(in: context);
+                context.delete(observation)
             } completion: { contextDidSave, error in
                 // TODO: why are we calling failure here?
                 // I think because the ObservationPushService is going to try to parse the response and update the observation which we do not want
@@ -346,7 +346,7 @@ enum ObservationState: Int, CustomStringConvertible {
                     if (response.statusCode == 404) {
                         // Observation does not exist on the server, delete it
                         MagicalRecord.save { context in
-                            observation.mr_deleteEntity(in: context);
+                            context.delete(observation)
                         } completion: { contextDidSave, error in
                             // TODO: why are we calling failure here?
                             // I think because the ObservationPushService is going to try to parse the response and update the observation which we do not want
@@ -605,7 +605,7 @@ enum ObservationState: Int, CustomStringConvertible {
             // if the observation is archived, delete it
             if state == .Archive {
                 MageLogger.misc.debug("Deleting archived observation with id: \(String(describing: remoteId))")
-                existingObservation.mr_deleteEntity(in: context)
+                context.delete(existingObservation)
             } else if !existingObservation.isDirty {
                 // if the observation is not dirty, and has been updated, update it
                 if let lastModified = feature[ObservationKey.lastModified.key] as? String {
@@ -654,7 +654,7 @@ enum ObservationState: Int, CustomStringConvertible {
                         existingObservation.observationImportant = important;
                     }
                 } else if let existingObservationImportant = existingObservation.observationImportant {
-                    existingObservationImportant.mr_deleteEntity(in: context);
+                    context.delete(existingObservationImportant)
                     existingObservation.observationImportant = nil;
                 }
                 
@@ -671,7 +671,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 
                 for (userId, favorite) in favoritesMap {
                     if !favoriteUserIds.contains(userId) {
-                        favorite.mr_deleteEntity(in: context);
+                        context.delete(favorite)
                         existingObservation.removeFromFavorites(favorite);
                     }
                 }
@@ -709,12 +709,12 @@ enum ObservationState: Int, CustomStringConvertible {
                     }
                     attachmentsDeletedOnServer?.forEach {
                         existingObservation.removeFromAttachments($0)
-                        $0.mr_deleteEntity(in: context)
+                        context.delete($0)
                     }
                 }
 
                 for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
-                    location.mr_deleteEntity(in: context)
+                    context.delete(location)
                 }
 
                 existingObservation.createObservationLocations(context: context)
@@ -1234,7 +1234,7 @@ enum ObservationState: Int, CustomStringConvertible {
             self.managedObjectContext?.mr_saveToPersistentStore(completion: completion)
         } else {
             MagicalRecord.save({ [weak self] localContext in
-                self?.mr_deleteEntity(in: localContext);
+                if let self = self { localContext.delete(self) }
             }, completion: completion)
         }
     }

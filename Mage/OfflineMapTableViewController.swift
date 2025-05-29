@@ -737,7 +737,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                         await deleteCacheOverlay(localOverlay)
                         MagicalRecord.save(blockAndWait: { context in
                             let localLayer = editedLayer.mr_(in: context)
-                            localLayer?.mr_deleteEntity()
+                            context.delete(localLayer!)
                         })
                     }
                 }

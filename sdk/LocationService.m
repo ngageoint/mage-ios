@@ -131,7 +131,6 @@ NSInteger const kLocationPushLimit = 100;
         [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
         NSError *error = nil;
         NSArray *locations = [_context executeFetchRequest:fetchRequest error:&error];
-        //[GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.context];
         
         if (![locations count]) return;
         
@@ -150,17 +149,11 @@ NSInteger const kLocationPushLimit = 100;
                 NSError *error = nil;
                 [weakSelf.context save:&error];
             }];
-//            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-//                for (GPSLocation *location in locations) {
-//                    [location MR_deleteEntityInContext:localContext];
-//                }
-//            } completion:^(BOOL contextDidSave, NSError *error) {
                 self.isPushingLocations = NO;
                 
                 if ([locations count] == kLocationPushLimit) {
                     [weakSelf pushLocations];
                 }
-//            }];
         } failure:^(NSError * _Nonnull error) {
             NSLog(@"Failure to push GPS locations to the server");
             self.isPushingLocations = NO;
