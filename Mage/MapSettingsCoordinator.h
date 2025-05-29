@@ -15,8 +15,8 @@
 
 @interface MapSettingsCoordinator : NSObject
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>) containerScheme;
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
 
 @property (weak, nonatomic) id<MapSettingsCoordinatorDelegate> delegate;
 

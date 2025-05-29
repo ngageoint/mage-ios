@@ -14,10 +14,9 @@ extension Notification.Name {
     public static let MAGEFormFetched = Notification.Name(Form.MAGEFormFetched)
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
-    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
-    public static let MapItemsTapped = Notification.Name("MapItemsTapped")
+    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired")
+    public static let MAGEServerContactedAfterOfflineLogin = Notification.Name("mil.nga.mage.server.contacted")
     public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
-    public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
     public static let ObservationUpdated = Notification.Name("ObservationUpdated")
     public static let DirectionsToItem = Notification.Name("DirectionsToItem")
     public static let DismissBottomSheet = Notification.Name("DismissBottomSheet")
@@ -37,6 +36,25 @@ extension Notification.Name {
     case mgrs
     case dms
     case gars
+}
+
+public enum MageDirectories: String {
+    case cache = "MapCache"
+}
+
+public enum MageZooms: Int {
+    case featureMaxZoom = 21
+}
+
+extension UserDefaults {
+    var coordinateDisplay: CoordinateDisplayType {
+        get {
+            return CoordinateDisplayType(rawValue: integer(forKey: #function)) ?? .latitudeLongitude
+        }
+        set {
+            setValue(newValue.rawValue, forKey: #function)
+        }
+    }
 }
 
 @objc extension UserDefaults {
@@ -126,15 +144,6 @@ extension Notification.Name {
         }
     }
     
-    var mapType: Int {
-        get {
-            return integer(forKey: #function)
-        }
-        set {
-            set(newValue, forKey: #function)
-        }
-    }
-    
     var gridType: Int {
         get {
             return integer(forKey: #function)
@@ -171,7 +180,7 @@ extension Notification.Name {
         }
     }
     
-    var selectedOnlineLayers: [String: [NSNumber]]? {
+    @objc var selectedOnlineLayers: [String: [NSNumber]]? {
         get {
             return dictionary(forKey: #function) as? [String: [NSNumber]];
         }
@@ -682,7 +691,7 @@ extension Notification.Name {
     }
     
     // MARK: GeoPackage keys
-    var geoPackageFeatureTilesMaxPointsPerTile: Int {
+    @objc public var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {
             return integer(forKey: "geopackage_feature_tiles_max_points_per_tile");
         }
@@ -691,7 +700,7 @@ extension Notification.Name {
         }
     }
     
-    var geoPackageFeatureTilesMaxFeaturesPerTile: Int {
+    @objc public var geoPackageFeatureTilesMaxFeaturesPerTile: Int {
         get {
             return integer(forKey: "geopackage_feature_tiles_max_features_per_tile");
         }
@@ -700,7 +709,7 @@ extension Notification.Name {
         }
     }
     
-    var geoPackageFeaturesMaxPointsPerTable: Int {
+    @objc public var geoPackageFeaturesMaxPointsPerTable: Int {
         get {
             return integer(forKey: "geopackage_features_max_points_per_table");
         }
@@ -709,7 +718,7 @@ extension Notification.Name {
         }
     }
     
-    var geoPackageFeaturesMaxFeaturesPerTable: Int {
+    @objc public var geoPackageFeaturesMaxFeaturesPerTable: Int {
         get {
             return integer(forKey: "geopackage_features_max_features_per_table");
         }
@@ -724,6 +733,15 @@ extension Notification.Name {
         }
         set {
             set(newValue, forKey: "shape_screen_click_percentage")
+        }
+    }
+    
+    var attachmentPushFrequency: TimeInterval {
+        get {
+            return double(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
         }
     }
 }

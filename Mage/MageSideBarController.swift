@@ -20,12 +20,10 @@ class SidebarUIButton: UIButton {
     var title: String?
 }
 
-@objc class MageSideBarController : UIViewController {
+@objc class MageSideBarController : MageNavStack {
     
     var activeButton: SidebarUIButton?;
-    var scheme: MDCContainerScheming?;
-    
-    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserActionsDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
+    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
     weak public var delegate: Delegate?;
     
     private lazy var railScroll : UIScrollView = {
@@ -70,19 +68,6 @@ class SidebarUIButton: UIButton {
         navigationRail.backgroundColor = containerScheme.colorScheme.surfaceColor;
         view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         railScroll.backgroundColor = containerScheme.colorScheme.surfaceColor;
-    }
-    
-    init(frame: CGRect) {
-        super.init(nibName: nil, bundle: nil);
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
-    }
-    
-    @objc convenience public init(containerScheme: MDCContainerScheming) {
-        self.init(frame: CGRect.zero);
-        self.scheme = containerScheme;
     }
     
     override func viewDidLoad() {
@@ -168,12 +153,13 @@ class SidebarUIButton: UIButton {
         
         var allRailItems: [SidebarUIButton] = [observationButton, locationButton];
 
-        for feed in Feed.mr_findAll()! as! [Feed] {
-            let feedButton: SidebarUIButton = createFeedRailView(feed: feed);
-            feedButton.feed = feed;
-            allRailItems.append(feedButton);
+        if let currentEventId = Server.currentEventId() {
+            for feed in Feed.getEventFeeds(eventId: currentEventId) {
+                let feedButton: SidebarUIButton = createFeedRailView(feed: feed);
+                feedButton.feed = feed;
+                allRailItems.append(feedButton);
+            }
         }
-
         for view in allRailItems {
             navigationRail.addArrangedSubview(view);
         }
@@ -183,8 +169,7 @@ class SidebarUIButton: UIButton {
     func createLocationsRailView() -> SidebarUIButton {
         let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", systemImageName: "person.2.fill");
         locationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let locationViewController : LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
-//        locationViewController.actionsDelegate = delegate;
+        var locationViewController = SwiftUIViewController(swiftUIView: LocationList().environmentObject(router))
         locationButton.viewController = locationViewController;
         return locationButton;
     }
@@ -192,8 +177,7 @@ class SidebarUIButton: UIButton {
     func createObservationsRailView() -> SidebarUIButton {
         let observationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.observations, title: "Observations", imageName: "observations");
         observationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-//        let observationViewController : ObservationTableViewController = ObservationTableViewController(attachmentDelegate: delegate, observationActionsDelegate: delegate, scheme: self.scheme);
-        let observationViewController : ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
+        let observationViewController = SwiftUIViewController(swiftUIView: ObservationList().environmentObject(router))
         observationButton.viewController = observationViewController;
         return observationButton;
     }

@@ -11,7 +11,6 @@ import MaterialComponents.MaterialBottomSheet
 
 @objc protocol ObservationEditListener {
     @objc func fieldValueChanged(_ field: [String: Any], value: Any?);
-//    @objc optional func fieldSelected(_ field: [String: Any], currentValue: Any?);
     @objc optional func formUpdated(_ form: [String: Any], eventForm: [String: Any], form index: Int);
 }
 
@@ -238,11 +237,11 @@ extension ObservationEditCoordinator: ObservationFormReorderDelegate {
         } else {
             self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
                 if (!contextDidSave) {
-                    print("Error saving observation to persistent store, context did not save");
+                    MageLogger.misc.error("Error saving observation to persistent store, context did not save");
                 }
                 
                 if let safeError = error {
-                    print("Error saving observation to persistent store \(safeError)");
+                    MageLogger.misc.error("Error saving observation to persistent store \(safeError)");
                 }
                 
                 delegate?.editComplete(self.observation!, coordinator: self as NSObject);
@@ -278,36 +277,36 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func saveObservation(observation: Observation) {
-        print("Save observation");
+        MageLogger.misc.debug("Save observation");
         if let user = user {
             self.observation!.userId = user.remoteId;
         }
         self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
             if (!contextDidSave) {
-                print("Error saving observation to persistent store, context did not save");
+                MageLogger.misc.error("Error saving observation to persistent store, context did not save");
             }
             
             if let safeError = error {
-                print("Error saving observation to persistent store \(safeError)");
+                MageLogger.misc.error("Error saving observation to persistent store \(safeError)");
             }
             
-            print("Saved the observation \(observation.remoteId ?? "")");
+            MageLogger.misc.debug("Saved the observation \(observation.remoteId ?? "")");
+            observation.createObservationLocations(context: self.managedObjectContext)
+            try? self.managedObjectContext.save()
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
             observationEditController = nil;
-            navigationController = nil;
         }
     }
     
     func cancelEdit() {
-        print("Cancel the edit")
+        MageLogger.misc.debug("Cancel the edit")
         let alert = UIAlertController(title: "Discard Changes", message: "Do you want to discard your changes?", preferredStyle: .alert);
         alert.addAction(UIAlertAction(title: "Yes, Discard", style: .destructive, handler: { [self] (action) in
             self.navigationController?.dismiss(animated: true, completion: nil);
             self.managedObjectContext.reset();
             delegate?.editCancel(self as NSObject);
             observationEditController = nil;
-            navigationController = nil;
         }));
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
         self.navigationController?.present(alert, animated: true, completion: nil);

@@ -73,15 +73,26 @@ import CoreData
     @objc public static let StaticLayerLoaded = "mil.nga.giat.mage.static.layer.loaded";
     
     @objc public static func operationToFetchStaticLayerData(layer: StaticLayer, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
         guard let manager = MageSessionManager.shared(), let layerId = layer.remoteId, let eventId = layer.eventId, let baseURL = MageServer.baseURL() else {
             return nil;
         }
         
+        try? layer.managedObjectContext?.obtainPermanentIDs(for: [layer])
+        context?.performAndWait {
+            let localLayer = context?.object(with: layer.objectID) as? StaticLayer
+            localLayer?.downloading = true
+            try? context?.save()
+        }
+        
         let url = baseURL.appendingPathComponent("/api/events/\(eventId)/layers/\(layerId)/features")
         let task = manager.get_TASK(url.absoluteString, parameters: nil, progress: nil) { task, responseObject in
-            MagicalRecord.save { context in
+            guard let context = context else { return }
+            context.performAndWait {
                 guard var dictionaryResponse = responseObject as? [AnyHashable : Any],
-                      let localLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@", layerId, eventId), in: context),
+                      let localLayer = try? context.fetchFirst(StaticLayer.self, predicate: NSPredicate(format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@", layerId, eventId)),
                       let localLayerId = localLayer.remoteId
                 else {
                     return;
@@ -127,24 +138,26 @@ import CoreData
                 localLayer.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_LOADED)
                 localLayer.downloading = false;
                 
-            } completion: { contextDidSave, error in
-                if contextDidSave {
-                    if let localLayer = layer.mr_(in: NSManagedObjectContext.mr_default()) {
-                        NotificationCenter.default.post(name: .StaticLayerLoaded, object: localLayer);
-                    }
-                }
+                try? context.save()
+                NotificationCenter.default.post(name: .StaticLayerLoaded, object: localLayer)
             }
+//        completion: { contextDidSave, error in
+//                if contextDidSave {
+//                    @Injected(\.nsManagedObjectContext)
+//                    var context: NSManagedObjectContext?
+//                    
+//                    guard let context = context else { return }
+//                    if let localLayer = layer.mr_(in: context) {
+//                        NotificationCenter.default.post(name: .StaticLayerLoaded, object: localLayer);
+//                    }
+//                }
+//            }
         } failure: { task, error in
             NSLog("error \(error)")
         }
 
         
-        MagicalRecord.save { context in
-            let localLayer = layer.mr_(in: context);
-            localLayer?.downloading = true;
-        } completion: { contextDidSave, error in
-            
-        }
+
         return task;
     }
     
@@ -153,20 +166,35 @@ import CoreData
             return;
         }
         
-        var l = StaticLayer.mr_findFirst(with: NSPredicate(format:"(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
-        if l == nil {
-            l = StaticLayer.mr_createEntity(in: context);
-            l?.populate(json, eventId: eventId);
-            l?.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
-            NSLog("Inserting layer with id: \(l?.remoteId ?? -1) into event \(eventId)")
-        } else {
-            NSLog("Updating layer with id: \(l?.remoteId ?? -1) into event \(eventId)")
-            l?.populate(json, eventId: eventId);
+        return context.performAndWait {
+            
+            var layer = try? context.fetchFirst(
+                StaticLayer.self,
+                predicate: NSPredicate(
+                    format:"(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)",
+                    remoteLayerId,
+                    eventId
+                )
+            )
+            if layer == nil {
+                let l = StaticLayer(context: context);
+                try? context.obtainPermanentIDs(for: [l])
+                l.populate(json, eventId: eventId);
+                l.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
+                NSLog("Inserting layer with id: \(l.remoteId ?? -1) into event \(eventId)")
+                layer = l
+            } else {
+                NSLog("Updating layer with id: \(layer?.remoteId ?? -1) into event \(eventId)")
+                layer?.populate(json, eventId: eventId);
+            }
+            
+            try? context.save()
+            
+            guard let l = layer else {
+                return;
+            }
+            NSLog("layer loaded \(l.name ?? "unkonwn")? \(l.loaded ?? -1.0)")
         }
-        guard let l = l else {
-            return;
-        }
-        NSLog("layer loaded \(l.name ?? "unkonwn")? \(l.loaded ?? -1.0)")
     }
     
     @objc public static func fetchStaticLayerData(eventId: NSNumber, staticLayer: StaticLayer) {
@@ -178,13 +206,15 @@ import CoreData
     }
     
     @objc public func removeStaticLayerData() {
-        MagicalRecord.save { [weak self] context in
-            guard let localLayer = self?.mr_(in: context) else {
-                return;
-            }
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        context?.performAndWait({
+            guard let localLayer = try? context?.existingObject(with: self.objectID) as? StaticLayer else { return }
+            
             localLayer.loaded = NSNumber(floatLiteral: Layer.OFFLINE_LAYER_NOT_DOWNLOADED);
             localLayer.data = nil
-        } completion: { contextDidSave, error in
-        }
+            try? context?.save()
+        })
     }
 }

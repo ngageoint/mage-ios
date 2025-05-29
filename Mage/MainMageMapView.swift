@@ -10,10 +10,46 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap, OnlineLayerMap {
+class MainMageMapView: 
+    MageMapView,
+        FilteredObservationsMap,
+        FilteredUsersMap,
+        BottomSheetEnabled,
+        MapDirections,
+        HasMapSettings,
+        HasMapSearch,
+        CanCreateObservation,
+        CanReportLocation,
+        UserHeadingDisplay,
+        UserTrackingMap,
+        StaticLayerMap,
+        GeoPackageLayerMap,
+        FeedsMap
+{
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
+    @Injected(\.feedItemRepository)
+    var feedItemRepository: FeedItemRepository
+    
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
+    var router: MageRouter
+    
+    // this initializes the location manager, this should go somewhere else in the future
+    @Injected(\.currentLocationRepository)
+    var currentLocationRepository: CurrentLocationRepository
+    
+    var childCoordinators: [NSObject] = [];
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
+    var bottomSheet: MDCBottomSheetController?
+    var attachmentViewCoordinator: AttachmentViewCoordinator?;
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -30,11 +66,11 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var feedsMapMixin: FeedsMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
-    
+    var observationMap: ObservationsMap?
+
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
     var viewFeedItemNotificationObserver: Any?
-    var startStraightLineNavigationNotificationObserver: Any?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -47,10 +83,13 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         return buttonStack
     }()
     
-    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: MDCContainerScheming?) {
+    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: MDCContainerScheming?, router: MageRouter) {
         self.viewController = viewController
         self.navigationController = navigationController
+        self.router = router
         super.init(scheme: scheme)
+        // this initializes the location manager, this should go somewhere else in the future
+        _ = currentLocationRepository.getLastLocation()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -67,11 +106,8 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         if let viewFeedItemNotificationObserver = viewFeedItemNotificationObserver {
             NotificationCenter.default.removeObserver(viewFeedItemNotificationObserver, name: .ViewFeedItem, object: nil)
         }
-        if let startStraightLineNavigationNotificationObserver = startStraightLineNavigationNotificationObserver {
-            NotificationCenter.default.removeObserver(startStraightLineNavigationNotificationObserver, name: .StartStraightLineNavigation, object: nil)
-        }
         viewController = nil
-        navigationController = nil
+//        navigationController = nil
     }
     
     override func removeFromSuperview() {
@@ -91,6 +127,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         geoPackageLayerMapMixin = nil
         feedsMapMixin = nil
         onlineLayerMapMixin = nil
+        observationMap = nil
     }
     
     override func layoutView() {
@@ -101,7 +138,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             buttonStack.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
             buttonStack.autoPinEdge(toSuperviewMargin: .left)
             
-            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
+//            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
             bottomSheetMixin = BottomSheetMixin(bottomSheetEnabled: self)
             if let viewController = viewController {
@@ -109,7 +146,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
                 mapMixins.append(mapDirectionsMixin!)
             }
             
-            persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
+            persistedMapStateMixin = PersistedMapStateMixin()
             hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, rootView: self)
             canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, shouldShowFab: UIDevice.current.userInterfaceIdiom != .pad, rootView: self, mapStackView: mapStack, locationService: nil)
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 2)
@@ -119,8 +156,8 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self)
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
             feedsMapMixin = FeedsMapMixin(feedsMap: self)
-            onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self)
-            mapMixins.append(filteredObservationsMapMixin!)
+            onlineLayerMapMixin = OnlineLayerMapMixin()
+//            mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
             mapMixins.append(persistedMapStateMixin!)
@@ -134,33 +171,39 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(geoPackageLayerMapMixin!)
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
+
+            observationMap = ObservationsMap()
+            mapMixins.append(observationMap!)
         }
         
         initiateMapMixins()
         
         viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
-            if let observation = notification.object as? Observation {
-                self?.viewObservation(observation)
+            Task {
+                await self?.bottomSheetMixin?.dismissBottomSheet()
+                if let observation = notification.object as? URL {
+                    await self?.router.appendRoute(ObservationRoute.detail(uri: observation))
+                }
             }
         }
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
-            if let user = notification.object as? User {
-                self?.viewUser(user)
+            Task {
+                await self?.bottomSheetMixin?.dismissBottomSheet()
+                if let user = notification.object as? URL {
+                    await self?.router.appendRoute(UserRoute.detail(uri: user))
+                }
             }
         }
 
         viewFeedItemNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
-            if let feedItem = notification.object as? FeedItem {
-                self?.viewFeedItem(feedItem)
+            Task {
+                await self?.bottomSheetMixin?.dismissBottomSheet()
+                if let feedItemUri = notification.object as? URL {
+                    await self?.viewFeedItemUri(feedItemUri)
+                }
             }
         }
-    }
-    
-    func viewUser(_ user: User) {
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let uvc = UserViewController(user: user, scheme: scheme)
-        navigationController?.pushViewController(uvc, animated: true)
     }
     
     func viewFeedItem(_ feedItem: FeedItem) {
@@ -169,13 +212,119 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         navigationController?.pushViewController(fivc, animated: true)
     }
     
-    func viewObservation(_ observation: Observation) {
+    @MainActor
+    func viewFeedItemUri(_ feedItemUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
-        navigationController?.pushViewController(ovc, animated: true)
+        if let feedItem = await feedItemRepository.getFeedItem(feedItemUri: feedItemUri) {
+            let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
+            navigationController?.pushViewController(fivc, animated: true)
+        }
     }
     
     func onSearchResultSelected(result: GeocoderResult) {
         // no-op
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        NSLog("Mage map view region did change")
+        let zoomLevel = mapView.zoomLevel
+        
+        mapStateRepository.zoom = Int(zoomLevel)
+        mapStateRepository.region = mapView.region
+    }
+}
+
+extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
+    func editCancel(_ coordinator: NSObject) {
+        removeChildCoordinator(coordinator);
+    }
+    
+    func editComplete(_ observation: Observation, coordinator: NSObject) {
+        removeChildCoordinator(coordinator);
+    }
+    
+    func removeChildCoordinator(_ coordinator: NSObject) {
+        if let index = self.childCoordinators.firstIndex(where: { (child) -> Bool in
+            return coordinator == child;
+        }) {
+            self.childCoordinators.remove(at: index);
+        }
+    }
+    
+    func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
+        ObservationActions.favorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: userRepository.getCurrentUser()?.remoteId)()
+    }
+    
+    func copyLocation(_ locationString: String) {
+        UIPasteboard.general.string = locationString;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(locationString) copied to clipboard"))
+    }
+    
+    func getDirectionsToObservation(_ observation: Observation, sourceView: UIView?) {
+        guard let location = observation.location else {
+            return;
+        }
+        var extraActions: [UIAlertAction] = [];
+        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: UIImage(named: "defaultMarker"), coordinate: location.coordinate))
+        }));
+        
+        if let viewController = self.viewController {
+            ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: "Observation", viewController: viewController, extraActions: extraActions, sourceView: sourceView);
+        }
+    }
+    
+    func deleteObservation(_ observation: Observation) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        if let viewController = self.viewController {
+            ObservationActionHandler.deleteObservation(observation: observation, viewController: viewController) { (success, error) in
+                self.navigationController?.popViewController(animated: true);
+            }
+        }
+    }
+    
+    func cancelAction() {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+    }
+    
+}
+
+extension MainMageMapView: AttachmentSelectionDelegate {
+    func selectedAttachment(_ attachmentUri: URL!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
+    }
+    
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: unsentAttachment["contentType"] as! String, delegate: self, scheme: scheme);
+        attachmentViewCoordinator?.start();
+    }
+    
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
+    }
+}
+
+extension MainMageMapView: AttachmentViewDelegate {
+    func doneViewing(coordinator: NSObject) {
+        attachmentViewCoordinator = nil;
     }
 }

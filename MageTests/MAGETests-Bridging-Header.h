@@ -2,3 +2,4 @@
 #import "MAGE-Bridging-Header.h"
 
 #import "TestingAppDelegate.h"
+#import "AuthenticationCoordinator+Testing.h"

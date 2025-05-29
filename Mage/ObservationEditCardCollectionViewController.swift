@@ -23,6 +23,8 @@ import MaterialComponents.MDCCard
 }
 
 @objc class ObservationEditCardCollectionViewController: UIViewController {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
     
     var delegate: (ObservationEditCardDelegate & FieldSelectionDelegate)?;
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
@@ -712,17 +714,15 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
 
 extension ObservationEditCardCollectionViewController: AttachmentSelectionDelegate {
     
-    func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func attachmentFabTapped(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
         // delete the attachment
-        attachment.markedForDeletion = true;
-        attachment.dirty = true;
+        attachmentRepository.markForDeletion(attachmentUri: attachmentUri)
         handler(true);
         let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted");
         let messageAction = MDCSnackbarMessageAction();
         messageAction.title = "UNDO";
         let actionHandler = {() in
-            attachment.markedForDeletion = false;
-            attachment.dirty = false;
+            self.attachmentRepository.undelete(attachmentUri: attachmentUri)
             handler(false);
         }
         messageAction.handler = actionHandler;
@@ -743,15 +743,16 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         MDCSnackbarManager.default.show(message);
     }
     
-    func selectedAttachment(_ attachment: Attachment!) {
-        if (attachment.url == nil) {
-            return;
-        }
+    func selectedAttachment(_ attachmentUri: URL!) {
         guard let nav = self.navigationController else {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
-        attachmentViewCoordinator?.start();
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
@@ -762,15 +763,16 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator?.start();
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        if (attachment.url == nil) {
-            return;
-        }
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
         guard let nav = self.navigationController else {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
-        attachmentViewCoordinator?.start();
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
     }
 }
 

@@ -5,8 +5,14 @@
 
 import Foundation
 import Kingfisher
+import MaterialViews
 
 @objc class MageRootViewController : UITabBarController {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
     
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
@@ -14,29 +20,43 @@ import Kingfisher
     var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
     var mapRequestFocusObserver: Any?
+    var snackbarNotificationObserver: Any?
+    var attachmentViewCoordinator: AttachmentViewCoordinator?
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
-        let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
+        let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self, context: context);
         return manager;
     }();
     
     private lazy var settingsTabItem: UINavigationController = {
-        let svc = SettingsTableViewController(scheme: scheme)!;
+        let svc = SettingsTableViewController(scheme: scheme, context: context)!;
         let nc = UINavigationController(rootViewController: svc);
         nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape.fill"), tag: 4);
         return nc;
     }();
     
     private lazy var locationsTab: UINavigationController = {
-        let locationTableViewController: LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
-        let nc = UINavigationController(rootViewController: locationTableViewController);
+        let locationTableViewController = LocationListNavStack(scheme: scheme)
+        
+        let nc = UINavigationController()
         nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);
-        return nc;
+        nc.pushViewController(locationTableViewController, animated: false)
+
+        return nc
     }()
     
+    func selectedAttachment(_ attachmentUri: URL!, navigationController: UINavigationController) {
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: navigationController, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
+    }
+    
     private lazy var observationsTab: UINavigationController = {
-        let observationTableViewController: ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
-        let nc = UINavigationController(rootViewController: observationTableViewController);
+        let observationList = ObservationListNavStack(scheme: scheme)
+        let nc = UINavigationController(rootViewController: observationList);
         nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
         return nc;
     }()
@@ -49,11 +69,8 @@ import Kingfisher
     }()
     
     private lazy var meTab: UINavigationController? = {
-        guard let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
-            return nil
-        }
-        let uvc = UserViewController(user: user, scheme: self.scheme);
-        let nc = UINavigationController(rootViewController: uvc);
+        let meNavStack = MeNavStack(scheme: scheme)
+        let nc = UINavigationController(rootViewController: meNavStack);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3);
         return nc;
     }()
@@ -116,6 +133,14 @@ import Kingfisher
             self?.selectedViewController = self?.mapTab;
             
         }
+        
+        snackbarNotificationObserver = NotificationCenter.default.addObserver(forName: .SnackbarNotification, object: nil, queue: .main, using: { notification in
+            if let object = notification.object as? SnackbarNotification,
+               let message = object.snackbarModel?.message
+            {
+                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: message))
+            }
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -127,6 +152,10 @@ import Kingfisher
         offlineObservationManager.delegate = nil
         if let mapRequestFocusObserver = mapRequestFocusObserver {
             NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
+        }
+        
+        if let snackbarNotificationObserver = snackbarNotificationObserver {
+            NotificationCenter.default.removeObserver(snackbarNotificationObserver, name: .SnackbarNotification, object: nil);
         }
         self.delegate = nil
         UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")
@@ -227,5 +256,11 @@ extension MageRootViewController: OfflineObservationDelegate {
         } else {
             self.profileTabBarItem?.badgeValue = nil;
         }
+    }
+}
+
+extension MageRootViewController: AttachmentViewDelegate {
+    func doneViewing(coordinator: NSObject) {
+        attachmentViewCoordinator = nil;
     }
 }

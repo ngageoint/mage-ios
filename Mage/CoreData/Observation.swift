@@ -13,7 +13,7 @@ import UIKit
 import MagicalRecord
 import geopackage_ios
 
-enum State: Int, CustomStringConvertible {
+enum ObservationState: Int, CustomStringConvertible {
     case Archive, Active
     
     var description: String {
@@ -28,7 +28,9 @@ enum State: Int, CustomStringConvertible {
 
 @objc public class Observation: NSManagedObject, Navigable {
     
-    var orderedAttachments: [Attachment]? {
+    public static let PRIMARY_OBSERVATION_GEOMETRY = "primary-observation-geometry"
+
+    var orderedAttachments: [AttachmentModel]? {
         get {
             var observationForms: [[String: Any]] = []
             if let properties = self.properties as? [String: Any] {
@@ -71,6 +73,8 @@ enum State: Int, CustomStringConvertible {
                     } ?? 0
                     return firstFormIndex < secondFormIndex
                 }
+            }).map({ attachment in
+                AttachmentModel(attachment: attachment)
             })
         }
     }
@@ -108,6 +112,11 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func fetchedResultsController(_ observation: Observation, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Observation>? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         let fetchRequest = Observation.fetchRequest()
 
         if let remoteId = observation.remoteId {
@@ -118,14 +127,14 @@ enum State: Int, CustomStringConvertible {
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
         }
         
-        let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         observationFetchedResultsController.delegate = delegate
         do {
             try observationFetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            MageLogger.misc.error("Unable to Perform Fetch Request")
+            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
         return observationFetchedResultsController
     }
@@ -139,43 +148,48 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func operationToPullObservations(initial: Bool, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         guard let currentEventId = Server.currentEventId(), let baseURL = MageServer.baseURL() else {
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/observations";
-        print("Fetching observations from event \(currentEventId)");
+        MageLogger.misc.debug("Fetching observations from event \(currentEventId)");
         
         var parameters: [AnyHashable : Any] = [
             // does this work on the server?
             "sort" : "lastModified+DESC"
         ]
         
-        if let lastObservationDate = Observation.fetchLastObservationDate(context: NSManagedObjectContext.mr_default()) {
+        if let lastObservationDate = Observation.fetchLastObservationDate(context: context) {
             parameters["startDate"] = ISO8601DateFormatter.string(from: lastObservationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
         }
         
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             guard let features = responseObject as? [[AnyHashable : Any]] else {
                 success?(task, nil);
                 return;
             }
             
-            print("Fetched \(features.count) observations from the server, saving");
+            MageLogger.misc.debug("Fetched \(features.count) observations from the server, saving");
             if features.count == 0 {
                 success?(task, responseObject)
                 return;
             }
             
             let saveStart = Date()
-            NSLog("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
             let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
             let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
             localContext.perform {
-                NSLog("TIMING There are \(features.count) features to save, chunking into groups of 250")
+                MageLogger.misc.debug("TIMING There are \(features.count) features to save, chunking into groups of 250")
                 localContext.mr_setWorkingName(#function)
                 
                 var chunks = features.chunked(into: 250);
@@ -190,7 +204,7 @@ enum State: Int, CustomStringConvertible {
                     }
                 }
                 localContext.reset();
-                NSLog("TIMING we have \(chunks.count) groups to save")
+                MageLogger.misc.debug("TIMING we have \(chunks.count) groups to save")
                 while (chunks.count > 0) {
                     autoreleasepool {
                         guard let features = chunks.last else {
@@ -198,7 +212,7 @@ enum State: Int, CustomStringConvertible {
                         }
                         chunks.removeLast();
                         let createObservationsDate = Date()
-                        NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
+                        MageLogger.misc.debug("TIMING creating \(features.count) observations for chunk \(chunks.count)")
 
                         for observation in features {
                             if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
@@ -208,51 +222,51 @@ enum State: Int, CustomStringConvertible {
                                 }
                             }
                         }
-                        NSLog("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
+                        MageLogger.misc.debug("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
                     }
                     
                     // only save once per chunk
                     let localSaveDate = Date()
                     do {
-                        NSLog("TIMING saving \(features.count) observations on local context")
+                        MageLogger.misc.debug("TIMING saving \(features.count) observations on local context")
                         try localContext.save()
                     } catch {
-                        print("Error saving observations: \(error)")
+                        MageLogger.misc.error("Error saving observations: \(error)")
                     }
-                    NSLog("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
+                    MageLogger.misc.debug("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
                     
                     rootSavingContext.perform {
                         let rootSaveDate = Date()
 
                         do {
-                            NSLog("TIMING saving \(features.count) observations on root context")
+                            MageLogger.misc.debug("TIMING saving \(features.count) observations on root context")
                             try rootSavingContext.save()
                         } catch {
-                            print("Error saving observations: \(error)")
+                            MageLogger.misc.error("Error saving observations: \(error)")
                         }
-                        NSLog("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
+                        MageLogger.misc.debug("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
 
                     }
                     
                     localContext.reset();
-                    NSLog("TIMING reset the local context for chunk \(chunks.count)")
-                    NSLog("Saved chunk \(chunks.count)")
+                    MageLogger.misc.debug("TIMING reset the local context for chunk \(chunks.count)")
+                    MageLogger.misc.debug("Saved chunk \(chunks.count)")
                 }
                 
-                NSLog("Received \(newObservationCount) new observations and send bulk is \(initial)")
+                MageLogger.misc.debug("Received \(newObservationCount) new observations and send bulk is \(initial)")
                 if ((initial && newObservationCount > 0) || newObservationCount > 1) {
                     NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
                 } else if let observationToNotifyAbout = observationToNotifyAbout {
                     NotificationRequester.observationPulled(observationToNotifyAbout);
                 }
                 
-                NSLog("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+                MageLogger.misc.debug("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
                 DispatchQueue.main.async {
                     success?(task, responseObject);
                 }
             }
         }, failure: { task, error in
-            print("Error \(error)")
+            MageLogger.misc.error("Error \(error)")
             failure?(task, error);
         })
         
@@ -260,7 +274,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     @objc public static func operationToPushObservation(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error?) -> Void)?) -> URLSessionDataTask? {
-        let archived = (observation.state?.intValue ?? 0) == State.Archive.rawValue
+        let archived = (observation.state?.intValue ?? 0) == ObservationState.Archive.rawValue
         if observation.remoteId != nil {
             if (archived) {
                 return Observation.operationToDelete(observation: observation, success: success, failure: failure);
@@ -277,7 +291,7 @@ enum State: Int, CustomStringConvertible {
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/favorite";
-        NSLog("Trying to push favorite to server \(url)")
+        MageLogger.misc.debug("Trying to push favorite to server \(url)")
 
         let manager = MageSessionManager.shared();
         
@@ -293,7 +307,7 @@ enum State: Int, CustomStringConvertible {
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/important";
-        NSLog("Trying to push favorite to server \(url)")
+        MageLogger.misc.debug("Trying to push favorite to server \(url)")
         
         let manager = MageSessionManager.shared();
         
@@ -308,7 +322,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func operationToDelete(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error?) -> Void)?) -> URLSessionDataTask? {
-        NSLog("Trying to delete observation \(observation.url ?? "no url")");
+        MageLogger.misc.debug("Trying to delete observation \(observation.url ?? "no url")");
         let deleteMethod = MAGERoutes.observation().deleteRoute(observation);
         
         let manager = MageSessionManager.shared();
@@ -323,11 +337,11 @@ enum State: Int, CustomStringConvertible {
                 failure?(task, nil);
             }
         }, failure: { task, error in
-            NSLog("Failure to delete")
+            MageLogger.misc.error("Failure to delete")
             let error = error as NSError
             if let data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] as? Data {
                 let errorString = String(data: data, encoding: .utf8);
-                NSLog("Error deleting observation \(errorString ?? "unknown error")");
+                MageLogger.misc.error("Error deleting observation \(errorString ?? "unknown error")");
                 if let response = task?.response as? HTTPURLResponse {
                     if (response.statusCode == 404) {
                         // Observation does not exist on the server, delete it
@@ -349,7 +363,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func operationToUpdate(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        NSLog("Trying to update observation \(observation.url ?? "unknown url")")
+        MageLogger.misc.debug("Trying to update observation \(observation.url ?? "unknown url")")
         let manager = MageSessionManager.shared();
         guard let context = observation.managedObjectContext, let event = Event.getCurrentEvent(context:context) else {
             return nil;
@@ -363,22 +377,16 @@ enum State: Int, CustomStringConvertible {
                 return manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
             }
         }
-//        else {
-//            // TODO: 6.1 and above
-//            if let observationUrl = observation.url {
-//                return manager?.patch_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
-//            }
-//        }
         return nil;
     }
     
     static func operationToCreate(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         let create = MAGERoutes.observation().createId(observation);
-        NSLog("Trying to create observation %@", create.route);
-        let manager = MageSessionManager.shared();
+        MageLogger.misc.debug("Trying to create observation \(String(describing: create.route))")
+        let manager = MageSessionManager.shared()
         
         let task = manager?.post_TASK(create.route, parameters: nil, progress: nil, success: { task, response in
-            NSLog("Successfully created location for observation resource");
+            MageLogger.misc.debug("Successfully created location for observation resource")
             guard let response = response as? [AnyHashable : Any], let observationUrl = response[ObservationKey.url.key] as? String, let remoteId = response[ObservationKey.id.key] as? String else {
                 return;
             }
@@ -390,16 +398,16 @@ enum State: Int, CustomStringConvertible {
                 localObservation.url = observationUrl;
             } completion: { contextDidSave, error in
                 if !contextDidSave {
-                    NSLog("Failed to save observation to DB after getting an ID")
+                    MageLogger.misc.error("Failed to save observation to DB after getting an ID")
                 }
                 guard let context = observation.managedObjectContext, let event = Event.getCurrentEvent(context: context) else {
                     return;
                 }
                 let putTask = manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: { task, response in
-                    print("successfully submitted observation")
+                    MageLogger.misc.debug("successfully submitted observation")
                     success?(task, response);
                 }, failure: { task, error in
-                    print("failure");
+                    MageLogger.misc.error("failure");
                 });
                 manager?.addTask(putTask);
             }
@@ -431,8 +439,8 @@ enum State: Int, CustomStringConvertible {
         }
         observationJson[ObservationKey.type.key] = "Feature";
         
-        let state = self.state?.intValue ?? State.Active.rawValue
-        observationJson[ObservationKey.state.key] = ["name":(State(rawValue: state) ?? .Active).description]
+        let state = self.state?.intValue ?? ObservationState.Active.rawValue
+        observationJson[ObservationKey.state.key] = ["name":(ObservationState(rawValue: state) ?? .Active).description]
         
         if let geometry = self.geometry {
             observationJson[ObservationKey.geometry.key] = GeometrySerializer.serializeGeometry(geometry);
@@ -558,8 +566,10 @@ enum State: Int, CustomStringConvertible {
         observation.properties = properties;
         observation.user = User.fetchCurrentUser(context: context);
         observation.dirty = false;
-        observation.state = NSNumber(value: State.Active.rawValue)
+        observation.state = NSNumber(value: ObservationState.Active.rawValue)
         observation.eventId = Server.currentEventId();
+
+        observation.createObservationLocations(context: context)
         return observation;
     }
     
@@ -567,15 +577,15 @@ enum State: Int, CustomStringConvertible {
         return json[ObservationKey.id.key] as? String
     }
     
-    static func stateFromJson(json: [AnyHashable : Any]) -> State {
+    static func stateFromJson(json: [AnyHashable : Any]) -> ObservationState {
         if let stateJson = json[ObservationKey.state.key] as? [AnyHashable : Any], let stateName = stateJson["name"] as? String {
-            if stateName == State.Archive.description {
-                return State.Archive
+            if stateName == ObservationState.Archive.description {
+                return ObservationState.Archive
             } else {
-                return State.Active;
+                return ObservationState.Active;
             }
         }
-        return State.Active;
+        return ObservationState.Active;
     }
     
     @discardableResult
@@ -585,13 +595,11 @@ enum State: Int, CustomStringConvertible {
         
         let state = Observation.stateFromJson(json: feature);
         
-//        NSLog("TIMING create the observation \(remoteId)")
-        
         if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
             // if the observation is archived, delete it
             if state == .Archive {
-                NSLog("Deleting archived observation with id: %@", remoteId);
-                existingObservation.mr_deleteEntity(in: context);
+                MageLogger.misc.debug("Deleting archived observation with id: \(String(describing: remoteId))")
+                existingObservation.mr_deleteEntity(in: context)
             } else if !existingObservation.isDirty {
                 // if the observation is not dirty, and has been updated, update it
                 if let lastModified = feature[ObservationKey.lastModified.key] as? String {
@@ -614,9 +622,9 @@ enum State: Int, CustomStringConvertible {
                             let manager = MageSessionManager.shared();
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
+                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
                             } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
                             manager?.addTask(fetchUserTask)
                         }
@@ -625,10 +633,10 @@ enum State: Int, CustomStringConvertible {
                         let manager = MageSessionManager.shared();
                         
                         let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                            NSLog("Fetched user \(userId) successfully.")
+                            MageLogger.misc.debug("Fetched user \(userId) successfully.")
                             existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
                         } failure: { task, error in
-                            NSLog("Failed to fetch user \(userId) error \(error)")
+                            MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                         }
                         manager?.addTask(fetchUserTask)
                     }
@@ -698,6 +706,12 @@ enum State: Int, CustomStringConvertible {
                         $0.mr_deleteEntity(in: context)
                     }
                 }
+
+                for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
+                    location.mr_deleteEntity(in: context)
+                }
+
+                existingObservation.createObservationLocations(context: context)
             }
         } else {
             if state != .Archive {
@@ -714,9 +728,9 @@ enum State: Int, CustomStringConvertible {
                                 let manager = MageSessionManager.shared();
                                 
                                 let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                    NSLog("Fetched user \(userId) successfully.")
+                                    MageLogger.misc.debug("Fetched user \(userId) successfully.")
                                 } failure: { task, error in
-                                    NSLog("Failed to fetch user \(userId) error \(error)")
+                                    MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                                 }
                                 manager?.addTask(fetchUserTask)
                             }
@@ -725,10 +739,10 @@ enum State: Int, CustomStringConvertible {
                             let manager = MageSessionManager.shared();
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
+                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
                                 observation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
                             } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
                             manager?.addTask(fetchUserTask)
                         }
@@ -757,7 +771,9 @@ enum State: Int, CustomStringConvertible {
                             }
                         }
                     }
-                    
+
+                    observation.createObservationLocations(context: context)
+
                     newObservation = observation;
                 }
             }
@@ -995,7 +1011,7 @@ enum State: Int, CustomStringConvertible {
     @objc public var hasValidationError: Bool {
         get {
             if let error = self.error {
-                return error[ObservationPushService.ObservationErrorStatusCode] != nil
+                return error[ObservationErrorKeys.errorStatusCode] != nil
             }
             return false;
         }
@@ -1004,9 +1020,9 @@ enum State: Int, CustomStringConvertible {
     @objc public var errorMessage: String {
         get {
             if let error = self.error {
-                if let errorMessage = error[ObservationPushService.ObservationErrorMessage] as? String {
+                if let errorMessage = error[ObservationErrorKeys.errorMessage] as? String {
                     return errorMessage
-                } else if let errorMessage = error[ObservationPushService.ObservationErrorDescription] as? String {
+                } else if let errorMessage = error[ObservationErrorKeys.errorDescription] as? String {
                     return errorMessage
                 }
             }
@@ -1042,16 +1058,24 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryEventForm: Form? {
         get {
             
             if let primaryObservationForm = primaryObservationForm, let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber {
-                return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext ?? NSManagedObjectContext.mr_default())
+                @Injected(\.nsManagedObjectContext)
+                var context: NSManagedObjectContext?
+                
+                guard let context = managedObjectContext ?? context else { return nil }
+                return (context).performAndWait {
+                    return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
+                }
             }
             return nil;
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryField: String? {
         get {
             if let primaryEventForm = primaryEventForm {
@@ -1061,6 +1085,7 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var secondaryField: String? {
         get {
             if let primaryEventForm = primaryEventForm {
@@ -1070,6 +1095,7 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryFieldText: String? {
         get {
             if let primaryField = primaryEventForm?.primaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFieldName = primaryField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1080,6 +1106,7 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var secondaryFieldText: String? {
         get {
             if let variantField = primaryEventForm?.secondaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let variantFieldName = variantField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1090,6 +1117,7 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryFeedFieldText: String? {
         get {
             if let primaryFeedField = primaryEventForm?.primaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFeedFieldName = primaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1100,6 +1128,7 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var secondaryFeedFieldText: String? {
         get {
             if let secondaryFeedField = primaryEventForm?.secondaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let secondaryFeedFieldName = secondaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1110,6 +1139,14 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
+    public func getAccuracy() -> Double? {
+        return self.properties?[ObservationKey.accuracy.key] as? Double
+    }
+    
+    public func getProvider() -> String? {
+        return self.properties?[ObservationKey.provider.key] as? String
+    }
+        
     @objc public static func fieldValueText(value: Any?, field: [AnyHashable : Any]) -> String {
         guard let value = value, let type = field[FieldKey.type.key] as? String else {
             return "";
@@ -1166,35 +1203,6 @@ enum State: Int, CustomStringConvertible {
         return "";
     }
     
-    @objc public func toggleFavorite(completion:((Bool,Error?) -> Void)?) {
-        MagicalRecord.save({ [weak self] localContext in
-            if let localObservation = self?.mr_(in: localContext),
-               let user = User.fetchCurrentUser(context: localContext),
-               let userRemoteId = user.remoteId {
-                if let favorite = localObservation.favoritesMap[userRemoteId], favorite.favorite {
-                    // toggle off
-                    favorite.dirty = true;
-                    favorite.favorite = false
-                } else {
-                    // toggle on
-                    if let favorite = localObservation.favoritesMap[userRemoteId] {
-                        favorite.dirty = true;
-                        favorite.favorite = true
-                        favorite.userId = userRemoteId
-                    } else {
-                        if let favorite = ObservationFavorite.mr_createEntity(in: localContext) {
-                            localObservation.addToFavorites(favorite);
-                            favorite.observation = localObservation;
-                            favorite.dirty = true;
-                            favorite.favorite = true
-                            favorite.userId = userRemoteId
-                        }
-                    }
-                }
-            }
-        }, completion: completion)
-    }
-    
     @objc public var favoritesMap: [String : ObservationFavorite] {
         get {
             var favoritesMap: [String:ObservationFavorite] = [:]
@@ -1209,79 +1217,13 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
-    @objc public func flagImportant(description: String, completion:((Bool,Error?) -> Void)?) {
-        if !self.currentUserCanUpdateImportant {
-            completion?(false, nil);
-            return;
-        }
-        
-        MagicalRecord.save({ [weak self] localContext in
-            if let localObservation = self?.mr_(in: localContext),
-               let user = User.fetchCurrentUser(context: localContext),
-               let userRemoteId = user.remoteId {
-                if let important = self?.observationImportant {
-                    important.dirty = true;
-                    important.important = true;
-                    important.userId = userRemoteId;
-                    important.reason = description
-                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                    important.timestamp = Date();
-                } else {
-                    if let important = ObservationImportant.mr_createEntity(in: localContext) {
-                        important.observation = localObservation
-                        localObservation.observationImportant = important;
-                        important.dirty = true;
-                        important.important = true;
-                        important.userId = userRemoteId;
-                        important.reason = description
-                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                        important.timestamp = Date();
-                    }
-                }
-            }
-        }, completion: completion)
-    }
-    
-    @objc public func removeImportant(completion:((Bool,Error?) -> Void)?) {
-        if !self.currentUserCanUpdateImportant {
-            completion?(false, nil);
-            return;
-        }
-        
-        MagicalRecord.save({ [weak self] localContext in
-            if let localObservation = self?.mr_(in: localContext),
-               let user = User.fetchCurrentUser(context: localContext),
-               let userRemoteId = user.remoteId {
-                if let important = self?.observationImportant {
-                    important.dirty = true;
-                    important.important = false;
-                    important.userId = userRemoteId;
-                    important.reason = nil
-                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                    important.timestamp = Date();
-                } else {
-                    if let important = ObservationImportant.mr_createEntity(in: localContext) {
-                        important.observation = localObservation
-                        localObservation.observationImportant = important;
-                        important.dirty = true;
-                        important.important = false;
-                        important.userId = userRemoteId;
-                        important.reason = nil
-                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                        important.timestamp = Date();
-                    }
-                }
-            }
-        }, completion: completion)
-    }
-    
     @objc public func delete(completion:((Bool,Error?) -> Void)?) {
         if !self.isDeletableByCurrentUser {
             completion?(false, nil);
             return;
         }
         if self.remoteId != nil {
-            self.state = NSNumber(value: State.Archive.rawValue)
+            self.state = NSNumber(value: ObservationState.Archive.rawValue)
             self.dirty = true
             self.managedObjectContext?.mr_saveToPersistentStore(completion: completion)
         } else {
@@ -1289,5 +1231,129 @@ enum State: Int, CustomStringConvertible {
                 self?.mr_deleteEntity(in: localContext);
             }, completion: completion)
         }
+    }
+
+    func createObservationLocations(context: NSManagedObjectContext) {
+        var order: Int64 = 0
+        var observationLocations: Set<ObservationLocation> = Set<ObservationLocation>()
+        // save the observations location
+        if let geometry = geometry {
+            if let observationLocation = NSEntityDescription.insertNewObject(forEntityName: "ObservationLocation", into: context) as? ObservationLocation {
+                observationLocation.observation = self
+                if let eventId = eventId {
+                    observationLocation.eventId = eventId.int64Value
+                }
+                observationLocation.fieldName = Observation.PRIMARY_OBSERVATION_GEOMETRY
+                observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
+                
+                let eventForm = Form.mr_findFirst(
+                    byAttribute: "formId",
+                    withValue: observationLocation.formId,
+                    in: context
+                )
+                
+                if let form = primaryObservationForm,
+                   let eventForm = eventForm,
+                   let primaryField = eventForm.primaryMapField,
+                   let primaryFieldName = primaryField[FieldKey.name.key] as? String
+                {
+                    observationLocation.observationFormId = form[FormKey.id.key] as? String
+                    let primaryValue = form[primaryFieldName]
+                    observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
+                    if let secondaryField = eventForm.secondaryMapField,
+                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
+                    {
+                        let secondaryValue = form[secondaryFieldName]
+                        observationLocation.secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
+                    }
+                }
+                observationLocation.geometryData = SFGeometryUtils.encode(geometry)
+                if let centroid = geometry.centroid() {
+                    observationLocation.latitude = centroid.y.doubleValue
+                    observationLocation.longitude = centroid.x.doubleValue
+                }
+                if let envelope = geometry.envelope() {
+                    observationLocation.minLatitude = envelope.minY.doubleValue
+                    observationLocation.maxLatitude = envelope.maxY.doubleValue
+                    observationLocation.minLongitude = envelope.minX.doubleValue
+                    observationLocation.maxLongitude = envelope.maxX.doubleValue
+                }
+                if let accuracy = self.properties?[ObservationKey.accuracy.key] as? Double {
+                    observationLocation.accuracy = accuracy
+                }
+                if let provider = self.properties?[ObservationKey.provider.key] as? String {
+                    observationLocation.provider = provider
+                }
+                observationLocation.order = order
+                order += 1
+                observationLocations.insert(observationLocation)
+            }
+        }
+
+        // save each location field
+        if let forms = properties?[ObservationKey.forms.key] as? [[String: Any]]
+        {
+            for form in forms {
+                if let eventFormId = form[EventKey.formId.key] as? NSNumber,
+                   let eventForm = event?.form(id: eventFormId)
+                {
+                    let geometryFields = eventForm.fields?.filter({ field in
+                        let archived = field[FieldKey.archived.key] as? Bool ?? false
+                        let type = field[FieldKey.type.key] as? String ?? ""
+                        return !archived && type == FieldType.geometry.key
+                    }) ?? [[:]]
+
+                    for geometryField in geometryFields {
+                        if let geometry = form[geometryField[FieldKey.name.key] as? String ?? ""] as? SFGeometry {
+                            if let observationLocation = NSEntityDescription.insertNewObject(forEntityName: "ObservationLocation", into: context) as? ObservationLocation {
+                                observationLocation.observation = self
+                                if let eventId = eventId {
+                                    observationLocation.eventId = eventId.int64Value
+                                }
+                                observationLocation.fieldName = geometryField[FieldKey.name.key] as? String
+                                observationLocation.formId = eventFormId.int64Value
+                                observationLocation.observationFormId = form[FormKey.id.key] as? String
+                                
+                                let eventForm = Form.mr_findFirst(
+                                    byAttribute: "formId",
+                                    withValue: observationLocation.formId,
+                                    in: context
+                                )
+                                
+                                if let eventForm = eventForm,
+                                   let primaryField = eventForm.primaryMapField,
+                                   let primaryFieldName = primaryField[FieldKey.name.key] as? String
+                                {
+                                    let primaryValue = form[primaryFieldName]
+                                    observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
+                                    if let secondaryField = eventForm.secondaryMapField,
+                                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
+                                    {
+                                        let secondaryValue = form[secondaryFieldName]
+                                        observationLocation.secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
+                                    }
+                                }
+                                
+                                observationLocation.geometryData = SFGeometryUtils.encode(geometry)
+                                if let centroid = geometry.centroid() {
+                                    observationLocation.latitude = centroid.y.doubleValue
+                                    observationLocation.longitude = centroid.x.doubleValue
+                                }
+                                if let envelope = geometry.envelope() {
+                                    observationLocation.minLatitude = envelope.minY.doubleValue
+                                    observationLocation.maxLatitude = envelope.maxY.doubleValue
+                                    observationLocation.minLongitude = envelope.minX.doubleValue
+                                    observationLocation.maxLongitude = envelope.maxX.doubleValue
+                                }
+                                observationLocation.order = order
+                                order += 1
+                                observationLocations.insert(observationLocation)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        self.locations = observationLocations
     }
 }

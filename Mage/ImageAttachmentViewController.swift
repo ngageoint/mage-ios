@@ -21,7 +21,7 @@ extension PlaceholderImage: Placeholder {}
     @IBOutlet weak var downloadProgressBar: UIProgressView?
     @IBOutlet weak var downloadingLabel: UILabel!
     
-    var attachment: Attachment? = nil;
+    var attachment: AttachmentModel? = nil;
     var url: URL? = nil;
     var imageSize: Int!
     
@@ -44,7 +44,7 @@ extension PlaceholderImage: Placeholder {}
         }
     }
     
-    @objc public convenience init(attachment: Attachment) {
+    @objc public convenience init(attachment: AttachmentModel) {
         self.init(nibName: "AttachmentView", bundle: nil);
         self.imageSize = 0;
         self.attachment = attachment;
@@ -112,7 +112,7 @@ extension PlaceholderImage: Placeholder {}
                     self.present(activityViewController, animated: true, completion: nil)
                 } catch {
                     // Prints the localized description of the error from the do block
-                    print("Error writing the file: \(error.localizedDescription)")
+                    MageLogger.misc.error("Error writing the file: \(error.localizedDescription)")
                 }
                 
             case .failure(let error):
@@ -133,7 +133,7 @@ extension PlaceholderImage: Placeholder {}
         if let attachment = self.attachment, !self.isFullSizeCached() {
             let attachmentMbs: Double = ((attachment.size?.doubleValue ?? 0) / (1000.0 * 1024.0));
             alert.addAction(UIAlertAction(title: String.init(format: "Download and Save Full Size Image %.2F MBs", attachmentMbs), style: .default , handler:{ (UIAlertAction)in
-                print("Go Download Full size")
+                MageLogger.misc.debug("Go Download Full size")
                 self.showAttachment(fullSize: true)
                 { result in
                     switch result {

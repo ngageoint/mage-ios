@@ -14,31 +14,12 @@ import Kingfisher
     
     var cllocation: CLLocation? {
         get {
-            if remoteId == UserDefaults.standard.currentUserId {
-                let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
-                if (locations.count != 0) {
-                    let location: GPSLocation = locations[0]
-                    return location.cllocation
-                }
-            } else {
-                return location?.location
-            }
-            
-            return nil
+            return location?.location
         }
     }
     
     var coordinate: CLLocationCoordinate2D {
         get {
-            if remoteId == UserDefaults.standard.currentUserId {
-                let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
-                if (locations.count != 0) {
-                    let location: GPSLocation = locations[0]
-                    return location.cllocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
-                }
-                    
-                return CLLocationCoordinate2D(latitude: 0, longitude: 0)
-            }
             return location?.location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
         }
     }
@@ -65,17 +46,26 @@ import Kingfisher
     
     @discardableResult
     @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> User? {
-        let user = User.mr_createEntity(in: context);
-        user?.update(json: json, context: context);
-        return user;
+        return context.performAndWait {
+            let user = User(context: context);
+            user.update(json: json, context: context);
+            try? context.obtainPermanentIDs(for: [user])
+            try? context.save()
+            return user;
+        }
     }
     
     @objc public static func fetchUser(userId: String, context:NSManagedObjectContext) -> User? {
-        return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context);
+        return context.performAndWait {
+            return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId)
+        }
     }
     
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
-        return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: UserDefaults.standard.currentUserId ?? "", in: context);
+        return context.performAndWait {
+            MageLogger.misc.debug("XXX current user \(String(describing: UserDefaults.standard.currentUserId))")
+            return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: UserDefaults.standard.currentUserId ?? "")
+        }
     }
     
     @objc public static func operationToFetchMyself(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
@@ -86,32 +76,33 @@ import Kingfisher
         let url = "\(baseURL.absoluteURL)/api/users/myself";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Myself @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Myself @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Myself. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Myself. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             
             let saveStart = Date()
-            NSLog("TIMING Saving Myself @ \(saveStart)")
-            MagicalRecord.save { localContext in
+            MageLogger.misc.debug("TIMING Saving Myself @ \(saveStart)")
+            @Injected(\.persistence)
+            var persistence: Persistence
+            
+            let context = persistence.getContext()
+            context.performAndWait {
                 guard let myself = responseObject as? [AnyHashable : Any], let userId = myself["id"] as? String else {
                     return;
                 }
-                if let user = User.fetchUser(userId: userId, context: localContext) {
-                    user.update(json: myself, context: localContext)
+                if let user = User.fetchUser(userId: userId, context: context) {
+                    user.update(json: myself, context: context)
                 } else {
-                    User.insert(json: myself, context: localContext)
+                    User.insert(json: myself, context: context)
                 }
                 
-            } completion: { contextDidSave, error in
-                NSLog("TIMING Saved Myself. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-
-                if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
-                } else if let success = success {
-                    success(task, nil);
+                do {
+                    try context.save()
+                    success?(task, nil)
+                } catch {
+                    failure?(task, error);
                 }
+                
             }
         }, failure: { task, error in
             if let failure = failure {
@@ -129,15 +120,15 @@ import Kingfisher
         let url = "\(baseURL.absoluteURL)/api/users/\(userId)";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching User /api/users/\(userId) @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching User /api/users/\(userId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched User /api/users/\(userId) . Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched User /api/users/\(userId) . Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             
             let saveStart = Date()
-            NSLog("TIMING Saving User /api/users/\(userId)  @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving User /api/users/\(userId)  @ \(saveStart)")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
-                    print("Users are empty");
+                    MageLogger.misc.debug("Users are empty");
                     success?(task, nil);
                     return;
                 }
@@ -153,16 +144,16 @@ import Kingfisher
                     
                     if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: localContext) {
                         // already exists in core data, lets update the object we have
-                        print("Updating user in the database \(user.name ?? "")");
+                        MageLogger.misc.debug("Updating user in the database \(user.name ?? "")");
                         user.update(json: userJson, context: localContext);
                     } else {
                         // not in core data yet need to create a new managed object
-                        print("Inserting new user into database");
+                        MageLogger.misc.debug("Inserting new user into database");
                         User.insert(json: userJson, context: localContext)
                     }
                 }
             } completion: { contextDidSave, error in
-                NSLog("TIMING Saved User /api/users/\(userId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+                MageLogger.misc.debug("TIMING Saved User /api/users/\(userId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
 
                 if let error = error {
                     if let failure = failure {
@@ -188,15 +179,15 @@ import Kingfisher
         let url = "\(baseURL.absoluteURL)/api/users";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Users @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Users @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             
             let saveStart = Date()
-            NSLog("TIMING Saving Users @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving Users @ \(saveStart)")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
-                    print("Users are empty");
+                    MageLogger.misc.debug("Users are empty");
                     success?(task, nil);
                     return;
                 }
@@ -207,10 +198,16 @@ import Kingfisher
                 return;
             }
             
-            MagicalRecord.save { localContext in
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else {
+                return
+            }
+            context.performAndWait {
                 // Get roles
                 var roleIdMap: [String : Role] = [:];
-                if let roles = Role.mr_findAll(in: localContext) as? [Role] {
+                if let roles = context.fetchAll(Role.self) {
                     for role in roles {
                         if let remoteId = role.remoteId {
                             roleIdMap[remoteId] = role
@@ -225,7 +222,7 @@ import Kingfisher
                     }
                 }
                                 
-                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds), in: localContext) as? [User] ?? [];
+                let usersMatchingIDs: [User] = (try? context.fetchObjects(User.self, predicate: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds))) ?? [];
                 var userIdMap: [String : User] = [:];
                 for user in usersMatchingIDs {
                     if let remoteId = user.remoteId {
@@ -240,24 +237,20 @@ import Kingfisher
                     }
                     if let user = userIdMap[userId] {
                         // already exists in core data, lets update the object we have
-                        print("Updating user in the database \(user.name ?? "")");
-                        user.update(json: userJson, context: localContext);
+                        MageLogger.misc.debug("Updating user in the database \(user.name ?? "")");
+                        user.update(json: userJson, context: context);
                         
                     } else {
                         // not in core data yet need to create a new managed object
-                        print("Inserting new user into database");
-                        User.insert(json: userJson, context: localContext)
+                        MageLogger.misc.debug("Inserting new user into database");
+                        User.insert(json: userJson, context: context)
                     }
                 }
-            } completion: { contextDidSave, error in
-                NSLog("TIMING Saved Users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-
-                if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
-                } else if let success = success {
-                    success(task, nil);
+                do {
+                    try context.save()
+                    success?(task, nil)
+                } catch {
+                    failure?(task, error)
                 }
             }
         }, failure: { task, error in
@@ -301,14 +294,14 @@ import Kingfisher
         self.prefetchIconAndAvatar();
         
         if let userRole = json[UserKey.role.key] as? [AnyHashable : Any] {
-            if let roleId = userRole[RoleKey.id.key] as? String, let role = Role.mr_findFirst(byAttribute: RoleKey.remoteId.key, withValue: roleId, in: context) {
-                self.role = role;
-                role.addToUsers(self);
-            } else {
-                let role = Role.insert(json: userRole, context: context);
-                self.role = role;
-                role?.addToUsers(self);
-            }
+            @Injected(\.roleLocalDataSource)
+            var roleLocalDataSource: RoleLocalDataSource
+            
+            roleLocalDataSource.addUserToRole(
+                roleJson: userRole,
+                user: self,
+                context: context
+            )
         }
     }
     
@@ -334,7 +327,7 @@ import Kingfisher
             prefetcher.start()
         }
         if let cacheAvatarUrl = self.cacheAvatarUrl, let url = URL(string: cacheAvatarUrl) {
-            print("caching avatar \(url)")
+            MageLogger.misc.debug("caching avatar \(url)")
             let prefetcher = ImagePrefetcher(urls: [url], options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             ]) {

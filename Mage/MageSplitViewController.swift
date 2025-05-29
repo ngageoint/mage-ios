@@ -8,7 +8,15 @@
 
 import Foundation
 
-@objc class MageSplitViewController : UISplitViewController {
+class MageSplitViewController : UISplitViewController {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    var bottomSheet: MDCBottomSheetController?
+    
     var startStraightLineNavigationObserver: AnyObject?
 
     var scheme: MDCContainerScheming?;
@@ -20,6 +28,8 @@ import Foundation
     var mapCalloutDelegates: [Any] = [];
     var childCoordinators: [NSObject] = [];
     var attachmentCoordinator: AttachmentViewCoordinator?;
+    
+    var router = MageRouter()
     
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
@@ -54,13 +64,12 @@ import Foundation
         
         self.delegate = self;
         
-        self.sideBarController = MageSideBarController(containerScheme: self.scheme!);
-        self.sideBarController!.delegate = self;
+        self.sideBarController = MageSideBarController(scheme: self.scheme);
         self.masterViewController = UINavigationController(rootViewController: self.sideBarController!);
 
-        self.mapViewController = MapViewController_iPad(delegate: self, scheme: self.scheme!);
-        self.detailViewController = UINavigationController(rootViewController: self.mapViewController!);
-        
+        self.mapViewController = MapViewController_iPad(delegate: nil, scheme: self.scheme!);
+        self.detailViewController = UINavigationController(rootViewController: self.mapViewController!)
+
         self.viewControllers = [self.masterViewController!, self.detailViewController!]
         
         self.applyTheme(withContainerScheme: self.scheme);
@@ -106,15 +115,6 @@ import Foundation
     
 }
 
-extension MageSplitViewController: AttachmentViewDelegate {
-    func doneViewing(coordinator: NSObject) {
-        if let coordinatorIndex = self.childCoordinators.firstIndex(of: coordinator) {
-            self.childCoordinators.remove(at: coordinatorIndex)
-        }
-        attachmentCoordinator = nil;
-    }
-}
-
 extension MageSplitViewController: UISplitViewControllerDelegate {
     func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewController.DisplayMode) {
         self.masterViewButton = svc.displayModeButtonItem;
@@ -126,77 +126,4 @@ extension MageSplitViewController: UISplitViewControllerDelegate {
             ensureButtonVisible();
         }
     }
-}
-
-extension MageSplitViewController: ObservationActionsDelegate & UserActionsDelegate & AttachmentSelectionDelegate & FeedItemSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        if let attachmentCoordinator = self.attachmentCoordinator {
-            attachmentCoordinator.setAttachment(attachment: attachment);
-        } else if let nav = self.mapViewController?.navigationController {
-            self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme)
-            self.childCoordinators.append(self.attachmentCoordinator!);
-            self.attachmentCoordinator?.start();
-        }
-    }
-    
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
-        if let nav = self.mapViewController?.navigationController {
-            self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: unsentAttachment["localPath"] as! URL, contentType: unsentAttachment["contentType"] as! String, delegate: self, scheme: self.scheme)
-            self.attachmentCoordinator?.start();
-            self.childCoordinators.append(self.attachmentCoordinator!);
-        }
-    }
-    
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        
-    }
-    
-    func feedItemSelected(_ feedItem: FeedItem) {
-        let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(feedItemViewController, animated: true);
-    }
-    
-    func selectedObservation(_ observation: Observation!) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);
-    }
-    
-    func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);    }
-    
-    func observationDetailSelected(_ observation: Observation!) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);
-    }
-    
-    func selectedUser(_ user: User!) {
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(userViewController, animated: true);
-    }
-    
-    func selectedUser(_ user: User!, region: MKCoordinateRegion) {
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(userViewController, animated: true);
-    }
-    
-    func userDetailSelected(_ user: User!) {
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(userViewController, animated: true);
-    }
-    
-    func viewObservation(_ observation: Observation) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);
-    }
-    
-    func viewUser(_ user: User) {
-        if let uvc = self.masterViewController?.topViewController as? UserViewController, uvc.user == user {
-            // already showing
-            return
-        }
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(userViewController, animated: true);
-    }
-
 }

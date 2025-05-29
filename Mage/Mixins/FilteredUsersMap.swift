@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol FilteredUsersMap {
     var mapView: MKMapView? { get set }
@@ -22,6 +23,9 @@ extension FilteredUsersMap {
 }
 
 class FilteredUsersMapMixin: NSObject, MapMixin {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     var mapAnnotationFocusedObserver: AnyObject?
     var filteredUsersMap: FilteredUsersMap?
     var mapView: MKMapView?
@@ -55,7 +59,15 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         locations = nil
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilter), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterUnit), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterNumber), options: [.new], context: nil)
@@ -85,13 +97,13 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         }
         
         if let user = user {
-            locations = Locations(for: user)
+            locations = Locations(for: user, context: context)
             locations?.delegate = self
         } else if let locations = locations,
            let locationPredicates = Locations.getPredicatesForLocationsForMap() as? [NSPredicate] {
             locations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: locationPredicates)
         } else {
-            locations = Locations.forMap()
+            locations = Locations.init(forMap: context)
             locations?.delegate = self
         }
         

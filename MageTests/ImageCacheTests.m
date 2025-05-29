@@ -43,7 +43,7 @@
 //    [OHHTTPStubs removeAllStubs];
 }
 
-- (void)testLoadAnImage {
+- (void)xtestLoadAnImage {
 //    CGSize size = CGSizeMake(75, 75);
 //    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
 //    [[UIColor whiteColor] setFill];

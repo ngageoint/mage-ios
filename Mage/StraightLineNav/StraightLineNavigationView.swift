@@ -57,7 +57,7 @@ class StraightLineNavigationView: UIView {
                 case .success(_):
                     self.setNeedsLayout()
                 case .failure(let error):
-                    print("Job failed: \(error.localizedDescription)")
+                    MageLogger.misc.error("Job failed: \(error.localizedDescription)")
                 }
             }
         }
@@ -127,6 +127,7 @@ class StraightLineNavigationView: UIView {
         return view;
     }();
     
+    // TODO: This is leaking self, should probably just modify the dimensions and corner radius of the view
     private lazy var rootView: UIView = {
         if UIDevice.current.userInterfaceIdiom == .pad {
             addSubview(ipadView);

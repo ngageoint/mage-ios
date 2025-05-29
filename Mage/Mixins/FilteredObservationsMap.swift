@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import geopackage_ios
+import MapFramework
 
 protocol FilteredObservationsMap {
     var mapView: MKMapView? { get set }
@@ -17,6 +18,9 @@ protocol FilteredObservationsMap {
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     var filteredObservationsMap: FilteredObservationsMap
     var mapAnnotationFocusedObserver: AnyObject?
     var user: User?
@@ -51,7 +55,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         observations = nil
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterUnitKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey), options: [.new], context: nil)
@@ -66,7 +78,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: .main) { [weak self] notification in
-            if let event: Event = notification.object as? Event {
+            if let event: EventModel = notification.object as? EventModel {
                 if event.remoteId == Server.currentEventId() {
                     self?.addFilteredObservations()
                 }
@@ -80,20 +92,24 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
     }
 
-    func items(at location: CLLocationCoordinate2D) -> [Any]? {
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = await (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
-            if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance) {
+            if lineObservation.hitTest(location: location, distanceTolerance: tolerance) {
                if let observation = lineObservation.observation {
                     annotations.append(observation)
                }
             }
         }
         for polygonObservation in polygonObservations {
-            if polygonHitTest(polygonObservation: polygonObservation, location: location) {
+            if polygonObservation.hitTest(location: location) {
                 if let observation = polygonObservation.observation {
                     annotations.append(observation)
                 }
@@ -101,7 +117,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
         return annotations
     }
-    
+
     func addFilteredObservations() {
         if let observations = observations, let fetchedObservations = observations.fetchedResultsController.fetchedObjects as? [Observation] {
             for observation in fetchedObservations {
@@ -109,15 +125,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         
-        if let user = user {
-            observations = Observations(for: user)
+        if let user = user, let context = context {
+            observations = Observations(for: user, context: context)
             observations?.delegate = self
         } else if let observations = observations,
-           let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
+                  let observationPredicates = Observations.getPredicatesForObservations(forMap: context) as? [NSPredicate] {
             observations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: observationPredicates)
             
         } else {
-            observations = Observations.forMap()
+            observations = Observations.init(forMap: context)
             observations?.delegate = self
         }
         
@@ -152,15 +168,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 annotation.animateDrop = animated
                 filteredObservationsMap.mapView?.addAnnotation(annotation)
             } else {
-                let style = ObservationShapeStyleParser.style(of: observation)
+                let style = ObservationShapeStyleParser.style(observation: observation)
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
                 shapeConverter?.close()
                 
                 if let mkpolyline = shape?.shape as? MKPolyline {
                     let styledPolyline = StyledPolyline.create(polyline: mkpolyline)
-                    styledPolyline.lineColor = style?.strokeColor ?? .black
-                    styledPolyline.lineWidth = style?.lineWidth ?? 1
+                    styledPolyline.lineColor = style.strokeColor ?? .black
+                    styledPolyline.lineWidth = style.lineWidth ?? 1
                     styledPolyline.observationRemoteId = observation.remoteId
                     styledPolyline.observation = observation
                     lineObservations.append(styledPolyline)
@@ -169,9 +185,9 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     }
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
-                    styledPolygon.lineColor = style?.strokeColor ?? .black
-                    styledPolygon.lineWidth = style?.lineWidth ?? 1
-                    styledPolygon.fillColor = style?.fillColor ?? .clear
+                    styledPolygon.lineColor = style.strokeColor ?? .black
+                    styledPolygon.lineWidth = style.lineWidth ?? 1
+                    styledPolygon.fillColor = style.fillColor ?? .clear
                     styledPolygon.observation = observation
                     styledPolygon.observationRemoteId = observation.remoteId
                     polygonObservations.append(styledPolygon)

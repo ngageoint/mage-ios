@@ -22,7 +22,7 @@ import sf_geojson_ios
             }
         }
         catch {
-            print("An error ocurred: \(error)")
+            MageLogger.misc.error("An error ocurred: \(error)")
         }
         return json
     }

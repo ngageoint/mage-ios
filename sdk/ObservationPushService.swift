@@ -6,91 +6,130 @@
 
 import Foundation
 import CoreData
+import Combine
 
-public class ObservationPushService: NSObject {
+enum ObservationErrorKeys: String {
+    case errorStatusCode, errorDescription, errorMessage
+}
+
+private struct ObservationPushServiceProviderKey: InjectionKey {
+    static var currentValue: ObservationPushService = ObservationPushServiceImpl()
+}
+
+extension InjectedValues {
+    var observationPushService: ObservationPushService {
+        get { Self[ObservationPushServiceProviderKey.self] }
+        set { Self[ObservationPushServiceProviderKey.self] = newValue }
+    }
+}
+
+protocol ObservationPushService: Actor {
+    var started: Bool { get }
+    func pushObservations(observations: [Observation]?)
+    func start()
+    func stop()
+    func isPushingObservations() -> Bool
+    func addDelegate(delegate: ObservationPushDelegate)
+}
+
+public actor ObservationPushServiceImpl: NSObject, ObservationPushService {
+    @Injected(\.persistence)
+    var persistence: Persistence
     
-    public static let ObservationErrorStatusCode = "errorStatusCode"
-    public static let ObservationErrorDescription = "errorDescription"
-    public static let ObservationErrorMessage = "errorMessage"
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
     
-    public static let singleton = ObservationPushService()
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    @Injected(\.observationImportantRepository)
+    var observationImportantRepository: ObservationImportantRepository
+    
+    @Injected(\.observationFavoriteRepository)
+    var observationFavoriteRepository: ObservationFavoriteRepository
+    
+    public static let singleton = ObservationPushServiceImpl()
     public var started = false;
     
     let interval: TimeInterval = Double(UserDefaults.standard.observationPushFrequency)
     var delegates: [ObservationPushDelegate] = []
-    var observationPushTimer: Timer?;
-    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
+    var observationPushTimer: (any Cancellable)?
+    var fetchedResultsController: NSFetchedResultsController<Observation>?;
     var favoritesFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var importantFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var pushingObservations: [NSManagedObjectID : Observation] = [:]
-    var pushingFavorites: [NSManagedObjectID : ObservationFavorite] = [:]
-    var pushingImportant: [String : ObservationImportant] = [:]
-    
-    private override init() {
-    }
+    var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
+    let fetchedResultsControllerDelegate = ObservationPushServiceImplFetchedResultsControllerDelgate()
     
     public func start() {
-        NSLog("start pushing observations");
         self.started = true;
-        let context = NSManagedObjectContext.mr_default();
-        
-        self.fetchedResultsController = Observation.mr_fetchAllSorted(by: ObservationKey.timestamp.key,
-                                                                      ascending: false,
-                                                                      with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                      groupBy: nil,
-                                                                      delegate: self,
-                                                                      in: context);
-        
-        self.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
-                                                                      ascending: false,
-                                                                      with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                      groupBy: nil,
-                                                                      delegate: self,
-                                                                      in: context);
-        
-        self.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
-                                                                               ascending: false,
-                                                                               with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                               groupBy: nil,
-                                                                               delegate: self,
-                                                                               in: context);
+        persistence.contextChange
+        .sink { [weak self] _ in
+            Task {
+                await self?.setUpFetchedResultsController()
+            }
+        }
+        .store(in: &cancellables)
+
+        setUpFetchedResultsController()
         onTimerFire();
         scheduleTimer();
     }
     
-    func stop() {
-        NSLog("stop pushing observations")
-        DispatchQueue.main.async { [weak self] in
-            if let timer = self?.observationPushTimer, timer.isValid {
-                timer.invalidate();
-                self?.observationPushTimer = nil;
-            }
-        }
+    func setUpFetchedResultsController() {
+        guard let context = self.context else { return }
         
+        let request = Observation.fetchRequest()
+        request.predicate = NSPredicate(format: "\(ObservationKey.dirty.key) == true")
+        request.sortDescriptors = [NSSortDescriptor(key: ObservationKey.timestamp.key, ascending: false)]
+        
+        self.fetchedResultsController = NSFetchedResultsController<Observation>(
+            fetchRequest: request,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        self.fetchedResultsController?.delegate = fetchedResultsControllerDelegate
+        try? self.fetchedResultsController?.performFetch()
+    }
+    
+    func stop() {
+        if let timer = self.observationPushTimer {
+            timer.cancel()
+            self.observationPushTimer = nil;
+        }
+        for cancellable in cancellables {
+            cancellable.cancel()
+        }
         self.fetchedResultsController = nil;
         self.importantFetchedResultsController = nil;
         self.favoritesFetchedResultsController = nil;
         self.started = false;
     }
-    
+
     func scheduleTimer() {
-        DispatchQueue.main.async { [weak self] in
-            if let timer = self?.observationPushTimer, timer.isValid {
-                timer.invalidate();
-                self?.observationPushTimer = nil;
+        if let timer = self.observationPushTimer {
+            timer.cancel()
+            self.observationPushTimer = nil;
+        }
+        
+        self.observationPushTimer = DispatchQueue
+            .global(qos: .utility)
+            .schedule(after: DispatchQueue.SchedulerTimeType(.now()),
+                      interval: .seconds(self.interval),
+                      tolerance: .seconds(self.interval / 5)) { [weak self] in
+            guard let self else { return }
+            Task {
+                 await self.onTimerFire()
             }
-            guard let pushService = self else {
-                return;
-            }
-            pushService.observationPushTimer = Timer.scheduledTimer(timeInterval: pushService.interval, target: pushService, selector: #selector(pushService.onTimerFire), userInfo: nil, repeats: true);
         }
     }
     
-    @objc func onTimerFire() {
+    func onTimerFire() {
         if !UserUtility.singleton.isTokenExpired && DataConnectionUtilities.shouldPushObservations() {
             pushObservations(observations: fetchedResultsController?.fetchedObjects as? [Observation])
-            pushFavorites(favorites: self.favoritesFetchedResultsController?.fetchedObjects as? [ObservationFavorite])
-            pushImportant(importants: self.importantFetchedResultsController?.fetchedObjects as? [ObservationImportant])
+            observationFavoriteRepository.sync()
+            observationImportantRepository.sync()
         }
     }
 
@@ -108,6 +147,12 @@ public class ObservationPushService: NSObject {
         });
     }
     
+    public func pushObservation(observationUri: URL) async {
+        if let observation = await observationRepository.getObservationNSManagedObject(observationUri: observationUri) {
+            pushObservations(observations: [observation])
+        }
+    }
+    
     public func pushObservations(observations: [Observation]?) {
         guard let observations = observations else {
             return
@@ -120,17 +165,16 @@ public class ObservationPushService: NSObject {
         
         // only push observations that haven't already been told to be pushed
         var observationsToPush: [NSManagedObjectID : Observation] = [:]
-        for observation in observations {
-            do {
-                try observation.managedObjectContext?.obtainPermanentIDs(for: [observation])
-            } catch {
-                
-            }
+        context?.performAndWait {
+            try? context?.obtainPermanentIDs(for: observations)
             
-            if self.pushingObservations[observation.objectID] == nil {
-                self.pushingObservations[observation.objectID] = observation
-                observationsToPush[observation.objectID] = observation;
-                observation.syncing = true;
+            for observation in observations {
+                if self.pushingObservations[observation.objectID] == nil {
+                    self.pushingObservations[observation.objectID] = observation
+                    observationsToPush[observation.objectID] = observation;
+                    observation.syncing = true;
+                }
+                try? context?.save()
             }
         }
         
@@ -148,30 +192,32 @@ public class ObservationPushService: NSObject {
                 
                 // save the properties of the observation before they get overwritten so we can match the attachments later
                 let propertiesToSave = observation.properties;
-                MagicalRecord.save { context in
-                    guard let localObservation = observation.mr_(in: context) else {
+                guard let context = self.context else { return }
+                context.performAndWait {
+                    guard let localObservation = self.context?.object(with: observationID) as? Observation else {
                         return;
                     }
                     localObservation.populate(json: response)
                     localObservation.dirty = false
                     localObservation.error = nil
                     
-                    if MageServer.isServerVersion5 {
-                        if let attachments = localObservation.attachments {
-                            for attachment in attachments {
-                                attachment.observationRemoteId = localObservation.remoteId
+                    // when the observation comes back from a new server the attachments will have moved from the field to the attachments array
+                    var remoteIdsFromJson :Set<String> = []
+
+                    if let attachmentsInResponse = response[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
+                        
+                        for attachmentResponse in attachmentsInResponse {
+                            guard let fieldName = attachmentResponse[AttachmentKey.fieldName.key] as? String,
+                                  let name = attachmentResponse[AttachmentKey.name.key] as? String,
+                                  let forms = propertiesToSave?[ObservationKey.forms.key] as? [[AnyHashable: Any]] else {
+                                continue;
                             }
-                        }
-                    } else {
-                        // when the observation comes back from a new server the attachments will have moved from the field to the attachments array
-                        if let attachmentsInResponse = response[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
+                            if let remoteId = attachmentResponse[AttachmentKey.id.key] as? String {
+                                remoteIdsFromJson.insert(remoteId)
+                            }
+                            
                             // only look for attachments without a url that match a field we tried to save
-                            for attachmentResponse in attachmentsInResponse where (attachmentResponse[ObservationKey.url.key] == nil) {
-                                guard let fieldName = attachmentResponse[AttachmentKey.fieldName.key] as? String,
-                                      let name = attachmentResponse[AttachmentKey.name.key] as? String,
-                                      let forms = propertiesToSave?[ObservationKey.forms.key] as? [[AnyHashable: Any]] else {
-                                    continue;
-                                }
+                            if attachmentResponse[ObservationKey.url.key] == nil {
                                 // search through each form for attachments that needed saving
                                 for form in forms {
                                     guard let formValue = form[fieldName] else {
@@ -193,10 +239,26 @@ public class ObservationPushService: NSObject {
                             }
                         }
                     }
-                } completion: { contextDidSave, error in
+                    // If a local attachment if absent on the server, delete it (and the locally cached file)
+                    let attachmentsDeletedOnServer = observation.attachments?.filter {
+                        !remoteIdsFromJson.contains($0.remoteId ?? "")
+                    }
+                    attachmentsDeletedOnServer?.forEach {
+                        observation.removeFromAttachments($0)
+                        context.delete($0)
+                    }
+                    var contextDidSave = false
+                    var saveError: Error?
+                    do {
+                        try context.save()
+                        contextDidSave = true
+                    } catch {
+                        contextDidSave = false
+                        saveError = error
+                    }
                     self.pushingObservations.removeValue(forKey: observationID);
                     for delegate in self.delegates {
-                        delegate.didPush(observation: observation, success: contextDidSave, error: error)
+                        delegate.didPush(observation: observation, success: contextDidSave, error: saveError)
                     }
                 }
             } failure: { task, error in
@@ -212,26 +274,34 @@ public class ObservationPushService: NSObject {
                     return;
                 }
                 
-                MagicalRecord.save { context in
-                    guard let error = error as NSError?, let localObservation = observation.mr_(in: context) else {
+                guard let context = self.context else { return }
+                context.performAndWait {
+                    guard let error = error as NSError?, let localObservation = self.context?.object(with: observationID) as? Observation else {
                         return;
                     }
                     
                     var localError = localObservation.error ?? [:]
-                    localError[ObservationPushService.ObservationErrorDescription] = error.localizedDescription;
+                    localError[ObservationErrorKeys.errorDescription] = error.localizedDescription;
                     if let response: HTTPURLResponse = error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] as? HTTPURLResponse {
-                        localError[ObservationPushService.ObservationErrorStatusCode] = response.statusCode;
+                        localError[ObservationErrorKeys.errorStatusCode] = response.statusCode;
                         if let data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] as? Data {
-                            localError[ObservationPushService.ObservationErrorMessage] = String(data: data, encoding: .utf8)
+                            localError[ObservationErrorKeys.errorMessage] = String(data: data, encoding: .utf8)
                         }
                     }
                     localObservation.error = localError;
                     // TODO: verify this if we set the error, the push service sees it as an update so it tries to resend immediately
                     // we need to put in some kind of throttle
-                } completion: { contextDidSave, recordSaveError in
+                    
+                    var contextDidSave = false
+                    do {
+                        try context.save()
+                        contextDidSave = true
+                    } catch {
+                        contextDidSave = false
+                    }
                     self.pushingObservations.removeValue(forKey: observationID);
                     for delegate in self.delegates {
-                        delegate.didPush(observation: observation, success: false, error: error)
+                        delegate.didPush(observation: localObservation, success: contextDidSave, error: error)
                     }
                 }
             }
@@ -243,156 +313,39 @@ public class ObservationPushService: NSObject {
         }
     }
     
-    func pushFavorites(favorites: [ObservationFavorite]?) {
-        guard let favorites = favorites else {
-            return
-        }
-
-        if !DataConnectionUtilities.shouldPushObservations() {
-            return
-        }
-        
-        // only push favorites that haven't already been told to be pushed
-        var favoritesToPush: [NSManagedObjectID : ObservationFavorite] = [:]
-        for favorite in favorites {
-            if pushingFavorites[favorite.objectID] == nil {
-                pushingFavorites[favorite.objectID] = favorite
-                favoritesToPush[favorite.objectID] = favorite
-            }
-        }
-        
-        NSLog("about to push an additional \(favoritesToPush.count) favorites")
-        let manager = MageSessionManager.shared()
-        for favorite in favoritesToPush.values {
-            let favoritePushTask = Observation.operationToPushFavorite(favorite: favorite) { task, response in
-                NSLog("Successfuly submitted favorite")
-                MagicalRecord.save { context in
-                    let localFavorite = favorite.mr_(in: context)
-                    localFavorite?.dirty = false;
-                } completion: { contextDidSave, error in
-                    self.pushingFavorites.removeValue(forKey: favorite.objectID)
-                }
-            } failure: { task, error in
-                NSLog("Error submitting favorite")
-                self.pushingFavorites.removeValue(forKey: favorite.objectID)
-            }
-            if let favoritePushTask = favoritePushTask {
-                manager?.addTask(favoritePushTask);
-            }
-        }
-    }
-    
-    func pushImportant(importants: [ObservationImportant]?) {
-        guard let importants = importants else {
-            return
-        }
-
-        // only push important changes that haven't already been told to be pushed
-        var importantsToPush: [String : ObservationImportant] = [:]
-        for important in importants {
-            if let observationRemoteId = important.observation?.remoteId, pushingImportant[observationRemoteId] == nil {
-                NSLog("adding important to push \(observationRemoteId)")
-                pushingImportant[observationRemoteId] = important
-                importantsToPush[observationRemoteId] = important
-            }
-        }
-        
-        NSLog("about to push an additional \(importantsToPush.count) importants")
-        let manager = MageSessionManager.shared();
-        for (observationId, important) in importantsToPush {
-            let importantPushTask = Observation.operationToPushImportant(important: important) { task, response in
-                // verify that the current state in our data is the same as returned from the server
-                MagicalRecord.save { context in
-                    if let response = response as? [AnyHashable : Any], let localImportant = important.mr_(in: context) {
-                        let serverImportant = response[ObservationKey.important.key] != nil
-                        if localImportant.important == serverImportant {
-                            localImportant.dirty = false
-                        } else {
-                            // force a push again
-                            localImportant.timestamp = Date()
-                        }
-                        if let observation = localImportant.observation {
-                            localImportant.managedObjectContext?.refresh(observation, mergeChanges: false);
-                        }
-                    }
-                } completion: { contextDidSave, error in
-                    self.pushingImportant.removeValue(forKey: observationId)
-                }
-            } failure: { task, error in
-                NSLog("Error submitting important")
-                self.pushingImportant.removeValue(forKey: observationId)
-            }
-            if let importantPushTask = importantPushTask {
-                manager?.addTask(importantPushTask);
-            }
-        }
-    }
-    
-    func isPushingFavorites() -> Bool {
-        return !pushingFavorites.isEmpty
-    }
-    
     func isPushingObservations() -> Bool {
         return !pushingObservations.isEmpty
     }
-    
-    func isPushingImportant() -> Bool {
-        return !pushingImportant.isEmpty
-    }
 }
 
-extension ObservationPushService : NSFetchedResultsControllerDelegate {
-    public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
+final class ObservationPushServiceImplFetchedResultsControllerDelgate : NSObject, NSFetchedResultsControllerDelegate {
+    @Injected(\.observationPushService)
+    var pushService: ObservationPushService
+    
+    public func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
         if let observation = anObject as? Observation {
             switch type {
             case .insert:
-                NSLog("observations inserted, push em")
-                pushObservations(observations: [observation])
+                NSLog("XXXX observations inserted, push em")
+                Task {
+                    await pushService.pushObservations(observations: [observation])
+                }
             case .delete:
                 break
             case .move:
                 break
             case .update:
-                NSLog("observations updated, push em")
+                NSLog("XXXX observations updated, push em")
                 if observation.remoteId != nil {
-                    pushObservations(observations: [observation])
-                }
-            @unknown default:
-                break
-            }
-        } else if let observationFavorite = anObject as? ObservationFavorite {
-            switch type {
-            case .insert:
-                NSLog("favorites inserted, push em")
-                pushFavorites(favorites: [observationFavorite])
-            case .delete:
-                break
-            case .move:
-                break
-            case .update:
-                NSLog("favorites updated, push em")
-                if observationFavorite.observation?.remoteId != nil {
-                    pushFavorites(favorites: [observationFavorite])
-                }
-            @unknown default:
-                break
-            }
-        } else if let observationImportant = anObject as? ObservationImportant {
-            switch type {
-            case .insert:
-                NSLog("important inserted, push em")
-                if observationImportant.observation?.remoteId != nil {
-                    pushImportant(importants: [observationImportant])
-                }
-            case .delete:
-                break
-            case .move:
-                break
-            case .update:
-                NSLog("important updated, push em")
-                if observationImportant.observation?.remoteId != nil {
-                    pushImportant(importants: [observationImportant])
+                    Task {
+                        await pushService.pushObservations(observations: [observation])
+                    }
                 }
             @unknown default:
                 break

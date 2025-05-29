@@ -271,7 +271,12 @@ class ObservationActionsView: UIView {
         importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant ?? false);
         
         currentUserFavorited = false;
-        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        
+        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: context) {
             currentUserFavorited = favorites.contains { (favorite) -> Bool in
                 favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite);
                 return favorite.userId == user.remoteId && favorite.favorite;

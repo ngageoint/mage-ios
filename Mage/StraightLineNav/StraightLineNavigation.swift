@@ -13,9 +13,9 @@ struct StraightLineNavigationNotification {
     var imageURL: URL? = nil
     var title: String? = nil
     var coordinate: CLLocationCoordinate2D
-    var user: User? = nil
-    var feedItem: FeedItem? = nil
-    var observation: Observation? = nil
+//    var user: User? = nil
+//    var feedItem: FeedItem? = nil
+//    var observation: Observation? = nil
 }
 
 protocol StraightLineNavigationDelegate {

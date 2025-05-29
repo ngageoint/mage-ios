@@ -148,7 +148,7 @@ class FeedItemCard : MDCCard {
 
 extension FeedItemCard : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if let item: FeedItem = annotation as? FeedItem {
+        if let item: FeedItemAnnotation = annotation as? FeedItemAnnotation {
             let annotationView: MKAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "feedItem") ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "feedItem");
             annotationView.canShowCallout = false;
             FeedItemRetriever.setAnnotationImage(feedItem: item, annotationView: annotationView);

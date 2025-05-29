@@ -8,22 +8,12 @@
 
 import Foundation
 
-class MageMapViewController: UIViewController {
+class MageMapViewController: MageNavStack {
     var mapView: MainMageMapView?
-    var scheme: MDCContainerScheming?;
-    
-    public init(scheme: MDCContainerScheming?) {
-        super.init(nibName: nil, bundle: nil)
-        self.scheme = scheme
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView = MainMageMapView(viewController: self, navigationController: self.navigationController, scheme: scheme)
+        mapView = MainMageMapView(viewController: self, navigationController: self.navigationController, scheme: scheme, router: router)
         view.addSubview(mapView!)
         mapView?.autoPinEdgesToSuperviewEdges()
         NotificationCenter.default.addObserver(forName: .ObservationFiltersChanged, object:nil, queue: .main) { [weak self] notification in
@@ -43,7 +33,6 @@ class MageMapViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
     }
     
     deinit {
@@ -56,7 +45,11 @@ class MageMapViewController: UIViewController {
     }
 
     func setNavBarTitle() {
-        guard let event = Event.getCurrentEvent(context: NSManagedObjectContext.mr_default()) else {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        guard let event = Event.getCurrentEvent(context: context) else {
             return
         }
         if !MageFilter.getString().isEmpty || !MageFilter.getLocationFilterString().isEmpty {

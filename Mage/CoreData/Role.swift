@@ -12,9 +12,9 @@ import CoreData
 @objc public class Role: NSManagedObject {
     
     @discardableResult
-    @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Role? {
-        let role = Role.mr_createEntity(in: context);
-        role?.update(json: json, context: context);
+    @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Role {
+        let role = Role(context: context);
+        role.update(json: json, context: context);
         return role;
     }
     
@@ -30,12 +30,12 @@ import CoreData
         let url = "\(baseURL.absoluteURL)/api/roles";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Roles @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Roles @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Roles. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Roles. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
-                    print("Roles are empty");
+                    MageLogger.misc.debug("Roles are empty");
                     success?(task, nil);
                     return;
                 }
@@ -46,9 +46,16 @@ import CoreData
                 return;
             }
             let saveStart = Date()
-            NSLog("TIMING Saving Roles @ \(saveStart)")
-            MagicalRecord.save { localContext in
-
+            MageLogger.misc.debug("TIMING Saving Roles @ \(saveStart)")
+            
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else { 
+                success?(task, nil)
+                return
+            }
+            context.performAndWait {
                 // Get the role ids to query
                 var roleIds: [String] = [];
                 for roleJson in roles {
@@ -57,7 +64,7 @@ import CoreData
                     }
                 }
 
-                let rolesMatchingIDs: [Role] = Role.mr_findAll(with: NSPredicate(format: "(\(RoleKey.remoteId.key) IN %@)", roleIds), in: localContext) as? [Role] ?? [];
+                let rolesMatchingIDs: [Role] = (try? context.fetchObjects(Role.self, predicate: NSPredicate(format: "(\(RoleKey.remoteId.key) IN %@)", roleIds))) ?? [];
                 var roleIdMap: [String : Role] = [:];
                 for role in rolesMatchingIDs {
                     if let remoteId = role.remoteId {
@@ -72,26 +79,23 @@ import CoreData
                     }
                     if let role = roleIdMap[roleId] {
                         // already exists in core data, lets update the object we have
-                        print("Updating role in the database \(role.remoteId ?? "")");
-                        role.update(json: roleJson, context: localContext);
+                        MageLogger.misc.debug("Updating role in the database \(role.remoteId ?? "")");
+                        role.update(json: roleJson, context: context);
 
                     } else {
                         // not in core data yet need to create a new managed object
-                        print("Inserting new role into database");
-                        Role.insert(json: roleJson, context: localContext)
+                        MageLogger.misc.debug("Inserting new role into database");
+                        Role.insert(json: roleJson, context: context)
                     }
                 }
-            } completion: { contextDidSave, error in
-                NSLog("TIMING inserted roles. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-
-                if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
-                } else if let success = success {
-                    success(task, nil);
+                
+                do {
+                    try context.save()
+                    success?(task, nil)
+                } catch {
+                    failure?(task, error)
                 }
-            }
+            } 
         }, failure: { task, error in
             if let failure = failure {
                 failure(task, error);

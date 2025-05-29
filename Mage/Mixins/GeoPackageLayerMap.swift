@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 import geopackage_ios
 
 protocol GeoPackageLayerMap {
@@ -29,13 +30,23 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         self.geoPackageLayerMap = geoPackageLayerMap
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         guard let mapView = geoPackageLayerMap.mapView else {
             return
         }
         geoPackage = GeoPackage(mapView: mapView)
         
-        CacheOverlays.getInstance().register(self)
+        Task {
+            await CacheOverlays.getInstance().register(self)
+        }
         geopackageImportedObserver = NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
             self?.updateGeoPackageLayers()
         }
@@ -43,7 +54,9 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     }
     
     func cleanupMixin() {
-        CacheOverlays.getInstance().unregisterListener(self)
+        Task {
+            await CacheOverlays.shared.unregisterListener(self)
+        }
         if let geopackageImportedObserver = geopackageImportedObserver {
             NotificationCenter.default.removeObserver(geopackageImportedObserver)
         }
@@ -51,17 +64,38 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     }
     
     func updateGeoPackageLayers() {
-        geoPackage?.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        Task {
+            await geoPackage?.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        }
         
     }
     
-    func items(at location: CLLocationCoordinate2D) -> [Any]? {
-        return geoPackage?.getFeaturesAtTap(location)
+    func itemKeys(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [String : [String]] {
+        await mainActorItemKeys(at: location, mapView: mapView, touchPoint: touchPoint)
+    }
+    
+    @MainActor
+    func mainActorItemKeys(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [String : [String]] {
+        if let keys = await geoPackage?.getFeatureKeys(atTap: location), !keys.isEmpty {
+            return [DataSources.geoPackage.key: keys.map({ key in
+                key.toKey()
+            })]
+        }
+        return [:]
     }
 }
 
 extension GeoPackageLayerMapMixin : CacheOverlayListener {
-    func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay]!) {
+    func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay]) {
+        MageLogger.misc.debug("XXX got notified")
         updateGeoPackageLayers()
     }
 }

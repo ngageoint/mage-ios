@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol GeoPackageBaseMap {
     var mapView: MKMapView? { get set }
@@ -15,7 +16,7 @@ protocol GeoPackageBaseMap {
 }
 
 class GeoPackageBaseMapMixin: NSObject, MapMixin {
-    var mapView: MKMapView?
+    weak var mapView: MKMapView?
     var gridOverlay: MKTileOverlay?
     
     init(mapView: MKMapView?) {
@@ -28,17 +29,37 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "mapShowTraffic")
     }
 
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: "mapType", options: .new, context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "gridType", options: .new, context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "mapShowTraffic", options: .new, context: nil)
-        addBaseMap()
+        Task { [weak self] in
+            await self?.addBaseMap()
+        }
+    }
+    
+    func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        if let overlay = overlay as? BaseMapOverlay {
+            return standardRenderer(overlay: overlay)
+        }
+        return nil
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        addBaseMap()
+        Task { [weak self] in
+            await self?.addBaseMap()
+        }
     }
     
+    @MainActor
     func addBaseMap() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
               let backgroundOverlay = appDelegate.getBaseMap(),
@@ -82,9 +103,13 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
     
     func traitCollectionUpdated(previous: UITraitCollection?) {
         if let previous = previous, previous.hasDifferentColorAppearance(comparedTo: UITraitCollection.current) {
-            addBaseMap()
+            Task { [weak self] in
+                await self?.addBaseMap()
+            }
         } else if previous == nil {
-            addBaseMap()
+            Task { [weak self] in
+                await self?.addBaseMap()
+            }
         }
     }
     

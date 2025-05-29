@@ -29,21 +29,24 @@
 @property (assign, nonatomic) NSInteger versionCellSelectionCount;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (weak, nonatomic) id<SettingsDelegate> delegate;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation SettingsTableViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate context: (NSManagedObjectContext *) context {
     if (self = [self initWithStyle:UITableViewStyleGrouped]) {
         self.scheme = containerScheme;
         self.delegate = delegate;
+        self.context = context;
     }
     return self;
 }
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     if (self = [self initWithStyle:UITableViewStyleGrouped]) {
         self.scheme = containerScheme;
+        self.context = context;
     }
     return self;
 }
@@ -62,7 +65,7 @@
     
     self.title = @"Settings";
     
-    self.dataSource = [[SettingsDataSource alloc] initWithScheme:self.scheme];
+    self.dataSource = [[SettingsDataSource alloc] initWithScheme:self.scheme context:self.context];
     self.tableView.dataSource = self.dataSource;
     self.tableView.delegate = self.dataSource;
     self.tableView.estimatedSectionFooterHeight = 45;
@@ -183,7 +186,7 @@
             break;
         }
         case kChangePassword: {
-            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme];
+            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme context: self.context];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }
@@ -216,6 +219,23 @@
             
             break;
         }
+        case kContactUs: {
+            [self onContactUs];
+            break;
+        }
+    }
+}
+
+- (void) onContactUs {
+    NSString *recipient = @"magesuitesupport@nga.mil";
+    NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@", recipient];
+    NSURL *mailtoURL = [NSURL URLWithString:mailtoURLString];
+
+    // Open the mail client
+    if ([[UIApplication sharedApplication] canOpenURL:mailtoURL]) {
+        [[UIApplication sharedApplication] openURL:mailtoURL options:@{} completionHandler:nil];
+    } else {
+        NSLog(@"Cannot open mail client.");
     }
 }
 
@@ -226,7 +246,7 @@
     
     [self presentViewController:navigationController animated:YES completion:nil];
     
-    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme];
+    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme context: self.context];
     [self.childCoordinators addObject:coord];
     [coord startLoginOnly];
     navigationController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLogin:)];

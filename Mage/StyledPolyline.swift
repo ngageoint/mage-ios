@@ -4,9 +4,18 @@
 //
 //
 
+import MapKit
 import CoreLocation
+import MapFramework
+import DataSourceDefinition
 
-@objc class StyledPolyline : MKPolyline, OverlayRenderable {
+@objc class StyledPolyline : MKPolyline, OverlayRenderable, DataSourceIdentifiable {
+    var id: String = ""
+    
+    var itemKey: String = ""
+    
+    var dataSource: any DataSourceDefinition = UnknownDefinition.definition
+    
     var renderer: MKOverlayRenderer {
         get {
             let renderer = MKPolylineRenderer(polyline: self)
@@ -26,8 +35,11 @@ import CoreLocation
             guard let observationRemoteId = observationRemoteId else {
                 return _observation
             }
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
             
-            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: NSManagedObjectContext.mr_default())
+            guard let context = context else { return nil }
+            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: context)
         }
         set {
             if let remoteId = newValue?.remoteId {

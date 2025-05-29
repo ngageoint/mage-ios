@@ -15,17 +15,22 @@ import MagicalRecord
 @objc public class Location: NSManagedObject, Navigable {
     
     static func mostRecentLocationFetchedResultsController(_ user: User, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Location>? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         let fetchRequest = Location.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "user = %@", user)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         locationFetchedResultsController.delegate = delegate
         do {
             try locationFetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            MageLogger.misc.error("Unable to Perform Fetch Request")
+            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
         return locationFetchedResultsController
     }
@@ -106,7 +111,7 @@ import MagicalRecord
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/locations/users";
-        print("Trying to fetch locations from server \(url)")
+        MageLogger.misc.debug("Trying to fetch locations from server \(url)")
         // we only need to get the most recent location
         var parameters: [AnyHashable : Any] = [
             "limit" : "1"
@@ -116,22 +121,22 @@ import MagicalRecord
         }
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Locations /api/events/\(currentEventId)/locations/users @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Locations /api/events/\(currentEventId)/locations/users @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             guard let allUserLocations = responseObject as? [[AnyHashable : Any]] else {
                 success?(task, nil);
                 return;
             }
             
-            print("Fetched \(allUserLocations.count) locations from the server, saving to location storage");
+            MageLogger.misc.debug("Fetched \(allUserLocations.count) locations from the server, saving to location storage");
             if allUserLocations.count == 0 {
                 success?(task, responseObject)
                 return;
             }
             
             let saveStart = Date()
-            NSLog("TIMING Saving Locations /api/events/\(currentEventId)/locations/users @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving Locations /api/events/\(currentEventId)/locations/users @ \(saveStart)")
             MagicalRecord.save { localContext in
                 let currentUser = User.fetchCurrentUser(context: localContext);
                 
@@ -158,9 +163,6 @@ import MagicalRecord
                     guard let userId = userJson[UserKey.id.key] as? String, let locations = userJson[UserKey.locations.key] as? [[AnyHashable : Any]] else {
                         continue;
                     }
-                    if (currentUser?.remoteId == userId) {
-                        continue;
-                    }
                     if let user = userIdMap[userId] {
                         if let location = user.location {
                             // already exists in core data, lets update the object we have
@@ -179,15 +181,15 @@ import MagicalRecord
                             let manager = MageSessionManager.shared();
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
+                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
                             } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
                             manager?.addTask(fetchUserTask)
                         }
                     } else {
                         if (locations.count != 0) {
-                            print("Could not find user for id \(userId)")
+                            MageLogger.misc.debug("Could not find user for id \(userId)")
                             newUserFound = true;
                             var displayName = "unknown";
                             var username = userId
@@ -205,9 +207,9 @@ import MagicalRecord
                             let manager = MageSessionManager.shared();
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
+                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
                             } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
                             manager?.addTask(fetchUserTask)
                         }
@@ -219,7 +221,7 @@ import MagicalRecord
                     User.operationToFetchUsers(success: nil, failure: nil);
                 }
             } completion: { contextDidSave, error in
-                NSLog("TIMING Saved Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+                MageLogger.misc.debug("TIMING Saved Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
 
                 if let error = error {
                     failure?(task, error);
@@ -235,8 +237,15 @@ import MagicalRecord
     }
     
     static func fetchLastLocationDate() -> Date? {
-        if let currentEventId = Server.currentEventId() {
-            let location = Location.mr_findFirst(with: NSPredicate(format: "\(LocationKey.eventId.key) == %@", currentEventId), sortedBy: LocationKey.timestamp.key, ascending: false);
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        if let currentEventId = Server.currentEventId(), let context = context {
+            let location = try? context.fetchFirst(
+                Location.self,
+                sortBy: [NSSortDescriptor(key: LocationKey.timestamp.key, ascending: false)], 
+                predicate: NSPredicate(
+                    format: "\(LocationKey.eventId.key) == %@", currentEventId));
             
             return location?.timestamp
         }

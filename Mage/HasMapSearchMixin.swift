@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 import mgrs_ios
 import gars_ios
@@ -53,7 +54,15 @@ class HasMapSearchMixin: NSObject, MapMixin {
         mapSearchButton.tintColor = scheme?.colorScheme.primaryColorVariant;
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         if UserDefaults.standard.showMapSearch {
             if rootView.arrangedSubviews.count < indexInView {
                 rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
@@ -79,6 +88,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
         if let sheet = searchController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
+            sheet.delegate = self
         }
         self.navigationController?.present(searchController, animated: true, completion: nil)
     }
@@ -102,7 +112,23 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
 }
 
+extension HasMapSearchMixin: UISheetPresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        guard let mapView = hasMapSearch.mapView else { return }
+        
+        // reset the layout margin if it was updated
+        mapView.layoutMargins.bottom = 0.0
+    }
+}
+
 extension HasMapSearchMixin: SearchControllerDelegate {
+    func clearSearchResult() {
+        guard let mapView = hasMapSearch.mapView else { return }
+        if let annotation = annotation {
+            mapView.removeAnnotation(annotation)
+        }
+    }
+    
     func onSearchResultSelected(type: SearchResponseType, result: GeocoderResult) {
         guard let location = result.location else { return }
         guard let mapView = hasMapSearch.mapView else { return }

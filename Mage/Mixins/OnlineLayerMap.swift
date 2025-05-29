@@ -8,26 +8,28 @@
 
 import Foundation
 import MapKit
-
-protocol OnlineLayerMap {
-    var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
-    var onlineLayerMapMixin: OnlineLayerMapMixin? { get set }
-}
+import MapFramework
 
 class OnlineLayerMapMixin: NSObject, MapMixin {
-    var onlineLayerMap: OnlineLayerMap
+    weak var mapView: MKMapView?
+    weak var mapState: MapState?
     var onlineLayers: [NSNumber:MKTileOverlay] = [:]
-    
-    init(onlineLayerMap: OnlineLayerMap) {
-        self.onlineLayerMap = onlineLayerMap
-    }
     
     func cleanupMixin() {
         UserDefaults.standard.removeObserver(self, forKeyPath: "selectedOnlineLayers")
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
+        self.mapView = mapView
+        self.mapState = mapState
         UserDefaults.standard.addObserver(self, forKeyPath: "selectedOnlineLayers", options: [.new], context: nil)
         updateOnlineLayers()
     }
@@ -56,17 +58,17 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
                     if format == "WMS" {
                         if let url = onlineLayer.url {
                             let wms = onlineLayer.options ?? [:]
-                            print("Adding the WMS layer \(onlineLayer.name ?? "") to the map")
+                            MageLogger.misc.debug("Adding the WMS layer \(onlineLayer.name ?? "") to the map")
                             return WMSTileOverlay(url: url, andParameters: wms)
                         }
                     } else if format == "XYZ" {
                         if let url = onlineLayer.url {
-                            print("Adding the XYZ layer \(onlineLayer.name ?? "") to the map url \(url)");
+                            MageLogger.misc.debug("Adding the XYZ layer \(onlineLayer.name ?? "") to the map url \(url)");
                             return XYZTileOverlay(urlTemplate: url)
                         }
                     } else if format == "TMS" {
                         if let url = onlineLayer.url {
-                            print("Adding the TMS layer \(onlineLayer.name ?? "") to the map url \(url)");
+                            MageLogger.misc.debug("Adding the TMS layer \(onlineLayer.name ?? "") to the map url \(url)");
                             return TMSTileOverlay(urlTemplate: url)
                         }
                     }
@@ -99,18 +101,18 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
         
         // Add the layers in the proper order ot the map
         for overlay in baseLayers {
-            onlineLayerMap.mapView?.addOverlay(overlay)
+            mapView?.addOverlay(overlay)
         }
         for overlay in nonBaseLayers {
-            onlineLayerMap.mapView?.addOverlay(overlay)
+            mapView?.addOverlay(overlay)
         }
         for overlay in transparentLayers {
-            onlineLayerMap.mapView?.addOverlay(overlay)
+            mapView?.addOverlay(overlay)
         }
         
         for unselectedOnlineLayerId in unselectedOnlineLayerIds {
             if let overlay = onlineLayers[unselectedOnlineLayerId] {
-                onlineLayerMap.mapView?.removeOverlay(overlay)
+                mapView?.removeOverlay(overlay)
                 onlineLayers.removeValue(forKey: unselectedOnlineLayerId)
             }
         }

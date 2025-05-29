@@ -101,15 +101,15 @@ class ObservationFormView: UIStackView {
                 if (value != nil) {
                     unsentAttachments = value as? [[String : AnyHashable]] ?? []
                 }
-                value = (self.observation.orderedAttachments)?.filter() { (attachment: Attachment) in
-                    guard let ofi = attachment.observationFormId, let fieldName = attachment.fieldName else { return false }
+                value = (self.observation.orderedAttachments)?.filter() { (attachment: AttachmentModel) in
+                    guard let ofi = attachment.formId, let fieldName = attachment.fieldName else { return false }
                     return ofi == form[FormKey.id.key] as? String && fieldName == fieldDictionary[FieldKey.name.key] as? String &&
                         !attachment.markedForDeletion;
                 }
                 
-                if let attachmentArray = value as? [Attachment], attachmentArray.count == 0 {
+                if let attachmentArray = value as? [AttachmentModel], attachmentArray.count == 0 {
                     value = nil;
-                } else if !(value is [Attachment]) {
+                } else if !(value is [AttachmentModel]) {
                     value = nil;
                 }
             } else if (!editMode && (value == nil || (value as? String) == "")) {
@@ -128,7 +128,7 @@ class ObservationFormView: UIStackView {
                     continue;
                 }
                 let attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as? String, observationFormId: form[FormKey.id.key] as? String, scheme: scheme);
-                fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? [Attachment]), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
+                fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? [AttachmentModel]), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
                 (fieldView as! AttachmentFieldView).setUnsentAttachments(attachments: unsentAttachments);
             case FieldType.numberfield.key:
                 fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
@@ -154,7 +154,7 @@ class ObservationFormView: UIStackView {
                 fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self, observationActionsDelegate: observationActionsDelegate);
                 (fieldView as! GeometryView).setValue(value as? SFGeometry)
             default:
-                print("No view is configured for type \(type)")
+                MageLogger.misc.error("No view is configured for type \(type)")
             }
             if let baseFieldView = fieldView as? BaseFieldView, let key = fieldDictionary[FieldKey.name.key] as? String {
                 baseFieldView.applyTheme(withScheme: scheme)

@@ -21,7 +21,10 @@
 
 @interface AuthenticationCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
-- (void) start:(MageServer *) mageServer;
+- (instancetype _Nullable) initWithNavigationController: (UINavigationController * _Nullable) navigationController andDelegate: (id<AuthenticationDelegate> _Nullable) delegate andScheme: (id<MDCContainerScheming> _Nullable) containerScheme context: (NSManagedObjectContext * _Nullable) context;
+- (void) start:(MageServer * _Nullable) mageServer;
 - (void) startLoginOnly;
+- (void) showLoginViewForServer:(MageServer * _Nullable) mageServer;
+
+@property (nonatomic, strong, readonly) MageServer * _Nullable server;
 @end

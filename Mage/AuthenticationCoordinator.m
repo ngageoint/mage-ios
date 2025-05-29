@@ -12,11 +12,9 @@
 #import "SignUpViewController_Server5.h"
 #import "IDPLoginView.h"
 #import "IDPCoordinator.h"
-#import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
 #import "MageSessionManager.h"
-#import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
 #import "UIColor+Hex.h"
@@ -25,8 +23,8 @@
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
-@property (weak, nonatomic) UINavigationController *navigationController;
-@property (strong, nonatomic) MageServer *server;
+@property (strong, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic, readwrite) MageServer *server;
 @property (strong, nonatomic) NSString *signupUsername;
 @property (strong, nonatomic) NSString *captchaToken;
 @property (strong, nonatomic) NSDictionary *signupParameters;
@@ -34,6 +32,7 @@
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
 
@@ -41,10 +40,10 @@
 
 BOOL signingIn = YES;
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     if (!self) return nil;
-    
+    _context = context;
     _scheme = containerScheme;
     _navigationController = navigationController;
     _delegate = delegate;
@@ -190,7 +189,7 @@ BOOL signingIn = YES;
 
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
-    User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+    User *currentUser = [User fetchCurrentUserWithContext:_context];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.loginView animated:NO];
@@ -214,7 +213,8 @@ BOOL signingIn = YES;
 }
 
 - (BOOL) didUserChange: (NSString *) username {
-    User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+    NSLog(@"Context is to search %@", _context);
+    User *currentUser = [User fetchCurrentUserWithContext:_context];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
@@ -324,16 +324,17 @@ BOOL signingIn = YES;
             [weakSelf returnToLogin: complete];
         }]];
 
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.navigationController presentViewController: alert animated: YES completion: nil];
     } else {
         // there is no stored password for this server
-        UIAlertController *alert = [UIAlertController
-                                    alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Unable to Login"
+                                                                       message: @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."
+                                                                preferredStyle: UIAlertControllerStyleAlert];
         alert.accessibilityLabel = @"Unable to Login";
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alert addAction: [UIAlertAction actionWithTitle: @"OK" style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
             [weakSelf returnToLogin: complete];
         }]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.navigationController presentViewController: alert animated: YES completion: nil];
     }
 }
 
@@ -385,7 +386,6 @@ BOOL signingIn = YES;
             }
         } else {
             ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString andDetailedInfo: errorDetail];
-//            info.username = username;
             [self.loginView setContactInfo:info];
         }
     }];

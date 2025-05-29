@@ -17,12 +17,13 @@
     Event *event = [Event getEventWithEventId:observation.eventId context:observation.managedObjectContext];
     
     NSString *body = @"";
-    if ([observation primaryFeedFieldText] != nil) {
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@", [observation primaryFeedFieldText]]];
-    }
-    if ([observation secondaryFeedFieldText] != nil) {
-        body = [body stringByAppendingString:[NSString stringWithFormat:@", %@", [observation secondaryFeedFieldText]]];
-    }
+    // TODO: get the field text properly
+//    if ([observation primaryFeedFieldText] != nil) {
+//        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@", [observation primaryFeedFieldText]]];
+//    }
+//    if ([observation secondaryFeedFieldText] != nil) {
+//        body = [body stringByAppendingString:[NSString stringWithFormat:@", %@", [observation secondaryFeedFieldText]]];
+//    }
     
     body = [body stringByAppendingString:[NSString stringWithFormat:@" observation was created in %@ event.", event.name]];
     
@@ -30,7 +31,7 @@
     content.body = body;
     
     NSMutableArray *attachments = [[NSMutableArray alloc] init];
-    NSString *imageUrl = [ObservationImage imageNameWithObservation:observation];
+    NSString *imageUrl = @"defaultMarker"; // [ObservationImage imageNameWithObservation:observation];
     
     UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
     
