@@ -349,7 +349,6 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         
     }];
-
 }
 
 @end

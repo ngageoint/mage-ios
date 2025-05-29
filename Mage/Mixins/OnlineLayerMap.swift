@@ -50,7 +50,7 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
         let onlineLayersInEvent = onlineLayersPerEvent[(Server.currentEventId() ?? -1).stringValue] ?? []
         
         for onlineLayerId in onlineLayersInEvent {
-            if let onlineLayer = ImageryLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", onlineLayerId, currentEventId)) {
+            if let onlineLayer = try? NSManagedObjectContext.mr_default().fetchFirst(ImageryLayer.self, predicate: NSPredicate(format: "remoteId == %@ AND eventId == %@", onlineLayerId, currentEventId)) {
                 if let overlay: MKTileOverlay = {
                     guard let format = onlineLayer.format else {
                         return nil

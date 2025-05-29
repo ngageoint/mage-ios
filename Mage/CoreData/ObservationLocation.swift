@@ -48,7 +48,7 @@ class ObservationLocation: NSManagedObject {
             var context: NSManagedObjectContext?
             
             guard let context = context else { return nil }
-            return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
+            return try? context.fetchFirst(Form.self, predicate: NSPredicate(format: "formId == %@", formId))
         }
     }
 }

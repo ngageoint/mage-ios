@@ -31,7 +31,7 @@ import DateTools
             var context: NSManagedObjectContext?
             
             guard let context = context else { return nil }
-            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationId, in: context)
+            return try? context.fetchFirst(Observation.self, predicate: NSPredicate(format: "remoteId == %@", observationId))
         }
     }
     

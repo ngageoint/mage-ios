@@ -39,7 +39,7 @@ import DataSourceDefinition
             var context: NSManagedObjectContext?
             
             guard let context = context else { return nil }
-            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: context)
+            return try? context.fetchFirst(Observation.self, predicate: NSPredicate(format: "remoteId == %@", observationRemoteId))
         }
         set {
             if let remoteId = newValue?.remoteId {

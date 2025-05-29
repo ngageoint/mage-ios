@@ -101,7 +101,9 @@ class ObservationImportantView: UIView {
         self.observation = observation;
         let important: ObservationImportant? = observation.observationImportant;
         if let userId = important?.userId {
-            let user = User.mr_findFirst(byAttribute: "remoteId", withValue: userId);
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            let user = try? context?.fetchFirst(User.self, predicate: NSPredicate(format: "remoteId == %@", userId))
             flaggedByLabel.text = "Flagged By \(user?.name ?? "")".uppercased()
         }
         if let reason = important?.reason {
