@@ -20,42 +20,6 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         coreDataStack = TestCoreDataStack()
         context = coreDataStack!.persistentContainer.newBackgroundContext()
         InjectedValues[\.nsManagedObjectContext] = context
-        
-//        while (!cleared) {
-//            let clearMap = TestHelpers.clearAndSetUpStack()
-//            cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationLocation.self)] ?? false)
-//
-//            if (!cleared) {
-//                cleared = Observation.mr_findAll(in: context)?.count == 0 && ObservationLocation.mr_findAll(in: context)?.count == 0
-//            }
-//
-//            if (!cleared) {
-//                Thread.sleep(forTimeInterval: 0.5);
-//            }
-//
-//        }
-//
-//        let e = XCTNSPredicateExpectation(predicate: NSPredicate(block: { context, change in
-//            guard let context = context as? NSManagedObjectContext else {
-//                return false
-//            }
-//            if let count = Observation.mr_findAll(in: context)?.count {
-//                return count == 0
-//            }
-//            return false
-//        }), object: context)
-//        //        wait(for: [e], timeout: 10)
-//
-//        let e2 = XCTNSPredicateExpectation(predicate: NSPredicate(block: { context, change in
-//            guard let context = context as? NSManagedObjectContext else {
-//                return false
-//            }
-//            if let count = Observation.mr_findAll(in: context)?.count {
-//                return count == 0
-//            }
-//            return false
-//        }), object: NSManagedObjectContext.mr_rootSaving())
-//        wait(for: [e, e2], timeout: 10)
     }
 
     override func tearDown() {

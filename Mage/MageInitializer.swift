@@ -70,7 +70,8 @@ enum MageLogger {
         guard let localContext = localContext else { return [:] }
         
         // clear server specific selected layers
-        if let events = Event.mr_findAll(in:localContext) as? [Event] {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        if let events = try? localContext.fetch(request) {
             for event in events {
                 UserDefaults.standard.removeObject(forKey: "selectedFeeds-\(event.remoteId ?? -1)")
             }

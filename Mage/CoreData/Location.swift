@@ -1,5 +1,5 @@
 //
-//  Location.m
+//  Location.swift
 //  mage-ios-sdk
 //
 //  Created by William Newman on 4/13/16.
@@ -148,7 +148,9 @@ import MagicalRecord
                     }
                 }
                 
-                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds), in: localContext) as? [User] ?? [];
+                let request = NSFetchRequest<User>(entityName: "User")
+                request.predicate = NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds)
+                let usersMatchingIDs = (try? localContext.fetch(request)) ?? [];
 
                 var userIdMap: [String : User] = [:];
                 for user in usersMatchingIDs {
