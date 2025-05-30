@@ -8,12 +8,8 @@
 
 import Foundation
 import UIKit
-import MaterialComponents.MaterialCollections
-import MaterialComponents.MDCCard
-import MaterialComponents.MDCContainerScheme;
 import Combine
 import SwiftUI
-import MaterialViews
 import MAGEStyle
 
 struct ObservationFullView: View {
@@ -49,23 +45,13 @@ struct ObservationFullView: View {
                 Button {
                     router.appendRoute(ObservationRoute.edit(uri: viewModel.observationModel?.observationId))
                 } label: {
-                    Label {
-                        Text("")
-                    } icon: {
                         Image(systemName: "pencil")
-                            .fontWeight(.black)
-                    }
-                    
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(width: 44, height: 44)
+                        .background(Circle().fill(Color.accentColor))
+                        .shadow(radius: 4)
                 }
-                .fixedSize()
-                .buttonStyle(
-                    MaterialFloatingButtonStyle(
-                        type: .secondary,
-                        size: .mini,
-                        foregroundColor: .white,
-                        backgroundColor: .secondaryColor
-                    )
-                )
                 .padding(.trailing, 16)
                 .padding(.bottom, 16)
             }
