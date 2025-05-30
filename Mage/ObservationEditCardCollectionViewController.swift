@@ -252,22 +252,33 @@ import MaterialComponents.MDCCard
     }
     
     func setupFormDependentButtons() {
-        addFormFAB.isEnabled = true;
-        addFormFAB.isHidden = false;
+        addFormFAB.isEnabled = true
+        addFormFAB.isHidden = false
+
         if let scheme = self.scheme {
-            addFormFAB.applySecondaryTheme(withScheme: scheme);
+            addFormFAB.applySecondaryTheme(withScheme: scheme)
         }
-        
-        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
-        if ((MageServer.isServerVersion5 && realFormCount == 1) || eventForms?.filter({ form in
-            return !form.archived
-        }).count == 0) {
-            addFormFAB.isHidden = true;
-        }
-        if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+
+        let deletedFormCount = observation?.formsToBeDeleted.count ?? 0
+        let realFormCount = observationForms.count - deletedFormCount
+        let maxFormsAllowed = (event?.maxObservationForms?.intValue) ?? Int.max
+        let shouldHideAddButton = isLegacyServerWithSingleForm(realFormCount) || areAllEventFormsArchived()
+
+        if shouldHideAddButton {
+            addFormFAB.isHidden = true
+        } else if realFormCount >= maxFormsAllowed {
             addFormFAB.applySecondaryTheme(withScheme: globalDisabledScheme())
         }
-        formsHeader.reorderButton.isHidden = realFormCount <= 1;
+
+        formsHeader.reorderButton.isHidden = realFormCount <= 1
+    }
+
+    private func isLegacyServerWithSingleForm(_ formCount: Int) -> Bool {
+        return MageServer.isServerVersion5 && formCount == 1
+    }
+
+    private func areAllEventFormsArchived() -> Bool {
+        return eventForms?.allSatisfy { $0.archived } ?? true
     }
     
     func setupObservation(observation: Observation) {
@@ -330,8 +341,9 @@ import MaterialComponents.MDCCard
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
         let eventForm = event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
         
-        var formPrimaryValue: String? = nil;
-        var formSecondaryValue: String? = nil;
+        var formPrimaryValue: String? = nil
+        var formSecondaryValue: String? = nil
+        
         if let primaryField = eventForm?.primaryFeedField, let primaryFieldName = primaryField[FieldKey.name.key] as? String {
             if let obsfield = observationForm[primaryFieldName] {
                 formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
@@ -344,73 +356,79 @@ import MaterialComponents.MDCCard
             }
         }
         
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate, attachmentSelectionDelegate: self);
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate, attachmentSelectionDelegate: self)
+        
         if let scheme = scheme {
-            formView.applyTheme(withScheme: scheme);
+            formView.applyTheme(withScheme: scheme)
         }
-        let formSpacerView = UIView(forAutoLayout: ());
-        formSpacerView.addSubview(formView);
-        formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .bottom);
-        let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = "Delete Form";
+        
+        let formSpacerView = UIView(forAutoLayout: ())
+        formSpacerView.addSubview(formView)
+        formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .bottom)
+        
+        let button = MDCButton(forAutoLayout: ())
+        button.accessibilityLabel = "Delete Form"
         button.accessibilityIdentifier = "Delete Form"
-        button.setTitle("Delete Form", for: .normal);
-        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
-        button.addTarget(self, action: #selector(deleteForm(sender:)), for: .allTouchEvents);
-        button.tag = index;
+        button.setTitle("Delete Form", for: .normal)
+        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5)
+        button.addTarget(self, action: #selector(deleteForm(sender:)), for: .allTouchEvents)
+        button.tag = index
 
-        let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
-        divider.autoSetDimension(.height, toSize: 1);
-        formSpacerView.addSubview(divider);
-        divider.autoPinEdge(toSuperviewEdge: .left);
-        divider.autoPinEdge(toSuperviewEdge: .right);
-        divider.autoPinEdge(.top, to: .bottom, of: formView);
-        formSpacerView.addSubview(button);
-        button.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16);
-        button.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        button.autoPinEdge(.top, to: .bottom, of: divider, withOffset: 16);
+        let divider = UIView(forAutoLayout: ())
+        divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12)
+        divider.autoSetDimension(.height, toSize: 1)
+        formSpacerView.addSubview(divider)
+        divider.autoPinEdge(toSuperviewEdge: .left)
+        divider.autoPinEdge(toSuperviewEdge: .right)
+        divider.autoPinEdge(.top, to: .bottom, of: formView)
+        formSpacerView.addSubview(button)
+        button.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16)
+        button.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
+        button.autoPinEdge(.top, to: .bottom, of: divider, withOffset: 16)
         button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
-        var tintColor: UIColor? = nil;
+        var tintColor: UIColor? = nil
         if let color = eventForm?.color {
-            tintColor = UIColor(hex: color);
+            tintColor = UIColor(hex: color)
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
         let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, systemImageName: "doc.text.fill", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView)
-        formView.containingCard = card;
-        stackView.addArrangedSubview(card);
-        cards.append(card);
-        formViews.append(formView);
-        return card;
+        formView.containingCard = card
+        stackView.addArrangedSubview(card)
+        cards.append(card)
+        formViews.append(formView)
+        return card
     }
     
     @objc func deleteForm(sender: UIView) {
         // save the index of the deleted form and then next time we either save
         // or reorder remove the form so the user is not distracted with a refresh
-        observation?.addFormToBeDeleted(formIndex: sender.tag);
-        cards[sender.tag].isHidden = true;
+        observation?.addFormToBeDeleted(formIndex: sender.tag)
+        cards[sender.tag].isHidden = true
         if let observation = self.observation {
-            self.commonFieldView?.setObservation(observation: observation);
+            self.commonFieldView?.setObservation(observation: observation)
         }
         
-        setupFormDependentButtons();
+        setupFormDependentButtons()
         
-        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed");
-        let messageAction = MDCSnackbarMessageAction();
-        messageAction.title = "UNDO";
-        let actionHandler = {() in
-            self.cards[sender.tag].isHidden = false;
-            self.observation?.removeFormToBeDeleted(formIndex: sender.tag);
-            self.setupFormDependentButtons();
+        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed")
+        let messageAction = MDCSnackbarMessageAction()
+        messageAction.title = "UNDO"
+        
+        let actionHandler = { () in
+            self.cards[sender.tag].isHidden = false
+            self.observation?.removeFormToBeDeleted(formIndex: sender.tag)
+            self.setupFormDependentButtons()
+            
             if let observation = self.observation {
-                self.commonFieldView?.setObservation(observation: observation);
+                self.commonFieldView?.setObservation(observation: observation)
             }
         }
-        messageAction.handler = actionHandler;
-        message.action = messageAction;
-        MDCSnackbarManager.default.show(message);
+        
+        messageAction.handler = actionHandler
+        message.action = messageAction
+        MDCSnackbarManager.default.show(message)
     }
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
@@ -446,157 +464,176 @@ import MaterialComponents.MDCCard
     }
     
     @objc func addForm(sender: UIButton) {
-        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
+        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0)
 
         if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
-            let messageAction = MDCSnackbarMessageAction();
-            messageAction.title = "OK";
-            message.action = messageAction;
-            MDCSnackbarManager.default.show(message);
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) - BRENT") // TODO: remove BRENT
+            let messageAction = MDCSnackbarMessageAction()
+            messageAction.title = "OK"
+            message.action = messageAction
+            MDCSnackbarManager.default.show(message)
         } else {
-            self.delegate?.addForm();
+            self.delegate?.addForm()
         }
     }
     
     @objc func cancel(sender: UIBarButtonItem) {
-        self.delegate?.cancelEdit();
+        self.delegate?.cancelEdit()
     }
     
     @objc func saveObservation(sender: UIBarButtonItem) {
-        removeDeletedForms();
+        removeDeletedForms()
+        
         guard let observation = self.observation else { return }
+        
         if (checkObservationValidity()) {
-            self.delegate?.saveObservation(observation: observation);
+            self.delegate?.saveObservation(observation: observation)
         }
+    }
+    
+    
+    private func validateCommonFields(_ scrolled: inout Bool) -> Bool {
+        guard let commonView = commonFieldView else { return true }
+        
+        let valid = commonView.checkValidity(enforceRequired: true)
+        
+        if (!valid) {
+            scrollView.setContentOffset(.zero, animated: true)
+            
+            scrolled = true
+        }
+        
+        return valid
+    }
+    
+    private func validateFormViews(_ scrolled: inout Bool) -> Bool {
+        var allValid = true
+        
+        for formView in formViews {
+            let valid = formView.checkValidity(enforceRequired: true)
+            allValid = allValid && valid
+            
+            if (!valid && !scrolled) {
+                scrollToFirstInvalidField(in: formView)
+                scrolled = true
+            }
+        }
+        
+        return allValid
+    }
+    
+    private func scrollToFirstInvalidField(in formView: ObservationFormView) {
+        let sortedFields = formView.fieldViews.values.sorted {
+            ($0.field[FieldKey.id.key] as? Int ?? Int.max) < ($1.field[FieldKey.id.key] as? Int ?? Int.max)
+        }
+        
+        for view in sortedFields where !view.isValid(enforceRequired: true) {
+            let offsetY = Double(view.frame.origin.y) - Double(bottomConstraint?.constant ?? 0.0)
+            
+            scrollView.setContentOffset(CGPoint(x: Double(scrollView.contentOffset.x), y: offsetY), animated: true)
+                break
+        }
+    }
+    
+    private func isLegacyFormCountInvalid(_ count: Int) -> Bool {
+        guard MageServer.isServerVersion5 else { return false }
+        
+        if (eventForms?.count ?? 0) > 0 && count == 0 {
+            showMessage("One form must be added to this observation. BRENT")  // TODO: remove BRENT
+            return true
+        }
+        
+        if count > 1 {
+            showMessage("Only one form can be added to this observation. BRENT") // TODO: remove BRENT
+            return true
+        }
+        
+        return false
+    }
+    
+    private func isFormCountTooHigh(_ count: Int) -> Bool {
+        let maxForms = (event?.maxObservationForms ?? NSNumber(value: Int.max)).intValue
+        
+        if count > maxForms {
+            showMessage("Total number of forms in an observation cannot be more than \(maxForms). BRENT") // TODO: remove BRENT
+            return true
+        }
+        
+        return false
+    }
+
+    private func isFormCountTooLow(_ count: Int) -> Bool {
+        let minForms = (event?.minObservationForms ?? 0).intValue
+        
+        if count < minForms {
+            showMessage("Total number of forms in an observation must be at least \(minForms). BRENT") // TODO: remove BRENT
+            return true
+        }
+        
+        return false
+    }
+    
+    private func hasInvalidFormInstanceCounts() -> Bool {
+        guard let observation = observation,
+              let properties = observation.properties,
+              let formList = properties[ObservationKey.forms.key] as? [[String: Any]] else {
+            return false
+        }
+        
+        let toDelete = observation.formsToBeDeleted
+        var countPerFormId: [Int: Int] = [:]
+        
+        for(index, form) in formList.enumerated() where !toDelete.contains(index) {
+            if let formId = form[EventKey.formId.key] as? Int {
+                countPerFormId[formId, default: 0] += 1
+            }
+        }
+        
+        for eventForm in eventForms ?? [] {
+            let min = eventForm.min ?? 0
+            let max = eventForm.max ?? Int.max
+            let count = countPerFormId[eventForm.formId?.intValue ?? Int.min] ?? 0
+            
+            if !eventForm.archived && count < min {
+                showMessage("\(eventForm.name ?? "") form must be included at least \(min) time\(min == 1 ? "" : "s"). BRENT") // TODO: remove BRENT
+                return true
+            }
+            
+            if count > max {
+                showMessage("\(eventForm.name ?? "") form cannod be included more than \(max) time\(max == 1 ? "" : "s"). BRENT") // TODO: remove BRENT
+                return true
+            }
+        }
+        
+        return false
+    }
+            
+    private func showMessage(_ text: String) {
+        let message = MDCSnackbarMessage(text: text)
+        let action = MDCSnackbarMessageAction()
+        action.title = "OK"
+        message.action = action
+        MDCSnackbarManager.default.show(message)
     }
     
     func checkObservationValidity() -> Bool {
         var scrolledToInvalidField = false
-        var valid: Bool = false;
-        if let commonFieldView = commonFieldView {
-            valid = commonFieldView.checkValidity(enforceRequired: true)
-            if !valid {
-                scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: 0), animated: true)
-                scrolledToInvalidField = true
-            }
-        } else {
-            valid = true;
-        }
-        for formView in formViews {
-            let formValid = formView.checkValidity(enforceRequired: true);
-            valid = valid && formValid;
-            if !formValid && !scrolledToInvalidField {
-                var yOffset:Double = 0.0
-                var fieldViews = Array(formView.fieldViews.values)
-                fieldViews.sort { ($0.field[FieldKey.id.key] as? Int ?? Int.max ) < ($1.field[FieldKey.id.key] as? Int ?? Int.max) }
-                for subview in fieldViews {
-                    if !subview.isValid(enforceRequired: true) && !scrolledToInvalidField {
-                        yOffset += Double(subview.frame.origin.y)
-                        yOffset += Double(-(bottomConstraint?.constant ?? 0.0))
-                        scrollView.setContentOffset(CGPoint(x: Double(scrollView.contentOffset.x), y: yOffset), animated: true)
-                        
-                        scrolledToInvalidField = true
-                    }
-                }
-            }
+        var isValid = validateCommonFields(&scrolledToInvalidField)
+        isValid = validateFormViews(&scrolledToInvalidField) && isValid
+        
+        let realFormCount = observationForms.count - (observation?.formsToBeDeleted.count ?? 0)
+        
+        if isLegacyFormCountInvalid(realFormCount) { return false }
+        if isFormCountTooHigh(realFormCount) { return false }
+        if isFormCountTooLow(realFormCount) { return false }
+        if hasInvalidFormInstanceCounts() { return false }
+        
+        if !isValid {
+            showMessage("The observation has validation errors.")
         }
         
-        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
-        
-        // if this is a legacy server and the event has forms, there needs to be 1
-        if (MageServer.isServerVersion5) {
-            if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
-            }
-            // this case should have already been prevented, but just in case
-            if (realFormCount > 1) {
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Only one form can be added to this observation");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
-            }
-        }
-        // end legacy check
-        
-        if (realFormCount > (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
-            // too many forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
-            let messageAction = MDCSnackbarMessageAction();
-            messageAction.title = "OK";
-            message.action = messageAction;
-            MDCSnackbarManager.default.show(message);
-            return false;
-        }
-        if (realFormCount < (event?.minObservationForms ?? NSNumber(value: 0)) as! Int) {
-            // not enough forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)");
-            let messageAction = MDCSnackbarMessageAction();
-            messageAction.title = "OK";
-            message.action = messageAction;
-            MDCSnackbarManager.default.show(message);
-            return false;
-        }
-        
-        // check each form for min max
-        var formIdCount: [Int : Int] = [ : ];
-        if let observation = self.observation, let properties = observation.properties {
-            if (properties.keys.contains(ObservationKey.forms.key)) {
-                if let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as? [[String: Any]] {
-                    let formsToBeDeleted = observation.formsToBeDeleted;
-                    for (index, form) in observationForms.enumerated() {
-                        if (!formsToBeDeleted.contains(index)) {
-                            let formId = form[EventKey.formId.key] as! Int;
-                            formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
-                        }
-                    }
-                }
-            }
-        }
-        
-        if let eventForms = eventForms {
-            for eventForm in eventForms {
-                let eventFormMin: Int = eventForm.min ?? 0;
-                let eventFormMax: Int = eventForm.max ?? Int.max;
-                let formCount = formIdCount[eventForm.formId?.intValue ?? Int.min] ?? 0;
-                // ignore archived forms when checkng min
-                if (!eventForm.archived && formCount < eventFormMin) {
-                    // not enough of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
-                    let messageAction = MDCSnackbarMessageAction();
-                    messageAction.title = "OK";
-                    message.action = messageAction;
-                    MDCSnackbarManager.default.show(message);
-                    return false;
-                }
-                if (formCount > eventFormMax) {
-                    // too many of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
-                    let messageAction = MDCSnackbarMessageAction();
-                    messageAction.title = "OK";
-                    message.action = messageAction;
-                    MDCSnackbarManager.default.show(message);
-                    return false;
-                }
-            }
-        }
-        
-        if (!valid) {
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "The observation has validation errors.");
-            let messageAction = MDCSnackbarMessageAction();
-            messageAction.title = "OK";
-            message.action = messageAction;
-            MDCSnackbarManager.default.show(message);
-        }
-        return valid;
+        return isValid
     }
     
     func removeDeletedForms() {
