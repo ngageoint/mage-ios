@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@import MaterialComponents;
+#import "AuthenticationTheming.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,10 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AuthenticationButton : UIView
 
-@property (strong, nonatomic) NSDictionary *strategy;
+@property (strong, nonatomic) NSDictionary *strategy;  // Authentication/Login Strategy
 @property (weak, nonatomic) id<AuthenticationButtonDelegate> delegate;
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyTheme:(id<AuthenticationTheming>)theme;
 
 @end
 

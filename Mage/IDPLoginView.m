@@ -8,19 +8,20 @@
 
 #import "IDPLoginView.h"
 #import "AuthenticationButton.h"
+#import "AuthenticationTheming.h"
 
 @interface IDPLoginView()<AuthenticationButtonDelegate>
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AuthenticationTheming> theme;
 @end
 
 @implementation IDPLoginView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    if (containerScheme != nil) {
-        self.scheme = containerScheme;
+- (void) applyTheme:(id<AuthenticationTheming>)authenticationTheme {
+    if (authenticationTheme != nil) {
+        self.theme = authenticationTheme;
     }
-    [self.authenticationButton applyThemeWithContainerScheme:containerScheme];
+    [self.authenticationButton applyTheme:authenticationTheme];
 }
 
 - (void) onAuthenticationButtonTapped:(id) sender {

@@ -7,6 +7,7 @@
 //
 
 #import "AuthenticationButton.h"
+#import "AuthenticationTheming.h"
 #import "UIColor+Adjust.h"
 
 @import HexColors;
@@ -19,7 +20,7 @@
 @property (weak, nonatomic) UIStackView *authenticationButton;
 @property (strong, nonatomic) UIColor *buttonColor;
 @property (strong, nonatomic) UIColor *buttonColorHighlighted;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AuthenticationTheming> theme;
 @end
 
 @implementation AuthenticationButton
@@ -36,10 +37,10 @@
     return self;
 }
 
-- (void) setStrategy:(NSDictionary *)strategy1 {
-    _strategy = strategy1;
+- (void) setStrategy:(NSDictionary *)loginStrategy {
+    _strategy = loginStrategy;
     
-    NSDictionary *strategy = [strategy1 objectForKey:@"strategy"];
+    NSDictionary *strategy = [loginStrategy objectForKey:@"strategy"];
     
     NSString *title = [strategy objectForKey:@"title"];
     self.loginButtonLabel.text = [NSString stringWithFormat:@"Sign in with %@", title];
@@ -55,7 +56,7 @@
     if ([strategy objectForKey:@"buttonColor"] != NULL) {
         self.buttonColor = [UIColor hx_colorWithHexRGBAString:[strategy valueForKey:@"buttonColor"] alpha:1.0];
     } else {
-        self.buttonColor = self.scheme ? self.scheme.colorScheme.surfaceColor : UIColor.whiteColor;
+        self.buttonColor = self.theme ? self.theme.surfaceColor : UIColor.whiteColor;
     }
 
     self.buttonColorHighlighted = [self.buttonColor brightness:15];
@@ -64,14 +65,14 @@
     if ([strategy objectForKey:@"textColor"] != NULL) {
         self.loginButtonLabel.textColor = [UIColor hx_colorWithHexRGBAString:[strategy valueForKey:@"textColor"] alpha:1.0];
     } else {
-        self.loginButtonLabel.textColor = self.scheme ? self.scheme.colorScheme.onSurfaceColor : [UIColor labelColor];
+        self.loginButtonLabel.textColor = self.theme ? self.theme.onSurfaceColor : [UIColor labelColor];
     }
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    self.scheme = containerScheme;
+- (void) applyTheme:(id<AuthenticationTheming>)theme {
+    self.theme = theme;
     [self.layer setShadowOffset:CGSizeMake(0, 1)];
-    [self.layer setShadowColor:containerScheme.colorScheme.onSurfaceColor.CGColor];
+    [self.layer setShadowColor:theme.onSurfaceColor.CGColor];
     [self.layer setShadowOpacity:.7];
     [self.layer setShadowRadius:2];
     [self setStrategy:self.strategy];
