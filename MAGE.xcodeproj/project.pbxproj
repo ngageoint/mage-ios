@@ -2144,10 +2144,13 @@
 				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
-				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
 				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
+				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
+				84342C562DEDF48100E5AFB8 /* AuthenticationTheming.h */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
+				84342C572DEDF50900E5AFB8 /* DefaultAuthenticationTheme.h */,
+				84342C582DEDF59C00E5AFB8 /* DefaultAuthenticationTheme.m */,
 				2F52827024732B740023E974 /* IDPCoordinator.h */,
 				2F52827124732B740023E974 /* IDPCoordinator.m */,
 				F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */,
@@ -2164,9 +2167,6 @@
 				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
-				84342C562DEDF48100E5AFB8 /* AuthenticationTheming.h */,
-				84342C572DEDF50900E5AFB8 /* DefaultAuthenticationTheme.h */,
-				84342C582DEDF59C00E5AFB8 /* DefaultAuthenticationTheme.m */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";

@@ -9,6 +9,7 @@
 #import "LdapLoginView.h"
 #import "AuthenticationButton.h"
 #import "MAGE-Swift.h"
+#import "AuthenticationTheming.h"
 @import MaterialComponents;
 
 @interface LdapLoginView() <UITextFieldDelegate, AuthenticationButtonDelegate>
@@ -22,25 +23,25 @@
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
 @property (strong, nonatomic) UIFont *passwordFont;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AuthenticationTheming> theme;
 
 @end
 
 @implementation LdapLoginView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    if (containerScheme != nil) {
-        self.scheme = containerScheme;
+- (void) applyTheme:(id<AuthenticationTheming>)containerTheme {
+    if (containerTheme != nil) {
+        self.theme = containerTheme;
     }
-    [self.usernameField applyThemeWithScheme:containerScheme];
-    [self.passwordField applyThemeWithScheme:containerScheme];
+//    [self.usernameField applyThemeWithScheme:self.theme];
+//    [self.passwordField applyThemeWithScheme:containerTheme];
     
-    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.usernameField.leadingView.tintColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.leadingView.tintColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.showPasswordLabel.textColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    [self.authenticationButton applyThemeWithContainerScheme:containerScheme];
+    [self.authenticationButton applyTheme:containerTheme];
 }
 
 - (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
@@ -85,7 +86,7 @@
     self.usernameField.placeholder = [NSString stringWithFormat:@"%@ Username", title];
     self.passwordField.placeholder = [NSString stringWithFormat:@"%@ Password", title];
     
-    [self applyThemeWithContainerScheme:self.scheme];
+    [self applyTheme:self.theme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {

@@ -10,39 +10,43 @@
 #import <PureLayout/PureLayout.h>
 #import "MAGE-Swift.h"
 @import MaterialComponents;
+#import "AuthenticationTheming.h"
 
 @interface LocalLoginView() <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet MDCFilledTextField *usernameField;
 @property (weak, nonatomic) IBOutlet MDCFilledTextField *passwordField;
-@property (weak, nonatomic) IBOutlet MDCButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UILabel *signupDescription;
-@property (weak, nonatomic) IBOutlet MDCButton *signupButton;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
+//@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AuthenticationTheming> theme;
 @end
 
 @implementation LocalLoginView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    if (containerScheme == nil) return;
-    self.scheme = containerScheme;
-    [self.usernameField applyThemeWithScheme:containerScheme];
-    [self.passwordField applyThemeWithScheme:containerScheme];
+- (void) applyTheme:(id<AuthenticationTheming>)authenticationTheme {
+    if (authenticationTheme == nil) return;
+    self.theme = authenticationTheme;
+//    [self.usernameField applyThemeWithScheme:authenticationTheme];
+//    [self.passwordField applyThemeWithScheme:authenticationTheme];
     
-    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.usernameField.leadingView.tintColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.leadingView.tintColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.signupDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
-    [self.loginButton applyContainedThemeWithScheme:self.scheme];
-    [self.signupButton applyTextThemeWithScheme:self.scheme];
-    [self.signupButton setTitleColor:[self.scheme.colorScheme.primaryColorVariant colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+    self.showPasswordLabel.textColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.signupDescription.textColor = [self.theme.onSurfaceColor colorWithAlphaComponent:0.6];
+    
+//    self.showPassword.onTintColor = self.theme.primaryColorVariant;
+//    [self.loginButton applyContainedThemeWithScheme:self.theme];
+//    [self.signupButton applyTextThemeWithScheme:self.theme];
+//    [self.signupButton setTitleColor:[self.theme.primaryColorVariant colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
 }
 
 - (id) init {
@@ -82,7 +86,7 @@
         self.signupContainerView.hidden = YES;
     }
 
-    [self applyThemeWithContainerScheme:self.scheme];
+    [self applyTheme:self.theme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {

@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AuthenticationTheming.h"
 
-@interface OrView : UIStackView
+@interface OrView: UIStackView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyTheme:(id<AuthenticationTheming>)theme;
 
 @end

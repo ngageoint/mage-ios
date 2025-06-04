@@ -31,7 +31,8 @@
 @property (weak, nonatomic) id<AuthenticationDelegate> delegate;
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+//@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AuthenticationTheming> theme;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
@@ -40,11 +41,11 @@
 
 BOOL signingIn = YES;
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andTheme:(id<AuthenticationTheming>) authenticationTheme context: (NSManagedObjectContext *) context {
     self = [super init];
     if (!self) return nil;
     _context = context;
-    _scheme = containerScheme;
+    _theme = authenticationTheme;
     _navigationController = navigationController;
     _delegate = delegate;
     
@@ -61,16 +62,16 @@ BOOL signingIn = YES;
     
     SignUpViewController *signupView;
     if ([MageServer isServerVersion5]) {
-        signupView = [[SignUpViewController_Server5 alloc] initWithDelegate:self andScheme:self.scheme];
+        signupView = [[SignUpViewController_Server5 alloc] initWithDelegate:self andTheme:self.theme];
     } else {
-        signupView = [[SignUpViewController alloc] initWithDelegate:self andScheme:self.scheme];
+        signupView = [[SignUpViewController alloc] initWithDelegate:self andTheme:self.theme];
     }
     
     [self.navigationController pushViewController:signupView animated:NO];
 }
 
 - (void) getCaptcha:(NSString *) username completion:(void (^)(NSString* captcha)) completion  {
-    NSString *background = [self.scheme.colorScheme.surfaceColor hex];
+    NSString *background = [self.theme.surfaceColor hex];
     
     self.signupUsername = username;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups"]];
@@ -190,7 +191,7 @@ BOOL signingIn = YES;
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
     User *currentUser = [User fetchCurrentUserWithContext:_context];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andTheme:_theme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
@@ -204,7 +205,7 @@ BOOL signingIn = YES;
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andScheme:_scheme];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andTheme:_theme];
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
 

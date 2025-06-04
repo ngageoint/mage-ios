@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MAGE-Swift.h"
 #import "LoginViewController.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AuthenticationTheming.h"
 
 @interface LdapLoginView : UIStackView
 
@@ -18,6 +18,6 @@
 
 @property (strong, nonatomic) id<LoginDelegate> delegate;
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyTheme:(id<AuthenticationTheming>)theme;
 
 @end

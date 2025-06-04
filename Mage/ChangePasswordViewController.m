@@ -30,9 +30,9 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
-@property (weak, nonatomic) IBOutlet MDCButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIView *changePasswordView;
-@property (weak, nonatomic) IBOutlet MDCButton *changeButton;
+@property (weak, nonatomic) IBOutlet UIButton *changeButton;
 @property (weak, nonatomic) IBOutlet UIView *informationView;
 @property (weak, nonatomic) IBOutlet UILabel *informationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
@@ -68,8 +68,7 @@
 
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
-    [self.changeButton applyContainedThemeWithScheme:self.scheme];
+
     self.showCurrentPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.showNewPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
