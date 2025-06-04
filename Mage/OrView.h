@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface OrView : UIStackView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithScheme:(id<AppContainerScheming>)containerScheme;
 
 @end

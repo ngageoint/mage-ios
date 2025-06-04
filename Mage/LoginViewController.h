@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ContactInfo.h"
 #import "Authentication.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @class User;
 @class MageServer;
@@ -24,8 +24,8 @@
 
 @interface LoginViewController : UIViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
-- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<AppContainerScheming>) containerScheme;
+- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<AppContainerScheming>) containerScheme;
 
 - (void) setContactInfo: (ContactInfo *) contactInfo;
 

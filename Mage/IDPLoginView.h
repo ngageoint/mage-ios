@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-@import MaterialComponents;
+#import "AppContainerScheming.h"
 
 @protocol IDPButtonDelegate <NSObject>
 
-- (void) signinForStrategy: (NSDictionary *) strategy;
+- (void) signinForStrategy:(NSDictionary *) strategy;
 
 @end
 
@@ -20,6 +20,6 @@
 @property (strong, nonatomic) NSDictionary *strategy;
 @property (strong, nonatomic) id<IDPButtonDelegate> delegate;
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme ;
+- (void) applyThemeWithScheme:(id<AppContainerScheming>) containerScheme;
 
 @end

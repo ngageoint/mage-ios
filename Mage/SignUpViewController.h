@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SignUpDelegate.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface SignUpViewController : UIViewController
 
-- (instancetype) initWithDelegate: (id<SignupDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithDelegate: (id<SignupDelegate>) delegate andScheme:(id<AppContainerScheming>) containerScheme;
 
 @end

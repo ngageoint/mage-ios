@@ -6,7 +6,7 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-@import MaterialComponents;
+//@import MaterialComponents;
 
 #import "SignUpViewController.h"
 #import "UINextField.h"
@@ -20,27 +20,27 @@
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *displayName;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *username;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *password;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *passwordConfirm;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *email;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *phone;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *captchaText;
+@property (weak, nonatomic) IBOutlet UITextField *displayName;
+@property (weak, nonatomic) IBOutlet UITextField *username;
+@property (weak, nonatomic) IBOutlet UITextField *password;
+@property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
+@property (weak, nonatomic) IBOutlet UITextField *email;
+@property (weak, nonatomic) IBOutlet UITextField *phone;
+@property (weak, nonatomic) IBOutlet UITextField *captchaText;
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
 @property (strong, nonatomic) id<SignupDelegate> delegate;
-@property (weak, nonatomic) IBOutlet MDCButton *cancelButton;
-@property (weak, nonatomic) IBOutlet MDCButton *signupButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthText;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordText;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
 @property (weak, nonatomic) IBOutlet WKWebView *captchaView;
 @property (weak, nonatomic) IBOutlet UIView *captchaContainer;
@@ -52,7 +52,7 @@
 
 @implementation SignUpViewController
 
-- (instancetype) initWithDelegate: (id<SignupDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme  {
+- (instancetype) initWithDelegate: (id<SignupDelegate>) delegate andScheme:(id<AppContainerScheming>) containerScheme  {
     if (self = [super initWithNibName:@"SignupView" bundle:nil]) {
         self.delegate = delegate;
         self.scheme = containerScheme;
@@ -62,7 +62,7 @@
 
 #pragma mark - Theme Changes
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
@@ -72,27 +72,27 @@
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     [self.mageServerURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
     self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    [self.signupButton applyContainedThemeWithScheme:self.scheme];
-    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
+//    [self.signupButton applyContainedThemeWithScheme:self.scheme];
+//    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
     self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.passwordStrengthText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.showPasswordText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    [self.username applyThemeWithScheme:containerScheme];
-    [self.displayName applyThemeWithScheme:containerScheme];
-    [self.password applyThemeWithScheme:containerScheme];
-    [self.passwordConfirm applyThemeWithScheme:containerScheme];
-    [self.email applyThemeWithScheme:containerScheme];
-    [self.phone applyThemeWithScheme:containerScheme];
-    [self.captchaText applyThemeWithScheme:containerScheme];
-    
-    self.username.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.displayName.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.password.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordConfirm.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.email.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.phone.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.captchaText.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    [self.username applyThemeWithScheme:containerScheme];
+//    [self.displayName applyThemeWithScheme:containerScheme];
+//    [self.password applyThemeWithScheme:containerScheme];
+//    [self.passwordConfirm applyThemeWithScheme:containerScheme];
+//    [self.email applyThemeWithScheme:containerScheme];
+//    [self.phone applyThemeWithScheme:containerScheme];
+//    [self.captchaText applyThemeWithScheme:containerScheme];
+//    
+//    self.username.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.displayName.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.password.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.passwordConfirm.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.email.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.phone.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.captchaText.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 
     self.captchaProgressView.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.captchaProgressLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
@@ -126,66 +126,64 @@
     [super viewDidLoad];
     
     UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.username setLeadingView:meImage];
-    self.username.leadingViewMode = UITextFieldViewModeAlways;
+//    [self.username setLeadingView:meImage];
+//    self.username.leadingViewMode = UITextFieldViewModeAlways;
     self.username.accessibilityLabel = @"Username";
     self.username.placeholder = @"Username *";
-    self.username.label.text = @"Username *";
-    self.username.leadingAssistiveLabel.text = @" ";
+    self.username.text = @"Username *";
+//    self.username.leadingAssistiveLabel.text = @" ";
     [self.username sizeToFit];
     
     UIImageView *displayNameImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"contact_card"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.displayName setLeadingView:displayNameImage];
-    self.displayName.leadingViewMode = UITextFieldViewModeAlways;
+//    [self.displayName setLeadingView:displayNameImage];
+//    self.displayName.leadingViewMode = UITextFieldViewModeAlways;
     self.displayName.accessibilityLabel = @"Display Name";
     self.displayName.placeholder = @"Display Name *";
-    self.displayName.label.text = @"Display Name *";
-    self.displayName.leadingAssistiveLabel.text = @" ";
+    self.displayName.text = @"Display Name *";
+//    self.displayName.leadingAssistiveLabel.text = @" ";
     [self.displayName sizeToFit];
     
     UIImageView *emailImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"envelope"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.email setLeadingView:emailImage];
-    self.email.leadingViewMode = UITextFieldViewModeAlways;
     self.email.accessibilityLabel = @"Email";
     self.email.placeholder = @"Email";
-    self.email.label.text = @"Email";
-    self.email.leadingAssistiveLabel.text = @" ";
+    self.email.text = @"Email";
+//    self.email.leadingAssistiveLabel.text = @" ";
     [self.email sizeToFit];
     
     UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"phone.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.phone setLeadingView:phoneImage];
-    self.phone.leadingViewMode = UITextFieldViewModeAlways;
+//    [self.phone setLeadingView:phoneImage];
+//    self.phone.leadingViewMode = UITextFieldViewModeAlways;
     self.phone.accessibilityLabel = @"Phone";
     self.phone.placeholder = @"Phone";
-    self.phone.label.text = @"Phone";
-    self.phone.leadingAssistiveLabel.text = @" ";
+    self.phone.text = @"Phone";
+//    self.phone.leadingAssistiveLabel.text = @" ";
     [self.phone sizeToFit];
     
     UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.password setLeadingView:passwordImage];
-    self.password.leadingViewMode = UITextFieldViewModeAlways;
+//    [self.password setLeadingView:passwordImage];
+//    self.password.leadingViewMode = UITextFieldViewModeAlways;
     self.password.accessibilityLabel = @"Password";
     self.password.placeholder = @"Password *";
-    self.password.label.text = @"Password *";
-    self.password.leadingAssistiveLabel.text = @" ";
+    self.password.text = @"Password *";
+//    self.password.leadingAssistiveLabel.text = @" ";
     [self.password sizeToFit];
     
     UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.passwordConfirm setLeadingView:passwordConfirmImage];
-    self.passwordConfirm.leadingViewMode = UITextFieldViewModeAlways;
+//    [self.passwordConfirm setLeadingView:passwordConfirmImage];
+//    self.passwordConfirm.leadingViewMode = UITextFieldViewModeAlways;
     self.passwordConfirm.accessibilityLabel = @"Confirm Password";
     self.passwordConfirm.placeholder = @"Confirm Password *";
-    self.passwordConfirm.label.text = @"Confirm Password *";
-    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    self.passwordConfirm.text = @"Confirm Password *";
+//    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
     [self.passwordConfirm sizeToFit];
     
     UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"checkmark"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.captchaText setLeadingView:captchaImage];
-    self.captchaText.leadingViewMode = UITextFieldViewModeAlways;
+//    [self.captchaText setLeadingView:captchaImage];
+//    self.captchaText.leadingViewMode = UITextFieldViewModeAlways;
     self.captchaText.accessibilityLabel = @"Captcha";
     self.captchaText.placeholder = @"Captcha Text *";
-    self.captchaText.label.text = @"Captcha Text *";
-    self.captchaText.leadingAssistiveLabel.text = @" ";
+    self.captchaText.text = @"Captcha Text *";
+//    self.captchaText.leadingAssistiveLabel.text = @" ";
     [self.captchaText sizeToFit];
 
     self.zxcvbn = [[DBZxcvbn alloc] init];
@@ -384,26 +382,26 @@
 }
 
 - (void) clearFieldErrors {
-    self.displayName.leadingAssistiveLabel.text = @" ";
-    self.username.leadingAssistiveLabel.text = @" ";
-    self.password.leadingAssistiveLabel.text = @" ";
-    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
-    self.email.leadingAssistiveLabel.text = @" ";
-    self.phone.leadingAssistiveLabel.text = @" ";
-    self.captchaText.leadingAssistiveLabel.text = @" ";
-    
-    [self.displayName applyThemeWithScheme:self.scheme];
-    [self.username applyThemeWithScheme:self.scheme];
-    [self.password applyThemeWithScheme:self.scheme];
-    [self.passwordConfirm applyThemeWithScheme:self.scheme];
-    [self.email applyThemeWithScheme:self.scheme];
-    [self.phone applyThemeWithScheme:self.scheme];
-    [self.captchaText applyThemeWithScheme:self.scheme];
+//    self.displayName.leadingAssistiveLabel.text = @" ";
+//    self.username.leadingAssistiveLabel.text = @" ";
+//    self.password.leadingAssistiveLabel.text = @" ";
+//    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+//    self.email.leadingAssistiveLabel.text = @" ";
+//    self.phone.leadingAssistiveLabel.text = @" ";
+//    self.captchaText.leadingAssistiveLabel.text = @" ";
+//    
+//    [self.displayName applyThemeWithScheme:self.scheme];
+//    [self.username applyThemeWithScheme:self.scheme];
+//    [self.password applyThemeWithScheme:self.scheme];
+//    [self.passwordConfirm applyThemeWithScheme:self.scheme];
+//    [self.email applyThemeWithScheme:self.scheme];
+//    [self.phone applyThemeWithScheme:self.scheme];
+//    [self.captchaText applyThemeWithScheme:self.scheme];
 }
 
-- (void) markFieldError: (MDCFilledTextField *) field errorText: (NSString *) errorText {
-    field.leadingAssistiveLabel.text = errorText;
-    [field applyErrorThemeWithScheme:self.scheme];
+- (void) markFieldError: (UITextField *) field errorText: (NSString *) errorText {
+//    field.leadingAssistiveLabel.text = errorText;
+//    [field applyErrorThemeWithScheme:self.scheme];
 }
 
 - (void) showDialogForRequiredFields:(NSArray *) fields {

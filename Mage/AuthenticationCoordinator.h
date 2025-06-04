@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @class MageServer;
 
@@ -21,7 +21,7 @@
 
 @interface AuthenticationCoordinator : NSObject
 
-- (instancetype _Nullable) initWithNavigationController: (UINavigationController * _Nullable) navigationController andDelegate: (id<AuthenticationDelegate> _Nullable) delegate andScheme: (id<MDCContainerScheming> _Nullable) containerScheme context: (NSManagedObjectContext * _Nullable) context;
+- (instancetype _Nullable) initWithNavigationController: (UINavigationController * _Nullable) navigationController andDelegate: (id<AuthenticationDelegate> _Nullable) delegate andScheme: (id<AppContainerScheming> _Nullable) containerScheme context: (NSManagedObjectContext * _Nullable) context;
 - (void) start:(MageServer * _Nullable) mageServer;
 - (void) startLoginOnly;
 - (void) showLoginViewForServer:(MageServer * _Nullable) mageServer;

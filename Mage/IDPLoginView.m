@@ -11,16 +11,16 @@
 
 @interface IDPLoginView()<AuthenticationButtonDelegate>
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation IDPLoginView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    if (containerScheme != nil) {
-        self.scheme = containerScheme;
-    }
-    [self.authenticationButton applyThemeWithContainerScheme:containerScheme];
+- (void) applyThemeWithScheme:(id<AppContainerScheming>)containerScheme {
+    if (containerScheme == nil) return;
+    
+    self.scheme = containerScheme;
+    [self.authenticationButton applyThemeWithScheme:containerScheme];
 }
 
 - (void) onAuthenticationButtonTapped:(id) sender {

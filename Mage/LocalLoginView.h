@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginViewController.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface LocalLoginView : UIStackView
 
@@ -17,6 +17,6 @@
 
 @property (weak, nonatomic) id<LoginDelegate> delegate;
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithScheme:(id<AppContainerScheming>)containerScheme;
 
 @end

@@ -17,26 +17,26 @@ import UIKit
 class ServerURLController: UIViewController {
     var didSetupConstraints = false
     @objc public var delegate: ServerURLDelegate?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var error: String?
     var additionalErrorInfo: Dictionary<String, Any>?
     
-    lazy var progressView: MDCProgressView = {
-        let progressView = MDCProgressView(forAutoLayout: ())
-        progressView.mode = MDCProgressViewMode.indeterminate
+    lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView(forAutoLayout: ())
         progressView.isHidden = true
         return progressView
     }()
     
-    private lazy var serverURL: MDCFilledTextField = {
-        let serverURL = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
+    private lazy var serverURL: UITextField = {
+        let serverURL = UITextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         serverURL.autocapitalizationType = .none;
         serverURL.accessibilityLabel = "MAGE Server URL";
-        serverURL.label.text = "MAGE Server URL"
+        serverURL.text = "MAGE Server URL"
         serverURL.placeholder = "MAGE Server URL"
+        
         let worldImage = UIImageView(image: UIImage(systemName: "globe.americas.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate))
-        serverURL.leadingView = worldImage
-        serverURL.leadingViewMode = .always
+//        serverURL.leadingView = worldImage
+//        serverURL.leadingViewMode = .always
         serverURL.autocorrectionType = .no
         serverURL.autocapitalizationType = .none
         serverURL.keyboardType = .URL
@@ -99,16 +99,16 @@ class ServerURLController: UIViewController {
         return buttonStack;
     }()
     
-    private lazy var cancelButton: MDCButton = {
-        let cancelButton = MDCButton(forAutoLayout: ());
+    private lazy var cancelButton: UIButton = {
+        let cancelButton = UIButton(forAutoLayout: ());
         cancelButton.accessibilityLabel = "Cancel";
         cancelButton.setTitle("Cancel", for: .normal);
         cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside);
         cancelButton.clipsToBounds = true;
         return cancelButton;
     }()
-    private lazy var okButton: MDCButton = {
-        let okButton = MDCButton(forAutoLayout: ());
+    private lazy var okButton: UIButton = {
+        let okButton = UIButton(forAutoLayout: ());
         okButton.accessibilityLabel = "OK";
         okButton.setTitle("OK", for: .normal);
         okButton.addTarget(self, action: #selector(okTapped), for: .touchUpInside);
@@ -140,7 +140,7 @@ class ServerURLController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    @objc convenience public init(delegate: ServerURLDelegate, error: String? = nil, scheme: MDCContainerScheming?) {
+    @objc convenience public init(delegate: ServerURLDelegate, error: String? = nil, scheme: AppContainerScheming?) {
         self.init(frame: CGRect.zero)
         self.scheme = scheme
         self.delegate = delegate
@@ -151,21 +151,21 @@ class ServerURLController: UIViewController {
         fatalError("This class does not support NSCoding")
     }
 
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let scheme = containerScheme else {
             return
         }
         self.scheme = scheme
         self.view.backgroundColor = scheme.colorScheme.backgroundColor
         self.setServerUrlTitle.textColor = scheme.colorScheme.primaryColorVariant
-        self.setServerUrlTitle.font = scheme.typographyScheme.headline6
+//        self.setServerUrlTitle.font = scheme.typographyScheme.headline6
         self.wandLabel.textColor = scheme.colorScheme.primaryColorVariant
         self.mageLabel.textColor = scheme.colorScheme.primaryColorVariant
         errorStatus.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        okButton.applyContainedTheme(withScheme: scheme)
-        cancelButton.applyContainedTheme(withScheme: scheme)
-        serverURL.applyTheme(withScheme: scheme)
-        serverURL.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+//        okButton.applyContainedTheme(withScheme: scheme)
+//        cancelButton.applyContainedTheme(withScheme: scheme)
+//        serverURL.applyTheme(withScheme: scheme)
+//        serverURL.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         errorImage.tintColor = scheme.colorScheme.errorColor
         errorInfoLink.textColor = scheme.colorScheme.primaryColorVariant
         errorInfoLink.font = UIFont.systemFont(ofSize: 12)
@@ -196,7 +196,7 @@ class ServerURLController: UIViewController {
             cancelButton.isHidden = true
             serverURL.text = url?.absoluteString
         } else if let scheme = scheme {
-            serverURL.applyTheme(withScheme: scheme)
+//            serverURL.applyTheme(withScheme: scheme)
         }
         
         if let url = url {
@@ -212,12 +212,14 @@ class ServerURLController: UIViewController {
         errorInfoLink.isHidden = false
         errorImage.isHidden = false
         progressView.isHidden = true
-        progressView.stopAnimating()
+//        progressView.stopAnimating()
         errorStatus.text = "This URL does not appear to be a MAGE server."
         additionalErrorInfo = userInfo
-        if let scheme = scheme {
-            serverURL.applyErrorTheme(withScheme: scheme)
-        }
+        
+        // TODO: BRENT
+//        if let scheme = scheme {
+//            serverURL.applyErrorTheme(withScheme: scheme)
+//        }
     }
 
     public override func updateViewConstraints() {
@@ -295,11 +297,12 @@ class ServerURLController: UIViewController {
             errorInfoLink.isHidden = true
             errorImage.isHidden = true
             progressView.isHidden = false
-            progressView.startAnimating()
+//            progressView.startAnimating()
             delegate?.setServerURL(url: url)
-            if let scheme = scheme {
-                serverURL.applyTheme(withScheme: scheme)
-            }
+            
+//            if let scheme = scheme {
+//                serverURL.applyTheme(withScheme: scheme)
+//            }
         } else {
             showError(error: "Invalid URL")
         }

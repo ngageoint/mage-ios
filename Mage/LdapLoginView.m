@@ -9,12 +9,12 @@
 #import "LdapLoginView.h"
 #import "AuthenticationButton.h"
 #import "MAGE-Swift.h"
-@import MaterialComponents;
 
 @interface LdapLoginView() <UITextFieldDelegate, AuthenticationButtonDelegate>
 
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *usernameField;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *passwordField;
+// TODO: BRENT - Still need to update ALL fields and then change their types
+@property (weak, nonatomic) IBOutlet UITextField *usernameField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -22,25 +22,25 @@
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
 @property (strong, nonatomic) UIFont *passwordFont;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
 @end
 
 @implementation LdapLoginView
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    if (containerScheme != nil) {
-        self.scheme = containerScheme;
-    }
-    [self.usernameField applyThemeWithScheme:containerScheme];
-    [self.passwordField applyThemeWithScheme:containerScheme];
+- (void) applyThemeWithScheme:(id<AppContainerScheming>)containerScheme {
+    if (containerScheme == nil) return;
     
-    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.scheme = containerScheme;
+    // TODO: BRENT
+//    [self.usernameField applyThemeWithScheme: containerScheme];
+//    [self.passwordField applyThemeWithScheme: containerScheme];
+//    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
     self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    [self.authenticationButton applyThemeWithContainerScheme:containerScheme];
+    [self.authenticationButton applyThemeWithScheme: containerScheme];
 }
 
 - (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
@@ -53,18 +53,20 @@
 
 - (void) didMoveToSuperview {
     UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];    [self addLeadingIconConstraints:meImage];
-    [self.usernameField setLeadingView:meImage];
-    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
+    // TODO: BRENT
+//    [self.usernameField setLeadingView:meImage];
+//    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
     self.usernameField.accessibilityLabel = @"Username";
     self.usernameField.placeholder = @"Username";
-    self.usernameField.label.text = @"Username";
+    self.usernameField.text = @"Username";
     [self.usernameField sizeToFit];
     self.passwordField.accessibilityLabel = @"Password";
     UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    [self.passwordField setLeadingView:keyImage];
-    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
+    // TODO: BRENT
+//    [self.passwordField setLeadingView:keyImage];
+//    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
     self.passwordField.placeholder = @"Password";
-    self.passwordField.label.text = @"Password";
+    self.passwordField.text = @"Password";
     [self.passwordField sizeToFit];
     self.authenticationButton.strategy = self.strategy;
     self.authenticationButton.delegate = self;
@@ -85,7 +87,7 @@
     self.usernameField.placeholder = [NSString stringWithFormat:@"%@ Username", title];
     self.passwordField.placeholder = [NSString stringWithFormat:@"%@ Password", title];
     
-    [self applyThemeWithContainerScheme:self.scheme];
+    [self applyThemeWithScheme: self.scheme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {

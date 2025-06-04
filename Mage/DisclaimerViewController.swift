@@ -14,7 +14,7 @@ import UIKit
 @objc public class DisclaimerViewController: UIViewController {
     var didSetupConstraints = false;
     @objc public var delegate: DisclaimerDelegate?
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?
     
     lazy var consentText: UITextView = {
         let consentText = UITextView(forAutoLayout: ())
@@ -75,20 +75,20 @@ import UIKit
         return agreeButton;
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let scheme = containerScheme else {
             return
         }
         self.scheme = scheme
         self.view.backgroundColor = scheme.colorScheme.backgroundColor
         self.consentText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        self.consentText.font = scheme.typographyScheme.body2
+//        self.consentText.font = scheme.typographyScheme.body2
         self.consentTitle.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        self.consentTitle.font = scheme.typographyScheme.headline6
+//        self.consentTitle.font = scheme.typographyScheme.headline6
         self.wandLabel.textColor = scheme.colorScheme.primaryColorVariant
         self.mageLabel.textColor = scheme.colorScheme.primaryColorVariant
-        agreeButton.applyContainedTheme(withScheme: scheme)
-        disagreeButton.applyContainedTheme(withScheme: scheme)
+//        agreeButton.applyContainedTheme(withScheme: scheme)
+//        disagreeButton.applyContainedTheme(withScheme: scheme)
     }
     
     override public func viewWillAppear(_ animated: Bool) {

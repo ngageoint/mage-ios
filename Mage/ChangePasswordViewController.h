@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @protocol ChangePasswordDelegate
 
@@ -18,6 +18,6 @@
 
 @interface ChangePasswordViewController : UIViewController
 
-- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme context: (NSManagedObjectContext *) context;
+- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<AppContainerScheming>)containerScheme context: (NSManagedObjectContext *) context;
 
 @end
