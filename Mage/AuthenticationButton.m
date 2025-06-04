@@ -19,7 +19,7 @@
 @property (weak, nonatomic) UIStackView *authenticationButton;
 @property (strong, nonatomic) UIColor *buttonColor;
 @property (strong, nonatomic) UIColor *buttonColorHighlighted;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation AuthenticationButton
@@ -68,7 +68,7 @@
     }
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithScheme:(id<AppContainerScheming>)containerScheme {
     self.scheme = containerScheme;
     [self.layer setShadowOffset:CGSizeMake(0, 1)];
     [self.layer setShadowColor:containerScheme.colorScheme.onSurfaceColor.CGColor];

@@ -164,6 +164,10 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84E713DA2DF0AF5600F52781 /* LightAppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713D92DF0AF5600F52781 /* LightAppTheme.m */; };
+		84E713DD2DF0AF9E00F52781 /* DarkAppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */; };
+		84E713DF2DF0C75B00F52781 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppTheme.swift */; };
+		84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1085,6 +1089,17 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84E713D42DF0AE6500F52781 /* AppColorScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppColorScheming.h; sourceTree = "<group>"; };
+		84E713D52DF0AE8C00F52781 /* AppShapeScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppShapeScheming.h; sourceTree = "<group>"; };
+		84E713D62DF0AEA700F52781 /* AppTypographyScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTypographyScheming.h; sourceTree = "<group>"; };
+		84E713D72DF0AEC400F52781 /* AppContainerScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppContainerScheming.h; sourceTree = "<group>"; };
+		84E713D82DF0AF0B00F52781 /* LightAppTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightAppTheme.h; sourceTree = "<group>"; };
+		84E713D92DF0AF5600F52781 /* LightAppTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightAppTheme.m; sourceTree = "<group>"; };
+		84E713DB2DF0AF7D00F52781 /* DarkAppTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DarkAppTheme.h; sourceTree = "<group>"; };
+		84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DarkAppTheme.m; sourceTree = "<group>"; };
+		84E713DE2DF0C75B00F52781 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		84E713E02DF0CA2400F52781 /* AppThemeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppThemeBridge.h; sourceTree = "<group>"; };
+		84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppThemeBridge.m; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2351,6 +2366,24 @@
 			name = Contact;
 			sourceTree = "<group>";
 		};
+		84E713D12DF0ADDE00F52781 /* Theming */ = {
+			isa = PBXGroup;
+			children = (
+				84E713D42DF0AE6500F52781 /* AppColorScheming.h */,
+				84E713D52DF0AE8C00F52781 /* AppShapeScheming.h */,
+				84E713D62DF0AEA700F52781 /* AppTypographyScheming.h */,
+				84E713D72DF0AEC400F52781 /* AppContainerScheming.h */,
+				84E713D82DF0AF0B00F52781 /* LightAppTheme.h */,
+				84E713D92DF0AF5600F52781 /* LightAppTheme.m */,
+				84E713DB2DF0AF7D00F52781 /* DarkAppTheme.h */,
+				84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */,
+				84E713DE2DF0C75B00F52781 /* AppTheme.swift */,
+				84E713E02DF0CA2400F52781 /* AppThemeBridge.h */,
+				84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */,
+			);
+			path = Theming;
+			sourceTree = "<group>";
+		};
 		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
@@ -2733,6 +2766,7 @@
 		F734C1E62BC8474B00B2E8C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				84E713D12DF0ADDE00F52781 /* Theming */,
 				F78876942C6BE2A000E30300 /* Attachment */,
 				F73564F72C655C0000466813 /* Location */,
 				F73564DC2C62BB6F00466813 /* Observation */,
@@ -4884,6 +4918,7 @@
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,
+				84E713DF2DF0C75B00F52781 /* AppTheme.swift in Sources */,
 				F7225F4A2C5944F700B7D935 /* ImportantButton.swift in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
@@ -5032,6 +5067,7 @@
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
+				84E713DD2DF0AF9E00F52781 /* DarkAppTheme.m in Sources */,
 				F7D31F942CB962E100126468 /* CacheActiveSwitch.swift in Sources */,
 				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
@@ -5146,6 +5182,7 @@
 				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
 				F7225F3F2C542C1400B7D935 /* FormLocalDataSource.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
+				84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
 				F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */,
@@ -5179,6 +5216,7 @@
 				F7DE98982C20D4D7005372F8 /* FeedItemRepository.swift in Sources */,
 				F7E079502C29F5430029C88D /* StaticLayerLocalDataSource.swift in Sources */,
 				F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */,
+				84E713DA2DF0AF5600F52781 /* LightAppTheme.m in Sources */,
 				F72D431B2694B60300F9AC3B /* Layer.swift in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift in Sources */,
