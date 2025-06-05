@@ -70,3 +70,7 @@
 #import "AppColorScheming.h"
 #import "AppShapeScheming.h"
 #import "AppTypographyScheming.h"
+
+#import "LightAppTheme.h"
+#import "LightColorScheme.h"
+
