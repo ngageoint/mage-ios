@@ -11,5 +11,6 @@
 @protocol AppTypographyScheming <NSObject>
 @property (nonatomic, strong, readonly) UIFont *headlineFont;
 @property (nonatomic, strong, readonly) UIFont *bodyFont;
+@property (nonatomic, strong, readonly) UIFont *subtitleFont;
 @property (nonatomic, strong, readonly) UIFont *buttonFont;
 @end

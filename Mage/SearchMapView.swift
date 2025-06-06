@@ -31,7 +31,7 @@ class SearchMapView: MageMapView, HasMapSearch {
         return buttonStack
     }()
     
-    public init(navigationController: UINavigationController?, scheme: MDCContainerScheming?) {
+    public init(navigationController: UINavigationController?, scheme: AppContainerScheming?) {
         super.init(scheme: scheme)
         self.navigationController = navigationController
         self.scheme = scheme
@@ -61,7 +61,7 @@ class SearchMapView: MageMapView, HasMapSearch {
         hasMapSearchMixin = nil
     }
     
-    override func applyTheme(scheme: MDCContainerScheming?) {
+    override func applyTheme(scheme: AppContainerScheming?) {
         super.applyTheme(scheme: scheme)
     }
     

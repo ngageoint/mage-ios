@@ -15,7 +15,7 @@ protocol SearchControllerDelegate {
 }
 
 class SearchSheetController: UIViewController {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     let cellReuseIdentifier = "seachCell"
     let geocoder = Geocoder()
     var searchType: SearchResponseType?
@@ -27,7 +27,7 @@ class SearchSheetController: UIViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    init(mapView: MKMapView?, scheme: MDCContainerScheming?) {
+    init(mapView: MKMapView?, scheme: AppContainerScheming?) {
         super.init(nibName: nil, bundle: nil);
         self.mapView = mapView
         self.scheme = scheme
@@ -116,7 +116,7 @@ class SearchSheetController: UIViewController {
         progressView.autoAlignAxis(toSuperviewAxis: .vertical)
     }
     
-    func applyTheme(withScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
@@ -129,7 +129,8 @@ class SearchSheetController: UIViewController {
         
         refreshingView.backgroundColor = scheme?.colorScheme.surfaceColor
         
-        refreshingStatus.font = scheme?.typographyScheme.headline6
+        // TODO: BRENT MDC Changes
+        refreshingStatus.font = scheme?.typographyScheme.headlineFont
         refreshingStatus.textColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
 
         progressView.tintColor = scheme?.colorScheme.onBackgroundColor
@@ -215,7 +216,7 @@ struct SearchResultConfiguration : UIContentConfiguration {
     let name: String
     let address: String?
     let location: CLLocationCoordinate2D?
-    let scheme: MDCContainerScheming?
+    let scheme: AppContainerScheming?
     
     func makeContentView() -> UIView & UIContentView {
         let view = SearchResultContentView(configuration: self, scheme: scheme)
@@ -241,7 +242,7 @@ class SearchResultContentView: UIView, UIContentView {
     
     lazy var locationButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
-    init(configuration: UIContentConfiguration, scheme: MDCContainerScheming?) {
+    init(configuration: UIContentConfiguration, scheme: AppContainerScheming?) {
         self.configuration = configuration
         
         super.init(frame: .zero)

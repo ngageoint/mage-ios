@@ -37,7 +37,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var startStraightLineNavigationObserver: Any?
     var mapView: MKMapView?
     weak var mapStack: UIStackView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var mapDirections: MapDirections
     weak var viewController: UIViewController?
     var sourceView: UIView?
@@ -49,7 +49,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var feedItemFetchedResultsController: NSFetchedResultsController<FeedItem>?
     private var timer: Timer?
     
-    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, locationManager: CLLocationManager? = nil, sourceView: UIView? = nil) {
+    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: AppContainerScheming?, locationManager: CLLocationManager? = nil, sourceView: UIView? = nil) {
         self.mapDirections = mapDirections
         self.mapView = mapDirections.mapView
         self.viewController = viewController
@@ -240,6 +240,8 @@ class MapDirectionsMixin: NSObject, MapMixin {
         if notification.includeCopy {
             await alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
                     UIPasteboard.general.string = location.coordinate.toDisplay()
+                
+                // TODO: BRENT - MDC
                     MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location.coordinate.toDisplay()) copied to clipboard"))
             }))
         }

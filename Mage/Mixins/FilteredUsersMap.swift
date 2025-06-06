@@ -29,7 +29,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     var mapAnnotationFocusedObserver: AnyObject?
     var filteredUsersMap: FilteredUsersMap?
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     
     var enlargedLocationView: MKAnnotationView?
     var selectedUserAccuracy: MKOverlay?
@@ -37,7 +37,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     var locations: Locations?
     var user: User?
     
-    init(filteredUsersMap: FilteredUsersMap, user: User? = nil, scheme: MDCContainerScheming?) {
+    init(filteredUsersMap: FilteredUsersMap, user: User? = nil, scheme: AppContainerScheming?) {
         self.filteredUsersMap = filteredUsersMap
         self.mapView = filteredUsersMap.mapView
         self.user = user
@@ -163,7 +163,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
         guard let locationAnnotation = annotation as? LocationAnnotation,
-              let annotationView = locationAnnotation.viewForAnnotation(on: mapView, scheme: scheme ?? globalContainerScheme()) else {
+              let annotationView = locationAnnotation.viewForAnnotation(on: mapView, scheme: scheme ?? NamedColorTheme()) else {
             return nil
         }
         

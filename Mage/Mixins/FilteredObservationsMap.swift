@@ -13,7 +13,7 @@ import MapFramework
 
 protocol FilteredObservationsMap {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var filteredObservationsMapMixin: FilteredObservationsMapMixin? { get set }
 }
 
@@ -176,7 +176,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 if let mkpolyline = shape?.shape as? MKPolyline {
                     let styledPolyline = StyledPolyline.create(polyline: mkpolyline)
                     styledPolyline.lineColor = style.strokeColor ?? .black
-                    styledPolyline.lineWidth = style.lineWidth ?? 1
+                    styledPolyline.lineWidth = style.lineWidth
                     styledPolyline.observationRemoteId = observation.remoteId
                     styledPolyline.observation = observation
                     lineObservations.append(styledPolyline)
@@ -186,7 +186,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
                     styledPolygon.lineColor = style.strokeColor ?? .black
-                    styledPolygon.lineWidth = style.lineWidth ?? 1
+                    styledPolygon.lineWidth = style.lineWidth
                     styledPolygon.fillColor = style.fillColor ?? .clear
                     styledPolygon.observation = observation
                     styledPolygon.observationRemoteId = observation.remoteId
@@ -248,7 +248,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             return nil
         }
         
-        let annotationView = observationAnnotation.viewForAnnotation(on: mapView, scheme: filteredObservationsMap.scheme ?? globalContainerScheme())
+        let annotationView = observationAnnotation.viewForAnnotation(on: mapView, scheme: filteredObservationsMap.scheme ?? NamedColorTheme())
         
         // adjiust the center offset if this is the enlargedPin
         if (annotationView == self.enlargedObservationView) {

@@ -27,7 +27,8 @@
     objc_setAssociatedObject(self, @selector(titleLabel), titleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void) setTitle:(NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<MDCContainerScheming>)containerScheme {
+// TODO: BRENT - MDC: View scheming has no place here.
+- (void) setTitle:(NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<AppContainerScheming>)containerScheme {
     if ([subtitle length] == 0) {
         self.title = title;
         self.titleView = nil;

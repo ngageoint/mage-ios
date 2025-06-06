@@ -28,7 +28,7 @@ class MageNavStack: UIViewController {
     
     var router: MageRouter = MageRouter()
     
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var bottomSheet: MDCBottomSheetController?
     var childCoordinators: [NSObject] = []
     
@@ -39,7 +39,7 @@ class MageNavStack: UIViewController {
     
     var avatarChooserDelegate: UserAvatarChooserDelegate?
     
-    init(scheme: MDCContainerScheming?) {
+    init(scheme: AppContainerScheming?) {
         self.scheme = scheme
         super.init(nibName: nil, bundle: nil)
         

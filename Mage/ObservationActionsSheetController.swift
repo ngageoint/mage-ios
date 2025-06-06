@@ -17,7 +17,7 @@ class ObservationActionsSheetController: UITableViewController {
     
     var observation: Observation!;
     weak var delegate: ObservationActionsDelegate?;
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     var userHasEditPermissions: Bool = false;
     var router: MageRouter
     
@@ -52,14 +52,16 @@ class ObservationActionsSheetController: UITableViewController {
         self.userHasEditPermissions = user?.hasEditPermission ?? false;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
 
         self.scheme = containerScheme;
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        cancelButton.applyTextTheme(withScheme: containerScheme);
+        
+        // TODO: BRENT - MDC
+//        cancelButton.applyTextTheme(withScheme: containerScheme);
         cancelButton.setTitleColor(containerScheme.colorScheme.primaryColorVariant, for: .normal)
     }
     
@@ -105,7 +107,7 @@ class ObservationActionsSheetController: UITableViewController {
         cell.imageView?.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor;
         cell.backgroundColor = scheme?.colorScheme.surfaceColor;
-        cell.textLabel?.font = scheme?.typographyScheme.subtitle1;
+        cell.textLabel?.font = scheme?.typographyScheme.subtitleFont;
         cell.accessoryType = .none;
         
         var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 3);

@@ -18,18 +18,18 @@
 @property (strong, nonatomic) GeometryEditViewController *geometryEditViewController;
 @property (strong, nonatomic) SearchMapViewController *searchMapViewController;
 @property (nonatomic) BOOL valueChanged;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation GeometryEditCoordinator
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
 }
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController scheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController scheme: (id<AppContainerScheming>) containerScheme {
     if (self = [super init]) {
         self.scheme = containerScheme;
         self.delegate = delegate;
@@ -49,7 +49,7 @@
             NSLog(@"Location %@", self.currentGeometry);
         }
 
-        self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self scheme:self.scheme];
+        self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self scheme: self.scheme];
     }
     
     return self;
@@ -69,7 +69,7 @@
 }
 
 - (void) search {
-    self.searchMapViewController = [[SearchMapViewController alloc] initWithScheme:self.scheme];
+    self.searchMapViewController = [[SearchMapViewController alloc] initWithScheme: self.scheme];
     self.searchMapViewController.delegate = self;
     [self.geometryEditViewController.navigationController pushViewController:self.searchMapViewController animated:YES];
 }

@@ -7,14 +7,14 @@
 //
 
 import SwiftUI
-import MaterialViews
+//import MaterialViews
 
 class LocationListWrapperViewController: SwiftUIViewController {
     let router: MageRouter
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var viewModel: LocationsViewModel
     
-    init(userRemoteIds: [String]? = nil, scheme: MDCContainerScheming?, router: MageRouter) {
+    init(userRemoteIds: [String]? = nil, scheme: AppContainerScheming?, router: MageRouter) {
         self.router = router
         self.scheme = scheme
         self.viewModel = LocationsViewModel(userIds: userRemoteIds)
@@ -124,7 +124,8 @@ struct LocationList: View {
                             .padding([.leading, .trailing], 16)
 
                         }
-                        .buttonStyle(MaterialButtonStyle(type: .contained))
+                        // TODO: BRENT - Style this button
+//                        .buttonStyle(MaterialButtonStyle(type: .contained))
 
                     }
                     .padding(64)

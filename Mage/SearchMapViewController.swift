@@ -15,11 +15,11 @@ import Foundation
 
 class SearchMapViewController: UIViewController, SearchMapViewDelegate {
     var mapView: SearchMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var result: GeocoderResult?
     @objc weak var delegate: SearchMapViewControllerDelegate?
     
-    @objc public init(scheme: MDCContainerScheming?) {
+    @objc public init(scheme: AppContainerScheming?) {
         super.init(nibName: nil, bundle: nil)
         self.scheme = scheme
     }

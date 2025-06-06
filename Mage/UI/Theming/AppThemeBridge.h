@@ -10,7 +10,17 @@
 #import "AppContainerScheming.h"
 
 @interface AppThemeBridge : NSObject
+
+// Matches MAGEScheme.scheme() for backward compatibility
++ (id<AppContainerScheming>)scheme;
+
+// Matches MAGEScheme.setupApplicationAppearance for backward compatibility
++ (void)setupApplicationAppearance:(id<AppContainerScheming>)scheme;
+
 + (id<AppContainerScheming>)defaultTheme;
-+ (id<AppContainerScheming>)darkTheme;
-- (void)applyTheme:(id<AppContainerScheming>)scheme;
++ (id<AppContainerScheming>)errorTheme;
++ (id<AppContainerScheming>)disabledTheme;
+
++ (void)applyTheme:(id<AppContainerScheming>)scheme;
+
 @end

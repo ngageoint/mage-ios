@@ -8,8 +8,8 @@
 
 import Foundation
 import UIKit
-import MaterialComponents.MaterialCollections
-import MaterialComponents.MDCCard
+//import MaterialComponents.MaterialCollections
+//import MaterialComponents.MDCCard
 
 @objc protocol ObservationEditCardDelegate {
     @objc func addForm();
@@ -33,7 +33,7 @@ import MaterialComponents.MDCCard
     var observationProperties: [String: Any] = [ : ];
     var newObservation: Bool = false;
     var alreadyPromptedToAddForm: Bool = false;
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     
     var cards: [ExpandableCard] = [];
     var formViews: [ObservationFormView] = [];
@@ -109,7 +109,7 @@ import MaterialComponents.MDCCard
         ])
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
@@ -239,7 +239,7 @@ import MaterialComponents.MDCCard
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(delegate: ObservationEditCardDelegate & FieldSelectionDelegate, observation: Observation, newObservation: Bool, containerScheme: MDCContainerScheming?) {
+    @objc convenience public init(delegate: ObservationEditCardDelegate & FieldSelectionDelegate, observation: Observation, newObservation: Bool, containerScheme: AppContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = containerScheme;
         self.delegate = delegate;

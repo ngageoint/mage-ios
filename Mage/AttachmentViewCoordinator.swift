@@ -19,7 +19,7 @@ import QuickLook
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?
 
     var attachment: AttachmentModel?
     weak var delegate: AttachmentViewDelegate?
@@ -39,7 +39,7 @@ import QuickLook
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
-    @objc public init(rootViewController: UINavigationController, attachment: AttachmentModel, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
+    @objc public init(rootViewController: UINavigationController, attachment: AttachmentModel, delegate: AttachmentViewDelegate?, scheme: AppContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
@@ -55,7 +55,7 @@ import QuickLook
         super.init();
     }
     
-    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
+    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: AppContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
         self.rootViewController = rootViewController;
         self.urlToLoad = url;
         self.delegate = delegate;
@@ -74,7 +74,7 @@ import QuickLook
     @objc public func start(_ animated: Bool = true) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let navigationController = UINavigationController();
-            navigationController.view.backgroundColor = scheme?.colorScheme.surfaceColor
+            navigationController.view.backgroundColor = scheme?.colorScheme.backgroundColor
             self.rootViewController.present(navigationController, animated: animated, completion: nil);
             self.rootViewController = navigationController;
         }

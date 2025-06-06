@@ -15,7 +15,7 @@ import gars_ios
 
 protocol HasMapSearch {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var navigationController: UINavigationController? { get set }
     var hasMapSearchMixin: HasMapSearchMixin? { get set }
     func onSearchResultSelected(result: GeocoderResult);
@@ -25,7 +25,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
     var hasMapSearch: HasMapSearch
     var rootView: UIStackView
     var indexInView: Int = 0
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var bottomSheet: MDCBottomSheetController?;
     var navigationController: UINavigationController?
     var annotation: MKPointAnnotation?
@@ -39,7 +39,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
         return mapSearchButton
     }()
     
-    init(hasMapSearch: HasMapSearch, rootView: UIStackView, indexInView: Int = 0, navigationController: UINavigationController?, scheme: MDCContainerScheming?) {
+    init(hasMapSearch: HasMapSearch, rootView: UIStackView, indexInView: Int = 0, navigationController: UINavigationController?, scheme: AppContainerScheming?) {
         self.hasMapSearch = hasMapSearch
         self.rootView = rootView
         self.indexInView = indexInView
@@ -48,7 +48,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
         self.searchController = SearchSheetController(mapView: hasMapSearch.mapView, scheme: scheme)
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         hasMapSearch.scheme = scheme
         mapSearchButton.backgroundColor = scheme?.colorScheme.surfaceColor;
         mapSearchButton.tintColor = scheme?.colorScheme.primaryColorVariant;

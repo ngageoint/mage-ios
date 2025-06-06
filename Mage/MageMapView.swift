@@ -19,7 +19,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
     var mapStateRepository: MapStateRepository
     
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     var mapMixins: [MapMixin] = []
     var geoPackageBaseMapMixin: GeoPackageBaseMapMixin?
     var mapState: MapState = MapState()
@@ -37,7 +37,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
         fatalError("This class does not support NSCoding")
     }
     
-    public init(scheme: MDCContainerScheming?) {
+    public init(scheme: AppContainerScheming?) {
         super.init(frame: .zero)
         self.configureForAutoLayout()
         self.scheme = scheme
@@ -94,7 +94,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
         mapMixins.removeAll()
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         self.scheme = scheme
         for mixin in mapMixins {
 //            mixin.applyTheme(scheme: scheme)

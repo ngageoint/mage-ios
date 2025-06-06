@@ -33,10 +33,10 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     weak var delegate: ObservationEditDelegate?;
     var observationEditController: ObservationEditCardCollectionViewController?;
     var observationFormReorder: ObservationFormReorder?;
-    var bottomSheet: MDCBottomSheetController?;
+    var bottomSheet: UIViewController?;
     var currentEditField: [String: Any]?;
     var currentEditValue: Any?;
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     
     private lazy var managedObjectContext: NSManagedObjectContext = {
         var managedObjectContext: NSManagedObjectContext = .mr_newMainQueue();
@@ -58,7 +58,7 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         return User.fetchCurrentUser(context: self.managedObjectContext);
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         self.scheme = containerScheme;
     }
     

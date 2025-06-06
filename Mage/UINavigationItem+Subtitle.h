@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-@import MaterialComponents;
+#import "AppContainerScheming.h"
 
 @interface UINavigationItem (Subtitle)
 
 @property (strong, nonatomic) UILabel * _Nullable titleLabel;
 @property (strong, nonatomic) UILabel * _Nullable subtitleLabel;
 
-- (void) setTitle:(nullable NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<MDCContainerScheming>_Nullable)containerScheme;
+- (void) setTitle:(nullable NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<AppContainerScheming>_Nullable)containerScheme;
 
 @end

@@ -21,14 +21,14 @@ class UserViewWrapperViewController: SwiftUIViewController {
     var bottomSheet: MDCBottomSheetController?
     var childCoordinators: [NSObject] = []
     
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var viewModel: UserViewViewModel
     
     var router: MageRouter
     
     var cancellables: Set<AnyCancellable> = Set()
     
-    init(userUri: URL, scheme: MDCContainerScheming?, router: MageRouter) {
+    init(userUri: URL, scheme: AppContainerScheming?, router: MageRouter) {
         self.router = router
         self.scheme = scheme
         self.viewModel = UserViewViewModel(uri: userUri)

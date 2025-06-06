@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialComponents
 import UIKit
 import CoreLocation
 
@@ -17,9 +16,9 @@ import CoreLocation
 
 @objc public class CoordinateField:UIView {
     
-    lazy var textField: MDCFilledTextField = {
+    lazy var textField: UITextField = {
         // this is just an estimated size
-        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
+        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self
         textField.sizeToFit()
         return textField;

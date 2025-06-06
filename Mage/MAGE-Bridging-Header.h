@@ -71,6 +71,7 @@
 #import "AppShapeScheming.h"
 #import "AppTypographyScheming.h"
 
-#import "LightAppTheme.h"
 #import "LightColorScheme.h"
 
+#import "LightAppTheme.h"
+#import "DarkAppTheme.h"

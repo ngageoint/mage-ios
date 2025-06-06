@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+//#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface ObservationTableHeaderView : UIView
 
-- (instancetype) initWithName:(NSString *)name andScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithName:(NSString *)name andScheme: (id<AppContainerScheming>) containerScheme;
 
 @end

@@ -18,8 +18,8 @@
 @property (nonatomic) BOOL allowsPolygonIntersections;
 @property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
 
-- (instancetype) initWithCoordinator: (GeometryEditCoordinator *) coordinator scheme: (id<MDCContainerScheming>) containerScheme;
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (instancetype) initWithCoordinator: (GeometryEditCoordinator *) coordinator scheme: (id<AppContainerScheming>) containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 - (BOOL) validate:(NSError **) error;
 - (void) setLocation: (SFGeometry *) geometry;
 

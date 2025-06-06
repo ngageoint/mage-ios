@@ -17,12 +17,12 @@
 
 @implementation ObservationTableHeaderView
 
-- (instancetype) initWithName:(NSString *)name andScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithName:(NSString *)name andScheme: (id<AppContainerScheming>) containerScheme {
     if (self = [super initWithFrame:CGRectMake(0, 0, 320, 45)]) {
         self.preservesSuperviewLayoutMargins = YES;
         self.name = name;
         self.label = [[UILabel alloc] initWithFrame:CGRectMake(16, 10, 320, 35)];
-        [self.label setFont:containerScheme.typographyScheme.overline];
+        [self.label setFont:containerScheme.typographyScheme.subtitleFont];
         [self.label setText: [name uppercaseString]];
         [self addSubview:self.label];
         [self.label setTextColor:containerScheme.colorScheme.onBackgroundColor];

@@ -7,22 +7,34 @@
 //
 
 #import "AppThemeBridge.h"
-#import "LightAppTheme.h"
-#import "DarkAppTheme.h"
-#import "MAGE-Swift.h"
+#import "Mage-Swift.h"
 
 @implementation AppThemeBridge
 
+// Backward compatibility for MAGEScheme.scheme()
++ (id<AppContainerScheming>)scheme {
+    return [self defaultTheme];
+}
+
+// Backward compatibility for MAGEScheme.setupApplicationAppearance
++ (void)setupApplicationAppearance:(id<AppContainerScheming>)scheme {
+    [self applyTheme:scheme];
+}
+
 + (id<AppContainerScheming>)defaultTheme {
-    return [[LightAppTheme alloc] init];
+    return [[NamedColorTheme alloc] init];
 }
 
-+ (id<AppContainerScheming>)darkTheme {
-    return [[DarkAppTheme alloc] init];
++ (id<AppContainerScheming>)errorTheme {
+    return [[ErrorColorTheme alloc] init];
 }
 
-- (void)applyTheme:(id<AppContainerScheming>)scheme {
-    [AppThemeManager applyAppearanceWith:scheme];
++ (id<AppContainerScheming>)disabledTheme {
+    return [[DisabledColorTheme alloc] init];
+}
+
++ (void)applyTheme:(id<AppContainerScheming>)scheme {
+    [AppThemeManager applyAppearanceWith: scheme];
 }
 
 @end

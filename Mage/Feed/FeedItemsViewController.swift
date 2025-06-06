@@ -16,7 +16,7 @@ protocol FeedItemSelectionDelegate {
 
 @objc class FeedItemsViewController : UITableViewController {
     
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem>? = {
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
@@ -47,14 +47,14 @@ protocol FeedItemSelectionDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil, scheme: MDCContainerScheming?) {
+    public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil, scheme: AppContainerScheming?) {
         self.feed = feed
         self.scheme = scheme;
         self.selectionDelegate = selectionDelegate;
         super.init(style: .grouped)
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
@@ -173,7 +173,7 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
 
-            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
             if let url: URL = feedItem.iconURL {
                 let size = 24;
 
@@ -189,7 +189,7 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
                     case .success(let value):
                         image = value.image.aspectResize(to: CGSize(width: size, height: size));
                     case .failure(_):
-                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
                     }
                 }
             }
@@ -201,6 +201,7 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
     
     func copyLocation(_ location: String) {
         UIPasteboard.general.string = location;
+        // TODO: BRENT - MaterialComponents, MDC
         MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location) copied to clipboard"))
     }
 }
