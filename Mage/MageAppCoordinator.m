@@ -109,6 +109,9 @@
 
 - (void) setServerURLWithUrl:(NSURL *)url {
     __weak __typeof__(self) weakSelf = self;
+    
+    [[UserUtility singleton] expireToken]; // Clear any previous authentication methods when switching servers
+    
     [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
         [MageInitializer clearServerSpecificData];
         dispatch_async(dispatch_get_main_queue(), ^{
