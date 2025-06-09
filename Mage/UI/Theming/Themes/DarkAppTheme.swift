@@ -9,7 +9,7 @@
 
 import UIKit
 
-@objc public final class DarkAppTheme: NSObject, AppContainerScheming {
+@objc public class DarkAppTheme: NSObject, AppContainerScheming {
     public let colorScheme: AppColorScheming?
     public let shapeScheme: AppShapeScheming?
     public let typographyScheme: AppTypographyScheming?

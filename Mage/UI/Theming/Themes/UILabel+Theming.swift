@@ -29,7 +29,7 @@ extension UILabel {
             switch type {
             case .primary:
                 textColor = baseColor
-                font = defaultFont ?? typographScheme.headlineFont
+                font = defaultFont ?? typographScheme.headline3Font
                 
             case .secondary:
                 textColor = baseColor.withAlphaComponent(0.6)

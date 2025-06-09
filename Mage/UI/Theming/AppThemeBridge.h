@@ -6,8 +6,9 @@
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "AppContainerScheming.h"
+#import <UIKit/UIKit.h>
+
+@protocol AppContainerScheming;
 
 @interface AppThemeBridge : NSObject
 

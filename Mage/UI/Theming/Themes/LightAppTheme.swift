@@ -7,7 +7,7 @@
 //
 
 
-@objc public final class LightAppTheme: NSObject, AppContainerScheming {
+@objc public class LightAppTheme: NSObject, AppContainerScheming {
     
     public let colorScheme: AppColorScheming?
     public let shapeScheme: AppShapeScheming?

@@ -9,7 +9,7 @@
 import Foundation
 
 @objc public protocol AppContainerScheming: AnyObject {
-    var colorScheme: AppColorScheming? { get }
-    var shapeScheme: AppShapeScheming? { get }
-    var typographyScheme: AppTypographyScheming? { get }
+    var colorScheme: AppColorScheming { get }
+    var shapeScheme: AppShapeScheming { get }
+    var typographyScheme: AppTypographyScheming { get }
 }
