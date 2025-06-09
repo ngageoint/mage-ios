@@ -9,14 +9,14 @@
 
 enum ThemeProvider {
     static func defaultTheme() -> AppContainerScheming {
-        return NamedColorTheme()
+        return LightAppTheme()
     }
 
     static func errorTheme() -> AppContainerScheming {
-        return ErrorColorTheme()
+        return ErrorAppTheme()
     }
 
     static func disabledTheme() -> AppContainerScheming {
-        return DisabledColorTheme()
+        return DisabledAppTheme()
     }
 }

@@ -164,13 +164,10 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
-		84E713DA2DF0AF5600F52781 /* LightAppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713D92DF0AF5600F52781 /* LightAppTheme.m */; };
-		84E713DD2DF0AF9E00F52781 /* DarkAppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */; };
 		84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */; };
 		84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */; };
 		84E713E42DF2121D00F52781 /* UIColor+Scheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */; };
 		84E713E62DF235BB00F52781 /* NamedColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E52DF235BB00F52781 /* NamedColorTheme.swift */; };
-		84E713E92DF237C400F52781 /* LightColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E82DF237C400F52781 /* LightColorScheme.m */; };
 		84E713EB2DF24ABA00F52781 /* ErrorColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713EA2DF24ABA00F52781 /* ErrorColorTheme.swift */; };
 		84E713ED2DF24ACA00F52781 /* DisabledColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */; };
 		84E713EF2DF32F2400F52781 /* ThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713EE2DF32F2400F52781 /* ThemeProvider.swift */; };
@@ -179,6 +176,22 @@
 		84E713F92DF7279700F52781 /* UITextField+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713F82DF7279700F52781 /* UITextField+Theming.swift */; };
 		84E713FB2DF72C6700F52781 /* UILabel+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */; };
 		84E713FD2DF7472400F52781 /* ThemingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FC2DF7472400F52781 /* ThemingConstants.swift */; };
+		84E713FF2DF7684700F52781 /* AppTypographyScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FE2DF7684700F52781 /* AppTypographyScheming.swift */; };
+		84E714012DF7685600F52781 /* AppColorScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714002DF7685600F52781 /* AppColorScheming.swift */; };
+		84E714032DF7686200F52781 /* AppShapeScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714022DF7686200F52781 /* AppShapeScheming.swift */; };
+		84E714052DF7687000F52781 /* AppContainerScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714042DF7687000F52781 /* AppContainerScheming.swift */; };
+		84E714072DF76A1100F52781 /* LightColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714062DF76A1100F52781 /* LightColorScheme.swift */; };
+		84E714092DF76A2900F52781 /* DarkColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714082DF76A2900F52781 /* DarkColorScheme.swift */; };
+		84E7140B2DF76A3700F52781 /* ErrorColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7140A2DF76A3700F52781 /* ErrorColorScheme.swift */; };
+		84E7140D2DF76AB200F52781 /* DarkAppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7140C2DF76AB200F52781 /* DarkAppTheme.swift */; };
+		84E7140F2DF76E7C00F52781 /* DefaultShapeScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7140E2DF76E7C00F52781 /* DefaultShapeScheme.swift */; };
+		84E714112DF76E8C00F52781 /* DefaultTypographyScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714102DF76E8C00F52781 /* DefaultTypographyScheme.swift */; };
+		84E714152DF770CE00F52781 /* LightAppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714142DF770CE00F52781 /* LightAppTheme.swift */; };
+		84E714172DF7715D00F52781 /* DisabledAppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714162DF7715D00F52781 /* DisabledAppTheme.swift */; };
+		84E714192DF774C000F52781 /* NamedAppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714182DF774C000F52781 /* NamedAppTheme.swift */; };
+		84E7141B2DF774D000F52781 /* ErrorAppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */; };
+		84E7141D2DF778B300F52781 /* NamedColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7141C2DF778B300F52781 /* NamedColorScheme.swift */; };
+		84E7141F2DF7792A00F52781 /* DisabledColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7141E2DF7792A00F52781 /* DisabledColorScheme.swift */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1100,21 +1113,11 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
-		84E713D42DF0AE6500F52781 /* AppColorScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppColorScheming.h; sourceTree = "<group>"; };
-		84E713D52DF0AE8C00F52781 /* AppShapeScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppShapeScheming.h; sourceTree = "<group>"; };
-		84E713D62DF0AEA700F52781 /* AppTypographyScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTypographyScheming.h; sourceTree = "<group>"; };
-		84E713D72DF0AEC400F52781 /* AppContainerScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppContainerScheming.h; sourceTree = "<group>"; };
-		84E713D82DF0AF0B00F52781 /* LightAppTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightAppTheme.h; sourceTree = "<group>"; };
-		84E713D92DF0AF5600F52781 /* LightAppTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightAppTheme.m; sourceTree = "<group>"; };
-		84E713DB2DF0AF7D00F52781 /* DarkAppTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DarkAppTheme.h; sourceTree = "<group>"; };
-		84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DarkAppTheme.m; sourceTree = "<group>"; };
 		84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeManager.swift; sourceTree = "<group>"; };
 		84E713E02DF0CA2400F52781 /* AppThemeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppThemeBridge.h; sourceTree = "<group>"; };
 		84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppThemeBridge.m; sourceTree = "<group>"; };
 		84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Scheming.swift"; sourceTree = "<group>"; };
 		84E713E52DF235BB00F52781 /* NamedColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedColorTheme.swift; sourceTree = "<group>"; };
-		84E713E72DF2375400F52781 /* LightColorScheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightColorScheme.h; sourceTree = "<group>"; };
-		84E713E82DF237C400F52781 /* LightColorScheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightColorScheme.m; sourceTree = "<group>"; };
 		84E713EA2DF24ABA00F52781 /* ErrorColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorColorTheme.swift; sourceTree = "<group>"; };
 		84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledColorTheme.swift; sourceTree = "<group>"; };
 		84E713EE2DF32F2400F52781 /* ThemeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProvider.swift; sourceTree = "<group>"; };
@@ -1123,6 +1126,22 @@
 		84E713F82DF7279700F52781 /* UITextField+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Theming.swift"; sourceTree = "<group>"; };
 		84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Theming.swift"; sourceTree = "<group>"; };
 		84E713FC2DF7472400F52781 /* ThemingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemingConstants.swift; sourceTree = "<group>"; };
+		84E713FE2DF7684700F52781 /* AppTypographyScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypographyScheming.swift; sourceTree = "<group>"; };
+		84E714002DF7685600F52781 /* AppColorScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorScheming.swift; sourceTree = "<group>"; };
+		84E714022DF7686200F52781 /* AppShapeScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShapeScheming.swift; sourceTree = "<group>"; };
+		84E714042DF7687000F52781 /* AppContainerScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainerScheming.swift; sourceTree = "<group>"; };
+		84E714062DF76A1100F52781 /* LightColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightColorScheme.swift; sourceTree = "<group>"; };
+		84E714082DF76A2900F52781 /* DarkColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkColorScheme.swift; sourceTree = "<group>"; };
+		84E7140A2DF76A3700F52781 /* ErrorColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorColorScheme.swift; sourceTree = "<group>"; };
+		84E7140C2DF76AB200F52781 /* DarkAppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkAppTheme.swift; sourceTree = "<group>"; };
+		84E7140E2DF76E7C00F52781 /* DefaultShapeScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultShapeScheme.swift; sourceTree = "<group>"; };
+		84E714102DF76E8C00F52781 /* DefaultTypographyScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTypographyScheme.swift; sourceTree = "<group>"; };
+		84E714142DF770CE00F52781 /* LightAppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightAppTheme.swift; sourceTree = "<group>"; };
+		84E714162DF7715D00F52781 /* DisabledAppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledAppTheme.swift; sourceTree = "<group>"; };
+		84E714182DF774C000F52781 /* NamedAppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedAppTheme.swift; sourceTree = "<group>"; };
+		84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAppTheme.swift; sourceTree = "<group>"; };
+		84E7141C2DF778B300F52781 /* NamedColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedColorScheme.swift; sourceTree = "<group>"; };
+		84E7141E2DF7792A00F52781 /* DisabledColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledColorScheme.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2392,32 +2411,54 @@
 		84E713D12DF0ADDE00F52781 /* Theming */ = {
 			isa = PBXGroup;
 			children = (
+				84E714132DF76ECA00F52781 /* Schemes */,
+				84E714122DF76EBC00F52781 /* Themes */,
 				84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */,
 				84E713FC2DF7472400F52781 /* ThemingConstants.swift */,
 				84E713E02DF0CA2400F52781 /* AppThemeBridge.h */,
 				84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */,
 				84E713EE2DF32F2400F52781 /* ThemeProvider.swift */,
-				84E713D42DF0AE6500F52781 /* AppColorScheming.h */,
-				84E713D52DF0AE8C00F52781 /* AppShapeScheming.h */,
-				84E713D62DF0AEA700F52781 /* AppTypographyScheming.h */,
-				84E713D72DF0AEC400F52781 /* AppContainerScheming.h */,
-				84E713D82DF0AF0B00F52781 /* LightAppTheme.h */,
-				84E713D92DF0AF5600F52781 /* LightAppTheme.m */,
-				84E713E72DF2375400F52781 /* LightColorScheme.h */,
-				84E713E82DF237C400F52781 /* LightColorScheme.m */,
-				84E713DB2DF0AF7D00F52781 /* DarkAppTheme.h */,
-				84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */,
-				84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */,
-				84E713F82DF7279700F52781 /* UITextField+Theming.swift */,
-				84E713F62DF34EE700F52781 /* UIButton+Theming.swift */,
-				84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */,
 				F723D608253F66AC00C6BE34 /* MAGEScheme.swift */,
+			);
+			path = Theming;
+			sourceTree = "<group>";
+		};
+		84E714122DF76EBC00F52781 /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				84E714142DF770CE00F52781 /* LightAppTheme.swift */,
+				84E7140C2DF76AB200F52781 /* DarkAppTheme.swift */,
+				84E714182DF774C000F52781 /* NamedAppTheme.swift */,
+				84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */,
+				84E714162DF7715D00F52781 /* DisabledAppTheme.swift */,
 				84E713E52DF235BB00F52781 /* NamedColorTheme.swift */,
 				84E713EA2DF24ABA00F52781 /* ErrorColorTheme.swift */,
 				84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */,
 				84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */,
+				84E713F82DF7279700F52781 /* UITextField+Theming.swift */,
+				84E713F62DF34EE700F52781 /* UIButton+Theming.swift */,
+				84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */,
 			);
-			path = Theming;
+			path = Themes;
+			sourceTree = "<group>";
+		};
+		84E714132DF76ECA00F52781 /* Schemes */ = {
+			isa = PBXGroup;
+			children = (
+				84E714042DF7687000F52781 /* AppContainerScheming.swift */,
+				84E713FE2DF7684700F52781 /* AppTypographyScheming.swift */,
+				84E714002DF7685600F52781 /* AppColorScheming.swift */,
+				84E714022DF7686200F52781 /* AppShapeScheming.swift */,
+				84E714062DF76A1100F52781 /* LightColorScheme.swift */,
+				84E7141C2DF778B300F52781 /* NamedColorScheme.swift */,
+				84E7141E2DF7792A00F52781 /* DisabledColorScheme.swift */,
+				84E714082DF76A2900F52781 /* DarkColorScheme.swift */,
+				84E7140A2DF76A3700F52781 /* ErrorColorScheme.swift */,
+				84E7140E2DF76E7C00F52781 /* DefaultShapeScheme.swift */,
+				84E714102DF76E8C00F52781 /* DefaultTypographyScheme.swift */,
+				84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */,
+			);
+			path = Schemes;
 			sourceTree = "<group>";
 		};
 		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
@@ -4925,6 +4966,7 @@
 				F7225F582C5A783B00B7D935 /* AttachmentRepository.swift in Sources */,
 				F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */,
 				F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */,
+				84E714112DF76E8C00F52781 /* DefaultTypographyScheme.swift in Sources */,
 				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */,
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
 				84E713ED2DF24ACA00F52781 /* DisabledColorTheme.swift in Sources */,
@@ -4939,6 +4981,7 @@
 				F79D2940282AC907008FD45E /* EventContentView.swift in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */,
+				84E714052DF7687000F52781 /* AppContainerScheming.swift in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
 				F7DE98762C12493B005372F8 /* ObservationLocationRepository.swift in Sources */,
@@ -5043,7 +5086,6 @@
 				F73564E02C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */,
-				84E713E92DF237C400F52781 /* LightColorScheme.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
 				842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */,
@@ -5092,6 +5134,7 @@
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
 				8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */,
 				F7BFB8EA2C5055A800901479 /* GeoPackageFeatureSummary.swift in Sources */,
+				84E7140B2DF76A3700F52781 /* ErrorColorScheme.swift in Sources */,
 				F78D578F27B58901003594D3 /* SingleUserMapView.swift in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
 				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
@@ -5106,7 +5149,7 @@
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
-				84E713DD2DF0AF9E00F52781 /* DarkAppTheme.m in Sources */,
+				84E714072DF76A1100F52781 /* LightColorScheme.swift in Sources */,
 				F7D31F942CB962E100126468 /* CacheActiveSwitch.swift in Sources */,
 				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
@@ -5151,6 +5194,7 @@
 				F7BFB8F52C518A2D00901479 /* MageBottomSheetViewModel.swift in Sources */,
 				F7C097922C812539003FA115 /* StaticLayerBottomSheetViewModel.swift in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
+				84E7140F2DF76E7C00F52781 /* DefaultShapeScheme.swift in Sources */,
 				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
 				F7DE988A2C1A4431005372F8 /* UserDefinition.swift in Sources */,
 				F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */,
@@ -5167,6 +5211,7 @@
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,
+				84E7141F2DF7792A00F52781 /* DisabledColorScheme.swift in Sources */,
 				F7C0979F2C812622003FA115 /* GeoPackageRelation.swift in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.swift in Sources */,
 				F7DE98852C13461B005372F8 /* ObservationIconLocalDataSource.swift in Sources */,
@@ -5255,7 +5300,6 @@
 				F7DE98982C20D4D7005372F8 /* FeedItemRepository.swift in Sources */,
 				F7E079502C29F5430029C88D /* StaticLayerLocalDataSource.swift in Sources */,
 				F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */,
-				84E713DA2DF0AF5600F52781 /* LightAppTheme.m in Sources */,
 				F72D431B2694B60300F9AC3B /* Layer.swift in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift in Sources */,
@@ -5272,6 +5316,7 @@
 				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */,
 				F73564D02C61401300466813 /* ObservationImportantRemoteDataSource.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
+				84E7140D2DF76AB200F52781 /* DarkAppTheme.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
 				F7DE98882C1A43F3005372F8 /* UserRepository.swift in Sources */,
@@ -5291,6 +5336,7 @@
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
+				84E714012DF7685600F52781 /* AppColorScheming.swift in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */,
@@ -5306,6 +5352,7 @@
 				F7C097672C7FBC73003FA115 /* RoleModel.swift in Sources */,
 				84E713EB2DF24ABA00F52781 /* ErrorColorTheme.swift in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
+				84E714172DF7715D00F52781 /* DisabledAppTheme.swift in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
@@ -5317,7 +5364,9 @@
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.swift in Sources */,
 				F763FF072C76299E00403A00 /* MeNavStack.swift in Sources */,
 				84E713F12DF3384F00F52781 /* DarkNamedColorTheme.swift in Sources */,
+				84E7141D2DF778B300F52781 /* NamedColorScheme.swift in Sources */,
 				F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.swift in Sources */,
+				84E714192DF774C000F52781 /* NamedAppTheme.swift in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
@@ -5392,6 +5441,7 @@
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.swift in Sources */,
 				F763FF0E2C7663A600403A00 /* UserService.swift in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,
+				84E714032DF7686200F52781 /* AppShapeScheming.swift in Sources */,
 				84E713EF2DF32F2400F52781 /* ThemeProvider.swift in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F73564D52C6180C500466813 /* ObservationFavoriteRepository.swift in Sources */,
@@ -5404,6 +5454,7 @@
 				F72D43252694B60300F9AC3B /* Role.swift in Sources */,
 				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,
 				F754C65B2C48689900E408E9 /* ObservationLocationBottomSheetActionBar.swift in Sources */,
+				84E7141B2DF774D000F52781 /* ErrorAppTheme.swift in Sources */,
 				F7E0794E2C29F4560029C88D /* StaticLayerRepository.swift in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F7C097AB2C85129A003FA115 /* EventRemoteDataSource.swift in Sources */,
@@ -5415,6 +5466,7 @@
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
 				F73565052C668DB200466813 /* UserObservationList.swift in Sources */,
+				84E714152DF770CE00F52781 /* LightAppTheme.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
@@ -5444,6 +5496,7 @@
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7DE98832C133CDB005372F8 /* ObservationMapItemAnnotation.swift in Sources */,
 				84E713F72DF34EE700F52781 /* UIButton+Theming.swift in Sources */,
+				84E714092DF76A2900F52781 /* DarkColorScheme.swift in Sources */,
 				F7BFB8E02C5019BA00901479 /* EmailButton.swift in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */,
@@ -5460,6 +5513,7 @@
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
+				84E713FF2DF7684700F52781 /* AppTypographyScheming.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */,

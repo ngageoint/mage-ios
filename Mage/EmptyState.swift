@@ -11,7 +11,7 @@ import UIKit
 
 class EmptyState: UIView {
     var didSetupConstraints = false;
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var image: UIImage?
     var title: String?
     var emptyDescription: String?
@@ -66,21 +66,20 @@ class EmptyState: UIView {
         return descriptionLabel
     }()
     
-    private lazy var button: MDCButton = {
-        let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = buttonText;
-        button.setTitle(buttonText, for: .normal);
+    private lazy var button: UIButton = {
+        let button = UIButton()
+        button.accessibilityLabel = buttonText
+        button.setTitle(buttonText, for: .normal)
         if let selector = selector {
             button.addTarget(tapHandler, action: selector, for: .touchUpInside)
         }
-        button.clipsToBounds = true;
-        return button;
+        button.clipsToBounds = true
+        return button
     }()
     
-    private lazy var activityIndicator: MDCActivityIndicator = {
-        let activityIndicator = MDCActivityIndicator()
-        activityIndicator.sizeToFit()
-        activityIndicator.indicatorMode = .indeterminate
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
         return activityIndicator;
     }()
@@ -93,6 +92,12 @@ class EmptyState: UIView {
             UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
                 self?.activityIndicator.alpha = newValue ? 0 : 1
             }, completion: { [weak self] _ in
+                if newValue {
+                    self?.activityIndicator.stopAnimating()
+                } else {
+                    self?.activityIndicator.startAnimating()
+                }
+                
                 self?.activityIndicator.isHidden = newValue
             })
         }
@@ -173,15 +178,18 @@ class EmptyState: UIView {
         applyTheme(withScheme: scheme)
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
+        guard let scheme else { return }
         self.scheme = scheme;
-        backgroundColor = scheme?.colorScheme.surfaceColor
-        titleLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.60)
-        titleLabel.font = scheme?.typographyScheme.headline4
-        descriptionLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.60)
-        descriptionLabel.font = scheme?.typographyScheme.body1
+        
+        backgroundColor = scheme.colorScheme?.surfaceColor
+        titleLabel.textColor = scheme.colorScheme?.onSurfaceColor.withAlphaComponent(0.60)
+        titleLabel.font = scheme.typographyScheme?.typographyScheme.headline4
+        descriptionLabel.textColor = scheme.colorScheme?.onSurfaceColor.withAlphaComponent(0.60)
+        descriptionLabel.font = scheme.typographyScheme?.body1
         descriptionLabel.backgroundColor = .clear
-        imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.45)
+        imageView.tintColor = scheme.colorScheme?.onSurfaceColor.withAlphaComponent(0.45)
+        
         if let scheme = scheme {
             button.applyContainedTheme(withScheme: scheme)
         }
