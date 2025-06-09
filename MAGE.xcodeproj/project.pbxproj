@@ -166,7 +166,7 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		84E713DA2DF0AF5600F52781 /* LightAppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713D92DF0AF5600F52781 /* LightAppTheme.m */; };
 		84E713DD2DF0AF9E00F52781 /* DarkAppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */; };
-		84E713DF2DF0C75B00F52781 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppTheme.swift */; };
+		84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */; };
 		84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */; };
 		84E713E42DF2121D00F52781 /* UIColor+Scheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */; };
 		84E713E62DF235BB00F52781 /* NamedColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E52DF235BB00F52781 /* NamedColorTheme.swift */; };
@@ -175,7 +175,10 @@
 		84E713ED2DF24ACA00F52781 /* DisabledColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */; };
 		84E713EF2DF32F2400F52781 /* ThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713EE2DF32F2400F52781 /* ThemeProvider.swift */; };
 		84E713F12DF3384F00F52781 /* DarkNamedColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */; };
-		84E713F72DF34EE700F52781 /* UIButton+SecondaryTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713F62DF34EE700F52781 /* UIButton+SecondaryTheme.swift */; };
+		84E713F72DF34EE700F52781 /* UIButton+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713F62DF34EE700F52781 /* UIButton+Theming.swift */; };
+		84E713F92DF7279700F52781 /* UITextField+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713F82DF7279700F52781 /* UITextField+Theming.swift */; };
+		84E713FB2DF72C6700F52781 /* UILabel+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */; };
+		84E713FD2DF7472400F52781 /* ThemingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FC2DF7472400F52781 /* ThemingConstants.swift */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1105,7 +1108,7 @@
 		84E713D92DF0AF5600F52781 /* LightAppTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightAppTheme.m; sourceTree = "<group>"; };
 		84E713DB2DF0AF7D00F52781 /* DarkAppTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DarkAppTheme.h; sourceTree = "<group>"; };
 		84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DarkAppTheme.m; sourceTree = "<group>"; };
-		84E713DE2DF0C75B00F52781 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeManager.swift; sourceTree = "<group>"; };
 		84E713E02DF0CA2400F52781 /* AppThemeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppThemeBridge.h; sourceTree = "<group>"; };
 		84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppThemeBridge.m; sourceTree = "<group>"; };
 		84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Scheming.swift"; sourceTree = "<group>"; };
@@ -1116,7 +1119,10 @@
 		84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledColorTheme.swift; sourceTree = "<group>"; };
 		84E713EE2DF32F2400F52781 /* ThemeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProvider.swift; sourceTree = "<group>"; };
 		84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkNamedColorTheme.swift; sourceTree = "<group>"; };
-		84E713F62DF34EE700F52781 /* UIButton+SecondaryTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+SecondaryTheme.swift"; sourceTree = "<group>"; };
+		84E713F62DF34EE700F52781 /* UIButton+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Theming.swift"; sourceTree = "<group>"; };
+		84E713F82DF7279700F52781 /* UITextField+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Theming.swift"; sourceTree = "<group>"; };
+		84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Theming.swift"; sourceTree = "<group>"; };
+		84E713FC2DF7472400F52781 /* ThemingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemingConstants.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2386,6 +2392,10 @@
 		84E713D12DF0ADDE00F52781 /* Theming */ = {
 			isa = PBXGroup;
 			children = (
+				84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */,
+				84E713FC2DF7472400F52781 /* ThemingConstants.swift */,
+				84E713E02DF0CA2400F52781 /* AppThemeBridge.h */,
+				84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */,
 				84E713EE2DF32F2400F52781 /* ThemeProvider.swift */,
 				84E713D42DF0AE6500F52781 /* AppColorScheming.h */,
 				84E713D52DF0AE8C00F52781 /* AppShapeScheming.h */,
@@ -2397,16 +2407,15 @@
 				84E713E82DF237C400F52781 /* LightColorScheme.m */,
 				84E713DB2DF0AF7D00F52781 /* DarkAppTheme.h */,
 				84E713DC2DF0AF9E00F52781 /* DarkAppTheme.m */,
-				84E713DE2DF0C75B00F52781 /* AppTheme.swift */,
 				84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */,
-				84E713E02DF0CA2400F52781 /* AppThemeBridge.h */,
-				84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */,
+				84E713F82DF7279700F52781 /* UITextField+Theming.swift */,
+				84E713F62DF34EE700F52781 /* UIButton+Theming.swift */,
+				84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */,
 				F723D608253F66AC00C6BE34 /* MAGEScheme.swift */,
 				84E713E52DF235BB00F52781 /* NamedColorTheme.swift */,
 				84E713EA2DF24ABA00F52781 /* ErrorColorTheme.swift */,
 				84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */,
 				84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */,
-				84E713F62DF34EE700F52781 /* UIButton+SecondaryTheme.swift */,
 			);
 			path = Theming;
 			sourceTree = "<group>";
@@ -4945,7 +4954,7 @@
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,
-				84E713DF2DF0C75B00F52781 /* AppTheme.swift in Sources */,
+				84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */,
 				F7225F4A2C5944F700B7D935 /* ImportantButton.swift in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
@@ -5024,6 +5033,7 @@
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.swift in Sources */,
 				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
+				84E713FB2DF72C6700F52781 /* UILabel+Theming.swift in Sources */,
 				F763FF2F2C7917F100403A00 /* UserModel.swift in Sources */,
 				F7225F442C5448D400B7D935 /* EventRepository.swift in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
@@ -5287,6 +5297,8 @@
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7225F5E2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
+				84E713F92DF7279700F52781 /* UITextField+Theming.swift in Sources */,
+				84E713FD2DF7472400F52781 /* ThemingConstants.swift in Sources */,
 				F7C0978F2C812502003FA115 /* ObservationLocationBottomSheetViewModel.swift in Sources */,
 				2F3C9EE02B179E8F00FF5570 /* HasMapSearchMixin.swift in Sources */,
 				F70C34392C73D7A0007616FA /* DownloadingFileView.swift in Sources */,
@@ -5431,7 +5443,7 @@
 				F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7DE98832C133CDB005372F8 /* ObservationMapItemAnnotation.swift in Sources */,
-				84E713F72DF34EE700F52781 /* UIButton+SecondaryTheme.swift in Sources */,
+				84E713F72DF34EE700F52781 /* UIButton+Theming.swift in Sources */,
 				F7BFB8E02C5019BA00901479 /* EmailButton.swift in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */,

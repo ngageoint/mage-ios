@@ -115,7 +115,7 @@ import UIKit
         }
 
         self.scheme = containerScheme;
-        addFormFAB.applySecondaryTheme(withScheme: containerScheme);
+        addFormFAB.applySecondaryTheme(with: scheme?.colorScheme);
         
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         

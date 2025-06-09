@@ -1,5 +1,5 @@
 //
-//  AppTheme.swift
+//  AppThemeManager.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 6/4/25.
@@ -62,6 +62,7 @@ import UIKit
         }
     }
 
+    // MARK: - TabBar Theming
     private static func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance, scheme: AppColorScheming) {
         itemAppearance.normal.iconColor = scheme.onBackgroundColor!.withAlphaComponent(0.6)
         itemAppearance.normal.titleTextAttributes = [
@@ -73,4 +74,27 @@ import UIKit
             .foregroundColor: scheme.primaryColorVariant!.withAlphaComponent(0.87)
         ]
     }
+    
+    // MARK: - Button Theming
+    @objc public static func applySecondaryThemeToButton(_ button: UIButton, with scheme: AppContainerScheming?) {
+        button.applySecondaryTheme(with: scheme?.colorScheme)
+    }
+    
+    @objc public static func applyPrimaryThemeToButton(_ button: UIButton, with scheme: AppContainerScheming?) {
+        button.applyPrimaryTheme(with: scheme?.colorScheme)
+    }
+
+    @objc public static func applyDisabledThemeToButton(_ button: UIButton, with scheme: AppContainerScheming?) {
+        button.applyDisabledTheme(with: scheme?.colorScheme)
+    }
+    
+    // MARK: - TextField Theming
+    @objc public static func applyPrimaryThemeToTextField(_ textField: UITextField, with scheme: AppContainerScheming?) {
+        textField.applyPrimaryTheme(with: scheme?.colorScheme)
+    }
+    
+    @objc public static func applyDisabledThemeToTextField(_ textField: UITextField, with scheme: AppContainerScheming?) {
+        textField.applyDisabledTheme(with: scheme?.colorScheme)
+    }
+
 }

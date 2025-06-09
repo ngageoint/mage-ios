@@ -23,4 +23,11 @@
 
 + (void)applyTheme:(id<AppContainerScheming>)scheme;
 
++ (void)applySecondaryThemeToButton:(UIButton *)button scheme:(id<AppContainerScheming>)scheme;
++ (void)applyPrimaryThemeToButton:(UIButton *)button scheme:(id<AppContainerScheming>)scheme;
++ (void)applyDisabledThemeToButton:(UIButton *)button scheme:(id<AppContainerScheming>)scheme;
+
++ (void)applyPrimaryThemeToTextField:(UITextField *)textField scheme:(id<AppContainerScheming>)scheme;
++ (void)applyDisabledThemeToTextField:(UITextField *)textField scheme:(id<AppContainerScheming>)scheme;
+
 @end

@@ -37,4 +37,24 @@
     [AppThemeManager applyAppearanceWith: scheme];
 }
 
++ (void)applySecondaryThemeToButton:(UIButton *)button scheme:(id<AppContainerScheming>)scheme {
+    [AppThemeManager applySecondaryThemeToButton:button with:scheme];
+}
+
++ (void)applyPrimaryThemeToButton:(UIButton *)button scheme:(id<AppContainerScheming>)scheme {
+    [AppThemeManager applyPrimaryThemeToButton:button with:scheme];
+}
+
++ (void)applyDisabledThemeToButton:(UIButton *)button scheme:(id<AppContainerScheming>)scheme {
+    [AppThemeManager applyDisabledThemeToButton:button with:scheme];
+}
+
++ (void)applyPrimaryThemeToTextField:(UITextField *)textField scheme:(id<AppContainerScheming>)scheme {
+  [AppThemeManager applyPrimaryThemeToTextField:textField with:scheme];
+}
+
++ (void)applyDisabledThemeToTextField:(UITextField *)textField scheme:(id<AppContainerScheming>)scheme {
+    [AppThemeManager applyDisabledThemeToTextField:textField with:scheme];
+}
+
 @end

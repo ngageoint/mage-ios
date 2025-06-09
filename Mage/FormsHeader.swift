@@ -18,15 +18,15 @@ class FormsHeader: UIView {
         return label;
     }()
     
-    lazy var reorderButton: MDCButton = {
-        let button = MDCButton();
+    lazy var reorderButton: UIButton = {
+        let button = UIButton();
         button.accessibilityLabel = "reorder";
         button.accessibilityIdentifier = "reorder";
         button.setImage(UIImage(systemName: "arrow.up.arrow.down")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        button.inkMaxRippleRadius = 30;
-        button.inkStyle = .unbounded;
+//        button.inkMaxRippleRadius = 30;
+//        button.inkStyle = .unbounded;
         return button;
     }()
     
