@@ -7,6 +7,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 ##### Bug Fixes
 
+## 4.2.0 (Rollback release)
+* Roll back to 4.0.7 logic.
+
 ## 4.0.7
 
 ##### Features
