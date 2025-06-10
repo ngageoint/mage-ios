@@ -14,7 +14,7 @@ protocol MediaLoaderDelegate {
 }
 
 class MediaPreviewController : QLPreviewController {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     
     var documentInteractionController: UIDocumentInteractionController?
 
@@ -27,12 +27,11 @@ class MediaPreviewController : QLPreviewController {
     
     private var previewItem : PreviewItem!
     
-    private lazy var activityIndicator: MDCActivityIndicator = {
-        let activityIndicator = MDCActivityIndicator()
-        activityIndicator.sizeToFit()
-        activityIndicator.indicatorMode = .indeterminate
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
-        return activityIndicator;
+        return activityIndicator
     }()
     
     private let mask: UIView = {
@@ -65,14 +64,14 @@ class MediaPreviewController : QLPreviewController {
         return notAvailableDescription
     }()
     
-    private lazy var openInButton: MDCButton = {
-        let openInButton = MDCButton()
+    private lazy var openInButton: UIButton = {
+        let openInButton = UIButton()
         openInButton.setTitle("Open In", for: .normal)
         openInButton.addTarget(self, action: #selector(self.presentShareSheet(_ :)), for: .touchUpInside);
         return openInButton
     }()
     
-    public convenience init(fileName: String, mediaTitle: String, data: Data? = nil, url: URL? = nil, mediaLoaderDelegate: MediaLoaderDelegate? = nil, scheme: MDCContainerScheming?) {
+    public convenience init(fileName: String, mediaTitle: String, data: Data? = nil, url: URL? = nil, mediaLoaderDelegate: MediaLoaderDelegate? = nil, scheme: AppContainerScheming?) {
         self.init()
         self.scheme = scheme
         self.fileName = fileName
@@ -83,19 +82,20 @@ class MediaPreviewController : QLPreviewController {
         applyTheme(withScheme: scheme)
     }
 
-    func applyTheme(withScheme scheme:MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
         self.scheme = scheme
         mask.backgroundColor = scheme.colorScheme.surfaceColor
         couldNotLoad.backgroundColor = scheme.colorScheme.surfaceColor
-        notVisibleImage.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
-        notAvailable.font = scheme.typographyScheme.headline5
-        notAvailable.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
-        notAvailableDescription.font = scheme.typographyScheme.subtitle2
-        notAvailableDescription.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
-        openInButton.applyOutlinedTheme(withScheme: scheme)
+        notVisibleImage.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.4)
+        notAvailable.font = scheme.typographyScheme.headline5Font
+        notAvailable.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.4)
+        notAvailableDescription.font = scheme.typographyScheme.subtitle2Font
+        notAvailableDescription.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.4)
+        
+//        openInButton.applyOutlinedTheme(withScheme: scheme)
     }
     
     override func viewDidLoad() {

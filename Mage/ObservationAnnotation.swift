@@ -40,7 +40,7 @@ import DateTools
         let geometry: SFGeometry? = geometry ?? observation.geometry
         guard let geometry = geometry else {
             self.init()
-            return;
+            return
         }
         let point = SFGeometryUtils.centroid(of: geometry)
         if let y = point?.y, let x = point?.x {
@@ -79,11 +79,11 @@ import DateTools
         self.accessibilityValue = "Observation Annotation"
     }
     
-    @objc public override func viewForAnnotation(on: MKMapView, scheme: MDCContainerScheming) -> MKAnnotationView {
+    @objc public func viewForAnnotation(on: MKMapView, scheme: AppContainerScheming) -> MKAnnotationView {
         return viewForAnnotation(on: on, with: nil, scheme: scheme)
     }
     
-    @objc public override func viewForAnnotation(on: MKMapView, with: AnnotationDragCallback?, scheme: MDCContainerScheming) -> MKAnnotationView {
+    @objc public func viewForAnnotation(on: MKMapView, with: AnnotationDragCallback?, scheme: AppContainerScheming) -> MKAnnotationView {
         var annotationView = on.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID)
         
         if let annotationView = annotationView {
@@ -98,8 +98,8 @@ import DateTools
                 @Injected(\.observationImageRepository)
                 var imageRepository: ObservationImageRepository
                 
-                let image = imageRepository.image(observation: observation);
-                annotationView?.image = image;
+                let image = imageRepository.image(observation: observation)
+                annotationView?.image = image
                 annotationView?.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
             }
         } else {

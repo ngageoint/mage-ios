@@ -10,7 +10,7 @@ import Foundation
 
 class CardHeader: UIView {
     var didSetupConstraints = false;
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     var headerText: String?;
     
     private lazy var headerLabel: UILabel = {
@@ -33,10 +33,10 @@ class CardHeader: UIView {
         buildView();
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         self.scheme = scheme;
-        headerLabel.font = scheme?.typographyScheme.overline;
-        headerLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+//        headerLabel.font = scheme?.typographyScheme.overline;
+        headerLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
     }
     
     func buildView() {

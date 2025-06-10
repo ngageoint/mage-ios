@@ -9,7 +9,7 @@
 import Foundation
 import Kingfisher
 import UIKit
-import MaterialComponents
+//import MaterialComponents
 import PureLayout
 
 private final class IntrinsicTableView: UITableView {
@@ -29,66 +29,66 @@ private final class IntrinsicTableView: UITableView {
 }
 
 @objc class FeedItemViewController : UIViewController {
-    var didSetupConstraints = false;
+    var didSetupConstraints = false
 
-    let HEADER_SECTION = 0;
-    let PROPERTIES_SECTION = 1;
+    let HEADER_SECTION = 0
+    let PROPERTIES_SECTION = 1
     
     let cellReuseIdentifier = "propertyCell"
     let headerCellIdentifier = "headerCell"
     
-    var scheme: AppContainerScheming?;
+    var scheme: AppContainerScheming?
     
     var feedItem : FeedItem?
     var properties: [String: Any]?
-    let propertiesHeader: CardHeader = CardHeader(headerText: "PROPERTIES");
+    let propertiesHeader: CardHeader = CardHeader(headerText: "PROPERTIES")
     
     // TODO: BRENT - MDC
-    private lazy var propertiesCard: MDCCard = {
-        let card = MDCCard();
-        card.addSubview(tableView);
-        return card;
+    private lazy var propertiesCard: UIView = {
+        let card = UIView()
+        card.addSubview(tableView)
+        return card
     }()
     
     private lazy var tableView : IntrinsicTableView = {
-        let tableView = IntrinsicTableView(frame: CGRect.zero, style: .plain);
-        tableView.allowsSelection = false;
+        let tableView = IntrinsicTableView(frame: CGRect.zero, style: .plain)
+        tableView.allowsSelection = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.isScrollEnabled = false;
+        tableView.isScrollEnabled = false
         tableView.register(FeedItemPropertyCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        return tableView;
+        return tableView
     }()
     
     private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView.newAutoLayout();
-        scrollView.accessibilityIdentifier = "card scroll";
-        scrollView.contentInset.bottom = 100;
-        return scrollView;
+        let scrollView = UIScrollView.newAutoLayout()
+        scrollView.accessibilityIdentifier = "card scroll"
+        scrollView.contentInset.bottom = 100
+        return scrollView
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView.newAutoLayout();
+        let stackView = UIStackView.newAutoLayout()
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = 8
         stackView.distribution = .fill
         stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-        stackView.isLayoutMarginsRelativeArrangement = true;
-        return stackView;
+        stackView.isLayoutMarginsRelativeArrangement = true
+        return stackView
     }()
     
     override func updateViewConstraints() {
         if (!didSetupConstraints) {
-            scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
-            stackView.autoPinEdgesToSuperviewEdges();
-            stackView.autoMatch(.width, to: .width, of: view);
-            tableView.autoPinEdgesToSuperviewEdges();
-            propertiesCard.autoMatch(.height, to: .height, of: tableView);
-            didSetupConstraints = true;
+            scrollView.autoPinEdgesToSuperviewEdges(with: .zero)
+            stackView.autoPinEdgesToSuperviewEdges()
+            stackView.autoMatch(.width, to: .width, of: view)
+            tableView.autoPinEdgesToSuperviewEdges()
+            propertiesCard.autoMatch(.height, to: .height, of: tableView)
+            didSetupConstraints = true
         }
         
-        super.updateViewConstraints();
+        super.updateViewConstraints()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -96,23 +96,23 @@ private final class IntrinsicTableView: UITableView {
     }
     
     init(frame: CGRect) {
-        super.init(nibName: nil, bundle: nil);
+        super.init(nibName: nil, bundle: nil)
     }
     
     @objc convenience public init(feedItem:FeedItem, scheme: AppContainerScheming?) {
-        self.init(frame: CGRect.zero);
-        self.scheme = scheme;
+        self.init(frame: CGRect.zero)
+        self.scheme = scheme
         self.feedItem = feedItem
-        self.properties = feedItem.properties as? [String: Any];
-        self.applyTheme(withScheme: scheme);
+        self.properties = feedItem.properties as? [String: Any]
+        self.applyTheme(withScheme: scheme)
     }
     
     override func loadView() {
-        view = UIView();
+        view = UIView()
         
-        view.addSubview(scrollView);
-        scrollView.addSubview(stackView);
-        view.setNeedsUpdateConstraints();
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        view.setNeedsUpdateConstraints()
     }
     
     public func applyTheme(withScheme scheme: AppContainerScheming? = nil) {
@@ -120,46 +120,46 @@ private final class IntrinsicTableView: UITableView {
             return
         }
 
-        self.view.backgroundColor = scheme.colorScheme.backgroundColor;
-        propertiesHeader.applyTheme(withScheme: scheme);
-        propertiesCard.applyTheme(withScheme: scheme);
-        tableView.backgroundColor = .clear;
+        self.view.backgroundColor = scheme.colorScheme.backgroundColor
+        propertiesHeader.applyTheme(withScheme: scheme)
+//        propertiesCard.applyTheme(withScheme: scheme)
+        tableView.backgroundColor = .clear
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad();
-        let cell: FeedItemCard = FeedItemCard(item: feedItem, actionsDelegate: self, hideSummaryImage: true);
-        cell.applyTheme(withScheme: self.scheme);
+        super.viewDidLoad()
+        let cell: FeedItemCard = FeedItemCard(item: feedItem, actionsDelegate: self, hideSummaryImage: true)
+        cell.applyTheme(withScheme: self.scheme)
         
-        self.stackView.addArrangedSubview(cell);
-        self.stackView.addArrangedSubview(propertiesHeader);
-        self.stackView.addArrangedSubview(propertiesCard);
+        self.stackView.addArrangedSubview(cell)
+        self.stackView.addArrangedSubview(propertiesHeader)
+        self.stackView.addArrangedSubview(propertiesCard)
     }
 }
 
 extension FeedItemViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView();
+        return UIView()
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension;
+        return UITableView.automaticDimension
     }
 }
 
 extension FeedItemViewController : UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return properties?.count ?? 0;
+        return properties?.count ?? 0
     }
 
     func numberOfSections(in: UITableView) -> Int {
-        return 1;
+        return 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: FeedItemPropertyCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemPropertyCell;
-        cell.applyTheme(withScheme: self.scheme);
+        let cell: FeedItemPropertyCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemPropertyCell
+        cell.applyTheme(withScheme: self.scheme)
 
         let key = properties?.keys.sorted()[indexPath.row] ?? ""
 
@@ -169,7 +169,7 @@ extension FeedItemViewController : UITableViewDataSource {
             cell.keyField.text = key
         }
 
-        cell.valueField.text = feedItem?.valueForKey(key: key) ?? "";
+        cell.valueField.text = feedItem?.valueForKey(key: key) ?? ""
         return cell
     }
 }
@@ -177,12 +177,13 @@ extension FeedItemViewController : UITableViewDataSource {
 extension FeedItemViewController: FeedItemActionsDelegate {
     
     func getDirectionsToFeedItem(_ feedItem: FeedItem, sourceView: UIView? = nil) {
-        var extraActions: [UIAlertAction] = [];
+        var extraActions: [UIAlertAction] = []
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
-            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
+            // TODO: BRENT - make these colors correct
+            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.magenta)
             if let url: URL = feedItem.iconURL {
-                let size = 24;
+                let size = 24
                 
                 let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
                 KingfisherManager.shared.retrieveImage(with: url, options: [
@@ -194,20 +195,20 @@ extension FeedItemViewController: FeedItemActionsDelegate {
                 ]) { result in
                     switch result {
                     case .success(let value):
-                        image = value.image.aspectResize(to: CGSize(width: size, height: size));
+                        image = value.image.aspectResize(to: CGSize(width: size, height: size))
                     case .failure(_):
-                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.magenta)
                     }
                 }
             }
             
             NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: feedItem.coordinate))
-        }));
-        ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions, sourceView: sourceView);
+        }))
+        ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions, sourceView: sourceView)
     }
     
     func copyLocation(_ location: String) {
-        UIPasteboard.general.string = location;
+        UIPasteboard.general.string = location
         
         // TODO: BRENT - MDC
         MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location) copied to clipboard"))

@@ -14,119 +14,119 @@ import Kingfisher
 }
 
 @objc class AskToDownloadViewController: UIViewController {
-    var didSetupConstraints: Bool = false;
+    var didSetupConstraints: Bool = false
     var attachment: AttachmentModel!
     var delegate: AskToDownloadDelegate?
     var url: URL?
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?
     
     private lazy var thumbnail: AttachmentUIImageView = {
-        let thumbnail = AttachmentUIImageView(image: nil);
-        thumbnail.useDownloadPlaceholder = false;
-        return thumbnail;
+        let thumbnail = AttachmentUIImageView(image: nil)
+        thumbnail.useDownloadPlaceholder = false
+        return thumbnail
     }()
     
     private lazy var downloadBlock: UIView = {
-        let downloadBlock = UIView(forAutoLayout: ());
-        downloadBlock.backgroundColor = .black.withAlphaComponent(0.13);
-        return downloadBlock;
+        let downloadBlock = UIView(forAutoLayout: ())
+        downloadBlock.backgroundColor = .black.withAlphaComponent(0.13)
+        return downloadBlock
     }()
     
     private lazy var emptyContentImage: UIImageView = {
-        let emptyContentImage: UIImageView = UIImageView(image: UIImage(named: "big_download"));
-        emptyContentImage.contentMode = .scaleAspectFit;
-        return emptyContentImage;
+        let emptyContentImage: UIImageView = UIImageView(image: UIImage(named: "big_download"))
+        emptyContentImage.contentMode = .scaleAspectFit
+        return emptyContentImage
     }()
     
     private lazy var descriptionLabel: UILabel = {
-        let descriptionLabel: UILabel = UILabel();
-        descriptionLabel.numberOfLines = 0;
-        return descriptionLabel;
+        let descriptionLabel: UILabel = UILabel()
+        descriptionLabel.numberOfLines = 0
+        return descriptionLabel
     }()
     
-    private lazy var viewButton: MDCButton = {
-        let viewButton: MDCButton = MDCButton(forAutoLayout: ());
-        viewButton.accessibilityLabel = "View";
-        viewButton.setTitle("View", for: .normal);
-        viewButton.clipsToBounds = true;
-        viewButton.addTarget(self, action: #selector(downloadApproved(_:)), for: .touchUpInside);
-        return viewButton;
+    private lazy var viewButton: UIButton = {
+        let viewButton: UIButton = UIButton(forAutoLayout: ())
+        viewButton.accessibilityLabel = "View"
+        viewButton.setTitle("View", for: .normal)
+        viewButton.clipsToBounds = true
+        viewButton.addTarget(self, action: #selector(downloadApproved(_:)), for: .touchUpInside)
+        return viewButton
     }()
     
     @objc public convenience init(attachment: AttachmentModel, delegate: AskToDownloadDelegate?) {
-        self.init(nibName: nil, bundle: nil);
-        self.attachment = attachment;
-        self.delegate = delegate;
+        self.init(nibName: nil, bundle: nil)
+        self.attachment = attachment
+        self.delegate = delegate
     }
     
     @objc public convenience init(url: URL, delegate: AskToDownloadDelegate?) {
-        self.init(nibName: nil, bundle: nil);
-        self.url = url;
-        self.delegate = delegate;
+        self.init(nibName: nil, bundle: nil)
+        self.url = url
+        self.delegate = delegate
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
 
-        self.scheme = containerScheme;
+        self.scheme = containerScheme
 
-        self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        self.viewButton.applyContainedTheme(withScheme: containerScheme);
-        self.emptyContentImage.tintColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6);
-        self.downloadBlock.backgroundColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
-        self.descriptionLabel.textColor = containerScheme.colorScheme.backgroundColor;
-        self.descriptionLabel.font = containerScheme.typographyScheme.body1;
+        self.view.backgroundColor = containerScheme.colorScheme.backgroundColor
+//        self.viewButton.applyContainedTheme(withScheme: containerScheme)
+        self.emptyContentImage.tintColor = containerScheme.colorScheme.onBackgroundColor?.withAlphaComponent(0.6)
+        self.downloadBlock.backgroundColor = containerScheme.colorScheme.onBackgroundColor?.withAlphaComponent(0.6)
+        self.descriptionLabel.textColor = containerScheme.colorScheme.backgroundColor
+        self.descriptionLabel.font = containerScheme.typographyScheme.bodyFont
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad();
+        super.viewDidLoad()
         
-        view.addSubview(thumbnail);
-        view.addSubview(downloadBlock);
-        view.addSubview(emptyContentImage);
+        view.addSubview(thumbnail)
+        view.addSubview(downloadBlock)
+        view.addSubview(emptyContentImage)
         
-        downloadBlock.addSubview(descriptionLabel);
-        downloadBlock.addSubview(viewButton);
+        downloadBlock.addSubview(descriptionLabel)
+        downloadBlock.addSubview(viewButton)
         
-        thumbnail.autoPinEdgesToSuperviewEdges();
-        downloadBlock.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .top);
-        emptyContentImage.autoCenterInSuperview();
-        emptyContentImage.autoMatch(.width, to: .width, of: view, withMultiplier: 0.67);
+        thumbnail.autoPinEdgesToSuperviewEdges()
+        downloadBlock.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .top)
+        emptyContentImage.autoCenterInSuperview()
+        emptyContentImage.autoMatch(.width, to: .width, of: view, withMultiplier: 0.67)
         
-        viewButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .top);
-        descriptionLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom);
-        viewButton.autoPinEdge(.top, to: .bottom, of: descriptionLabel, withOffset: 16);
+        viewButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .top)
+        descriptionLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
+        viewButton.autoPinEdge(.top, to: .bottom, of: descriptionLabel, withOffset: 16)
         
-        self.downloadBlock.isHidden = true;
+        self.downloadBlock.isHidden = true
         if (!DataConnectionUtilities.shouldFetchAttachments()) {
             if (self.attachment.contentType?.hasPrefix("image") == true) {
-                self.descriptionLabel.text = "Your attachment fetch settings do not allow auto downloading full size images.  Would you like to view the image?";
+                self.descriptionLabel.text = "Your attachment fetch settings do not allow auto downloading full size images.  Would you like to view the image?"
             } else if (self.attachment.contentType?.hasPrefix("video") == true) {
-                self.descriptionLabel.text = String.init(format: "Your attachment fetch settings do not allow auto downloading of videos.  This video is %.2FMB.  Would you like to view the video?", (self.attachment.size!.doubleValue / (1024.0 * 1024.0)));
+                self.descriptionLabel.text = String.init(format: "Your attachment fetch settings do not allow auto downloading of videos.  This video is %.2FMB.  Would you like to view the video?", (self.attachment.size!.doubleValue / (1024.0 * 1024.0)))
             }
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated);
-        self.showAttachment();
+        super.viewDidAppear(animated)
+        self.showAttachment()
     }
     
     @IBAction func downloadApproved(_ sender: Any) {
-        self.delegate?.downloadApproved();
+        self.delegate?.downloadApproved()
     }
     
     func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         
-        self.thumbnail.setURL(url: self.url);
-        self.thumbnail.setAttachment(attachment: self.attachment);
+        self.thumbnail.setURL(url: self.url)
+        self.thumbnail.setAttachment(attachment: self.attachment)
         if (self.thumbnail.isLargeSizeCached() == true) {
-            self.delegate?.downloadApproved();
+            self.delegate?.downloadApproved()
         } else {
-            self.downloadBlock.isHidden = false;
-            self.thumbnail.showImage(cacheOnly: true);
+            self.downloadBlock.isHidden = false
+            self.thumbnail.showImage(cacheOnly: true)
             if (self.thumbnail.placeholderIsRealImage == true) {
                 self.emptyContentImage.isHidden = true
             }

@@ -19,84 +19,84 @@ struct StraightLineNavigationNotification {
 }
 
 protocol StraightLineNavigationDelegate {
-    func cancelStraightLineNavigation();
+    func cancelStraightLineNavigation()
 }
 
 class StraightLineNavigation: NSObject {
-    var delegate: StraightLineNavigationDelegate?;
-    weak var mapView: MKMapView?;
-    weak var mapStack: UIStackView?;
+    var delegate: StraightLineNavigationDelegate?
+    weak var mapView: MKMapView?
+    weak var mapStack: UIStackView?
     var navigationModeEnabled: Bool = false
     var headingModeEnabled: Bool = false
-    var navView: StraightLineNavigationView?;
+    var navView: StraightLineNavigationView?
     
-    var headingPolyline: NavigationOverlay?;
-    var relativeBearingPolyline: NavigationOverlay?;
+    var headingPolyline: NavigationOverlay?
+    var relativeBearingPolyline: NavigationOverlay?
     
     var relativeBearingColor: UIColor {
         get {
-            return UserDefaults.standard.bearingTargetColor;
+            return UserDefaults.standard.bearingTargetColor
         }
     }
     var headingColor: UIColor {
         get {
-            return UserDefaults.standard.headingColor;
+            return UserDefaults.standard.headingColor
         }
     }
     
     init(mapView: MKMapView, locationManager: CLLocationManager?, mapStack: UIStackView) {
-        self.mapView = mapView;
-        self.mapStack = mapStack;
+        self.mapView = mapView
+        self.mapStack = mapStack
     }
     
     deinit {
-        navView?.removeFromSuperview();
+        navView?.removeFromSuperview()
         navView = nil
     }
     
-    func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, imageURL: URL?, scheme: MDCContainerScheming? = nil) {
-        navigationModeEnabled = true;
-        headingModeEnabled = true;
+    func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, imageURL: URL?, scheme: AppContainerScheming? = nil) {
+        navigationModeEnabled = true
+        headingModeEnabled = true
         
-        navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: relativeBearingColor, bearingColor: headingColor);
+        navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: relativeBearingColor, bearingColor: headingColor)
         navView?.destinationMarkerUrl = imageURL
-        updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate);
-        self.delegate = delegate;
-        mapStack?.addArrangedSubview(navView!);
+        updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate)
+        self.delegate = delegate
+        mapStack?.addArrangedSubview(navView!)
     }
     
     func startHeading(manager: CLLocationManager) {
-        headingModeEnabled = true;
-        updateHeadingLine(manager: manager);
+        headingModeEnabled = true
+        updateHeadingLine(manager: manager)
     }
     
     @discardableResult
     func stopHeading() -> Bool {
         if (!navigationModeEnabled && headingModeEnabled) {
-            headingModeEnabled = false;
+            headingModeEnabled = false
             if let headingPolyline = headingPolyline {
-                mapView?.removeOverlay(headingPolyline);
+                mapView?.removeOverlay(headingPolyline)
             }
-            return true;
+            return true
         }
-        return false;
+        return false
     }
     
     func stopNavigation() {
         if let navView = navView {
             navView.removeFromSuperview()
         }
-        navigationModeEnabled = false;
+        navigationModeEnabled = false
         if let relativeBearingPolyline = relativeBearingPolyline {
-            mapView?.removeOverlay(relativeBearingPolyline);
+            mapView?.removeOverlay(relativeBearingPolyline)
         }
         if let headingPolyline = headingPolyline {
-            mapView?.removeOverlay(headingPolyline);
+            mapView?.removeOverlay(headingPolyline)
         }
     }
     
     func calculateBearingPoint(startCoordinate: CLLocationCoordinate2D, bearing: CLLocationDirection) -> CLLocationCoordinate2D {
-        var metersDistanceForBearing = 500000.0;
+        var metersDistanceForBearing = 500000.0
         
         let span = mapView?.region.span ?? MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5)
         let center = mapView?.region.center ?? startCoordinate
@@ -108,7 +108,7 @@ class StraightLineNavigation: NSObject {
         
         metersDistanceForBearing = min(metersDistanceForBearing, max(loc1.distance(from: loc2), loc3.distance(from: loc4)) * 2.0)
         
-        let radDirection = bearing * (.pi / 180.0);
+        let radDirection = bearing * (.pi / 180.0)
 
         return locationWithBearing(bearing: radDirection, distanceMeters: metersDistanceForBearing, origin: startCoordinate)
     }
@@ -128,42 +128,42 @@ class StraightLineNavigation: NSObject {
     func updateHeadingLine(manager: CLLocationManager) {
         if (self.headingModeEnabled) {
             guard let location = manager.location else {
-                return;
+                return
             }
             
             guard let userCoordinate = manager.location?.coordinate else {
-                return;
+                return
             }
             
             // if the user is moving, use their direction of movement
-            var bearing = location.course;
-            let speed = location.speed;
+            var bearing = location.course
+            let speed = location.speed
             
             if (bearing < 0 || speed <= 0 || location.courseAccuracy < 0 || location.courseAccuracy >= 180) {
                 // if the user is not moving, use the heading of the phone or the course accuracy is invalid
                 if let trueHeading = manager.heading?.trueHeading {
-                    bearing = trueHeading;
+                    bearing = trueHeading
                 } else {
-                    return;
+                    return
                 }
             }
-            let bearingPoint = MKMapPoint(calculateBearingPoint(startCoordinate: userCoordinate, bearing: bearing));
+            let bearingPoint = MKMapPoint(calculateBearingPoint(startCoordinate: userCoordinate, bearing: bearing))
             
             let userLocationPoint = MKMapPoint(userCoordinate)
             let coordinates: [MKMapPoint] = [userLocationPoint, bearingPoint]
             if (headingPolyline != nil) {
-                mapView?.removeOverlay(headingPolyline!);
+                mapView?.removeOverlay(headingPolyline!)
             }
             headingPolyline = NavigationOverlay(points: coordinates, count: 2, color: headingColor)
             headingPolyline?.accessibilityLabel = "heading"
-            mapView?.addOverlay(headingPolyline!, level: .aboveLabels);
-            navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor);
+            mapView?.addOverlay(headingPolyline!, level: .aboveLabels)
+            navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor)
         }
     }
     
     func updateNavigationLines(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D?) {
         guard let userCoordinate = manager.location?.coordinate else {
-            return;
+            return
         }
         if navigationModeEnabled, let destinationCoordinate = destinationCoordinate {
             let userLocationPoint = MKMapPoint(userCoordinate)
@@ -171,14 +171,14 @@ class StraightLineNavigation: NSObject {
             
             let coordinates: [MKMapPoint] = [userLocationPoint, endCoordinate]
             if (relativeBearingPolyline != nil) {
-                mapView?.removeOverlay(relativeBearingPolyline!);
+                mapView?.removeOverlay(relativeBearingPolyline!)
             }
             relativeBearingPolyline = NavigationOverlay(points: coordinates, count: 2, color: relativeBearingColor)
             relativeBearingPolyline?.accessibilityLabel = "relative bearing"
-            mapView?.addOverlay(relativeBearingPolyline!);
-            navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor, destinationCoordinate: destinationCoordinate);
+            mapView?.addOverlay(relativeBearingPolyline!)
+            navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor, destinationCoordinate: destinationCoordinate)
         }
         
-        updateHeadingLine(manager: manager);
+        updateHeadingLine(manager: manager)
     }
 }

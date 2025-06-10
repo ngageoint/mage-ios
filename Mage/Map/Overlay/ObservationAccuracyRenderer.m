@@ -22,7 +22,7 @@
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         if (containerScheme.colorScheme.primaryColor != nil) {
             self.fillColor = [containerScheme.colorScheme.primaryColorVariant colorWithAlphaComponent:0.2f];

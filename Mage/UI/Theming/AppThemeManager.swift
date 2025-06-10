@@ -9,6 +9,7 @@
 import UIKit
 
 @objc public class AppThemeManager: NSObject {
+    // MARK: - Global Appearance
     @objc public static func applyAppearance(with scheme: AppContainerScheming?) {
         guard let colorScheme = scheme?.colorScheme else { return }
 
@@ -77,24 +78,29 @@ import UIKit
     
     // MARK: - Button Theming
     @objc public static func applySecondaryThemeToButton(_ button: UIButton, with scheme: AppContainerScheming?) {
-        button.applySecondaryTheme(with: scheme?.colorScheme)
+        guard let scheme else { return }
+        button.applySecondaryTheme(withScheme: scheme)
     }
     
     @objc public static func applyPrimaryThemeToButton(_ button: UIButton, with scheme: AppContainerScheming?) {
-        button.applyPrimaryTheme(with: scheme?.colorScheme)
+        guard let scheme else { return }
+        button.applyPrimaryTheme(withScheme: scheme)
     }
 
     @objc public static func applyDisabledThemeToButton(_ button: UIButton, with scheme: AppContainerScheming?) {
-        button.applyDisabledTheme(with: scheme?.colorScheme)
+        guard let scheme else { return }
+        button.applyDisabledTheme(withScheme: scheme)
     }
     
     // MARK: - TextField Theming
     @objc public static func applyPrimaryThemeToTextField(_ textField: UITextField, with scheme: AppContainerScheming?) {
-        textField.applyPrimaryTheme(with: scheme?.colorScheme)
+        guard let scheme else { return }
+        textField.applyPrimaryTheme(withScheme: scheme)
     }
     
     @objc public static func applyDisabledThemeToTextField(_ textField: UITextField, with scheme: AppContainerScheming?) {
-        textField.applyDisabledTheme(with: scheme?.colorScheme)
+        guard let scheme else { return }
+        textField.applyDisabledTheme(withScheme: scheme)
     }
 
 }

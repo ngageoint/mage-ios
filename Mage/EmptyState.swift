@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class EmptyState: UIView {
-    var didSetupConstraints = false;
+    var didSetupConstraints = false
     var scheme: AppContainerScheming?
     var image: UIImage?
     var title: String?
@@ -23,7 +23,7 @@ class EmptyState: UIView {
     let containerView: UIView = UIView.newAutoLayout()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(forAutoLayout: ());
+        let stackView = UIStackView(forAutoLayout: ())
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.spacing = 0
@@ -81,7 +81,7 @@ class EmptyState: UIView {
         let activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
-        return activityIndicator;
+        return activityIndicator
     }()
     
     var isActivityIndicatorHidden: Bool {
@@ -121,7 +121,7 @@ class EmptyState: UIView {
     }
     
     override init(frame: CGRect) {
-        super.init(frame: CGRect.zero);
+        super.init(frame: CGRect.zero)
         addSubview(containerView)
         containerView.addSubview(imageView)
         containerView.addSubview(titleLabel)
@@ -144,7 +144,7 @@ class EmptyState: UIView {
         })
     }
     
-    func configure(image: UIImage? = nil, title: String? = nil, description: String? = nil, attributedDescription: NSAttributedString? = nil, showActivityIndicator: Bool? = false, buttonText: String? = nil, tapHandler: AnyObject? = nil, selector: Selector? = nil, scheme: MDCContainerScheming? = nil) {
+    func configure(image: UIImage? = nil, title: String? = nil, description: String? = nil, attributedDescription: NSAttributedString? = nil, showActivityIndicator: Bool? = false, buttonText: String? = nil, tapHandler: AnyObject? = nil, selector: Selector? = nil, scheme: AppContainerScheming? = nil) {
         UIView.transition(with: self, duration: 0.45, options: .transitionCrossDissolve, animations: { [weak self] in
             self?.image = image
             self?.title = title
@@ -155,8 +155,8 @@ class EmptyState: UIView {
             self?.selector = selector
             self?.tapHandler = tapHandler
         
-            self?.button.accessibilityLabel = buttonText;
-            self?.button.setTitle(buttonText, for: .normal);
+            self?.button.accessibilityLabel = buttonText
+            self?.button.setTitle(buttonText, for: .normal)
             if let selector = selector {
                 self?.button.addTarget(tapHandler, action: selector, for: .touchUpInside)
             }
@@ -180,19 +180,19 @@ class EmptyState: UIView {
     
     func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme else { return }
-        self.scheme = scheme;
+        self.scheme = scheme
         
-        backgroundColor = scheme.colorScheme?.surfaceColor
-        titleLabel.textColor = scheme.colorScheme?.onSurfaceColor.withAlphaComponent(0.60)
-        titleLabel.font = scheme.typographyScheme?.typographyScheme.headline4
-        descriptionLabel.textColor = scheme.colorScheme?.onSurfaceColor.withAlphaComponent(0.60)
-        descriptionLabel.font = scheme.typographyScheme?.body1
+        backgroundColor = scheme.colorScheme.surfaceColor
+        titleLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.60)
+        titleLabel.font = scheme.typographyScheme.headline4Font
+        descriptionLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.60)
+        descriptionLabel.font = scheme.typographyScheme.bodyFont
         descriptionLabel.backgroundColor = .clear
-        imageView.tintColor = scheme.colorScheme?.onSurfaceColor.withAlphaComponent(0.45)
+        imageView.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.45)
         
-        if let scheme = scheme {
-            button.applyContainedTheme(withScheme: scheme)
-        }
+//        if let scheme = scheme {
+//            button.applyContainedTheme(withScheme: scheme)
+//        }
     }
     
     override func didMoveToSuperview() {
@@ -224,8 +224,8 @@ class EmptyState: UIView {
             stackView.autoPinEdge(toSuperviewEdge: .bottom)
 //            }
 
-            didSetupConstraints = true;
+            didSetupConstraints = true
         }
-        super.updateConstraints();
+        super.updateConstraints()
     }
 }

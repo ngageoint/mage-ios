@@ -15,6 +15,9 @@ import UIKit
     var headline4Font: UIFont { get }
     var headline5Font: UIFont { get }
     var headline6Font: UIFont { get }
+    
+    var subtitle1Font: UIFont { get }
+    var subtitle2Font: UIFont { get }
 
     var bodyFont: UIFont { get }
     var buttonFont: UIFont { get }

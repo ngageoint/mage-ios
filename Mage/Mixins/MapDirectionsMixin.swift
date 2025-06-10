@@ -156,7 +156,9 @@ class MapDirectionsMixin: NSObject, MapMixin {
         {
             if let feedItem = await feedItemRepository.getFeedItem(feedItemUri: uri) {
                 title = feedItem.title ?? "Feed Item"
-                image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                
+                // TODO: BRENT - MAKE THESE COLORS CORRECT
+                image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
                 if let url: URL = feedItem.iconURL {
                     let size = 24;
                     
@@ -172,7 +174,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
                         case .success(let value):
                             image = value.image.aspectResize(to: CGSize(width: size, height: size));
                         case .failure(_):
-                            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
                         }
                     }
                 }
@@ -184,7 +186,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
            let featureItem = FeatureItem.fromKey(jsonString: key)
         {
             title = featureItem.featureTitle ?? "Feature"
-            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
             if let url: URL = featureItem.iconURL {
                 let size = 24;
                 
@@ -200,7 +202,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
                     case .success(let value):
                         image = value.image.aspectResize(to: CGSize(width: size, height: size));
                     case .failure(_):
-                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
                     }
                 }
             }

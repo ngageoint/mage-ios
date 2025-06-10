@@ -19,9 +19,9 @@ struct Marker {
     
     func degreeText() -> String {
         if (self.degrees.remainder(dividingBy: 30) == 0) {
-            return String(format: "%.0f", self.degrees);
+            return String(format: "%.0f", self.degrees)
         }
-        return "";
+        return ""
     }
     
     static func markers() -> [Marker] {
@@ -108,70 +108,70 @@ class CompassTargetView: CompassMarkerView {
     }
     
     override func capsuleHeight() -> CGFloat {
-        return 20;
+        return 20
     }
     
     override func capsuleColor() -> UIColor {
-        return targetColor;
+        return targetColor
     }
 }
 
 class CompassMarkerView: UIView {
     var marker: Marker?
     var compassDegrees: Double?
-    var targetColor: UIColor = .gray;
+    var targetColor: UIColor = .gray
     
     private lazy var stack: UIStackView = {
-        let stack = UIStackView(forAutoLayout: ());
+        let stack = UIStackView(forAutoLayout: ())
         stack.axis = .vertical
         stack.alignment = .fill
-        stack.spacing = 0;
+        stack.spacing = 0
         stack.distribution = .fillEqually
-        stack.translatesAutoresizingMaskIntoConstraints = false;
-        stack.isUserInteractionEnabled = false;
-        return stack;
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.isUserInteractionEnabled = false
+        return stack
     }()
     
     public convenience init(marker: Marker? = nil, compassDegrees: Double? = nil, targetColor: UIColor = .gray) {
-        self.init(frame: .zero);
-        self.marker = marker;
-        self.compassDegrees = compassDegrees;
-        self.targetColor = targetColor;
-        layout();
+        self.init(frame: .zero)
+        self.marker = marker
+        self.compassDegrees = compassDegrees
+        self.targetColor = targetColor
+        layout()
     }
     
     func layout() {
-        let degreeMeasurement = Measurement(value: marker?.degrees ?? 0, unit: UnitAngle.degrees);
+        let degreeMeasurement = Measurement(value: marker?.degrees ?? 0, unit: UnitAngle.degrees)
         let transform = CGAffineTransform(rotationAngle: CGFloat(degreeMeasurement.converted(to: .radians).value))
         
-        let degreeLabel = UILabel(forAutoLayout: ());
-        degreeLabel.text = marker?.degreeText();
-        degreeLabel.transform = textTransform();
+        let degreeLabel = UILabel(forAutoLayout: ())
+        degreeLabel.text = marker?.degreeText()
+        degreeLabel.transform = textTransform()
         
-        let capsule = UIView(forAutoLayout: ());
-        capsule.autoSetDimensions(to: CGSize(width: capsuleWidth(), height: capsuleHeight()));
-        capsule.backgroundColor = capsuleColor();
+        let capsule = UIView(forAutoLayout: ())
+        capsule.autoSetDimensions(to: CGSize(width: capsuleWidth(), height: capsuleHeight()))
+        capsule.backgroundColor = capsuleColor()
         
-        let capsuleContainer = UIView(forAutoLayout: ());
-        capsuleContainer.addSubview(capsule);
-        capsule.autoAlignAxis(toSuperviewAxis: .vertical);
-        capsule.autoPinEdge(toSuperviewEdge: .top);
+        let capsuleContainer = UIView(forAutoLayout: ())
+        capsuleContainer.addSubview(capsule)
+        capsule.autoAlignAxis(toSuperviewAxis: .vertical)
+        capsule.autoPinEdge(toSuperviewEdge: .top)
         
-        let markerLabel = UILabel(forAutoLayout: ());
-        markerLabel.text = marker?.label;
-        markerLabel.transform = textTransform();
+        let markerLabel = UILabel(forAutoLayout: ())
+        markerLabel.text = marker?.label
+        markerLabel.transform = textTransform()
         
-        addSubview(capsuleContainer);
-        addSubview(degreeLabel);
-        addSubview(markerLabel);
+        addSubview(capsuleContainer)
+        addSubview(degreeLabel)
+        addSubview(markerLabel)
         
-        degreeLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 5);
-        degreeLabel.autoAlignAxis(toSuperviewAxis: .vertical);
-        capsuleContainer.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 30, left: 0, bottom: 20, right: 0), excludingEdge: .bottom);
-        markerLabel.autoPinEdge(.top, to: .bottom, of: degreeLabel, withOffset: 25);
-        markerLabel.autoAlignAxis(toSuperviewAxis: .vertical);
+        degreeLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 5)
+        degreeLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+        capsuleContainer.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 30, left: 0, bottom: 20, right: 0), excludingEdge: .bottom)
+        markerLabel.autoPinEdge(.top, to: .bottom, of: degreeLabel, withOffset: 25)
+        markerLabel.autoAlignAxis(toSuperviewAxis: .vertical)
         
-        self.transform = transform;
+        self.transform = transform
     }
 
     func capsuleWidth() -> CGFloat {
@@ -189,121 +189,121 @@ class CompassMarkerView: UIView {
     
     func textTransform() -> CGAffineTransform {
         let degrees = CLLocationDegrees(Double((-(self.compassDegrees ?? 0))) - (self.marker?.degrees ?? 0))
-        let degreeMeasurement = Measurement(value: degrees, unit: UnitAngle.degrees);
+        let degreeMeasurement = Measurement(value: degrees, unit: UnitAngle.degrees)
         return CGAffineTransform(rotationAngle: CGFloat(degreeMeasurement.converted(to: .radians).value))
     }
 }
 
 class CompassView: UIView {
-    var scheme: MDCContainerScheming?;
-    var targetColor: UIColor = .systemGreen;
-    var headingColor: UIColor = .systemRed;
-    var viewableDegrees: Double = 360.0;
-    var compassTargetView: CompassTargetView?;
+    var scheme: AppContainerScheming?
+    var targetColor: UIColor = .systemGreen
+    var headingColor: UIColor = .systemRed
+    var viewableDegrees: Double = 360.0
+    var compassTargetView: CompassTargetView?
     
     private lazy var stack: UIStackView = {
-        let stack = UIStackView(forAutoLayout: ());
+        let stack = UIStackView(forAutoLayout: ())
         stack.axis = .vertical
         stack.alignment = .fill
-        stack.spacing = 0;
+        stack.spacing = 0
         stack.distribution = .fillEqually
-        stack.translatesAutoresizingMaskIntoConstraints = false;
-        stack.isUserInteractionEnabled = false;
-        return stack;
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.isUserInteractionEnabled = false
+        return stack
     }()
     
-    public convenience init(scheme: MDCContainerScheming? = nil, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
-        self.init(frame: .zero);
-        self.scheme = scheme;
-        self.targetColor = targetColor;
-        self.headingColor = headingColor;
+    public convenience init(scheme: AppContainerScheming? = nil, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
+        self.init(frame: .zero)
+        self.scheme = scheme
+        self.targetColor = targetColor
+        self.headingColor = headingColor
         
-        layoutView(heading: 0.0);
+        layoutView(heading: 0.0)
         
-        applyTheme(withScheme: scheme);
+        applyTheme(withScheme: scheme)
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
-        self.backgroundColor = scheme?.colorScheme.surfaceColor;
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
+        self.backgroundColor = scheme?.colorScheme.surfaceColor
     }
     
     func layoutView(heading: Double, destinationBearing: Double) {
-        let rotationalHeading = 360.0 - heading;
-        let markerContainer = layoutView(heading: heading);
-        let marker = Marker(degrees: destinationBearing);
-        compassTargetView = CompassTargetView(marker: marker, compassDegrees: rotationalHeading, targetColor: self.targetColor);
-        markerContainer.addSubview(compassTargetView!);
-        compassTargetView!.autoPinEdgesToSuperviewEdges();
+        let rotationalHeading = 360.0 - heading
+        let markerContainer = layoutView(heading: heading)
+        let marker = Marker(degrees: destinationBearing)
+        compassTargetView = CompassTargetView(marker: marker, compassDegrees: rotationalHeading, targetColor: self.targetColor)
+        markerContainer.addSubview(compassTargetView!)
+        compassTargetView!.autoPinEdgesToSuperviewEdges()
     }
     
     @discardableResult func layoutView(heading: Double) -> UIView {
-        let rotationalHeading = 360.0 - heading;
+        let rotationalHeading = 360.0 - heading
         if (viewableDegrees >= 360.0) {
-            viewableDegrees = 359.0;
+            viewableDegrees = 359.0
         }
         
-        let capsule = UIView(forAutoLayout: ());
-        capsule.autoSetDimensions(to: CGSize(width: 5, height: 50));
-        capsule.backgroundColor = self.headingColor;
+        let capsule = UIView(forAutoLayout: ())
+        capsule.autoSetDimensions(to: CGSize(width: 5, height: 50))
+        capsule.backgroundColor = self.headingColor
         
-        let markerContainer = UIView(forAutoLayout: ());
+        let markerContainer = UIView(forAutoLayout: ())
         for marker in Marker.markers() {
-            var leftLowerLimit = heading - (viewableDegrees / 2);
+            var leftLowerLimit = heading - (viewableDegrees / 2)
             if (leftLowerLimit < 0) {
-                leftLowerLimit = leftLowerLimit + 360;
+                leftLowerLimit = leftLowerLimit + 360
             }
             if (leftLowerLimit > 360) {
-                leftLowerLimit = leftLowerLimit - 360;
+                leftLowerLimit = leftLowerLimit - 360
             }
-            var rightUpperLimit = heading + (viewableDegrees / 2);
+            var rightUpperLimit = heading + (viewableDegrees / 2)
             if (rightUpperLimit < 0) {
-                rightUpperLimit = rightUpperLimit + 360;
+                rightUpperLimit = rightUpperLimit + 360
             }
             if (rightUpperLimit > 360) {
-                rightUpperLimit = rightUpperLimit - 360;
+                rightUpperLimit = rightUpperLimit - 360
             }
             if (leftLowerLimit > rightUpperLimit) {
                 if ((marker.degrees <= rightUpperLimit) || (marker.degrees >= leftLowerLimit)) {
-                    let compassMarkerView = CompassMarkerView(marker: marker, compassDegrees: rotationalHeading);
-                    markerContainer.addSubview(compassMarkerView);
-                    compassMarkerView.autoPinEdgesToSuperviewEdges();
+                    let compassMarkerView = CompassMarkerView(marker: marker, compassDegrees: rotationalHeading)
+                    markerContainer.addSubview(compassMarkerView)
+                    compassMarkerView.autoPinEdgesToSuperviewEdges()
                 }
             } else {
                 if ((marker.degrees <= rightUpperLimit) && (marker.degrees >= leftLowerLimit)) {
-                    let compassMarkerView = CompassMarkerView(marker: marker, compassDegrees: rotationalHeading);
-                    markerContainer.addSubview(compassMarkerView);
-                    compassMarkerView.autoPinEdgesToSuperviewEdges();
+                    let compassMarkerView = CompassMarkerView(marker: marker, compassDegrees: rotationalHeading)
+                    markerContainer.addSubview(compassMarkerView)
+                    compassMarkerView.autoPinEdgesToSuperviewEdges()
                 }
             }
         }
-        let degreeMeasurement = Measurement(value: rotationalHeading, unit: UnitAngle.degrees);
-        markerContainer.transform = CGAffineTransform(rotationAngle: CGFloat(degreeMeasurement.converted(to: .radians).value));
+        let degreeMeasurement = Measurement(value: rotationalHeading, unit: UnitAngle.degrees)
+        markerContainer.transform = CGAffineTransform(rotationAngle: CGFloat(degreeMeasurement.converted(to: .radians).value))
         
-        addSubview(capsule);
-        addSubview(markerContainer);
+        addSubview(capsule)
+        addSubview(markerContainer)
         
-        capsule.autoPinEdge(toSuperviewEdge: .top);
-        capsule.autoAlignAxis(toSuperviewAxis: .vertical);
-        markerContainer.autoPinEdgesToSuperviewEdges();
-        return markerContainer;
+        capsule.autoPinEdge(toSuperviewEdge: .top)
+        capsule.autoAlignAxis(toSuperviewAxis: .vertical)
+        markerContainer.autoPinEdgesToSuperviewEdges()
+        return markerContainer
     }
     
     func updateHeading(heading: CLLocationDirection, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
-        self.targetColor = targetColor;
-        self.headingColor = headingColor;
+        self.targetColor = targetColor
+        self.headingColor = headingColor
         for v in subviews {
-            v.removeFromSuperview();
+            v.removeFromSuperview()
         }
-        layoutView(heading: heading);
+        layoutView(heading: heading)
     }
     
     func updateHeading(heading: CLLocationDirection, destinationBearing: Double, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
-        self.targetColor = targetColor;
-        self.headingColor = bearingColor;
+        self.targetColor = targetColor
+        self.headingColor = bearingColor
         for v in subviews {
-            v.removeFromSuperview();
+            v.removeFromSuperview()
         }
-        layoutView(heading: heading, destinationBearing: destinationBearing);
+        layoutView(heading: heading, destinationBearing: destinationBearing)
     }
     
 }

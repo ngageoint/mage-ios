@@ -69,6 +69,7 @@ protocol FeedItemSelectionDelegate {
         super.viewDidLoad()
         self.title = feed.title;
         tableView.rowHeight = UITableView.automaticDimension
+        
         self.dataSource = UITableViewDiffableDataSource<Int, NSManagedObjectID>(
             tableView: tableView,
             cellProvider: { (tableView, indexPath, feedItemId) in
@@ -174,7 +175,9 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
 
-            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
+            // TODO: BRENT - at a minimum, the default color needs to be set to something logical
+            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.red);
+            
             if let url: URL = feedItem.iconURL {
                 let size = 24;
 
@@ -190,7 +193,8 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
                     case .success(let value):
                         image = value.image.aspectResize(to: CGSize(width: size, height: size));
                     case .failure(_):
-                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
+                        // TODO: BRENT - at a minimum, the default color needs to be set to something logical
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.red);
                     }
                 }
             }

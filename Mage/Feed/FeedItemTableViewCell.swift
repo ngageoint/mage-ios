@@ -9,23 +9,24 @@
 import Foundation
 import PureLayout
 import Kingfisher
-import MaterialComponents.MDCCard;
+//import MaterialComponents.MDCCard;
 
 class FeedItemTableViewCell : UITableViewCell {
     private var constructed = false;
     private var feedItem: FeedItem?;
     private var didSetUpConstraints = false;
     private var actionsDelegate: FeedItemActionsDelegate?;
-    private var scheme: MDCContainerScheming?;
+    private var scheme: AppContainerScheming?;
 
-    private lazy var card: MDCCard = {
-        let card = MDCCard(forAutoLayout: ());
-        card.enableRippleBehavior = true
-        card.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
+    // TODO: BRENT - get rid of MDCCard
+    private lazy var card: UIView = {
+        let card = UIView(forAutoLayout: ());
+//        card.enableRippleBehavior = true
+//        card.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
         return card;
     }()
     
-    @objc func tap(_ card: MDCCard) {
+    @objc func tap(_ card: UIView) {
         if let feedItem = self.feedItem {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -59,14 +60,14 @@ class FeedItemTableViewCell : UITableViewCell {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
 
         self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.backgroundColor;
-        card.applyTheme(withScheme: scheme);
+//        card.applyTheme(withScheme: scheme);
         feedItemView.applyTheme(withScheme: scheme);
         actionsView.applyTheme(withScheme: scheme);
     }
@@ -75,7 +76,7 @@ class FeedItemTableViewCell : UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate?, scheme: MDCContainerScheming?) {
+    func configure(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate?, scheme: AppContainerScheming?) {
         self.feedItem = feedItem;
         self.actionsDelegate = actionsDelegate;
         card.accessibilityLabel = "feed item card \(feedItem.title ?? "")"

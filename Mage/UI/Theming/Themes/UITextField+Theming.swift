@@ -12,6 +12,20 @@ extension UITextField {
     enum TextFieldThemeType {
         case primary
         case disabled
+        case error
+    }
+    
+    func applyTheme(
+        type: TextFieldThemeType,
+        scheme: AppContainerScheming?,
+        defaultFont: UIFont? = nil
+    ) {
+        self.applyTheme(
+            type: type,
+            colorScheme: scheme?.colorScheme,
+            typographScheme: scheme?.typographyScheme,
+            defaultFont: defaultFont
+        )
     }
     
     func applyTheme(
@@ -33,6 +47,11 @@ extension UITextField {
                 backgroundColor = colorScheme.surfaceColor?.withAlphaComponent(0.5) ?? UIColor.systemGray5
                 textColor = colorScheme.surfaceColor?.withAlphaComponent(0.5) ?? UIColor.systemGray
                 tintColor = colorScheme.primaryColor?.withAlphaComponent(0.5) ?? UIColor.systemGray
+                
+            case .error:
+                 backgroundColor = colorScheme.surfaceColor ?? .systemBackground
+                 textColor = colorScheme.errorColor ?? .systemRed
+                 tintColor = colorScheme.errorColor ?? .systemRed
             }
             
             // Placeholder color
@@ -41,6 +60,7 @@ extension UITextField {
                     switch type {
                     case .primary: return 0.6
                     case .disabled: return 0.4
+                    case .error: return 0.6
                     }
                 }()
                 
@@ -58,6 +78,8 @@ extension UITextField {
                 font = defaultFont ?? typographScheme.bodyFont
             case .disabled:
                 font = defaultFont ?? typographScheme.bodyFont
+            case .error:
+                font = defaultFont ?? typographScheme.bodyFont
             }
             
             // Border
@@ -65,6 +87,7 @@ extension UITextField {
                 switch type {
                 case .primary: return colorScheme.primaryColor ?? .systemBlue
                 case .disabled: return colorScheme.onSurfaceColor ?? .systemGray
+                case .error: return colorScheme.errorColor ?? .systemRed
                 }
             }()
             

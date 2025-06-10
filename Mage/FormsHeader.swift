@@ -10,7 +10,7 @@ import Foundation
 
 class FormsHeader: UIView {
     var didSetupConstraints = false;
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     
     private lazy var headerLabel: UILabel = {
         let label: UILabel = UILabel(forAutoLayout: ());
@@ -39,11 +39,13 @@ class FormsHeader: UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: AppContainerScheming) {
         self.scheme = scheme;
-        headerLabel.font = scheme.typographyScheme.overline;
-        headerLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        reorderButton.applyTextTheme(withScheme: scheme);
+//        headerLabel.font = scheme.typographyScheme.overline;
+        headerLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
+
+        // TODO: BRENT - Fix layout
+//        reorderButton.applyTextTheme(withScheme: scheme);
         reorderButton.setTitleColor(scheme.colorScheme.primaryColorVariant, for: .normal)
         reorderButton.tintColor = scheme.colorScheme.primaryColorVariant
     }

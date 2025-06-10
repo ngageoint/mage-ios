@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "MAGE-Swift.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ObservationAccuracyRenderer : MKCircleRenderer
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 
 @end
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "AnnotationDragCallback.h"
-@import MaterialComponents;
+#import "MAGE-Swift.h"
 
 /**
  *  Common map annotation
@@ -24,8 +24,8 @@
 
 -(id)init;
 -(NSNumber *) getIdAsNumber;
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme;
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback scheme: (id<MDCContainerScheming>) scheme;
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<AppContainerScheming>) scheme;
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback scheme: (id<AppContainerScheming>) scheme;
 -(void) hidden: (BOOL) hidden;
 
 @end

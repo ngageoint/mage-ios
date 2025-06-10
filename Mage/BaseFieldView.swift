@@ -99,12 +99,12 @@ class BaseFieldView : UIView {
         super.updateConstraints();
     }
     
-    func setPlaceholder(textField: MDCFilledTextField) {
+    func setPlaceholder(textField: UITextField) {
         textField.placeholder = field[FieldKey.title.key] as? String
         if ((field[FieldKey.required.key] as? Bool) == true) {
             textField.placeholder = (textField.placeholder ?? "") + " *"
         }
-        textField.label.text = textField.placeholder;
+        textField.text = textField.placeholder;
     }
     
     func setPlaceholder(textArea: MDCFilledTextArea) {

@@ -125,13 +125,13 @@ class SearchSheetController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
-        dragIcon.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        dragIcon.backgroundColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         
         refreshingView.backgroundColor = scheme?.colorScheme.surfaceColor
         
         // TODO: BRENT MDC Changes
-        refreshingStatus.font = scheme?.typographyScheme.headlineFont
-        refreshingStatus.textColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
+        refreshingStatus.font = scheme?.typographyScheme.headline1Font
+        refreshingStatus.textColor = scheme?.colorScheme.onBackgroundColor?.withAlphaComponent(0.6)
 
         progressView.tintColor = scheme?.colorScheme.onBackgroundColor
     }
@@ -261,7 +261,7 @@ class SearchResultContentView: UIView, UIContentView {
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
         
         stackView.setCustomSpacing(4, after: nameLabel)
-        nameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        nameLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
         nameLabel.autoPinEdge(.left, to: .left, of: stackView, withOffset: 16)
         nameLabel.autoPinEdge(.right, to: .right, of: stackView, withOffset: 16)
 
@@ -269,7 +269,7 @@ class SearchResultContentView: UIView, UIContentView {
         addressLabel.autoPinEdge(.top, to: .bottom, of: nameLabel, withOffset: 16)
         addressLabel.autoPinEdge(.left, to: .left, of: stackView, withOffset: 16)
         addressLabel.autoPinEdge(.right, to: .right, of: stackView, withOffset: 16)
-        addressLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.60);
+        addressLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.60);
         addressLabel.numberOfLines = 0;
         addressLabel.lineBreakMode = .byWordWrapping;
         
