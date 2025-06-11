@@ -5,8 +5,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+//#import <MaterialComponents/MDCContainerScheme.h>
 #import "AttachmentSelectionDelegate.h"
+#import "AppContainerScheming.h"
 
 @class AttachmentModel;
 
@@ -16,8 +17,8 @@
 @property (strong, nonatomic) NSArray<NSDictionary *> *unsentAttachments;
 @property (weak, nonatomic) NSString *attachmentFormatName;
 @property (nonatomic, weak) IBOutlet id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
-@property (nonatomic, weak) id<MDCContainerScheming> containerScheme;
+@property (nonatomic, weak) id<AppContainerScheming> containerScheme;
 
 - (id) initWithButtonImage: (NSString *) imageName useErrorColor: (BOOL) useErrorColor;
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 @end

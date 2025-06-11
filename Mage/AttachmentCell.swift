@@ -8,7 +8,7 @@ import Kingfisher
 
 @objc class AttachmentCell: UICollectionViewCell {
     
-    private var button: MDCFloatingButton?;
+    private var button: UIButton?;
     
     private lazy var imageView: AttachmentUIImageView = {
         let imageView: AttachmentUIImageView = AttachmentUIImageView(image: nil);
@@ -60,10 +60,10 @@ import Kingfisher
         self.imageView.cancel();
     }
     
-    @objc public func setImage(newAttachment: [String : AnyHashable], button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
+    @objc public func setImage(newAttachment: [String : AnyHashable], button: UIButton? = nil, scheme: AppContainerScheming? = nil) {
         layoutSubviews()
         self.button = button
-        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor?.withAlphaComponent(0.4)
         self.imageView.contentMode = .scaleAspectFill
         self.imageView.kf.indicatorType = .none
         guard let contentType = newAttachment["contentType"] as? String, let localPath = newAttachment["localPath"] as? String else {
@@ -97,8 +97,8 @@ import Kingfisher
             self.imageView.contentMode = .scaleAspectFit
             let label = UILabel.newAutoLayout()
             label.text = newAttachment["contentType"] as? String
-            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            label.font = scheme?.typographyScheme.overline
+            label.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+//            label.font = scheme?.typographyScheme.overline
             label.numberOfLines = 1
             label.lineBreakMode = .byTruncatingTail
             label.autoSetDimension(.height, toSize: label.font.pointSize)
@@ -115,14 +115,14 @@ import Kingfisher
         }
     }
     
-    @objc public func setImage(attachment: AttachmentModel, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
+    @objc public func setImage(attachment: AttachmentModel, formatName:NSString, button: UIButton? = nil, scheme: AppContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
         self.imageView.kf.indicatorType = .none;
-        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor?.withAlphaComponent(0.4);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView.setAttachment(attachment: attachment);
-            self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
             self.imageView.showThumbnail(cacheOnly: !DataConnectionUtilities.shouldFetchAttachments(),
                                          completionHandler:
@@ -179,8 +179,8 @@ import Kingfisher
             self.imageView.contentMode = .scaleAspectFit;
             let label = UILabel.newAutoLayout()
             label.text = attachment.name
-            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            label.font = scheme?.typographyScheme.overline
+            label.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+//            label.font = scheme?.typographyScheme.overline
             label.numberOfLines = 1
             label.lineBreakMode = .byTruncatingTail
             label.autoSetDimension(.height, toSize: label.font.pointSize)

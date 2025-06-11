@@ -16,46 +16,46 @@ import PureLayout
 // for legacy servers add the attachment field to common
 // TODO: This can be removed once all servers are upgraded
 class EditAttachmentCardView: UIView {
-    var didSetupConstraints = false;
-    var observation: Observation;
-    weak var viewController: UIViewController?;
-    weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    var scheme: AppContainerScheming?;
-    var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    var didSetupConstraints = false
+    var observation: Observation
+    weak var viewController: UIViewController?
+    weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?
+    var scheme: AppContainerScheming?
+    var attachmentCreationCoordinator: AttachmentCreationCoordinator?
     
     lazy var attachmentField: [String: Any] = {
         let attachmentField: [String: Any] =
             [FieldKey.name.key: "attachments",
              FieldKey.type.key: "attachment"
-            ];
-        return attachmentField;
+            ]
+        return attachmentField
     }()
     
     lazy var attachmentView: AttachmentFieldView = {
-        attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, scheme:scheme);
-        let attachmentView = AttachmentFieldView(field: attachmentField, delegate: self, value: observation.orderedAttachments, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
-        return attachmentView;
+        attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, scheme:scheme)
+        let attachmentView = AttachmentFieldView(field: attachmentField, delegate: self, value: observation.orderedAttachments, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator)
+        return attachmentView
     }()
     
     init(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, viewController: UIViewController) {
-        self.observation = observation;
-        self.viewController = viewController;
-        self.attachmentSelectionDelegate = attachmentSelectionDelegate;
-        super.init(frame: CGRect.zero);
-        self.configureForAutoLayout();
-        buildView();
+        self.observation = observation
+        self.viewController = viewController
+        self.attachmentSelectionDelegate = attachmentSelectionDelegate
+        super.init(frame: CGRect.zero)
+        self.configureForAutoLayout()
+        buildView()
         self.accessibilityLabel = "Edit Attachment Card"
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
 
-        super.applyTheme(withScheme: scheme);
-        self.scheme = scheme;
-        attachmentView.applyTheme(withScheme: scheme);
-        attachmentCreationCoordinator?.applyTheme(withContainerScheme: scheme);
+//        super.applyTheme(withScheme: scheme)
+        self.scheme = scheme
+        attachmentView.applyTheme(withScheme: scheme)
+        attachmentCreationCoordinator?.applyTheme(withContainerScheme: scheme)
     }
     
     required init?(coder: NSCoder) {
@@ -64,31 +64,31 @@ class EditAttachmentCardView: UIView {
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-                attachmentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8));
-            didSetupConstraints = true;
+                attachmentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+            didSetupConstraints = true
         }
-        super.updateConstraints();
+        super.updateConstraints()
     }
     
     func buildView() {
-        self.addSubview(attachmentView);
+        self.addSubview(attachmentView)
     }
 }
 
 extension EditAttachmentCardView: FieldSelectionDelegate {
     func launchFieldSelectionViewController(viewController: UIViewController) {
-//        fieldSelectionDelegate?.launchFieldSelectionViewController(viewController: viewController);
+//        fieldSelectionDelegate?.launchFieldSelectionViewController(viewController: viewController)
     }
 }
 
 extension EditAttachmentCardView: ObservationFormFieldListener {
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
-        let newProperties = self.observation.properties as? [String: Any];
+        let newProperties = self.observation.properties as? [String: Any]
         
         if (field[FieldKey.name.key] as! String == attachmentField[FieldKey.name.key] as! String) {
-            self.observation.addToAttachments(value as! Set<Attachment>);
+            self.observation.addToAttachments(value as! Set<Attachment>)
         }
-        self.observation.properties = newProperties;
+        self.observation.properties = newProperties
     }
 }
 
