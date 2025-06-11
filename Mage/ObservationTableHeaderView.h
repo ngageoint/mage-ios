@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import <MaterialComponents/MaterialContainerScheme.h>
-#import "AppContainerScheming.h"
 
 @interface ObservationTableHeaderView : UIView
 

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AppContainerScheming.h"
 
 @class MageServer;
 

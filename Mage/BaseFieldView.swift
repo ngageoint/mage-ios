@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import MaterialComponents.MDCTextField
+//import MaterialComponents.MDCTextField
 
 class BaseFieldView : UIView {
     var didSetupConstraints = false
@@ -16,7 +16,7 @@ class BaseFieldView : UIView {
     internal var fieldValueValid: Bool! = false
     internal var value: Any?
     internal var editMode: Bool = true
-    internal var scheme: MDCContainerScheming?
+    internal var scheme: AppContainerScheming?
     
     private lazy var fieldSelectionCoordinator: FieldSelectionCoordinator? = {
         var fieldSelectionCoordinator: FieldSelectionCoordinator? = nil

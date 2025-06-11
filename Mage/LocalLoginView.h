@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginViewController.h"
-#import "AppContainerScheming.h"
 
 @interface LocalLoginView : UIStackView
 

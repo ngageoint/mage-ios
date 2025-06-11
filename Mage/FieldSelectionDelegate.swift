@@ -20,16 +20,16 @@ class FieldSelectionCoordinator {
     private var editSelect: SelectEditViewController?;
     private var geometryEdit: UIViewController?;
     private var geometryCoordinator: GeometryEditCoordinator!;
-    private var scheme: MDCContainerScheming?;
+    private var scheme: AppContainerScheming?;
     
-    public init(field: [String : Any], formField: BaseFieldView?, delegate: FieldSelectionDelegate?, scheme: MDCContainerScheming?) {
+    public init(field: [String : Any], formField: BaseFieldView?, delegate: FieldSelectionDelegate?, scheme: AppContainerScheming?) {
         self.field = field;
         self.formField = formField;
         self.delegate = delegate;
         self.scheme = scheme;
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         self.scheme = scheme;
     }
     

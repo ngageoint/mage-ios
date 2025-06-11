@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "SFGeometry.h"
 #import <MapKit/MapKit.h>
-#import "AppContainerScheming.h"
 
 @protocol GeometryEditDelegate
 

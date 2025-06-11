@@ -65,13 +65,3 @@
 #import "WMSTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
-
-//#import "AppContainerScheming.h"
-//#import "AppColorScheming.h"
-//#import "AppShapeScheming.h"
-//#import "AppTypographyScheming.h"
-//
-//#import "LightColorScheme.h"
-//
-//#import "LightAppTheme.h"
-//#import "DarkAppTheme.h"

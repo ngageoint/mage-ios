@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "SignUpDelegate.h"
-#import "AppContainerScheming.h"
 
 @interface SignUpViewController : UIViewController
 

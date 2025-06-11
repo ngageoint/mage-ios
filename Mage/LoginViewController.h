@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "ContactInfo.h"
 #import "Authentication.h"
-#import "AppContainerScheming.h"
 
 @class User;
 @class MageServer;
