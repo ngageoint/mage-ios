@@ -192,6 +192,8 @@
 		84E7141B2DF774D000F52781 /* ErrorAppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */; };
 		84E7141D2DF778B300F52781 /* NamedColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7141C2DF778B300F52781 /* NamedColorScheme.swift */; };
 		84E7141F2DF7792A00F52781 /* DisabledColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7141E2DF7792A00F52781 /* DisabledColorScheme.swift */; };
+		84E714212DF9D0EF00F52781 /* UITextView+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714202DF9D0EF00F52781 /* UITextView+Placeholder.swift */; };
+		84E714232DF9D48A00F52781 /* UITextView+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714222DF9D48A00F52781 /* UITextView+Theming.swift */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1142,6 +1144,8 @@
 		84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAppTheme.swift; sourceTree = "<group>"; };
 		84E7141C2DF778B300F52781 /* NamedColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedColorScheme.swift; sourceTree = "<group>"; };
 		84E7141E2DF7792A00F52781 /* DisabledColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledColorScheme.swift; sourceTree = "<group>"; };
+		84E714202DF9D0EF00F52781 /* UITextView+Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Placeholder.swift"; sourceTree = "<group>"; };
+		84E714222DF9D48A00F52781 /* UITextView+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Theming.swift"; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2436,6 +2440,8 @@
 				84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */,
 				84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */,
 				84E713F82DF7279700F52781 /* UITextField+Theming.swift */,
+				84E714202DF9D0EF00F52781 /* UITextView+Placeholder.swift */,
+				84E714222DF9D48A00F52781 /* UITextView+Theming.swift */,
 				84E713F62DF34EE700F52781 /* UIButton+Theming.swift */,
 				84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */,
 			);
@@ -5434,6 +5440,7 @@
 				F70688992BA4920D00D8E2EA /* ObservationLocalDataSource.swift in Sources */,
 				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
+				84E714212DF9D0EF00F52781 /* UITextView+Placeholder.swift in Sources */,
 				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
 				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
@@ -5469,6 +5476,7 @@
 				84E714152DF770CE00F52781 /* LightAppTheme.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
+				84E714232DF9D48A00F52781 /* UITextView+Theming.swift in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
 				04E2C8A028D387C2001F0812 /* GridSystems.swift in Sources */,
 				F70C34352C73D735007616FA /* DownloadingImageView.swift in Sources */,

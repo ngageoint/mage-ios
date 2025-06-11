@@ -8,19 +8,19 @@
 
 import Foundation
 import UIKit
-import MaterialComponents.MaterialTypographyScheme
-import MaterialComponents.MaterialCards
+//import MaterialComponents.MaterialTypographyScheme
+//import MaterialComponents.MaterialCards
 import PureLayout
 
 
 // for legacy servers add the attachment field to common
 // TODO: This can be removed once all servers are upgraded
-class EditAttachmentCardView: MDCCard {
+class EditAttachmentCardView: UIView {
     var didSetupConstraints = false;
     var observation: Observation;
     weak var viewController: UIViewController?;
     weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     
     lazy var attachmentField: [String: Any] = {
