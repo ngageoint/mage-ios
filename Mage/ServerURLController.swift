@@ -161,7 +161,7 @@ class ServerURLController: UIViewController {
 //        self.setServerUrlTitle.font = scheme.typographyScheme.headline6
         self.wandLabel.textColor = scheme.colorScheme.primaryColorVariant
         self.mageLabel.textColor = scheme.colorScheme.primaryColorVariant
-        errorStatus.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        errorStatus.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
 //        okButton.applyContainedTheme(withScheme: scheme)
 //        cancelButton.applyContainedTheme(withScheme: scheme)
 //        serverURL.applyTheme(withScheme: scheme)

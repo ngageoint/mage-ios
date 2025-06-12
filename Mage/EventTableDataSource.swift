@@ -8,7 +8,7 @@ import CoreData
 import UIKit
 
 class EventTableDataSource: NSObject {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var eventSelectionDelegate: EventSelectionDelegate?
     var otherFetchedResultsController: NSFetchedResultsController<Event>?
     var recentFetchedResultsController:NSFetchedResultsController<Event>?
@@ -19,7 +19,7 @@ class EventTableDataSource: NSObject {
     var headerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>?
     var footerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>?
 
-    public init(eventSelectionDelegate: EventSelectionDelegate? = nil, scheme: MDCContainerScheming? = nil) {
+    public init(eventSelectionDelegate: EventSelectionDelegate? = nil, scheme: AppContainerScheming? = nil) {
         self.scheme = scheme
         self.eventSelectionDelegate = eventSelectionDelegate
         super.init()

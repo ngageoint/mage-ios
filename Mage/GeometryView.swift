@@ -7,8 +7,6 @@
 //
 
 import Foundation
-//import MaterialComponents.MDCTextField
-//import MaterialComponents.MDCButton
 import MapFramework
 
 class GeometryView : BaseFieldView {
@@ -55,7 +53,7 @@ class GeometryView : BaseFieldView {
         return mapView
     }()
     
-    func applyTheme(withScheme scheme: AppContainerScheming?) {
+    override func applyTheme(withScheme scheme: AppContainerScheming?) {
         self.scheme = scheme
         guard let scheme = scheme else {
             return
@@ -218,13 +216,13 @@ class GeometryView : BaseFieldView {
     override func setValid(_ valid: Bool) {
         if let scheme = scheme {
             if (valid) {
-                textField.applyTheme(withScheme: scheme)
-                textField.leadingAssistiveLabel.text = nil
+//                textField.applyTheme(withScheme: scheme)
+//                textField.leadingAssistiveLabel.text = nil
                 textField.sizeToFit()
                 applyTheme(withScheme: scheme)
             } else {
-                textField.applyErrorTheme(withScheme: globalErrorContainerScheme())
-                textField.leadingAssistiveLabel.text = "\(field[FieldKey.title.key] as? String ?? "") is required"
+//                textField.applyErrorTheme(withScheme: globalErrorContainerScheme())
+//                textField.leadingAssistiveLabel.text = "\(field[FieldKey.title.key] as? String ?? "") is required"
                 textField.sizeToFit()
                 latitudeLongitudeButton.applyTheme(withScheme: globalErrorContainerScheme())
                 fieldNameLabel.textColor = scheme.colorScheme.errorColor

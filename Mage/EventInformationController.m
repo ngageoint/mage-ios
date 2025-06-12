@@ -9,11 +9,10 @@
 #import "EventInformationController.h"
 #import "EventInformationView.h"
 #import <HexColors.h>
-#import "MAGE-Swift.h"
 
 @interface EventInformationController ()
 @property (strong, nonatomic) NSArray<Form *>* forms;
-@property (strong, nonatomic) NSObject<MDCContainerScheming> *scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation EventInformationController
@@ -26,7 +25,7 @@ static const NSInteger FORMS_SECTION = 0;
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme: (id<AppContainerScheming>) containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

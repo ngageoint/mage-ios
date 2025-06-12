@@ -15,7 +15,7 @@ class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap,
 
     var user: User?
     
-    public init(user: User?, scheme: MDCContainerScheming?) {
+    public init(user: User?, scheme: AppContainerScheming?) {
         self.user = user
         super.init(scheme: scheme)
     }

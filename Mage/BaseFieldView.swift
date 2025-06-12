@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import MaterialComponents.MDCTextField
 
 class BaseFieldView : UIView {
     var didSetupConstraints = false
@@ -76,13 +75,13 @@ class BaseFieldView : UIView {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         self.scheme = scheme
         fieldSelectionCoordinator?.applyTheme(withScheme: scheme)
         fieldValue.textColor = scheme?.colorScheme.onSurfaceColor
-        fieldValue.font = scheme?.typographyScheme.body1
-        fieldNameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        if let font = scheme?.typographyScheme.body1 {
+        fieldValue.font = scheme?.typographyScheme.bodyFont
+        fieldNameLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+        if let font = scheme?.typographyScheme.bodyFont {
             let smallFont = font.withSize(font.pointSize * 0.8)
             fieldNameLabel.font = smallFont
         }

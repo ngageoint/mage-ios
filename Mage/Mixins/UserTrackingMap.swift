@@ -8,7 +8,6 @@
 
 import Foundation
 import MapKit
-import MaterialComponents
 import MapFramework
 
 protocol UserTrackingMap {
@@ -20,22 +19,28 @@ protocol UserTrackingMap {
 class UserTrackingMapMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var userTrackingMap: UserTrackingMap
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     weak var buttonParentView: UIStackView?
     var indexInView: Int = 0
     var locationManager: CLLocationManager?
     var isTrackingAnimation: Bool = false
     var locationAuthorizationStatus: CLAuthorizationStatus = .notDetermined
 
-    private lazy var trackingButton: MDCFloatingButton = {
-        let trackingButton = MDCFloatingButton(shape: .mini)
-        trackingButton.setImage(UIImage(systemName: "location"), for: .normal)
-        trackingButton.addTarget(self, action: #selector(onTrackingButtonPressed(_:)), for: .touchUpInside)
-        trackingButton.accessibilityLabel = "track location"
-        return trackingButton
+    private lazy var trackingButton: UIButton = {
+        let button = UIButton.floatingButton(
+            imageName: "location",
+            scheme: ThemeProvider.defaultTheme(),
+            useErrorColor: false,
+            size: 40.0,
+            target: self,
+            action: #selector(onTrackingButtonPressed(_:))
+        )
+        
+        button.accessibilityLabel = "track location"
+        return button
     }()
     
-    init(userTrackingMap: UserTrackingMap, buttonParentView: UIStackView?, indexInView: Int = 0, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
+    init(userTrackingMap: UserTrackingMap, buttonParentView: UIStackView?, indexInView: Int = 0, locationManager: CLLocationManager? = CLLocationManager(), scheme: AppContainerScheming?) {
         self.userTrackingMap = userTrackingMap
         self.mapView = userTrackingMap.mapView
         self.scheme = scheme
@@ -49,7 +54,7 @@ class UserTrackingMapMixin: NSObject, MapMixin {
         locationManager = nil
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }

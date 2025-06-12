@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MAGE-Swift.h"
 
 @interface Observation (Section)
 

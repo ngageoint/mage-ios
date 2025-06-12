@@ -18,7 +18,7 @@ protocol FollowUser {
 class FollowUserMapMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var _followedUser: User?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var fetchedResultsController: NSFetchedResultsController<Location>?
     var gpsFetchedResultsController: NSFetchedResultsController<GPSLocation>?
 
@@ -32,7 +32,7 @@ class FollowUserMapMixin: NSObject, MapMixin {
         }
     }
     
-    init(followUser: FollowUser, user: User? = nil, scheme: MDCContainerScheming?) {
+    init(followUser: FollowUser, user: User? = nil, scheme: AppContainerScheming?) {
         self.mapView = followUser.mapView
         self.scheme = scheme
         self._followedUser = user

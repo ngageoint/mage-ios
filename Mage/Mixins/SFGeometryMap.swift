@@ -14,7 +14,7 @@ import sf_ios
 
 protocol SFGeometryMap {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var sfGeometryMapMixin: SFGeometryMapMixin? { get set }
 }
 

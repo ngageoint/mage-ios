@@ -7,7 +7,6 @@
 //
 
 #import "GridTypeTableViewCell.h"
-#import "MAGE-Swift.h"
 
 @implementation GridTypeTableViewCell
 

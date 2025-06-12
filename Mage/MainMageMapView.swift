@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MaterialComponents
 import CoreData
 
 class MainMageMapView: 
@@ -83,7 +82,7 @@ class MainMageMapView:
         return buttonStack
     }()
     
-    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: MDCContainerScheming?, router: MageRouter) {
+    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: AppContainerScheming?, router: MageRouter) {
         self.viewController = viewController
         self.navigationController = navigationController
         self.router = router

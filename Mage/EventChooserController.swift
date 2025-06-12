@@ -15,7 +15,7 @@ func actionButtonTapped()
 }
 
 @objc class EventChooserController: UIViewController {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var didSetupConstraints = false
     var delegate: EventSelectionDelegate?
     var eventDataSource: EventTableDataSource?
@@ -60,29 +60,26 @@ func actionButtonTapped()
     private lazy var eventInstructions: UILabel = {
         let eventInstructions = UILabel.newAutoLayout()
         eventInstructions.numberOfLines = 0
-        eventInstructions.text = "Please choose an event.  The observations you create and your reported location will be part of the selected event."
+        eventInstructions.text = "Please choose an event. The observations you create and your reported location will be part of the selected event."
         eventInstructions.lineBreakMode = .byWordWrapping
         eventInstructions.textAlignment = .center
         eventInstructions.isHidden = true
         return eventInstructions
     }()
     
-    private lazy var refreshingButton: MDCFloatingButton = {
-        let refreshingButton = MDCFloatingButton(shape: .default)
-        refreshingButton.mode = MDCFloatingButtonMode.expanded
-        refreshingButton.setImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
-        refreshingButton.addTarget(self, action: #selector(refreshingButtonTapped), for: .touchUpInside)
-        refreshingButton.accessibilityLabel = "Refresh Events"
-        refreshingButton.setTitle("Refresh Events", for: .normal)
-        refreshingButton.isHidden = true
+    private lazy var refreshingButton: UIButton = {
+        let refreshingButton = UIButton.floatingButton(
+            imageName: "arrow.clockwise",
+            scheme: self.scheme,
+            target: self,
+            action: #selector(refreshingButtonTapped),
+            accessibilityLabel: "Refresh Events")
         return refreshingButton
     }()
     
-    lazy var progressView: MDCProgressView = {
-        let progressView = MDCProgressView(forAutoLayout: ())
-        progressView.mode = MDCProgressViewMode.indeterminate
+    lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView(forAutoLayout: ())
         progressView.isHidden = false
-        progressView.startAnimating()
         return progressView
     }()
     
@@ -122,7 +119,7 @@ func actionButtonTapped()
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(delegate: EventSelectionDelegate, scheme: MDCContainerScheming? = nil) {
+    @objc convenience public init(delegate: EventSelectionDelegate, scheme: AppContainerScheming? = nil) {
         self.init(frame: CGRect.zero);
         self.modalPresentationStyle = .fullScreen
         self.scheme = scheme
@@ -171,7 +168,7 @@ func actionButtonTapped()
         }
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
@@ -179,7 +176,7 @@ func actionButtonTapped()
         self.scheme = containerScheme
         view.backgroundColor = scheme?.colorScheme.primaryColor
         eventInstructions.textColor = scheme?.colorScheme.onPrimaryColor
-        eventInstructions.font = scheme?.typographyScheme.caption
+        eventInstructions.font = scheme?.typographyScheme.captionFont
         // actionbutton
         collectionView.backgroundColor = scheme?.colorScheme.surfaceColor
         refreshingButton.applySecondaryTheme(withScheme: containerScheme)
@@ -190,13 +187,13 @@ func actionButtonTapped()
         searchController.searchBar.searchTextField.backgroundColor = scheme?.colorScheme.surfaceColor;
         refreshingView.backgroundColor = scheme?.colorScheme.primaryColor
         refreshingStatus.textColor = scheme?.colorScheme.onPrimaryColor
-        refreshingStatus.font = scheme?.typographyScheme.caption
+        refreshingStatus.font = scheme?.typographyScheme.captionFont
         progressView.progressTintColor = scheme?.colorScheme.primaryColor
         var red: CGFloat = 1.0
         var blue: CGFloat = 1.0
         var green: CGFloat = 1.0 
         var alpha: CGFloat = 1.0
-        scheme?.colorScheme.primaryColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        scheme?.colorScheme.primaryColor?.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         progressView.trackTintColor = UIColor(red: CGFloat.minimum(red + 0.2, 1.0), green: CGFloat.minimum(green + 0.2, 1.0), blue: CGFloat.minimum(blue + 0.2, 1.0), alpha: 1.0)
     }
     
@@ -318,7 +315,7 @@ func actionButtonTapped()
                 }, completion: nil)
             }
         })
-        progressView.stopAnimating()
+        progressView.isHidden = true
     }
     
     @objc func refreshingButtonTapped() {

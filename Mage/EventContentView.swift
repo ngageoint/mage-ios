@@ -11,7 +11,7 @@ import UIKit
 
 struct EventScheme {
     var event: Event?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
 }
 
 // content view's view model, also generates the content view instance for the cell
@@ -108,7 +108,7 @@ class EventContentView: UIView, UIContentView {
 // 1 job: generate a properly configured content configuration object based on the state (selected, highlighted, disabled, etc.) of the cell and then assign the configuration to itself.
 class EventCell: UICollectionViewListCell {
     var event: Event?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     
     override func updateConfiguration(using state: UICellConfigurationState) {
         var newConfiguration = EventContentConfiguration().updated(for: state)
@@ -119,9 +119,9 @@ class EventCell: UICollectionViewListCell {
         newConfiguration.offlineCount = offline?.count
         
         newConfiguration.eventNameColor = scheme?.colorScheme.onSurfaceColor
-        newConfiguration.eventDescriptionColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        newConfiguration.eventNameFont = scheme?.typographyScheme.subtitle1
-        newConfiguration.eventDescriptionFont = scheme?.typographyScheme.subtitle2
+        newConfiguration.eventDescriptionColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+        newConfiguration.eventNameFont = scheme?.typographyScheme.subtitle1Font
+        newConfiguration.eventDescriptionFont = scheme?.typographyScheme.subtitle2Font
         contentConfiguration = newConfiguration
     }
 }

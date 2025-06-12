@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "AppContainerScheming.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

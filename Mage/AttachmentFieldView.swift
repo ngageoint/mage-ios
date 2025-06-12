@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialComponents.MDCButton
 import UIKit
 
 @objc protocol AttachmentCreationDelegate {
@@ -107,91 +106,81 @@ class AttachmentFieldView : BaseFieldView {
         return stackView
     }()
     
-    private lazy var audioButton: MDCButton = {
-        let button = MDCButton()
+    private lazy var audioButton: UIButton = {
+        let button = UIButton()
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Audio"
         button.setImage(UIImage(systemName: "mic.fill")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(addAudioAttachment), for: .touchUpInside)
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0)
-        button.inkMaxRippleRadius = 30
-        button.inkStyle = .unbounded
         return button
     }()
     
-    private lazy var cameraButton: MDCButton = {
-        let button = MDCButton()
+    private lazy var cameraButton: UIButton = {
+        let button = UIButton()
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera"
         button.setImage(UIImage(systemName: "camera.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(addCameraAttachment), for: .touchUpInside)
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0)
-        button.inkMaxRippleRadius = 30
-        button.inkStyle = .unbounded
         return button
     }()
     
-    private lazy var galleryButton: MDCButton = {
-        let button = MDCButton()
+    private lazy var galleryButton: UIButton = {
+        let button = UIButton()
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Gallery"
         button.setImage(UIImage(systemName: "photo.fill.on.rectangle.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(addGalleryAttachment), for: .touchUpInside)
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0)
-        button.inkMaxRippleRadius = 30
-        button.inkStyle = .unbounded
         return button
     }()
     
-    private lazy var videoButton: MDCButton = {
-        let button = MDCButton()
+    private lazy var videoButton: UIButton = {
+        let button = UIButton()
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Video"
         button.setImage(UIImage(named: "video")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(addVideoAttachment), for: .touchUpInside)
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0)
-        button.inkMaxRippleRadius = 30
-        button.inkStyle = .unbounded
         return button
     }()
     
-    private lazy var fileButton: MDCButton = {
-        let button = MDCButton()
+    private lazy var fileButton: UIButton = {
+        let button = UIButton()
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " File"
         button.setImage(UIImage(systemName: "paperclip")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal)
         button.addTarget(self, action: #selector(addFileAttachment), for: .touchUpInside)
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0)
-        button.inkMaxRippleRadius = 30
-        button.inkStyle = .unbounded
         return button
     }()
     
-    func applyTheme(withScheme scheme: AppContainerScheming?) {
+    override func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
 
         super.applyTheme(withScheme: scheme)
-        audioButton.applyTextTheme(withScheme: scheme)
-        audioButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        videoButton.applyTextTheme(withScheme: scheme)
-        videoButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        galleryButton.applyTextTheme(withScheme: scheme)
-        galleryButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        cameraButton.applyTextTheme(withScheme: scheme)
-        cameraButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        fileButton.applyTextTheme(withScheme: scheme)
-        fileButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        errorLabel.font = scheme.typographyScheme.caption
-        errorLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+//        audioButton.applyTextTheme(withScheme: scheme)
+        audioButton.setImageTintColor(scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6), for: .normal)
+//        videoButton.applyTextTheme(withScheme: scheme)
+        videoButton.setImageTintColor(scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6), for: .normal)
+//        galleryButton.applyTextTheme(withScheme: scheme)
+        galleryButton.setImageTintColor(scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6), for: .normal)
+//        cameraButton.applyTextTheme(withScheme: scheme)
+        cameraButton.setImageTintColor(scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6), for: .normal)
+//        fileButton.applyTextTheme(withScheme: scheme)
+        fileButton.setImageTintColor(scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6), for: .normal)
+        errorLabel.font = scheme.typographyScheme.captionFont
+        errorLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         errorLabelSpacerView.backgroundColor = scheme.colorScheme.surfaceColor
         if (editMode) {
-            self.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12)
+            self.backgroundColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.12)
             attachmentCollectionView.backgroundColor = .clear
             attachmentHolderView.backgroundColor = .clear
         }
         attachmentCollectionDataStore.applyTheme(withContainerScheme: scheme)
-        emptyDoc.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        emptyDoc.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         attachmentCollectionEmptyView.backgroundColor = .clear
-        divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12)
-        noAttachmentsLabel.font = scheme.typographyScheme.headline5
-        noAttachmentsLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        divider.backgroundColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.12)
+        noAttachmentsLabel.font = scheme.typographyScheme.headline5Font
+        noAttachmentsLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         attachmentCreationCoordinator?.applyTheme(withContainerScheme: scheme)
     }
     

@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 #import "AttachmentSelectionDelegate.h"
+#import "AppContainerScheming.h"
+#import "MAGE-Swift.h"
 
 @class AttachmentModel;
 
@@ -15,7 +17,7 @@
 @property (strong, nonatomic) NSArray<NSDictionary *> *unsentAttachments;
 @property (weak, nonatomic) NSString *attachmentFormatName;
 @property (nonatomic, weak) IBOutlet id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
-@property (nonatomic, strong) (id<AppContainerScheming>)containerScheme;
+@property (nonatomic, weak) id<AppContainerScheming> containerScheme;
 
 - (id) initWithButtonImage: (NSString *) imageName useErrorColor: (BOOL) useErrorColor;
 - (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;

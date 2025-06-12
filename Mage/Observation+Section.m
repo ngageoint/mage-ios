@@ -8,7 +8,6 @@
 
 #import "Observation+Section.h"
 #import "NSDate+display.h"
-#import "MAGE-Swift.h"
 
 @implementation Observation (Section)
 

@@ -5,9 +5,8 @@
 //
 
 #import "AttachmentCollectionDataStore.h"
-// TODO: BRENT
-//#import <MaterialComponents/MDCFloatingButton.h>
 #import "MAGE-Swift.h"
+// TODO: BRENT
 
 @interface AttachmentCollectionDataStore ()
 @property (strong, nonatomic) NSString *imageName;
@@ -36,12 +35,18 @@
 
     if (self.imageName != nil) {
         button = [UIButton floatingButtonWithImageName: self.imageName
-                                                scheme:self.containerScheme
-                                         useErrorColor:self.useErrorColor
-                                                  size:40.0
-                                                target:self
-                                                action:@selector(attachmentFabTapped:)
-                                                   tag:indexPath.row];
+                                                scheme: self.containerScheme
+                                                target: self
+                                                action: @selector(attachmentFabTapped:)
+                                                   tag: indexPath.row];
+        
+        button = [UIButton floatingButtonWithImageName: self.imageName
+                                                scheme: self.containerScheme
+                                         useErrorColor: self.useErrorColor
+                                                  size: 40.0
+                                                target: self
+                                                action: @selector(attachmentFabTapped:)
+                                                   tag: indexPath.row];
     }
     
     AttachmentModel *attachment = [self attachmentAtIndex:[indexPath row]];
@@ -55,7 +60,7 @@
     return cell;
 }
 
-- (void) attachmentFabTapped: (MDCFloatingButton *) sender {
+- (void) attachmentFabTapped: (UIButton *) sender {
     if (self.attachmentSelectionDelegate) {
         AttachmentModel *attachment = [self attachmentAtIndex:sender.tag];
         if (attachment != nil) {

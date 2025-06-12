@@ -45,13 +45,13 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
         }
     }
 
-    public init(observation: Observation?, scheme: MDCContainerScheming?) {
+    public init(observation: Observation?, scheme: AppContainerScheming?) {
         super.init(scheme: scheme)
         self._observation = observation
         self.scheme = scheme
     }
     
-    public init(sfgeometry: SFGeometry?, scheme: MDCContainerScheming?) {
+    public init(sfgeometry: SFGeometry?, scheme: AppContainerScheming?) {
         super.init(scheme: scheme)
         self._sfgeometry = sfgeometry
         self.scheme = scheme
@@ -98,7 +98,7 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
         }
     }
     
-    override func applyTheme(scheme: MDCContainerScheming?) {
+    override func applyTheme(scheme: AppContainerScheming?) {
         super.applyTheme(scheme: scheme)
         addFeature()
     }

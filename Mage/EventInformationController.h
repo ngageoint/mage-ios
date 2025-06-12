@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppContainerScheming.h"
+#import "MAGE-Swift.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
