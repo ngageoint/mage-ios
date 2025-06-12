@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "MAGE-Swift.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

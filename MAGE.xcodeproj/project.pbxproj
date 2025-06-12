@@ -176,10 +176,6 @@
 		84E713F92DF7279700F52781 /* UITextField+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713F82DF7279700F52781 /* UITextField+Theming.swift */; };
 		84E713FB2DF72C6700F52781 /* UILabel+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */; };
 		84E713FD2DF7472400F52781 /* ThemingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FC2DF7472400F52781 /* ThemingConstants.swift */; };
-		84E713FF2DF7684700F52781 /* AppTypographyScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713FE2DF7684700F52781 /* AppTypographyScheming.swift */; };
-		84E714012DF7685600F52781 /* AppColorScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714002DF7685600F52781 /* AppColorScheming.swift */; };
-		84E714032DF7686200F52781 /* AppShapeScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714022DF7686200F52781 /* AppShapeScheming.swift */; };
-		84E714052DF7687000F52781 /* AppContainerScheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714042DF7687000F52781 /* AppContainerScheming.swift */; };
 		84E714072DF76A1100F52781 /* LightColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714062DF76A1100F52781 /* LightColorScheme.swift */; };
 		84E714092DF76A2900F52781 /* DarkColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714082DF76A2900F52781 /* DarkColorScheme.swift */; };
 		84E7140B2DF76A3700F52781 /* ErrorColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E7140A2DF76A3700F52781 /* ErrorColorScheme.swift */; };
@@ -1130,10 +1126,6 @@
 		84E713F82DF7279700F52781 /* UITextField+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Theming.swift"; sourceTree = "<group>"; };
 		84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Theming.swift"; sourceTree = "<group>"; };
 		84E713FC2DF7472400F52781 /* ThemingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemingConstants.swift; sourceTree = "<group>"; };
-		84E713FE2DF7684700F52781 /* AppTypographyScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypographyScheming.swift; sourceTree = "<group>"; };
-		84E714002DF7685600F52781 /* AppColorScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorScheming.swift; sourceTree = "<group>"; };
-		84E714022DF7686200F52781 /* AppShapeScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShapeScheming.swift; sourceTree = "<group>"; };
-		84E714042DF7687000F52781 /* AppContainerScheming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainerScheming.swift; sourceTree = "<group>"; };
 		84E714062DF76A1100F52781 /* LightColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightColorScheme.swift; sourceTree = "<group>"; };
 		84E714082DF76A2900F52781 /* DarkColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkColorScheme.swift; sourceTree = "<group>"; };
 		84E7140A2DF76A3700F52781 /* ErrorColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorColorScheme.swift; sourceTree = "<group>"; };
@@ -1150,6 +1142,10 @@
 		84E714222DF9D48A00F52781 /* UITextView+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Theming.swift"; sourceTree = "<group>"; };
 		84E714242DF9FE2500F52781 /* UIButton+Floating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Floating.swift"; sourceTree = "<group>"; };
 		84E714262DFA05E800F52781 /* UIButton+ImageTintColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+ImageTintColor.swift"; sourceTree = "<group>"; };
+		84E714282DFA23AB00F52781 /* AppContainerScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppContainerScheming.h; sourceTree = "<group>"; };
+		84E714292DFA23C300F52781 /* AppColorScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppColorScheming.h; sourceTree = "<group>"; };
+		84E7142A2DFA240900F52781 /* AppShapeScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppShapeScheming.h; sourceTree = "<group>"; };
+		84E7142B2DFA243600F52781 /* AppTypographyScheming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTypographyScheming.h; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2457,10 +2453,6 @@
 		84E714132DF76ECA00F52781 /* Schemes */ = {
 			isa = PBXGroup;
 			children = (
-				84E714042DF7687000F52781 /* AppContainerScheming.swift */,
-				84E713FE2DF7684700F52781 /* AppTypographyScheming.swift */,
-				84E714002DF7685600F52781 /* AppColorScheming.swift */,
-				84E714022DF7686200F52781 /* AppShapeScheming.swift */,
 				84E714062DF76A1100F52781 /* LightColorScheme.swift */,
 				84E7141C2DF778B300F52781 /* NamedColorScheme.swift */,
 				84E7141E2DF7792A00F52781 /* DisabledColorScheme.swift */,
@@ -2469,6 +2461,10 @@
 				84E7140E2DF76E7C00F52781 /* DefaultShapeScheme.swift */,
 				84E714102DF76E8C00F52781 /* DefaultTypographyScheme.swift */,
 				84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */,
+				84E714282DFA23AB00F52781 /* AppContainerScheming.h */,
+				84E714292DFA23C300F52781 /* AppColorScheming.h */,
+				84E7142A2DFA240900F52781 /* AppShapeScheming.h */,
+				84E7142B2DFA243600F52781 /* AppTypographyScheming.h */,
 			);
 			path = Schemes;
 			sourceTree = "<group>";
@@ -4993,7 +4989,6 @@
 				F79D2940282AC907008FD45E /* EventContentView.swift in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */,
-				84E714052DF7687000F52781 /* AppContainerScheming.swift in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
 				F7DE98762C12493B005372F8 /* ObservationLocationRepository.swift in Sources */,
@@ -5350,7 +5345,6 @@
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
-				84E714012DF7685600F52781 /* AppColorScheming.swift in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */,
@@ -5456,7 +5450,6 @@
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.swift in Sources */,
 				F763FF0E2C7663A600403A00 /* UserService.swift in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,
-				84E714032DF7686200F52781 /* AppShapeScheming.swift in Sources */,
 				84E713EF2DF32F2400F52781 /* ThemeProvider.swift in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F73564D52C6180C500466813 /* ObservationFavoriteRepository.swift in Sources */,
@@ -5529,7 +5522,6 @@
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
-				84E713FF2DF7684700F52781 /* AppTypographyScheming.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */,

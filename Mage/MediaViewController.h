@@ -5,11 +5,8 @@
 //    
 //
 
-
 #import <UIKit/UIKit.h>
 #import "Recording.h"
-#import "MAGE-Swift.h"
-
 
 @protocol AudioRecordingDelegate;
 

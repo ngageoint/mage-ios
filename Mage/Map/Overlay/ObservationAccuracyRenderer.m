@@ -8,6 +8,7 @@
 
 #import "ObservationAccuracyRenderer.h"
 #import "ObservationAccuracy.h"
+#import "MAGE-Swift.h"
 
 @implementation ObservationAccuracyRenderer
 

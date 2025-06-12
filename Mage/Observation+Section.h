@@ -6,7 +6,7 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "MAGE-Swift.h"
+#import <Foundation/Foundation.h>
 
 @interface Observation (Section)
 

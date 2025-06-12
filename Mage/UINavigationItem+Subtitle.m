@@ -8,6 +8,7 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import <objc/runtime.h>
+#import "MAGE-Swift.h"
 
 @implementation UINavigationItem (Subtitle)
 

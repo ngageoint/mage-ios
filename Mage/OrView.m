@@ -7,13 +7,14 @@
 //
 
 #import "OrView.h"
+#import "MAGE-Swift.h"
 
 @interface OrView()
 
 @property (weak, nonatomic) IBOutlet UILabel *orLabel;
 @property (weak, nonatomic) IBOutlet UIView *rightLine;
 @property (weak, nonatomic) IBOutlet UIView *leftLine;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 
 @end
 

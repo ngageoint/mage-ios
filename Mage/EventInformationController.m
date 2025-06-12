@@ -9,23 +9,24 @@
 #import "EventInformationController.h"
 #import "EventInformationView.h"
 #import <HexColors.h>
+#import "MAGE-Swift.h"
 
 @interface EventInformationController ()
 @property (strong, nonatomic) NSArray<Form *>* forms;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSObject<MDCContainerScheming> *scheme;
 @end
 
 @implementation EventInformationController
 
 static const NSInteger FORMS_SECTION = 0;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.scheme = containerScheme;
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

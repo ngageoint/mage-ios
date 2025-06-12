@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 @end
 
 @implementation LocalLoginView

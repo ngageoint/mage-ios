@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MAGE-Swift.h"
 
 @protocol GridTypeDelegate
 

@@ -15,7 +15,7 @@
 @property (strong, nonatomic) NSArray<NSDictionary *> *unsentAttachments;
 @property (weak, nonatomic) NSString *attachmentFormatName;
 @property (nonatomic, weak) IBOutlet id<AttachmentSelectionDelegate> attachmentSelectionDelegate;
-@property (nonatomic, weak) id<AppContainerScheming> containerScheme;
+@property (nonatomic, strong) (id<AppContainerScheming>)containerScheme;
 
 - (id) initWithButtonImage: (NSString *) imageName useErrorColor: (BOOL) useErrorColor;
 - (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;

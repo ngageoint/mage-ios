@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MAGE-Swift.h"
-#import <MaterialComponents/MDCContainerScheme.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) id<EventInformationControllerDelegate> delegate;
 @property (strong, nonatomic) Event* event;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme;
 
 @end
 

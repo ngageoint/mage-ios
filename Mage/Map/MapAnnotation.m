@@ -7,6 +7,7 @@
 //
 
 #import "MapAnnotation.h"
+#import "MAGE-Swift.h"
 
 @implementation MapAnnotation
 

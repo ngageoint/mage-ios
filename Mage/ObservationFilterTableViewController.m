@@ -30,7 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lastLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *periodSegmentedControl;
 @property (weak, nonatomic) IBOutlet UITextField *timeNumberTextField;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 @end
 
 @implementation ObservationFilterTableViewController

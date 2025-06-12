@@ -11,7 +11,7 @@
 
 @interface IDPLoginView()<AuthenticationButtonDelegate>
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 @end
 
 @implementation IDPLoginView

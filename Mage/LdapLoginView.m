@@ -22,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
 @property (strong, nonatomic) UIFont *passwordFont;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 
 @end
 

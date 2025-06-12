@@ -3,6 +3,7 @@
 #import <CoreAudio/CoreAudioTypes.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "MobileCoreServices/UTCoreTypes.h"
+#import "MAGE-Swift.h"
 
 @interface MediaViewController ()<AVAudioRecorderDelegate,AVAudioPlayerDelegate>{
     BOOL isRecording;

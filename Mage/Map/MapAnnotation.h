@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "AnnotationDragCallback.h"
-#import "MAGE-Swift.h"
+#import "AppContainerScheming.h"
 
 /**
  *  Common map annotation

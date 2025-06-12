@@ -8,6 +8,7 @@
 
 #import "AuthenticationButton.h"
 #import "UIColor+Adjust.h"
+#import "MAGE-Swift.h"
 
 @import HexColors;
 
@@ -19,7 +20,7 @@
 @property (weak, nonatomic) UIStackView *authenticationButton;
 @property (strong, nonatomic) UIColor *buttonColor;
 @property (strong, nonatomic) UIColor *buttonColorHighlighted;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 @end
 
 @implementation AuthenticationButton

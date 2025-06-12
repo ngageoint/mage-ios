@@ -13,6 +13,6 @@
 @property (strong, nonatomic) UILabel * _Nullable titleLabel;
 @property (strong, nonatomic) UILabel * _Nullable subtitleLabel;
 
-- (void) setTitle:(nullable NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<AppContainerScheming>_Nullable)containerScheme;
+- (void) setTitle:(nullable NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<AppContainerScheming>)containerScheme;
 
 @end

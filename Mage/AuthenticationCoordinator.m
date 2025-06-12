@@ -31,7 +31,7 @@
 @property (weak, nonatomic) id<AuthenticationDelegate> delegate;
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
-@property (strong, nonatomic) id<AppContainerScheming> scheme;
+@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end

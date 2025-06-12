@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MAGE-Swift.h"
 #import "LoginViewController.h"
 
 @interface LdapLoginView : UIStackView
