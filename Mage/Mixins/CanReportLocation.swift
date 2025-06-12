@@ -8,12 +8,11 @@
 
 import Foundation
 import MapKit
-import MaterialComponents
 import MapFramework
 
 protocol CanReportLocation {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var navigationController: UINavigationController? { get }
     var canReportLocationMixin: CanReportLocationMixin? { get set }
 }
@@ -25,12 +24,14 @@ class CanReportLocationMixin: NSObject, MapMixin {
     var locationManager: CLLocationManager?
     var locationAuthorizationStatus: CLAuthorizationStatus = .notDetermined
     
-    private lazy var reportLocationButton: MDCFloatingButton = {
-        let reportLocationButton = MDCFloatingButton(shape: .mini)
-        reportLocationButton.setImage(UIImage(named:"location_tracking_off"), for: .normal)
-        reportLocationButton.addTarget(self, action: #selector(reportLocationButtonPressed(_:)), for: .touchUpInside)
-        reportLocationButton.accessibilityLabel = "report location"
-        return reportLocationButton
+    private lazy var reportLocationButton: UIButton = {
+        let button = UIButton.floatingButton(
+            imageName: "location_tracking_off",
+            scheme: nil,
+            target: self,
+            action: #selector(reportLocationButtonPressed),
+            accessibilityLabel: "report location")
+        return button
     }()
     
     init(canReportLocation: CanReportLocation, buttonParentView: UIStackView?, indexInView: Int = 1, locationManager: CLLocationManager? = CLLocationManager()) {

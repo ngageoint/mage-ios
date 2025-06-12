@@ -244,7 +244,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
                     UIPasteboard.general.string = location.coordinate.toDisplay()
                 
                 // TODO: BRENT - MDC
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location.coordinate.toDisplay()) copied to clipboard"))
+//                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location.coordinate.toDisplay()) copied to clipboard"))
             }))
         }
         

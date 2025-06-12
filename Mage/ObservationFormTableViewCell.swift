@@ -98,16 +98,16 @@ class ObservationFormTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
-        formNameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        formNameLabel.font = scheme?.typographyScheme.overline;
-        primaryLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        primaryLabel.font = scheme?.typographyScheme.headline6;
-        secondaryLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        secondaryLabel.font = scheme?.typographyScheme.subtitle2;
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
+        formNameLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
+//        formNameLabel.font = scheme?.typographyScheme.overline;
+        primaryLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
+        primaryLabel.font = scheme?.typographyScheme.headline6Font;
+        secondaryLabel.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
+        secondaryLabel.font = scheme?.typographyScheme.subtitle2Font;
     }
     
-    func configure(observationForm: [String : Any], eventForm: Form, scheme: MDCContainerScheming?) {
+    func configure(observationForm: [String : Any], eventForm: Form, scheme: AppContainerScheming?) {
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;

@@ -13,7 +13,7 @@ import MapFramework
 protocol CanCreateObservation {
     var mapView: MKMapView? { get set }
     var navigationController: UINavigationController? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var canCreateObservationMixin: CanCreateObservationMixin? { get set }
 }
 
@@ -26,13 +26,16 @@ class CanCreateObservationMixin: NSObject, MapMixin {
     weak var locationService: LocationService?
     var shouldShowFab: Bool = true
     
-    private lazy var createFab: MDCFloatingButton = {
-        let createFab = MDCFloatingButton(shape: .default)
-        createFab.setImage(UIImage(named:"add_location"), for: .normal)
-        createFab.addTarget(self, action: #selector(createNewObservation(_:)), for: .touchUpInside)
-        createFab.accessibilityLabel = "New"
-        createFab.isHidden = !shouldShowFab
-        return createFab
+    private lazy var createFab: UIButton = {
+        let button = UIButton.floatingButton(
+            imageName: "add_location",
+            scheme: nil,
+            target: self,
+            action: #selector(createNewObservation),
+            accessibilityLabel: "New")
+        
+        button.isHidden = !shouldShowFab
+        return button
     }()
     
     init(canCreateObservation: CanCreateObservation, shouldShowFab: Bool? = true, rootView: UIView?, mapStackView: UIStackView?, locationService: LocationService? = nil) {
@@ -48,7 +51,7 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         self.shouldShowFab = shouldShowFab ?? true
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }

@@ -16,7 +16,7 @@ protocol FeedItemDelegate {
 }
 protocol FeedsMap {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var feedsMapMixin: FeedsMapMixin? { get set }
 }
 

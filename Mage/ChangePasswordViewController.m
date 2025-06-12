@@ -42,7 +42,7 @@
 @property (nonatomic) BOOL loggedIn;
 @property (strong, nonatomic) id<ChangePasswordDelegate> delegate;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
-@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 

@@ -40,7 +40,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthText;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordText;
-@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
 @property (weak, nonatomic) IBOutlet WKWebView *captchaView;
 @property (weak, nonatomic) IBOutlet UIView *captchaContainer;

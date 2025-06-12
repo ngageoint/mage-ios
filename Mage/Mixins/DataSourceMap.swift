@@ -22,7 +22,7 @@ class DataSourceMap: MapMixin {
     
     var viewModel: DataSourceMapViewModel?
 
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     weak var mapState: MapState?
     weak var mapView: MKMapView?
 
@@ -41,7 +41,7 @@ class DataSourceMap: MapMixin {
         cancellable.removeAll()
     }
 
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         self.scheme = scheme
     }
 

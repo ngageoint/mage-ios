@@ -15,7 +15,7 @@ import DataSourceDefinition
 
 protocol StaticLayerMap {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var staticLayerMapMixin: StaticLayerMapMixin? { get set }
 }
 

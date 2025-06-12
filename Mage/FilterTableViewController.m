@@ -10,16 +10,15 @@
 #import "MageFilter.h"
 #import "ObservationFilterTableViewController.h"
 #import "LocationFilterTableViewController.h"
-#import <MaterialComponents/MDCContainerScheme.h>
 
 @interface FilterTableViewController ()
 @property (assign, nonatomic) BOOL isPopover;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation FilterTableViewController
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

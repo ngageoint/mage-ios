@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialComponents.MDCContainerScheme;
 
 @objc protocol ObservationFormReorderDelegate {
     func formsReordered(observation: Observation);
@@ -21,7 +20,7 @@ class ObservationFormReorder: UITableViewController {
     let delegate: ObservationFormReorderDelegate;
     var observationForms: [[String: Any]] = [];
     var observationProperties: [String: Any] = [ : ];
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     
     private lazy var event: Event? = {
         guard let eventId = observation.eventId, let context = observation.managedObjectContext else {
@@ -54,7 +53,7 @@ class ObservationFormReorder: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public init(observation: Observation, delegate: ObservationFormReorderDelegate, containerScheme: MDCContainerScheming?) {
+    public init(observation: Observation, delegate: ObservationFormReorderDelegate, containerScheme: AppContainerScheming?) {
         self.observation = observation
         self.delegate = delegate;
         self.scheme = containerScheme;
@@ -73,7 +72,7 @@ class ObservationFormReorder: UITableViewController {
         }
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
@@ -82,8 +81,8 @@ class ObservationFormReorder: UITableViewController {
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         
-        self.descriptionHeaderView.font = containerScheme.typographyScheme.overline;
-        self.descriptionHeaderView.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
+//        self.descriptionHeaderView.font = containerScheme.typographyScheme.overline;
+        self.descriptionHeaderView.textColor = containerScheme.colorScheme.onBackgroundColor?.withAlphaComponent(0.6)
     }
     
     override func viewDidLoad() {

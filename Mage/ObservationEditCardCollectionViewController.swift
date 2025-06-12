@@ -352,26 +352,29 @@ import UIKit
         let formSpacerView = UIView(forAutoLayout: ())
         formSpacerView.addSubview(formView)
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .bottom)
-        let button = MDCButton(forAutoLayout: ())
+        
+        let button = UIButton(forAutoLayout: ())
         button.accessibilityLabel = "Delete Form"
         button.accessibilityIdentifier = "Delete Form"
         button.setTitle("Delete Form", for: .normal)
-        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5)
+//        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5)
         button.addTarget(self, action: #selector(deleteForm(sender:)), for: .allTouchEvents)
         button.tag = index
 
         let divider = UIView(forAutoLayout: ())
-        divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12)
+        divider.backgroundColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12)
         divider.autoSetDimension(.height, toSize: 1)
+        
         formSpacerView.addSubview(divider)
         divider.autoPinEdge(toSuperviewEdge: .left)
         divider.autoPinEdge(toSuperviewEdge: .right)
         divider.autoPinEdge(.top, to: .bottom, of: formView)
+        
         formSpacerView.addSubview(button)
         button.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16)
         button.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
         button.autoPinEdge(.top, to: .bottom, of: divider, withOffset: 16)
-        button.applyTextTheme(withScheme: globalErrorContainerScheme())
+//        button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
         var tintColor: UIColor? = nil
         if let color = eventForm?.color {

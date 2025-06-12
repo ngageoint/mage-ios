@@ -8,7 +8,6 @@
 
 import Foundation
 import MapKit
-import MaterialComponents
 import MapFramework
 
 protocol UserHeadingDisplay {
@@ -20,12 +19,12 @@ protocol UserHeadingDisplay {
 class UserHeadingDisplayMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var userHeadingDisplay: UserHeadingDisplay
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var locationManager: CLLocationManager?
     var straightLineNavigation: StraightLineNavigation?
     weak var mapStack: UIStackView?
     
-    init(userHeadingDisplay: UserHeadingDisplay, mapStack: UIStackView, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
+    init(userHeadingDisplay: UserHeadingDisplay, mapStack: UIStackView, locationManager: CLLocationManager? = CLLocationManager(), scheme: AppContainerScheming?) {
         self.userHeadingDisplay = userHeadingDisplay
         self.mapView = userHeadingDisplay.mapView
         self.scheme = scheme
@@ -38,7 +37,7 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
         locationManager = nil
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }

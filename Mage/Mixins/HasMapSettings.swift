@@ -12,7 +12,7 @@ import MapFramework
 
 protocol HasMapSettings {
     var mapView: MKMapView? { get set }
-    var scheme: MDCContainerScheming? { get set }
+    var scheme: AppContainerScheming? { get set }
     var navigationController: UINavigationController? { get set }
     var hasMapSettingsMixin: HasMapSettingsMixin? { get set }
 }
@@ -26,14 +26,16 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     var settingsCoordinator: MapSettingsCoordinator?
     weak var rootView: UIView?
     
-    private lazy var mapSettingsButton: MDCFloatingButton = {
-        let mapSettingsButton = MDCFloatingButton(shape: .mini)
-        mapSettingsButton.setImage(UIImage(systemName:"square.stack.3d.up"), for: .normal)
-        mapSettingsButton.addTarget(self, action: #selector(mapSettingsButtonTapped(_:)), for: .touchUpInside)
-        mapSettingsButton.accessibilityLabel = "map_settings"
-        return mapSettingsButton
+    private lazy var mapSettingsButton: UIButton = {
+        let button = UIButton.floatingButton(
+            imageName: "square.stack.3d.up",
+            scheme: nil,
+            target: self,
+            action: #selector(mapSettingsButtonTapped),
+            accessibilityLabel: "map_settings")
+        return button
     }()
-    
+
     init(hasMapSettings: HasMapSettings, rootView: UIView?) {
         self.hasMapSettings = hasMapSettings
         self.rootView = rootView
@@ -46,7 +48,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         geoPackageImportedObserver = nil
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         hasMapSettings.scheme = scheme
         mapSettingsButton.backgroundColor = scheme?.colorScheme.surfaceColor;
         mapSettingsButton.tintColor = scheme?.colorScheme.primaryColorVariant;

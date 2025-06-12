@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface FilterTableViewController : UITableViewController
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 
 @end
