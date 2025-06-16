@@ -6,7 +6,6 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 import Foundation
-import MaterialComponents.MDCButton;
 import UIKit
 
 @objc protocol FormPickedDelegate {
@@ -26,22 +25,22 @@ class ButtonFooterView: UICollectionReusableView {
         }
     }
     
-    var _scheme: MDCContainerScheming?
-    var scheme: MDCContainerScheming? {
+    var _scheme: AppContainerScheming?
+    var scheme: AppContainerScheming? {
         get {
             return _scheme
         }
         set {
             _scheme = newValue
             if let scheme = newValue {
-                button.applyTextTheme(withScheme: scheme)
+//                button.applyTextTheme(withScheme: scheme)
                 button.setTitleColor(scheme.colorScheme.primaryColorVariant, for: .normal)
             }
         }
     }
     
-    lazy var button: MDCButton = {
-        let button = MDCButton(forAutoLayout: ());
+    lazy var button: UIButton = {
+        let button = UIButton(forAutoLayout: ());
         button.clipsToBounds = true;
         button.addAction(UIAction(handler: { [unowned self] _ in
             self.buttonDidTappedCallback?()
@@ -74,7 +73,7 @@ class ButtonFooterView: UICollectionReusableView {
 
     weak var delegate: FormPickedDelegate?;
     var forms: [Form] = []
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     weak var observation: Observation?;
     var formIdCount: [Int : Int] = [ : ];
     var didSetupConstraints = false
@@ -101,7 +100,7 @@ class ButtonFooterView: UICollectionReusableView {
         delegate?.cancelSelection()
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+    func applyTheme(withScheme scheme: AppContainerScheming? = nil) {
         guard let scheme = scheme else {
             return
         }
@@ -119,7 +118,7 @@ class ButtonFooterView: UICollectionReusableView {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(delegate: FormPickedDelegate? = nil, forms: [Form]? = nil, observation: Observation? = nil, scheme: MDCContainerScheming?) {
+    @objc public convenience init(delegate: FormPickedDelegate? = nil, forms: [Form]? = nil, observation: Observation? = nil, scheme: AppContainerScheming?) {
         self.init(frame: CGRect.zero)
         self.delegate = delegate
         if let forms = forms {
@@ -159,7 +158,7 @@ class ButtonFooterView: UICollectionReusableView {
         configuration.text = "Add A Form To Your Observation"
         
         if let scheme = self.scheme {
-            configuration.textProperties.font = scheme.typographyScheme.body1
+            configuration.textProperties.font = scheme.typographyScheme.bodyFont
             backgroundConfiguration.backgroundColor = scheme.colorScheme.surfaceColor
         }
         
@@ -187,9 +186,9 @@ class ButtonFooterView: UICollectionReusableView {
         var backgroundColor: UIColor = .clear
         if (formCount >= formMax) {
             configuration.imageProperties.tintColor = globalDisabledScheme().colorScheme.onSurfaceColor
-            configuration.textProperties.color = globalDisabledScheme().colorScheme.onSurfaceColor
-            configuration.secondaryTextProperties.color = globalDisabledScheme().colorScheme.onSurfaceColor
-            backgroundColor = globalDisabledScheme().colorScheme.surfaceColor
+            configuration.textProperties.color = globalDisabledScheme().colorScheme.onSurfaceColor ?? UIColor.magenta
+            configuration.secondaryTextProperties.color = globalDisabledScheme().colorScheme.onSurfaceColor  ?? UIColor.magenta
+            backgroundColor = globalDisabledScheme().colorScheme.surfaceColor  ?? UIColor.magenta
             
         } else {
             if let color = item.color {
@@ -198,12 +197,15 @@ class ButtonFooterView: UICollectionReusableView {
                 configuration.imageProperties.tintColor = self.scheme?.colorScheme.primaryColor
             }
             if let scheme = self.scheme {
-                configuration.textProperties.color = scheme.colorScheme.onSurfaceColor
-                configuration.textProperties.font = scheme.typographyScheme.subtitle1
-                configuration.secondaryTextProperties.color = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-                backgroundColor = scheme.colorScheme.surfaceColor
+                configuration.textProperties.color = scheme.colorScheme.onSurfaceColor ?? UIColor.magenta
+                configuration.textProperties.font = scheme.typographyScheme.subtitle1Font
+                configuration.secondaryTextProperties.color = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6) ?? UIColor.magenta
+                backgroundColor = scheme.colorScheme.surfaceColor ?? UIColor.magenta
             }
         }
+        
+        
+        // TODO: BRENT - FIX COLORS
         
         var backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
         backgroundConfiguration.backgroundColor = backgroundColor

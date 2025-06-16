@@ -39,14 +39,6 @@
                                                 target: self
                                                 action: @selector(attachmentFabTapped:)
                                                    tag: indexPath.row];
-        
-        button = [UIButton floatingButtonWithImageName: self.imageName
-                                                scheme: self.containerScheme
-                                         useErrorColor: self.useErrorColor
-                                                  size: 40.0
-                                                target: self
-                                                action: @selector(attachmentFabTapped:)
-                                                   tag: indexPath.row];
     }
     
     AttachmentModel *attachment = [self attachmentAtIndex:[indexPath row]];

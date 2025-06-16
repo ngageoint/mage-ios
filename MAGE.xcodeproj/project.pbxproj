@@ -164,6 +164,7 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84E470182DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */; };
 		84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */; };
 		84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */; };
 		84E713E42DF2121D00F52781 /* UIColor+Scheming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E32DF2121D00F52781 /* UIColor+Scheming.swift */; };
@@ -1113,6 +1114,7 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ShowSimpleAlert.swift"; sourceTree = "<group>"; };
 		84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeManager.swift; sourceTree = "<group>"; };
 		84E713E02DF0CA2400F52781 /* AppThemeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppThemeBridge.h; sourceTree = "<group>"; };
 		84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppThemeBridge.m; sourceTree = "<group>"; };
@@ -2446,6 +2448,7 @@
 				84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */,
 				84E714242DF9FE2500F52781 /* UIButton+Floating.swift */,
 				84E714262DFA05E800F52781 /* UIButton+ImageTintColor.swift */,
+				84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */,
 			);
 			path = Themes;
 			sourceTree = "<group>";
@@ -5331,6 +5334,7 @@
 				F7DE98882C1A43F3005372F8 /* UserRepository.swift in Sources */,
 				F776AC972BCD9E6A000FAFB4 /* ObservationService.swift in Sources */,
 				F734C1DA2BC03EB400B2E8C8 /* MapFeatureRepository.swift in Sources */,
+				84E470182DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift in Sources */,
 				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F78876932C6AA54800E30300 /* MageRouter.swift in Sources */,

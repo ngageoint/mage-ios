@@ -17,9 +17,9 @@ class CacheOverlayTableCell: UITableViewCell {
     var mainTable: UITableView?
     var tableView: UITableView
     
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, scheme: MDCContainerScheming) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, scheme: AppContainerScheming) {
         self.tableView = UITableView(frame: .zero, style: .plain)
         self.tableView.tag = 100
         self.scheme = scheme
@@ -154,8 +154,8 @@ extension CacheOverlayTableCell: UITableViewDataSource, UITableViewDelegate {
         if cell == nil {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cacheOverlayCell")
         }
-        cell?.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        cell?.detailTextLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        cell?.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87)
+        cell?.detailTextLabel?.textColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         cell?.backgroundColor = scheme?.colorScheme.surfaceColor
         cell?.imageView?.tintColor = scheme?.colorScheme.primaryColorVariant
         

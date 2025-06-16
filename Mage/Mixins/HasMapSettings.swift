@@ -101,7 +101,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
             circle.tag = 998
             circle.layer.cornerRadius = 10
             circle.layer.borderWidth = 0.5
-            circle.layer.borderColor = hasMapSettings.scheme?.colorScheme.onPrimaryColor.withAlphaComponent(0.87).cgColor
+            circle.layer.borderColor = hasMapSettings.scheme?.colorScheme.onPrimaryColor?.withAlphaComponent(0.87).cgColor
             circle.backgroundColor = hasMapSettings.scheme?.colorScheme.primaryColor
             circle.accessibilityLabel = "layer_download_circle"
             let imageView = UIImageView(image: UIImage(named: "download"))

@@ -83,7 +83,7 @@ class StaticPointAnnotation: DataSourceAnnotation {
         super.init(coordinate: coordinate, itemKey: fi.toKey())
     }
     
-    func viewForAnnotation(on mapView: MKMapView, scheme: MDCContainerScheming?) -> MKAnnotationView {
+    func viewForAnnotation(on mapView: MKMapView, scheme: AppContainerScheming?) -> MKAnnotationView {
         if let iconUrl = self.iconUrl {
             return customAnnotationView(mapView: mapView, iconUrl: iconUrl)
         }

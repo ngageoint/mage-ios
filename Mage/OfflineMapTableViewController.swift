@@ -14,7 +14,7 @@ import geopackage_ios
     var refreshLayersButton: UIBarButtonItem?
     var selectedStaticLayers: Set<NSNumber>?
     var mapsFetchedResultsController: NSFetchedResultsController<any NSFetchRequestResult>?
-    var scheme: MDCContainerScheming
+    var scheme: AppContainerScheming
     var context: NSManagedObjectContext
     
     enum Sections: Int {
@@ -37,7 +37,7 @@ import geopackage_ios
         }
     }
     
-    @objc init(scheme: MDCContainerScheming, context: NSManagedObjectContext) {
+    @objc init(scheme: AppContainerScheming, context: NSManagedObjectContext) {
         self.scheme = scheme
         self.context = context
         
@@ -48,7 +48,7 @@ import geopackage_ios
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(containerScheme: MDCContainerScheming?) {
+    func applyTheme(containerScheme: AppContainerScheming?) {
         guard let containerScheme else { return }
         scheme = containerScheme
         tableView.backgroundColor = scheme.colorScheme.backgroundColor
@@ -214,7 +214,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             imageView.image = UIImage(named: "square.stack.3d.up")
             imageView.contentMode = .scaleAspectFill
             imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+            imageView.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87)
             
             let title = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width * 0.8, height: 0))
             title.text = "No Layers"
@@ -222,7 +222,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             title.textAlignment = .center
             title.translatesAutoresizingMaskIntoConstraints = false
             title.font = UIFont.systemFont(ofSize: 24)
-            title.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+            title.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87)
             title.sizeToFit()
             
             let description = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width * 0.8, height: 0))
@@ -230,7 +230,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             description.numberOfLines = 0
             description.textAlignment = .center
             description.translatesAutoresizingMaskIntoConstraints = false
-            description.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+            description.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87)
             description.sizeToFit()
             
             view.addSubview(title)
@@ -426,8 +426,8 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
         if cell == nil {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "onlineLayerCell")
         }
-        cell?.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        cell?.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        cell?.textLabel?.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87)
+        cell?.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         cell?.backgroundColor = scheme.colorScheme.surfaceColor
         cell?.imageView?.tintColor = scheme.colorScheme.primaryColorVariant
         cell?.imageView?.image = nil
@@ -532,7 +532,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             cell?.imageView?.image = nil
             let activityIndicator = UIActivityIndicatorView(style: .medium)
             activityIndicator.startAnimating()
-            activityIndicator.color = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+            activityIndicator.color = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
             cell?.accessoryView = activityIndicator
         } else {
             cell?.textLabel?.text = layer.name

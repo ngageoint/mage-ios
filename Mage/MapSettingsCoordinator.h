@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MaterialComponents/MDCContainerScheme.h>
 
 @protocol MapSettingsCoordinatorDelegate
 - (void) mapSettingsComplete:(NSObject *) coordinator;
@@ -15,8 +14,8 @@
 
 @interface MapSettingsCoordinator : NSObject
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
 
 @property (weak, nonatomic) id<MapSettingsCoordinatorDelegate> delegate;
 

@@ -67,7 +67,7 @@ class CommonFieldsView: UIView {
         }
 //        super.applyTheme(withScheme: scheme)
         geometryView.applyTheme(withScheme: scheme)
-        dateView.applyTheme(withScheme: scheme)
+//        dateView.applyTheme(withScheme: scheme)
     }
     
     override func updateConstraints() {

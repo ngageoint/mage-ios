@@ -17,14 +17,14 @@
 @property (strong, nonatomic) UINavigationController *rootViewController;
 @property (strong, nonatomic) UINavigationController *settingsNavController;
 @property (strong, nonatomic) UIView *sourceView;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
 
 @implementation MapSettingsCoordinator
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>)  containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<AppContainerScheming>)  containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     self.scheme = containerScheme;
     self.rootViewController = rootViewController;
@@ -33,7 +33,7 @@
     return self;
 }
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     self.scheme = containerScheme;
     self.rootViewController = rootViewController;

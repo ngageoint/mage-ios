@@ -46,7 +46,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
         locationManager = nil
     }
     
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func applyTheme(scheme: AppContainerScheming?) {
         guard let scheme = self.canReportLocation.scheme else {
             return
         }
@@ -79,6 +79,12 @@ class CanReportLocationMixin: NSObject, MapMixin {
         setupReportLocationButton()
     }
     
+    private func showSimpleAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        canReportLocation.navigationController?.present(alert, animated: true, completion: nil)
+    }
+    
     @objc func reportLocationButtonPressed(_ sender: UIButton) {
         let authorized = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
         
@@ -89,24 +95,32 @@ class CanReportLocationMixin: NSObject, MapMixin {
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
         
         if UserDefaults.standard.locationServiceDisabled {
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location reporting for this MAGE server is disabled"))
+            showSimpleAlert(message: "Location reporting for this MAGE server is disabled")
+            
         } else if !authorized {
-            let alert = UIAlertController(title: "Location Services Disabled", message: "MAGE has been denied access to location services.  To report your location please go into your device settings and enable the Location permission.", preferredStyle: .alert)
+            let alert = UIAlertController(
+                title: "Location Services Disabled",
+                message: "MAGE has been denied access to location services. To report your location please go into your device settings and enable the Location permission.",
+                preferredStyle: .alert
+            )
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in
-                if let url = NSURL(string: UIApplication.openSettingsURLString) as URL? {
+            alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { _ in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }))
             canReportLocation.navigationController?.present(alert, animated: true, completion: nil)
+            
         } else if !inEvent {
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "You cannot report your location for an event you are not part of"))
+            showSimpleAlert(message: "You cannot report your location for an event you are not part of")
+            
         } else if !UserDefaults.standard.reportLocation {
-            UserDefaults.standard.reportLocation = !UserDefaults.standard.reportLocation
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "You are now reporting your location"))
+            UserDefaults.standard.reportLocation = true
+            showSimpleAlert(message: "You are now reporting your location")
+            
         } else {
-            UserDefaults.standard.reportLocation = !UserDefaults.standard.reportLocation
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location reporting has been disabled"))
+            UserDefaults.standard.reportLocation = false
+            showSimpleAlert(message: "Location reporting has been disabled")
         }
         
         setupReportLocationButton()
@@ -125,7 +139,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
         
         if UserDefaults.standard.locationServiceDisabled {
             reportLocationButton.setImage(UIImage(named: "location_tracking_off"), for: .normal)
-            reportLocationButton.tintColor = canReportLocation.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.3)
+            reportLocationButton.tintColor = canReportLocation.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.3)
         } else if trackingOn && inEvent && authorized {
             reportLocationButton.setImage(UIImage(named: "location_tracking_on"), for: .normal)
             reportLocationButton.tintColor = UIColor(red: 76.0/255.0, green:175.0/255.0, blue:80.0/255.0, alpha:1.0)
@@ -134,7 +148,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
             reportLocationButton.tintColor = UIColor(red: 244.0/255.0, green:67.0/255.0, blue:54.0/255.0, alpha:1.0)
         } else {
             reportLocationButton.setImage(UIImage(named: "location_tracking_off"), for: .normal)
-            reportLocationButton.tintColor = canReportLocation.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.3)
+            reportLocationButton.tintColor = canReportLocation.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.3)
         }
     }
 }
