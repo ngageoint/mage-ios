@@ -12,28 +12,20 @@ import MagicalRecord
 @testable import MAGE
 
 class ObservationBuilder {
-    @Injected(\.nsManagedObjectContext)
-    static var context: NSManagedObjectContext?
-    
-    static func createBlankObservation(_ eventId: NSNumber = 0) -> Observation {
-        guard let context = context else {
-            fatalError()
+    static func createBlankObservation(_ eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
+        var observation: Observation!;
+        if let safeContext = context {
+            observation = Observation.mr_createEntity(in: safeContext);
+        } else {
+            observation = Observation.mr_createEntity()!;
         }
-        return context.performAndWait {
-            var observation = Observation(context: context)
-            observation.eventId = eventId;
-            let observationProperties: [String:Any] = [:]
-            observation.properties = observationProperties;
-            try? context.obtainPermanentIDs(for: [observation])
-            try? context.save()
-            return observation
-        }
+        observation.eventId = eventId;
+        let observationProperties: [String:Any] = [:]
+        observation.properties = observationProperties;
+        return observation
     }
     
-    static func createObservation(jsonFileName: String, eventId: NSNumber = 0) -> Observation {
-        guard let context = context else {
-            fatalError()
-        }
+    static func createObservation(jsonFileName: String, eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
         guard let pathString = Bundle(for: ObservationBuilder.self).path(forResource: jsonFileName, ofType: "json") else {
             fatalError("jsonFileName not found")
         }
@@ -59,46 +51,33 @@ class ObservationBuilder {
         return observation;
     }
     
-    static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry) -> Observation {
-        guard let context = context else {
-            fatalError()
-        }
+    static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry, context: NSManagedObjectContext? = nil) -> Observation {
         var observation: Observation;
-        observation = createBlankObservation(eventId);
+        observation = createBlankObservation(eventId, context: context);
         if (jsonFileName != nil) {
-            observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId);
+            observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId, context: context);
         }
         observation.geometry = geometry;
-        observation.createObservationLocations(context: context)
         return observation;
     }
     
-    static func createPointObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
-        guard let context = context else {
-            fatalError()
-        }
+    static func createPointObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
         let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: point);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: point, context: context);
     }
     
-    static func createLineObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
-        guard let context = context else {
-            fatalError()
-        }
+    static func createLineObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
         let points: NSMutableArray = [SFPoint(x: -105.2678, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0085) as Any]
         
         let line: SFLineString = SFLineString(points: points);
-        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: line);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: line, context: context);
     }
     
-    static func createPolygonObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
-        guard let context = context else {
-            fatalError()
-        }
+    static func createPolygonObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
         let points: NSMutableArray = [SFPoint(x: -105.2678, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0102) as Any, SFPoint(x: -105.2678, andY: 40.0102) as Any]
         let line: SFLineString = SFLineString(points: points);
         let poly: SFPolygon = SFPolygon(ring: line);
-        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: poly);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: poly, context: context);
     }
     
     static func addObservationProperty(observation: Observation, key: String, value: Any) {
@@ -121,44 +100,27 @@ class ObservationBuilder {
         observation.timestamp = date;
     }
     
-    static func createAttachment(eventId: NSNumber, name: String? = nil, remoteId: String? = nil, observationRemoteId: String? = nil) -> Attachment? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        guard let context = context else { return nil }
-        
-        return context.performAndWait {
-            
-            let attachment: Attachment = Attachment(context: context);
-            attachment.localPath = "";
-            attachment.name = name;
-            attachment.dirty = false;
-            attachment.eventId = eventId;
-            attachment.contentType = "image/png";
-            attachment.observationRemoteId = observationRemoteId;
-            attachment.remoteId = remoteId;
-            if (observationRemoteId != nil && remoteId != nil) {
-                attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
-            }
-            attachment.lastModified = Date()
-            try? context.obtainPermanentIDs(for: [attachment])
-            try? context.save()
-            return attachment;
+    static func createAttachment(eventId: NSNumber, name: String? = nil, remoteId: String? = nil, observationRemoteId: String? = nil) -> Attachment {
+        let attachment: Attachment = Attachment(context: NSManagedObjectContext.mr_default());
+        attachment.localPath = "";
+        attachment.name = name;
+        attachment.dirty = false;
+        attachment.eventId = eventId;
+        attachment.contentType = "image/png";
+        attachment.observationRemoteId = observationRemoteId;
+        attachment.remoteId = remoteId;
+        if (observationRemoteId != nil && remoteId != nil) {
+            attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
         }
+        attachment.lastModified = Date()
+        return attachment;
     }
     
-    static func addAttachmentToObservation(observation: Observation) -> Attachment? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        guard let context = context else { return nil }
+    static func addAttachmentToObservation(observation: Observation) -> Attachment{
+        let attachment: Attachment = createAttachment(eventId: observation.eventId!, name: "name\(observation.attachments?.count ?? 0)", remoteId: "remoteid\(observation.attachments?.count ?? 0)", observationRemoteId: observation.remoteId);
         
-        return context.performAndWait {
-            if let attachment: Attachment = createAttachment(eventId: observation.eventId!, name: "name\(observation.attachments?.count ?? 0)", remoteId: "remoteid\(observation.attachments?.count ?? 0)", observationRemoteId: observation.remoteId) {
-                
-                observation.addToAttachments(attachment)
-                return attachment
-            }
-            return nil
-        }
+        observation.addToAttachments(attachment);
+        return attachment;
     }
     
     static func addFormToObservation(observation: Observation, form: Form, values: [String: Any?]? = nil) {

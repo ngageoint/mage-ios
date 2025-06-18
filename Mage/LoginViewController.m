@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
+#import "DeviceUUID.h"
 #import "IDPLoginView.h"
 #import "LocalLoginView.h"
 #import "LdapLoginView.h"
@@ -195,7 +196,6 @@
 - (void) setContactInfo:(ContactInfo *) contactInfo {
     self.messageView.attributedText = contactInfo.messageWithContactInfo;
     self.messageView.accessibilityLabel = contactInfo.title;
-    self.messageView.isAccessibilityElement = true;
     self.messageView.textAlignment = NSTextAlignmentCenter;
     self.messageView.font = self.scheme.typographyScheme.body1;
     self.messageView.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];

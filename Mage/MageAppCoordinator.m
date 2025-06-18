@@ -25,19 +25,18 @@
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (strong, nonatomic) ServerURLController *urlController;
 @property (strong, nonatomic) AuthenticationCoordinator *authCoordinator;
-@property (strong, nonatomic) NSManagedObjectContext *context;
+
 @end
 
 @implementation MageAppCoordinator
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme:(id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme:(id<MDCContainerScheming>) containerScheme {
     self = [super init];
     if (!self) return nil;
     
     _childCoordinators = [[NSMutableArray alloc] init];
     _navigationController = navigationController;
     _scheme = containerScheme;
-    _context = context;
 
     [self setupPushNotificationsForApplication:application];
     self.imageCacheProvider = ImageCacheProvider.shared;
@@ -75,9 +74,9 @@
         self.authCoordinator = nil;
     }
     if ([MageServer isServerVersion5]) {
-        self.authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
+        self.authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
     } else {
-        self.authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
+        self.authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
     }
     
     [_childCoordinators addObject:self.authCoordinator];

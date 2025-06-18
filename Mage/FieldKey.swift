@@ -125,7 +125,6 @@ public enum AttachmentKey : String {
     case localPath
     case lastModified
     case markedForDeletion
-    case observationRemoteId
     
     var key: String {
         return self.rawValue

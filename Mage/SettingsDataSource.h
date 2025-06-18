@@ -30,8 +30,7 @@ typedef NS_ENUM(NSUInteger, SettingType) {
     kLogout,
     kChangePassword,
     kAttributions,
-    kDisclaimer,
-    kContactUs
+    kDisclaimer
 };
 
 @protocol SettingsDelegate
@@ -43,7 +42,7 @@ typedef NS_ENUM(NSUInteger, SettingType) {
 @property (weak, nonatomic) id<SettingsDelegate> delegate;
 @property (assign, nonatomic) BOOL showDisclosureIndicator;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) reloadData;
 
 @end

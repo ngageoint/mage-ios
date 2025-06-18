@@ -62,8 +62,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>Set by build phase script</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

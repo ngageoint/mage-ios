@@ -8,7 +8,6 @@
 
 import Foundation
 import MapKit
-import MapFramework
 
 protocol HasMapSettings {
     var mapView: MKMapView? { get set }
@@ -18,9 +17,6 @@ protocol HasMapSettings {
 }
 
 class HasMapSettingsMixin: NSObject, MapMixin {
-    @Injected(\.nsManagedObjectContext)
-    var context: NSManagedObjectContext?
-    
     var geoPackageImportedObserver: Any?
     var hasMapSettings: HasMapSettings
     var settingsCoordinator: MapSettingsCoordinator?
@@ -52,20 +48,12 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         mapSettingsButton.tintColor = scheme?.colorScheme.primaryColorVariant;
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func setupMixin(mapView: MKMapView, mapState: MapState) {
+    func setupMixin() {
         guard let mapView = self.hasMapSettings.mapView else {
             return
         }
         rootView?.insertSubview(mapSettingsButton, aboveSubview: mapView)
-        mapSettingsButton.autoPinEdge(.top, to: .top, of: mapView, withOffset: 75)
+        mapSettingsButton.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
         mapSettingsButton.autoPinEdge(toSuperviewMargin: .right)
         
         setupMapSettingsButton()
@@ -78,17 +66,13 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     }
     
     @objc func mapSettingsButtonTapped(_ sender: UIButton) {
-        settingsCoordinator = MapSettingsCoordinator(rootViewController: hasMapSettings.navigationController, scheme: hasMapSettings.scheme, context: context)
+        settingsCoordinator = MapSettingsCoordinator(rootViewController: hasMapSettings.navigationController, scheme: hasMapSettings.scheme)
         settingsCoordinator?.delegate = self
         settingsCoordinator?.start()
     }
     
     func setupMapSettingsButton() {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
-        let count = Layer.mr_countOfEntities(with: NSPredicate(format: "eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", Server.currentEventId() ?? -1, "GeoPackage"), in: context)
+        let count = Layer.mr_countOfEntities(with: NSPredicate(format: "eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", Server.currentEventId() ?? -1, "GeoPackage"), in: NSManagedObjectContext.mr_default())
         for subview in mapSettingsButton.subviews {
             if subview.tag == 998 {
                 subview.removeFromSuperview()

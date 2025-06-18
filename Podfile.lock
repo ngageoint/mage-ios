@@ -33,6 +33,7 @@ PODS:
   - KIF (3.8.9):
     - KIF/Core (= 3.8.9)
   - KIF/Core (3.8.9)
+  - Kingfisher (7.10.1)
   - libPhoneNumber-iOS (0.9.15)
   - MagicalRecord (2.3.2):
     - MagicalRecord/Core (= 2.3.2)
@@ -710,7 +711,7 @@ PODS:
     - crs-ios (~> 1.0.5)
     - PROJ (~> 9.4.0)
   - PureLayout (3.1.9)
-  - Quick (6.1.0)
+  - Quick (4.0.0)
   - sf-geojson-ios (4.2.5):
     - sf-ios (~> 4.1.4)
   - sf-ios (4.1.4)
@@ -723,6 +724,7 @@ PODS:
     - sf-ios (~> 4.1.4)
   - SSZipArchive (2.2.3)
   - tiff-ios (4.0.2)
+  - UIImage-Categories (0.0.1)
   - zxcvbn-ios (1.0.4)
 
 DEPENDENCIES:
@@ -732,6 +734,7 @@ DEPENDENCIES:
   - geopackage-ios (~> 8.0.6)
   - HexColors (~> 4.0.0)
   - KIF
+  - Kingfisher (~> 7.0)
   - libPhoneNumber-iOS (~> 0.9.15)
   - MagicalRecord (~> 2.3.2)
   - MaterialComponents
@@ -743,8 +746,9 @@ DEPENDENCIES:
   - OHHTTPStubs/Swift
   - PROJ
   - PureLayout
-  - Quick (~> 6)
+  - Quick (from `https://github.com/Quick/Quick.git`, commit `a0a5fc857cea079fbe973e4faa80b6ceaf17bd46`)
   - SSZipArchive (~> 2.2.2)
+  - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
 
 SPEC REPOS:
@@ -758,6 +762,7 @@ SPEC REPOS:
     - grid-ios
     - HexColors
     - KIF
+    - Kingfisher
     - libPhoneNumber-iOS
     - MagicalRecord
     - MaterialComponents
@@ -774,7 +779,6 @@ SPEC REPOS:
     - PROJ-include
     - proj-ios
     - PureLayout
-    - Quick
     - sf-geojson-ios
     - sf-ios
     - sf-proj-ios
@@ -782,7 +786,18 @@ SPEC REPOS:
     - sf-wkt-ios
     - SSZipArchive
     - tiff-ios
+    - UIImage-Categories
     - zxcvbn-ios
+
+EXTERNAL SOURCES:
+  Quick:
+    :commit: a0a5fc857cea079fbe973e4faa80b6ceaf17bd46
+    :git: https://github.com/Quick/Quick.git
+
+CHECKOUT OPTIONS:
+  Quick:
+    :commit: a0a5fc857cea079fbe973e4faa80b6ceaf17bd46
+    :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
@@ -794,6 +809,7 @@ SPEC CHECKSUMS:
   grid-ios: 4aa398fd164bb8acac9d587cf61016cc6523defb
   HexColors: 5f95843ef89aff6a72e1fd3a8ebabf205cc43379
   KIF: 7660c626b0f2d4562533590960db70a36d640558
+  Kingfisher: bc5abe80a8e0144537ef1dd5a0b2621b04f7f439
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
@@ -810,7 +826,7 @@ SPEC CHECKSUMS:
   PROJ-include: e7438fba489ea7c636495dc05d197840cdac04da
   proj-ios: 2a8ea337e1b728e669bb0845a1bd12fabce6609d
   PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
-  Quick: 6676ffb409bf04abba2ff23902af2407bfc6ac90
+  Quick: 5dc45f9bc11236594a7acc99f7bd85ecdc9a477d
   sf-geojson-ios: 94a1409bbc463ff5fabf8235815c3d7422d26de2
   sf-ios: 03cc989b70b11d80ab80afc9db2086a621fa4703
   sf-proj-ios: 6cd46b6b9c4bdefa2a8fb8bc65c3b9fd434eedad
@@ -818,8 +834,9 @@ SPEC CHECKSUMS:
   sf-wkt-ios: 85faef2380a4fd47e6237f692d13273d641ab4eb
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   tiff-ios: 1ad6750cd8bb3db75bd2977e40145813389786b9
+  UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 6bf6e8beed482c01a9482c97a00981e88ede0c74
+PODFILE CHECKSUM: f16cca03e04b188f2a160d5cfebad79559bce7c3
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

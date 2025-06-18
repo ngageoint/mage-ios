@@ -11,11 +11,13 @@
 #import "GPKGMapShapeConverter.h"
 #import "MapShapeObservation.h"
 #import "MapAnnotationObservation.h"
+#import "ObservationShapeStyle.h"
+#import "ObservationShapeStyleParser.h"
 #import "MAGE-Swift.h"
 
 @interface MapObservationManager ()
 
-@property (nonatomic, weak) MKMapView *mapView;
+@property (nonatomic, strong) MKMapView *mapView;
 
 @end
 
@@ -59,7 +61,7 @@
 //        observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];
     } else{
         
-        ObservationShapeStyle *style = [ObservationShapeStyleParser styleWithObservation: observation];
+        ObservationShapeStyle *style = [ObservationShapeStyleParser styleOfObservation: observation];
         
         GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
         GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:geometry];

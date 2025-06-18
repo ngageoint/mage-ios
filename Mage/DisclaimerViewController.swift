@@ -21,7 +21,6 @@ import UIKit
         consentText.isScrollEnabled = true
         consentText.isSelectable = false
         consentText.backgroundColor = .clear
-        consentText.isAccessibilityElement = true
         return consentText
     }()
     
@@ -30,7 +29,6 @@ import UIKit
         consentTitle.textAlignment = .center
         consentTitle.isSelectable = false
         consentTitle.backgroundColor = .clear
-        consentTitle.isAccessibilityElement = true
         return consentTitle
     }()
     
@@ -96,11 +94,8 @@ import UIKit
         
         navigationItem.title = "Disclaimer"
         consentTitle.text = UserDefaults.standard.disclaimerTitle
-        consentTitle.accessibilityLabel = UserDefaults.standard.disclaimerTitle
-
         consentText.text = UserDefaults.standard.disclaimerText
-        consentText.accessibilityLabel = UserDefaults.standard.disclaimerText
-
+        
         if let navigationController = navigationController, !navigationController.isNavigationBarHidden {
             agreeButton.isHidden = true
             disagreeButton.isHidden = true

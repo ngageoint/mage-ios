@@ -16,12 +16,9 @@ import QuickLook
 }
 
 @objc class AttachmentViewCoordinator: NSObject, NavigationControllerObserverDelegate, AskToDownloadDelegate {
-    @Injected(\.attachmentRepository)
-    var attachmentRepository: AttachmentRepository
-    
     var scheme: MDCContainerScheming?;
 
-    var attachment: AttachmentModel?
+    var attachment: Attachment?
     weak var delegate: AttachmentViewDelegate?
     var rootViewController: UINavigationController
     var navigationControllerObserver: NavigationControllerObserver
@@ -39,7 +36,7 @@ import QuickLook
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
-    @objc public init(rootViewController: UINavigationController, attachment: AttachmentModel, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
+    @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
@@ -51,11 +48,11 @@ import QuickLook
         } else {
             self.tempFile =  NSTemporaryDirectory() + "tempfile";
         }
-        self.navigationControllerObserver = navigationControllerObserver ?? NavigationControllerObserver(navigationController: self.rootViewController);
+        self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
     }
     
-    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
+    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.urlToLoad = url;
         self.delegate = delegate;
@@ -63,7 +60,7 @@ import QuickLook
         self.contentType = contentType;
         self.tempFile =  NSTemporaryDirectory() + url.lastPathComponent;
         
-        self.navigationControllerObserver = navigationControllerObserver ?? NavigationControllerObserver(navigationController: self.rootViewController);
+        self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
     }
     
@@ -111,7 +108,7 @@ import QuickLook
         }
     }
     
-    @objc public func setAttachment(attachment: AttachmentModel) {
+    @objc public func setAttachment(attachment: Attachment) {
         self.attachment = attachment;
         if (hasPushedViewController) {
             self.ignoreNextDelegateCall = true;
@@ -189,7 +186,7 @@ import QuickLook
     }
     
     func downloadApproved() {
-        MageLogger.misc.debug("Download the attachment")
+        print("Download the attachment")
         FadeTransitionSegue.addFadeTransition(to: self.rootViewController.view);
         self.ignoreNextDelegateCall = true;
         self.rootViewController.popViewController(animated: false);
@@ -205,10 +202,10 @@ import QuickLook
         if let attachment = self.attachment {
             name = attachment.name ?? "file"
             if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
-                MageLogger.misc.debug("Playing locally: \(localPath)");
+                print("Playing locally", localPath);
                 self.urlToLoad = URL(fileURLWithPath: localPath);
             } else if let attachmentUrl = attachment.url {
-                MageLogger.misc.debug("Playing from link \(attachmentUrl)");
+                print("Playing from link \(attachmentUrl)");
                 let token: String = StoredPassword.retrieveStoredToken();
 
                 if let url = URL(string: attachmentUrl) {
@@ -260,9 +257,15 @@ extension AttachmentViewCoordinator : AVAssetResourceLoaderDelegate {
 
 extension AttachmentViewCoordinator : MediaLoaderDelegate {
     func mediaLoadComplete(filePath: String, newFile: Bool) {
-        MageLogger.misc.debug("Media load complete");
+        print("Media load complete");
         if (newFile) {
-            attachmentRepository.saveLocalPath(attachmentUri: attachment?.attachmentUri, localPath: filePath)
+            MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
+                if let attachment = self.attachment {
+                    let localAttachment = attachment.mr_(in: localContext);
+                    localAttachment?.localPath = filePath;
+                }
+            }) { (success, error) in
+            };
         }
     }
 }

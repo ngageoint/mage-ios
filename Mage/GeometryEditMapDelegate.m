@@ -9,7 +9,7 @@
 #import "GeometryEditMapDelegate.h"
 #import "GPKGMapPoint.h"
 #import "MapShapePointAnnotationView.h"
-#import "MAGE-Swift.h"
+#import "ObservationShapeStyle.h"
 
 @interface GeometryEditMapDelegate()
 

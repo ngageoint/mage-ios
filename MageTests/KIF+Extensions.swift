@@ -9,43 +9,29 @@
 import Quick
 import KIF
 
-extension XCTestCase {
-    func tester(file : String = #file, _ line : Int = #line) -> KIFUITestActor {
-        return KIFUITestActor(inFile: file, atLine: line, delegate: self)
-    }
-    
-    func system(file : String = #file, _ line : Int = #line) -> KIFSystemTestActor {
-        return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
-    }
-    
-    func viewTester(file: String = #file, _ line: Int = #line) -> KIFUIViewTestActor {
-        return KIFUIViewTestActor(inFile: file, atLine: line, delegate: self)
-    }
-}
-
 /**
  creates KIFUITestActor for a KIFSpec
  use it to interact with UI
  */
-//public func tester(file: String = #file, _ line: Int = #line) -> KIFUITestActor {
-//    return KIFUITestActor(inFile: file, atLine: line, delegate: KIFSpec.getCurrentKIFActorDelegate())
-//}
-//
-///**
-// creates KIFUIViewTestActor for a KIFSpec
-// use it to interact with UI and chain view selectors and predicates
-// */
-//public func viewTester(file: String = #file, _ line: Int = #line) -> KIFUIViewTestActor {
-//    return KIFUIViewTestActor(inFile: file, atLine: line, delegate: KIFSpec.getCurrentKIFActorDelegate())
-//}
-//
-///**
-// creates KIFSystemTestActor for a KIFSpec
-// use it to interact with application without involving UI
-// */
-//public func system(file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
-//    return KIFSystemTestActor(inFile: file, atLine: line, delegate: KIFSpec.getCurrentKIFActorDelegate())
-//}
+public func tester(file: String = #file, _ line: Int = #line) -> KIFUITestActor {
+    return KIFUITestActor(inFile: file, atLine: line, delegate: KIFSpec.getCurrentKIFActorDelegate())
+}
+
+/**
+ creates KIFUIViewTestActor for a KIFSpec
+ use it to interact with UI and chain view selectors and predicates
+ */
+public func viewTester(file: String = #file, _ line: Int = #line) -> KIFUIViewTestActor {
+    return KIFUIViewTestActor(inFile: file, atLine: line, delegate: KIFSpec.getCurrentKIFActorDelegate())
+}
+
+/**
+ creates KIFSystemTestActor for a KIFSpec
+ use it to interact with application without involving UI
+ */
+public func system(file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
+    return KIFSystemTestActor(inFile: file, atLine: line, delegate: KIFSpec.getCurrentKIFActorDelegate())
+}
 
 /**
  KIFSpec is a base class all KIF specs written in Quick inherit from.
@@ -97,20 +83,6 @@ open class KIFSpec: QuickSpec {
         KIFSpec.currentKIFActorDelegate = self
     }
 }
-extension KIFTestActor {
-    func tester(file : String = #file, _ line : Int = #line) -> KIFUITestActor {
-        return KIFUITestActor(inFile: file, atLine: line, delegate: self)
-    }
-    
-    func system(file : String = #file, _ line : Int = #line) -> KIFSystemTestActor {
-        return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
-    }
-    
-    func viewTester(file: String = #file, _ line: Int = #line) -> KIFUIViewTestActor {
-        return KIFUIViewTestActor(inFile: file, atLine: line, delegate: self)
-    }
-}
-
 
 
 //

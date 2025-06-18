@@ -7,17 +7,7 @@
 //
 //
 
-import MapKit
-import MapFramework
-import DataSourceDefinition
-
-@objc class StyledPolygon: MKPolygon, OverlayRenderable, DataSourceIdentifiable {
-    var id: String = ""
-    
-    var itemKey: String = ""
-    
-    var dataSource: any DataSourceDefinition = UnknownDefinition.definition
-    
+@objc class StyledPolygon: MKPolygon, OverlayRenderable {
     var renderer: MKOverlayRenderer {
         get {
             let renderer = MKPolygonRenderer(polygon: self)
@@ -39,11 +29,8 @@ import DataSourceDefinition
             guard let observationRemoteId = observationRemoteId else {
                 return _observation
             }
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
             
-            guard let context = context else { return nil }
-            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: context)
+            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: NSManagedObjectContext.mr_default())
         }
         set {
             if let remoteId = newValue?.remoteId {

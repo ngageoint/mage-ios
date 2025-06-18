@@ -11,7 +11,6 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
-import MapFramework
 
 @testable import MAGE
 import CoreLocation
@@ -38,7 +37,7 @@ class SFGeometryMapTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("SFGeometryMapTests") {
+        describe("SFGeometryMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
@@ -46,13 +45,9 @@ class SFGeometryMapTests: KIFSpec {
             var testimpl: SFGeometryMapTestImpl!
             var mixin: SFGeometryMapMixin!
             var userabc: User!
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
             
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
+                
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -97,8 +92,6 @@ class SFGeometryMapTests: KIFSpec {
             }
             
             afterEach {
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 
@@ -131,8 +124,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: geometry)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
@@ -144,8 +136,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: nil)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -163,8 +154,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: nil)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -182,8 +172,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: nil)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -202,8 +191,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: nil)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -222,8 +210,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: nil)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -249,8 +236,7 @@ class SFGeometryMapTests: KIFSpec {
                 mixin = SFGeometryMapMixin(sfGeometryMap: testimpl, sfGeometry: nil)
                 testimpl.sfGeometryMapMixin = mixin
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 

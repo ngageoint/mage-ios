@@ -16,6 +16,7 @@
 #import "MapShapePointAnnotationView.h"
 #import "PROJProjectionConstants.h"
 #import "SFGeometryEnvelopeBuilder.h"
+#import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
 #import "GPKGGeoPackageFactory.h"

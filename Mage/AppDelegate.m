@@ -19,8 +19,7 @@
 #import "TransitionViewController.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
-
-@protocol AttachmentPushService;
+#import "GeoPackageImporter.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -30,7 +29,10 @@
 @property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) BOOL applicationStarted;
 @property (nonatomic, strong) GeoPackageImporter *gpImporter;
-@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
+@property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
+@property (nonatomic, strong) GPKGGeoPackage *backgroundGeoPackage;
+@property (nonatomic, strong) GPKGGeoPackage *darkBackgroundGeoPackage;
 @end
 
 @implementation AppDelegate
@@ -78,14 +80,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
     
     [MageInitializer initializePreferences];
-    self.context = [MageInitializer setupCoreData];
+    [MageInitializer setupCoreData];
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
     NSString *filePath = [notification.userInfo valueForKey:@"filePath"];
-    [self.gpImporter importGeoPackageFileAsLink:filePath andMove:NO withLayerId:[notification.userInfo valueForKey:@"layerId"] completionHandler:^(BOOL imported) {
-        
-    }];
+    [self.gpImporter importGeoPackageFileAsLink:filePath andMove:NO withLayerId:[notification.userInfo valueForKey:@"layerId"]];
 }
 
 - (BOOL)application:(UIApplication *)app
@@ -101,9 +101,7 @@
         NSString * filePath = [url path];
         
         // Handle GeoPackage files
-        [self.gpImporter handleGeoPackageImport:filePath completionHandler:^(BOOL imported) {
-            
-        }];
+        [self.gpImporter handleGeoPackageImport:filePath];
     } else if ([[url scheme] isEqualToString:@"mage"] && [[url host] isEqualToString:@"app"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MageAppLink" object:url];
     }
@@ -149,11 +147,9 @@
         NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
         // error should be null and contextDidSave should be true
         if (contextDidSave && error == NULL) {
-            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme] context: self.context];
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
             [self.appCoordinator start];
-            [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
-                
-            }];
+            [self.gpImporter processOfflineMapArchives];
         } else {
             NSLog(@"Could not read or write from the database %@", error);
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
@@ -182,19 +178,16 @@
 }
 
 - (void) logout {
-//    [self.backgroundGeoPackage close];
-//    [self.darkBackgroundGeoPackage close];
-//    self.backgroundGeoPackage = nil;
-//    self.darkBackgroundGeoPackage = nil;
-//    [self.backgroundOverlay cleanup];
-//    self.backgroundOverlay = nil;
-//    [self.darkBackgroundOverlay cleanup];
-//    self.darkBackgroundOverlay = nil;
-//    [[CacheOverlays getInstance] removeByCacheName:@"countries"];
-//    [[CacheOverlays getInstance] removeByCacheName:@"countries_dark"];
-    
-    [MageInitializer cleanupGeoPackages];
-    
+    [self.backgroundGeoPackage close];
+    [self.darkBackgroundGeoPackage close];
+    self.backgroundGeoPackage = nil;
+    self.darkBackgroundGeoPackage = nil;
+    [self.backgroundOverlay cleanup];
+    self.backgroundOverlay = nil;
+    [self.darkBackgroundOverlay cleanup];
+    self.darkBackgroundOverlay = nil;
+    [[CacheOverlays getInstance] removeByCacheName:@"countries"];
+    [[CacheOverlays getInstance] removeByCacheName:@"countries_dark"];
     [[Mage singleton] stopServices];
     [[LocationService singleton] stop];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -264,9 +257,7 @@
                     self.splashView = nil;
                 }
                 
-                [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
-                    
-                }];
+                [self.gpImporter processOfflineMapArchives];
             } else {
                 NSLog(@"Could not read or write from the database %@", error);
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
@@ -284,18 +275,95 @@
 
 - (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler {
     // Handle attachments uploaded in the background
-    if ([identifier isEqualToString:@"mil.nga.mage.background.attachment"]) {
+    if ([identifier isEqualToString:kAttachmentBackgroundSessionIdentifier]) {
         NSLog(@"ATTACHMENT - AppDelegate handleEventsForBackgroundURLSession");
-        [AttachmentPushServiceProvider.instance getAttachmentPushService].backgroundSessionCompletionHandler = completionHandler;
+        AttachmentPushService *service = [AttachmentPushService singleton];
+        service.backgroundSessionCompletionHandler = completionHandler;
     }
 }
 
 - (BaseMapOverlay *) getBaseMap {
-    return [MageInitializer getBaseMap];
+    if (self.backgroundOverlay != nil) {
+        return self.backgroundOverlay;
+    }
+    
+    // Add the GeoPackage caches
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
+    NSString *countriesGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries" ofType:@"gpkg"];
+    NSLog(@"Countries GeoPackage path %@", countriesGeoPackagePath);
+    
+    if (![manager exists:@"countries"]) {
+        @try {
+            [manager importGeoPackageFromPath:countriesGeoPackagePath];
+        }
+        @catch (NSException *e) {
+            // probably was already imported and that is fine
+        }
+    }
+    
+    self.backgroundGeoPackage = [manager open:@"countries"];
+    if (self.backgroundGeoPackage) {
+        @try {
+            GPKGFeatureDao * featureDao = [self.backgroundGeoPackage featureDaoWithTableName:@"countries"];
+            
+            // If indexed, add as a tile overlay
+            GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.backgroundGeoPackage andFeatureDao:featureDao];
+            [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.backgroundGeoPackage andFeatureDao:featureDao]];
+            
+            self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+            [self.backgroundOverlay setMinZoom:0];
+            self.backgroundOverlay.darkTheme = NO;
+            
+            self.backgroundOverlay.canReplaceMapContent = true;
+        }
+        @catch (NSException *e) {
+            NSLog(@"Exception initializing the base map GP %@", e);
+        }
+    }
+    
+    return self.backgroundOverlay;
 }
 
 - (BaseMapOverlay *) getDarkBaseMap {
-    return [MageInitializer getDarkBaseMap];
+    if (self.darkBackgroundOverlay != nil) {
+        return self.darkBackgroundOverlay;
+    }
+    
+    NSString *countriesDarkGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries_dark" ofType:@"gpkg"];
+    NSLog(@"Countries GeoPackage path %@", countriesDarkGeoPackagePath);
+    
+    // Add the GeoPackage caches
+    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
+    if (![manager exists:@"countries_dark"]) {
+        @try {
+            [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
+        }
+        @catch (NSException *e) {
+            // probably was already imported and that is fine
+        }
+    }
+
+    self.darkBackgroundGeoPackage = [manager open:@"countries_dark"];
+    if (self.darkBackgroundGeoPackage) {
+        @try {
+            GPKGFeatureDao * darkFeatureDao = [self.darkBackgroundGeoPackage featureDaoWithTableName:@"countries"];
+            
+            // If indexed, add as a tile overlay
+            GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.darkBackgroundGeoPackage andFeatureDao:darkFeatureDao];
+            [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.darkBackgroundGeoPackage andFeatureDao:darkFeatureDao]];
+            
+            self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+            [self.darkBackgroundOverlay setMinZoom:0];
+            self.darkBackgroundOverlay.darkTheme = YES;
+            
+            self.darkBackgroundOverlay.canReplaceMapContent = true;
+            }
+            @catch (NSException *e) {
+                NSLog(@"Exception initializing the dark base map GP %@", e);
+            }
+    }
+    
+    return self.darkBackgroundOverlay;
 }
 
 - (void) applicationWillTerminate:(UIApplication *) application {
@@ -306,10 +374,8 @@
 
 - (void)tokenDidExpire:(NSNotification *)notification {
     [[Mage singleton] stopServices];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-        [self createRootView];
-    });
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self createRootView];
 }
 
 #pragma mark - Application's Documents directory

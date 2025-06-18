@@ -21,12 +21,12 @@
     return routes;
 }
 
-- (RouteMethod *) pull: (NSNumber *) eventId context: (NSManagedObjectContext *) context {
+- (RouteMethod *) pull: (NSNumber *) eventId {
     RouteMethod *method = [[RouteMethod alloc] init];
     method.method = @"GET";
     method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations", [MageServer baseURL], eventId];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"lastModified+DESC" forKey:@"sort"];
-    __block NSDate *lastObservationDate = [Observation fetchLastObservationDateWithContext:context];
+    __block NSDate *lastObservationDate = [Observation fetchLastObservationDateWithContext:[NSManagedObjectContext MR_defaultContext]];
     if (lastObservationDate != nil) {
         [parameters setObject:[lastObservationDate iso8601String] forKey:@"startDate"];
     }

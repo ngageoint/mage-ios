@@ -7,6 +7,7 @@
 //
 
 #import "ContactInfo.h"
+#import "DeviceUUID.h"
 #import "LinkGenerator.h"
 
 @implementation ContactInfo

@@ -11,11 +11,10 @@ import CoreData
 
 @objc public class ObservationFavorite: NSManagedObject {
     @objc public static func favorite(userId: String, context: NSManagedObjectContext) -> ObservationFavorite? {
-        let favorite = ObservationFavorite(context: context);
-        favorite.dirty = false
-        favorite.favorite = true;
-        favorite.userId = userId;
-        try? context.obtainPermanentIDs(for: [favorite])
+        let favorite = ObservationFavorite.mr_createEntity(in: context);
+        favorite?.dirty = false
+        favorite?.favorite = true;
+        favorite?.userId = userId;
         return favorite;
     }
 }

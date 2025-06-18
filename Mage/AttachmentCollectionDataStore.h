@@ -8,11 +8,9 @@
 #import <MaterialComponents/MDCContainerScheme.h>
 #import "AttachmentSelectionDelegate.h"
 
-@class AttachmentModel;
-
 @interface AttachmentCollectionDataStore : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *attachmentCollection;
-@property (strong, nonatomic) NSArray<AttachmentModel *> *attachments;
+@property (strong, nonatomic) NSArray<Attachment *> *attachments;
 @property (strong, nonatomic) NSArray<NSDictionary *> *unsentAttachments;
 @property (weak, nonatomic) NSString *attachmentFormatName;
 @property (nonatomic, weak) IBOutlet id<AttachmentSelectionDelegate> attachmentSelectionDelegate;

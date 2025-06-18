@@ -9,97 +9,75 @@ import SSZipArchive
 import CoreData
 
 @objc public class Form: NSManagedObject {
-    @Injected(\.nsManagedObjectContext)
-    var context: NSManagedObjectContext?
     
     @objc public static let MAGEFormFetched = "mil.nga.giat.mage.form.fetched";
     
     @discardableResult
     @objc public static func deleteAllFormsForEvent(eventId: NSNumber, context: NSManagedObjectContext) -> Bool {
-        return context.performAndWait {
-            do {
-                let forms = try context.fetchObjects(Form.self, predicate: NSPredicate(format: "eventId == %@", eventId))
-                for form in forms ?? [] {
-                    context.delete(form)
-                }
-                return true
-            } catch {
-                NSLog("Could not delete forms \(error)")
-                return false
-            }
-        }
+        return Form.mr_deleteAll(matching: NSPredicate(format: "eventId == %@", eventId), in: context)
     }
     
     @discardableResult
     @objc public static func createForm(eventId: NSNumber, order: NSNumber, formJson: [AnyHashable : Any], context: NSManagedObjectContext) -> Form? {
-        return context.performAndWait {
-            if let formId = formJson[FormKey.id.key] as? NSNumber {
-                let form = Form(context: context)
-                let formJsonEntity = FormJson(context: context)
-                formJsonEntity.json = formJson
-                formJsonEntity.formId = formId
-                form.json = formJsonEntity
-                form.eventId = eventId
-                form.archived = formJson[FormKey.archived.key] as? Bool ?? false
-                form.formId = formId
-                form.order = order
-                
-                if let formFields = formJson[FormKey.fields.key] as? [[AnyHashable: Any]] {
-                    if let primaryMapFieldName = formJson[FormKey.primaryField.key] as? String {
-                        form.primaryMapField = formFields.first { field in
-                            if let fieldName = field[FieldKey.name.key] as? String {
-                                return fieldName == primaryMapFieldName
-                            }
-                            return false
+        if let formId = formJson[FormKey.id.key] as? NSNumber, let form = Form.mr_createEntity(in: context), let formJsonEntity = FormJson.mr_createEntity(in: context) {
+            formJsonEntity.json = formJson
+            formJsonEntity.formId = formId
+            form.json = formJsonEntity
+            form.eventId = eventId
+            form.archived = formJson[FormKey.archived.key] as? Bool ?? false
+            form.formId = formId
+            form.order = order
+            
+            if let formFields = formJson[FormKey.fields.key] as? [[AnyHashable: Any]] {
+                if let primaryMapFieldName = formJson[FormKey.primaryField.key] as? String {
+                    form.primaryMapField = formFields.first { field in
+                        if let fieldName = field[FieldKey.name.key] as? String {
+                            return fieldName == primaryMapFieldName
                         }
-                    }
-                    if let secondaryMapFieldName = formJson[FormKey.secondaryField.key] as? String {
-                        form.secondaryMapField = formFields.first { field in
-                            if let fieldName = field[FieldKey.name.key] as? String {
-                                return fieldName == secondaryMapFieldName
-                            }
-                            return false
-                        }
-                    }
-                    if let primaryFeedFieldName = formJson[FormKey.primaryFeedField.key] as? String {
-                        form.primaryFeedField = formFields.first { field in
-                            if let fieldName = field[FieldKey.name.key] as? String {
-                                return fieldName == primaryFeedFieldName
-                            }
-                            return false
-                        }
-                    }
-                    if let secondaryFeedFieldName = formJson[FormKey.secondaryFeedField.key] as? String {
-                        form.secondaryFeedField = formFields.first { field in
-                            if let fieldName = field[FieldKey.name.key] as? String {
-                                return fieldName == secondaryFeedFieldName
-                            }
-                            return false
-                        }
+                        return false
                     }
                 }
-                try? context.obtainPermanentIDs(for: [form])
-                try? context.save()
-                return form
+                if let secondaryMapFieldName = formJson[FormKey.secondaryField.key] as? String {
+                    form.secondaryMapField = formFields.first { field in
+                        if let fieldName = field[FieldKey.name.key] as? String {
+                            return fieldName == secondaryMapFieldName
+                        }
+                        return false
+                    }
+                }
+                if let primaryFeedFieldName = formJson[FormKey.primaryFeedField.key] as? String {
+                    form.primaryFeedField = formFields.first { field in
+                        if let fieldName = field[FieldKey.name.key] as? String {
+                            return fieldName == primaryFeedFieldName
+                        }
+                        return false
+                    }
+                }
+                if let secondaryFeedFieldName = formJson[FormKey.secondaryFeedField.key] as? String {
+                    form.secondaryFeedField = formFields.first { field in
+                        if let fieldName = field[FieldKey.name.key] as? String {
+                            return fieldName == secondaryFeedFieldName
+                        }
+                        return false
+                    }
+                }
             }
-            return nil
+            
+            return form
         }
+        return nil
     }
     
     @discardableResult
     @objc public static func deleteAndRecreateForms(eventId: NSNumber, formsJson:[[AnyHashable: Any]], context: NSManagedObjectContext) -> [Form] {
-        
-        return context.performAndWait {
-            Form.deleteAllFormsForEvent(eventId: eventId, context: context)
-            var forms: [Form] = []
-            for (index, formJson) in formsJson.enumerated() {
-                if let form = Form.createForm(eventId: eventId, order: NSNumber(value: index), formJson: formJson, context: context) {
-                    forms.append(form)
-                }
+        Form.deleteAllFormsForEvent(eventId: eventId, context: context)
+        var forms: [Form] = []
+        for (index, formJson) in formsJson.enumerated() {
+            if let form = Form.createForm(eventId: eventId, order: NSNumber(value: index), formJson: formJson, context: context) {
+                forms.append(form)
             }
-            try? context.save()
-            return forms
         }
+        return forms
     }
     
     @objc public var name: String? {

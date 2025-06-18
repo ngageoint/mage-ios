@@ -15,25 +15,18 @@ import CoreData
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
-        
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else {
-            return nil
-        }
         let url = "\(baseURL.absoluteURL)/api/events";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        MageLogger.misc.debug("TIMING Fetching Events @ \(methodStart)")
+        NSLog("TIMING Fetching Events @ \(methodStart)")
 
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            MageLogger.misc.debug("TIMING Fetched Events. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            NSLog("TIMING Fetched Events. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
 
             let saveStart = Date()
-            MageLogger.misc.debug("TIMING Saving Events @ \(saveStart)")
-            context.performAndWait {
-                let localUser = User.fetchCurrentUser(context: context);
+            NSLog("TIMING Saving Events @ \(saveStart)")
+            MagicalRecord.save { localContext in
+                let localUser = User.fetchCurrentUser(context: localContext);
                 var eventsReturned: [NSNumber] = []
                 
                 guard let events = responseObject as? [[AnyHashable : Any]] else {
@@ -41,10 +34,8 @@ import CoreData
                     return;
                 }
                 for eventJson in events {
-                    if let eventId = eventJson[EventKey.id.key] as? NSNumber, 
-                        let event = context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: eventId)
-                    {
-                        event.updateEvent(json: eventJson, context: context);
+                    if let eventId = eventJson[EventKey.id.key] as? NSNumber, let event = Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: eventId, in: localContext) {
+                        event.updateEvent(json: eventJson, context: localContext);
                         if let recentEventIds = localUser?.recentEventIds, let remoteId = event.remoteId {
                             event.recentSortOrder = NSNumber(value: recentEventIds.firstIndex(of: remoteId) ?? 0)
                         }
@@ -52,7 +43,7 @@ import CoreData
                             eventsReturned.append(remoteId)
                         }
                     } else {
-                        if let event = Event.insertEvent(json: eventJson, context: context) {
+                        if let event = Event.insertEvent(json: eventJson, context: localContext) {
                             if let recentEventIds = localUser?.recentEventIds, let remoteId = event.remoteId {
                                 event.recentSortOrder = NSNumber(value: recentEventIds.firstIndex(of: remoteId) ?? 0)
                             }
@@ -62,20 +53,21 @@ import CoreData
                         }
                     }
                 }
-                
-                let eventsToDelete = try? context.fetchObjects(Event.self, predicate: NSPredicate(format: "NOT (\(EventKey.remoteId.key) IN %@)", eventsReturned))
-                
-                for event in eventsToDelete ?? [] {
-                    context.delete(event)
-                }
-                do {
-                    try context.save()
-                    success?(task, nil)
-                } catch {
-                    failure?(task, error)
-                }
+                Event.mr_deleteAll(matching: NSPredicate(format: "NOT (\(EventKey.remoteId.key) IN %@)", eventsReturned), in: localContext);
+            } completion: { contextDidSave, error in
+                NSLog("TIMING Saved Events. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
+
+                if let error = error {
+                    if let failure = failure {
+                        failure(task, error);
+                    }
+                } else if let success = success {
+                    success(task, nil);
+                }
             }
+
         }, failure: { task, error in
             if let failure = failure {
                 failure(task, error);
@@ -85,20 +77,14 @@ import CoreData
     }
     
     @objc public static func sendRecentEvent() {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context,
-              let u = User.fetchCurrentUser(context: context), 
-                let baseURL = MageServer.baseURL()
-        else {
+        guard let u = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()), let baseURL = MageServer.baseURL() else {
             return;
         }
         let manager = MageSessionManager.shared();
         guard let currentEventId = Server.currentEventId(), let task: URLSessionDataTask = manager?.post_TASK("\(baseURL.absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(currentEventId)/recent", parameters: nil, progress: nil, success: { task, response in
             
         }, failure: { task, error in
-            MageLogger.misc.error("Error posting recent event")
+            print("Error posting recent event")
         }) else {
             return
         }
@@ -106,27 +92,20 @@ import CoreData
     }
     
     @objc public static func getCurrentEvent(context: NSManagedObjectContext) -> Event? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        if let context = context, let currentEventId = Server.currentEventId() {
-            return context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: currentEventId)
+        if let currentEventId = Server.currentEventId() {
+            return Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: currentEventId, in: context);
         }
         return nil;
     }
     
     @objc public static func getEvent(eventId: NSNumber, context: NSManagedObjectContext) -> Event? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        if let context = context {
-            return context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: eventId)
-        }
-        return nil;
+        return Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: eventId, in: context);
     }
     
     @objc public static func caseInsensitiveSortFetchAll(sortTerm: String?, ascending: Bool, predicate: NSPredicate?, groupBy: String?, context: NSManagedObjectContext) -> NSFetchedResultsController<Event>? {
-        let request = Event.fetchRequest()
+        guard let request = Event.mr_requestAll(in: context) as? NSFetchRequest<Event> else {
+            return nil;
+        }
         request.predicate = predicate;
         request.includesSubentities = false;
         
@@ -138,9 +117,8 @@ import CoreData
     }
     
     static func insertEvent(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Event? {
-        let event = Event(context: context)
-        try? context.obtainPermanentIDs(for: [event])
-        event.updateEvent(json: json, context: context);
+        let event = Event.mr_createEntity(in: context)
+        event?.updateEvent(json: json, context: context);
         return event;
     }
     
@@ -163,7 +141,7 @@ import CoreData
                 }) {
                     team.update(json: teamJson, context: context);
                 } else {
-                    if let teamId = teamJson[TeamKey.id.key] as? String, let team = context.fetchFirst(Team.self, key: TeamKey.remoteId.key, value: teamId) {
+                    if let teamId = teamJson[TeamKey.id.key] as? String, let team = Team.mr_findFirst(byAttribute: TeamKey.remoteId.key, withValue: teamId, in: context) {
                         team.update(json: teamJson, context: context);
                         self.addToTeams(team);
                     } else {
@@ -178,7 +156,7 @@ import CoreData
             Layer.populateLayers(json: layers, eventId: remoteId, context: context);
         }
         if let remoteId = remoteId {
-            Feed.refreshFeeds(eventId: remoteId, context: context)
+            Feed.refreshFeeds(eventId: remoteId)
         }
     }
     
@@ -188,20 +166,24 @@ import CoreData
         }
         for team in teams {
             if let users = team.users {
-                if users.contains(where: { $0.remoteId == user.remoteId }) {
-                    return true
+                if users.contains(user) {
+                    return true;
                 }
             }
         }
-        MageLogger.misc.debug("User \(user.name ?? "") is not in the event \(self.name ?? "")");
+        print("User \(user.name ?? "") is not in the event \(self.name ?? "")");
         return false;
+    }
+    
+    @objc public func form(observation: Observation) -> Form? {
+        return observation.primaryEventForm;
     }
     
     @objc public func form(id: NSNumber?) -> Form? {
         guard let id = id, let managedObjectContext = self.managedObjectContext, let remoteId = remoteId else {
             return nil
         }
-        return try? managedObjectContext.fetchFirst(Form.self, predicate: NSPredicate(format: "\(FormKey.eventId.key) == %@ AND \(FormKey.formId.key) == %@", remoteId, id))
+        return Form.mr_findFirst(with: NSPredicate(format: "\(FormKey.eventId.key) == %@ AND \(FormKey.formId.key) == %@", remoteId, id), in: managedObjectContext)
     }
     
     @objc public var forms: [Form]? {
@@ -209,7 +191,7 @@ import CoreData
             guard let managedObjectContext = managedObjectContext, let remoteId = remoteId else {
                 return nil
             }
-            return try? managedObjectContext.fetchObjects(Form.self, sortBy: [NSSortDescriptor(key: "order", ascending: true)], predicate: NSPredicate(format: "eventId == %@", remoteId))
+            return Form.mr_findAllSorted(by: "order", ascending: true, with: NSPredicate(format: "eventId == %@", remoteId), in: managedObjectContext) as? [Form]
         }
     }
     
@@ -218,7 +200,7 @@ import CoreData
             guard let managedObjectContext = managedObjectContext, let remoteId = remoteId else {
                 return nil
             }
-            return try? managedObjectContext.fetchObjects(Form.self, sortBy: [NSSortDescriptor(key: "order", ascending: true)], predicate: NSPredicate(format: "eventId == %@ AND \(FormKey.archived.key) == false", remoteId))
+            return Form.mr_findAllSorted(by: "order", ascending: true, with: NSPredicate(format: "eventId == %@ AND \(FormKey.archived.key) == false", remoteId), in: managedObjectContext) as? [Form]
         }
     }
 }

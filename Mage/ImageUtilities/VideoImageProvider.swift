@@ -45,7 +45,7 @@ struct VideoImageProvider: ImageDataProvider {
                 do {
                     handler(.success(try self.generateThumb(asset: asset)));
                 } catch let error as NSError {
-                    MageLogger.misc.error("\(error.description).")
+                    print("\(error.description).")
                     handler(.failure(error));
                 }
                 return;
@@ -65,7 +65,7 @@ struct VideoImageProvider: ImageDataProvider {
             do {
                 handler(.success(try self.generateThumb(asset: asset)));
             } catch let error as NSError {
-                MageLogger.misc.error("thrown error from generate thumb for url \(realUrl) \(error.description).")
+                print("thrown error from generate thumb for url \(realUrl) \(error.description).")
                 handler(.failure(error));
             }
         }

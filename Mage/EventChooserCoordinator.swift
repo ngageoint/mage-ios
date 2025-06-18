@@ -29,11 +29,7 @@ import UIKit
     
     @objc func start() {
         if let currentEventId = Server.currentEventId() {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return }
-            if let event = Event.getEvent(eventId: currentEventId, context: context) {
+            if let event = Event.getEvent(eventId: currentEventId, context: NSManagedObjectContext.mr_default()) {
                 eventToSegueTo = event
                 eventController?.dismiss(animated: false)
                 delegate?.eventChosen(event: event)
@@ -60,8 +56,7 @@ import UIKit
         if let eventController = eventController {
             viewController?.pushViewController(eventController, animated: false)
         }
-        
-        MageUseCases.fetchEvents()
+        Mage.singleton.fetchEvents()
     }
 
     func eventsFetched() {

@@ -24,7 +24,6 @@
 @property (strong, nonatomic) NSArray<Event *>* recentEvents;
 @property (strong, nonatomic) NSMutableArray* sections;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
-@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation SettingsDataSource
@@ -39,26 +38,25 @@ static const NSInteger SETTINGS_SECTION = 6;
 static const NSInteger ABOUT_SECTION = 7;
 static const NSInteger LEGAL_SECTION = 8;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super init];
     
     if (self) {
         self.scheme = containerScheme;
-        self.context = context;
-        self.event = [Event getCurrentEventWithContext:context];
+        self.event = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
         
-        User *user = [User fetchCurrentUserWithContext:context];
+        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];
 
         if (recentEventIds != nil) {
-            NSFetchRequest *recentRequest = [Event MR_requestAllInContext:context];
+            NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
             [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
             [recentRequest setIncludesSubentities:NO];
             NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
             [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
             
             NSError *error = nil;
-            self.recentEvents = [context executeFetchRequest:recentRequest error:&error];
+            self.recentEvents = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:recentRequest error:&error];
             if (error != nil) {
                 self.recentEvents = [[NSArray alloc] init];
             }
@@ -253,10 +251,9 @@ static const NSInteger LEGAL_SECTION = 8;
 
 - (NSDictionary *) servicesSection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    CLLocationManager *manager = [[CLLocationManager alloc] init];
     
     NSString *locationServicesLabel = nil;
-    CLAuthorizationStatus authorizationStatus = manager.authorizationStatus;
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
     if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
         locationServicesLabel = [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off";
     } else {
@@ -358,9 +355,6 @@ static const NSInteger LEGAL_SECTION = 8;
         case LocationDisplayDms:
             locationDisplayString = @"Degrees Minutes Seconds";
             break;
-        case LocationDisplayGars:
-            NSLog(@"LocationDisplayGars switch not handled in SettingsDataSource.m");
-            break;
     }
     return [@{
         @"header": @"Display Settings",
@@ -458,7 +452,7 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSDictionary *) aboutSection {
-    User *user = [User fetchCurrentUserWithContext:self.context];
+    User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
@@ -478,15 +472,7 @@ static const NSInteger LEGAL_SECTION = 8;
                              @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                              @"textLabel": @"Version",
                              @"detailTextLabel": self.versionCellSelectionCount >= 5 ? [NSString stringWithFormat:@"%@ (%@)", versionString, buildString] : versionString
-                             },
-                         @{
-                             @"type": [NSNumber numberWithInteger: kContactUs],
-                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                             @"textLabel": @"Contact Us",
-                             @"systemImage": @"envelope.fill",
-                             @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
-                         }
-              ]
+                             }]
               } mutableCopy];
 }
 

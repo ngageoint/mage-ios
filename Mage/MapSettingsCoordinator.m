@@ -8,7 +8,7 @@
 
 #import "MapSettingsCoordinator.h"
 #import "MapSettings.h"
-//#import "OfflineMapTableViewController.h"
+#import "OfflineMapTableViewController.h"
 #import "OnlineMapTableViewController.h"
 #import "MAGE-Swift.h"
 
@@ -18,27 +18,24 @@
 @property (strong, nonatomic) UINavigationController *settingsNavController;
 @property (strong, nonatomic) UIView *sourceView;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
-@property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
 
 @implementation MapSettingsCoordinator
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>)  containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController scheme: (id<MDCContainerScheming>) containerScheme {
     self = [super init];
     self.scheme = containerScheme;
     self.rootViewController = rootViewController;
     self.settingsNavController = self.rootViewController;
-    self.context = context;
     return self;
 }
 
-- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithRootViewController: (UINavigationController *) rootViewController andSourceView: (UIView *) sourceView scheme: (id<MDCContainerScheming>) containerScheme {
     self = [super init];
     self.scheme = containerScheme;
     self.rootViewController = rootViewController;
     self.sourceView = sourceView;
-    self.context = context;
     return self;
 }
 
@@ -78,7 +75,7 @@
 }
 
 - (void) offlineMapsCellTapped {
-    OfflineMapTableViewController *offlineMapController = [[OfflineMapTableViewController alloc] initWithScheme: self.scheme context:self.context];
+    OfflineMapTableViewController *offlineMapController = [[OfflineMapTableViewController alloc] initWithScheme: self.scheme];
     [self.settingsNavController pushViewController:offlineMapController animated:YES];
 }
 
@@ -91,7 +88,7 @@
     if ([viewController isKindOfClass:[MapSettings class]]) {
         MapSettings *settings = (MapSettings *)viewController;
         
-        NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:self.context];
+        NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND type == %@ AND (loaded == 0 || loaded == nil)", [Server currentEventId], @"GeoPackage"] inContext:[NSManagedObjectContext MR_defaultContext]];
         settings.mapsToDownloadCount = count;
     }
 }

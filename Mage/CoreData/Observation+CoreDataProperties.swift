@@ -30,7 +30,6 @@ extension Observation {
     @NSManaged var attachments: Set<Attachment>?
     @NSManaged var favorites: Set<ObservationFavorite>?
     @NSManaged var observationImportant: ObservationImportant?
-    @NSManaged var locations: Set<ObservationLocation>?
     @NSManaged var user: User?
 }
 

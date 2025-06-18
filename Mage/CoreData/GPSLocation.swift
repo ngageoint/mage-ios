@@ -49,16 +49,7 @@ import sf_ios
     }
     
     @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation? {
-        var gpsLocation: GPSLocation? {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            if let context = context {
-                return GPSLocation(context: context)
-            }
-            return nil
-        }
-        
-        guard let gpsLocation = gpsLocation else {
+        guard let gpsLocation = GPSLocation.mr_createEntity(in: context) else {
             return nil;
         }
         
@@ -92,6 +83,19 @@ import sf_ios
         gpsLocation.timestamp = location.timestamp;
         gpsLocation.eventId = Server.currentEventId();
         
+        let radioTechDict = telephonyInfo.serviceCurrentRadioAccessTechnology ?? [:];
+        let carrierInfoDict : [String : CTCarrier] = telephonyInfo.serviceSubscriberCellularProviders ?? [:];
+
+        var carrierInformations: [[AnyHashable:Any]] = [];
+        for key in radioTechDict.keys {
+            let carrier = carrierInfoDict[key];
+            carrierInformations.append([
+                GPSLocationKey.carrier_name.key: carrier?.carrierName ?? "No carrier",
+                GPSLocationKey.country_code.key: carrier?.isoCountryCode ?? "Airplane mode, no sim or out of range",
+                GPSLocationKey.mobile_country_code.key: carrier?.mobileCountryCode ?? "No sim or out of range"
+                ]);
+        }
+        
         gpsLocation.properties = [
             GPSLocationKey.altitude.key: location.altitude,
             GPSLocationKey.accuracy.key: location.horizontalAccuracy,
@@ -103,6 +107,7 @@ import sf_ios
             GPSLocationKey.battery_level.key: device.batteryLevel * 100,
             GPSLocationKey.battery_state.key: batteryState,
             GPSLocationKey.telephone_network.key: telephonyInfo.serviceCurrentRadioAccessTechnology ?? "Unknown",
+            GPSLocationKey.carrier_information.key: carrierInformations,
             GPSLocationKey.network.key: manager.localizedNetworkReachabilityStatusString(),
             GPSLocationKey.mage_version.key: "\(appVersion ?? "")-\(buildNumber ?? "")",
             GPSLocationKey.provider.key: "gps",

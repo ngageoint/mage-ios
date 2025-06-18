@@ -38,7 +38,7 @@ import Kingfisher
         button?.removeFromSuperview();
     }
     
-    func getAttachmentUrl(attachment: AttachmentModel) -> URL? {
+    func getAttachmentUrl(attachment: Attachment) -> URL? {
         if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
             return URL(fileURLWithPath: localPath);
         } else if let url = attachment.url {
@@ -47,7 +47,7 @@ import Kingfisher
         return nil;
     }
 
-    func getAttachmentUrl(size: Int, attachment: AttachmentModel) -> URL? {
+    func getAttachmentUrl(size: Int, attachment: Attachment) -> URL? {
         if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
             return URL(fileURLWithPath: localPath);
         } else if let url = attachment.url {
@@ -115,7 +115,7 @@ import Kingfisher
         }
     }
     
-    @objc public func setImage(attachment: AttachmentModel, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
+    @objc public func setImage(attachment: Attachment, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
         self.imageView.kf.indicatorType = .none;
@@ -126,11 +126,11 @@ import Kingfisher
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
             self.imageView.showThumbnail(cacheOnly: !DataConnectionUtilities.shouldFetchAttachments(),
                                          completionHandler:
-                                            { [weak self] result in
+                                            { result in
                                                 switch result {
                                                 case .success(_):
-                                                    self?.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-                                                    NSLog("Loaded the image \(self?.imageView.accessibilityLabel ?? "")")
+                                                    self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+                                                    NSLog("Loaded the image \(self.imageView.accessibilityLabel ?? "")")
                                                 case .failure(let error):
                                                     print(error);
                                                 }

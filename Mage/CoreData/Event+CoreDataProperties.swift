@@ -45,7 +45,7 @@ extension Event {
                 return []
             }
         } catch let error {
-            MageLogger.misc.error("error:\(error)")
+            print("error:\(error)")
             return []
         }
     }

@@ -11,7 +11,6 @@ import MapKit
 
 protocol SearchControllerDelegate {
     func onSearchResultSelected(type: SearchResponseType, result: GeocoderResult);
-    func clearSearchResult()
 }
 
 class SearchSheetController: UIViewController {
@@ -152,9 +151,9 @@ extension SearchSheetController : UISearchBarDelegate {
                     self.searchType = type
                     self.searchResults = results
                 case let .error(message):
-                MageLogger.misc.error("search error \(message)")
+                    print("search error \(message)")
             }
-            self.delegate?.clearSearchResult()
+            
             self.tableView.reloadData()
             UIView.animate(withDuration: 0.3) {
                 self.refreshingView.alpha = 0.0
@@ -167,7 +166,6 @@ extension SearchSheetController : UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.searchType = nil
         self.searchResults = []
-        self.delegate?.clearSearchResult()
         self.tableView.reloadData()
         
         return true

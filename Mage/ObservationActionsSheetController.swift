@@ -19,10 +19,9 @@ class ObservationActionsSheetController: UITableViewController {
     weak var delegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
     var userHasEditPermissions: Bool = false;
-    var router: MageRouter
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
-        router.bottomSheetRoute = nil
+        delegate?.cancelAction?();
     }
     
     private lazy var cancelButton: MDCButton = {
@@ -38,17 +37,11 @@ class ObservationActionsSheetController: UITableViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    public init(observation: Observation, delegate: ObservationActionsDelegate, router: MageRouter) {
-        self.router = router
+    @objc public init(observation: Observation, delegate: ObservationActionsDelegate) {
         super.init(style: .plain);
         self.observation = observation;
         self.delegate = delegate;
-        self.router = router
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
-        let user = User.fetchCurrentUser(context: context);
+        let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default());
         self.userHasEditPermissions = user?.hasEditPermission ?? false;
     }
     
@@ -165,7 +158,7 @@ class ObservationActionsSheetController: UITableViewController {
             delegate?.deleteObservation?(observation);
         }
         if (tag == ObservationActionsSheetController.EDIT_CELL_TAG) {
-            router.appendRoute(ObservationRoute.edit(uri: observation.objectID.uriRepresentation()))
+            delegate?.editObservation?(observation);
         }
         
         if (tag == ObservationActionsSheetController.REORDER_CELL_TAG) {
@@ -175,7 +168,7 @@ class ObservationActionsSheetController: UITableViewController {
         if (tag == ObservationActionsSheetController.USER_CELL_TAG) {
             // show the user page
             if let user = observation.user {
-                router.appendRoute(UserRoute.detail(uri: user.objectID.uriRepresentation()))
+                delegate?.viewUser?(user)
             }
         }
         

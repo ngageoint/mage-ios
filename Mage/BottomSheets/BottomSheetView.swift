@@ -8,15 +8,13 @@
 
 import UIKit
 
-protocol BottomSheetView {
-    func getHeaderColor() -> UIColor?
-    func refresh()
-}
+class BottomSheetView: UIView {
 
-extension BottomSheetView {
     func getHeaderColor() -> UIColor? {
         return .clear
     }
     
-    func refresh() {}
+    func refresh() {
+    }
+
 }

@@ -8,7 +8,6 @@
 
 import Foundation
 import MapKit
-import MapFramework
 
 protocol FollowUser {
     var mapView: MKMapView? { get set }
@@ -38,15 +37,7 @@ class FollowUserMapMixin: NSObject, MapMixin {
         self._followedUser = user
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func setupMixin(mapView: MKMapView, mapState: MapState) {
+    func setupMixin() {
         if _followedUser != nil {
             followUser(user: _followedUser)
         }
@@ -79,19 +70,14 @@ class FollowUserMapMixin: NSObject, MapMixin {
             fetchRequest.predicate = NSPredicate(value: true)
             fetchRequest.fetchLimit = 1
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: GPSLocationKey.timestamp.key, ascending: true)]
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return }
-            
-            gpsFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+            gpsFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
             gpsFetchedResultsController?.delegate = self
             do {
                 try gpsFetchedResultsController?.performFetch()
             } catch {
                 let fetchError = error as NSError
-                MageLogger.misc.error("Unable to Perform Fetch Request")
-                MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
+                print("Unable to Perform Fetch Request")
+                print("\(fetchError), \(fetchError.localizedDescription)")
             }
             if let fetchedObjects = gpsFetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty, let cllocation = fetchedObjects[0].cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
@@ -100,19 +86,14 @@ class FollowUserMapMixin: NSObject, MapMixin {
             let fetchRequest = Location.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "user = %@", user)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return }
-            
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
             fetchedResultsController?.delegate = self
             do {
                 try fetchedResultsController?.performFetch()
             } catch {
                 let fetchError = error as NSError
-                MageLogger.misc.error("Unable to Perform Fetch Request")
-                MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
+                print("Unable to Perform Fetch Request")
+                print("\(fetchError), \(fetchError.localizedDescription)")
             }
             if let fetchedObjects = fetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty {
                 zoomAndCenterMap(location: fetchedObjects[0])
@@ -140,16 +121,16 @@ extension FollowUserMapMixin : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            MageLogger.misc.debug("insert")
+            print("insert")
             if let location = anObject as? Location {
                 zoomAndCenterMap(location: location)
             } else if let gpsLocation = anObject as? GPSLocation, let cllocation = gpsLocation.cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }
         case .delete:
-            MageLogger.misc.debug("delete")
+            print("delete")
         case .update:
-            MageLogger.misc.debug("update")
+            print("update")
             if let location = anObject as? Location {
                 zoomAndCenterMap(location: location)
             } else if let gpsLocation = anObject as? GPSLocation, let cllocation = gpsLocation.cllocation {

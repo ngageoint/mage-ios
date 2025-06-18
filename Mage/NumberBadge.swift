@@ -52,6 +52,7 @@ class NumberBadge: UIView {
         label.textColor = textColor
         label.textAlignment = .center
         label.accessibilityLabel = "Badge \(label.text ?? "")"
+        
         setNeedsUpdateConstraints()
     }
     

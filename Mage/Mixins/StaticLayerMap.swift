@@ -8,10 +8,8 @@
 
 import Foundation
 import MapKit
-import MapFramework
 import CoreData
 import geopackage_ios
-import DataSourceDefinition
 
 protocol StaticLayerMap {
     var mapView: MKMapView? { get set }
@@ -20,9 +18,6 @@ protocol StaticLayerMap {
 }
 
 class StaticLayerMapMixin: NSObject, MapMixin {
-    @Injected(\.staticLayerRepository)
-    var repository: StaticLayerRepository
-    
     var mapAnnotationFocusedObserver: AnyObject?
 
     var staticLayerMap: StaticLayerMap
@@ -41,15 +36,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "selectedStaticLayers")
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func setupMixin(mapView: MKMapView, mapState: MapState) {
+    func setupMixin() {
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.staticLayerMap.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)
@@ -74,11 +61,11 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         
         let staticLayersInEvent = staticLayersPerEvent[currentEvent.stringValue] ?? []
         for staticLayerId in staticLayersInEvent {
-            guard let staticLayer = repository.getStaticLayer(remoteId: staticLayerId, eventId: currentEvent) else {
+            guard let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", staticLayerId, currentEvent), in: NSManagedObjectContext.mr_default()) else {
                 continue
             }
             if !unselectedStaticLayerIds.contains(staticLayerId) {
-                MageLogger.misc.debug("Adding the static layer \(staticLayer.name ?? "No Name") to the map")
+                print("Adding the static layer \(staticLayer.name ?? "No Name") to the map")
                 guard let features = staticLayer.features else {
                     continue
                 }
@@ -88,12 +75,13 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                         continue
                     }
                     if featureType == "Point" {
-                        let annotation = StaticPointAnnotation(feature: feature)
-                        annotation.layerName = staticLayer.name
-                        annotation.title = StaticLayer.featureName(feature: feature)
-                        annotation.subtitle = StaticLayer.featureDescription(feature: feature)
-                        staticLayerMap.mapView?.addAnnotation(annotation)
-                        annotations.append(annotation)
+                        if let annotation = StaticPointAnnotation(feature: feature) {
+                            annotation.layerName = staticLayer.name
+                            annotation.title = StaticLayer.featureName(feature: feature)
+                            annotation.subtitle = StaticLayer.featureDescription(feature: feature)
+                            staticLayerMap.mapView?.addAnnotation(annotation)
+                            annotations.append(annotation)
+                        }
                     } else if featureType == "Polygon" {
                         if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
                             let polygon = StyledPolygon.generate(coordinates: coordinates as? [[[NSNumber]]] ?? [])
@@ -110,10 +98,6 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             polygon.title = StaticLayer.featureName(feature: feature)
                             polygon.subtitle = StaticLayer.featureDescription(feature: feature)
                             
-                            polygon.itemKey = FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: polygon.coordinate, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil).toKey()
-                            polygon.id = polygon.itemKey
-                            polygon.dataSource = DataSources.staticLayerFeature
-                            
                             annotations.append(polygon)
                             staticLayerMap.mapView?.addOverlay(polygon)
                         }
@@ -129,10 +113,6 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             polyline.title = StaticLayer.featureName(feature: feature)
                             polyline.subtitle = StaticLayer.featureDescription(feature: feature)
                             
-                            polyline.itemKey = FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: polyline.coordinate, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil).toKey()
-                            polyline.id = polyline.itemKey
-                            polyline.dataSource = DataSources.staticLayerFeature
-                            
                             annotations.append(polyline)
                             staticLayerMap.mapView?.addOverlay(polyline)
                         }
@@ -147,8 +127,8 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         }
         
         for unselectedStaticLayerId in unselectedStaticLayerIds {
-            if let unselectedStaticLayer = repository.getStaticLayer(remoteId: unselectedStaticLayerId), let staticItems = staticLayers[unselectedStaticLayerId] {
-                MageLogger.misc.debug("removing the layer \(unselectedStaticLayer.name ?? "No Name") from the map")
+            if let unselectedStaticLayer = StaticLayer.mr_findFirst(byAttribute: "remoteId", withValue: unselectedStaticLayerId), let staticItems = staticLayers[unselectedStaticLayerId] {
+                print("removing the layer \(unselectedStaticLayer.name ?? "No Name") from the map")
                 for staticItem in staticItems {
                     if let overlay = staticItem as? MKOverlay {
                         staticLayerMap.mapView?.removeOverlay(overlay)
@@ -161,43 +141,30 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         }
     }
     
-    func itemKeys(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [String : [String]] {
+    func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = await (self.staticLayerMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = (self.staticLayerMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
-        var annotations: [FeatureItem] = []
+        var annotations: [Any] = []
         
         for (layerId, features) in staticLayers {
             for feature in features {
                 if let polyline = feature as? StyledPolyline {
-                    if polyline.hitTest(location: location, distanceTolerance: tolerance) {
-                        if let currentEventId = Server.currentEventId(),
-                            let staticLayer = repository.getStaticLayer(remoteId: layerId, eventId: currentEventId)
-                        {
-                            annotations.append(FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: location, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil))
+                    if lineHitTest(lineObservation: polyline, location: location, tolerance: tolerance) {
+                        if let currentEventId = Server.currentEventId(), let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, currentEventId), in: NSManagedObjectContext.mr_default()) {
+                            annotations.append(FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: location, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil, images: nil))
                         }
                     }
                 } else if let polygon = feature as? StyledPolygon {
-                    if polygon.hitTest(location: location) {
-                        if let currentEventId = Server.currentEventId(),
-                            let staticLayer = repository.getStaticLayer(remoteId: layerId, eventId: currentEventId)
-                        {
-                            annotations.append(FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: location, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil))
+                    if polygonHitTest(polygonObservation: polygon, location: location) {
+                        if let currentEventId = Server.currentEventId(), let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, currentEventId), in: NSManagedObjectContext.mr_default()) {
+                            annotations.append(FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: location, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil, images: nil))
                         }
                     }
                 }
             }
         }
-        if annotations.isEmpty {
-            return [:]
-        }
-        return [DataSources.featureItem.key: annotations.map({ featureItem in
-            featureItem.toKey()
-        })]
+        return annotations
     }
     
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {

@@ -9,7 +9,6 @@
 import Foundation
 import MapKit
 import MaterialComponents
-import MapFramework
 
 protocol CanReportLocation {
     var mapView: MKMapView? { get set }
@@ -52,15 +51,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
         reportLocationButton.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func setupMixin(mapView: MKMapView, mapState: MapState) {
+    func setupMixin() {
         guard let buttonParentView = buttonParentView else {
             return
         }
@@ -81,10 +72,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
     @objc func reportLocationButtonPressed(_ sender: UIButton) {
         let authorized = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
         
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
+        let context = NSManagedObjectContext.mr_default()
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
         
         if UserDefaults.standard.locationServiceDisabled {
@@ -116,10 +104,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
         let authorized = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
         
         let trackingOn = UserDefaults.standard.reportLocation
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
+        let context = NSManagedObjectContext.mr_default()
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
         
         if UserDefaults.standard.locationServiceDisabled {

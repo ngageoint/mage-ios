@@ -48,33 +48,15 @@ public enum LayerType : String {
             return nil;
         }
         let url = "\(baseURL)/api/events/\(eventId)/layers";
-        MageLogger.misc.debug("XXX url \(url)")
+        
         let task = manager.get_TASK(url, parameters: nil, progress: nil) { task, response in
             guard let response = response as? [[AnyHashable : Any]] else {
                 return;
             }
-            
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context else { return }
-            
-            context.performAndWait {
-                MageLogger.misc.debug("XXX saving \(response.count)")
+
+            MagicalRecord.save { context in
                 let layerRemoteIds = Layer.populateLayers(json: response, eventId: eventId, context: context)
-                MageLogger.misc.debug("XXX saved \(layerRemoteIds)")
-                let layers = try? context.fetchObjects(
-                    Layer.self,
-                    predicate: NSPredicate(
-                        format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@",
-                            layerRemoteIds,
-                            eventId
-                    )
-                )
-                
-                for layer in layers ?? [] {
-                    context.delete(layer)
-                }
+                Layer.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@", layerRemoteIds, eventId), in: context);
                 
                 var selectedOnlineLayers = UserDefaults.standard.selectedOnlineLayers ?? [:]
                 
@@ -92,18 +74,8 @@ public enum LayerType : String {
                 selectedOnlineLayers[eventId.stringValue] = selectedEventOnlineLayers;
                 UserDefaults.standard.selectedOnlineLayers = selectedOnlineLayers;
                 
-                let staticLayers = try? context.fetchObjects(
-                    StaticLayer.self,
-                    predicate: NSPredicate(
-                        format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@",
-                        layerRemoteIds,
-                        eventId
-                    )
-                )
                 
-                for staticLayer in staticLayers ?? [] {
-                    context.delete(staticLayer)
-                }
+                StaticLayer.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@", layerRemoteIds, eventId), in: context);
                 
                 var selectedStaticLayers = UserDefaults.standard.selectedStaticLayers ?? [:]
                 
@@ -121,15 +93,15 @@ public enum LayerType : String {
                 selectedStaticLayers[eventId.stringValue] = selectedEventStaticLayers;
                 UserDefaults.standard.selectedStaticLayers = selectedStaticLayers;
                 
-                do {
-                    try context.save()
-                    success?(task, response)
-                } catch {
-                    failure?(task, error)
+            } completion: { contextDidSave, error in
+                if let error = error {
+                    failure?(task, error);
+                } else {
+                    success?(task, response);
                 }
             }
         } failure: { task, error in
-            MageLogger.misc.error("XXX Error \(error)")
+            NSLog("Error \(error)")
             failure?(task, error);
         };
 
@@ -138,83 +110,45 @@ public enum LayerType : String {
     
     @discardableResult
     @objc public static func populateLayers(json: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [NSNumber] {
-        
-        return context.performAndWait {
-            var layerRemoteIds: [NSNumber] = [];
-            for layer in json {
-                guard let remoteLayerId = Layer.layerId(json: layer) else {
-                    continue;
-                }
-                layerRemoteIds.append(remoteLayerId);
-                
-                if let layerType = Layer.layerType(json: layer),
-                   layerType == LayerType.Feature.key
-                {
-                    StaticLayer.createOrUpdate(json: layer, eventId: eventId, context: context);
-                } else if let layerType = Layer.layerType(json: layer),
-                          layerType == LayerType.GeoPackage.key
-                {
-                    var l = try? context.fetchFirst(
-                        Layer.self,
-                        predicate: NSPredicate(
-                            format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)",
-                            remoteLayerId,
-                            eventId
-                        )
-                    )
-                    if l == nil {
-                        l = Layer(context: context)
-                        try? context.obtainPermanentIDs(for: [l!])
-                        l?.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
-                    }
-                    guard let l = l else {
-                        continue
-                    }
-                    l.populate(layer, eventId: eventId);
-                    
-                    // If this layer already exists but for a different event, set it's downloaded status
-                    if let existing = try? context.fetchFirst(
-                        Layer.self,
-                        predicate: NSPredicate(
-                            format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) != %@",
-                            remoteLayerId,
-                            eventId)
-                    ) {
-                        l.loaded = existing.loaded
-                    }
-                } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.Imagery.key {
-                    var l = try? context.fetchFirst(
-                        ImageryLayer.self,
-                        predicate: NSPredicate(
-                            format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)",
-                            remoteLayerId,
-                            eventId
-                        )
-                    )
-                    if l == nil {
-                        l = ImageryLayer(context: context)
-                        try? context.obtainPermanentIDs(for: [l!])
-                    }
-                    l?.populate(layer, eventId: eventId)
-                } else {
-                    var l = try? context.fetchFirst(
-                        Layer.self,
-                        predicate: NSPredicate(
-                            format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)",
-                            remoteLayerId,
-                            eventId)
-                    )
-                    if l == nil {
-                        l = Layer(context: context)
-                        try? context.obtainPermanentIDs(for: [l!])
-                    }
-                    l?.populate(layer, eventId: eventId);
-                }
+        var layerRemoteIds: [NSNumber] = [];
+        for layer in json {
+            guard let remoteLayerId = Layer.layerId(json: layer) else {
+                continue;
             }
+            layerRemoteIds.append(remoteLayerId);
             
-            try? context.save()
-            return layerRemoteIds;
+            if let layerType = Layer.layerType(json: layer), layerType == LayerType.Feature.key {
+                StaticLayer.createOrUpdate(json: layer, eventId: eventId, context: context);
+            } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.GeoPackage.key {
+                var l = Layer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context)
+                if l == nil {
+                    l = Layer.mr_createEntity(in: context);
+                    l?.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
+                }
+                guard let l = l else {
+                    continue
+                }
+                l.populate(layer, eventId: eventId);
+                
+                // If this layer already exists but for a different event, set it's downloaded status
+                if let existing = Layer.mr_findFirst(with: NSPredicate(format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) != %@", remoteLayerId, eventId), in: context) {
+                    l.loaded = existing.loaded
+                }
+            } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.Imagery.key {
+                var l = ImageryLayer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
+                if l == nil {
+                    l = ImageryLayer.mr_createEntity(in: context);
+                }
+                l?.populate(layer, eventId: eventId);
+            } else {
+                var l = Layer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
+                if l == nil {
+                    l = Layer.mr_createEntity(in: context)
+                }
+                l?.populate(layer, eventId: eventId);
+            }
         }
+        return layerRemoteIds;
     }
     
     @objc public static func refreshLayers(eventId: NSNumber) {
@@ -230,18 +164,8 @@ public enum LayerType : String {
         return documentsDirectory as String
     }
     
-    @objc public static func downloadGeoPackage(
-        layer: Layer,
-        success: (() -> Void)?,
-        failure: ((Error) -> Void)?
-    ) {
-        guard let currentEventId = Server.currentEventId(),
-              let remoteId = layer.remoteId,
-                let manager = MageSessionManager.shared(),
-                let fileName = layer.file?[LayerFileKey.name.key] as? String,
-                let baseURL = MageServer.baseURL(),
-                let contentType = layer.file?[LayerFileKey.contentType.key] as? String
-        else {
+    @objc public static func downloadGeoPackage(layer: Layer, success: (() -> Void)?, failure: ((Error) -> Void)?) {
+        guard let currentEventId = Server.currentEventId(), let remoteId = layer.remoteId, let manager = MageSessionManager.shared(), let fileName = layer.file?[LayerFileKey.name.key] as? String, let baseURL = MageServer.baseURL(), let contentType = layer.file?[LayerFileKey.contentType.key] as? String else {
             return;
         }
         let url = "\(baseURL)/api/events/\(currentEventId)/layers/\(remoteId)"
@@ -251,17 +175,14 @@ public enum LayerType : String {
             let request = try manager.requestSerializer.request(withMethod: "GET", urlString: url, parameters: nil);
             request.setValue(contentType, forHTTPHeaderField: "Accept")
             let task = manager.downloadTask(with: request as URLRequest) { downloadProgress in
-                
-                @Injected(\.nsManagedObjectContext)
-                var context: NSManagedObjectContext?
-                
-                context?.performAndWait {
-                    guard let localLayer = try? context?.existingObject(with: layer.objectID) as? Layer else {
+                MagicalRecord.save { context in
+                    guard let localLayer = layer.mr_(in: context) else {
                         return;
                     }
                     localLayer.downloadedBytes = NSNumber(value:downloadProgress.completedUnitCount);
-                    MageLogger.misc.debug("GeoPackage downloaded bytes \(downloadProgress.completedUnitCount)")
-                    try? context?.save()
+                    NSLog("GeoPackage downloaded bytes \(downloadProgress.completedUnitCount)")
+                } completion: { _, _ in
+                    
                 }
             } destination: { targetPath, response in
                 return urlPath;
@@ -274,45 +195,39 @@ public enum LayerType : String {
                 }
                 
                 if let fileString = filePath?.path {
-                    MageLogger.misc.debug("Downloaded GeoPackage to \(fileString)")
-                    NotificationCenter.default.post(
-                        name: .GeoPackageDownloaded,
-                        object: nil,
-                        userInfo: [
-                            "filePath":fileString,
-                            "layerId":remoteId
-                        ]
-                    )
+                    NSLog("Downloaded GeoPackage to \(fileString)")
+                    NotificationCenter.default.post(name: .GeoPackageDownloaded, object: nil, userInfo: [
+                        "filePath":fileString,
+                        "layerId":remoteId
+                    ])
                 }
             }
             
             task.taskDescription = "geopackage_download_\(remoteId)"
             if !FileManager.default.fileExists(atPath: urlPath.path) {
                 let directoryToCreate = urlPath.deletingLastPathComponent();
-                MageLogger.misc.debug("Create directory for geopackage \(directoryToCreate)")
+                NSLog("Create directory for geopackage \(directoryToCreate)")
                 try FileManager.default.createDirectory(at: directoryToCreate, withIntermediateDirectories: true, attributes: nil)
             } else {
-                MageLogger.misc.debug("GeoPackage still exists at \(urlPath), delete it")
+                NSLog("GeoPackage still exists at \(urlPath), delete it")
                 do {
                     try FileManager.default.removeItem(at: urlPath)
                 } catch {
-                    MageLogger.misc.error("Error deleting existing GeoPackage \(error)")
+                    NSLog("Error deleting existing GeoPackage \(error)")
                 }
                 
                 if FileManager.default.fileExists(atPath: urlPath.path) {
-                    MageLogger.misc.debug("GeoPackage file still exists at \(urlPath.path) after attempted deletion")
+                    NSLog("GeoPackage file still exists at \(urlPath.path) after attempted deletion")
                 }
             }
             
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            context?.performAndWait {
-                guard let localLayer = try? context?.existingObject(with: layer.objectID) as? Layer else {
+            MagicalRecord.save { context in
+                guard let localLayer = layer.mr_(in: context) else {
                     return;
                 }
                 localLayer.downloading = true
-                try? context?.save()
+            } completion: { _, _ in
+                
             }
             
             manager.addTask(task);
@@ -330,16 +245,14 @@ public enum LayerType : String {
             task.cancel();
         }
         
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        context?.performAndWait {
-            guard let localLayer = try? context?.existingObject(with: layer.objectID) as? Layer else {
+        MagicalRecord.save { context in
+            guard let localLayer = layer.mr_(in: context) else {
                 return;
             }
             localLayer.downloadedBytes = 0;
             localLayer.downloading = false;
-            try? context?.save()
+        } completion: { contextDidSave, error in
+
         }
     }
     

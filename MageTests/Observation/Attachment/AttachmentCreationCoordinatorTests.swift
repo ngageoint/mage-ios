@@ -18,10 +18,6 @@ import PhotosUI
 @testable import MAGE
 
 class MockAttachmentCreationCoordinatorDelegate: AttachmentCreationCoordinatorDelegate {
-    func attachmentCreated(attachment: MAGE.AttachmentModel) {
-        
-    }
-    
 
     let attachmentCreatedCalled = XCTestExpectation(description: "attachmentCreated called")
     let attachmentCreationCancelledCalled = XCTestExpectation(description: "attachmentCreationCancelled called")
@@ -45,7 +41,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("AttachmentCreationCoordinatorTests") {
+        describe("AttachmentCreationCoordinatorTests") {
 
             var attachmentCreationCoordinator: AttachmentCreationCoordinator!
             var view: UIView!
@@ -122,7 +118,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
 
             it("converts png to jpeg and marks the attachment as a jpeg") {
 
-                let pngUrl = Bundle(for: AttachmentCreationCoordinatorTests.self).url(forResource: "test_image_attachment", withExtension: "png")!
+                let pngUrl = Bundle(for: AttachmentFieldViewTests.self).url(forResource: "test_image_attachment", withExtension: "png")!
                 var assetId: String? = nil
                 try PHPhotoLibrary.shared().performChangesAndWait {
                     let addPngToLibrary = PHAssetCreationRequest.creationRequestForAssetFromImage(atFileURL: pngUrl)

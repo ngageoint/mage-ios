@@ -22,6 +22,7 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         view.addSubview(label);
         label.autoAlignAxis(toSuperviewAxis: .horizontal);
         label.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+//        label.autoCenterInSuperview();
         return view;
     }()
     
@@ -58,7 +59,7 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
             case .success(_):
                 self.setNeedsLayout()
             case .failure(let error):
-                MageLogger.misc.error("Job failed: \(error.localizedDescription)")
+                print("Job failed: \(error.localizedDescription)")
             }
         }
         

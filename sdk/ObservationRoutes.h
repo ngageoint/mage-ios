@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype) singleton;
 
-- (RouteMethod *) pull: (NSNumber *) eventId context: (NSManagedObjectContext *) context;
+- (RouteMethod *) pull: (NSNumber *) eventId;
 - (RouteMethod *) deleteRoute: (Observation *) observation;
 - (RouteMethod *) createId: (Observation *) observation;
 - (RouteMethod *) pushFavorite: (ObservationFavorite *) observationFavorite;

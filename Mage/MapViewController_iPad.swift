@@ -8,10 +8,8 @@ import Foundation
 import PureLayout
 
 @objc class MapViewController_iPad : MageMapViewController {
-    @Injected(\.nsManagedObjectContext)
-    var context: NSManagedObjectContext?
     
-    typealias Delegate = ObservationActionsDelegate & FeedItemSelectionDelegate
+    typealias Delegate = ObservationActionsDelegate & UserActionsDelegate & FeedItemSelectionDelegate
     weak var delegate: Delegate?;
     var settingsCoordinator: MapSettingsCoordinator?
     
@@ -53,7 +51,7 @@ import PureLayout
         super.viewWillAppear(animated);
         self.navigationController?.navigationBar.isTranslucent = false;
         
-        self.offlineObservationManager = MageOfflineObservationManager(delegate: self, context: context);
+        self.offlineObservationManager = MageOfflineObservationManager(delegate: self);
         self.offlineObservationManager?.start()
         setupNavigationBar()
     }
@@ -71,17 +69,13 @@ import PureLayout
     }
     
     @objc func profileButtonTapped(_ sender: UIView) {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
-        if let user: User = User.fetchCurrentUser(context: context) {
+        if let user: User = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
             delegate?.viewUser?(user);
         }
     }
     
     @objc func mapSettingsTapped(_ sender: UIView) {
-        settingsCoordinator = MapSettingsCoordinator(rootViewController: self.navigationController, andSourceView: sender, scheme: self.scheme, context: context);
+        settingsCoordinator = MapSettingsCoordinator(rootViewController: self.navigationController, andSourceView: sender, scheme: self.scheme);
         settingsCoordinator?.delegate = self;
         settingsCoordinator?.start();
     }
@@ -89,8 +83,7 @@ import PureLayout
     @objc func moreTapped(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet);
         alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in
-            guard let context = self.context else { return }
-            let settingsViewController: SettingsViewController = SettingsViewController(scheme: self.scheme, context: context);
+            let settingsViewController: SettingsViewController = SettingsViewController(scheme: self.scheme);
             settingsViewController.dismissable = true;
             self.present(settingsViewController, animated: true, completion: nil);
         }));

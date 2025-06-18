@@ -59,7 +59,7 @@
     
     XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
     
-    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:nil andScheme:[MAGEScheme scheme] context:nil];
+    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:nil andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -155,7 +155,7 @@
     }];
 }
 
-- (void) xtestLoginDisconnectedThenRegainConnection {
+- (void) testLoginDisconnectedThenRegainConnection {
 //    NSString *baseUrlKey = @"baseServerUrl";
 //    
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

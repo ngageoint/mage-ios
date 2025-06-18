@@ -20,7 +20,7 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableArray *predicates = [NSMutableArray arrayWithObjects:
                                   [NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]],
-//                                  [NSPredicate predicateWithFormat:@"user.remoteId != %@", [prefs valueForKey:@"currentUserId"]],
+                                  [NSPredicate predicateWithFormat:@"user.remoteId != %@", [prefs valueForKey:@"currentUserId"]],
                                   nil];
 
     NSPredicate *timePredicate = [TimeFilter getLocationTimePredicateForField:@"timestamp"];
@@ -30,7 +30,7 @@
     return predicates;
 }
 
-+ (Locations *) locationsForAllUsers: (NSManagedObjectContext*) context {
++ (Locations *) locationsForAllUsers {
     
     
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
@@ -38,31 +38,31 @@
                     withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocations]]
                           groupBy:nil
                          delegate:nil
-                        inContext:context];
+                        inContext:[NSManagedObjectContext MR_defaultContext]];
     
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Locations *) locationsForMap: (NSManagedObjectContext*) context {
++ (Locations *) locationsForMap {
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                                                                                ascending:NO
                                                                            withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocationsForMap]]
                                                                                  groupBy:nil
                                                                                 delegate:nil
-                                                                               inContext:context];
+                                                                               inContext:[NSManagedObjectContext MR_defaultContext]];
     
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Locations *) locationsForUser:(User *) user context: (NSManagedObjectContext*) context {
++ (Locations *) locationsForUser:(User *) user {
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                                                                                ascending:NO
                                                                            withPredicate:[NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", user, [Server currentEventId]]
                                                                                  groupBy:nil
                                                                                 delegate:nil
-                                                                               inContext:context];
+                                                                               inContext:[NSManagedObjectContext MR_defaultContext]];
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }

@@ -13,131 +13,137 @@ import Nimble
 
 @testable import MAGE
 
-class ObservationFormReorderTests: AsyncMageCoreDataTestCase {
+class ObservationFormReorderTests: KIFSpec {
+    
+    override func spec() {
+        
+        describe("ObservationFormReorder") {
+            var observationFormReorder: ObservationFormReorder?
+            var window: UIWindow!;
+            var stackSetup = false;
+            var eventForm: Form!
+            
+            beforeEach {
+                if (!stackSetup) {
+                    TestHelpers.clearAndSetUpStack();
+                    stackSetup = true;
+                }
+                
+                MageCoreDataFixtures.clearAllData();
+                TestHelpers.resetUserDefaults();
+                window = TestHelpers.getKeyWindowVisible();
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "allFieldTypesForm")
+                
+                eventForm = FormBuilder.createFormWithAllFieldTypes();
+                
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.locationDisplay = .latlng;
+                UserDefaults.standard.serverMajorVersion = 6;
+                UserDefaults.standard.serverMinorVersion = 0;
+                
+                observationFormReorder?.dismiss(animated: false);
+                
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots();
+            }
+            
+            afterEach {
+                observationFormReorder?.dismiss(animated: false);
+                observationFormReorder = nil;
+                window.rootViewController = nil;
+            }
+            
+            it("observation for reorder primary and variant") {
+                let observation = ObservationBuilder.createPointObservation(eventId: 1);
+                ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : "At Venue",
+                    "field9": "text"
+                ]);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : "Parade Event",
+                    "field9": "hello"
+                ]);
 
-    var observationFormReorder: ObservationFormReorder?
-    var window: UIWindow!;
-    var stackSetup = false;
-    var eventForm: Form!
-    
-    @MainActor
-    override func setUp() async throws {
-        try await super.setUp()
-        TestHelpers.resetUserDefaults();
-        window = TestHelpers.getKeyWindowVisible();
-        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "allFieldTypesForm")
-        
-        eventForm = FormBuilder.createFormWithAllFieldTypes();
-        
-        UserDefaults.standard.mapType = 0;
-        UserDefaults.standard.locationDisplay = .latlng;
-        UserDefaults.standard.serverMajorVersion = 6;
-        UserDefaults.standard.serverMinorVersion = 0;
-        
-        observationFormReorder?.dismiss(animated: false);
-    }
-    
-    @MainActor
-    override func tearDown() async throws {
-        try await super.tearDown()
-        observationFormReorder?.dismiss(animated: false);
-        observationFormReorder = nil;
-        window.rootViewController = nil;
-    }
-    
-    @MainActor
-    func testObservationForReorderPrimaryAndVariant() {
-        let observation = ObservationBuilder.createPointObservation(eventId: 1);
-        ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : "At Venue",
-            "field9": "text"
-        ]);
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : "Parade Event",
-            "field9": "hello"
-        ]);
-
-        let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
-        observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
-        let nav = UINavigationController(rootViewController: observationFormReorder!);
-        window.rootViewController = nav;
-        
-        TestHelpers.printAllAccessibilityLabelsInWindows();
-        tester().waitForView(withAccessibilityLabel: "Reorder Forms");
-        tester().waitForAnimationsToFinish();
+                let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
+                observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
+                let nav = UINavigationController(rootViewController: observationFormReorder!);
+                window.rootViewController = nav;
+                
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "Reorder Forms");
+                tester().waitForAnimationsToFinish();
 //                expect(window).to(haveValidSnapshot(usesDrawRect: true));
-    }
-    
-    @MainActor
-    func testObservationForReorderPrimaryOnly() {
-        let observation = ObservationBuilder.createPointObservation(eventId: 1);
-        ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : "At Venue",
-            "field9": nil
-        ]);
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : "Parade Event",
-            "field9": nil
-        ]);
-        
-        let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
-        observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
-        let nav = UINavigationController(rootViewController: observationFormReorder!);
-        window.rootViewController = nav;
-        
-        TestHelpers.printAllAccessibilityLabelsInWindows();
-        tester().waitForView(withAccessibilityLabel: "Reorder Forms");
-        tester().waitForAnimationsToFinish();
+            }
+            
+            it("observation for reorder primary only") {
+                let observation = ObservationBuilder.createPointObservation(eventId: 1);
+                ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : "At Venue",
+                    "field9": nil
+                ]);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : "Parade Event",
+                    "field9": nil
+                ]);
+                
+                let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
+                observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
+                let nav = UINavigationController(rootViewController: observationFormReorder!);
+                window.rootViewController = nav;
+                
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "Reorder Forms");
+                tester().waitForAnimationsToFinish();
 //                expect(window).to(haveValidSnapshot(usesDrawRect: true));
-    }
-    
-    @MainActor
-    func testObservationForReorderVariantOnly() {
-        let observation = ObservationBuilder.createPointObservation(eventId: 1);
-        ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : nil,
-            "field9": "hello"
-        ]);
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : nil,
-            "field9": "hello"
-        ]);
-        
-        let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
-        observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
-        let nav = UINavigationController(rootViewController: observationFormReorder!);
-        window.rootViewController = nav;
-        
-        TestHelpers.printAllAccessibilityLabelsInWindows();
-        tester().waitForView(withAccessibilityLabel: "Reorder Forms");
-        tester().waitForAnimationsToFinish();
+            }
+            
+            it("observation for reorder variant only") {
+                let observation = ObservationBuilder.createPointObservation(eventId: 1);
+                ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : nil,
+                    "field9": "hello"
+                ]);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : nil,
+                    "field9": "hello"
+                ]);
+                
+                let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
+                observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
+                let nav = UINavigationController(rootViewController: observationFormReorder!);
+                window.rootViewController = nav;
+                
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "Reorder Forms");
+                tester().waitForAnimationsToFinish();
 //                expect(window).to(haveValidSnapshot(usesDrawRect: true));
-    }
-    
-    @MainActor
-    func testObsrevationForReorderFormNameOnly() {
-        let observation = ObservationBuilder.createPointObservation(eventId: 1);
-        ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : nil,
-            "field9": nil
-        ]);
-        ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
-            "type" : nil,
-            "field9": nil
-        ]);
-        
-        let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
-        observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
-        let nav = UINavigationController(rootViewController: observationFormReorder!);
-        window.rootViewController = nav;
-        
-        TestHelpers.printAllAccessibilityLabelsInWindows();
-        tester().waitForView(withAccessibilityLabel: "Reorder Forms");
-        tester().waitForAnimationsToFinish();
+            }
+            
+            it("observation for reorder form name only") {
+                let observation = ObservationBuilder.createPointObservation(eventId: 1);
+                ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : nil,
+                    "field9": nil
+                ]);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm, values: [
+                    "type" : nil,
+                    "field9": nil
+                ]);
+                
+                let delegate: MockObservationFormReorderDelegate = MockObservationFormReorderDelegate();
+                observationFormReorder = ObservationFormReorder(observation: observation, delegate: delegate, containerScheme: MAGEScheme.scheme());
+                let nav = UINavigationController(rootViewController: observationFormReorder!);
+                window.rootViewController = nav;
+                
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "Reorder Forms");
+                tester().waitForAnimationsToFinish();
 //                expect(window).to(haveValidSnapshot(usesDrawRect: true));
+            }
+        }
     }
 }

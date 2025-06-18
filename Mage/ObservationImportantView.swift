@@ -8,39 +8,6 @@
 
 import Foundation
 import PureLayout
-import SwiftUI
-import MAGEStyle
-
-struct ObservationImportantViewSwiftUI: View {
-    var important: ObservationImportantModel
-    
-    var body: some View {
-        if important.important {
-            HStack(spacing: 8) {
-                Image(systemName: "flag.fill")
-                    .fontWeight(.semibold)
-                    .padding(.leading, 16)
-                    .padding(.top, 8)
-                    .padding(.bottom, 8)
-                    .frame(width: 32, height: 32)
-                    .foregroundStyle(Color.onSurfaceColor)
-                VStack(alignment: .leading, spacing: 8) {
-                    if let userName = important.userName {
-                        Text(userName)
-                            .overlineText()
-                    }
-                    if let reason = important.reason, !reason.isEmpty {
-                        Text(reason)
-                            .secondaryText()
-                    }
-                }
-                .padding([.top, .bottom], 8)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.importantColor)
-        }
-    }
-}
 
 class ObservationImportantView: UIView {
     weak var observation: Observation?;

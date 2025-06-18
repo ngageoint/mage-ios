@@ -15,7 +15,7 @@ import Kingfisher
 
 @objc class AskToDownloadViewController: UIViewController {
     var didSetupConstraints: Bool = false;
-    var attachment: AttachmentModel!
+    var attachment: Attachment!
     var delegate: AskToDownloadDelegate?
     var url: URL?
     var scheme: MDCContainerScheming?;
@@ -53,7 +53,7 @@ import Kingfisher
         return viewButton;
     }()
     
-    @objc public convenience init(attachment: AttachmentModel, delegate: AskToDownloadDelegate?) {
+    @objc public convenience init(attachment: Attachment, delegate: AskToDownloadDelegate?) {
         self.init(nibName: nil, bundle: nil);
         self.attachment = attachment;
         self.delegate = delegate;

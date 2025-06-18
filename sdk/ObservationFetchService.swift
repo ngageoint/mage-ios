@@ -7,8 +7,6 @@
 import Foundation
 
 public class ObservationFetchService: NSObject {
-    @Injected(\.observationRepository)
-    var observationRepository: ObservationRepository
     
     public static let singleton = ObservationFetchService()
     public var started = false
@@ -64,9 +62,23 @@ public class ObservationFetchService: NSObject {
             scheduleTimer()
             return
         }
-        Task {
-            let pulled = await observationRepository.fetchObservations()
-            self.scheduleTimer()
+        var observationFetchTask: URLSessionTask?;
+        
+        if initial {
+            observationFetchTask = Observation.operationToPullInitialObservations(success: { _, _ in
+                self.scheduleTimer()
+            }, failure: { _, _ in
+                self.scheduleTimer()
+            })
+        } else {
+            observationFetchTask = Observation.operationToPullObservations(success: { _, _ in
+                self.scheduleTimer()
+            }, failure: { _, _ in
+                self.scheduleTimer()
+            })
+        }
+        if let observationFetchTask = observationFetchTask {
+            MageSessionManager.shared().addTask(observationFetchTask);
         }
     }
     

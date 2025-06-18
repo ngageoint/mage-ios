@@ -20,14 +20,15 @@
 + (void) setFavoritesFilter:(BOOL) filter;
 
 
-+ (Observations *) observations: (NSManagedObjectContext *) context;
-+ (Observations *) list: (NSManagedObjectContext *) context;
-+ (Observations *) observationsForMap: (NSManagedObjectContext *) context;
-+ (Observations *) observationsForUser:(User *) user context: (NSManagedObjectContext *) context;
-+ (Observations *) observationsForObservation:(Observation *) observation context: (NSManagedObjectContext *) context;
++ (Observations *) observations;
++ (Observations *) list;
++ (Observations *) observationsForMap;
++ (Observations *) hideObservations;
++ (Observations *) observationsForUser:(User *) user;
++ (Observations *) observationsForObservation:(Observation *) observation;
 
-+ (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context;
-+ (NSMutableArray *) getPredicatesForObservationsForMap: (NSManagedObjectContext *) context;
++ (NSMutableArray *) getPredicatesForObservations;
++ (NSMutableArray *) getPredicatesForObservationsForMap;
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 

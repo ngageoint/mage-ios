@@ -7,6 +7,7 @@
 //
 
 #import "LdapLoginView.h"
+#import "DeviceUUID.h"
 #import "AuthenticationButton.h"
 #import "MAGE-Swift.h"
 @import MaterialComponents;

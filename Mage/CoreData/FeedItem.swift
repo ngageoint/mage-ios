@@ -16,25 +16,20 @@ import MapKit
     var view: MKAnnotationView?
     
     static func fetchedResultsController(_ feedItem: FeedItem, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<FeedItem>? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context,
-                let remoteId = feedItem.remoteId
-        else {
+        guard let remoteId = feedItem.remoteId else {
             return nil
         }
         let fetchRequest = FeedItem.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "temporalSortValue", ascending: true)]
-        let feedItemFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        let feedItemFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
         feedItemFetchedResultsController.delegate = delegate
         do {
             try feedItemFetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            MageLogger.misc.error("Unable to Perform Fetch Request")
-            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
         }
         return feedItemFetchedResultsController
     }
@@ -105,30 +100,11 @@ import MapKit
         return kCLLocationCoordinate2DInvalid
     }
 
-    @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItemAnnotation]? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return nil }
-        return context.performAndWait {
-            if let feed = try? context.fetchFirst(
-                Feed.self,
-                predicate: NSPredicate(
-                    format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)",
-                    feedId,
-                    eventId
-                )
-            ) {
-                return try? context.fetchObjects(
-                    FeedItem.self,
-                    predicate: NSPredicate(format: "(feed == %@)", feed)
-                )?.map({ feedItem in
-                    FeedItemAnnotation(feedItem: feedItem)
-                })
-            }
-            return [];
+    @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItem]? {
+        if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)", feedId, eventId)) {
+            return FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed)) as? [FeedItem];
         }
-        
+        return [];
     }
     
     @objc public static func feedItemIdFromJson(json: [AnyHashable: Any]) -> String? {

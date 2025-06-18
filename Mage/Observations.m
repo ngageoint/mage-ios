@@ -33,14 +33,14 @@
     [defaults synchronize];
 }
 
-+ (NSMutableArray *) getPredicatesForObservationsForMap: (NSManagedObjectContext *) context {
-    NSMutableArray *predicates = [Observations getPredicatesForObservations: context];
++ (NSMutableArray *) getPredicatesForObservationsForMap {
+    NSMutableArray *predicates = [Observations getPredicatesForObservations];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [predicates addObject:[NSPredicate predicateWithValue:!defaults.hideObservations]];
     return predicates;
 }
 
-+ (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context {
++ (NSMutableArray *) getPredicatesForObservations {
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
     NSPredicate *timePredicate = [TimeFilter getObservationTimePredicateForField:@"timestamp"];
     if (timePredicate) {
@@ -52,7 +52,7 @@
     }
     
     if ([Observations getFavoritesFilter]) {
-        User *currentUser = [User fetchCurrentUserWithContext:context];
+        User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", [NSNumber numberWithBool:YES], currentUser.remoteId]];
     }
     
@@ -60,46 +60,46 @@
 }
 
 // Purely for swift because calling Observations.observations() is impossible
-+ (Observations *) list: (NSManagedObjectContext *) context {
-    return [Observations observations:context];
++ (Observations *) list {
+    return [Observations observations];
 }
 
-+ (Observations *) observations: (NSManagedObjectContext *) context {
-    NSMutableArray *predicates = [Observations getPredicatesForObservations: context];
++ (Observations *) observations {
+    NSMutableArray *predicates = [Observations getPredicatesForObservations];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Observations *) observationsForMap: (NSManagedObjectContext *) context {
-    NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap: context];
++ (Observations *) observationsForMap {
+    NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:YES withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Observations *) hideObservations: (NSManagedObjectContext *) context {
++ (Observations *) hideObservations {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithValue:NO]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"dateSection"
                                                                                                           cacheName:nil];
     
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Observations *) observationsForUser:(User *) user context: (NSManagedObjectContext *) context {
++ (Observations *) observationsForUser:(User *) user {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"dirty,timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"dirtySection"
                                                                                                           cacheName:nil];
     
@@ -107,10 +107,10 @@
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Observations *) observationsForObservation:(Observation *) observation context: (NSManagedObjectContext *) context {
++ (Observations *) observationsForObservation:(Observation *) observation {
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
+                                                                                               managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:nil
                                                                                                           cacheName:nil];
     

@@ -8,7 +8,6 @@
 
 import Foundation
 import MapKit
-import MapFramework
 
 protocol CanCreateObservation {
     var mapView: MKMapView? { get set }
@@ -55,16 +54,8 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         canCreateObservation.scheme = scheme
         createFab.applySecondaryTheme(withScheme: scheme)
     }
-
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func setupMixin(mapView: MKMapView, mapState: MapState) {
+    
+    func setupMixin() {
         guard let mapView = self.canCreateObservation.mapView, let mapStackView = mapStackView else {
             return
         }

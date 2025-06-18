@@ -6,8 +6,8 @@
 //  Copyright © 2016 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-//#import "CacheActiveSwitch.h"
-//
-//@implementation CacheActiveSwitch
-//
-//@end
+#import "CacheActiveSwitch.h"
+
+@implementation CacheActiveSwitch
+
+@end

@@ -11,13 +11,12 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import MagicalRecord
-import MapFramework
 
 @testable import MAGE
 import CoreLocation
 import MapKit
 
-class PersistedMapStateTestImpl : NSObject {
+class PersistedMapStateTestImpl : NSObject, PersistedMapState {
     var mapView: MKMapView?
     
     var persistedMapStateMixin: PersistedMapStateMixin?
@@ -27,7 +26,7 @@ class PersistedMapStateTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("PersistedMapStateTests") {
+        describe("PersistedMapStateTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
@@ -61,8 +60,7 @@ class PersistedMapStateTests: KIFSpec {
                 testimpl = PersistedMapStateTestImpl()
                 testimpl.mapView = mapView
                 
-                // TODO: inject a different map state repository
-                mixin = PersistedMapStateMixin()
+                mixin = PersistedMapStateMixin(persistedMapState: testimpl)
                 
                 navController = UINavigationController(rootViewController: controller);
                 window.rootViewController = navController;
@@ -103,27 +101,26 @@ class PersistedMapStateTests: KIFSpec {
             it("initialize the PersistedMapState with a region") {
                 UserDefaults.standard.mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30, longitude: 10), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
-
-                expect(testimpl.mapView!.centerCoordinate.latitude).toEventually(beCloseTo(30, within: 1.0))
-                expect(testimpl.mapView!.centerCoordinate.longitude).toEventually(beCloseTo(10, within: 1.0))
+                mixin.setupMixin()
+                
+                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(30, within: 1.0))
+                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(10, within: 1.0))
                 mixin.cleanupMixin()
             }
             
             it("initialize the PersistedMapState with a region then move the map and the user preference should change") {
                 UserDefaults.standard.mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30, longitude: 10), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
                 
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                mixin.setupMixin()
                 
-                expect(testimpl.mapView!.centerCoordinate.latitude).toEventually(beCloseTo(30, within: 1.0))
-                expect(testimpl.mapView!.centerCoordinate.longitude).toEventually(beCloseTo(10, within: 1.0))
+                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(30, within: 1.0))
+                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(10, within: 1.0))
                 
-                let region = testimpl.mapView!.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:15, longitude:25), latitudinalMeters: 100000, longitudinalMeters: 10000))
-                testimpl.mapView!.setRegion(region, animated: false)
+                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:15, longitude:25), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                    mixin.mapView?.setRegion(region, animated: false)
+                }
                 
-//                mixin.regionDidChange(mapView: testimpl.mapView!, animated: false)
+                mixin.regionDidChange(mapView: mixin.mapView!, animated: false)
                 
                 let newRegion = UserDefaults.standard.mapRegion
                 expect(newRegion.center.latitude).to(beCloseTo(15, within: 1))

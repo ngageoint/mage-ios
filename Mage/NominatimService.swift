@@ -28,7 +28,7 @@ class NominatimService {
         }
         
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, response in
-            MageLogger.misc.debug("success")
+            print("success")
             if let featureCollection = response as? [AnyHashable : Any]  {
                 let results: [GeocoderResult] = (featureCollection["features"] as? [[AnyHashable: Any]])?.map({ feature in
                     let properties = feature["properties"] as? [AnyHashable: Any]
@@ -48,7 +48,7 @@ class NominatimService {
                 completion(SearchResponse.error(message: "Error parsing geocoder results."));
             }
         }, failure: { task, error in
-            MageLogger.misc.error("Error accessing place name server, please try again later.")
+            print("Error accessing place name server, please try again later.")
         })
         
         manager?.addTask(task);

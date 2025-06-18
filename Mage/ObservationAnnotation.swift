@@ -27,11 +27,7 @@ import DateTools
                 return _observation
             }
 
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return nil }
-            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationId, in: context)
+            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationId, in: NSManagedObjectContext.mr_default())
         }
     }
     
@@ -67,7 +63,7 @@ import DateTools
         }
       
         self.coordinate = location
-//        self.title = observation.primaryFeedFieldText
+        self.title = observation.primaryFeedFieldText
         if self.title == nil || self.title.count == 0 {
             self.title = "Observation"
         }
@@ -95,10 +91,7 @@ import DateTools
         
         if point {
             if let observation = observation {
-                @Injected(\.observationImageRepository)
-                var imageRepository: ObservationImageRepository
-                
-                let image = imageRepository.image(observation: observation);
+                let image = ObservationImage.image(observation: observation);
                 annotationView?.image = image;
                 annotationView?.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
             }

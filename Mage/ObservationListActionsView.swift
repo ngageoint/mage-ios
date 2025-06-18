@@ -19,9 +19,6 @@ class ObservationListActionsView: UIView {
     var bottomSheet: MDCBottomSheetController?;
     internal var scheme: MDCContainerScheming?;
     
-    @Injected(\.userRepository)
-    var userRepository: UserRepository
-    
     private lazy var actionButtonView: UIView = {
         let actionButtonView = UIView.newAutoLayout();
         actionButtonView.addSubview(latitudeLongitudeButton);
@@ -131,11 +128,7 @@ class ObservationListActionsView: UIView {
         currentUserFavorited = false;
         var favoriteCounter = 0;
         if let favorites = observation.favorites {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return }
-            if let user = User.fetchCurrentUser(context: context) {
+            if let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
                 currentUserFavorited = favorites.contains { (favorite) -> Bool in
                     return favorite.userId == user.remoteId && favorite.favorite;
                 }
@@ -176,8 +169,12 @@ class ObservationListActionsView: UIView {
         if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                ObservationActions.favorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: self.userRepository.getCurrentUser()?.remoteId)()
+                
+                observation.toggleFavorite { (_, _) in
+                    observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+                    self.populate(observation: observation, delegate: self.observationActionsDelegate)
                     NotificationCenter.default.post(name: .ObservationUpdated, object: observation)
+                }
             }
         }
     }
@@ -187,12 +184,7 @@ class ObservationListActionsView: UIView {
         NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
         // let the bottom sheet dismiss because we cannot present two alert dialogs
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            let notification = DirectionsToItemNotification(
-                location: self.observation?.location,
-                itemKey: self.observation?.objectID.uriRepresentation().absoluteString,
-                dataSource: DataSources.observation,
-                includeCopy: false
-            )
+            let notification = DirectionsToItemNotification(observation: self.observation, user: nil, feedItem: nil)
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
     }

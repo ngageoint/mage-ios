@@ -2,35 +2,41 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>userFetch</key>
-	<dict>
-		<key>title</key>
-		<string>User Fetch Frequency</string>
-		<key>section</key>
-		<string>Frequency</string>
-		<key>labels</key>
-		<array>
-			<string>15 seconds</string>
-			<string>30 seconds</string>
-			<string>1 minute</string>
-			<string>2 minutes</string>
-			<string>5 minutes</string>
-			<string>10 minutes</string>
-			<string>30 minutes</string>
-		</array>
-		<key>values</key>
-		<array>
-			<integer>15</integer>
-			<integer>30</integer>
-			<integer>60</integer>
-			<integer>120</integer>
-			<integer>300</integer>
-			<integer>600</integer>
-			<real>1800</real>
-		</array>
-		<key>preferenceKey</key>
-		<string>userFetchFrequency</string>
-	</dict>
+	<key>imageUploadSize</key>
+	<string>3</string>
+	<key>videoUploadSize</key>
+	<string>AVAssetExportPresetHighestQuality</string>
+	<key>serverCompatibilities</key>
+	<array>
+		<dict>
+			<key>serverMajorVersion</key>
+			<integer>6</integer>
+			<key>serverMinorVersion</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>serverMajorVersion</key>
+			<integer>5</integer>
+			<key>serverMinorVersion</key>
+			<integer>4</integer>
+		</dict>
+	</array>
+	<key>attachmentPushFrequency</key>
+	<integer>60</integer>
+	<key>baseServerUrl</key>
+	<string></string>
+	<key>reportLocation</key>
+	<true/>
+	<key>gpsDistanceFilter</key>
+	<integer>10</integer>
+	<key>userFetchFrequency</key>
+	<integer>300</integer>
+	<key>observationFetchFrequency</key>
+	<integer>300</integer>
+	<key>observationPushFrequency</key>
+	<integer>45</integer>
+	<key>userReportingFrequency</key>
+	<integer>30</integer>
 	<key>userReporting</key>
 	<dict>
 		<key>preferenceKey</key>
@@ -60,10 +66,6 @@
 			<integer>0</integer>
 		</array>
 	</dict>
-	<key>userPushNetworkOption</key>
-	<integer>0</integer>
-	<key>userReportingFrequency</key>
-	<integer>30</integer>
 	<key>observationFetch</key>
 	<dict>
 		<key>title</key>
@@ -93,10 +95,10 @@
 		<key>preferenceKey</key>
 		<string>observationFetchFrequency</string>
 	</dict>
-	<key>attachmentFetch</key>
+	<key>userFetch</key>
 	<dict>
 		<key>title</key>
-		<string>Attachment Fetch Frequency</string>
+		<string>User Fetch Frequency</string>
 		<key>section</key>
 		<string>Frequency</string>
 		<key>labels</key>
@@ -120,53 +122,8 @@
 			<real>1800</real>
 		</array>
 		<key>preferenceKey</key>
-		<string>attachmentFetchFrequency</string>
+		<string>userFetchFrequency</string>
 	</dict>
-	<key>attachmentFetchFrequency</key>
-	<integer>300</integer>
-	<key>observationFetchFrequency</key>
-	<integer>300</integer>
-	<key>serverCompatibilities</key>
-	<array>
-		<dict>
-			<key>serverMajorVersion</key>
-			<integer>6</integer>
-			<key>serverMinorVersion</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>serverMajorVersion</key>
-			<integer>5</integer>
-			<key>serverMinorVersion</key>
-			<integer>4</integer>
-		</dict>
-	</array>
-	<key>userFetchFrequency</key>
-	<integer>300</integer>
-	<key>userFetchNetworkOption</key>
-	<integer>0</integer>
-	<key>attachmentPushFrequency</key>
-	<integer>60</integer>
-	<key>attachmentPushNetworkOption</key>
-	<integer>0</integer>
-	<key>attachmentFetchNetworkOption</key>
-	<integer>0</integer>
-	<key>observationPushFrequency</key>
-	<integer>45</integer>
-	<key>observationFetchNetworkOption</key>
-	<integer>0</integer>
-	<key>observationPushNetworkOption</key>
-	<integer>0</integer>
-	<key>imageUploadSize</key>
-	<string>3</string>
-	<key>videoUploadSize</key>
-	<string>AVAssetExportPresetHighestQuality</string>
-	<key>baseServerUrl</key>
-	<string></string>
-	<key>reportLocation</key>
-	<true/>
-	<key>gpsDistanceFilter</key>
-	<integer>10</integer>
 	<key>imageUploadSizes</key>
 	<dict>
 		<key>title</key>
@@ -190,6 +147,18 @@
 		<key>preferenceKey</key>
 		<string>imageUploadSize</string>
 	</dict>
+	<key>observationPushNetworkOption</key>
+	<integer>0</integer>
+	<key>observationFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>attachmentPushNetworkOption</key>
+	<integer>0</integer>
+	<key>attachmentFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>userPushNetworkOption</key>
+	<integer>0</integer>
+	<key>userFetchNetworkOption</key>
+	<integer>0</integer>
 	<key>videoUploadQualities</key>
 	<dict>
 		<key>title</key>

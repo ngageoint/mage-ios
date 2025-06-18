@@ -15,9 +15,9 @@
 @property (nonatomic, weak) id<NSFetchedResultsControllerDelegate> delegate;
 @property(nonatomic, strong)  NSFetchedResultsController  *fetchedResultsController;
 
-+ (Locations *) locationsForAllUsers: (NSManagedObjectContext*) context;
-+ (Locations *) locationsForUser:(User *) user context: (NSManagedObjectContext*) context;
-+ (Locations *) locationsForMap: (NSManagedObjectContext*) context;
++ (Locations *) locationsForAllUsers;
++ (Locations *) locationsForUser:(User *) user;
++ (Locations *) locationsForMap;
 
 + (NSMutableArray *) getPredicatesForLocations;
 + (NSMutableArray *) getPredicatesForLocationsForMap;

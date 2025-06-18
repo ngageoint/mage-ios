@@ -80,12 +80,7 @@ class EventTableDataSource: NSObject {
     }
     
     func refreshEventData() {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
-        
-        guard let current = User.fetchCurrentUser(context: context), let recentEventIds = current.recentEventIds else {
+        guard let current = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()), let recentEventIds = current.recentEventIds else {
             return
         }
         updateOtherFetchedResultsController(recentEventIds: recentEventIds)
@@ -93,12 +88,8 @@ class EventTableDataSource: NSObject {
     }
     
     func updateOtherFetchedResultsController(recentEventIds: [NSNumber]) {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
         otherFetchedResultsController = otherFetchedResultsController ?? {
-            let frc = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format: "NOT (remoteId IN %@)", recentEventIds), groupBy: nil, context: context)
+            let frc = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format: "NOT (remoteId IN %@)", recentEventIds), groupBy: nil, context: NSManagedObjectContext.mr_default())
             frc?.accessibilityLabel = "Other Events"
             return frc
         }()
@@ -110,11 +101,7 @@ class EventTableDataSource: NSObject {
     }
     
     func updateRecentFetchedResultsController(recentEventIds: [NSNumber]) {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
-        guard let recentRequest: NSFetchRequest<Event> = Event.mr_requestAll(in: context) as? NSFetchRequest<Event> else {
+        guard let recentRequest: NSFetchRequest<Event> = Event.mr_requestAll(in: NSManagedObjectContext.mr_default()) as? NSFetchRequest<Event> else {
             return
         }
         recentRequest.predicate = NSPredicate(format: "(remoteId IN %@)", recentEventIds)
@@ -122,11 +109,7 @@ class EventTableDataSource: NSObject {
         let sortBy = NSSortDescriptor(key: "recentSortOrder", ascending: true)
         recentRequest.sortDescriptors = [sortBy]
         recentFetchedResultsController = recentFetchedResultsController ?? {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return nil }
-            let frc = NSFetchedResultsController(fetchRequest: recentRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+            let frc = NSFetchedResultsController(fetchRequest: recentRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
             frc.accessibilityLabel = "My Recent Events"
             return frc
         }()
@@ -154,11 +137,7 @@ class EventTableDataSource: NSObject {
         if let filteredFetchedResultsController = filteredFetchedResultsController {
             filteredFetchedResultsController.fetchRequest.predicate = predicate
         } else {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else { return }
-            filteredFetchedResultsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: predicate, groupBy: nil, context: context)
+            filteredFetchedResultsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: predicate, groupBy: nil, context: NSManagedObjectContext.mr_default())
             filteredFetchedResultsController?.delegate = delegate
             filteredFetchedResultsController?.accessibilityLabel = "Filtered"
         }

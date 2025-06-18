@@ -11,7 +11,7 @@
 
 @interface MageAppCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) start;
 
 @end

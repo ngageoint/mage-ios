@@ -42,6 +42,7 @@ class MediaPreviewController : QLPreviewController {
     
     private let couldNotLoad: UIView = {
         let couldNotLoad = UIView.newAutoLayout()
+//        couldNotLoad.backgroundColor = .systemBackground
         return couldNotLoad
     }()
     
@@ -108,6 +109,7 @@ class MediaPreviewController : QLPreviewController {
         couldNotLoad.addSubview(notAvailable)
         couldNotLoad.addSubview(notAvailableDescription)
         couldNotLoad.addSubview(openInButton)
+//        view.addSubview(couldNotLoad)
         
         mask.addSubview(activityIndicator)
         
@@ -133,6 +135,7 @@ class MediaPreviewController : QLPreviewController {
         }
         
         documentInteractionController = UIDocumentInteractionController(url: imageURL)
+//        documentInteractionController?.annotation = info
         documentInteractionController?.delegate = self
         documentInteractionController?.presentOptionsMenu(from: sender.frame, in: view, animated: true)
     }
@@ -186,7 +189,8 @@ class MediaPreviewController : QLPreviewController {
                 self.loadFile()
                 return
             } catch {
-                MageLogger.misc.error("Error writing the file: \(error.localizedDescription)")
+                // Prints the localized description of the error from the do block
+                print("Error writing the file: \(error.localizedDescription)")
             }
         }
         

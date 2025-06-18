@@ -107,7 +107,7 @@ class AttachmentSlideShow: UIView {
         }
     }
     
-    func getAttachmentUrl(attachment: AttachmentModel) -> URL {
+    func getAttachmentUrl(attachment: Attachment) -> URL {
         if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
             return URL(fileURLWithPath: attachment.localPath!);
         } else {
@@ -115,7 +115,7 @@ class AttachmentSlideShow: UIView {
         }
     }
     
-    func getAttachmentUrl(size: Int, attachment: AttachmentModel) -> URL {
+    func getAttachmentUrl(size: Int, attachment: Attachment) -> URL {
         if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
             return URL(fileURLWithPath: attachment.localPath!);
         } else {
@@ -284,13 +284,13 @@ class AttachmentSlideShow: UIView {
     
     @objc func imageViewTapped(sender: UITapGestureRecognizer) {
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
-        attachmentSelectionDelegate?.selectedAttachment(attachmentImageView.attachment?.attachmentUri);
+        attachmentSelectionDelegate?.selectedAttachment(attachmentImageView.attachment);
     }
     
     @objc func notCachedImageViewTapped(sender: UITapGestureRecognizer) {
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
 //        attachmentImageView.kf.indicatorType = .activity;
-        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachmentImageView.attachment?.attachmentUri, completionHandler: { forceDownload in
+        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachmentImageView.attachment, completionHandler: { forceDownload in
             self.showThumbnail(imageView: attachmentImageView, cacheOnly: !forceDownload);
         });
     }

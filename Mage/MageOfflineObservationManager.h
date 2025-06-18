@@ -19,7 +19,7 @@
 
 @property (weak, nonatomic) id<OfflineObservationDelegate> delegate;
 
-- (instancetype) initWithDelegate:(id<OfflineObservationDelegate>) delegate context: (NSManagedObjectContext *) context;
+- (instancetype) initWithDelegate:(id<OfflineObservationDelegate>) delegate;
 - (void) start;
 - (void) stop;
 

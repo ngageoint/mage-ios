@@ -9,7 +9,6 @@
 import Foundation
 import MapKit
 import MaterialComponents
-import MapFramework
 
 protocol UserHeadingDisplay {
     var mapView: MKMapView? { get set }
@@ -45,15 +44,7 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
         self.scheme = scheme
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
-
-    func setupMixin(mapView: MKMapView, mapState: MapState) {
+    func setupMixin() {
         applyTheme(scheme: scheme)
         
         locationManager?.delegate = self
@@ -114,7 +105,7 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
         case .followWithHeading:
             start()
         @unknown default:
-            MageLogger.misc.debug("Unknown tracking mode \(String(describing: mode))")
+            print("Unknown tracking mode \(mode)")
         }
     }
 }

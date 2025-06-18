@@ -12,9 +12,8 @@ import CoreData
 @objc public class ObservationImportant : NSManagedObject {
     
     @objc public static func important(json: [String : Any], context: NSManagedObjectContext) -> ObservationImportant? {
-        let important = ObservationImportant(context: context);
-        important.update(json: json);
-        try? context.obtainPermanentIDs(for: [important])
+        let important = ObservationImportant.mr_createEntity(in: context);
+        important?.update(json: json);
         return important
     }
     

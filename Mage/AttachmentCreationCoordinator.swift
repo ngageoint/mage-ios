@@ -17,19 +17,19 @@ import UniformTypeIdentifiers
 
 protocol AttachmentCreationCoordinatorDelegate: AnyObject {
     // can be removed after server 5
-    func attachmentCreated(attachment: AttachmentModel);
+    func attachmentCreated(attachment: Attachment);
     
     func attachmentCreated(fieldValue: [String : AnyHashable]);
     func attachmentCreationCancelled();
 }
 
 class AttachmentCreationCoordinator: NSObject {
-    weak var scheme: MDCContainerScheming?;
+    var scheme: MDCContainerScheming?;
     var photoLocations: [TimeInterval : CLLocation] = [:]
     var photoHeadings: [TimeInterval : CLHeading] = [:]
     var locationManager: CLLocationManager?;
     weak var rootViewController: UIViewController?;
-    weak var observation: Observation?
+    var observation: Observation;
     var fieldName: String?;
     var observationFormId: String?;
     weak var delegate: AttachmentCreationCoordinatorDelegate?;
@@ -76,9 +76,9 @@ class AttachmentCreationCoordinator: NSObject {
             } else {
                 // this is only applicable in the server5 case, can be removed after that
                 attachmentJson["dirty"] = 1;
-                if let observation = observation, let attachment = Attachment.attachment(json: attachmentJson, context: (observation.managedObjectContext)!) {
+                if let attachment = Attachment.attachment(json: attachmentJson, context: (observation.managedObjectContext)!) {
                     attachment.observation = observation;
-                    delegate?.attachmentCreated(attachment: AttachmentModel(attachment: attachment));
+                    delegate?.attachmentCreated(attachment: attachment);
                 }
             }
         }
@@ -97,14 +97,14 @@ class AttachmentCreationCoordinator: NSObject {
 
 extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     func addFileAttachment() {
-        MageLogger.misc.debug("Add file")
+        print("Add file")
         let controller = UIDocumentPickerViewController(forOpeningContentTypes: [.item])
         controller.delegate = self
         self.rootViewController?.present(controller, animated: true, completion: nil)
     }
     
     func addVoiceAttachment() {
-        MageLogger.misc.debug("Add voice")
+        print("Add voice")
         ExternalDevice.checkMicrophonePermissions(for: self.rootViewController) { (permissionGranted) in
             self.presentVoiceRecorder()
         }
@@ -112,14 +112,14 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     
     func presentVoiceRecorder() {
         DispatchQueue.main.async {
-            MageLogger.misc.debug("Present the voice recorder");
+            print("Present the voice recorder");
             self.audioRecorderViewController = AudioRecorderViewController(delegate: self);
             self.rootViewController?.present(self.audioRecorderViewController!, animated: true);
         }
     }
     
     func addVideoAttachment() {
-        MageLogger.misc.debug("Add video")
+        print("Add video")
         ExternalDevice.checkCameraPermissions(for: self.rootViewController) { (permissionGranted) in
             if (permissionGranted) {
                 ExternalDevice.checkMicrophonePermissions(for: self.rootViewController) { (permissionGranted) in
@@ -131,7 +131,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     
     func presentVideo() {
         DispatchQueue.main.async {
-            MageLogger.misc.debug("Present the video")
+            print("Present the video")
             self.pickerController = UIImagePickerController();
             self.pickerController!.delegate = self;
             self.pickerController!.allowsEditing = true;
@@ -143,7 +143,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     }
     
     func addCameraAttachment() {
-        MageLogger.misc.debug("Add camera")
+        print("Add camera")
         ExternalDevice.checkCameraPermissions(for: self.rootViewController) { (permissionGranted) in
             if (permissionGranted) {
                 self.initializeLocationManager()
@@ -154,7 +154,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     
     func presentCamera() {
         DispatchQueue.main.async {
-            MageLogger.misc.debug("Present the camera")
+            print("Present the camera")
             self.pickerController = UIImagePickerController();
             self.pickerController!.delegate = self;
             self.pickerController!.sourceType = .camera;
@@ -166,7 +166,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     }
     
     func addGalleryAttachment() {
-        MageLogger.misc.debug("Add gallery")
+        print("Add gallery")
         ExternalDevice.checkGalleryPermissions(for: self.rootViewController) { (permissionGranted) in
             if (permissionGranted) {
                 self.presentGallery();
@@ -176,7 +176,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     
     func presentGallery() {
         DispatchQueue.main.async { [weak self] in
-            MageLogger.misc.debug("Present the gallery")
+            print("Present the gallery")
             var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
             configuration.filter = .any(of: [.images, .videos])
             configuration.selectionLimit = 1;
@@ -218,7 +218,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
                 }
                 catch {
-                    MageLogger.misc.error("error creating directory \(attachmentsDirectory) to save scaled attachment file \(fileName ?? "<unknown file>") - \(error)")
+                    print("error creating directory \(attachmentsDirectory) to save scaled attachment file \(fileName ?? "<unknown file>")", error)
                     return
                 }
                 guard let baseImage = CIImage(data: data) else {
@@ -232,7 +232,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     self.addAttachmentForSaving(location: scaledImagePath, contentType: "image/jpeg")
                 }
                 catch {
-                    MageLogger.misc.error("error saving scaled attachment image \(scaledImagePath) from base image \(fileName ?? "<unknown file>") - \(error)")
+                    print("error saving scaled attachment image \(scaledImagePath) from base image \(fileName ?? "<unknown file>")", error)
                 }
             }
         }
@@ -265,18 +265,18 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
             }
             catch {
-                MageLogger.misc.error("error creating directory \(attachmentsDirectory) to export attachment video - \(error)")
+                print("error creating directory \(attachmentsDirectory) to export attachment video", error)
                 return
             }
             guard let exportSession = AVAssetExportSession(asset: avAsset, presetName: self.videoUploadQuality()) else {
-                MageLogger.misc.error("failed to create export session for attachment video")
+                print("failed to create export session for attachment video")
                 return
             }
             exportSession.outputURL = videoExportPath
             exportSession.outputFileType = .mp4
             await exportSession.export()
             if let error = exportSession.error {
-                MageLogger.misc.error("video export failed: \(String(describing: error.localizedDescription))")
+                print("video export failed: \(String(describing: error.localizedDescription))")
                 return
             }
             self.addAttachmentForSaving(location: videoExportPath, contentType: "video/mp4")
@@ -298,7 +298,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     func galleryPermissionDenied() {
         // The user selected certain photos to share with MAGE and this wasn't one of them
         // prompt the user to pick more photos to share
-        MageLogger.misc.debug("Cannot access asset")
+        print("Cannot access asset")
         let alert = UIAlertController(title: "Permission Denied", message: "MAGE is unable to access the photo you have chosen.  Please update the photos MAGE is allowed to access and try again.", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Update allowed photos", style: .default , handler:{ (UIAlertAction)in
@@ -316,7 +316,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        MageLogger.misc.debug("picked a photo \(results)")
+        print("picked a photo \(results)")
         // This is to compensate for iOS not setting all the colors on the PHPicker so now we have to set it back
         UINavigationBar.appearance().tintColor = self.scheme?.colorScheme.onPrimaryColor
 
@@ -371,7 +371,7 @@ extension AttachmentCreationCoordinator: PHPhotoLibraryChangeObserver {
 
 extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        MageLogger.misc.debug("picked a picture \(info)")
+        print("picked a picture \(info)")
         
         picker.dismiss(animated: true, completion: nil);
         
@@ -420,7 +420,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                         
                         addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
                     } catch {
-                        MageLogger.misc.error("Unable to write image to file \(fileToWriteTo): \(error)")
+                        print("Unable to write image to file \(fileToWriteTo): \(error)")
                     }
                     
                     // save the original image that was not resized to the photo library, with GPS data
@@ -436,10 +436,10 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                         try FileManager.default.removeItem(at: originalFileToWriteTo);
 
                     } catch {
-                        MageLogger.misc.error("Unable to write image to file \(originalFileToWriteTo): \(error)")
+                        print("Unable to write image to file \(originalFileToWriteTo): \(error)")
                     }
                 } catch {
-                    MageLogger.misc.error("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                    print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
                 }
                 photoHeadings.removeAll();
                 photoLocations.removeAll();
@@ -534,7 +534,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     }
 
     func handleMovie(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
-        MageLogger.misc.debug("handling movie \(info)")
+        print("handling movie \(info)")
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         guard let videoUrl = info[.mediaURL] as? URL else { return }
@@ -547,21 +547,21 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4");
         
         let videoQuality: String = videoUploadQuality();
-        MageLogger.misc.debug("video quality \(videoQuality)")
+        print("video quality \(videoQuality)")
         let avAsset = AVURLAsset(url: videoUrl);
         let compatiblePresets: [String] = AVAssetExportSession.exportPresets(compatibleWith: avAsset);
         if (compatiblePresets.contains(videoQuality)) {
             guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
-                MageLogger.misc.error("Export session not created")
+                print("Export session not created")
                 return
             }
             do {
                 try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
                 exportSession.outputURL = fileToWriteTo;
                 exportSession.outputFileType = .mp4;
-                MageLogger.misc.debug("exporting async")
+                print("exporting async")
                 exportSession.exportAsynchronously {
-                    let foo = exportSession.status
+                    print("export session status \(exportSession.status)")
                     switch (exportSession.status) {
                         case .completed:
                             print("Export complete")
@@ -581,7 +581,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                         }
                 }
             } catch {
-                MageLogger.misc.error("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
             }
         }
     }
@@ -630,7 +630,7 @@ extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
                     try attachmentData.write(to: fileToWriteTo, options: .completeFileProtection)
                     self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
                 } catch {
-                    MageLogger.misc.error("Unable to write file \(fileToWriteTo): \(error)")
+                    print("Unable to write file \(fileToWriteTo): \(error)")
                     MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "The file type \(filename).\(fileType) is not supported by MAGE. Try uploading a .zip version of the file instead."))
                 }
                 
@@ -651,7 +651,7 @@ extension AttachmentCreationCoordinator: UINavigationControllerDelegate {
 
 extension AttachmentCreationCoordinator: AudioRecordingDelegate {
     func recordingAvailable(recording: Recording) {
-        MageLogger.misc.debug("Recording available")
+        print("Recording available")
         addAttachmentForSaving(location: URL(fileURLWithPath: recording.filePath!), contentType: recording.mediaType!)
     
         self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
@@ -671,12 +671,12 @@ extension AttachmentCreationCoordinator: CLLocationManagerDelegate {
         // save the locations so we can get the correct one when an image is taken
         for location in locations {
             photoLocations[location.timestamp.timeIntervalSince1970] = location;
-            MageLogger.misc.debug("location to be saved is \(location)")
+            print("location to be saved is \(location)")
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         photoHeadings[newHeading.timestamp.timeIntervalSince1970] = newHeading;
-        MageLogger.misc.debug("heading to be saved is \(newHeading)")
+        print("heading to be saved is \(newHeading)")
     }
 }

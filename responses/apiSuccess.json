@@ -18,9 +18,5 @@
         "text":"Disclaimer text",
         "title":"Consent to Monitoring",
         "show":true
-    },
-    "contactinfo": {
-        "email": "test@test.com",
-        "phone": "555-555-5555"
     }
 }

@@ -11,12 +11,9 @@ import CoreData
 @objc public class Attachment: NSManagedObject {
     
     public static func attachment(json: [AnyHashable : Any], order: Int? = 0, context: NSManagedObjectContext) -> Attachment? {
-        return context.performAndWait {
-            let attachment = Attachment(context: context)
-            attachment.populate(json: json, order: order)
-            try? context.obtainPermanentIDs(for: [attachment])
-            return attachment
-        }
+        let attachment = Attachment.mr_createEntity(in: context);
+        attachment?.populate(json: json, order: order);
+        return attachment;
     }
     
     public func populate(json: [AnyHashable : Any], order: Int? = 0) {
