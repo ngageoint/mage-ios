@@ -27,14 +27,14 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (assign, nonatomic) NSInteger versionCellSelectionCount;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (weak, nonatomic) id<SettingsDelegate> delegate;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation SettingsTableViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate context: (NSManagedObjectContext *) context {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate context: (NSManagedObjectContext *) context {
     if (self = [self initWithStyle:UITableViewStyleGrouped]) {
         self.scheme = containerScheme;
         self.delegate = delegate;
@@ -43,7 +43,7 @@
     return self;
 }
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     if (self = [self initWithStyle:UITableViewStyleGrouped]) {
         self.scheme = containerScheme;
         self.context = context;
@@ -51,7 +51,7 @@
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

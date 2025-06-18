@@ -59,7 +59,7 @@ class SidebarUIButton: UIButton {
         return rail;
     }()
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
@@ -113,7 +113,7 @@ class SidebarUIButton: UIButton {
         let size = 24;
         let button : SidebarUIButton = SidebarUIButton(forAutoLayout: ());
         button.autoSetDimensions(to: CGSize(width: 56, height: 56));
-        button.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        button.tintColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
         button.sidebarType = sidebarType;
         button.title = title;
         
@@ -193,7 +193,7 @@ class SidebarUIButton: UIButton {
     
     @objc func activateButton(button: SidebarUIButton) {
         if let activeButton = activeButton {
-            activeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            activeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
         }
         button.tintColor = self.scheme?.colorScheme.onSurfaceColor;
         activeButton = button;

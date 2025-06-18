@@ -58,37 +58,49 @@ import UIKit
         mageLabel.baselineAdjustment = .alignBaselines
         return mageLabel;
     }()
-    private lazy var disagreeButton: MDCButton = {
-        let disagreeButton = MDCButton(forAutoLayout: ());
-        disagreeButton.accessibilityLabel = "Disagree";
-        disagreeButton.setTitle("Disagree", for: .normal);
-        disagreeButton.addTarget(self, action: #selector(disagreeTapped), for: .touchUpInside);
-        disagreeButton.clipsToBounds = true;
-        return disagreeButton;
+    
+    private lazy var disagreeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityLabel = "Disagree"
+        button.setTitle("Disagree", for: .normal)
+        button.addTarget(self, action: #selector(disagreeTapped), for: .touchUpInside)
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 8
+        return button
     }()
-    private lazy var agreeButton: MDCButton = {
-        let agreeButton = MDCButton(forAutoLayout: ());
-        agreeButton.accessibilityLabel = "Agree";
-        agreeButton.setTitle("Agree", for: .normal);
-        agreeButton.addTarget(self, action: #selector(agreeTapped), for: .touchUpInside);
-        agreeButton.clipsToBounds = true;
-        return agreeButton;
+
+    private lazy var agreeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityLabel = "Agree"
+        button.setTitle("Agree", for: .normal)
+        button.addTarget(self, action: #selector(agreeTapped), for: .touchUpInside)
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 8
+        return button
     }()
     
     @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
-        guard let scheme = containerScheme else {
-            return
-        }
+        guard let scheme = containerScheme else { return }
+        
         self.scheme = scheme
         self.view.backgroundColor = scheme.colorScheme.backgroundColor
-        self.consentText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        self.consentText.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
 //        self.consentText.font = scheme.typographyScheme.body2
-        self.consentTitle.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+        self.consentTitle.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87)
 //        self.consentTitle.font = scheme.typographyScheme.headline6
         self.wandLabel.textColor = scheme.colorScheme.primaryColorVariant
         self.mageLabel.textColor = scheme.colorScheme.primaryColorVariant
-//        agreeButton.applyContainedTheme(withScheme: scheme)
-//        disagreeButton.applyContainedTheme(withScheme: scheme)
+        
+        let backgroundColor = scheme.colorScheme.primaryColor ?? .systemBlue
+        let textColor = scheme.colorScheme.onPrimaryColor ?? .white
+
+        [agreeButton, disagreeButton].forEach { button in
+            button.backgroundColor = backgroundColor
+            button.setTitleColor(textColor, for: .normal)
+            button.titleLabel?.font = scheme.typographyScheme.buttonFont
+        }
     }
     
     override public func viewWillAppear(_ animated: Bool) {

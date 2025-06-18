@@ -30,7 +30,7 @@
 @property (strong, nonatomic) UIView *settingsDetailView;
 @property (strong, nonatomic) UIImageView *settingsDetailImageView;
 @property (strong, nonatomic) UILabel *settingsDetailLabel;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) NSManagedObjectContext* context;
 
 @end
@@ -45,7 +45,7 @@
     return self;
 }
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     if (self = [super init]) {
         self.context = context;
         self.scheme = containerScheme;
@@ -54,7 +54,7 @@
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

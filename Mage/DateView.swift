@@ -68,7 +68,7 @@ class DateView : BaseFieldView {
         return textField
     }()
     
-    func applyTheme(withScheme scheme: AppContainerScheming?) {
+    override func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
@@ -174,9 +174,7 @@ class DateView : BaseFieldView {
                 textField.applyTheme(type: .primary, scheme: scheme)
             }
         } else {
-            textField.applyErrorTheme(withScheme: scheme)
-//            textField.applyErrorTheme(withScheme: globalErrorContainerScheme())
-//            textField.leadingAssistiveLabel.text = getErrorMessage()
+            textField.applyTheme(type: .error, scheme: scheme)
         }
     }
 }

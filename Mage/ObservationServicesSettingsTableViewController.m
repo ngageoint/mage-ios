@@ -7,6 +7,7 @@
 #import "ObservationServicesSettingsTableViewController.h"
 #import "ObservationTableHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
+#import "MAGE-Swift.h"
 
 @interface ObservationServicesSettingsTableViewController ()
 
@@ -21,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceDescription;
 @property (assign, nonatomic) BOOL observationFetchEnabled;
 @property (assign, nonatomic) BOOL attachmentFetchEnabled;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
 @end
 
@@ -33,7 +34,7 @@ static NSInteger ATTACHMENT_FETCH_SECTION = 1;
 static NSInteger FETCH_ITEMS_CELL = 0;
 static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Observation Sync";
     self.scheme = containerScheme;
@@ -65,7 +66,7 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
     [self applyThemeWithContainerScheme:self.scheme];
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

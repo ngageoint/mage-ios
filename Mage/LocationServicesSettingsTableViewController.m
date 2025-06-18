@@ -22,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceDescription;
 
 @property (assign, nonatomic) BOOL locationServicesEnabled;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation LocationServicesSettingsTableViewController
@@ -34,7 +34,7 @@ static NSInteger REPORT_LOCATION_CELL = 0;
 static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 static NSInteger GPS_DISTANCE_CELL_ROW = 2;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Location Sync";
     self.scheme = containerScheme;
@@ -65,7 +65,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
     [self.tableView reloadData];
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

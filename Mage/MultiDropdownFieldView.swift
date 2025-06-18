@@ -7,19 +7,19 @@
 //
 
 import Foundation
+import UIKit
 
 class MultiDropdownFieldView : BaseFieldView {
     
-    lazy var textField: MDCFilledTextField = {
-        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
-        textField.trailingView = UIImageView(image: UIImage(named: "arrow_drop_down"));
-        textField.trailingViewMode = .always;
-        if (value != nil) {
-            textField.text = getDisplayValue();
-        }
-        textField.leadingAssistiveLabel.text = " ";
-        textField.sizeToFit();
-        return textField;
+    lazy var textField: UITextField = {
+        let textField = UITextField(forAutoLayout: ())
+        textField.borderStyle = .roundedRect
+        textField.rightView = UIImageView(image: UIImage(named: "arrow_drop_down"))
+        textField.rightViewMode = .always
+        textField.isUserInteractionEnabled = false
+        textField.accessibilityLabel = field[FieldKey.name.key] as? String
+        textField.font = UIFont.preferredFont(forTextStyle: .body)
+        return textField
     }()
     
     required init(coder aDecoder: NSCoder) {
@@ -35,14 +35,13 @@ class MultiDropdownFieldView : BaseFieldView {
         self.addFieldView();
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
-        guard let scheme = scheme else {
-            return
-        }
-
+    override func applyTheme(withScheme scheme: AppContainerScheming?) {
+        guard let scheme else { return }
         super.applyTheme(withScheme: scheme);
-        textField.applyTheme(withScheme: scheme);
-        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+
+        textField.textColor = scheme.colorScheme.onSurfaceColor
+        textField.backgroundColor = scheme.colorScheme.surfaceColor
+        textField.rightView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
     }
     
     func addFieldView() {
@@ -83,13 +82,11 @@ class MultiDropdownFieldView : BaseFieldView {
     override func setValid(_ valid: Bool) {
         super.setValid(valid);
         if (valid) {
-            textField.leadingAssistiveLabel.text = " ";
-            if let scheme = scheme {
-                textField.applyTheme(withScheme: scheme);
-            }
+            textField.layer.borderColor = UIColor.clear.cgColor
+            textField.layer.borderWidth = 0
         } else {
-            textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
-            textField.leadingAssistiveLabel.text = getErrorMessage();
+            textField.layer.borderColor = UIColor.systemRed.cgColor
+            textField.layer.borderWidth = 1.0
         }
     }
     

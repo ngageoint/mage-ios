@@ -9,19 +9,19 @@
 import UIKit
 
 @objc class ThemeTableViewController: UITableViewController {
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(scheme: MDCContainerScheming?) {
+    @objc public init(scheme: AppContainerScheming?) {
         self.scheme = scheme;
         super.init(style: .grouped)
         applyTheme(withScheme: self.scheme)
     }
     
-    public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+    public func applyTheme(withScheme scheme: AppContainerScheming? = nil) {
         guard let scheme = scheme else {
             return
         }
@@ -67,8 +67,8 @@ import UIKit
         }
 
         cell.tintColor = self.scheme?.colorScheme.primaryColor;
-        cell.textLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        cell.textLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
+        cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
         
         return cell
     }

@@ -10,11 +10,11 @@
 #import "NSDate+display.h"
 #import "ObservationTableHeaderView.h"
 #import "DisplaySettingsHeader.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 #import "MAGE-Swift.h"
 
 @interface LocationDisplayTableViewController ()
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) DisplaySettingsHeader *header;
 @end
 
@@ -27,7 +27,7 @@ static NSString *LOCATION_DISPLAY_REUSE_ID = @"LOCATION_DISPLAY_REUSE_ID";
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

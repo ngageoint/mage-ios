@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "ValuePickerTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @protocol LocationServicesDelegate
 - (void) openSettingsTapped;
@@ -15,6 +15,6 @@
 
 @interface LocationServicesSettingsTableViewController : UITableViewController<CLLocationManagerDelegate>
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme;
 
 @end

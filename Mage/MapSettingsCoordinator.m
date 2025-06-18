@@ -8,7 +8,6 @@
 
 #import "MapSettingsCoordinator.h"
 #import "MapSettings.h"
-//#import "OfflineMapTableViewController.h"
 #import "OnlineMapTableViewController.h"
 #import "MAGE-Swift.h"
 

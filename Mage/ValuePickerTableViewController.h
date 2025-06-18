@@ -5,7 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface ValuePickerTableViewController : UITableViewController <UITableViewDelegate>
 
@@ -15,7 +15,7 @@
 @property (nonatomic) NSNumber *selected;
 @property (nonatomic, strong) NSString *preferenceKey;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme;
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (instancetype) initWithScheme: (id<AppContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 
 @end

@@ -22,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *observationsDescription;
 
 @property (assign, nonatomic) BOOL fetchEnabled;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation DataSynchronizationSettingsTableViewController
@@ -35,7 +35,7 @@ static NSInteger ADVANCED_WIFI_SETTINGS_SECTION = 3;
 static NSInteger FETCH_CELL_ROW = 0;
 static NSInteger PUSH_CELL_ROW = 1;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Network Sync Settings";
     self.scheme = containerScheme;
@@ -53,7 +53,7 @@ static NSInteger PUSH_CELL_ROW = 1;
     [self.tableView registerNib:[UINib nibWithNibName:@"RightDetailSubtitleCell" bundle:nil] forCellReuseIdentifier:@"rightDetailSubtitleCell"];
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

@@ -15,7 +15,7 @@ protocol FileViewerCoordinatorDelegate {
 }
 
 class FileViewerCoordinator: NSObject {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var data: Data
     var contentType: String
     var info: [String: Any]?
@@ -24,7 +24,7 @@ class FileViewerCoordinator: NSObject {
     var quickLookController: MediaPreviewController?
     var documentTitle = "GeoPackage Media"
 
-    public init(presentingViewController: UIViewController, data: Data, contentType: String, info: [String: Any]? = nil, scheme: MDCContainerScheming?) {
+    public init(presentingViewController: UIViewController, data: Data, contentType: String, info: [String: Any]? = nil, scheme: AppContainerScheming?) {
         self.scheme = scheme
         self.data = data
         self.contentType = contentType

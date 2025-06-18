@@ -18,10 +18,10 @@ import UIKit
     var eventController: EventChooserController?
     var viewController: UINavigationController?
     var eventToSegueTo: Event?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var mageEventsFetchedObserver: Any?
     
-    @objc init(viewController: UINavigationController, delegate: EventChooserDelegate?, scheme: MDCContainerScheming) {
+    @objc init(viewController: UINavigationController, delegate: EventChooserDelegate?, scheme: AppContainerScheming) {
         self.viewController = viewController
         self.delegate = delegate
         self.scheme = scheme

@@ -13,7 +13,7 @@
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate, GridTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
 @property (strong) NSArray *feeds;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation MapSettings
@@ -39,7 +39,7 @@ static NSString *LAYERS_SECTION_NAME = @"Layers";
 static NSString *MAGE_SECTION_NAME = @"MAGE";
 static NSString *FEED_SECTION_NAME = @"Feeds";
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
@@ -49,7 +49,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
     [self.tableView reloadData];
 }
 
-- (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate scheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.scheme = containerScheme;
     self.delegate = delegate;

@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DataSynchronizationSettingsTableViewController : UITableViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme;
 
 @end
 

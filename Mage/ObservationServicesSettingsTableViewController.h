@@ -7,9 +7,9 @@
 #import <UIKit/UIKit.h>
 #import "ValuePickerTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface ObservationServicesSettingsTableViewController : UITableViewController
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme;
 @end
 

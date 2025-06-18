@@ -10,19 +10,19 @@ import Foundation
 
 @objc class NavigationSettingsViewController: UITableViewController {
     
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(scheme: MDCContainerScheming?) {
+    @objc public init(scheme: AppContainerScheming?) {
         self.scheme = scheme;
         super.init(style: .grouped)
         tableView.register(cellClass: ColorPickerCell.self)
     }
     
-    public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+    public func applyTheme(withScheme scheme: AppContainerScheming? = nil) {
         guard let scheme = scheme else {
             return
         }
@@ -75,8 +75,8 @@ import Foundation
         if (indexPath.row == 2) {
             cell.textLabel?.text = "Always show heading on map"
             cell.accessoryType = UserDefaults.standard.showHeading ? .checkmark : .none
-            cell.textLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-            cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            cell.textLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
+            cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
             return cell;
         }
         let colorCell: ColorPickerCell = tableView.dequeue(cellClass: ColorPickerCell.self, forIndexPath: indexPath)
@@ -97,8 +97,8 @@ import Foundation
             cell.textLabel?.textColor = UserDefaults.standard.headingColor;
         }
         
-        cell.textLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        cell.textLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
+        cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
         cell.accessoryType = .none;
         
         return cell

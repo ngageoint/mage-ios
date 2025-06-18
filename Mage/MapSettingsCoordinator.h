@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AppContainerScheming.h"
 
 @protocol MapSettingsCoordinatorDelegate
 - (void) mapSettingsComplete:(NSObject *) coordinator;

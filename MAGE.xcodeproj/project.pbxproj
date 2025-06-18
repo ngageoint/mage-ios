@@ -164,6 +164,8 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84C95F542E01C53E002F0A58 /* FloatingButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */; };
+		84C95F562E030D73002F0A58 /* SFPoint+Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */; };
 		84E470182DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */; };
 		84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */; };
 		84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */; };
@@ -1114,6 +1116,9 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84C95F522E01C3DE002F0A58 /* FloatingButtonFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloatingButtonFactory.h; sourceTree = "<group>"; };
+		84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonFactory.swift; sourceTree = "<group>"; };
+		84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFPoint+Coordinate.swift"; sourceTree = "<group>"; };
 		84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ShowSimpleAlert.swift"; sourceTree = "<group>"; };
 		84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeManager.swift; sourceTree = "<group>"; };
 		84E713E02DF0CA2400F52781 /* AppThemeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppThemeBridge.h; sourceTree = "<group>"; };
@@ -2425,6 +2430,7 @@
 				84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */,
 				84E713EE2DF32F2400F52781 /* ThemeProvider.swift */,
 				F723D608253F66AC00C6BE34 /* MAGEScheme.swift */,
+				84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */,
 			);
 			path = Theming;
 			sourceTree = "<group>";
@@ -2447,6 +2453,8 @@
 				84E713F62DF34EE700F52781 /* UIButton+Theming.swift */,
 				84E713FA2DF72C6700F52781 /* UILabel+Theming.swift */,
 				84E714242DF9FE2500F52781 /* UIButton+Floating.swift */,
+				84C95F522E01C3DE002F0A58 /* FloatingButtonFactory.h */,
+				84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */,
 				84E714262DFA05E800F52781 /* UIButton+ImageTintColor.swift */,
 				84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */,
 			);
@@ -5015,6 +5023,7 @@
 				F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */,
 				F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */,
 				F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */,
+				84C95F542E01C53E002F0A58 /* FloatingButtonFactory.swift in Sources */,
 				F734C1E92BC8476600B2E8C8 /* Actions.swift in Sources */,
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */,
@@ -5340,6 +5349,7 @@
 				F78876932C6AA54800E30300 /* MageRouter.swift in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
 				F78D579C27BE9A4F003594D3 /* SFGeometryMap.swift in Sources */,
+				84C95F562E030D73002F0A58 /* SFPoint+Coordinate.swift in Sources */,
 				F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */,
 				F73565012C66616D00466813 /* UserViewSwiftUI.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,

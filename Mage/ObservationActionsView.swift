@@ -6,324 +6,310 @@
 //  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import PureLayout
-import MaterialComponents.MDCPalettes
+import CoreData
 
 class ObservationActionsView: UIView {
-    var didSetupConstraints = false;
-    weak var observation: Observation?;
-    weak var observationActionsDelegate: ObservationActionsDelegate?;
-    internal var currentUserFavorited: Bool = false;
-    internal var isImportant: Bool = false;
-    var bottomSheet: MDCBottomSheetController?;
-    internal var scheme: MDCContainerScheming?;
-    
-    var favoriteCountText: NSAttributedString {
-        get {
-            let favoriteCountText = NSMutableAttributedString();
-            if let favorites = observation?.favorites {
-                let favoriteCount: Int = favorites.reduce(0) { (result, favorite) -> Int in
-                    if (favorite.favorite) {
-                        return result + 1;
-                    }
-                    return result;
-                }
-                let favoriteLabelAttributes: [NSAttributedString.Key: Any] = [
-                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
-                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6) ?? UIColor.label.withAlphaComponent(0.6)
-                ];
-                let favoriteCountAttributes: [NSAttributedString.Key: Any] = [
-                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
-                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87) ?? UIColor.label.withAlphaComponent(0.87)
-                ];
-                favoriteCountText.append(NSAttributedString(string: "\(favoriteCount)", attributes: favoriteCountAttributes))
-                favoriteCountText.append(NSAttributedString(string: favoriteCount == 1 ? " FAVORITE" : " FAVORITES", attributes: favoriteLabelAttributes))
-            }
-            return favoriteCountText;
-        }
-    }
+    private var didSetupConstraints = false
+    weak var observation: Observation?
+    weak var observationActionsDelegate: ObservationActionsDelegate?
+    private var currentUserFavorited: Bool = false
+    private var isImportant: Bool = false
+
+    private var scheme: AppContainerScheming?
     
     private lazy var divider: UIView = {
-        let divider = UIView(forAutoLayout: ());
-        divider.autoSetDimension(.height, toSize: 1);
-        return divider;
+        let view = UIView(forAutoLayout: ())
+        view.autoSetDimension(.height, toSize: 1)
+        return view
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(forAutoLayout: ());
+        let stackView = UIStackView(forAutoLayout: ())
         stackView.axis = .vertical
-        stackView.alignment = .fill
         stackView.spacing = 0
         stackView.distribution = .fill
-        stackView.directionalLayoutMargins = .zero;
-        stackView.isLayoutMarginsRelativeArrangement = true;
-        stackView.translatesAutoresizingMaskIntoConstraints = false;
-        stackView.clipsToBounds = true;
-        return stackView;
+        return stackView
     }()
     
     private lazy var actionButtonView: UIView = {
-        let actionButtonView = UIView.newAutoLayout();
-        actionButtonView.addSubview(favoriteCountButton);
-        actionButtonView.addSubview(importantButton);
-        actionButtonView.addSubview(directionsButton);
-        actionButtonView.addSubview(favoriteButton);
-        actionButtonView.addSubview(moreButton);
-        return actionButtonView;
+        let view = UIView.newAutoLayout()
+        actionButtonView.addSubview(favoriteCountButton)
+        actionButtonView.addSubview(importantButton)
+        actionButtonView.addSubview(directionsButton)
+        actionButtonView.addSubview(favoriteButton)
+        actionButtonView.addSubview(moreButton)
+        return actionButtonView
     }()
     
-    private lazy var favoriteCountButton: MDCButton = {
-        let button = MDCButton();
-        button.accessibilityLabel = "show favorites";
-        button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside);
-        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        return button;
+    private lazy var favoriteCountButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.accessibilityLabel = "show favorites"
+        button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        return button
     }()
     
-    private lazy var moreButton: MDCButton = {
-        let moreButton = MDCButton();
-        moreButton.accessibilityLabel = "more";
-        moreButton.setImage(UIImage(named: "more")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        moreButton.addTarget(self, action: #selector(moreTapped), for: .touchUpInside);
-        moreButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
-        moreButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        moreButton.inkMaxRippleRadius = 30;
-        moreButton.inkStyle = .unbounded;
-        return moreButton;
+    private lazy var moreButton: UIButton = makeIconButton(named: "more", action: #selector(moreTapped))
+    
+    private lazy var favoriteButton: UIButton = makeIconButton(
+        systemName: "heart",
+        filledSystemName: "heart.fill",
+        action: #selector(favoriteObservation)
+    )
+    
+    private lazy var directionsButton: UIButton = makeIconButton(
+        systemName: "arrow.triangle.turn.up.right.diamond",
+        action: #selector(getDirectionsToObservation)
+    )
+    
+    private lazy var importantButton: UIButton = makeIconButton(
+        systemName: "flag",
+        filledSystemName: "flag.fill",
+        action: #selector(toggleImportant)
+    )
+    
+    private lazy var importantInputView: UITextField = {
+        let field = UITextField(forAutoLayout: ())
+        field.borderStyle = .roundedRect
+        field.placeholder = "Important Description"
+        field.accessibilityLabel = "Important Description"
+        field.inputAccessoryView = accessoryView
+        return field
     }()
     
-    private lazy var favoriteButton: MDCButton = {
-        let favoriteButton = MDCButton();
-        favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
-        favoriteButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
-        favoriteButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        favoriteButton.inkMaxRippleRadius = 30;
-        favoriteButton.inkStyle = .unbounded;
-        return favoriteButton;
-    }()
     
-    private lazy var directionsButton: MDCButton = {
-        let directionsButton = MDCButton();
-        directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(systemName: "arrow.triangle.turn.up.right.diamond", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
-        directionsButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
-        directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        directionsButton.inkMaxRippleRadius = 30;
-        directionsButton.inkStyle = .unbounded;
-        return directionsButton;
-    }()
-    
-    private lazy var importantButton: MDCButton = {
-        let importantButton = MDCButton();
-        importantButton.accessibilityLabel = "important";
-        importantButton.setImage(UIImage(systemName: "flag", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        importantButton.addTarget(self, action: #selector(toggleImportant), for: .touchUpInside);
-        importantButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
-        importantButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        importantButton.inkMaxRippleRadius = 30;
-        importantButton.inkStyle = .unbounded;
-        return importantButton;
-    }()
-    
-    private lazy var importantInputView: MDCFilledTextField = {
-        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
-        textField.autocapitalizationType = .none;
-        textField.accessibilityLabel = "Important Description";
-        textField.label.text = "Important Description"
-        textField.placeholder = "Important Description"
-        textField.inputAccessoryView = accessoryView;
-        textField.sizeToFit();
-        return textField;
-    }()
-    
+//    var favoriteCountText: NSAttributedString {
+//        get {
+//            let favoriteCountText = NSMutableAttributedString()
+//            if let favorites = observation?.favorites {
+//                let favoriteCount: Int = favorites.reduce(0) { (result, favorite) -> Int in
+//                    if (favorite.favorite) {
+//                        return result + 1
+//                    }
+//                    return result
+//                }
+//                let favoriteLabelAttributes: [NSAttributedString.Key: Any] = [
+//                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+//                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6) ?? UIColor.label.withAlphaComponent(0.6)
+//                ]
+//                let favoriteCountAttributes: [NSAttributedString.Key: Any] = [
+//                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+//                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87) ?? UIColor.label.withAlphaComponent(0.87)
+//                ]
+//                favoriteCountText.append(NSAttributedString(string: "\(favoriteCount)", attributes: favoriteCountAttributes))
+//                favoriteCountText.append(NSAttributedString(string: favoriteCount == 1 ? " FAVORITE" : " FAVORITES", attributes: favoriteLabelAttributes))
+//            }
+//            return favoriteCountText
+//        }
+//    }
+//    
+   
+
     private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 44);
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
         
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        doneBarButton.accessibilityLabel = "Done";
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
-        cancelBarButton.accessibilityLabel = "Cancel";
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
+        let cancel = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed))
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
-        return toolbar;
+        toolbar.items = [cancel, flex, done]
+        return toolbar
     }()
     
-    private lazy var setImportantButton: MDCButton = {
-        let setImportantButton = MDCButton(forAutoLayout: ());
-        setImportantButton.accessibilityLabel = "Flag as important";
-        setImportantButton.setTitle("Flag as important", for: .normal);
-        setImportantButton.addTarget(self, action: #selector(makeImportant), for: .touchUpInside);
-        setImportantButton.clipsToBounds = true;
-        return setImportantButton;
+    private lazy var setImportantButton: UIButton = {
+        let button = UIButton(forAutoLayout: ())
+        button.setTitle("Flag as important", for: .normal)
+        button.accessibilityLabel = "Flag as important"
+        button.addTarget(self, action: #selector(makeImportant), for: .touchUpInside)
+        return button
     }()
     
-    private lazy var cancelOrRemoveButton: MDCButton = {
-        let cancelOrRemoveButton = MDCButton(forAutoLayout: ());
-        cancelOrRemoveButton.accessibilityLabel = "Cancel";
-        cancelOrRemoveButton.setTitle("Cancel", for: .normal);
-        cancelOrRemoveButton.addTarget(self, action: #selector(removeImportant), for: .touchUpInside);
-        cancelOrRemoveButton.clipsToBounds = true;
-        return cancelOrRemoveButton;
+    private lazy var cancelOrRemoveButton: UIButton = {
+        let button = UIButton(forAutoLayout: ())
+        button.setTitle("Cancel", for: .normal)
+        button.accessibilityLabel = "Cancel"
+        button.addTarget(self, action: #selector(removeImportant), for: .touchUpInside)
+        return button
     }()
     
     private lazy var importantWrapperView: UIView = {
-        let importantWrapperView = UIView.newAutoLayout();
-        importantWrapperView.accessibilityLabel = "edit important";
-        importantWrapperView.isHidden = true;
-        importantWrapperView.clipsToBounds = true;
+        let view = UIView.newAutoLayout()
+        view.isHidden = true
+        view.accessibilityLabel = "edit important"
         
-        let buttonView = UIView.newAutoLayout();
-        buttonView.clipsToBounds = true;
-        buttonView.addSubview(setImportantButton);
-        setImportantButton.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
-        buttonView.addSubview(cancelOrRemoveButton);
+        let buttonContainer = UIView.newAutoLayout()
+        buttonContainer.addSubview(setImportantButton)
+        buttonContainer.addSubview(cancelOrRemoveButton)
+
+        setImportantButton.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left)
         cancelOrRemoveButton.autoPinEdge(.right, to: .left, of: setImportantButton, withOffset: 8)
         cancelOrRemoveButton.autoAlignAxis(.horizontal, toSameAxisOf: setImportantButton)
         
-        importantWrapperView.addSubview(importantInputView);
-        importantInputView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);
+        view.addSubview(importantInputView)
+        importantInputView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom)
 
-        importantWrapperView.addSubview(buttonView);
-        buttonView.autoPinEdge(.top, to: .bottom, of: importantInputView, withOffset: 12);
-        buttonView.autoPinEdge(toSuperviewEdge: .left, withInset: 8);
-        buttonView.autoPinEdge(toSuperviewEdge: .right, withInset: 8);
+        view.addSubview(buttonContainer)
+        buttonContainer.autoPinEdge(.top, to: .bottom, of: importantInputView, withOffset: 12)
+        buttonContainer.autoPinEdge(toSuperviewEdge: .left, withInset: 8)
+        buttonContainer.autoPinEdge(toSuperviewEdge: .right, withInset: 8)
         
-        importantWrapperView.addSubview(divider);
-        divider.autoPinEdge(.top, to: .bottom, of: buttonView, withOffset: 16);
-        divider.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
+        view.addSubview(divider)
+        divider.autoPinEdge(.top, to: .bottom, of: buttonContainer, withOffset: 16)
+        divider.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
         
-        return importantWrapperView;
+        return view
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
-        guard let scheme = scheme else {
-            return
-        }
-
-        self.scheme = scheme;
-        divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
-
-        favoriteButton.applyTextTheme(withScheme: scheme);
-        importantButton.applyTextTheme(withScheme: scheme);
-        directionsButton.applyTextTheme(withScheme: scheme);
-        moreButton.applyTextTheme(withScheme: scheme);
-        favoriteCountButton.applyTextTheme(withScheme: scheme);
-        favoriteButton.setImageTintColor(currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
-        favoriteButton.inkColor = MDCPalette.green.accent700?.withAlphaComponent(0.2);
-        importantButton.setImageTintColor(isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
-        importantButton.inkColor = MDCPalette.orange.accent400?.withAlphaComponent(0.2);
-        directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        moreButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-
-        cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
-        setImportantButton.applyContainedTheme(withScheme: scheme);
-        self.backgroundColor = scheme.colorScheme.surfaceColor
+    
+    public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: AppContainerScheming?) {
+        self.init(frame: CGRect.zero)
+        self.observation = observation
+        self.observationActionsDelegate = observationActionsDelegate
+        self.scheme = scheme
+        configureForAutoLayout()
+        populate(observation: observation)
+        applyTheme(withScheme: scheme)
+        self.accessibilityLabel = "actions"
     }
     
-    public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
-        self.init(frame: CGRect.zero);
-        self.scheme = scheme;
-        self.observation = observation;
-        self.observationActionsDelegate = observationActionsDelegate;
-        self.configureForAutoLayout();
-        layoutView();
-        if let observation = observation {
-            populate(observation: observation);
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
+        guard let scheme else { return }
+
+        backgroundColor = scheme.colorScheme.surfaceColor
+        divider.backgroundColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.12)
+
+        [favoriteButton, importantButton, directionsButton, moreButton].forEach {
+            $0.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         }
-        applyTheme(withScheme: scheme);
-        self.accessibilityLabel = "actions";
+        
+        favoriteButton.tintColor = currentUserFavorited ? UIColor.systemGreen : favoriteButton.tintColor
+        importantButton.tintColor = isImportant ? UIColor.systemOrange : importantButton.tintColor
     }
+
+    
+    // MARK: - Population
+
+    func populate(observation: Observation?) {
+        self.observation = observation
+        favoriteCountButton.setAttributedTitle(favoriteCountText(), for: .normal)
+
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+
+        currentUserFavorited = observation?.isCurrentUserFavorited(in: context) ?? false
+        isImportant = observation?.observationImportant?.important ?? false
+
+        favoriteButton.setImage(UIImage(systemName: currentUserFavorited ? "heart.fill" : "heart"), for: .normal)
+        importantButton.setImage(UIImage(systemName: isImportant ? "flag.fill" : "flag"), for: .normal)
+
+        importantInputView.text = observation?.observationImportant?.reason
+        importantWrapperView.isHidden = true
+    }
+
+//    public func populate(observation: Observation!) {
+//        self.observation = observation
+//        favoriteCountButton.isHidden = true
+//        favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal)
+//        importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant ?? false)
+//        
+//        currentUserFavorited = false
+//        @Injected(\.nsManagedObjectContext)
+//        var context: NSManagedObjectContext?
+//        
+//        guard let context = context else { return }
+//        
+//        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: context) {
+//            currentUserFavorited = favorites.contains { (favorite) -> Bool in
+//                favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite)
+//                return favorite.userId == user.remoteId && favorite.favorite
+//            }
+//        }
+//        if (currentUserFavorited) {
+//            favoriteButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
+//        } else {
+//            favoriteButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
+//        }
+//        
+//        isImportant = false
+//        if (!self.importantWrapperView.isHidden) {
+//            UIView.animate(withDuration: 0.2) {
+//                self.importantWrapperView.isHidden = true
+//            }
+//        }
+//        importantInputView.text = nil
+//        importantButton.setImage(UIImage(systemName: "flag", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
+//        setImportantButton.accessibilityLabel = "Flag as important"
+//        setImportantButton.setTitle("Flag as important", for: .normal)
+//        setImportantButton.isEnabled = true
+//        cancelOrRemoveButton.accessibilityLabel = "Cancel"
+//        cancelOrRemoveButton.setTitle("Cancel", for: .normal)
+//        cancelOrRemoveButton.isEnabled = true
+//        if let important = observation.observationImportant {
+//            if (important.important) {
+//                isImportant = true
+//                importantButton.setImage(UIImage(systemName: "flag.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
+//                importantInputView.text = important.reason
+//                setImportantButton.accessibilityLabel = "Update Important"
+//                setImportantButton.setTitle("Update", for: .normal)
+//                cancelOrRemoveButton.accessibilityLabel = "Remove"
+//                cancelOrRemoveButton.setTitle("Remove", for: .normal)
+//            }
+//        }
+//        if let scheme = scheme {
+//            applyTheme(withScheme: scheme)
+//        }
+//    }
+    
+    
+    
+    private func favoriteCountText() -> NSAttributedString {
+          guard let count = observation?.favoriteCount else { return NSAttributedString(string: "") }
+
+          let normalAttrs: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.secondaryLabel]
+          let boldAttrs: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.label]
+
+          let result = NSMutableAttributedString(string: "\(count)", attributes: boldAttrs)
+          result.append(NSAttributedString(string: count == 1 ? " FAVORITE" : " FAVORITES", attributes: normalAttrs))
+          return result
+      }
+    
+    
     
     func layoutView() {
-        self.addSubview(stackView);
-        stackView.autoPinEdgesToSuperviewEdges();
-        stackView.addArrangedSubview(importantWrapperView);
-        stackView.addArrangedSubview(actionButtonView);
+        self.addSubview(stackView)
+        stackView.autoPinEdgesToSuperviewEdges()
+        stackView.addArrangedSubview(importantWrapperView)
+        stackView.addArrangedSubview(actionButtonView)
     }
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            moreButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left);
-            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -16);
-            directionsButton.autoAlignAxis(.horizontal, toSameAxisOf: moreButton);
-            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -16);
-            favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
-            importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -16);
-            importantButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
+            moreButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left)
+            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -16)
+            directionsButton.autoAlignAxis(.horizontal, toSameAxisOf: moreButton)
+            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -16)
+            favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton)
+            importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -16)
+            importantButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton)
             
-            favoriteCountButton.autoAlignAxis(toSuperviewAxis: .horizontal);
-            favoriteCountButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-            didSetupConstraints = true;
+            favoriteCountButton.autoAlignAxis(toSuperviewAxis: .horizontal)
+            favoriteCountButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+            didSetupConstraints = true
         }
-        super.updateConstraints();
+        super.updateConstraints()
     }
     
-    public func populate(observation: Observation!) {
-        self.observation = observation;
-        favoriteCountButton.isHidden = true;
-        favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal);
-        importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant ?? false);
-        
-        currentUserFavorited = false;
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
-        
-        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: context) {
-            currentUserFavorited = favorites.contains { (favorite) -> Bool in
-                favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite);
-                return favorite.userId == user.remoteId && favorite.favorite;
-            }
-        }
-        if (currentUserFavorited) {
-            favoriteButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal);
-        } else {
-            favoriteButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal);
-        }
-        
-        isImportant = false;
-        if (!self.importantWrapperView.isHidden) {
-            UIView.animate(withDuration: 0.2) {
-                self.importantWrapperView.isHidden = true;
-            }
-        }
-        importantInputView.text = nil;
-        importantButton.setImage(UIImage(systemName: "flag", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal);
-        setImportantButton.accessibilityLabel = "Flag as important";
-        setImportantButton.setTitle("Flag as important", for: .normal);
-        setImportantButton.isEnabled = true;
-        cancelOrRemoveButton.accessibilityLabel = "Cancel";
-        cancelOrRemoveButton.setTitle("Cancel", for: .normal);
-        cancelOrRemoveButton.isEnabled = true;
-        if let important = observation.observationImportant {
-            if (important.important) {
-                isImportant = true;
-                importantButton.setImage(UIImage(systemName: "flag.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal);
-                importantInputView.text = important.reason;
-                setImportantButton.accessibilityLabel = "Update Important";
-                setImportantButton.setTitle("Update", for: .normal);
-                cancelOrRemoveButton.accessibilityLabel = "Remove";
-                cancelOrRemoveButton.setTitle("Remove", for: .normal);
-            }
-        }
-        if let scheme = scheme {
-            applyTheme(withScheme: scheme);
-        }
-    }
     
     @objc func showFavorites() {
-        observationActionsDelegate?.showFavorites?(observation!);
+        observationActionsDelegate?.showFavorites?(observation!)
     }
     
     @objc func moreTapped() {
-        observationActionsDelegate?.moreActionsTapped?(observation!);
+        observationActionsDelegate?.moreActionsTapped?(observation!)
     }
     
     @objc func favoriteObservation() {
@@ -332,47 +318,47 @@ class ObservationActionsView: UIView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 self.observationActionsDelegate?.favoriteObservation?(observation, completion: { savedObservation in
                     if let savedObservation = savedObservation {
-                        self.observation = savedObservation;
+                        self.observation = savedObservation
                         self.populate(observation: savedObservation)
                     }
-                });
+                })
             }
         }
     }
     
     @objc func getDirectionsToObservation(_ sender: UIButton) {
-        observationActionsDelegate?.getDirectionsToObservation?(observation!, sourceView: sender);
+        observationActionsDelegate?.getDirectionsToObservation?(observation!, sourceView: sender)
     }
     
     @objc func toggleImportant() {
         UIView.animate(withDuration: 0.2) {
-            self.importantWrapperView.isHidden = !self.importantWrapperView.isHidden;
+            self.importantWrapperView.isHidden = !self.importantWrapperView.isHidden
         }
     }
     
     @objc func makeImportant() {
-        importantInputView.resignFirstResponder();
-        observationActionsDelegate?.makeImportant?(observation!, reason: self.importantInputView.text ?? "");
-        setImportantButton.setTitle("Saving", for: .normal);
-        setImportantButton.isEnabled = false;
+        importantInputView.resignFirstResponder()
+        observationActionsDelegate?.makeImportant?(observation!, reason: self.importantInputView.text ?? "")
+        setImportantButton.setTitle("Saving", for: .normal)
+        setImportantButton.isEnabled = false
     }
     
     @objc func removeImportant() {
-        importantInputView.resignFirstResponder();
+        importantInputView.resignFirstResponder()
         if (observation?.isImportant == true) {
-            observationActionsDelegate?.removeImportant?(observation!);
-            cancelOrRemoveButton.setTitle("Removing", for: .normal);
-            cancelOrRemoveButton.isEnabled = false;
+            observationActionsDelegate?.removeImportant?(observation!)
+            cancelOrRemoveButton.setTitle("Removing", for: .normal)
+            cancelOrRemoveButton.isEnabled = false
         } else {
-            toggleImportant();
+            toggleImportant()
         }
     }
     
     @objc func doneButtonPressed() {
-        importantInputView.resignFirstResponder();
+        importantInputView.resignFirstResponder()
     }
     
     @objc func cancelButtonPressed() {
-        importantInputView.resignFirstResponder();
+        importantInputView.resignFirstResponder()
     }
 }

@@ -11,11 +11,11 @@
 #import "NSDate+display.h"
 #import "ObservationTableHeaderView.h"
 #import "DisplaySettingsHeader.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "MAGE-Swift.h"
 
 @interface TimeSettingsTableViewController ()
 @property (assign, nonatomic) BOOL gmtTime;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) DisplaySettingsHeader *header;
 @end
 
@@ -31,7 +31,7 @@ static NSInteger GMT_TIME_CELL_ROW = 1;
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

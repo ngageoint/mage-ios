@@ -4,16 +4,17 @@
 //
 
 #import "ValuePickerTableViewController.h"
+#import "MAGE-Swift.h"
 
 @interface ValuePickerTableViewController()
 
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
 @end
 
 @implementation ValuePickerTableViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>)containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.scheme = containerScheme;
     return self;
@@ -26,7 +27,7 @@
     self.selected = [defaults objectForKey:self.preferenceKey];
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

@@ -34,11 +34,12 @@
     UIButton *button = nil;
 
     if (self.imageName != nil) {
-        button = [UIButton floatingButtonWithImageName: self.imageName
-                                                scheme: self.containerScheme
-                                                target: self
-                                                action: @selector(attachmentFabTapped:)
-                                                   tag: indexPath.row];
+        button = [FloatingButtonFactory floatingButtonWithImageName: self.imageName
+                                                             scheme: self.containerScheme
+                                                             target: self
+                                                             action: @selector(attachmentFabTapped:)
+                                                                tag: indexPath.row
+                                                 accessibilityLabel: self.imageName];
     }
     
     AttachmentModel *attachment = [self attachmentAtIndex:[indexPath row]];

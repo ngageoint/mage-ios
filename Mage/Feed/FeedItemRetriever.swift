@@ -12,18 +12,18 @@ import Kingfisher
 extension UIImage {
     
     func colorized(color : UIColor) -> UIImage {
-        let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height);
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0);
-        let context = UIGraphicsGetCurrentContext();
-        context!.translateBy(x: 0, y: self.size.height);
-        context!.scaleBy(x: 1.0, y: -1.0);
-        context!.draw(self.cgImage!, in: rect);
-        context!.clip(to: rect, mask: self.cgImage!);
-        context?.setFillColor(color.cgColor);
-        context?.fill(rect);
-        let colorizedImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return colorizedImage!;
+        let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+        let context = UIGraphicsGetCurrentContext()
+        context!.translateBy(x: 0, y: self.size.height)
+        context!.scaleBy(x: 1.0, y: -1.0)
+        context!.draw(self.cgImage!, in: rect)
+        context!.clip(to: rect, mask: self.cgImage!)
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+        let colorizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return colorizedImage!
     }
 }
 
@@ -31,7 +31,7 @@ extension UIImage {
     
     @objc public static func setAnnotationImage(feedItem: FeedItemAnnotation, annotationView: MKAnnotationView) {
         if let url: URL = feedItem.iconURL {
-            let size = 35;
+            let size = 35
             
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
@@ -43,22 +43,22 @@ extension UIImage {
                 case .success(let value):
                     
                     let image = value.image.aspectResize(to: CGSize(width: size, height: size))
-                    annotationView.image = image;
+                    annotationView.image = image
                     annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                     
                 case .failure(_):
-                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
+                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.blue)
                     annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                 }
             }
         } else {
-            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor);
+            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.blue)
             annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
         }
     }
     
     public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
-        var feedRetrievers: [FeedItemRetriever] = [];
+        var feedRetrievers: [FeedItemRetriever] = []
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         
@@ -68,11 +68,11 @@ extension UIImage {
             if let feeds: [Feed] = context.fetchAll(Feed.self) {
             
                 for feed: Feed in feeds {
-                    let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
-                    feedRetrievers.append(retriever);
+                    let retriever = FeedItemRetriever(feed: feed, delegate: delegate)
+                    feedRetrievers.append(retriever)
                 }
             }
-            return feedRetrievers;
+            return feedRetrievers
         }
     }
     
@@ -83,7 +83,7 @@ extension UIImage {
         guard let context = context else { return nil }
         return context.performAndWait {
             if let feed: Feed = context.fetchFirst(Feed.self, key: "tag", value: feedTag) {
-                return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
+                return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate)
             }
             return nil
         }
@@ -97,7 +97,7 @@ extension UIImage {
         return context.performAndWait {
             if let feed: Feed = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
                 if (feed.itemsHaveSpatialDimension) {
-                    return FeedItemRetriever(feed: feed, delegate: delegate);
+                    return FeedItemRetriever(feed: feed, delegate: delegate)
                 }
             }
             return nil
@@ -105,7 +105,7 @@ extension UIImage {
     }
     
     public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
-        var feedRetrievers: [FeedItemRetriever] = [];
+        var feedRetrievers: [FeedItemRetriever] = []
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         
@@ -116,8 +116,8 @@ extension UIImage {
                 
                 for feed: Feed in feeds {
                     if (feed.itemsHaveSpatialDimension) {
-                        let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
-                        feedRetrievers.append(retriever);
+                        let retriever = FeedItemRetriever(feed: feed, delegate: delegate)
+                        feedRetrievers.append(retriever)
                     }
                 }
             }
@@ -125,15 +125,15 @@ extension UIImage {
         }
     }
 
-    @objc public let feed: Feed;
-    let delegate: FeedItemDelegate;
+    @objc public let feed: Feed
+    let delegate: FeedItemDelegate
     
     var fetchedResultsController: NSFetchedResultsController<FeedItem>?
     
     func createFetchedResultsController() {
         // Create Fetch Request
-        let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
-        fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
+        let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed)
         
         // Configure Fetch Request
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
@@ -152,8 +152,8 @@ extension UIImage {
     }
     
     init(feed: Feed, delegate: FeedItemDelegate) {
-        self.feed = feed;
-        self.delegate = delegate;
+        self.feed = feed
+        self.delegate = delegate
     }
     
     @objc public func startRetriever() -> [FeedItemAnnotation]? {
@@ -170,7 +170,7 @@ extension UIImage {
                 return FeedItemAnnotation(feedItem: feedItem)
             }
             return nil
-        });
+        })
     }
     
 }

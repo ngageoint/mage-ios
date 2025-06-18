@@ -37,7 +37,7 @@ import PureLayout
 
     private var offlineObservationManager : MageOfflineObservationManager?;
     
-    convenience public init(delegate: Delegate?, scheme: MDCContainerScheming) {
+    convenience public init(delegate: Delegate?, scheme: AppContainerScheming) {
         self.init(scheme: scheme);
         self.delegate = delegate;
     }

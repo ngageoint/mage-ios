@@ -7,11 +7,9 @@
 //
 
 import Foundation
-import MaterialComponents.MaterialTypographyScheme
-import MaterialComponents.MaterialCards
 import PureLayout
 
-class ObservationAttachmentCard: MDCCard {
+class ObservationAttachmentCard: UIView {
     var didSetupConstraints = false;
     weak var observation: Observation?;
     weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
@@ -51,12 +49,11 @@ class ObservationAttachmentCard: MDCCard {
         super.updateConstraints();
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
 
-        super.applyTheme(withScheme: scheme);
         attachmentView.applyTheme(withScheme: scheme);
     }
     

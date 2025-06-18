@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialComponents.MDCTextField
 
 class CheckboxFieldView : BaseFieldView {
     lazy var checkboxSwitch: UISwitch = {
@@ -49,11 +48,11 @@ class CheckboxFieldView : BaseFieldView {
         return containerView;
     }()
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    override func applyTheme(withScheme scheme: AppContainerScheming?) {
         super.applyTheme(withScheme: scheme);
-        label.font = scheme?.typographyScheme.body1;
+        label.font = scheme?.typographyScheme.bodyFont;
         label.textColor = scheme?.colorScheme.onSurfaceColor;
-        errorLabel.font = scheme?.typographyScheme.caption;
+        errorLabel.font = scheme?.typographyScheme.captionFont;
         checkboxSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant;
     }
     

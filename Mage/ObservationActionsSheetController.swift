@@ -104,10 +104,9 @@ class ObservationActionsSheetController: UITableViewController {
             }
             return cell
         }()
-        cell.imageView?.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        cell.imageView?.tintColor = scheme?.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
         cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor;
         cell.backgroundColor = scheme?.colorScheme.surfaceColor;
-        cell.textLabel?.font = scheme?.typographyScheme.subtitleFont;
         cell.accessoryType = .none;
         
         var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 3);

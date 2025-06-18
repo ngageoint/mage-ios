@@ -16,8 +16,8 @@ class FormDefaultsViewController: UIViewController {
     var navController: UINavigationController!;
     var event: Event!;
     var eventForm: Form!;
-    var scheme: MDCContainerScheming?;
-    let card = MDCCard(forAutoLayout: ());
+    var scheme: AppContainerScheming?;
+    let card = UIView(forAutoLayout: ())
     let formNameLabel = UILabel.newAutoLayout();
     let formDescriptionLabel = UILabel.newAutoLayout();
     let defaultsLabel = UILabel.newAutoLayout();
@@ -55,8 +55,8 @@ class FormDefaultsViewController: UIViewController {
         return stackView;
     }()
     
-    private lazy var resetButton: MDCButton = {
-        let button = MDCButton(forAutoLayout: ());
+    private lazy var resetButton: UIButton = {
+        let button = UIButton(forAutoLayout: ());
         button.accessibilityLabel = "reset defaults";
         button.setTitle("Reset To Server Defaults", for: .normal);
         button.addTarget(self, action: #selector(resetDefaults), for: .touchUpInside);
@@ -91,7 +91,7 @@ class FormDefaultsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(event: Event, eventForm: Form, navigationController: UINavigationController, scheme: MDCContainerScheming, formDefaultsCoordinator: FormDefaultsCoordinator?) {
+    @objc convenience public init(event: Event, eventForm: Form, navigationController: UINavigationController, scheme: AppContainerScheming, formDefaultsCoordinator: FormDefaultsCoordinator?) {
         self.init(frame: CGRect.zero);
         self.event = event;
         self.eventForm = eventForm;
@@ -104,30 +104,32 @@ class FormDefaultsViewController: UIViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    @objc public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
 
         self.scheme = containerScheme;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        formNameLabel.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
-        formNameLabel.font = containerScheme.typographyScheme.headline6;
-        formDescriptionLabel.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6);
-        formDescriptionLabel.font = containerScheme.typographyScheme.subtitle2;
-        defaultsLabel.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        defaultsLabel.font = containerScheme.typographyScheme.subtitle1;
-        defaultDescriptionLabel.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        defaultDescriptionLabel.font = containerScheme.typographyScheme.caption;
+        formNameLabel.textColor = containerScheme.colorScheme.onBackgroundColor?.withAlphaComponent(0.87);
+        formNameLabel.font = containerScheme.typographyScheme.headline6Font;
+        formDescriptionLabel.textColor = containerScheme.colorScheme.onBackgroundColor?.withAlphaComponent(0.6);
+        formDescriptionLabel.font = containerScheme.typographyScheme.subtitle2Font;
+        defaultsLabel.textColor = containerScheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.87);
+        defaultsLabel.font = containerScheme.typographyScheme.subtitle1Font;
+        defaultDescriptionLabel.textColor = containerScheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6);
+        defaultDescriptionLabel.font = containerScheme.typographyScheme.captionFont;
         observationFormView?.applyTheme(withScheme: containerScheme);
-        card.applyTheme(withScheme: containerScheme);
+        
+//        card.applyTheme(withScheme: containerScheme);
+        
         if let color = eventForm.color {
             image.tintColor = UIColor(hex: color);
         } else {
             image.tintColor = containerScheme.colorScheme.primaryColor
         }
-        resetButton.applyTextTheme(withScheme: globalErrorContainerScheme());
-        divider.backgroundColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+//        resetButton.applyTextTheme(withScheme: globalErrorContainerScheme());
+        divider.backgroundColor = containerScheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.12);
     }
     
     @objc func resetDefaults() {

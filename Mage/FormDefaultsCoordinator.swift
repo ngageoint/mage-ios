@@ -1,5 +1,5 @@
 //
-//  FormDefaultsCoordinator.m
+//  FormDefaultsCoordinator.swift
 //  MAGE
 //
 //  Created by William Newman on 1/30/19.
@@ -7,73 +7,73 @@
 //
 
 @objc protocol FormDefaultsDelegate {
-    @objc func formDefaultsComplete(coordinator: NSObject);
+    @objc func formDefaultsComplete(coordinator: NSObject)
 }
 
 @objc class FormDefaultsCoordinator: NSObject {
     
-    var childCoordinators: [Any] = [];
-    var navController: UINavigationController;
-    var viewController: UIViewController?;
-    var delegate: FormDefaultsDelegate;
-    var event: Event!;
-    var form: Form;
-    var defaults: NSMutableDictionary?;
-    var scheme: MDCContainerScheming;
+    var childCoordinators: [Any] = []
+    var navController: UINavigationController
+    var viewController: UIViewController?
+    var delegate: FormDefaultsDelegate
+    var event: Event!
+    var form: Form
+    var defaults: NSMutableDictionary?
+    var scheme: AppContainerScheming
     
     private lazy var serverDefaults: [String: AnyHashable] = {
         // Make a mutable copy of the original form
-        var defaults = FormDefaults.mutableForm(form.json?.json ?? [:]) as! [String : AnyHashable];
+        var defaults = FormDefaults.mutableForm(form.json?.json ?? [:]) as! [String : AnyHashable]
         
         // filter out archived and hidden fields and sort
-        var fields: [[String: AnyHashable]] = defaults[FormKey.fields.key] as! [[String: AnyHashable]];
+        var fields: [[String: AnyHashable]] = defaults[FormKey.fields.key] as! [[String: AnyHashable]]
         var filteredFields: [[String: AnyHashable]] = fields.filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) }
         filteredFields.sort { (firstField : [String: AnyHashable], secondField: [String: AnyHashable]) -> Bool in
-            return (firstField[FieldKey.id.key] as! Int) < (secondField[FieldKey.id.key] as! Int);
+            return (firstField[FieldKey.id.key] as! Int) < (secondField[FieldKey.id.key] as! Int)
         }
         var newForm: [String: AnyHashable] = [ : ]
         for (_, field) in filteredFields.enumerated() {
             // grab the server default from the form fields value property
             if let value: AnyHashable = field[FieldKey.value.key] {
-                newForm[field[FieldKey.name.key] as! String] = value;
+                newForm[field[FieldKey.name.key] as! String] = value
             }
         }
-        return newForm;
-    }();
+        return newForm
+    }()
     
-    @objc public init(navController: UINavigationController, event: Event, form: Form, scheme: MDCContainerScheming, delegate: FormDefaultsDelegate) {
-        self.navController = navController;
-        self.event = event;
-        self.form = form;
-        self.delegate = delegate;
-        self.scheme = scheme;
+    @objc public init(navController: UINavigationController, event: Event, form: Form, scheme: AppContainerScheming, delegate: FormDefaultsDelegate) {
+        self.navController = navController
+        self.event = event
+        self.form = form
+        self.delegate = delegate
+        self.scheme = scheme
     }
     
     @objc func start() {
-        viewController = FormDefaultsViewController(event: event, eventForm: form, navigationController: navController, scheme: self.scheme, formDefaultsCoordinator: self);
-        self.navController.pushViewController(viewController!, animated: true);
+        viewController = FormDefaultsViewController(event: event, eventForm: form, navigationController: navController, scheme: self.scheme, formDefaultsCoordinator: self)
+        self.navController.pushViewController(viewController!, animated: true)
     }
     
     func save(defaults: [String: AnyHashable]) {
-        let formDefaults = FormDefaults(eventId: self.event.remoteId as! Int, formId: form.formId?.intValue ?? -1);
+        let formDefaults = FormDefaults(eventId: self.event.remoteId as! Int, formId: form.formId?.intValue ?? -1)
         // Compare server defaults with defaults.  If they are the same clear the defaults
         if (defaults == serverDefaults) {
-            formDefaults.clear();
+            formDefaults.clear()
         } else {
-            formDefaults.setDefaults(defaults);
+            formDefaults.setDefaults(defaults)
         }
-        self.navController.popViewController(animated: true);
-        self.delegate.formDefaultsComplete(coordinator: self);
+        self.navController.popViewController(animated: true)
+        self.delegate.formDefaultsComplete(coordinator: self)
     }
     
     func cancel() {
-        self.navController.popViewController(animated: true);
-        self.delegate.formDefaultsComplete(coordinator: self);
+        self.navController.popViewController(animated: true)
+        self.delegate.formDefaultsComplete(coordinator: self)
     }
 }
 
 extension FormDefaultsCoordinator: FieldSelectionDelegate {
     func launchFieldSelectionViewController(viewController: UIViewController) {
-        self.navController.pushViewController(viewController, animated: true);
+        self.navController.pushViewController(viewController, animated: true)
     }
 }

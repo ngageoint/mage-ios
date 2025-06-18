@@ -5,7 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @protocol MapSettingsDelegate
 
@@ -18,8 +18,8 @@
 
 @property (nonatomic) NSUInteger mapsToDownloadCount;
 
-- (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate scheme: (id<AppContainerScheming>) containerScheme;
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 
 @end

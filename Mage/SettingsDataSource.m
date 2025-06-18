@@ -23,7 +23,7 @@
 @property (strong, nonatomic) Event* event;
 @property (strong, nonatomic) NSArray<Event *>* recentEvents;
 @property (strong, nonatomic) NSMutableArray* sections;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
@@ -39,7 +39,7 @@ static const NSInteger SETTINGS_SECTION = 6;
 static const NSInteger ABOUT_SECTION = 7;
 static const NSInteger LEGAL_SECTION = 8;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     
     if (self) {

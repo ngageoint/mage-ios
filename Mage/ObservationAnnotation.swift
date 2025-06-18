@@ -67,7 +67,6 @@ import DateTools
         }
       
         self.coordinate = location
-//        self.title = observation.primaryFeedFieldText
         if self.title == nil || self.title.count == 0 {
             self.title = "Observation"
         }
@@ -79,11 +78,11 @@ import DateTools
         self.accessibilityValue = "Observation Annotation"
     }
     
-    @objc public func viewForAnnotation(on: MKMapView, scheme: AppContainerScheming) -> MKAnnotationView {
+    @objc public override func viewForAnnotation(on: MKMapView, scheme: AppContainerScheming) -> MKAnnotationView {
         return viewForAnnotation(on: on, with: nil, scheme: scheme)
     }
     
-    @objc public func viewForAnnotation(on: MKMapView, with: AnnotationDragCallback?, scheme: AppContainerScheming) -> MKAnnotationView {
+    @objc public override func viewForAnnotation(on: MKMapView, with: AnnotationDragCallback?, scheme: AppContainerScheming) -> MKAnnotationView {
         var annotationView = on.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID)
         
         if let annotationView = annotationView {

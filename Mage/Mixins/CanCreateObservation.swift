@@ -9,6 +9,8 @@
 import Foundation
 import MapKit
 import MapFramework
+import sf_ios
+import sf_geojson_ios
 
 protocol CanCreateObservation {
     var mapView: MKMapView? { get set }

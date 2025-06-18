@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import sf_geojson_ios
 
 @objc protocol ObservationEditListener {
     @objc func fieldValueChanged(_ field: [String: Any], value: Any?);
@@ -131,7 +132,9 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     
     func createObservation(location: SFGeometry?, accuracy: CLLocationAccuracy, provider: String, delta: Double) -> Observation? {
         newObservation = true;
+        
         let observation = Observation.create(geometry: location, accuracy: accuracy, provider: provider, delta: delta, context: managedObjectContext);
+        
         observation.dirty = true;
         addRequiredForms(observation: observation);
         return observation;
@@ -271,7 +274,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
         let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, observation: observation, scheme: self.scheme);
         formPicker.applyTheme(withScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: formPicker);
-        bottomSheet?.trackingScrollView = formPicker.collectionView
+//        bottomSheet?.trackingScrollView = formPicker.collectionView
         self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
     }
     

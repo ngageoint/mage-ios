@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import "AttachmentSelectionDelegate.h"
 #import "AppContainerScheming.h"
-#import "MAGE-Swift.h"
+//#import "MAGE-Swift.h"
 
 @class AttachmentModel;
 

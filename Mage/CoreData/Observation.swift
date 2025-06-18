@@ -12,6 +12,7 @@ import sf_ios
 import UIKit
 import MagicalRecord
 import geopackage_ios
+import sf_geojson_ios
 
 enum ObservationState: Int, CustomStringConvertible {
     case Archive, Active
@@ -1356,4 +1357,19 @@ enum ObservationState: Int, CustomStringConvertible {
         }
         self.locations = observationLocations
     }
+    
+    
+    func isCurrentUserFavorited(in context: NSManagedObjectContext?) -> Bool {
+        guard let context = context,
+              let user = User.fetchCurrentUser(context: context),
+              let favorites = self.favorites else {
+            return false
+        }
+        return favorites.contains { $0.userId == user.remoteId && $0.favorite }
+    }
+
+    var favoriteCount: Int {
+        return favorites?.filter { $0.favorite }.count ?? 0
+    }
+
 }

@@ -15,11 +15,11 @@ class MageSplitViewController : UISplitViewController {
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
-    var bottomSheet: MDCBottomSheetController?
+    var bottomSheet: UIViewController?
     
     var startStraightLineNavigationObserver: AnyObject?
 
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?;
     var masterViewController: UINavigationController?;
     var detailViewController: UINavigationController?;
     var sideBarController: MageSideBarController?;
@@ -39,12 +39,12 @@ class MageSplitViewController : UISplitViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc convenience public init(containerScheme: MDCContainerScheming) {
+    @objc convenience public init(containerScheme: AppContainerScheming) {
         self.init(frame: CGRect.zero);
         self.scheme = containerScheme;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
