@@ -90,10 +90,7 @@ import MagicalRecord
         self.properties = json[LocationKey.properties.key] as? [AnyHashable : Any]
         var date = Date();
         if let locationTimestamp = self.properties?[LocationKey.timestamp.key] as? String {
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-            date = formatter.date(from: locationTimestamp) ?? Date();
+            date = ISO8601DateFormatter.gmtZeroDate(from: locationTimestamp) ?? Date();
         }
         self.timestamp = date;
         
@@ -117,7 +114,7 @@ import MagicalRecord
             "limit" : "1"
         ]
         if let lastLocationDate = Location.fetchLastLocationDate() {
-            parameters["startDate"] = ISO8601DateFormatter.string(from: lastLocationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
+            parameters["startDate"] = ISO8601DateFormatter.gmtZeroString(from: lastLocationDate);
         }
         let manager = MageSessionManager.shared();
         let methodStart = Date()

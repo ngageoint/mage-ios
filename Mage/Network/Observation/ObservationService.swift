@@ -58,7 +58,7 @@ enum ObservationService: URLRequestConvertible {
                 "sort": "lastModified+DESC"
             ]
             if let date = date {
-                params["startDate"] = ISO8601DateFormatter.string(from: date, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
+                params["startDate"] = ISO8601DateFormatter.gmtZeroString(from: date);
             }
             return params
         }

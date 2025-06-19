@@ -265,8 +265,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         let backgroundContext = persistence.getNewBackgroundContext(name: #function)
         
         return await backgroundContext.perform {
-            MageLogger.misc.debug("TIMING There are \(propertyList.count) features to save, chunking into groups of 250")
-
             var chunks = propertyList.chunked(into: 250);
             var newObservationCount = 0;
             var observationToNotifyAbout: Observation?;
@@ -279,7 +277,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                 }
             }
             backgroundContext.reset();
-            MageLogger.misc.debug("TIMING we have \(chunks.count) groups to save")
             while (chunks.count > 0) {
                 autoreleasepool {
                     guard let features = chunks.last else {
@@ -287,7 +284,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                     }
                     chunks.removeLast();
                     let createObservationsDate = Date()
-                    MageLogger.misc.debug("TIMING creating \(features.count) observations for chunk \(chunks.count)")
 
                     for observation in features {
                         if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: backgroundContext) {
@@ -297,46 +293,37 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                             }
                         }
                     }
-                    MageLogger.misc.debug("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
                 }
 
                 // only save once per chunk
                 let localSaveDate = Date()
                 do {
-                    MageLogger.misc.debug("TIMING saving \(propertyList.count) observations on local context")
                     try backgroundContext.save()
                 } catch {
                     MageLogger.misc.error("Error saving observations: \(error)")
                 }
-                MageLogger.misc.debug("TIMING saved \(propertyList.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
 
                 let rootContext = self.persistence.getRootContext()
                 rootContext.perform {
                     let rootSaveDate = Date()
 
                     do {
-                        MageLogger.misc.debug("TIMING saving \(propertyList.count) observations on root context")
                         try rootContext.save()
                     } catch {
                         MageLogger.misc.error("Error saving observations: \(error)")
                     }
-                    MageLogger.misc.debug("TIMING saved \(propertyList.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
 
                 }
-
                 backgroundContext.reset();
-                MageLogger.misc.debug("TIMING reset the local context for chunk \(chunks.count)")
-                MageLogger.misc.debug("Saved chunk \(chunks.count)")
             }
 
-            MageLogger.misc.debug("Received \(newObservationCount) new observations and send bulk is \(initial)")
             if ((initial && newObservationCount > 0) || newObservationCount > 1) {
                 NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: backgroundContext));
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
             }
 
-            MageLogger.misc.debug("TIMING Saved Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Saved \(newObservationCount) Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
             return newObservationCount
         }
     }
