@@ -65,13 +65,16 @@
     self.usernameField.accessibilityLabel = @"Username";
     self.usernameField.placeholder = @"Username";
     self.usernameField.label.text = @"Username";
+    self.usernameField.text = @"PaulSolt";  // FIXME: Do not MERGE - fast login
     [self.usernameField sizeToFit];
+    
     self.passwordField.accessibilityLabel = @"Password";
     UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.passwordField setLeadingView:keyImage];
     self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
     self.passwordField.placeholder = @"Password";
     self.passwordField.label.text = @"Password";
+    self.passwordField.text = [StoredPassword retrieveStoredPassword]; // FIXME: Do not MERGE - fast login
     [self.passwordField sizeToFit];
     [self.usernameField setEnabled:YES];
     [self.passwordField setEnabled:YES];
