@@ -99,7 +99,7 @@ import SimpleFeatures
             GPSLocationKey.bearing.key: location.course,
             GPSLocationKey.speed.key: location.speed,
             GPSLocationKey.millis.key: location.timestamp.timeIntervalSince1970,
-            GPSLocationKey.timestamp.key: ISO8601DateFormatter.string(from: location.timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]),
+            GPSLocationKey.timestamp.key: ISO8601DateFormatter.gmtZeroString(from: location.timestamp),
             GPSLocationKey.battery_level.key: device.batteryLevel * 100,
             GPSLocationKey.battery_state.key: batteryState,
             GPSLocationKey.telephone_network.key: telephonyInfo.serviceCurrentRadioAccessTechnology ?? "Unknown",

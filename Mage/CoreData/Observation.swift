@@ -313,7 +313,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
         
         if let timestamp = self.timestamp {
-            observationJson[ObservationKey.timestamp.key] = ISO8601DateFormatter.string(from: timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]);
+            observationJson[ObservationKey.timestamp.key] = ISO8601DateFormatter.gmtZeroString(from: timestamp)
         }
         
         var jsonProperties : [AnyHashable : Any] = self.properties ?? [:]
@@ -419,7 +419,7 @@ enum ObservationState: Int, CustomStringConvertible {
         observation.timestamp = observationDate;
         
         var properties: [AnyHashable : Any] = [:];
-        properties[ObservationKey.timestamp.key] = ISO8601DateFormatter.string(from: observationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
+        properties[ObservationKey.timestamp.key] = ISO8601DateFormatter.gmtZeroString(from: observationDate);
         if let geometry = geometry, let provider = provider {
             properties[ObservationKey.provider.key] = provider;
             if (provider != "manual") {
@@ -463,7 +463,6 @@ enum ObservationState: Int, CustomStringConvertible {
         var newObservation: Observation? = nil;
         var regions: [MKCoordinateRegion] = []
         let remoteId = Observation.idFromJson(json: feature);
-        
         let state = Observation.stateFromJson(json: feature);
         
         if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
@@ -474,10 +473,7 @@ enum ObservationState: Int, CustomStringConvertible {
             } else if !existingObservation.isDirty {
                 // if the observation is not dirty, and has been updated, update it
                 if let lastModified = feature[ObservationKey.lastModified.key] as? String {
-                    let formatter = ISO8601DateFormatter()
-                    formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
-                    formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-                    let lastModifiedDate = formatter.date(from: lastModified) ?? Date();
+                    let lastModifiedDate = ISO8601DateFormatter.gmtZeroDate(from: lastModified) ?? Date();
                     if lastModifiedDate == existingObservation.lastModified {
                         // If the last modified date for this observation has not changed no need to update.
                         return ObservationChangeRegions(observation: newObservation, regionsChanged: regions)
@@ -700,17 +696,11 @@ enum ObservationState: Int, CustomStringConvertible {
         }
         
         if let lastModified = json[ObservationKey.lastModified.key] as? String {
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-            self.lastModified = formatter.date(from: lastModified);
+            self.lastModified = ISO8601DateFormatter.gmtZeroDate(from: lastModified);
         }
         
         if let timestamp = self.properties?[ObservationKey.timestamp.key] as? String {
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-            self.timestamp = formatter.date(from: timestamp);
+            self.timestamp = ISO8601DateFormatter.gmtZeroDate(from: timestamp);
         }
         
         self.url = json[ObservationKey.url.key] as? String
@@ -1043,10 +1033,7 @@ enum ObservationState: Int, CustomStringConvertible {
             }
         } else if type == FieldType.date.key {
             if let value = value as? String {
-                let formatter = ISO8601DateFormatter()
-                formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
-                formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-                let date = formatter.date(from: value);
+                let date = ISO8601DateFormatter.gmtZeroDate(from: value);
                 return (date as NSDate?)?.formattedDisplay() ?? "";
             }
         } else if type == FieldType.checkbox.key {
