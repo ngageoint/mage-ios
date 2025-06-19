@@ -26,10 +26,17 @@ class SplitLayout: UICollectionViewLayout {
         numberOfColumns = 2
         numberOfRows = Int(ceil(Double(count) / Double(numberOfColumns)))
         
-        let width = (collectionView!.bounds.width - (itemSpacing * CGFloat(numberOfColumns - 1))) / CGFloat(numberOfColumns)
-        let height = (collectionView!.bounds.height - (rowSpacing * CGFloat(numberOfRows - 1))) / CGFloat(numberOfRows)
-        itemSize = CGSize(width: width, height: height)
-        fullWidthItemSize = CGSize(width: collectionView!.bounds.width, height: height)
+        if count % 2 == 1 {
+            let width = (collectionView!.bounds.width - (itemSpacing * CGFloat(numberOfColumns - 1))) / CGFloat(numberOfColumns)
+            let height = (collectionView!.bounds.height - (rowSpacing * CGFloat(numberOfRows - 1))) / CGFloat(numberOfRows)
+            itemSize = CGSize(width: width, height: height)
+            fullWidthItemSize = CGSize(width: collectionView!.bounds.width, height: height)
+        } else {
+            let width = 200.0
+            let height = 200.0
+            itemSize = CGSize(width: width, height: height)
+            fullWidthItemSize = CGSize(width: collectionView!.bounds.width, height: height)
+        }
     }
     
     override var collectionViewContentSize: CGSize {
