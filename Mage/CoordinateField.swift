@@ -55,11 +55,11 @@ import CoreLocation
     
     @objc public var label: String? {
         get {
-            return textField.label.text
+            return textField.text
         }
         set {
             textField.accessibilityLabel = newValue
-            textField.label.text = newValue
+            textField.text = newValue
         }
     }
     
@@ -73,7 +73,7 @@ import CoreLocation
     }
     
     @objc public var coordinate : CLLocationDegrees = CLLocationDegrees.nan
-    var scheme : MDCContainerScheming?
+    var scheme : AppContainerScheming?
     var latitude : Bool = true
     var delegate: CoordinateFieldDelegate?
     @objc public var linkedLongitudeField : CoordinateField?
@@ -83,7 +83,7 @@ import CoreLocation
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public init(latitude: Bool = true, text: String? = nil, label: String? = nil, delegate: CoordinateFieldDelegate? = nil, scheme: MDCContainerScheming? = nil) {
+    @objc public init(latitude: Bool = true, text: String? = nil, label: String? = nil, delegate: CoordinateFieldDelegate? = nil, scheme: AppContainerScheming? = nil) {
         super.init(frame: CGRect.zero);
         self.scheme = scheme
         self.label = label
@@ -94,13 +94,11 @@ import CoreLocation
         self.delegate = delegate
     }
     
-    @objc func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    @objc func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
-        textField.applyTheme(withScheme: scheme)
-        textField.setFilledBackgroundColor(scheme.colorScheme.surfaceColor.withAlphaComponent(0.87), for: .normal)
-        textField.setFilledBackgroundColor(scheme.colorScheme.surfaceColor.withAlphaComponent(0.87), for: .editing)
+        textField.applyTheme(type: .primary, scheme: scheme)
     }
     
     @objc func applyTheme() {

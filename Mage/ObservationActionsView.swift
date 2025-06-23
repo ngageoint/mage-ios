@@ -80,34 +80,6 @@ class ObservationActionsView: UIView {
         return field
     }()
     
-    
-//    var favoriteCountText: NSAttributedString {
-//        get {
-//            let favoriteCountText = NSMutableAttributedString()
-//            if let favorites = observation?.favorites {
-//                let favoriteCount: Int = favorites.reduce(0) { (result, favorite) -> Int in
-//                    if (favorite.favorite) {
-//                        return result + 1
-//                    }
-//                    return result
-//                }
-//                let favoriteLabelAttributes: [NSAttributedString.Key: Any] = [
-//                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
-//                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6) ?? UIColor.label.withAlphaComponent(0.6)
-//                ]
-//                let favoriteCountAttributes: [NSAttributedString.Key: Any] = [
-//                    .font: scheme?.typographyScheme.overline ?? UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
-//                    .foregroundColor: scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87) ?? UIColor.label.withAlphaComponent(0.87)
-//                ]
-//                favoriteCountText.append(NSAttributedString(string: "\(favoriteCount)", attributes: favoriteCountAttributes))
-//                favoriteCountText.append(NSAttributedString(string: favoriteCount == 1 ? " FAVORITE" : " FAVORITES", attributes: favoriteLabelAttributes))
-//            }
-//            return favoriteCountText
-//        }
-//    }
-//    
-   
-
     private lazy var accessoryView: UIToolbar = {
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
@@ -164,7 +136,7 @@ class ObservationActionsView: UIView {
         return view
     }()
     
-    
+    // MARK: - Initializers
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: AppContainerScheming?) {
         self.init(frame: CGRect.zero)
         self.observation = observation
@@ -172,11 +144,44 @@ class ObservationActionsView: UIView {
         self.scheme = scheme
         configureForAutoLayout()
         populate(observation: observation)
-        applyTheme(withScheme: scheme)
+        applyTheme()
         self.accessibilityLabel = "actions"
     }
+
     
-    func applyTheme(withScheme scheme: AppContainerScheming?) {
+    // MARK: - Layout and Theming
+    private func configureLayout() {
+        addSubview(stackView)
+        stackView.autoPinEdgesToSuperviewEdges()
+        stackView.addArrangedSubview(importantWrapperView)
+        stackView.addArrangedSubview(actionButtonView)
+        
+        updateConstraintsIfNeeded()
+    }
+
+    override func updateConstraints() {
+        if !didSetupConstraints {
+            moreButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left)
+            
+            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -16)
+            directionsButton.autoAlignAxis(.horizontal, toSameAxisOf: moreButton)
+            
+            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -16)
+            favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton)
+            
+            importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -16)
+            importantButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton)
+            
+            favoriteCountButton.autoAlignAxis(toSuperviewAxis: .horizontal)
+            favoriteCountButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+            
+            didSetupConstraints = true
+        }
+        
+        super.updateConstraints()
+    }
+    
+    func applyTheme() {
         guard let scheme else { return }
 
         backgroundColor = scheme.colorScheme.surfaceColor
@@ -209,62 +214,6 @@ class ObservationActionsView: UIView {
         importantInputView.text = observation?.observationImportant?.reason
         importantWrapperView.isHidden = true
     }
-
-//    public func populate(observation: Observation!) {
-//        self.observation = observation
-//        favoriteCountButton.isHidden = true
-//        favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal)
-//        importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant ?? false)
-//        
-//        currentUserFavorited = false
-//        @Injected(\.nsManagedObjectContext)
-//        var context: NSManagedObjectContext?
-//        
-//        guard let context = context else { return }
-//        
-//        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: context) {
-//            currentUserFavorited = favorites.contains { (favorite) -> Bool in
-//                favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite)
-//                return favorite.userId == user.remoteId && favorite.favorite
-//            }
-//        }
-//        if (currentUserFavorited) {
-//            favoriteButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
-//        } else {
-//            favoriteButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
-//        }
-//        
-//        isImportant = false
-//        if (!self.importantWrapperView.isHidden) {
-//            UIView.animate(withDuration: 0.2) {
-//                self.importantWrapperView.isHidden = true
-//            }
-//        }
-//        importantInputView.text = nil
-//        importantButton.setImage(UIImage(systemName: "flag", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
-//        setImportantButton.accessibilityLabel = "Flag as important"
-//        setImportantButton.setTitle("Flag as important", for: .normal)
-//        setImportantButton.isEnabled = true
-//        cancelOrRemoveButton.accessibilityLabel = "Cancel"
-//        cancelOrRemoveButton.setTitle("Cancel", for: .normal)
-//        cancelOrRemoveButton.isEnabled = true
-//        if let important = observation.observationImportant {
-//            if (important.important) {
-//                isImportant = true
-//                importantButton.setImage(UIImage(systemName: "flag.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
-//                importantInputView.text = important.reason
-//                setImportantButton.accessibilityLabel = "Update Important"
-//                setImportantButton.setTitle("Update", for: .normal)
-//                cancelOrRemoveButton.accessibilityLabel = "Remove"
-//                cancelOrRemoveButton.setTitle("Remove", for: .normal)
-//            }
-//        }
-//        if let scheme = scheme {
-//            applyTheme(withScheme: scheme)
-//        }
-//    }
-    
-    
     
     private func favoriteCountText() -> NSAttributedString {
           guard let count = observation?.favoriteCount else { return NSAttributedString(string: "") }
@@ -278,75 +227,82 @@ class ObservationActionsView: UIView {
       }
     
     
+    // MARK: - Button Builders
     
-    func layoutView() {
-        self.addSubview(stackView)
-        stackView.autoPinEdgesToSuperviewEdges()
-        stackView.addArrangedSubview(importantWrapperView)
-        stackView.addArrangedSubview(actionButtonView)
+    private func makeIconButton(named imageName: String, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: action, for: .touchUpInside)
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40))
+        
+        return button
     }
     
-    override func updateConstraints() {
-        if (!didSetupConstraints) {
-            moreButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left)
-            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -16)
-            directionsButton.autoAlignAxis(.horizontal, toSameAxisOf: moreButton)
-            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -16)
-            favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton)
-            importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -16)
-            importantButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton)
-            
-            favoriteCountButton.autoAlignAxis(toSuperviewAxis: .horizontal)
-            favoriteCountButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
-            didSetupConstraints = true
-        }
-        super.updateConstraints()
+    private func makeIconButton(systemName: String, filledSystemName: String? = nil, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        let image = UIImage(systemName: systemName, withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))
+
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: action, for: .touchUpInside)
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40))
+        
+        return button
     }
     
     
-    @objc func showFavorites() {
-        observationActionsDelegate?.showFavorites?(observation!)
+    // MARK: - Actions
+    
+    @objc private func showFavorites() {
+        guard let observation else { return }
+        observationActionsDelegate?.showFavorites?(observation)
     }
     
-    @objc func moreTapped() {
-        observationActionsDelegate?.moreActionsTapped?(observation!)
+    @objc private func moreTapped() {
+        guard let observation else { return }
+        observationActionsDelegate?.moreActionsTapped?(observation)
     }
     
-    @objc func favoriteObservation() {
-        if let observation = observation {
-            // let the ripple dissolve before transitioning otherwise it looks weird
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.observationActionsDelegate?.favoriteObservation?(observation, completion: { savedObservation in
-                    if let savedObservation = savedObservation {
-                        self.observation = savedObservation
-                        self.populate(observation: savedObservation)
-                    }
-                })
+    @objc private func favoriteObservation() {
+        guard let observation else { return }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.observationActionsDelegate?.favoriteObservation?(observation) { updated in
+                if let updated {
+                    self.populate(observation: updated)
+                }
             }
         }
     }
     
     @objc func getDirectionsToObservation(_ sender: UIButton) {
-        observationActionsDelegate?.getDirectionsToObservation?(observation!, sourceView: sender)
+        guard let observation else { return }
+        observationActionsDelegate?.getDirectionsToObservation?(observation, sourceView: sender)
     }
     
     @objc func toggleImportant() {
         UIView.animate(withDuration: 0.2) {
-            self.importantWrapperView.isHidden = !self.importantWrapperView.isHidden
+            self.importantWrapperView.isHidden.toggle()
         }
     }
     
     @objc func makeImportant() {
+        guard let observation else { return }
+        
         importantInputView.resignFirstResponder()
-        observationActionsDelegate?.makeImportant?(observation!, reason: self.importantInputView.text ?? "")
+        observationActionsDelegate?.makeImportant?(observation, reason: importantInputView.text ?? "")
         setImportantButton.setTitle("Saving", for: .normal)
         setImportantButton.isEnabled = false
     }
     
     @objc func removeImportant() {
+        guard let observation else { return }
+        
         importantInputView.resignFirstResponder()
-        if (observation?.isImportant == true) {
-            observationActionsDelegate?.removeImportant?(observation!)
+        
+        if isImportant {
+            observationActionsDelegate?.removeImportant?(observation)
             cancelOrRemoveButton.setTitle("Removing", for: .normal)
             cancelOrRemoveButton.isEnabled = false
         } else {

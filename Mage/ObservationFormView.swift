@@ -8,9 +8,6 @@
 
 import Foundation
 
-//import MaterialComponents.MaterialTextFields
-//import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
-
 @objc protocol ObservationFormFieldListener {
     @objc func fieldValueChanged(_ field: [String : Any], value: Any?)
 }

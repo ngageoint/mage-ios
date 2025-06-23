@@ -1,241 +1,217 @@
 //
-//  MageRootViewController.m
+//  MageRootViewController.swift
 //  Mage
+//  Updated on 06/23/2025 by Brent Michalski
 //
 
 import Foundation
 import Kingfisher
-import MaterialViews
+import UIKit
 
 @objc class MageRootViewController : UITabBarController {
-    @Injected(\.attachmentRepository)
-    var attachmentRepository: AttachmentRepository
+    // Dependency Injection
+    @Injected(\.attachmentRepository) var attachmentRepository: AttachmentRepository
+    @Injected(\.nsManagedObjectContext) var context: NSManagedObjectContext?
     
-    @Injected(\.nsManagedObjectContext)
-    var context: NSManagedObjectContext?
+    private var mapRequestFocusObserver: Any?
+    private var snackbarNoticiasObserver: Any?
     
-    var profileTabBarItem: UITabBarItem?;
-    var moreTabBarItem: UITabBarItem?;
-    var moreTableViewDelegate: UITableViewDelegate?;
-    var scheme: MDCContainerScheming?;
-    var feedViewControllers: [UINavigationController] = [];
-    var mapRequestFocusObserver: Any?
-    var snackbarNotificationObserver: Any?
-    var attachmentViewCoordinator: AttachmentViewCoordinator?
+    private(set) lazy var offlineObservationManager: MageOfflineObservationManager = {
+        MageOfflineObservationManager(delegate: self, context: context)
+    }()
     
-    private lazy var offlineObservationManager: MageOfflineObservationManager = {
-        let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self, context: context);
-        return manager;
-    }();
+    private var feedViewControllers: [UINavigationController] = []
     
-    private lazy var settingsTabItem: UINavigationController = {
-        let svc = SettingsTableViewController(scheme: scheme, context: context)!;
-        let nc = UINavigationController(rootViewController: svc);
-        nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape.fill"), tag: 4);
-        return nc;
-    }();
+    init(containerScheme: AppContainerScheming?) {
+        super.init(nibName: nil, bundle: nil)
+        self.scheme = containerScheme
+    }
     
-    private lazy var locationsTab: UINavigationController = {
-        let locationTableViewController = LocationListNavStack(scheme: scheme)
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) not implemented")
+    }
+    
+    var scheme: AppContainerScheming?
+    private var attachmentViewCoordinator: AttachmentViewCoordinator?
+    
+    // TODO: BRENT - Remove FORCED unwrap
+    private lazy var settingsNav: UINavigationController = {
+        let vc = SettingsTableViewController(scheme: scheme, context: context)!
+        let nav = UINavigationController(rootViewController: vc)
         
-        let nc = UINavigationController()
-        nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);
-        nc.pushViewController(locationTableViewController, animated: false)
+        nav.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape.fill"), tag: 4)
+        
+        return nav
+    }()
+    
+    private lazy var peopleNav: UINavigationController = {
+        let vc = LocationListNavStack(scheme: scheme)
+        let nav = UINavigationController(rootViewController: vc)
+        
+        nav.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2)
+        
+        return nav
+    }()
 
-        return nc
+    private lazy var obsNav: UINavigationController = {
+        let root = ObservationListNavStack(scheme: scheme)
+        let nav = UINavigationController(rootViewController: root)
+        
+        nav.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1)
+        
+        return nav
     }()
     
-    func selectedAttachment(_ attachmentUri: URL!, navigationController: UINavigationController) {
-        Task {
-            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
-                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: navigationController, attachment: attachment, delegate: self, scheme: scheme);
-                attachmentViewCoordinator?.start();
-            }
-        }
-    }
-    
-    private lazy var observationsTab: UINavigationController = {
-        let observationList = ObservationListNavStack(scheme: scheme)
-        let nc = UINavigationController(rootViewController: observationList);
-        nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
-        return nc;
+    private lazy var mapNav: UINavigationController = {
+        let root = MageMapViewController(scheme: scheme)
+        let nav = UINavigationController(rootViewController: root)
+        
+        nav.tabBarItem = UITabBarItem(title: "Map", image: UIImage(systemName: "map.fill"), tag: -1)
+        
+        return nav
     }()
-    
-    private lazy var mapTab: UINavigationController = {
-        let mapViewController: MageMapViewController = MageMapViewController(scheme: scheme)
-        let nc = UINavigationController(rootViewController: mapViewController);
-        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(systemName: "map.fill"), tag: -1);
-        return nc;
-    }()
-    
-    private lazy var meTab: UINavigationController? = {
-        let meNavStack = MeNavStack(scheme: scheme)
-        let nc = UINavigationController(rootViewController: meNavStack);
-        nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3);
-        return nc;
-    }()
-    
-    init(frame: CGRect) {
-        super.init(nibName: nil, bundle: nil);
-    }
-    
-    @objc public init(containerScheme: MDCContainerScheming?) {
-        self.scheme = containerScheme;
-        super.init(nibName: nil, bundle: nil);
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
-    }
-    
-    @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let scheme = scheme else {
-            return
-        }
 
-        self.scheme = scheme;
-        self.view.tintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
+    private lazy var profileNav: UINavigationController = {
+        let root = MeNavStack(scheme: scheme)
+        let nav = UINavigationController(rootViewController: root)
         
-        if let topViewController = self.moreNavigationController.topViewController {
-            if let tableView = topViewController.view as? UITableView {
-                tableView.tintColor = scheme.colorScheme.primaryColor
-                tableView.backgroundColor = scheme.colorScheme.backgroundColor
-            }
-        }
+        nav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3)
         
-        self.view.backgroundColor = scheme.colorScheme.backgroundColor;
+        return nav
+    }()
+    
+    private var profileTabBarItem: UITabBarItem? {
+        return profileNav.tabBarItem
     }
     
     override func viewDidLoad() {
-        Mage.singleton.startServices(initial: true);
-        super.viewDidLoad();
+        super.viewDidLoad()
         
-        createOrderedTabs();
-        
-        self.delegate = self;
+        Mage.singleton.startServices(initial: true)
+        delegate = self
+        setupTabs()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
-        applyTheme(withScheme: self.scheme);
-        if let moreTableView = moreNavigationController.topViewController?.view as? UITableView {
-            if let proxyDelegate = moreTableView.delegate {
-                moreTableViewDelegate = MoreTableViewDelegate(proxyDelegate: proxyDelegate, containerScheme: scheme)
-                moreTableView.delegate = moreTableViewDelegate
-            }
-        }
+        super.viewWillAppear(animated)
+        
+        applyTheme(scheme: self.scheme)
+        observeNotifications()
         offlineObservationManager.start()
-        setServerConnectionStatus();
-        UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
-        
-        mapRequestFocusObserver = NotificationCenter.default.addObserver(forName: .MapRequestFocus, object: nil, queue: .main) { [weak self]  notification in
-            self?.mapTab.popToRootViewController(animated: false);
-            self?.selectedViewController = self?.mapTab;
-            
-        }
-        
-        snackbarNotificationObserver = NotificationCenter.default.addObserver(forName: .SnackbarNotification, object: nil, queue: .main, using: { notification in
-            if let object = notification.object as? SnackbarNotification,
-               let message = object.snackbarModel?.message
-            {
-                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: message))
-            }
-        })
+        setServerBadge()
+        UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated);
+        super.viewWillDisappear(animated)
         
-        mapTab.viewControllers.removeAll()
-        Mage.singleton.stopServices();
-        offlineObservationManager.stop();
+        cleanupObservers()
+        Mage.singleton.stopServices()
+        
+        offlineObservationManager.stop()
         offlineObservationManager.delegate = nil
-        if let mapRequestFocusObserver = mapRequestFocusObserver {
-            NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
-        }
-        
-        if let snackbarNotificationObserver = snackbarNotificationObserver {
-            NotificationCenter.default.removeObserver(snackbarNotificationObserver, name: .SnackbarNotification, object: nil);
-        }
-        self.delegate = nil
-        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")
     }
     
-    func createOrderedTabs() {
-        var allTabs: [UIViewController] = self.viewControllers ?? [];
-        allTabs.append(mapTab);
-        allTabs.append(settingsTabItem);
-        if let meTab = meTab {
-            allTabs.append(meTab);
-        }
-        allTabs.append(locationsTab);
-        allTabs.append(observationsTab);
-        
-        if let currentEventId = Server.currentEventId() {
-            for feed in Feed.getEventFeeds(eventId: currentEventId) {
-                let nc = createFeedViewController(feed: feed);
-                allTabs.append(nc);
-                feedViewControllers.append(nc);
-            }
-        }
-        
-        var orderedTabs: [UIViewController] = [];
-        orderedTabs = allTabs.sorted { (controller, controller2) -> Bool in
-            let position1 = UserDefaults.standard.object(forKey: "rootViewTabPosition\(controller.tabBarItem.tag)");
-            let position2 = UserDefaults.standard.object(forKey: "rootViewTabPosition\(controller2.tabBarItem.tag)");
-            if (position1 == nil && position2 == nil) {
-                return controller.tabBarItem.tag < controller2.tabBarItem.tag;
-            } else if (position1 == nil) {
-                return false;
-            } else if (position2 == nil) {
-                return true;
-            }
-            return (position1 as! Int) < (position2 as! Int);
-        }
 
-        self.viewControllers = orderedTabs;
+    // MARK: - Set up tabs
+    
+    private func setupTabs() {
+        var controllers: [UIViewController] = [settingsNav, peopleNav, obsNav, mapNav]
+        controllers.append(profileNav)
+        
+        // Add feed tabs
+        if let eventId = Server.currentEventId() {
+            for feed in Feed.getEventFeeds(eventId: eventId) {
+                let nav = createFeedNav(for: feed)
+                controllers.append(nav)
+            }
+        }
+        viewControllers = ordered(controllers)
     }
     
-    func createFeedViewController(feed: Feed) -> UINavigationController {
-        let size = 24;
-        let fvc = FeedItemsViewController(feed: feed, scheme: self.scheme);
-        let nc = UINavigationController(rootViewController: fvc);
-        nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
-        nc.tabBarItem.image = UIImage(systemName: "dot.radiowaves.up.forward")?.aspectResize(to: CGSize(width: size, height: size));
+    private func ordered(_ list: [UIViewController]) -> [UIViewController] {
+        list.sorted {
+            let a = UserDefaults.standard.integer(forKey: "rootViewTabPosition\($0.tabBarItem.tag)")
+            let b = UserDefaults.standard.integer(forKey: "rootViewTabPosition\($1.tabBarItem.tag)")
+            return a < b
+        }
+    }
 
-        if let url: URL = feed.tabIconURL {
-            let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
-            KingfisherManager.shared.retrieveImage(with: url, options: [
-                .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ]) { result in
-                switch result {
-                case .success(let value):
-                    let image: UIImage = value.image.aspectResize(to: CGSize(width: size, height: size));
-                    nc.tabBarItem.image = image;
-                case .failure(let error):
-                    print(error);
+    private func createFeedNav(for feed: Feed) -> UINavigationController {
+        let vc = FeedItemsViewController(feed: feed, scheme: scheme)
+        let nav = UINavigationController(rootViewController: vc)
+        
+        nav.tabBarItem = UITabBarItem(title: feed.title, image: UIImage(systemName: "dot.radiowaves.up.forward"), tag: feed.tag?.intValue ?? 5)
+        
+        // placeholder icon
+        if let url = feed.tabIconURL {
+            KingfisherManager.shared.retrieveImage(with: url, options: [.processor(DownsamplingImageProcessor(size: CGSize(width: 24, height: 24)))]) { result in
+                if case let .success(value) = result {
+                    nav.tabBarItem.image = value.image
                 }
             }
         }
-        return nc;
+        return nav
     }
     
-    func setServerConnectionStatus() {
-        if ("offline" == UserDefaults.standard.loginType) {
-            moreTabBarItem?.badgeValue = "!";
-            moreTabBarItem?.badgeColor = UIColor.systemOrange;
-        } else {
-            moreTabBarItem?.badgeValue = nil;
-            moreTabBarItem?.badgeColor = nil;
+    // MARK: - Theming & Badging
+    
+    @objc func applyTheme(scheme: AppContainerScheming?) {
+        guard let scheme else { return }
+        
+        self.scheme = scheme
+        tabBar.tintColor = scheme.colorScheme.primaryColor?.withAlphaComponent(0.87)
+        view.backgroundColor = scheme.colorScheme.backgroundColor
+    }
+    
+    private func setServerBadge() {
+        let offline = UserDefaults.standard.loginType == "offline"
+        let index = viewControllers?.firstIndex { $0.tabBarItem.tag == 4 }
+        viewControllers?[index ?? 0].tabBarItem.badgeValue = offline ? "!" : nil
+    }
+    
+    
+    // MARK: - Notifications
+    
+    private func observeNotifications() {
+        mapRequestFocusObserver = NotificationCenter.default.addObserver(forName: .MapRequestFocus, object: nil, queue: .main) { [weak self] _ in
+            self?.selectedViewController = self?.mapNav
+        }
+        
+        snackbarNoticiasObserver = NotificationCenter.default.addObserver(forName: .SnackbarNotification, object: nil, queue: .main) { [weak self] notification in
+            if let message = (notification.object as? SnackbarNotification)?.snackbarModel?.message {
+                let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
+            }
         }
     }
     
+    private func cleanupObservers() {
+        if let mapReqObserver = mapRequestFocusObserver {
+            NotificationCenter.default.removeObserver(mapReqObserver)
+        }
+        
+        if let snkbrObserver = snackbarNoticiasObserver {
+            NotificationCenter.default.removeObserver(snkbrObserver)
+        }
+        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        setServerConnectionStatus();
+        setServerBadge()
+    }
+    
+    // MARK: - Attachment
+    
+    @objc func selectedAttachment(_ uri: URL, navigationController nav: UINavigationController) {
+        Task {
+            if let att = await attachmentRepository.getAttachment(attachmentUri: uri) {
+                let coordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: att, delegate: self, scheme: scheme)
+                coordinator.start()
+                self.attachmentViewCoordinator = coordinator
+            }
+        }
     }
 }
 
@@ -252,15 +228,15 @@ extension MageRootViewController: UITabBarControllerDelegate {
 extension MageRootViewController: OfflineObservationDelegate {
     func offlineObservationsDidChangeCount(_ count: Int) {
         if (count > 0) {
-            self.profileTabBarItem?.badgeValue = count > 99 ? "99+" : String(count);
+            self.profileTabBarItem?.badgeValue = count > 99 ? "99+" : String(count)
         } else {
-            self.profileTabBarItem?.badgeValue = nil;
+            self.profileTabBarItem?.badgeValue = nil
         }
     }
 }
 
 extension MageRootViewController: AttachmentViewDelegate {
     func doneViewing(coordinator: NSObject) {
-        attachmentViewCoordinator = nil;
+        attachmentViewCoordinator = nil
     }
 }
