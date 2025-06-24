@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import geopackage_ios
+import GeoPackage
 import MapKit
 import MapFramework
 

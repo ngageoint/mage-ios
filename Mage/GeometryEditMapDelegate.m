@@ -7,7 +7,7 @@
 //
 
 #import "GeometryEditMapDelegate.h"
-#import "GPKGMapPoint.h"
+@import GeoPackage;
 #import "MapShapePointAnnotationView.h"
 #import "MAGE-Swift.h"
 

@@ -7,8 +7,7 @@
 //
 
 #import "MapPolylineObservation.h"
-#import "GPKGMapShapeConverter.h"
-#import "GPKGMapUtils.h"
+@import GeoPackage;
 
 @interface MapPolylineObservation ()
 

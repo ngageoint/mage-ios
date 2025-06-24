@@ -62,7 +62,7 @@ class GeometryEditViewControllerTests: AsyncMageCoreDataTestCase {
         
         window.rootViewController = nil;
     }
-    
+   
     @MainActor
     func testGeometryEditCoordinatorLaunch() async {
         let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
@@ -77,7 +77,7 @@ class GeometryEditViewControllerTests: AsyncMageCoreDataTestCase {
             return mockMapDelegate.finishedRendering == true
         }
         let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [delegateExpectation], timeout: 2)
+        await fulfillment(of: [delegateExpectation], timeout: 2) // FLAKEY TEST, 2 seconds not always long enough...
     }
     
     @MainActor
@@ -138,6 +138,6 @@ class GeometryEditViewControllerTests: AsyncMageCoreDataTestCase {
         expect(mockGeometryEditDelegate.geometryEditCompleteCalled).to(beTrue());
         let geometry: SFGeometry? = mockGeometryEditDelegate.geometryEditCompleteGeometry;
         expect(geometry).toNot(beNil());
-        expect(geometry?.geometryType).to(equal(SF_POINT))
+        expect(geometry?.geometryType).to(equal(.POINT))
     }
 }

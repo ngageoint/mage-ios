@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import sf_ios
+import SimpleFeatures
 
 @testable import MAGE
 

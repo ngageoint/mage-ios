@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import geopackage_ios
+import GeoPackage
 import ExceptionCatcher
 import SSZipArchive
 

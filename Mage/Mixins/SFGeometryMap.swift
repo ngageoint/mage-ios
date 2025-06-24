@@ -9,8 +9,8 @@
 import Foundation
 import MapKit
 import MapFramework
-import sf_ios
-import sf_geojson_ios
+import GeoPackage
+import SimpleFeatures
 
 protocol SFGeometryMap {
     var mapView: MKMapView? { get set }

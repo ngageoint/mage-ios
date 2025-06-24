@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import geopackage_ios
+import GeoPackage
 
 @testable import MAGE
 

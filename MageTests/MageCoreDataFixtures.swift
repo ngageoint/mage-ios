@@ -8,7 +8,7 @@
 
 import Foundation
 import MagicalRecord
-import sf_ios
+import SimpleFeatures
 import Quick
 import Nimble
 import OHHTTPStubs

@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import geopackage_ios
+import GeoPackage
 import MapFramework
 
 protocol FilteredObservationsMap {
@@ -162,7 +162,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func updateObservation(observation: Observation, animated: Bool = false, zoom: Bool = false) {
         deleteObservation(observation: observation)
         if let geometry = observation.geometry {
-            if geometry.geometryType == SF_POINT {
+            if geometry.geometryType == .POINT {
                 let annotation = ObservationAnnotation(observation: observation, geometry: geometry)
 //                annotation.view.layer.zPosition = CGFloat(observation.timestamp?.timeIntervalSinceReferenceDate ?? 0)
                 annotation.animateDrop = animated
