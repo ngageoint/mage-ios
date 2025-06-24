@@ -7,12 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppContainerScheming.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface UINavigationItem (Subtitle)
 
 @property (strong, nonatomic) UILabel * _Nullable titleLabel;
 @property (strong, nonatomic) UILabel * _Nullable subtitleLabel;
 
-- (void) setTitle:(nullable NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<AppContainerScheming>)containerScheme;
+- (void) setTitle:(nullable NSString *)title subtitle:(nullable NSString *)subtitle scheme: (id<AppContainerScheming>)containerScheme;
 
 @end
+
+NS_ASSUME_NONNULL_END

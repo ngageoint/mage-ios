@@ -43,7 +43,7 @@ class SearchMapViewController: UIViewController, SearchMapViewDelegate {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel(_:)));
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "Cancel";
         
-        self.navigationItem.setTitle("Search", subtitle: nil, scheme: scheme)
+        self.navigationItem.setTitle("Search", subtitle: nil, scheme: scheme ?? AppDefaultContainerScheme())
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(apply(_:)))
         self.navigationItem.rightBarButtonItem?.isEnabled = false
     }

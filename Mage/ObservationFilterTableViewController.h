@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppContainerScheming.h"
 
 @interface ObservationFilterTableViewController : UITableViewController
 

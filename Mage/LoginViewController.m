@@ -30,7 +30,7 @@
 @property (nonatomic) BOOL loginFailure;
 @property (weak, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
 @property (strong, nonatomic) User *user;
-@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 @property (strong, nonatomic) IBOutlet UITextView *messageView;
 @property (strong, nonatomic) UIButton *messageDetailButton;

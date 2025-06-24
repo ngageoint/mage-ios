@@ -166,6 +166,10 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		84C95F542E01C53E002F0A58 /* FloatingButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */; };
 		84C95F562E030D73002F0A58 /* SFPoint+Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */; };
+		84C95F592E0B2E0F002F0A58 /* AppDefaultColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F582E0B2E0F002F0A58 /* AppDefaultColorScheme.m */; };
+		84C95F5C2E0B3014002F0A58 /* AppDefaultShapeScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F5B2E0B3014002F0A58 /* AppDefaultShapeScheme.m */; };
+		84C95F5F2E0B3073002F0A58 /* AppDefaultTypographyScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F5E2E0B3073002F0A58 /* AppDefaultTypographyScheme.m */; };
+		84C95F622E0B319F002F0A58 /* AppDefaultContainerScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F612E0B319F002F0A58 /* AppDefaultContainerScheme.m */; };
 		84E470182DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */; };
 		84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */; };
 		84E713E22DF0CA4D00F52781 /* AppThemeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */; };
@@ -1119,6 +1123,14 @@
 		84C95F522E01C3DE002F0A58 /* FloatingButtonFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloatingButtonFactory.h; sourceTree = "<group>"; };
 		84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonFactory.swift; sourceTree = "<group>"; };
 		84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFPoint+Coordinate.swift"; sourceTree = "<group>"; };
+		84C95F572E0B2DF0002F0A58 /* AppDefaultColorScheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDefaultColorScheme.h; sourceTree = "<group>"; };
+		84C95F582E0B2E0F002F0A58 /* AppDefaultColorScheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDefaultColorScheme.m; sourceTree = "<group>"; };
+		84C95F5A2E0B300A002F0A58 /* AppDefaultShapeScheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDefaultShapeScheme.h; sourceTree = "<group>"; };
+		84C95F5B2E0B3014002F0A58 /* AppDefaultShapeScheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDefaultShapeScheme.m; sourceTree = "<group>"; };
+		84C95F5D2E0B3067002F0A58 /* AppDefaultTypographyScheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDefaultTypographyScheme.h; sourceTree = "<group>"; };
+		84C95F5E2E0B3073002F0A58 /* AppDefaultTypographyScheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDefaultTypographyScheme.m; sourceTree = "<group>"; };
+		84C95F602E0B3191002F0A58 /* AppDefaultContainerScheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDefaultContainerScheme.h; sourceTree = "<group>"; };
+		84C95F612E0B319F002F0A58 /* AppDefaultContainerScheme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDefaultContainerScheme.m; sourceTree = "<group>"; };
 		84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ShowSimpleAlert.swift"; sourceTree = "<group>"; };
 		84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppThemeManager.swift; sourceTree = "<group>"; };
 		84E713E02DF0CA2400F52781 /* AppThemeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppThemeBridge.h; sourceTree = "<group>"; };
@@ -2476,6 +2488,14 @@
 				84E714292DFA23C300F52781 /* AppColorScheming.h */,
 				84E7142A2DFA240900F52781 /* AppShapeScheming.h */,
 				84E7142B2DFA243600F52781 /* AppTypographyScheming.h */,
+				84C95F572E0B2DF0002F0A58 /* AppDefaultColorScheme.h */,
+				84C95F582E0B2E0F002F0A58 /* AppDefaultColorScheme.m */,
+				84C95F5A2E0B300A002F0A58 /* AppDefaultShapeScheme.h */,
+				84C95F5B2E0B3014002F0A58 /* AppDefaultShapeScheme.m */,
+				84C95F5D2E0B3067002F0A58 /* AppDefaultTypographyScheme.h */,
+				84C95F5E2E0B3073002F0A58 /* AppDefaultTypographyScheme.m */,
+				84C95F602E0B3191002F0A58 /* AppDefaultContainerScheme.h */,
+				84C95F612E0B319F002F0A58 /* AppDefaultContainerScheme.m */,
 			);
 			path = Schemes;
 			sourceTree = "<group>";
@@ -5148,6 +5168,7 @@
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
 				F7E40A6626939A4200E50E26 /* UserBottomSheetView.swift in Sources */,
 				F79D2959282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld in Sources */,
+				84C95F622E0B319F002F0A58 /* AppDefaultContainerScheme.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
@@ -5202,6 +5223,7 @@
 				F776ACAE2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
+				84C95F5C2E0B3014002F0A58 /* AppDefaultShapeScheme.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				2FAC84A92B505A9800FCAB37 /* SearchMapViewController.swift in Sources */,
@@ -5398,6 +5420,7 @@
 				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
 				F73564D92C62548900466813 /* ObservationFavoriteRemoteDataSource.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
+				84C95F5F2E0B3073002F0A58 /* AppDefaultTypographyScheme.m in Sources */,
 				F7BFB8D02C4AAE5500901479 /* FavoriteButton.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.swift in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
@@ -5472,6 +5495,7 @@
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
 				F73564D72C62547600466813 /* ObservationFavoriteLocalDataSource.swift in Sources */,
+				84C95F592E0B2E0F002F0A58 /* AppDefaultColorScheme.m in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F72D43252694B60300F9AC3B /* Role.swift in Sources */,
 				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,

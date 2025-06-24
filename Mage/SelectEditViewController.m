@@ -25,13 +25,13 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectedChoicesConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UILabel *selectedTextLabel;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation SelectEditViewController
 static NSString *DROPDOWN_CHOICE_REUSE_ID = @"DROPDOWN_CHOICE_REUSE_ID";
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
@@ -51,7 +51,7 @@ static NSString *DROPDOWN_CHOICE_REUSE_ID = @"DROPDOWN_CHOICE_REUSE_ID";
     [self.tableView reloadData];
 }
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme  {
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate scheme: (id<AppContainerScheming>) containerScheme  {
     self = [super initWithNibName:@"ObservationEditSelectPickerView" bundle:nil];
     if (self == nil) return nil;
     

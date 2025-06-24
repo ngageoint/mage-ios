@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppContainerScheming.h"
 
 @protocol IDPButtonDelegate <NSObject>
-
 - (void) signinForStrategy:(NSDictionary *) strategy;
-
 @end
+
 
 @interface IDPLoginView : UIStackView
 

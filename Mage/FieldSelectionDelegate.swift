@@ -10,7 +10,7 @@ import Foundation
 
 @objc protocol FieldSelectionDelegate {
     @objc func launchFieldSelectionViewController(viewController: UIViewController)
-    @objc func fieldTapped(_ field: [String: Any])
+    @objc optional func fieldTapped(_ field: [String: Any])
 }
 
 class FieldSelectionCoordinator {

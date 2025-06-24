@@ -181,7 +181,7 @@ extension FeedItemViewController: FeedItemActionsDelegate {
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
             // TODO: BRENT - make these colors correct
-            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.magenta)
+            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor ?? UIColor.magenta)
             if let url: URL = feedItem.iconURL {
                 let size = 24
                 
@@ -197,7 +197,7 @@ extension FeedItemViewController: FeedItemActionsDelegate {
                     case .success(let value):
                         image = value.image.aspectResize(to: CGSize(width: size, height: size))
                     case .failure(_):
-                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.magenta)
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor ?? UIColor.magenta)
                     }
                 }
             }

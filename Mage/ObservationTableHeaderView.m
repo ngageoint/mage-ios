@@ -22,7 +22,7 @@
         self.preservesSuperviewLayoutMargins = YES;
         self.name = name;
         self.label = [[UILabel alloc] initWithFrame:CGRectMake(16, 10, 320, 35)];
-        [self.label setFont:containerScheme.typographyScheme.subtitleFont];
+        [self.label setFont: containerScheme.typographyScheme.subtitle1Font];
         [self.label setText: [name uppercaseString]];
         [self addSubview:self.label];
         [self.label setTextColor:containerScheme.colorScheme.onBackgroundColor];

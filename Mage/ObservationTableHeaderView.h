@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppContainerScheming.h"
 
 @interface ObservationTableHeaderView : UIView
 
-- (instancetype) initWithName:(NSString *)name andScheme: (id<AppContainerScheming>) containerScheme;
+- (instancetype) initWithName:(NSString *)name andScheme:(id<AppContainerScheming>) containerScheme;
 
 @end

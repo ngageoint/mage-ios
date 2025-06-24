@@ -47,12 +47,12 @@ extension UIImage {
                     annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                     
                 case .failure(_):
-                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.blue)
+                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor ?? UIColor.blue)
                     annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                 }
             }
         } else {
-            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme?.primaryColor ?? UIColor.blue)
+            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor ?? UIColor.blue)
             annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
         }
     }

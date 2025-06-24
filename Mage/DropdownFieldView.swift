@@ -9,7 +9,7 @@
 
 import UIKit
 
-class DropdownFieldView : BaseFieldView {
+class DropdownFieldView: BaseFieldView {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
@@ -28,9 +28,9 @@ class DropdownFieldView : BaseFieldView {
     override func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme else { return }
 
-        textField.textColor = scheme.colorScheme?.primaryColor
-        textField.backgroundColor = scheme.colorScheme?.surfaceColor?.withAlphaComponent(0.87)
-        textField.rightView?.tintColor = scheme.colorScheme?.onSurfaceColor?.withAlphaComponent(0.6)
+        textField.textColor = scheme.colorScheme.primaryColor
+        textField.backgroundColor = scheme.colorScheme.surfaceColor?.withAlphaComponent(0.87)
+        textField.rightView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -118,7 +118,7 @@ class DropdownFieldView : BaseFieldView {
 
 extension DropdownFieldView: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        delegate?.fieldTapped(field)
+        delegate?.fieldTapped?(field)
         return false
     }
 }

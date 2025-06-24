@@ -23,7 +23,7 @@ class ObservationListNavStack: MageNavStack {
     
     func setNavBarTitle() {
         let timeFilterString = MageFilter.getString();
-        self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
+        self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme ?? AppDefaultContainerScheme());
     }
     
     @objc func launchObservationFilter() {

@@ -18,7 +18,7 @@
 @property (strong, nonatomic) GeometryEditViewController *geometryEditViewController;
 @property (strong, nonatomic) SearchMapViewController *searchMapViewController;
 @property (nonatomic) BOOL valueChanged;
-@property (strong, nonatomic) (id<AppContainerScheming>)scheme;
+@property (strong, nonatomic) id<AppContainerScheming>scheme;
 @end
 
 @implementation GeometryEditCoordinator

@@ -31,6 +31,10 @@ import UIKit
         fatalError("init(coder:) not implemented")
     }
     
+    @objc convenience init(containerScheme: Any?) {
+        self.init(containerScheme: containerScheme as? AppContainerScheming)
+    }
+    
     var scheme: AppContainerScheming?
     private var attachmentViewCoordinator: AttachmentViewCoordinator?
     

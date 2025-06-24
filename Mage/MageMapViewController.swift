@@ -53,9 +53,9 @@ class MageMapViewController: MageNavStack {
             return
         }
         if !MageFilter.getString().isEmpty || !MageFilter.getLocationFilterString().isEmpty {
-            self.navigationItem.setTitle(event.name, subtitle: "Showing filtered results.", scheme: scheme)
+            self.navigationItem.setTitle(event.name, subtitle: "Showing filtered results.", scheme: scheme ?? AppDefaultContainerScheme())
         } else {
-            self.navigationItem.setTitle(event.name, subtitle: nil, scheme: scheme)
+            self.navigationItem.setTitle(event.name, subtitle: nil, scheme: scheme ?? AppDefaultContainerScheme())
         }
     }
     

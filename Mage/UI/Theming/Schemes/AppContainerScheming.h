@@ -15,8 +15,10 @@
 @protocol AppShapeScheming;
 @protocol AppTypographyScheming;
 
-@protocol AppContainerScheming
+NS_ASSUME_NONNULL_BEGIN
+@protocol AppContainerScheming <NSObject>
 @property (nonatomic, readonly) id<AppColorScheming> colorScheme;
 @property (nonatomic, readonly) id<AppShapeScheming> shapeScheme;
 @property (nonatomic, readonly) id<AppTypographyScheming> typographyScheme;
 @end
+NS_ASSUME_NONNULL_END

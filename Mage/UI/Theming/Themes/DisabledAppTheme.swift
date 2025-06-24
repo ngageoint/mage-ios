@@ -7,9 +7,9 @@
 //
 
 @objc public final class DisabledAppTheme: NSObject, AppContainerScheming {
-    public let colorScheme: AppColorScheming?
-    public let shapeScheme: AppShapeScheming?
-    public let typographyScheme: AppTypographyScheming?
+    public let colorScheme: AppColorScheming
+    public let shapeScheme: AppShapeScheming
+    public let typographyScheme: AppTypographyScheming
     
     public override init() {
         self.colorScheme = DisabledColorScheme()

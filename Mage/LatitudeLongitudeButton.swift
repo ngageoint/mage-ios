@@ -34,7 +34,7 @@ class LatitudeLongitudeButton : UIButton {
             return
             }
 //        super.applyTextTheme(withScheme: scheme)
-        setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        setTitleColor(scheme.colorScheme.primaryColorVariant?.withAlphaComponent(0.87), for: .normal)
 //        setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
     }
     

@@ -10,9 +10,9 @@
 import UIKit
 
 @objc public final class NamedAppTheme: NSObject, AppContainerScheming {
-    public let colorScheme: AppColorScheming?
-    public let shapeScheme: AppShapeScheming?
-    public let typographyScheme: AppTypographyScheming?
+    public let colorScheme: AppColorScheming
+    public let shapeScheme: AppShapeScheming
+    public let typographyScheme: AppTypographyScheming
     
     public override init() {
         self.colorScheme = NamedColorScheme()
