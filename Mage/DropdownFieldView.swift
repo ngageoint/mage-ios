@@ -84,7 +84,7 @@ class DropdownFieldView : BaseFieldView {
     
     override func setValid(_ valid: Bool) {
         super.setValid(valid)
-        
+            
         if valid {
             textField.layer.borderColor = UIColor.clear.cgColor
             textField.layer.borderWidth = 0
