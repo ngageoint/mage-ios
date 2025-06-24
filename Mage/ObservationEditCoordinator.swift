@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import sf_geojson_ios
+//import sf_geojson_ios
 
 @objc protocol ObservationEditListener {
     @objc func fieldValueChanged(_ field: [String: Any], value: Any?);

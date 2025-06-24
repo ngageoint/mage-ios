@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreLocation
-import sf_ios
 
 extension SFPoint {
     var coordinate: CLLocationCoordinate2D {
