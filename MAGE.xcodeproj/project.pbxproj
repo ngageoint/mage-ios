@@ -101,6 +101,8 @@
 		6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
+		84082F302E0C7892003F128D /* UITabBar+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */; };
+		84082F332E0C92F7003F128D /* UITextField+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84082F322E0C92F7003F128D /* UITextField+Factory.m */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
@@ -164,17 +166,6 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
-		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
-		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
-		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
-		BD6E578C2DE0D3A000C046FD /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578B2DE0D3A000C046FD /* MGRS */; };
-		BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578E2DE0D3C000C046FD /* GARS */; };
-		BD6E57922DE0D3D700C046FD /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E57912DE0D3D700C046FD /* GeoPackage */; };
-		BDB16FA22DF770F900FDD03B /* SimpleFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA12DF770F900FDD03B /* SimpleFeatures */; };
-		BDB16FA52DF7713300FDD03B /* Projections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA42DF7713300FDD03B /* Projections */; };
-		BDB16FA82DF7715400FDD03B /* SimpleFeaturesWKT in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA72DF7715400FDD03B /* SimpleFeaturesWKT */; };
-		BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */; };
-		BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */; };
 		84C95F542E01C53E002F0A58 /* FloatingButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */; };
 		84C95F562E030D73002F0A58 /* SFPoint+Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */; };
 		84C95F592E0B2E0F002F0A58 /* AppDefaultColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F582E0B2E0F002F0A58 /* AppDefaultColorScheme.m */; };
@@ -210,6 +201,17 @@
 		84E714232DF9D48A00F52781 /* UITextView+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714222DF9D48A00F52781 /* UITextView+Theming.swift */; };
 		84E714252DF9FE2500F52781 /* UIButton+Floating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714242DF9FE2500F52781 /* UIButton+Floating.swift */; };
 		84E714272DFA05E800F52781 /* UIButton+ImageTintColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E714262DFA05E800F52781 /* UIButton+ImageTintColor.swift */; };
+		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
+		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
+		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
+		BD6E578C2DE0D3A000C046FD /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578B2DE0D3A000C046FD /* MGRS */; };
+		BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578E2DE0D3C000C046FD /* GARS */; };
+		BD6E57922DE0D3D700C046FD /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E57912DE0D3D700C046FD /* GeoPackage */; };
+		BDB16FA22DF770F900FDD03B /* SimpleFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA12DF770F900FDD03B /* SimpleFeatures */; };
+		BDB16FA52DF7713300FDD03B /* Projections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA42DF7713300FDD03B /* Projections */; };
+		BDB16FA82DF7715400FDD03B /* SimpleFeaturesWKT in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA72DF7715400FDD03B /* SimpleFeaturesWKT */; };
+		BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */; };
+		BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1120,6 +1122,9 @@
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
+		84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Theming.swift"; sourceTree = "<group>"; };
+		84082F312E0C92B4003F128D /* UITextField+Factory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+Factory.h"; sourceTree = "<group>"; };
+		84082F322E0C92F7003F128D /* UITextField+Factory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Factory.m"; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -2490,6 +2495,9 @@
 				84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */,
 				84E714262DFA05E800F52781 /* UIButton+ImageTintColor.swift */,
 				84E470172DFCC33200E2B6C7 /* UIViewController+ShowSimpleAlert.swift */,
+				84082F312E0C92B4003F128D /* UITextField+Factory.h */,
+				84082F322E0C92F7003F128D /* UITextField+Factory.m */,
+				84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */,
 			);
 			path = Themes;
 			sourceTree = "<group>";
@@ -4490,8 +4498,9 @@
 		F7A94D5E18AD9CAF00CB9EE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1610;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1620;
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
@@ -4780,52 +4789,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests-resources.sh",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
 			);
@@ -4882,52 +4851,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
 			);
@@ -4944,52 +4873,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
-				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
 			);
@@ -5135,6 +5024,7 @@
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
+				84082F332E0C92F7003F128D /* UITextField+Factory.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
 				842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */,
 				F706888B2BA3A7D900D8E2EA /* DataSourceMap.swift in Sources */,
@@ -5247,6 +5137,7 @@
 				84E7140F2DF76E7C00F52781 /* DefaultShapeScheme.swift in Sources */,
 				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
 				F7DE988A2C1A4431005372F8 /* UserDefinition.swift in Sources */,
+				84082F302E0C7892003F128D /* UITabBar+Theming.swift in Sources */,
 				F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.swift in Sources */,
@@ -5784,7 +5675,6 @@
 		F7A94D9618AD9CB000CB9EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -5807,6 +5697,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -5841,7 +5732,6 @@
 		F7A94D9718AD9CB000CB9EE0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -5864,6 +5754,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

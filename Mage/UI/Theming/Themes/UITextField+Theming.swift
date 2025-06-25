@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextField {
+@objc extension UITextField {
     enum TextFieldThemeType {
         case primary
         case disabled
@@ -97,11 +97,11 @@ extension UITextField {
     }
     
     
-    func applyPrimaryTheme(withScheme scheme: AppContainerScheming?) {
+    @objc public func applyPrimaryTheme(withScheme scheme: AppContainerScheming?) {
         self.applyTheme(type: .primary, colorScheme: scheme?.colorScheme, typographScheme: scheme?.typographyScheme)
     }
 
-    func applyDisabledTheme(withScheme scheme: AppContainerScheming?) {
-        self.applyTheme(type: .primary, colorScheme: scheme?.colorScheme, typographScheme: scheme?.typographyScheme)
+    @objc public func applyDisabledTheme(withScheme scheme: AppContainerScheming?) {
+        self.applyTheme(type: .disabled, colorScheme: scheme?.colorScheme, typographScheme: scheme?.typographyScheme)
     }
 }

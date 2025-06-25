@@ -4,11 +4,11 @@
 //
 //
 
-#import "GeometryEditViewController.h"
-#import "LocationService.h"
 @import SimpleFeatures;
 @import GeoPackage;
 @import Projections;
+#import "GeometryEditViewController.h"
+#import "LocationService.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
 #import "MapShapePointsObservation.h"
@@ -19,9 +19,7 @@
 #import "AppDelegate.h"
 #import <PureLayout/PureLayout.h>
 #import "MAGE-Swift.h"
-
-
-@import MaterialComponents;
+#import "UITextField+Factory.h"
 
 static float paddingPercentage = .1;
 static NSString *latLngTitle = @"Lat / Lng";
@@ -30,7 +28,7 @@ static NSString *dmsTitle = @"DMS";
 static NSString *garsTitle = @"GARS";
 
 
-@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate, CoordinateFieldDelegate>
+@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, UITabBarDelegate, CoordinateFieldDelegate>
 
 @property (strong, nonatomic) GeometryEditCoordinator *coordinator;
 @property (strong, nonatomic) SFGeometry *geometry;
@@ -53,25 +51,25 @@ static NSString *garsTitle = @"GARS";
 @property (strong, nonatomic) CoordinateField *dmsLatitudeField;
 @property (strong, nonatomic) CoordinateField *dmsLongitudeField;
 
-@property (strong, nonatomic) MDCFilledTextField *latitudeField;
-@property (strong, nonatomic) MDCFilledTextField *longitudeField;
-@property (strong, nonatomic) MDCFilledTextField *mgrsField;
-@property (strong, nonatomic) MDCFilledTextField *garsField;
+@property (strong, nonatomic) UITextField *latitudeField;
+@property (strong, nonatomic) UITextField *longitudeField;
+@property (strong, nonatomic) UITextField *mgrsField;
+@property (strong, nonatomic) UITextField *garsField;
+
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (nonatomic) double lastAnnotationSelectedTime;
 @property (nonatomic, strong) Observation *observation;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
-@property (strong, nonatomic) MDCFloatingButton *searchButton;
-
-@property (strong, nonatomic) MDCFloatingButton *pointButton;
-@property (strong, nonatomic) MDCFloatingButton *lineButton;
-@property (strong, nonatomic) MDCFloatingButton *rectangleButton;
-@property (strong, nonatomic) MDCFloatingButton *polygonButton;
+@property (strong, nonatomic) UIButton *searchButton;
+@property (strong, nonatomic) UIButton *pointButton;
+@property (strong, nonatomic) UIButton *lineButton;
+@property (strong, nonatomic) UIButton *rectangleButton;
+@property (strong, nonatomic) UIButton *polygonButton;
 
 @property (strong, nonatomic) UIScrollView *slidescroll;
-@property (strong, nonatomic) MDCTabBarView *fieldTypeTabs;
+@property (strong, nonatomic) UITabBar *fieldTypeTabs;
 @property (strong, nonatomic) UIView *hintView;
 @property (strong, nonatomic) UILabel *hintLabel;
 @end
@@ -81,34 +79,33 @@ static NSString *garsTitle = @"GARS";
 #define degreesToRadians(x) (M_PI * x / 180.0)
 #define radiansToDegrees(x) (x * 180.0 / M_PI)
 
-- (void) themeTextField: (MDCFilledTextField *) field withScheme: (id<MDCContainerScheming>)containerScheme {
-    [field applyThemeWithScheme:containerScheme];
-    [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateNormal];
-    [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateEditing];
+- (void) themeTextField: (UITextField *) field withScheme: (id<AppContainerScheming>)containerScheme {
+    if (field == nil || containerScheme == nil) return;
+    [field applyPrimaryThemeWithScheme:containerScheme];
 }
 
-- (void) applyThemeTextField: (MDCFilledTextField *) field {
-    [self themeTextField:field withScheme:self.scheme];
-}
-
-- (void) applyErrorThemeTextField: (MDCFilledTextField *) field {
+- (void) applyErrorThemeTextField: (UITextField *) field {
+    if (field == nil) return;
     [self themeTextField:field withScheme:[MAGEErrorScheme scheme]];
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
+    if (containerScheme == nil) return;
+    
     self.scheme = containerScheme;
+    
     self.navigationController.navigationBar.translucent = NO;
     self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColor;
-    [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
-    [self applyThemeTextField:self.latitudeField];
-    [self applyThemeTextField:self.longitudeField];
-    [self applyThemeTextField:self.mgrsField];
     
-    // DMS
+    [self.fieldTypeTabs applyPrimaryThemeWithScheme:containerScheme];
+    
+    [self themeTextField: self.latitudeField withScheme:containerScheme];
+    [self themeTextField: self.longitudeField withScheme:containerScheme];
+    [self themeTextField: self.mgrsField withScheme:containerScheme];
+    [self themeTextField: self.garsField withScheme:containerScheme];
+    
     [self.dmsLatitudeField applyThemeWithScheme:containerScheme];
     [self.dmsLongitudeField applyThemeWithScheme:containerScheme];
-    
-    [self applyThemeTextField:self.garsField];
     
     self.hintView.backgroundColor = containerScheme.colorScheme.primaryColor;
     self.hintLabel.textColor = containerScheme.colorScheme.onSecondaryColor;
@@ -130,10 +127,10 @@ static NSString *garsTitle = @"GARS";
 }
 
 -(void) setShapeTypeSelection {
-    [self updateButton:self.pointButton toSelected:self.shapeType == SF_POINT];
-    [self updateButton:self.lineButton toSelected:self.shapeType == SF_LINESTRING];
-    [self updateButton:self.rectangleButton toSelected:self.shapeType == SF_POLYGON && self.isRectangle];
-    [self updateButton:self.polygonButton toSelected:self.shapeType == SF_POLYGON && !self.isRectangle];
+    [self updateButton:self.pointButton toSelected:(self.shapeType == SF_POINT)];
+    [self updateButton:self.lineButton toSelected:(self.shapeType == SF_LINESTRING)];
+    [self updateButton:self.rectangleButton toSelected:(self.shapeType == SF_POLYGON && self.isRectangle)];
+    [self updateButton:self.polygonButton toSelected:(self.shapeType == SF_POLYGON && !self.isRectangle)];
 }
 
 - (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
@@ -146,7 +143,7 @@ static NSString *garsTitle = @"GARS";
     }
 }
 
-- (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator scheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator scheme: (id<AppContainerScheming>) containerScheme {
     if (self = [super initWithNibName:nil bundle:nil]) {
         _mapDelegate = [[GeometryEditMapDelegate alloc] initWithDragCallback:self andEditDelegate:self];
         _coordinator = coordinator;
@@ -200,11 +197,11 @@ static NSString *garsTitle = @"GARS";
     self.latitudeField.text = nil;
     self.longitudeField.text = nil;
     self.mgrsField.text = nil;
-    [self applyThemeTextField:self.mgrsField];
+    [self.mgrsField applyPrimaryThemeWithScheme:self.scheme];
     self.dmsLatitudeField.text = nil;
     self.dmsLongitudeField.text = nil;
     self.garsField.text = nil;
-    [self applyThemeTextField:self.garsField];
+    [self.garsField applyPrimaryThemeWithScheme:self.scheme];
     if(self.mapObservation != nil){
         [self.mapObservation removeFromMapView:self.map];
         self.mapObservation = nil;
@@ -291,7 +288,7 @@ static NSString *garsTitle = @"GARS";
     [self setupGridType:defaults];
     
     // field type tabs
-    self.fieldTypeTabs = [[MDCTabBarView alloc] init];
+    self.fieldTypeTabs = [[UITabBar alloc] init];
     UITabBarItem *latlngTab = [[UITabBarItem alloc] initWithTitle:latLngTitle image:nil tag:0];
     latlngTab.accessibilityLabel = @"Latitude Longitude";
     UITabBarItem *mgrsTab = [[UITabBarItem alloc] initWithTitle:mgrsTitle image:nil tag:1];
@@ -301,11 +298,11 @@ static NSString *garsTitle = @"GARS";
     UITabBarItem *garsTab = [[UITabBarItem alloc] initWithTitle:garsTitle image:nil tag:3];
     garsTab.accessibilityLabel = @"GARS";
     self.fieldTypeTabs.items = @[latlngTab, mgrsTab, dmsTab, garsTab];
-    self.fieldTypeTabs.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
+//    self.fieldTypeTabs.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
     NSInteger tabIndex = defaults.locationDisplay;
     [self.fieldTypeTabs setSelectedItem:[self.fieldTypeTabs.items objectAtIndex:tabIndex]];
     
-    self.fieldTypeTabs.tabBarDelegate = self;
+    self.fieldTypeTabs.delegate = self;
     [self.view addSubview:self.fieldTypeTabs];
     [self.fieldTypeTabs autoPinEdgesToSuperviewSafeAreaWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
     
@@ -328,23 +325,20 @@ static NSString *garsTitle = @"GARS";
     [self.slidescroll autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.fieldTypeTabs];
     [tabStack autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self.slidescroll];
     
-    self.latitudeField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
-    self.latitudeField.placeholder = @"Latitude";
-    self.latitudeField.label.text = @"Latitude";
+    self.latitudeField = [UITextField themedTextFieldWithPlaceholder:@"Latitude" scheme:self.scheme target:self action:@selector(textFieldDidChange:)];
+    self.longitudeField = [UITextField themedTextFieldWithPlaceholder:@"Longitude" scheme:self.scheme target:self action:@selector(textFieldDidChange:)];
+    self.mgrsField = [UITextField themedTextFieldWithPlaceholder:@"MGRS" scheme:self.scheme target:self action:@selector(textFieldDidChange:)];
+    self.garsField = [UITextField themedTextFieldWithPlaceholder:@"GARS" scheme:self.scheme target:self action:@selector(textFieldDidChange:)];
+
     self.latitudeField.accessibilityLabel = @"Latitude Value";
-    [self.latitudeField sizeToFit];
-    
-    self.longitudeField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
-    self.longitudeField.placeholder = @"Longitude";
-    self.longitudeField.label.text = @"Longitude";
     self.longitudeField.accessibilityLabel = @"Longitude Value";
-    [self.longitudeField sizeToFit];
-    
-    self.mgrsField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
-    self.mgrsField.placeholder = @"MGRS";
-    self.mgrsField.label.text = @"MGRS";
     self.mgrsField.accessibilityLabel = @"MGRS Value";
+    self.garsField.accessibilityLabel = @"GARS Value";
+
+    [self.latitudeField sizeToFit];
+    [self.longitudeField sizeToFit];
     [self.mgrsField sizeToFit];
+    [self.garsField sizeToFit];
     
     // DMS
     self.dmsLatitudeField = [[CoordinateField alloc] initWithLatitude: true text:nil label:@"Latitude DMS" delegate: self scheme:self.scheme];
@@ -356,11 +350,6 @@ static NSString *garsTitle = @"GARS";
     [self.dmsLongitudeField sizeToFit];
     self.dmsLatitudeField.linkedLongitudeField = self.dmsLongitudeField;
     
-    self.garsField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
-    self.garsField.placeholder = @"GARS";
-    self.garsField.label.text = @"GARS";
-    self.garsField.accessibilityLabel = @"GARS Value";
-    [self.garsField sizeToFit];
     
     UIView *latlngContainer = [[UIView alloc] initForAutoLayout];
     [latlngContainer addSubview:_latitudeField];
@@ -1716,7 +1705,7 @@ static NSString *garsTitle = @"GARS";
     return mapShapePoints;
 }
 
-- (void)tabBarView:(MDCTabBarView *)tabBarView didSelectItem:(UITabBarItem *)item {
+- (void)tabBarView:(UITabBar *)tabBarView didSelectItem:(UITabBarItem *)item {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{

@@ -8,7 +8,8 @@ import Foundation
 import Kingfisher
 import UIKit
 
-@objc class MageRootViewController : UITabBarController {
+@objcMembers
+class MageRootViewController : UITabBarController {
     // Dependency Injection
     @Injected(\.attachmentRepository) var attachmentRepository: AttachmentRepository
     @Injected(\.nsManagedObjectContext) var context: NSManagedObjectContext?
@@ -22,6 +23,7 @@ import UIKit
     
     private var feedViewControllers: [UINavigationController] = []
     
+    @objc(initWithContainerScheme:)
     init(containerScheme: AppContainerScheming?) {
         super.init(nibName: nil, bundle: nil)
         self.scheme = containerScheme

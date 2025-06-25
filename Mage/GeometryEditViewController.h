@@ -10,7 +10,7 @@
 #import "AnnotationDragCallback.h"
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditMapDelegate.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface GeometryEditViewController : UIViewController <AnnotationDragCallback>
 
