@@ -164,6 +164,8 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		A82BB07A2E0B0D8200AB657F /* AttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82BB0792E0B0D8200AB657F /* AttachmentType.swift */; };
+		A82BB07C2E0B0EB000AB657F /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82BB07B2E0B0EB000AB657F /* DateFormatter.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
 		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
@@ -1099,6 +1101,8 @@
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
+		A82BB0792E0B0D8200AB657F /* AttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentType.swift; sourceTree = "<group>"; };
+		A82BB07B2E0B0EB000AB657F /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B29DE4B6C2FE6308F8758572 /* Pods-MAGEGeoPackageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2919,6 +2923,7 @@
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 				F7E079512C32EB750029C88D /* MKShapeExtensions.swift */,
 				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
+				A82BB07B2E0B0EB000AB657F /* DateFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3350,6 +3355,7 @@
 				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
 				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
 				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
+				A82BB0792E0B0D8200AB657F /* AttachmentType.swift */,
 			);
 			name = Attachment;
 			sourceTree = "<group>";
@@ -4970,6 +4976,7 @@
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.swift in Sources */,
 				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
+				A82BB07A2E0B0D8200AB657F /* AttachmentType.swift in Sources */,
 				F763FF2F2C7917F100403A00 /* UserModel.swift in Sources */,
 				F7225F442C5448D400B7D935 /* EventRepository.swift in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
@@ -5169,6 +5176,7 @@
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */,
+				A82BB07C2E0B0EB000AB657F /* DateFormatter.swift in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
 				2F6D80D72B1FAD7100545221 /* NominatimService.swift in Sources */,
 				F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */,

@@ -26,17 +26,10 @@ class SplitLayout: UICollectionViewLayout {
         numberOfColumns = 2
         numberOfRows = Int(ceil(Double(count) / Double(numberOfColumns)))
         
-        if count % 2 == 1 {
-            let width = (collectionView!.bounds.width - (itemSpacing * CGFloat(numberOfColumns - 1))) / CGFloat(numberOfColumns)
-            let height = (collectionView!.bounds.height - (rowSpacing * CGFloat(numberOfRows - 1))) / CGFloat(numberOfRows)
-            itemSize = CGSize(width: width, height: height)
-            fullWidthItemSize = CGSize(width: collectionView!.bounds.width, height: height)
-        } else {
-            let width = 200.0
-            let height = 200.0
-            itemSize = CGSize(width: width, height: height)
-            fullWidthItemSize = CGSize(width: collectionView!.bounds.width, height: height)
-        }
+        let width = 200.0
+        let height = 200.0
+        itemSize = CGSize(width: width, height: height)
+        
     }
     
     override var collectionViewContentSize: CGSize {
@@ -47,11 +40,7 @@ class SplitLayout: UICollectionViewLayout {
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         
         attributes.center = centerForItem(at: indexPath)
-        if (count % 2 == 1 && indexPath.item == 0) {
-            attributes.size = fullWidthItemSize
-        } else {
-            attributes.size = itemSize
-        }
+        attributes.size = itemSize
         
         return attributes
     }
@@ -63,8 +52,8 @@ class SplitLayout: UICollectionViewLayout {
     
     private func centerForItem(at indexPath: IndexPath) -> CGPoint {
         if (count % 2 == 1 && indexPath.item == 0) {
-            return CGPoint(x: fullWidthItemSize.width / 2,
-                           y: fullWidthItemSize.height / 2)
+            return CGPoint(x: itemSize.width / 2,
+                           y: itemSize.height / 2)
         }
         
         let item = indexPath.item + (count % 2);
