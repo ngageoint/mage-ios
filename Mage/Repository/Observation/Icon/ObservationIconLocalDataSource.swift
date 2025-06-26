@@ -32,6 +32,7 @@ class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
     
     let queue = DispatchQueue(label: "Queue")
 
+    @MainActor
     func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize {
         if let eventIconSize = iconSizePerEvent[eventId] {
             return eventIconSize
