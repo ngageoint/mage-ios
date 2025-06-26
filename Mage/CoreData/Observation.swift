@@ -205,6 +205,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 }
                 localContext.reset();
                 MageLogger.misc.debug("TIMING we have \(chunks.count) groups to save")
+                var regions: [MKCoordinateRegion] = []
                 while (chunks.count > 0) {
                     autoreleasepool {
                         guard let features = chunks.last else {
@@ -218,7 +219,8 @@ enum ObservationState: Int, CustomStringConvertible {
                             if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
                                 newObservationCount = newObservationCount + 1;
                                 if (!initial) {
-                                    observationToNotifyAbout = newObservation;
+                                    observationToNotifyAbout = newObservation.observation
+                                    regions.append(contentsOf: newObservation.regionsChanged ?? []);
                                 }
                             }
                         }
@@ -544,7 +546,7 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    @objc public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
+    public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> ObservationChangeRegions {
         var observationDate = date ?? Date();
         observationDate = Calendar.current.date(bySetting: .second, value: 0, of: observationDate)!
         observationDate = Calendar.current.date(bySetting: .nanosecond, value: 0, of: observationDate)!
@@ -570,7 +572,11 @@ enum ObservationState: Int, CustomStringConvertible {
         observation.eventId = Server.currentEventId();
 
         observation.createObservationLocations(context: context)
-        return observation;
+        var regions: [MKCoordinateRegion] = []
+        for location in (observation.locations ?? Set<ObservationLocation>()) {
+            regions.append(location.region)
+        }
+        return ObservationChangeRegions(observation: observation, regionsChanged: regions)
     }
     
     static func idFromJson(json: [AnyHashable : Any]) -> String? {
@@ -589,8 +595,9 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    @objc public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, context:NSManagedObjectContext) -> Observation? {
+    public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, context:NSManagedObjectContext) -> ObservationChangeRegions? {
         var newObservation: Observation? = nil;
+        var regions: [MKCoordinateRegion] = []
         let remoteId = Observation.idFromJson(json: feature);
         
         let state = Observation.stateFromJson(json: feature);
@@ -609,7 +616,7 @@ enum ObservationState: Int, CustomStringConvertible {
                     let lastModifiedDate = formatter.date(from: lastModified) ?? Date();
                     if lastModifiedDate == existingObservation.lastModified {
                         // If the last modified date for this observation has not changed no need to update.
-                        return newObservation
+                        return ObservationChangeRegions(observation: newObservation, regionsChanged: regions)
                     }
                 }
                 
@@ -708,10 +715,14 @@ enum ObservationState: Int, CustomStringConvertible {
                 }
 
                 for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
+                    regions.append(location.region)
                     location.mr_deleteEntity(in: context)
                 }
 
                 existingObservation.createObservationLocations(context: context)
+                for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
+                    regions.append(location.region)
+                }
             }
         } else {
             if state != .Archive {
@@ -774,12 +785,16 @@ enum ObservationState: Int, CustomStringConvertible {
 
                     observation.createObservationLocations(context: context)
 
+                    for location in (observation.locations ?? Set<ObservationLocation>()) {
+                        regions.append(location.region)
+                    }
+                    
                     newObservation = observation;
                 }
             }
         }
         
-        return newObservation;
+        return ObservationChangeRegions(observation: newObservation, regionsChanged: regions)
     }
     
     @objc public static func isRectangle(points: [SFPoint]) -> Bool {
