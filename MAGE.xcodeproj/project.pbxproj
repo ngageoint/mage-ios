@@ -176,6 +176,7 @@
 		BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */; };
 		BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
+		D2A46FF92E0DD73700CE0D72 /* ObservationChangeRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
 		F7003949200D425400E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
@@ -1105,6 +1106,7 @@
 		B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGEGeoPackageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E70D96990B16652014926 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD66678D2D82152100D9BBA0 /* MAGE.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MAGE.xctestplan; sourceTree = "<group>"; };
+		D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationChangeRegions.swift; sourceTree = "<group>"; };
 		E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
@@ -3821,6 +3823,7 @@
 		F7C097702C80C50D003FA115 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */,
 				F7225F472C57D48C00B7D935 /* ObservationModel.swift */,
 				F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */,
 				F754C65C2C49A87100E408E9 /* ObservationFavoritesModel.swift */,
@@ -4924,6 +4927,7 @@
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
+				D2A46FF92E0DD73700CE0D72 /* ObservationChangeRegions.swift in Sources */,
 				F7C097732C80C52C003FA115 /* AttachmentModel.swift in Sources */,
 				F781609E273EE1A50055B5D2 /* ObjC.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
