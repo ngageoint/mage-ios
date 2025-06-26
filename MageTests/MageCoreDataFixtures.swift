@@ -230,7 +230,8 @@ class MageCoreDataFixtures {
         var context: NSManagedObjectContext?
         guard let context = context else { return nil }
         return context.performAndWait {
-            var observation = Observation.create(feature: observationJson, context: context)!;
+            var observationChangeRegions = Observation.create(feature: observationJson, context: context)!;
+            var observation = observationChangeRegions.observation!
             if let importantJson: [String : Any] = observationJson["important"] as? [String : Any] {
                 let important: ObservationImportant = ObservationImportant.important(json: importantJson, context: context)!
                 important.observation = observation;
@@ -258,7 +259,7 @@ class MageCoreDataFixtures {
             var o: Observation?
 //            MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
             let user = try? context.fetchFirst(User.self, predicate: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]))
-                o = Observation.create(feature: jsonDictionary[0] as! [AnyHashable : Any], context: context)!;
+            o = Observation.create(feature: jsonDictionary[0] as! [AnyHashable : Any], context: context)!.observation!;
                 o?.eventId = eventId;
                 o?.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
                 o?.user = user;
