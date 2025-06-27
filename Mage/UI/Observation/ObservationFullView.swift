@@ -54,14 +54,6 @@ struct ObservationFullView: View {
                     
                 }
                 .fixedSize()
-                .buttonStyle(
-                    MaterialFloatingButtonStyle(
-                        type: .secondary,
-                        size: .mini,
-                        foregroundColor: .white,
-                        backgroundColor: .secondaryColor
-                    )
-                )
                 .padding(.trailing, 16)
                 .padding(.bottom, 16)
             }

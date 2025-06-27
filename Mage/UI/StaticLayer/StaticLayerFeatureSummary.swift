@@ -8,7 +8,6 @@
 
 import SwiftUI
 import Kingfisher
-import MaterialViews
 import MAGEStyle
 
 struct StaticLayerFeatureSummary: View {

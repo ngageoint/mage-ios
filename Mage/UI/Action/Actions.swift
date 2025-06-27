@@ -8,7 +8,6 @@
 import Foundation
 import MapKit
 import SwiftUI
-import MaterialViews
 
 protocol Action {
     func action()
@@ -24,10 +23,11 @@ enum Actions {
         func action() {
             let coordinateDisplay = UserDefaults.standard.coordinateDisplay
             UIPasteboard.general.string = coordinateDisplay.format(coordinate: latLng)
+            
             NotificationCenter.default.post(
                 name: .SnackbarNotification,
                 object: SnackbarNotification(
-                    snackbarModel: SnackbarModel(
+                    snackbarModel: AlertModel(
                         message: "Location \(coordinateDisplay.format(coordinate: latLng)) copied to clipboard")
                 )
             )

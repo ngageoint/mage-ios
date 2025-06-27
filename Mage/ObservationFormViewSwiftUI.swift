@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 
 struct ObservationFormViewSwiftUI: View {
     @State

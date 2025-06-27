@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import MaterialViews
 
 struct FeatureBottomSheet: View {
     @ObservedObject

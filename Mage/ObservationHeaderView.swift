@@ -66,7 +66,6 @@ struct ObservationHeaderViewSwiftUI: View {
                                     
                                 }
                             }
-                            .buttonStyle(MaterialButtonStyle(type: .text))
                             
                             Button {
                                 viewModel.makeImportant()
@@ -77,7 +76,6 @@ struct ObservationHeaderViewSwiftUI: View {
                                     
                                 }
                             }
-                            .buttonStyle(MaterialButtonStyle(type: .contained))
                         }
                     }.padding()
                 }

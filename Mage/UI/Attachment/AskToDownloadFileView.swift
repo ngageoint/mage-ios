@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import MaterialViews
 
 struct AskToDownloadFileView: View {
     
@@ -28,8 +27,6 @@ struct AskToDownloadFileView: View {
             } label: {
                 Text("View")
             }
-            .buttonStyle(MaterialButtonStyle(type: .contained))
-
             Spacer()
         }
         .padding()

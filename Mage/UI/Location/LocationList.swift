@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-//import MaterialViews
 
 class LocationListWrapperViewController: SwiftUIViewController {
     let router: MageRouter
@@ -124,9 +123,6 @@ struct LocationList: View {
                             .padding([.leading, .trailing], 16)
 
                         }
-                        // TODO: BRENT - Style this button
-//                        .buttonStyle(MaterialButtonStyle(type: .contained))
-
                     }
                     .padding(64)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

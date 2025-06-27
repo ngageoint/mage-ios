@@ -7,7 +7,6 @@
 
 import SwiftUI
 import MapKit
-import MaterialViews
 
 struct CoordinateButton: View {
     var action: CoordinateActions
@@ -26,7 +25,6 @@ struct CoordinateButton: View {
             }
             .accessibilityElement()
             .accessibilityLabel("Location")
-            .buttonStyle(MaterialButtonStyle())
         }
     }
 }

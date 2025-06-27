@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 import Combine
-import MaterialViews
 
 struct FeedItemBottomSheet: View {
     @ObservedObject
@@ -44,7 +43,6 @@ struct FeedItemBottomSheet: View {
                         Text("More Details")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(MaterialButtonStyle(type: .contained))
                     .padding(8)
                 }
                 .id("\(viewModel.feedItemUri?.absoluteString ?? "")")

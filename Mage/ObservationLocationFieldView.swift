@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 import MapFramework
 import MAGEStyle
-import MaterialViews
 
 struct ObservationLocationFieldView: View {
 
@@ -60,7 +59,6 @@ struct ObservationLocationFieldView: View {
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
                     Spacer()
                     CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
-                        .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")
                         .font(Font.caption)
@@ -87,13 +85,11 @@ struct ObservationLocationFieldView: View {
                     }
                 )
                 .contentShape(Rectangle())
-                .buttonStyle(MaterialButtonStyle())
                 .accessibilityElement()
                 .accessibilityLabel("previous")
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
                     Spacer()
                     CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
-                        .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")
                         .font(Font.caption)
@@ -118,7 +114,6 @@ struct ObservationLocationFieldView: View {
                     }
                 )
                 .contentShape(Rectangle())
-                .buttonStyle(MaterialButtonStyle())
                 .accessibilityElement()
                 .accessibilityLabel("next")
             }

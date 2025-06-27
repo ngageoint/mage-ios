@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 
 struct PhoneButton: View {
     var phoneAction: UserActions
@@ -21,8 +20,6 @@ struct PhoneButton: View {
             } icon: {
                 Image(uiImage: UIImage(systemName: "phone")!.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate))
             }
-            
         }
-        .buttonStyle(MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6)))
     }
 }

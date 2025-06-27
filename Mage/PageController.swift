@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 
 struct PageController: View {
     var count: Int
@@ -34,7 +33,6 @@ struct PageController: View {
                         })
                 }
             )
-            .buttonStyle(MaterialButtonStyle())
             .accessibilityElement()
             .accessibilityLabel("previous")
 
@@ -57,7 +55,6 @@ struct PageController: View {
                         })
                 }
             )
-            .buttonStyle(MaterialButtonStyle())
             .accessibilityElement()
             .accessibilityLabel("next")
         }

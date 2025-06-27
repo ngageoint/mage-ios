@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import MaterialViews
 
 struct ObservationSyncStatusSwiftUI: View {
     
@@ -83,7 +82,6 @@ struct ObservationSyncStatusSwiftUI: View {
             } label: {
                 Text("Sync Now")
             }
-            .buttonStyle(MaterialButtonStyle(type: .text))
         }
     }
 }

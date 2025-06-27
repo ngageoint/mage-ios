@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 
 struct EmailButton: View {
     var emailAction: UserActions
@@ -21,8 +20,6 @@ struct EmailButton: View {
             } icon: {
                 Image(uiImage: UIImage(systemName: "envelope")!.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate))
             }
-            
         }
-        .buttonStyle(MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6)))
     }
 }

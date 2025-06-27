@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import MaterialViews
 
 struct AskToCacheImageView: View {
     
@@ -28,7 +27,6 @@ struct AskToCacheImageView: View {
             } label: {
                 Text("View")
             }
-            .buttonStyle(MaterialButtonStyle(type: .contained))
 
             Spacer()
         }

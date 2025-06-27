@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 
 struct NavigateToButton: View {
     var navigateToAction: CoordinateActions
@@ -23,6 +22,5 @@ struct NavigateToButton: View {
             }
             
         }
-        .buttonStyle(MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6)))
     }
 }

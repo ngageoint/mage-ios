@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialViews
 import SwiftUI
 import MAGEStyle
 import MapFramework
@@ -52,7 +51,6 @@ struct ObservationMapItemView: View {
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
                     Spacer()
                     CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
-                        .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")
                         .font(Font.caption)
@@ -79,12 +77,10 @@ struct ObservationMapItemView: View {
                     }
                 )
                 .contentShape(Rectangle())
-                .buttonStyle(MaterialButtonStyle(type: .text))
                 .accessibilityElement()
                 .accessibilityLabel("previous")
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
                     CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
-                        .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")
                         .font(Font.caption)
@@ -108,7 +104,6 @@ struct ObservationMapItemView: View {
                     }
                 )
                 .contentShape(Rectangle())
-                .buttonStyle(MaterialButtonStyle())
                 .accessibilityElement()
                 .accessibilityLabel("next")
             }

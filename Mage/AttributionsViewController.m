@@ -88,11 +88,6 @@
            @"copyright": @"",
            @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://raw.githubusercontent.com/iziz/libPhoneNumber-iOS/master/LICENSE" forText:@"Apache License 2.0"]
            },
-         @{
-           @"title": @"Material Components for iOS",
-           @"copyright": @"Google Inc.",
-           @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://github.com/material-components/material-components-ios/blob/develop/LICENSE" forText:@"Apache License 2.0"]
-           },
                          
          nil];
     }

@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 import Combine
-import MaterialViews
 
 struct UserBottomSheet: View {
     @ObservedObject
@@ -45,7 +44,6 @@ struct UserBottomSheet: View {
                         Text("More Details")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(MaterialButtonStyle(type: .contained))
                     .padding(8)
                 }
                 .id(user.remoteId)

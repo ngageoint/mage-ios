@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 import Combine
-import MaterialViews
 
 struct ObservationLocationBottomSheet: View {
     @ObservedObject
@@ -58,7 +57,6 @@ struct ObservationLocationBottomSheet: View {
                         Text("More Details")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(MaterialButtonStyle(type: .contained))
                     .padding(8)
                 }
                 .id(observationMapItem.observationLocationId)

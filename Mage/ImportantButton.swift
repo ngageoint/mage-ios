@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 
 struct ImportantButton: View {
     var importantAction: () -> Void
@@ -40,9 +39,6 @@ struct ImportantButton: View {
             }
             
         }
-        .buttonStyle(
-            MaterialButtonStyle(foregroundColor: isImportant ? .importantColor : .onSurfaceColor.opacity(0.6), backgroundColor: .importantColor)
-        )
         .transformEffect(.identity)
     }
 }

@@ -9,7 +9,6 @@
 import SwiftUI
 
 import SwiftUI
-import MaterialViews
 
 struct ShowFavoritesButton: View {
     var favoriteCount: Int?
@@ -25,9 +24,6 @@ struct ShowFavoritesButton: View {
                 } icon: {
                 }
             }
-            .buttonStyle(
-                MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6))
-            )
             .transformEffect(.identity)
         }
     }

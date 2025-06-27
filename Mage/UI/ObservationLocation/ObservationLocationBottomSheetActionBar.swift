@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import MaterialViews
 import DataSourceDefinition
 
 enum CoordinateActions {
@@ -26,10 +25,12 @@ enum CoordinateActions {
             guard let coordinate = coordinate else { break }
             let coordinateDisplay = UserDefaults.standard.coordinateDisplay
             UIPasteboard.general.string = coordinateDisplay.format(coordinate: coordinate)
+            
+            // TODO: - BRENT - should be renamed.
             NotificationCenter.default.post(
                 name: .SnackbarNotification,
                 object: SnackbarNotification(
-                    snackbarModel: SnackbarModel(
+                    snackbarModel: AlertModel(
                         message: "Location \(coordinateDisplay.format(coordinate: coordinate)) copied to clipboard")
                 )
             )
@@ -158,7 +159,6 @@ struct ObservationViewActionBar: View {
                         .rotationEffect(.degrees(90))
                 }
             }
-            .buttonStyle(MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6)))
         }
     }
 }

@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 import Combine
 import MAGEStyle
-import MaterialViews
 
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
@@ -110,8 +109,6 @@ struct ObservationList: View {
                                 .padding([.leading, .trailing], 16)
                                 
                             }
-                            .buttonStyle(MaterialButtonStyle(type: .contained))
-                            
                         }
                         .padding(64)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -139,14 +136,6 @@ struct ObservationList: View {
                     
                 }
                 .fixedSize()
-                .buttonStyle(
-                    MaterialFloatingButtonStyle(
-                        type: .secondary,
-                        size: .regular,
-                        foregroundColor: .white,
-                        backgroundColor: .secondaryColor
-                    )
-                )
                 .padding(.trailing, 16)
                 .padding(.bottom, 16)
             }
