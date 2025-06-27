@@ -29,8 +29,6 @@
         )
     }
     
-    static var storedFormModels: [NSNumber:FormModel] = [:]
-    
     @objc static func style(
         observation: Observation,
         primaryFieldText: String? = nil,
@@ -42,9 +40,10 @@
         if let primaryObservationForm = observation.primaryObservationForm, 
             let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber
         {
-            form = storedFormModels[formId] ?? ObservationShapeStyleParser.formRepository.getForm(formId: formId)
-            storedFormModels[formId] = form
+            form = ObservationShapeStyleParser.formRepository.getForm(formId: formId)
         }
+        
+//        let form = observation.primaryEventForm
         
         // Check for a style
         var styleField = form?.style
