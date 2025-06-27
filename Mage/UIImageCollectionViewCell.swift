@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MaterialComponents
 
 class UIImageCollectionViewCell: UICollectionViewCell {
     let imageView: UIImageView = UIImageView()
@@ -34,7 +33,7 @@ class UIImageCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupCell(image: UIImage?, title: String?, scheme: MDCContainerScheming?) {
+    func setupCell(image: UIImage?, title: String?, scheme: AppContainerScheming?) {
         imageView.image = image
         titleLabel.text = title
         if let scheme = scheme {

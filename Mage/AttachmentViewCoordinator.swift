@@ -182,7 +182,7 @@ import QuickLook
                         self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
                     }
                 } else {
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Unable to open attachment \(attachment.name ?? "file")"))
+                    AlertManager.shared.show(message: "Unable to open attachment \(attachment.name ?? "file")")
                 }
             }
         }

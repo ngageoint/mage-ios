@@ -129,7 +129,6 @@ class SearchSheetController: UIViewController {
         
         refreshingView.backgroundColor = scheme?.colorScheme.surfaceColor
         
-        // TODO: BRENT MDC Changes
         refreshingStatus.font = scheme?.typographyScheme.headline1Font
         refreshingStatus.textColor = scheme?.colorScheme.onBackgroundColor?.withAlphaComponent(0.6)
 

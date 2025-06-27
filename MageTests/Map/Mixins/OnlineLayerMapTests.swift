@@ -18,7 +18,7 @@ import CoreLocation
 import MapKit
 
 class OnlineLayerMapTestImpl : NSObject {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var mapView: MKMapView?
     
     var onlineLayerMapMixin: OnlineLayerMapMixin?

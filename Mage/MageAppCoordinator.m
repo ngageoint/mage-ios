@@ -22,7 +22,7 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (strong, nonatomic) ImageCacheProvider *imageCacheProvider;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) ServerURLController *urlController;
 @property (strong, nonatomic) AuthenticationCoordinator *authCoordinator;
 @property (strong, nonatomic) NSManagedObjectContext *context;
@@ -30,7 +30,7 @@
 
 @implementation MageAppCoordinator
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme:(id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme:(id<AppContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     if (!self) return nil;
     

@@ -9,10 +9,7 @@
 import Foundation
 import PureLayout
 import Kingfisher
-import MaterialComponents.MaterialTypographyScheme
-import MaterialComponents.MaterialCards
 import SwiftUI
-import MaterialViews
 
 struct ObservationHeaderViewSwiftUI: View {
     @EnvironmentObject

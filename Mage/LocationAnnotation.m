@@ -5,8 +5,7 @@
 //
 
 @import DateTools;
-@import MaterialComponents;
-
+#import "AppContainerScheming.h"
 #import "LocationAnnotation.h"
 @import SimpleFeatures;
 #import <PureLayout.h>
@@ -54,7 +53,7 @@
     return self;
 }
 
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<AppContainerScheming>) scheme {
     MKAnnotationView *annotationView = nil;
     if (self.user.iconColor || self.user.iconUrl == nil) {
         PersonAnnotationView *personAnnotationView = (PersonAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];

@@ -13,11 +13,11 @@ import UIKit
 class MDCActivityIndicatorProgress: Indicator {
     private let progressIndicatorView: IndicatorView
     
-    private lazy var activityIndicator: MDCActivityIndicator = {
-        let activityIndicator = MDCActivityIndicator()
-        activityIndicator.sizeToFit()
-        activityIndicator.indicatorMode = .indeterminate
-        return activityIndicator;
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
     
     var view: IndicatorView {
@@ -52,7 +52,7 @@ class AttachmentSlideShow: UIView {
     private var didSetUpConstraints = false;
     private var height: CGFloat = 150.0;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var scheme: MDCContainerScheming?;
+    private var scheme: AppContainerScheming?;
     
     private lazy var slidescroll: UIScrollView = {
         let slidescroll = UIScrollView(forAutoLayout: ());
@@ -127,10 +127,12 @@ class AttachmentSlideShow: UIView {
     func showThumbnail(imageView: AttachmentUIImageView, cacheOnly: Bool = !DataConnectionUtilities.shouldFetchAttachments()) {
         imageView.accessibilityLabel = "attachment \(imageView.attachment?.name ?? "")";
 
-        let i = MDCActivityIndicatorProgress(parent: imageView);
+        let progress = UIActivityIndicatorView()
+        progress.hidesWhenStopped = true
+        progress.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.showThumbnail(cacheOnly: cacheOnly,
-                                indicator: i,
+                                indicator: progress,
                                 progressBlock: {
                                     receivedSize, totalSize in
                                     let percentage = (Float(receivedSize) / Float(totalSize))
@@ -308,7 +310,7 @@ class AttachmentSlideShow: UIView {
         super.updateConstraints();
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         self.scheme = scheme;
         self.backgroundColor = scheme?.colorScheme.backgroundColor;
         self.pageControl.pageIndicatorTintColor = scheme?.colorScheme.onPrimaryColor.withAlphaComponent(0.6);

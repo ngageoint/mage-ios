@@ -7,19 +7,19 @@
 //
 
 #import "TransitionViewController.h"
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface TransitionViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 
 @end
 
 @implementation TransitionViewController
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

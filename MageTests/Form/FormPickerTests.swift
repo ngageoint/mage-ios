@@ -11,7 +11,6 @@ import Quick
 import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
-import MaterialComponents.MaterialBottomSheet
 
 @testable import MAGE
 
@@ -114,83 +113,83 @@ class FormPickerTests: AsyncMageCoreDataTestCase {
 //                expect(formPicker.view).to(haveValidSnapshot());
     }
     
-    @MainActor
-    func testAsASheet() {
-        let formsJson: [[String: AnyHashable]] = [[
-            "name": "Vehicle",
-            "description": "Information about a vehicle",
-            "color": "#7852A2",
-            "id": 3
-        ], [
-            "name": "Evidence",
-            "description": "Evidence form",
-            "color": "#52A278",
-            "id": 0
-        ], [
-            "name": "Witness",
-            "description": "Information gathered from a witness",
-            "color": "#A25278",
-            "id": 1
-        ], [
-            "name": "Location",
-            "description": "Detailed information about the scene",
-            "color": "#78A252",
-            "id": 4
-        ],[
-            "name": "Suspect2",
-            "description": "Information about a suspect",
-            "color": "#5278A2",
-            "id": 2
-        ], [
-            "name": "Vehicle2",
-            "description": "Information about a vehicle",
-            "color": "#7852A2",
-            "id": 3
-        ], [
-            "name": "Evidence2",
-            "description": "Evidence form",
-            "color": "#52A278",
-            "id": 0
-        ], [
-            "name": "Witness2",
-            "description": "Information gathered from a witness",
-            "color": "#A25278",
-            "id": 1
-        ], [
-            "name": "Location2",
-            "description": "Detailed information about the scene",
-            "color": "#78A252",
-            "id": 4
-        ], [
-            "name": "Suspect",
-            "description": "Information about a suspect",
-            "color": "#5278A2",
-            "id": 2
-        ]]
-        let delegate = MockFormPickerDelegate();
-        
-        let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
-
-        formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
-        
-        let container = UIViewController();
-        
-        window.rootViewController = container;
-        
-        let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: formPicker);
-        container.present(bottomSheet, animated: true, completion: {
-            TestHelpers.printAllAccessibilityLabelsInWindows();
-        });
-        tester().waitForView(withAccessibilityLabel: "Add A Form Table");
-        tester().tapItem(at: IndexPath(row: forms.count - 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Add A Form Table")
-        
-        expect(delegate.formPickedCalled).to(beTrue());
-        expect(delegate.pickedForm).to(equal(forms[9]));
-        
-        bottomSheet.dismiss(animated: false)
-
-//                expect(formPicker.view).to(haveValidSnapshot());
-    }
+//    @MainActor
+//    func testAsASheet() {
+//        let formsJson: [[String: AnyHashable]] = [[
+//            "name": "Vehicle",
+//            "description": "Information about a vehicle",
+//            "color": "#7852A2",
+//            "id": 3
+//        ], [
+//            "name": "Evidence",
+//            "description": "Evidence form",
+//            "color": "#52A278",
+//            "id": 0
+//        ], [
+//            "name": "Witness",
+//            "description": "Information gathered from a witness",
+//            "color": "#A25278",
+//            "id": 1
+//        ], [
+//            "name": "Location",
+//            "description": "Detailed information about the scene",
+//            "color": "#78A252",
+//            "id": 4
+//        ],[
+//            "name": "Suspect2",
+//            "description": "Information about a suspect",
+//            "color": "#5278A2",
+//            "id": 2
+//        ], [
+//            "name": "Vehicle2",
+//            "description": "Information about a vehicle",
+//            "color": "#7852A2",
+//            "id": 3
+//        ], [
+//            "name": "Evidence2",
+//            "description": "Evidence form",
+//            "color": "#52A278",
+//            "id": 0
+//        ], [
+//            "name": "Witness2",
+//            "description": "Information gathered from a witness",
+//            "color": "#A25278",
+//            "id": 1
+//        ], [
+//            "name": "Location2",
+//            "description": "Detailed information about the scene",
+//            "color": "#78A252",
+//            "id": 4
+//        ], [
+//            "name": "Suspect",
+//            "description": "Information about a suspect",
+//            "color": "#5278A2",
+//            "id": 2
+//        ]]
+//        let delegate = MockFormPickerDelegate();
+//        
+//        let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
+//
+//        formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
+//        
+//        let container = UIViewController();
+//        
+//        window.rootViewController = container;
+//        
+//        let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: formPicker);
+//        container.present(bottomSheet, animated: true, completion: {
+//            TestHelpers.printAllAccessibilityLabelsInWindows();
+//        });
+//        tester().waitForView(withAccessibilityLabel: "Add A Form Table");
+//        tester().tapItem(at: IndexPath(row: forms.count - 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Add A Form Table")
+//        
+//        expect(delegate.formPickedCalled).to(beTrue());
+//        expect(delegate.pickedForm).to(equal(forms[9]));
+//        
+//        bottomSheet.dismiss(animated: false)
+//
+////                expect(formPicker.view).to(haveValidSnapshot());
+//    }
     // check constraints here
     @MainActor
     func testShouldTriggerTheDelegate() {

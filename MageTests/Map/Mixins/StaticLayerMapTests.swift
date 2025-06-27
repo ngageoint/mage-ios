@@ -19,7 +19,7 @@ import MapKit
 
 class StaticLayerMapTestImpl : NSObject, StaticLayerMap {
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
 
     var staticLayerMapMixin: StaticLayerMapMixin?
 }

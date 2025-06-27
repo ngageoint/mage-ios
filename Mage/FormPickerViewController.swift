@@ -33,7 +33,6 @@ class ButtonFooterView: UICollectionReusableView {
         set {
             _scheme = newValue
             if let scheme = newValue {
-//                button.applyTextTheme(withScheme: scheme)
                 button.setTitleColor(scheme.colorScheme.primaryColorVariant, for: .normal)
             }
         }
@@ -271,11 +270,11 @@ extension FormPickerViewController : UICollectionViewDelegate {
         
         if (formCount >= formMax) {
             // max amount of this form have already been added
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(form.name ?? "") form cannot be included in an observation more than \(formMax) time\(formMax == 1 ? "" : "s")")
-            let messageAction = MDCSnackbarMessageAction()
-            messageAction.title = "OK"
-            message.action = messageAction
-            MDCSnackbarManager.default.show(message)
+            AlertManager.shared.showAlertWithTitle(
+                form.name ?? "",
+                message: "Form cannot be included in an observation more than \(formMax) time\(formMax == 1 ? "" : "s")",
+                okTitle: "OK"
+            )
         } else {
             delegate?.formPicked(form: form)
         }

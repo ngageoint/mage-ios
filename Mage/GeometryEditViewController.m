@@ -404,12 +404,17 @@ static NSString *garsTitle = @"GARS";
     [self.hintView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.slidescroll];
     
     if (defaults.showMapSearch) {
-        self.searchButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-        self.searchButton.accessibilityLabel = @"search";
-        [self.searchButton setImage:[UIImage systemImageNamed:@"magnifyingglass"] forState:UIControlStateNormal];
-        [self.searchButton addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self.searchButton setTintColor:self.scheme.colorScheme.primaryColor];
-        [self.searchButton setBackgroundColor:self.scheme.colorScheme.surfaceColor];
+        self.searchButton = [FloatingButtonFactory
+                             floatingButtonWithImageName:@"magnifyingglass"
+                             scheme:self.scheme
+                             useErrorColor:false
+                             size:40
+                             cornerRadius:20
+                             target:self
+                             action:@selector(searchButtonClick:)
+                             tag:10
+                             accessabilityLabel:@"search"];
+
         [self.view addSubview:self.searchButton];
         [self.searchButton autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.hintView withOffset:16];
         [self.searchButton autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:16];
@@ -422,25 +427,49 @@ static NSString *garsTitle = @"GARS";
     buttonStack.directionalLayoutMargins = NSDirectionalEdgeInsetsZero;
     [buttonStack setUserInteractionEnabled:true];
     
-    self.pointButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-    self.pointButton.accessibilityLabel = @"point";
-    [self.pointButton setImage:[UIImage imageNamed:@"observations"] forState:UIControlStateNormal];
-    [self.pointButton addTarget:self action:@selector(pointButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.lineButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-    self.lineButton.accessibilityLabel = @"line";
-    [self.lineButton setImage:[UIImage imageNamed:@"line_string"] forState:UIControlStateNormal];
-    [self.lineButton addTarget:self action:@selector(lineButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.rectangleButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-    self.rectangleButton.accessibilityLabel = @"rectangle";
-    [self.rectangleButton setImage:[UIImage imageNamed:@"rectangle"] forState:UIControlStateNormal];
-    [self.rectangleButton addTarget:self action:@selector(rectangleButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.polygonButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-    self.polygonButton.accessibilityLabel = @"polygon";
-    [self.polygonButton setImage:[UIImage imageNamed:@"polygon"] forState:UIControlStateNormal];
-    [self.polygonButton addTarget:self action:@selector(polygonButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.pointButton = [FloatingButtonFactory
+                        floatingButtonWithImageName:@"observations"
+                        scheme:self.scheme
+                        useErrorColor:false
+                        size:40.0
+                        cornerRadius:20.0
+                        target:self
+                        action:@selector(pointButtonClick:)
+                        tag:0
+                        accessabilityLabel:@"observations"];
+
+    self.lineButton = [FloatingButtonFactory
+                        floatingButtonWithImageName:@"line_string"
+                        scheme:self.scheme
+                        useErrorColor:false
+                        size:40.0
+                        cornerRadius:20.0
+                        target:self
+                        action:@selector(pointButtonClick:)
+                        tag:0
+                        accessabilityLabel:@"line"];
+
+    self.rectangleButton = [FloatingButtonFactory
+                        floatingButtonWithImageName:@"rectangle"
+                        scheme:self.scheme
+                        useErrorColor:false
+                        size:40.0
+                        cornerRadius:20.0
+                        target:self
+                        action:@selector(pointButtonClick:)
+                        tag:0
+                        accessabilityLabel:@"rectangle"];
+
+    self.polygonButton = [FloatingButtonFactory
+                        floatingButtonWithImageName:@"polygon"
+                        scheme:self.scheme
+                        useErrorColor:false
+                        size:40.0
+                        cornerRadius:20.0
+                        target:self
+                        action:@selector(pointButtonClick:)
+                        tag:0
+                        accessabilityLabel:@"polygon"];
     
     [buttonStack addArrangedSubview:self.pointButton];
     [buttonStack addArrangedSubview:self.lineButton];
@@ -691,7 +720,8 @@ static NSString *garsTitle = @"GARS";
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 1) {
         self.mgrsField.text = [GridSystems mgrs:coordinate];
-        [self applyThemeTextField:self.mgrsField];
+        // TODO: BRENT - Verify not needed
+//        [self applyThemeTextField:self.mgrsField];
     }
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 2) {
@@ -701,7 +731,8 @@ static NSString *garsTitle = @"GARS";
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 3) {
         self.garsField.text = [GridSystems gars:coordinate];
-        [self applyThemeTextField:self.garsField];
+        // TODO: BRENT - Verify not needed
+//        [self applyThemeTextField:self.garsField];
     }
 }
 
@@ -764,7 +795,7 @@ static NSString *garsTitle = @"GARS";
 - (void) onLatLonTextChanged {
     
     CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
-    MDCFilledTextField *themeField = nil;
+    UITextField *themeField = nil;
     
     if (self.fieldTypeTabs.selectedItem.tag == 0) {
         NSDecimalNumber *latitude = nil;
@@ -801,7 +832,8 @@ static NSString *garsTitle = @"GARS";
     
     if (themeField != nil) {
         if (self.validLocation || themeField.text.length == 0) {
-            [self applyThemeTextField:themeField];
+            // TODO: BRENT - Verify not needed
+//            [self applyThemeTextField:themeField];
         } else {
             [self applyErrorThemeTextField:themeField];
         }

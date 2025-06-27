@@ -9,7 +9,6 @@
 import Foundation
 import Kingfisher
 import UIKit
-//import MaterialComponents
 import PureLayout
 
 private final class IntrinsicTableView: UITableView {
@@ -43,7 +42,7 @@ private final class IntrinsicTableView: UITableView {
     var properties: [String: Any]?
     let propertiesHeader: CardHeader = CardHeader(headerText: "PROPERTIES")
     
-    // TODO: BRENT - MDC
+    // TODO: BRENT - Fix UI
     private lazy var propertiesCard: UIView = {
         let card = UIView()
         card.addSubview(tableView)
@@ -209,8 +208,6 @@ extension FeedItemViewController: FeedItemActionsDelegate {
     
     func copyLocation(_ location: String) {
         UIPasteboard.general.string = location
-        
-        // TODO: BRENT - MDC
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location) copied to clipboard"))
+        AlertManager.shared.show(title: "Location Copied", message: "Location \(location) copied to clipboard")
     }
 }

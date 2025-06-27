@@ -174,7 +174,9 @@
     [self.loginsStackView addArrangedSubview:self.messageView];
     
     UIView *messageDetailButtonContainer = [UIView newAutoLayoutView];
-    self.messageDetailButton = [[MDCButton alloc] init];
+    
+    self.messageDetailButton = [[UIButton alloc] init];
+//    self.messageDetailButton = [[MDCButton alloc] init];
 //    [self.messageDetailButton applyTextThemeWithScheme: _scheme];
     [self.messageDetailButton setTitle:@"Copy Error Message Detail" forState:UIControlStateNormal];
     [self.messageDetailButton addTarget:self action:@selector(copyDetail) forControlEvents:UIControlEventTouchUpInside];
@@ -190,7 +192,7 @@
 
 - (void) copyDetail {
     UIPasteboard.generalPasteboard.string = self.errorMessageDetail;
-    [MDCSnackbarManager.defaultManager showMessage:[MDCSnackbarMessage messageWithText: @"Error detail copied to clipboard"]];
+    [AlertManager.shared showWithMessage: @"Error detail copied to clipboard" duration:2.0 in:nil];
 }
 
 - (void) setContactInfo:(ContactInfo *) contactInfo {

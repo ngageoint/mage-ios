@@ -52,33 +52,6 @@ class TextFieldView : BaseFieldView {
         return textField
     }()
     
-    // TODO: BRENT - REMOVE
-//    lazy var textField: MDCFilledTextField = {
-//        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
-//        textField.delegate = self
-//        textField.inputAccessoryView = accessoryView
-//        textField.keyboardType = keyboardType
-//        if (field[FieldKey.type.key] as? String == FieldType.email.key) {
-//            textField.trailingView = UIImageView(image: UIImage(systemName: "envelope"))
-//            textField.trailingViewMode = .always
-//        } else if (field[FieldKey.type.key] as? String == FieldType.textfield.key) {
-//            textField.trailingView = UIImageView(image: UIImage(named: "outline_title"))
-//            textField.trailingViewMode = .always
-//        } else if (field[FieldKey.type.key] as? String == FieldType.password.key) {
-//            textField.trailingView = UIImageView(image: UIImage(systemName: "lock"))
-//            textField.trailingViewMode = .always
-//        }
-//        textField.autocapitalizationType = .none
-//        textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? ""
-//        textField.leadingAssistiveLabel.text = " "
-//        setPlaceholder(textField: textField)
-//        if (value != nil) {
-//            textField.text = value as? String
-//        }
-//        textField.sizeToFit()
-//        return textField
-//    }()
-    
     private lazy var accessoryView: UIToolbar = {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
         toolbar.autoSetDimension(.height, toSize: 44)
@@ -96,11 +69,6 @@ class TextFieldView : BaseFieldView {
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
-    
-    // TODO: BRENT - REMOVE
-//    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
-//        self.init(field: field, editMode: editMode, delegate: delegate, value: nil, multiline: false, keyboardType: keyboardType)
-//    }
     
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
         self.init(field: field, editMode: editMode, delegate: delegate, value: nil, multiline: multiline)
@@ -125,21 +93,6 @@ class TextFieldView : BaseFieldView {
         }
         super.updateConstraints()
     }
-    
-//    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
-//        guard let scheme = scheme else {
-//            return
-//        }
-//
-//        super.applyTheme(withScheme: scheme)
-//        if (multiline) {
-//            multilineTextField.applyTheme(withScheme: scheme)
-//            multilineTextField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-//        } else {
-//            textField.applyTheme(withScheme: scheme)
-//            textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-//        }
-//    }
     
     func addFieldView() {
         if editMode {

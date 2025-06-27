@@ -355,7 +355,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     return
                 }
             }
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset types: \(itemProvider.registeredTypeIdentifiers)"))
+            AlertManager.shared.show(message: "Could not handle asset types: \(itemProvider.registeredTypeIdentifiers)")
         }
     }
 }
@@ -613,7 +613,7 @@ extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
             let mimeType = uttype?.preferredMIMEType ?? UTType.data.identifier
             
             guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not access the documents directory"))
+                AlertManager.shared.show(message: "Could not access the documents directory")
                 return
             }
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
@@ -631,11 +631,11 @@ extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
                     self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
                 } catch {
                     MageLogger.misc.error("Unable to write file \(fileToWriteTo): \(error)")
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "The file type \(filename).\(fileType) is not supported by MAGE. Try uploading a .zip version of the file instead."))
+                    AlertManager.shared.show(message: "The file type \(filename).\(fileType) is not supported by MAGE. Try uploading a .zip version of the file instead.")
                 }
                 
             } catch {
-                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)"))
+                AlertManager.shared.show(message: "Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
             }
             
             if securityScoped {

@@ -206,7 +206,6 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
     
     func copyLocation(_ location: String) {
         UIPasteboard.general.string = location;
-        // TODO: BRENT - MaterialComponents, MDC
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location) copied to clipboard"))
+        AlertManager.shared.show(title: "Location Copied", message: "Location \(location) copied to clipboard")
     }
 }

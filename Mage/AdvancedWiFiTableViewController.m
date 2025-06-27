@@ -15,7 +15,7 @@
 @property (assign, nonatomic) NSNumber *wifiNetworkRestrictionType;
 @property (strong, nonatomic) NSMutableArray *wifiWhitelist;
 @property (strong, nonatomic) NSMutableArray *wifiBlacklist;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation AdvancedWiFiTableViewController
@@ -27,7 +27,7 @@ static NSInteger NO_RESTRICTIONS_CELL_ROW = 0;
 static NSInteger ONLY_THESE_WIFI_NETWORKS_CELL_ROW = 1;
 static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Advanced WiFi";
     self.scheme = containerScheme;
@@ -56,7 +56,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

@@ -119,7 +119,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
         expect(self.viewTester().usingLabel("timestamp")?.view).toNot(beNil());
         
         viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) == ""
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
     }
@@ -144,7 +144,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
         expect(self.viewTester().usingLabel("timestamp")?.view).toNot(beNil());
         
         viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) == ""
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
         
@@ -155,7 +155,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
         nc.pushViewController(mockFieldSelectionDelegate.viewControllerToLaunch!, animated: false);
         viewTester().usingLabel("Geometry Edit Map").longPress();
         tester().tapView(withAccessibilityLabel: "Apply");
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) != ""
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) != ""
         
         expect(UIApplication.getTopViewController()).toNot(beAnInstanceOf(mockFieldSelectionDelegate.viewControllerToLaunch!.classForCoder));
         
@@ -179,7 +179,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
         expect(self.viewTester().usingLabel("timestamp")?.view).toNot(beNil());
         
         viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: initialTime)! as NSDate).formattedDisplay());
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) == ""
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
         TestHelpers.printAllAccessibilityLabelsInWindows();
@@ -216,7 +216,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
 //        expect(self.viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
         
         viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == "40.0085, -105.2678 "
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) == "40.0085, -105.2678 "
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
     }
@@ -242,7 +242,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
 //        expect(self.viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
         
         viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == "40.0085, -105.2666 "
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) == "40.0085, -105.2666 "
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
@@ -268,7 +268,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
 //        expect(self.viewTester().usingLabel("timestamp")?.view).toNot(beNil());
         
         viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-        expect((self.viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == "40.0093, -105.2666 "
+        expect((self.viewTester().usingLabel("geometry value")!.view as! UITextField).text) == "40.0093, -105.2666 "
         expect(self.commonFieldsView.checkValidity()).to(beTrue());
         expect(self.commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
     }

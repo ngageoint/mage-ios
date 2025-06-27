@@ -16,18 +16,18 @@
     @property (nonatomic, strong) NSArray *insecureOnlineLayers;
     @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
 @property (strong, nonatomic) NSFetchedResultsController *onlineLayersFetchedResultsController;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation OnlineMapTableViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.scheme = containerScheme;
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

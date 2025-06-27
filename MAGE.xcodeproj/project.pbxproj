@@ -166,6 +166,8 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84A9AB6D2E0EEF3B008DC749 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A9AB6C2E0EEF3B008DC749 /* BottomSheetViewController.swift */; };
+		84A9AB6F2E0F1165008DC749 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A9AB6E2E0F1165008DC749 /* AlertManager.swift */; };
 		84C95F542E01C53E002F0A58 /* FloatingButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */; };
 		84C95F562E030D73002F0A58 /* SFPoint+Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */; };
 		84C95F592E0B2E0F002F0A58 /* AppDefaultColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C95F582E0B2E0F002F0A58 /* AppDefaultColorScheme.m */; };
@@ -436,7 +438,6 @@
 		F734C1E92BC8476600B2E8C8 /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734C1E82BC8476600B2E8C8 /* Actions.swift */; };
 		F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734C1EA2BC847C300B2E8C8 /* Notifications.swift */; };
 		F734C1F12BC84B2000B2E8C8 /* ViewExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F734C1F02BC84B2000B2E8C8 /* ViewExtensions */; };
-		F734C1F42BC84C8300B2E8C8 /* MaterialViews in Frameworks */ = {isa = PBXBuildFile; productRef = F734C1F32BC84C8300B2E8C8 /* MaterialViews */; };
 		F73564CC2C613BA400466813 /* ObservationImportantRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564CB2C613BA400466813 /* ObservationImportantRepository.swift */; };
 		F73564CE2C613BB400466813 /* ObservationImportantLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564CD2C613BB400466813 /* ObservationImportantLocalDataSource.swift */; };
 		F73564D02C61401300466813 /* ObservationImportantRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564CF2C61401300466813 /* ObservationImportantRemoteDataSource.swift */; };
@@ -972,7 +973,6 @@
 		043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPackageTableCacheOverlay.swift; sourceTree = "<group>"; };
 		043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageFeatureTableCacheOverlay.h; sourceTree = "<group>"; };
 		043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureTableCacheOverlay.swift; sourceTree = "<group>"; };
-		0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayTableCell.h; sourceTree = "<group>"; };
 		0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheOverlayTableCell.swift; sourceTree = "<group>"; };
 		0450822E1C44282F00EDEB88 /* CacheActiveSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheActiveSwitch.swift; sourceTree = "<group>"; };
 		0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheActiveSwitch.m; sourceTree = "<group>"; };
@@ -1136,6 +1136,8 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84A9AB6C2E0EEF3B008DC749 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		84A9AB6E2E0F1165008DC749 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		84C95F522E01C3DE002F0A58 /* FloatingButtonFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloatingButtonFactory.h; sourceTree = "<group>"; };
 		84C95F532E01C53E002F0A58 /* FloatingButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonFactory.swift; sourceTree = "<group>"; };
 		84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFPoint+Coordinate.swift"; sourceTree = "<group>"; };
@@ -1448,7 +1450,6 @@
 		F734C1E82BC8476600B2E8C8 /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		F734C1EA2BC847C300B2E8C8 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		F734C1EF2BC8495200B2E8C8 /* ViewExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ViewExtensions; path = Packages/ViewExtensions; sourceTree = "<group>"; };
-		F734C1F22BC84C0600B2E8C8 /* MaterialViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MaterialViews; path = Packages/MaterialViews; sourceTree = "<group>"; };
 		F73564CB2C613BA400466813 /* ObservationImportantRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantRepository.swift; sourceTree = "<group>"; };
 		F73564CD2C613BB400466813 /* ObservationImportantLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantLocalDataSource.swift; sourceTree = "<group>"; };
 		F73564CF2C61401300466813 /* ObservationImportantRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantRemoteDataSource.swift; sourceTree = "<group>"; };
@@ -2000,7 +2001,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F734C1F42BC84C8300B2E8C8 /* MaterialViews in Frameworks */,
 				F70688832BA37ECE00D8E2EA /* Kingfisher in Frameworks */,
 				BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */,
 				2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */,
@@ -2069,7 +2069,6 @@
 				043FF1221C22F6E4000CA07F /* CacheOverlay.swift */,
 				043FF11E1C22F643000CA07F /* CacheOverlays.h */,
 				043FF11F1C22F643000CA07F /* CacheOverlays.swift */,
-				0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */,
 				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.swift */,
 				043FF1241C22F875000CA07F /* CacheOverlayTypes.h */,
 				043FF1251C22F875000CA07F /* CacheOverlayTypes.m */,
@@ -2464,9 +2463,11 @@
 				84E714122DF76EBC00F52781 /* Themes */,
 				84E713DE2DF0C75B00F52781 /* AppThemeManager.swift */,
 				84E713FC2DF7472400F52781 /* ThemingConstants.swift */,
+				84A9AB6C2E0EEF3B008DC749 /* BottomSheetViewController.swift */,
 				84E713E02DF0CA2400F52781 /* AppThemeBridge.h */,
 				84E713E12DF0CA4D00F52781 /* AppThemeBridge.m */,
 				84E713EE2DF32F2400F52781 /* ThemeProvider.swift */,
+				84A9AB6E2E0F1165008DC749 /* AlertManager.swift */,
 				F723D608253F66AC00C6BE34 /* MAGEScheme.swift */,
 				84C95F552E030D73002F0A58 /* SFPoint+Coordinate.swift */,
 			);
@@ -3603,7 +3604,6 @@
 				BD66678D2D82152100D9BBA0 /* MAGE.xctestplan */,
 				F7DE98912C1B355D005372F8 /* DebugUtilities */,
 				F776AC8E2BC9DADE000FAFB4 /* MapFramework */,
-				F734C1F22BC84C0600B2E8C8 /* MaterialViews */,
 				F734C1EF2BC8495200B2E8C8 /* ViewExtensions */,
 				F734C1DF2BC83CF300B2E8C8 /* MAGEStyle */,
 				F70688BF2BB73E5F00D8E2EA /* MKMapViewExtensions */,
@@ -4430,7 +4430,6 @@
 				F70688C02BB7400C00D8E2EA /* MKMapViewExtensions */,
 				F734C1E02BC83D4F00B2E8C8 /* MAGEStyle */,
 				F734C1F02BC84B2000B2E8C8 /* ViewExtensions */,
-				F734C1F32BC84C8300B2E8C8 /* MaterialViews */,
 				F776AC8F2BC9E178000FAFB4 /* MapFramework */,
 				F776AC942BCD9DE3000FAFB4 /* Alamofire */,
 				F7DE98922C1B3B9B005372F8 /* DebugUtilities */,
@@ -5130,6 +5129,7 @@
 				F776AC992BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift in Sources */,
 				F7225F5A2C5A784700B7D935 /* AttachmentLocalDataSource.swift in Sources */,
 				F776ACA12BCDB892000FAFB4 /* MageSession.swift in Sources */,
+				84A9AB6D2E0EEF3B008DC749 /* BottomSheetViewController.swift in Sources */,
 				F788768F2C6AA44300E30300 /* MageNavStack.swift in Sources */,
 				F7BFB8F52C518A2D00901479 /* MageBottomSheetViewModel.swift in Sources */,
 				F7C097922C812539003FA115 /* StaticLayerBottomSheetViewModel.swift in Sources */,
@@ -5301,6 +5301,7 @@
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7C097B02C85168C003FA115 /* FetchEventsUseCase.swift in Sources */,
+				84A9AB6F2E0F1165008DC749 /* AlertManager.swift in Sources */,
 				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				F73564F62C65584E00466813 /* LocationLocalDataSource.swift in Sources */,
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
@@ -6328,10 +6329,6 @@
 		F734C1F02BC84B2000B2E8C8 /* ViewExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ViewExtensions;
-		};
-		F734C1F32BC84C8300B2E8C8 /* MaterialViews */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MaterialViews;
 		};
 		F776AC8F2BC9E178000FAFB4 /* MapFramework */ = {
 			isa = XCSwiftPackageProductDependency;

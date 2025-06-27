@@ -29,7 +29,7 @@ class MageNavStack: UIViewController {
     var router: MageRouter = MageRouter()
     
     var scheme: AppContainerScheming?
-    var bottomSheet: MDCBottomSheetController?
+    var bottomSheet: BottomSheetViewController?
     var childCoordinators: [NSObject] = []
     
     var navigationControllerObserver: NavigationControllerObserver?
@@ -125,7 +125,7 @@ class MageNavStack: UIViewController {
                 }
                 let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self, router: router);
                 actionsSheet.applyTheme(withContainerScheme: self.scheme);
-                self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+                self.bottomSheet = BottomSheetViewController(contentViewController: actionsSheet);
                 self.bottomSheet?.delegate = self
                 self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
             }
@@ -520,9 +520,9 @@ extension MageNavStack: NavigationControllerObserverDelegate {
     }
 }
 
-extension MageNavStack: MDCBottomSheetControllerDelegate {
+extension MageNavStack: BottomSheetViewControllerDelegate {
     
-    func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
+    func bottomSheetControllerDidDismissBottomSheet(_ controller: BottomSheetViewController) {
         router.bottomSheetRoute = nil
     }
 }

@@ -8,51 +8,47 @@
 
 import UIKit
 
-extension UIButton {
+public extension UIButton {
     
     /// Full version (customizable floating button)
-    @objc static func floatingButton(
+    static func floatingButton(
         imageName: String?,
         scheme: AppContainerScheming?,
         useErrorColor: Bool = false,
         size: CGFloat = 40.0,
+        cornerRadius: CGFloat? = nil,
         target: Any?,
         action: Selector,
         tag: Int = 0,
         accessibilityLabel: String? = nil
     ) -> UIButton {
-        
         let button = UIButton(type: .custom)
-        
-        // Set image if available
-        var buttonImage: UIImage? = nil
-        if let imageName = imageName {
-            buttonImage = UIImage(systemName: imageName) ?? UIImage(named: imageName)
-        }
-        button.setImage(buttonImage, for: .normal)
-        
-        // Apply theme
-        if useErrorColor {
-            button.applySecondaryTheme(withScheme: ThemeProvider.errorTheme())
-        } else {
-            button.applySecondaryTheme(withScheme: scheme)
-        }
-        
-        // Round styling
-        button.frame = CGRect(x: 0, y: 0, width: size, height: size)
-        button.layer.cornerRadius = size / 2.0
-        button.clipsToBounds = true
-        
-        // Target/action
-        button.addTarget(target, action: action, for: .touchUpInside)
-        
-        // Tag
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.tag = tag
         
-        // Accessibility
-        if let accessibilityLabel = accessibilityLabel {
-            button.accessibilityLabel = accessibilityLabel
+        if let name = imageName {
+            button.setImage(UIImage(named: name), for: .normal)
         }
+
+        if let label = accessibilityLabel {
+            button.accessibilityLabel = label
+        }
+        
+        button.addTarget(target, action: action, for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: size),
+            button.heightAnchor.constraint(equalToConstant: size)
+        ])
+
+        // Round or custom styling
+        button.layer.cornerRadius = cornerRadius ?? size / 2.0
+        button.clipsToBounds = true
+
+        let color = useErrorColor ? scheme?.colorScheme.errorColor : scheme?.colorScheme.primaryColor
+        button.backgroundColor = color ?? .systemBlue
+
+        button.tintColor = scheme?.colorScheme.onPrimaryColor ?? .white
         
         return button
     }

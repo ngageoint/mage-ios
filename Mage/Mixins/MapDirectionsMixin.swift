@@ -242,9 +242,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
         if notification.includeCopy {
             await alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
                     UIPasteboard.general.string = location.coordinate.toDisplay()
-                
-                // TODO: BRENT - MDC
-//                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location.coordinate.toDisplay()) copied to clipboard"))
+                AlertManager.shared.show(message: "Location \(location.coordinate.toDisplay()) copied to clipboard", duration: 2.0)
             }))
         }
         

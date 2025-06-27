@@ -47,7 +47,7 @@ class MainMageMapView:
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
-    var bottomSheet: MDCBottomSheetController?
+    var bottomSheet: BottomSheetViewController?
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
@@ -256,7 +256,7 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
     
     func copyLocation(_ locationString: String) {
         UIPasteboard.general.string = locationString;
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(locationString) copied to clipboard"))
+        AlertManager.shared.show(message: "Location \(locationString) copied to clipboard", duration: 2.0)
     }
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView?) {

@@ -119,7 +119,7 @@ class UserTrackingMapTests: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "track location")
-        expect(self.buttonStack.arrangedSubviews[0]).to(beAKindOf(MDCFloatingButton.self))
+        expect(self.buttonStack.arrangedSubviews[0]).to(beAKindOf(UIButton.self))
         
         mixin.cleanupMixin()
     }
@@ -133,7 +133,7 @@ class UserTrackingMapTests: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "track location")
-        let button = viewTester().usingLabel("track location").view as! MDCFloatingButton
+        let button = viewTester().usingLabel("track location").view as! UIButton
         expect(button.currentImage).to(equal(UIImage(systemName: "location")))
         expect(self.mixin.mapView?.userTrackingMode).to(equal(MKUserTrackingMode.none))
         
@@ -157,7 +157,7 @@ class UserTrackingMapTests: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
         
         tester().waitForView(withAccessibilityLabel: "track location")
-        let button = viewTester().usingLabel("track location").view as! MDCFloatingButton
+        let button = viewTester().usingLabel("track location").view as! UIButton
         expect(button.currentImage).to(equal(UIImage(systemName: "location")))
         expect(self.mixin.mapView?.userTrackingMode).to(equal(MKUserTrackingMode.none))
         

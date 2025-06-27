@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import MaterialComponents
 import QuickLook
 
 class DocumentViewer : UIViewController {
@@ -33,8 +32,8 @@ class DocumentViewer : UIViewController {
         return notAvailableDescription
     }()
     
-    private lazy var openInButton: MDCButton = {
-        let openInButton = MDCButton()
+    private lazy var openInButton: UIButton = {
+        let openInButton = UIButton()
         openInButton.setTitle("Open In", for: .normal)
         openInButton.addTarget(self, action: #selector(self.presentShareSheet(_ :)), for: .touchUpInside);
         return openInButton
@@ -46,9 +45,9 @@ class DocumentViewer : UIViewController {
     var data: Data?
     var info: [String : Any]?
     var contentType: String?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
 
-    public convenience init(data: Data, contentType: String, info: [String : Any]?, scheme: MDCContainerScheming?) {
+    public convenience init(data: Data, contentType: String, info: [String : Any]?, scheme: AppContainerScheming?) {
         self.init(nibName: nil, bundle: nil);
         self.data = data
         self.info = info
@@ -77,7 +76,7 @@ class DocumentViewer : UIViewController {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+    func applyTheme(withScheme scheme: AppContainerScheming?) {
         guard let scheme = scheme else {
             return
         }

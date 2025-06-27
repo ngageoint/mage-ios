@@ -16,7 +16,7 @@ import MapFramework
 @testable import MAGE
 
 class FilteredObservationsMapTestImpl : NSObject, FilteredObservationsMap {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var mapView: MKMapView?
     
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?

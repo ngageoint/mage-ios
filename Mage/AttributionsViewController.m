@@ -11,18 +11,18 @@
 
 @interface AttributionsViewController ()
 @property (weak, nonatomic) NSArray *attributions;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) id<AppContainerScheming> scheme;
 @end
 
 @implementation AttributionsViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme {
+- (instancetype) initWithScheme: (id<AppContainerScheming>)containerScheme {
     self = [super initWithStyle:UITableViewStylePlain];
     self.scheme = containerScheme;
     return self;
 }
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }

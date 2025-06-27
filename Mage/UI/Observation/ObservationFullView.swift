@@ -8,12 +8,8 @@
 
 import Foundation
 import UIKit
-import MaterialComponents.MaterialCollections
-import MaterialComponents.MDCCard
-import MaterialComponents.MDCContainerScheme;
 import Combine
 import SwiftUI
-import MaterialViews
 import MAGEStyle
 
 struct ObservationFullView: View {

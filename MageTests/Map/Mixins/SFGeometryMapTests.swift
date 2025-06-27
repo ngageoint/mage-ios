@@ -19,7 +19,7 @@ import MapKit
 
 class SFGeometryMapTestImpl : NSObject, SFGeometryMap {
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     
     var sfGeometryMapMixin: SFGeometryMapMixin?
 }

@@ -6,8 +6,6 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-//@import MaterialComponents;
-
 #import "SignUpViewController.h"
 #import "UINextField.h"
 #import "MageSessionManager.h"

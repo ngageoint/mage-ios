@@ -10,9 +10,9 @@ import SwiftUI
 
 class MoreTableViewDelegate : NSObject, UITableViewDelegate {
     var proxyDelegate: UITableViewDelegate
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     
-    init(proxyDelegate delegate: UITableViewDelegate, containerScheme: MDCContainerScheming?) {
+    init(proxyDelegate delegate: UITableViewDelegate, containerScheme: AppContainerScheming?) {
         proxyDelegate = delegate
         scheme = containerScheme;
         super.init()

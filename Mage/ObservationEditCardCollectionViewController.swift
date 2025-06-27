@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-//import MaterialComponents.MaterialCollections
-//import MaterialComponents.MDCCard
 
 @objc protocol ObservationEditCardDelegate {
     @objc func addForm()
@@ -80,14 +78,11 @@ import UIKit
     
     // TODO: BRENT - FIX STYLING
     private lazy var addFormFAB: UIButton = {
-        let fab = UIButton()  //  MDCFloatingButton(shape: .default)
-        fab.accessibilityLabel = "Add Form"
-//        fab.mode = .expanded
-        fab.setImage(UIImage(systemName: "doc.text.fill"), for: .normal)
-        fab.setTitle("Add Form", for: .normal)
-        fab.addTarget(self, action: #selector(self.addForm(sender:)), for: .touchUpInside)
-        return fab
-    }()
+        let faButton = FloatingButtonFactory.floatingButtonWithImageName("doc.text.fill", scheme: self.scheme, target: self, action: #selector(addForm(sender:)), tag: 99, accessibilityLabel: "Add Form")
+        faButton.setTitle("Add Form", for: .normal)
+        return faButton
+    }
+   
     
     private func addStackViewConstraints() {
         bottomConstraint = stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -60)
@@ -401,10 +396,9 @@ import UIKit
         
         setupFormDependentButtons()
         
-        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Form Removed")
-        let messageAction = MDCSnackbarMessageAction()
-        messageAction.title = "UNDO"
-        let actionHandler = {() in
+        let alert = UIAlertController(title: nil, message: "Form Removed", preferredStyle: .alert)
+
+        let undoAction = UIAlertAction(title: "UNDO", style: .default) { _ in
             self.cards[sender.tag].isHidden = false
             self.observation?.removeFormToBeDeleted(formIndex: sender.tag)
             self.setupFormDependentButtons()
@@ -412,9 +406,16 @@ import UIKit
                 self.commonFieldView?.setObservation(observation: observation)
             }
         }
-        messageAction.handler = actionHandler
-        message.action = messageAction
-        MDCSnackbarManager.default.show(message)
+
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .cancel)
+
+        alert.addAction(undoAction)
+        alert.addAction(dismissAction)
+
+        // Presenting the alert
+        if let viewController = self.parentViewController {
+            viewController.present(alert, animated: true)
+        }
     }
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
@@ -439,7 +440,6 @@ import UIKit
     }
     
     @objc func reorderForms() {
-        // allow MDCButton ink ripple
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
             removeDeletedForms()
             guard let observation = self.observation else {
@@ -454,11 +454,11 @@ import UIKit
 
         if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))")
-            let messageAction = MDCSnackbarMessageAction()
-            messageAction.title = "OK"
-            message.action = messageAction
-            MDCSnackbarManager.default.show(message)
+            AlertManager.shared.showAlertWithTitle(
+                form.name ?? "",
+                message: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))",
+                okTitle: "OK"
+            )
         } else {
             self.delegate?.addForm()
         }
@@ -512,20 +512,20 @@ import UIKit
         // if this is a legacy server and the event has forms, there needs to be 1
         if (MageServer.isServerVersion5) {
             if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation")
-                let messageAction = MDCSnackbarMessageAction()
-                messageAction.title = "OK"
-                message.action = messageAction
-                MDCSnackbarManager.default.show(message)
+                AlertManager.shared.showAlertWithTitle(
+                    form.name ?? "",
+                    message: "One form must be added to this observation",
+                    okTitle: "OK"
+                )
                 return false
             }
             // this case should have already been prevented, but just in case
             if (realFormCount > 1) {
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Only one form can be added to this observation")
-                let messageAction = MDCSnackbarMessageAction()
-                messageAction.title = "OK"
-                message.action = messageAction
-                MDCSnackbarManager.default.show(message)
+                AlertManager.shared.showAlertWithTitle(
+                    form.name ?? "",
+                    message: "Only one form can be added to this observation",
+                    okTitle: "OK"
+                )
                 return false
             }
         }
@@ -533,20 +533,21 @@ import UIKit
         
         if (realFormCount > (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // too many forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))")
-            let messageAction = MDCSnackbarMessageAction()
-            messageAction.title = "OK"
-            message.action = messageAction
-            MDCSnackbarManager.default.show(message)
+            if (realFormCount > 1) {
+                AlertManager.shared.showAlertWithTitle(
+                    form.name ?? "",
+                    message: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))",
+                    okTitle: "OK"
+                )
             return false
         }
         if (realFormCount < (event?.minObservationForms ?? NSNumber(value: 0)) as! Int) {
             // not enough forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)")
-            let messageAction = MDCSnackbarMessageAction()
-            messageAction.title = "OK"
-            message.action = messageAction
-            MDCSnackbarManager.default.show(message)
+            AlertManager.shared.showAlertWithTitle(
+                form.name ?? "",
+                message: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)",
+                okTitle: "OK"
+            )
             return false
         }
         
@@ -574,32 +575,33 @@ import UIKit
                 // ignore archived forms when checkng min
                 if (!eventForm.archived && formCount < eventFormMin) {
                     // not enough of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")")
-                    let messageAction = MDCSnackbarMessageAction()
-                    messageAction.title = "OK"
-                    message.action = messageAction
-                    MDCSnackbarManager.default.show(message)
+                    AlertManager.shared.showAlertWithTitle(
+                        form.name ?? "",
+                        message: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")",
+                        okTitle: "OK"
+                    )
                     return false
                 }
                 if (formCount > eventFormMax) {
                     // too many of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")")
-                    let messageAction = MDCSnackbarMessageAction()
-                    messageAction.title = "OK"
-                    message.action = messageAction
-                    MDCSnackbarManager.default.show(message)
+                    AlertManager.shared.showAlertWithTitle(
+                        form.name ?? "",
+                        message: "\(eventForm.name ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")",
+                        okTitle: "OK"
+                    )
                     return false
                 }
             }
         }
         
         if (!valid) {
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "The observation has validation errors.")
-            let messageAction = MDCSnackbarMessageAction()
-            messageAction.title = "OK"
-            message.action = messageAction
-            MDCSnackbarManager.default.show(message)
+            AlertManager.shared.showAlertWithTitle(
+                form.name ?? "",
+                message: "The observation has validation errors.",
+                okTitle: "OK"
+            )
         }
+            
         return valid
     }
     
@@ -722,29 +724,23 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         // delete the attachment
         attachmentRepository.markForDeletion(attachmentUri: attachmentUri)
         handler(true)
-        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted")
-        let messageAction = MDCSnackbarMessageAction()
-        messageAction.title = "UNDO"
+        
         let actionHandler = {() in
             self.attachmentRepository.undelete(attachmentUri: attachmentUri)
             handler(false)
         }
-        messageAction.handler = actionHandler
-        message.action = messageAction
-        MDCSnackbarManager.default.show(message)
+        
+        AlertManager.shared.showUndoAlert(message: "Attachment Deleted", undoHandler: actionHandler)
     }
     
     func attachmentFabTappedField(_ field: [AnyHashable : Any]!, completionHandler handler: ((Bool) -> Void)!) {
         handler(true)
-        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted")
-        let messageAction = MDCSnackbarMessageAction()
-        messageAction.title = "UNDO"
+
         let actionHandler = {() in
             handler(false)
         }
-        messageAction.handler = actionHandler
-        message.action = messageAction
-        MDCSnackbarManager.default.show(message)
+
+        AlertManager.shared.showUndoAlert(message: "Attachment Deleted", undoHandler: actionHandler)
     }
     
     func selectedAttachment(_ attachmentUri: URL!) {

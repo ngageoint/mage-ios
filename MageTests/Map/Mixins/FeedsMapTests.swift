@@ -18,7 +18,7 @@ import CoreLocation
 import MapKit
 
 class FeedsMapTestImpl : NSObject, FeedsMap {
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var mapView: MKMapView?
     
     var feedsMapMixin: FeedsMapMixin?

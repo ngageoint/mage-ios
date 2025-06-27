@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EventInformationController.h"
-#import <MaterialComponents/MDCContainerScheme.h>
+#import "AppContainerScheming.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<EventInformationDelegate> delegate;
 
-- (instancetype) initWithViewController: (UINavigationController *) viewController event:(Event *) event scheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithViewController: (UINavigationController *) viewController event:(Event *) event scheme: (id<AppContainerScheming>) containerScheme;
 - (void) start;
 - (void) startIpad;
 

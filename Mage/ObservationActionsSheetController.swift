@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MaterialComponents.MDCAppBar;
 
 class ObservationActionsSheetController: UITableViewController {
     static let DELETE_CELL_TAG: Int = 1
@@ -25,13 +24,14 @@ class ObservationActionsSheetController: UITableViewController {
         router.bottomSheetRoute = nil
     }
     
-    private lazy var cancelButton: MDCButton = {
-        let cancelButton = MDCButton(forAutoLayout: ());
-        cancelButton.accessibilityLabel = "Cancel";
-        cancelButton.setTitle("Cancel", for: .normal);
-        cancelButton.clipsToBounds = true;
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside);
-        return cancelButton;
+    private lazy var cancelButton: UIButton = {
+        let cancelButton = UIButton(forAutoLayout: ())
+        cancelButton.accessibilityLabel = "Cancel"
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.clipsToBounds = true
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
+        cancelButton.applySecondaryStyle(withScheme: scheme)
+        return cancelButton
     }()
     
     required init(coder aDecoder: NSCoder) {

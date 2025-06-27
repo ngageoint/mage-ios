@@ -20,7 +20,7 @@ import MapKit
 class BottomSheetEnabledTestImpl : NSObject, BottomSheetEnabled {
     var navigationController: UINavigationController?
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var bottomSheetMixin: BottomSheetMixin?
 }
 

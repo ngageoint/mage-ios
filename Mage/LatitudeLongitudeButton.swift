@@ -9,7 +9,6 @@
 import Foundation
 import CoreLocation
 
-// TODO: BRENT - MDC
 class LatitudeLongitudeButton : UIButton {
     var _coordinate: CLLocationCoordinate2D?
     
@@ -33,15 +32,12 @@ class LatitudeLongitudeButton : UIButton {
         guard let scheme = scheme else {
             return
             }
-//        super.applyTextTheme(withScheme: scheme)
         setTitleColor(scheme.colorScheme.primaryColorVariant?.withAlphaComponent(0.87), for: .normal)
-//        setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
     }
     
     override func willMove(toSuperview newSuperview: UIView?) {
         accessibilityLabel = "location";
         setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
-//        setInsets(forContentPadding: defaultContentEdgeInsets, imageTitlePadding: 5);
         addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
         accessibilityLabel = "location button"
         titleLabel?.adjustsFontSizeToFitWidth = true
@@ -51,6 +47,6 @@ class LatitudeLongitudeButton : UIButton {
     
     @objc func copyLocation() {
         UIPasteboard.general.string = currentTitle ?? "No Location";
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(currentTitle ?? "No Location") copied to clipboard"))
+        AlertManager.shared.show(title: "Location Copied", message: "Location \(location) copied to clipboard")
     }
 }

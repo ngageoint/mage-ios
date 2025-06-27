@@ -18,7 +18,7 @@ class UserViewWrapperViewController: SwiftUIViewController {
     var attachmentRepository: AttachmentRepository
     var attachmentViewCoordinator: AttachmentViewCoordinator?
     
-    var bottomSheet: MDCBottomSheetController?
+    var bottomSheet: BottomSheetViewController?
     var childCoordinators: [NSObject] = []
     
     var scheme: AppContainerScheming?

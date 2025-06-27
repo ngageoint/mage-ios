@@ -9,56 +9,56 @@
 import Foundation
 
 class AttachmentProgressViewController: UIViewController {
-    var scheme: MDCContainerScheming?;
+    var scheme: AppContainerScheming?
     
-    private lazy var activityIndicator: MDCActivityIndicator = {
-        let activityIndicator = MDCActivityIndicator()
-        activityIndicator.sizeToFit()
-        activityIndicator.indicatorMode = .indeterminate
-        return activityIndicator;
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
     
     private lazy var progressDescription: UILabel = {
-        let description = UILabel.newAutoLayout();
-        description.textAlignment = .center;
-        return description;
+        let description = UILabel.newAutoLayout()
+        description.textAlignment = .center
+        return description
     }()
     
-    public convenience init(scheme: MDCContainerScheming?) {
-        self.init(nibName: nil, bundle: nil);
-        self.scheme = scheme;
+    public convenience init(scheme: AppContainerScheming?) {
+        self.init(nibName: nil, bundle: nil)
+        self.scheme = scheme
     }
     
-    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    public func applyTheme(withContainerScheme containerScheme: AppContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
 
-        self.scheme = containerScheme;
+        self.scheme = containerScheme
         
-        self.view.backgroundColor = containerScheme.colorScheme.surfaceColor.withAlphaComponent(0.87);
-        self.progressDescription.textColor = containerScheme.colorScheme.onSurfaceColor;
-        self.progressDescription.font = containerScheme.typographyScheme.headline5;
+        self.view.backgroundColor = containerScheme.colorScheme.surfaceColor.withAlphaComponent(0.87)
+        self.progressDescription.textColor = containerScheme.colorScheme.onSurfaceColor
+        self.progressDescription.font = containerScheme.typographyScheme.headline5
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad();
+        super.viewDidLoad()
         
-        view.addSubview(activityIndicator);
-        view.addSubview(progressDescription);
+        view.addSubview(activityIndicator)
+        view.addSubview(progressDescription)
         
-        activityIndicator.autoCenterInSuperview();
-        progressDescription.autoPinEdge(toSuperviewEdge: .left);
-        progressDescription.autoPinEdge(toSuperviewEdge: .right);
-        progressDescription.autoPinEdge(.top, to: .bottom, of: activityIndicator, withOffset: 16);
+        activityIndicator.autoCenterInSuperview()
+        progressDescription.autoPinEdge(toSuperviewEdge: .left)
+        progressDescription.autoPinEdge(toSuperviewEdge: .right)
+        progressDescription.autoPinEdge(.top, to: .bottom, of: activityIndicator, withOffset: 16)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated);
-        activityIndicator.startAnimating();
+        super.viewDidAppear(animated)
+        activityIndicator.startAnimating()
     }
     
     func setProgressMessage(message: String) {
-        progressDescription.text = message;
+        progressDescription.text = message
     }
 }

@@ -21,7 +21,7 @@ class CanCreateObservationTestImpl : NSObject, CanCreateObservation {
     var navigationController: UINavigationController?
     
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
 
     var canCreateObservationMixin: CanCreateObservationMixin?
 }
@@ -141,7 +141,7 @@ class CanCreateObservationTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection")
         tester().tapView(withAccessibilityLabel: "CANCEL")
         
-        let geometryView = viewTester().usingLabel("geometry value").view as! MDCFilledTextField
+        let geometryView = viewTester().usingLabel("geometry value").view as! UITextField
         expect(geometryView.text).to(equal("40.0085, -105.2678 GPS ± 6.00m"))
         
         expect(self.mixin.editCoordinator).toNot(beNil())
@@ -166,7 +166,7 @@ class CanCreateObservationTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection")
         tester().tapView(withAccessibilityLabel: "CANCEL")
         
-        let geometryView = viewTester().usingLabel("geometry value").view as! MDCFilledTextField
+        let geometryView = viewTester().usingLabel("geometry value").view as! UITextField
         expect(geometryView.text).to(equal("15.0365, 25.0000 "))
         
         expect(self.mixin.editCoordinator).toNot(beNil())

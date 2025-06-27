@@ -8,12 +8,10 @@
 
 #import "SignUpViewController_Server5.h"
 
-@import MaterialComponents;
-
 @interface SignUpViewController_Server5 ()
 
 @property (weak, nonatomic) UIView *captchaContainer;
-@property (weak, nonatomic) IBOutlet MDCFilledTextField *captchaText;
+@property (weak, nonatomic) IBOutlet UITextField *captchaText;
 
 @end
 

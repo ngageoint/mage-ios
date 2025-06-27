@@ -21,7 +21,7 @@ class SingleObservationMapTestImpl : NSObject, FilteredObservationsMap {
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
 
     var singleObservationMapMixin: SingleObservationMapMixin?
 }

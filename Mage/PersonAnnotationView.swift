@@ -44,7 +44,7 @@ import Kingfisher
         }
     }
     
-    @objc public var scheme: MDCContainerScheming?
+    @objc public var scheme: AppContainerScheming?
     
     static func circleWithColor(color: UIColor) -> UIImage? {
         let diameter = 10.0

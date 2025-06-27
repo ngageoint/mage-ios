@@ -19,7 +19,7 @@ import MapKit
 
 class CanReportLocationTestImpl : NSObject, CanReportLocation {
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
     var navigationController: UINavigationController?
     var canReportLocationMixin: CanReportLocationMixin?
 }
@@ -137,9 +137,9 @@ class CanReportLocationTestsUserNotInEvent: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "report location")
-        let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
+        let button = viewTester().usingLabel("report location").view as! UIButton
         expect(button.currentImage).to(equal(UIImage(named:"location_tracking_off")))
-        expect(button.tintColor).to(equal(MAGEScheme.scheme().colorScheme.onSurfaceColor.withAlphaComponent(0.3)))
+        expect(button.tintColor).to(equal(MAGEScheme.scheme().colorScheme.onSurfaceColor?.withAlphaComponent(0.3)))
         
         tester().tapView(withAccessibilityLabel: "report location")
         tester().waitForView(withAccessibilityLabel: "You cannot report your location for an event you are not part of")
@@ -157,7 +157,7 @@ class CanReportLocationTestsUserNotInEvent: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "report location")
-        let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
+        let button = viewTester().usingLabel("report location").view as! UIButton
         expect(button.currentImage).to(equal(UIImage(named:"location_tracking_off")))
         
         tester().tapView(withAccessibilityLabel: "report location")
@@ -284,7 +284,7 @@ class CanReportLocationTestsUserInEvent: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "report location")
-        expect(self.buttonStack.arrangedSubviews[0]).to(beAKindOf(MDCFloatingButton.self))
+        expect(self.buttonStack.arrangedSubviews[0]).to(beAKindOf(UIButton.self))
         
         mixin.cleanupMixin()
     }
@@ -296,7 +296,7 @@ class CanReportLocationTestsUserInEvent: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "report location")
-        expect(self.buttonStack.arrangedSubviews[1]).to(beAKindOf(MDCFloatingButton.self))
+        expect(self.buttonStack.arrangedSubviews[1]).to(beAKindOf(UIButton.self))
         
         mixin.cleanupMixin()
     }
@@ -310,7 +310,7 @@ class CanReportLocationTestsUserInEvent: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
         tester().waitForView(withAccessibilityLabel: "report location")
-        let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
+        let button = viewTester().usingLabel("report location").view as! UIButton
         expect(button.currentImage).to(equal(UIImage(named:"location_tracking_on")))
         
         tester().tapView(withAccessibilityLabel: "report location")
@@ -335,7 +335,7 @@ class CanReportLocationTestsUserInEvent: AsyncMageCoreDataTestCase {
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
         
         tester().waitForView(withAccessibilityLabel: "report location")
-        let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
+        let button = viewTester().usingLabel("report location").view as! UIButton
         expect(button.currentImage).to(equal(UIImage(named:"location_tracking_off")))
         
         tester().tapView(withAccessibilityLabel: "report location")

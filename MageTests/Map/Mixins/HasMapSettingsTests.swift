@@ -21,7 +21,7 @@ class HasMapSettingsTestImpl : NSObject, HasMapSettings {
     var navigationController: UINavigationController?
     
     var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var scheme: AppContainerScheming?
 
     var hasMapSettingsMixin: HasMapSettingsMixin?
 }

@@ -26,19 +26,22 @@ class HasMapSearchMixin: NSObject, MapMixin {
     var rootView: UIStackView
     var indexInView: Int = 0
     var scheme: AppContainerScheming?
-    var bottomSheet: MDCBottomSheetController?;
+    var bottomSheet: BottomSheetViewController?;
     var navigationController: UINavigationController?
     var annotation: MKPointAnnotation?
     var searchController: SearchSheetController
 
-    private lazy var mapSearchButton: MDCFloatingButton = {
-        let mapSearchButton = MDCFloatingButton(shape: .mini)
-        mapSearchButton.setImage(UIImage(systemName:"magnifyingglass"), for: .normal)
-        mapSearchButton.addTarget(self, action: #selector(mapSearchButtonTapped(_:)), for: .touchUpInside)
-        mapSearchButton.accessibilityLabel = "map_search"
-        return mapSearchButton
+    private lazy var mapSearchButton: UIButton = { FloatingButtonFactory.floatingButtonWithImageName("magnifyingglass",
+                                                                                                     scheme: self.scheme,
+                                                                                                     useErrorColor: false,
+                                                                                                     size: 40,
+                                                                                                     cornerRadius: 20,
+                                                                                                     target: self,
+                                                                                                     action: #selector(mapSearchButtonTapped),
+                                                                                                     tag: 10,
+                                                                                                     accessabilityLabel: "map_search")
     }()
-    
+
     init(hasMapSearch: HasMapSearch, rootView: UIStackView, indexInView: Int = 0, navigationController: UINavigationController?, scheme: AppContainerScheming?) {
         self.hasMapSearch = hasMapSearch
         self.rootView = rootView

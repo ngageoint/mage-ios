@@ -8,13 +8,12 @@
 
 import Foundation
 import PureLayout
-//import MaterialComponents.MDCPalettes
 
 class FeedItemActionsView: UIView {
     var didSetupConstraints = false
     var feedItem: FeedItem?
     var actionsDelegate: FeedItemActionsDelegate?
-    var bottomSheet: UIViewController? // MDCBottomSheetController?
+    var bottomSheet: BottomSheetViewController?
     var scheme: AppContainerScheming?
     
     private lazy var actionButtonView: UIStackView = {

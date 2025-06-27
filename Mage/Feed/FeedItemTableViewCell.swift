@@ -9,7 +9,6 @@
 import Foundation
 import PureLayout
 import Kingfisher
-//import MaterialComponents.MDCCard;
 
 class FeedItemTableViewCell : UITableViewCell {
     private var constructed = false;
@@ -18,7 +17,7 @@ class FeedItemTableViewCell : UITableViewCell {
     private var actionsDelegate: FeedItemActionsDelegate?;
     private var scheme: AppContainerScheming?;
 
-    // TODO: BRENT - get rid of MDCCard
+    // TODO: BRENT - Fix UI
     private lazy var card: UIView = {
         let card = UIView(forAutoLayout: ());
 //        card.enableRippleBehavior = true

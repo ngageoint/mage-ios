@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MaterialComponents/MaterialContainerScheme.h>
+#import "AppContainerScheming.h"
 
 @interface TransitionViewController : UIViewController
 
-- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (void) applyThemeWithContainerScheme:(id<AppContainerScheming>)containerScheme;
 
 @end
