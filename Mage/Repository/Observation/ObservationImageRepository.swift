@@ -48,8 +48,11 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         return documentsDirectory as String
     }()
     
+    private var imageNameCache: [ImageNameCacheKey: String?] = [:]
+    
     func clearCache() {
         imageCache.removeAllObjects()
+        imageNameCache.removeAll()
     }
     
     // This is used as the key to a dictionary of imageNames
@@ -60,7 +63,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         let secondaryFieldText: String?
     }
     
-    private static let cacheQueue = DispatchQueue(label: "imageNameCacheQueue")
+    private let cacheQueue = DispatchQueue(label: "imageNameCacheQueue")
     /**
      # Returning an image location/name and storing it for later
      - `rootIconFolder` = "\(documentsDirectory)/events/icons-\(eventId)/icons"
@@ -71,7 +74,6 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
      - We end up with a fullpath to some icon, if we find one
      - So the point of this cache and queue is to safely store them once to keep the lookup as close to O(N) as possible
      */
-    private static var imageNameCache: [ImageNameCacheKey: String?] = [:]
     
     func imageName(
         eventId: Int64?,
@@ -91,8 +93,8 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         )
         
         // Read from cache
-        if let cachedResult = ObservationImageRepositoryImpl.cacheQueue.sync(execute: {
-            ObservationImageRepositoryImpl.imageNameCache[cacheKey]
+        if let cachedResult = cacheQueue.sync(execute: {
+            imageNameCache[cacheKey]
         }) {
             return cachedResult
         }
@@ -129,8 +131,8 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
                             if filename.hasPrefix("icon") {
                                 let fullpath = "\(directoryToSearch)\(path)"
                                 // Write to cache
-                                ObservationImageRepositoryImpl.cacheQueue.sync {
-                                    ObservationImageRepositoryImpl.imageNameCache[cacheKey] = fullpath
+                                cacheQueue.sync {
+                                    imageNameCache[cacheKey] = fullpath
                                 }
                                 return fullpath
                             }
