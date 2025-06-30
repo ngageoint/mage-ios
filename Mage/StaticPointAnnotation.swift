@@ -46,7 +46,7 @@ class StaticPointAnnotation: DataSourceAnnotation {
             guard let timestamp = (feature["properties"] as? [AnyHashable : Any])?["timestamp"] as? String else {
                 return nil
             }
-            let lastModifiedDate = ISO8601DateFormatter.gmtZeroDate(from: timestamp) ?? Date();
+            let lastModifiedDate = Date.ISO8601FormatStyle.gmtZeroDate(from: timestamp) ?? Date();
             return lastModifiedDate
         }()
         

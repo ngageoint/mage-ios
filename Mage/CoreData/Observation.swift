@@ -313,7 +313,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
         
         if let timestamp = self.timestamp {
-            observationJson[ObservationKey.timestamp.key] = ISO8601DateFormatter.gmtZeroString(from: timestamp)
+            observationJson[ObservationKey.timestamp.key] = Date.ISO8601FormatStyle.gmtZeroString(from: timestamp)
         }
         
         var jsonProperties : [AnyHashable : Any] = self.properties ?? [:]
@@ -419,7 +419,7 @@ enum ObservationState: Int, CustomStringConvertible {
         observation.timestamp = observationDate;
         
         var properties: [AnyHashable : Any] = [:];
-        properties[ObservationKey.timestamp.key] = ISO8601DateFormatter.gmtZeroString(from: observationDate);
+        properties[ObservationKey.timestamp.key] = Date.ISO8601FormatStyle.gmtZeroString(from: observationDate);
         if let geometry = geometry, let provider = provider {
             properties[ObservationKey.provider.key] = provider;
             if (provider != "manual") {
@@ -473,7 +473,7 @@ enum ObservationState: Int, CustomStringConvertible {
             } else if !existingObservation.isDirty {
                 // if the observation is not dirty, and has been updated, update it
                 if let lastModified = feature[ObservationKey.lastModified.key] as? String {
-                    let lastModifiedDate = ISO8601DateFormatter.gmtZeroDate(from: lastModified) ?? Date();
+                    let lastModifiedDate = Date.ISO8601FormatStyle.gmtZeroDate(from: lastModified) ?? Date();
                     if lastModifiedDate == existingObservation.lastModified {
                         // If the last modified date for this observation has not changed no need to update.
                         return ObservationChangeRegions(observation: newObservation, regionsChanged: regions)
@@ -696,11 +696,11 @@ enum ObservationState: Int, CustomStringConvertible {
         }
         
         if let lastModified = json[ObservationKey.lastModified.key] as? String {
-            self.lastModified = ISO8601DateFormatter.gmtZeroDate(from: lastModified);
+            self.lastModified = Date.ISO8601FormatStyle.gmtZeroDate(from: lastModified);
         }
         
         if let timestamp = self.properties?[ObservationKey.timestamp.key] as? String {
-            self.timestamp = ISO8601DateFormatter.gmtZeroDate(from: timestamp);
+            self.timestamp = Date.ISO8601FormatStyle.gmtZeroDate(from: timestamp);
         }
         
         self.url = json[ObservationKey.url.key] as? String
@@ -1033,7 +1033,7 @@ enum ObservationState: Int, CustomStringConvertible {
             }
         } else if type == FieldType.date.key {
             if let value = value as? String {
-                let date = ISO8601DateFormatter.gmtZeroDate(from: value);
+                let date = Date.ISO8601FormatStyle.gmtZeroDate(from: value);
                 return (date as NSDate?)?.formattedDisplay() ?? "";
             }
         } else if type == FieldType.checkbox.key {

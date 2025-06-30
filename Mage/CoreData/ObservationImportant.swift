@@ -25,7 +25,7 @@ import CoreData
         self.reason = json[ObservationImportantKey.description.key] as? String;
         
         if let timestamp = json[ObservationImportantKey.timestamp.key] as? String {
-            self.timestamp = ISO8601DateFormatter.gmtZeroDate(from: timestamp);
+            self.timestamp = Date.ISO8601FormatStyle.gmtZeroDate(from: timestamp);
         }
     }
 }
