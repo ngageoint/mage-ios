@@ -42,7 +42,6 @@ protocol ObservationLocationLocalDataSource {
         minLongitude: Double?,
         maxLongitude: Double?
     ) async -> [ObservationMapItem]
-    func locationsPublisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never>
     func observeObservationLocation(
         observationLocationUri: URL?
     ) -> AnyPublisher<ObservationMapItem, Never>?
@@ -278,20 +277,5 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
                 return ObservationMapItem(observation: location)
             } ?? []
         }
-    }
-
-    func locationsPublisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {
-        guard let context = context else { return AnyPublisher(Just([].difference(from: [])).setFailureType(to: Never.self)) }
-        var itemChanges: AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {
-            let fetchRequest: NSFetchRequest<ObservationLocation> = ObservationLocation.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "eventId", ascending: false)]
-            return context.changesPublisher(for: fetchRequest, transformer: { location in
-                ObservationMapItem(observation: location)
-            })
-            .catch { _ in Empty() }
-            .eraseToAnyPublisher()
-        }
-
-        return itemChanges
     }
 }
