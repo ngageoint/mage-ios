@@ -35,19 +35,19 @@ class AttachmentFieldView : BaseFieldView {
     }();
     
     lazy var attachmentCollectionView: UICollectionView = {
-        let layout: SplitLayout = SplitLayout();
-        layout.itemSpacing = 5;
-        layout.rowSpacing = 5;
-        
-        var cv: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout);
-        cv.configureForAutoLayout();
-        cv.register(AttachmentCell.self, forCellWithReuseIdentifier: "AttachmentCell");
-        cv.delegate = attachmentCollectionDataStore;
-        cv.dataSource = attachmentCollectionDataStore;
-        cv.accessibilityLabel = "Attachment Collection";
-        cv.accessibilityIdentifier = "Attachment Collection";
-        attachmentCollectionDataStore.attachmentCollection = cv;
-        return cv;
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout();
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.sectionInset = .zero
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.configureForAutoLayout()
+        collectionView.backgroundColor = .yellow
+        collectionView.register(AttachmentCell.self, forCellWithReuseIdentifier: "AttachmentCell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+        collectionView.dataSource = attachmentCollectionDataStore;
+        attachmentCollectionDataStore.attachmentCollection = collectionView;
+        return collectionView
     }();
     
     lazy var attachmentHolderView: UIView = {
@@ -166,7 +166,7 @@ class AttachmentFieldView : BaseFieldView {
         guard let scheme = scheme else {
             return
         }
-
+        
         super.applyTheme(withScheme: scheme);
         audioButton.applyTextTheme(withScheme: scheme);
         audioButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
@@ -364,7 +364,6 @@ class AttachmentFieldView : BaseFieldView {
             }
         }
         setAttachmentHolderHeight();
-
         super.updateConstraints();
     }
     
@@ -381,7 +380,7 @@ class AttachmentFieldView : BaseFieldView {
         }
         return error
     }
-
+    
     override func setValid(_ valid: Bool) {
         errorLabel.text = getErrorMessage()
         if let scheme = scheme {
@@ -487,5 +486,27 @@ extension AttachmentFieldView : AttachmentSelectionDelegate {
             });
             handler(deleted);
         })
+    }
+}
+
+extension AttachmentFieldView: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return CGSize(width: 100, height: 100)
+        }
+        
+        let isPortrait = collectionView.bounds.height > collectionView.bounds.width
+        let itemsPerRow: CGFloat = isPortrait ? 3 : 5
+        
+        let totalSpacing = layout.sectionInset.left
+                        + layout.sectionInset.right
+                        + (itemsPerRow - 1) * layout.minimumInteritemSpacing
+        
+        let width = (collectionView.bounds.width - totalSpacing) / itemsPerRow
+        
+        return CGSize(width: width, height: width)
     }
 }
