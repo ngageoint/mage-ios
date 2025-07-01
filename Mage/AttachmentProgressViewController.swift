@@ -36,9 +36,9 @@ class AttachmentProgressViewController: UIViewController {
 
         self.scheme = containerScheme
         
-        self.view.backgroundColor = containerScheme.colorScheme.surfaceColor.withAlphaComponent(0.87)
+        self.view.backgroundColor = containerScheme.colorScheme.surfaceColor?.withAlphaComponent(0.87)
         self.progressDescription.textColor = containerScheme.colorScheme.onSurfaceColor
-        self.progressDescription.font = containerScheme.typographyScheme.headline5
+        self.progressDescription.font = containerScheme.typographyScheme.headline5Font
     }
     
     override func viewDidLoad() {

@@ -24,6 +24,7 @@ class MageRootViewController : UITabBarController {
     private var feedViewControllers: [UINavigationController] = []
     
     @objc(initWithContainerScheme:)
+    
     init(containerScheme: AppContainerScheming?) {
         super.init(nibName: nil, bundle: nil)
         self.scheme = containerScheme
@@ -33,9 +34,9 @@ class MageRootViewController : UITabBarController {
         fatalError("init(coder:) not implemented")
     }
     
-    @objc convenience init(containerScheme: Any?) {
-        self.init(containerScheme: containerScheme as? AppContainerScheming)
-    }
+//    @objc convenience init(containerScheme: Any?) {
+//        self.init(containerScheme: containerScheme as? AppContainerScheming)
+//    }
     
     var scheme: AppContainerScheming?
     private var attachmentViewCoordinator: AttachmentViewCoordinator?

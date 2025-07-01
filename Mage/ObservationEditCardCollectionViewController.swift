@@ -81,7 +81,7 @@ import UIKit
         let faButton = FloatingButtonFactory.floatingButtonWithImageName("doc.text.fill", scheme: self.scheme, target: self, action: #selector(addForm(sender:)), tag: 99, accessibilityLabel: "Add Form")
         faButton.setTitle("Add Form", for: .normal)
         return faButton
-    }
+    }()
    
     
     private func addStackViewConstraints() {
@@ -455,7 +455,7 @@ import UIKit
         if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
             AlertManager.shared.showAlertWithTitle(
-                form.name ?? "",
+                "OK",
                 message: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))",
                 okTitle: "OK"
             )
@@ -513,7 +513,7 @@ import UIKit
         if (MageServer.isServerVersion5) {
             if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
                 AlertManager.shared.showAlertWithTitle(
-                    form.name ?? "",
+                    "OK",
                     message: "One form must be added to this observation",
                     okTitle: "OK"
                 )
@@ -522,7 +522,7 @@ import UIKit
             // this case should have already been prevented, but just in case
             if (realFormCount > 1) {
                 AlertManager.shared.showAlertWithTitle(
-                    form.name ?? "",
+                    "OK",
                     message: "Only one form can be added to this observation",
                     okTitle: "OK"
                 )
@@ -535,71 +535,72 @@ import UIKit
             // too many forms
             if (realFormCount > 1) {
                 AlertManager.shared.showAlertWithTitle(
-                    form.name ?? "",
+                    "OK",
                     message: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))",
                     okTitle: "OK"
                 )
-            return false
-        }
-        if (realFormCount < (event?.minObservationForms ?? NSNumber(value: 0)) as! Int) {
-            // not enough forms
-            AlertManager.shared.showAlertWithTitle(
-                form.name ?? "",
-                message: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)",
-                okTitle: "OK"
-            )
-            return false
-        }
-        
-        // check each form for min max
-        var formIdCount: [Int : Int] = [ : ]
-        if let observation = self.observation, let properties = observation.properties {
-            if (properties.keys.contains(ObservationKey.forms.key)) {
-                if let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as? [[String: Any]] {
-                    let formsToBeDeleted = observation.formsToBeDeleted
-                    for (index, form) in observationForms.enumerated() {
-                        if (!formsToBeDeleted.contains(index)) {
-                            let formId = form[EventKey.formId.key] as! Int
-                            formIdCount[formId] = (formIdCount[formId] ?? 0) + 1
+                return false
+            }
+            if (realFormCount < (event?.minObservationForms ?? NSNumber(value: 0)) as! Int) {
+                // not enough forms
+                AlertManager.shared.showAlertWithTitle(
+                    "OK",
+                    message: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)",
+                    okTitle: "OK"
+                )
+                return false
+            }
+            
+            // check each form for min max
+            var formIdCount: [Int : Int] = [ : ]
+            if let observation = self.observation, let properties = observation.properties {
+                if (properties.keys.contains(ObservationKey.forms.key)) {
+                    if let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as? [[String: Any]] {
+                        let formsToBeDeleted = observation.formsToBeDeleted
+                        for (index, form) in observationForms.enumerated() {
+                            if (!formsToBeDeleted.contains(index)) {
+                                let formId = form[EventKey.formId.key] as! Int
+                                formIdCount[formId] = (formIdCount[formId] ?? 0) + 1
+                            }
                         }
                     }
                 }
             }
-        }
-        
-        if let eventForms = eventForms {
-            for eventForm in eventForms {
-                let eventFormMin: Int = eventForm.min ?? 0
-                let eventFormMax: Int = eventForm.max ?? Int.max
-                let formCount = formIdCount[eventForm.formId?.intValue ?? Int.min] ?? 0
-                // ignore archived forms when checkng min
-                if (!eventForm.archived && formCount < eventFormMin) {
-                    // not enough of this form
-                    AlertManager.shared.showAlertWithTitle(
-                        form.name ?? "",
-                        message: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")",
-                        okTitle: "OK"
-                    )
-                    return false
-                }
-                if (formCount > eventFormMax) {
-                    // too many of this form
-                    AlertManager.shared.showAlertWithTitle(
-                        form.name ?? "",
-                        message: "\(eventForm.name ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")",
-                        okTitle: "OK"
-                    )
-                    return false
+            
+            if let eventForms = eventForms {
+                for eventForm in eventForms {
+                    let eventFormMin: Int = eventForm.min ?? 0
+                    let eventFormMax: Int = eventForm.max ?? Int.max
+                    let formCount = formIdCount[eventForm.formId?.intValue ?? Int.min] ?? 0
+                    // ignore archived forms when checkng min
+                    if (!eventForm.archived && formCount < eventFormMin) {
+                        // not enough of this form
+                        AlertManager.shared.showAlertWithTitle(
+                            "OK",
+                            message: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")",
+                            okTitle: "OK"
+                        )
+                        return false
+                    }
+                    if (formCount > eventFormMax) {
+                        // too many of this form
+                        AlertManager.shared.showAlertWithTitle(
+                            "OK",
+                            message: "\(eventForm.name ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")",
+                            okTitle: "OK"
+                        )
+                        return false
+                    }
                 }
             }
-        }
-        
-        if (!valid) {
-            AlertManager.shared.showAlertWithTitle(
-                form.name ?? "",
-                message: "The observation has validation errors.",
-                okTitle: "OK"
-            )
+            
+            if (!valid) {
+                AlertManager.shared.showAlertWithTitle(
+                    "OK",
+                    message: "The observation has validation errors.",
+                    okTitle: "OK"
+                )
+            }
         }
             
         return valid
@@ -678,7 +679,9 @@ import UIKit
         addFormViews(stackView: stackView)
     }
 }
-
+    
+    
+    
 extension ObservationEditCardCollectionViewController: ObservationFormListener {
     func formUpdated(_ form: [String : Any], form index: Int) {
         observationForms[index] = form

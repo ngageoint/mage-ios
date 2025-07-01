@@ -14,110 +14,54 @@ import MAGEStyle
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
     
-    @EnvironmentObject
-    var router: MageRouter
+    @EnvironmentObject var router: MageRouter
     
     var body: some View {
         Group {
             switch viewModel.state {
             case .loading:
-                VStack(alignment: .center, spacing: 16) {
-                    HStack(alignment: .center, spacing: 0) {
-                        Spacer()
-                        Image("marker_large")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: 200)
-                            .padding([.trailing, .leading], 24)
-                            .foregroundColor(Color.onSurfaceColor.opacity(0.45))
-                        Spacer()
-                    }
-                    Text("Loading Observations")
-                        .font(.headline4)
-                        .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .multilineTextAlignment(.center)
-                    ProgressView()
-                        .tint(Color.primaryColorVariant)
-                }
-                .padding(24)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.backgroundColor)
-                .transition(AnyTransition.opacity)
-            case let .loaded(rows: rows):
-                ScrollViewReader { proxy in
-                    List(rows) { uriItem in
-                        switch uriItem {
-                        case .listItem(let uri):
-                            ObservationSummaryViewSwiftUI(
-                                viewModel: ObservationListViewModel(uri: uri)
-                            )
-                            .onAppear {
-                                if rows.first == uriItem {
-                                    viewModel.setFirstRowVisible(visible: true)
-                                }
-                                if rows.last == uriItem {
-                                    viewModel.loadMore()
-                                }
-                            }
-                            .onDisappear {
-                                if rows.first == uriItem {
-                                    viewModel.setFirstRowVisible(visible: false)
-                                }
-                            }
-                            .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.backgroundColor)
-                        case .sectionHeader(_):
-                            EmptyView()
-                        }
-                        
-                    }
-                    .listStyle(.plain)
-                    .listSectionSeparator(.hidden)
-                    .emptyPlaceholder(rows) {
-                        VStack(alignment: .center, spacing: 16) {
-                            HStack(alignment: .center, spacing: 0) {
-                                Spacer()
-                                Image("outline_not_listed_location")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 200, maxHeight: 200)
-                                    .padding([.trailing, .leading], 24)
-                                    .foregroundColor(Color.onSurfaceColor.opacity(0.45))
-                                Spacer()
-                            }
-                            Text("No Observations")
-                                .font(.headline4)
-                                .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
-                                .fixedSize(horizontal: false, vertical: true)
-                                .multilineTextAlignment(.center)
-                            Text("No observations have been submitted within your configured time filter for this event.")
-                                .font(.body1)
-                                .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
-                                .fixedSize(horizontal: false, vertical: true)
-                                .multilineTextAlignment(.center)
-                                .padding(.bottom, 8)
-                            Button {
-                                router.appendRoute(MageRoute.observationFilter)
-                            } label: {
-                                Label {
-                                    Text("Adjust Filter")
-                                } icon: {
-                                    
-                                }
-                                .padding([.leading, .trailing], 16)
-                                
-                            }
-                        }
-                        .padding(64)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.surfaceColor)
-                    }
-                }
-                    .transition(AnyTransition.opacity)
+                loadingView
                 
-            case let .failure(error: error):
+            case .loaded(let rows):
+                ScrollViewReader { proxy in
+                    Group {
+                        if rows.isEmpty {
+                            emptyPlaceholderContent()
+                        } else {
+                            List(rows) { uriItem in
+                                switch uriItem {
+                                case .listItem(let uri):
+                                    ObservationSummaryViewSwiftUI(
+                                        viewModel: ObservationListViewModel(uri: uri)
+                                    )
+                                    .onAppear {
+                                        if rows.first == uriItem {
+                                            viewModel.setFirstRowVisible(visible: true)
+                                        }
+                                        if rows.last == uriItem {
+                                            viewModel.loadMore()
+                                        }
+                                    }
+                                    .onDisappear {
+                                        if rows.first == uriItem {
+                                            viewModel.setFirstRowVisible(visible: false)
+                                        }
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                    .listRowSeparator(.hidden)
+                                    .listRowBackground(Color.backgroundColor)
+                                case .sectionHeader:
+                                    EmptyView()
+                                }
+                            }
+                            .listStyle(.plain)
+                            .listSectionSeparator(.hidden)
+                        }
+                    }
+                }
+                .transition(.opacity)
+                
+            case .failure(let error):
                 Text(error.localizedDescription)
             }
         }
@@ -133,7 +77,6 @@ struct ObservationList: View {
                             .resizable()
                             .scaledToFit()
                     }
-                    
                 }
                 .fixedSize()
                 .padding(.trailing, 16)
@@ -148,4 +91,71 @@ struct ObservationList: View {
             viewModel.fetchObservations()
         }
     }
+    
+    @ViewBuilder
+    private var loadingView: some View {
+        VStack(alignment: .center, spacing: 16) {
+            HStack(alignment: .center) {
+                Spacer()
+                Image("marker_large")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 200)
+                    .padding([.trailing, .leading], 24)
+                    .foregroundColor(Color.onSurfaceColor.opacity(0.45))
+                Spacer()
+            }
+            Text("Loading Observations...")
+                .font(.headline4)
+                .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
+            ProgressView()
+                .tint(Color.primaryColorVariant)
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.backgroundColor)
+        .transition(.opacity)
+    }
+    
+    @ViewBuilder
+    private func emptyPlaceholderContent() -> some View {
+        VStack(alignment: .center, spacing: 16) {
+            HStack {
+                Spacer()
+                Image("outline_not_listed_location")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 200, maxHeight: 200)
+                    .padding([.trailing, .leading], 24)
+                    .foregroundColor(Color.onSurfaceColor.opacity(0.45))
+                Spacer()
+            }
+            
+            Text("No Observations")
+                .font(.headline4)
+                .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
+            
+            Text("No observations have been submitted within your configured time filter for this event.")
+                .font(.body1)
+                .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
+                .padding(.bottom, 8)
+            
+            Button {
+                router.appendRoute(MageRoute.observationFilter)
+            } label: {
+                Label("Adjust Filter", systemImage: "slider.horizontal.3")
+                    .padding(.horizontal, 16)
+            }
+        }
+        .padding(64)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.surfaceColor)
+    }
+    
 }

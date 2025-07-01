@@ -61,9 +61,8 @@ class ObservationImportantView: UIView {
     
     func applyTheme(withScheme scheme: AppContainerScheming?) {
         reasonLabel.textColor = UIColor.black.withAlphaComponent(0.87)
-        reasonLabel.font = scheme?.typographyScheme.body2
+        reasonLabel.font = scheme?.typographyScheme.bodyFont
         flaggedByLabel.textColor = UIColor.black.withAlphaComponent(0.6)
-        flaggedByLabel.font = scheme?.typographyScheme.overline
         flagImage.tintColor = UIColor.black.withAlphaComponent(0.87)
     }
     

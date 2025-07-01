@@ -53,7 +53,7 @@ class ObservationsViewModel: ObservableObject {
         case loaded(rows: [URIItem])
         case failure(error: Error)
         
-        fileprivate var rows: [URIItem] {
+        var rows: [URIItem] {
             if case let .loaded(rows: rows) = self {
                 return rows
             } else {

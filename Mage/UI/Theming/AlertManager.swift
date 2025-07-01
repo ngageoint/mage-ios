@@ -16,21 +16,21 @@ import UIKit
     private override init() {}
 
     /// Shows a basic snackbar-style alert (no title)
-    @objc public func show(message: String, duration: TimeInterval = 2.0, in viewController: UIViewController? = nil) {
-        show(title: nil, message: message, duration: duration, in: viewController)
-    }
+//    @objc public func show(message: String, duration: TimeInterval = 2.0, in viewController: UIViewController? = nil) {
+//        show(title: nil, message: message, duration: duration, in: viewController)
+//    }
     
     /// Shows a snackbar-style alert with title
-    @objc public func show(title: String?, message: String, duration: TimeInterval = 2.0, in viewController: UIViewController? = nil) {
-        guard let presentingVC = viewController ?? Self.topViewController() else { return }
-
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        presentingVC.present(alert, animated: true)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            alert.dismiss(animated: true)
-        }
-    }
+//    @objc public func show(title: String?, message: String, duration: TimeInterval = 2.0, in viewController: UIViewController? = nil) {
+//        guard let presentingVC = viewController ?? Self.topViewController() else { return }
+//
+//        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//        presentingVC.present(alert, animated: true)
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+//            alert.dismiss(animated: true)
+//        }
+//    }
     
     /// Shows an alert with any number of custom actions
     @objc public func showAlert(
@@ -118,6 +118,6 @@ import UIKit
         alert.addAction(UIAlertAction(title: "UNDO", style: .default) { _ in undoHandler() })
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
 
-        topViewController()?.present(alert, animated: true)
+        AlertManager.topViewController()?.present(alert, animated: true)
     }
 }

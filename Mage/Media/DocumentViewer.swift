@@ -83,12 +83,12 @@ class DocumentViewer : UIViewController {
         
         self.scheme = scheme
         view.backgroundColor = scheme.colorScheme.surfaceColor
-        imageView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
-        notAvailable.font = scheme.typographyScheme.headline5
-        notAvailable.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
-        notAvailableDescription.font = scheme.typographyScheme.subtitle2
-        notAvailableDescription.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
-        openInButton.applyOutlinedTheme(withScheme: scheme)
+        imageView.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.4)
+        notAvailable.font = scheme.typographyScheme.headline5Font
+        notAvailable.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.4)
+        notAvailableDescription.font = scheme.typographyScheme.subtitle2Font
+        notAvailableDescription.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.4)
+        openInButton.applyTheme(type: .primary, colorScheme: scheme.colorScheme, typographyScheme: scheme.typographyScheme)
     }
     
     override func viewDidLoad() {

@@ -65,10 +65,14 @@ class FieldSelectionCoordinator {
         editSelect?.navigationController?.popViewController(animated: true)
         editSelect = nil
     }
+    
+    @objc func fieldTapped(_ field: [String: Any]) {
+        // Default implementation does nothing.
+    }
+
 }
 
 extension FieldSelectionCoordinator: PropertyEditDelegate {
-    
     
     func setValue(_ value: Any!, forFieldDefinition fieldDefinition: [AnyHashable : Any]!) {
         self.currentEditValue = value
@@ -106,8 +110,8 @@ extension FieldSelectionCoordinator: GeometryEditDelegate {
 }
 
 
-extension FieldSelectionDelegate {
-    func fieldTapped(_ field: [String: Any]) {
-        // Default implementation does nothing.
-    }
-}
+//extension FieldSelectionDelegate {
+//    func fieldTapped(_ field: [String: Any]) {
+//        // Default implementation does nothing.
+//    }
+//}

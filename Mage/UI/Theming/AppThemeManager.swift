@@ -95,12 +95,12 @@ import UIKit
     // MARK: - TextField Theming
     @objc public static func applyPrimaryThemeToTextField(_ textField: UITextField, with scheme: AppContainerScheming?) {
         guard let scheme else { return }
-        textField.applyPrimaryTheme(withScheme: scheme)
+        textField.applyTheme(type: .primary, scheme: scheme)
     }
     
     @objc public static func applyDisabledThemeToTextField(_ textField: UITextField, with scheme: AppContainerScheming?) {
         guard let scheme else { return }
-        textField.applyDisabledTheme(withScheme: scheme)
+        textField.applyTheme(type: .disabled, scheme: scheme)
     }
 
 }

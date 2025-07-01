@@ -48,7 +48,7 @@ import Foundation
         textField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingChanged)
 
         // Optional: Apply theming if available
-        textField.applyPrimaryTheme(withScheme: scheme)
+        textField.applyTheme(type: .primary, scheme: scheme)
 
         return textField
     }()
@@ -105,7 +105,7 @@ import Foundation
         cancelButton.applyPrimaryTheme(withScheme: containerScheme)
 
         // Apply text field theming (assuming UITextField+Theming.swift exists)
-        textField.applyPrimaryTheme(withScheme: containerScheme)
+        textField.applyTheme(type: .primary, scheme: containerScheme)
     }
 
     override func viewDidLoad() {

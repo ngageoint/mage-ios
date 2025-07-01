@@ -35,110 +35,96 @@ struct LocationList: View {
     
     @EnvironmentObject
     var router: MageRouter
-        
+    
     var body: some View {
-        Group {
-            switch viewModel.state {
-            case .loading:
-                VStack(alignment: .center, spacing: 16) {
-                    HStack(alignment: .center, spacing: 0) {
-                        Spacer()
-                        Image("marker_large")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: 200)
-                            .padding([.trailing, .leading], 24)
-                            .foregroundColor(Color.onSurfaceColor.opacity(0.45))
-                        Spacer()
-                    }
-                    Text("Loading Users")
-                        .font(.headline4)
-                        .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .multilineTextAlignment(.center)
-                    ProgressView()
-                        .tint(Color.primaryColorVariant)
+        switch viewModel.state {
+        case .loading:
+            VStack(alignment: .center, spacing: 16) {
+                HStack(alignment: .center, spacing: 0) {
+                    Spacer()
+                    Image("marker_large")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: 200)
+                        .padding([.trailing, .leading], 24)
+                        .foregroundColor(Color.onSurfaceColor.opacity(0.45))
+                    Spacer()
                 }
-                .padding(24)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.backgroundColor)
-                .transition(AnyTransition.opacity)
-            case let .loaded(rows: rows):
-                List(rows) { item in
+                Text("Loading Users")
+                    .font(.headline4)
+                    .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.center)
+                ProgressView()
+                    .tint(Color.primaryColorVariant)
+            }
+            .padding(24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.backgroundColor)
+            .transition(AnyTransition.opacity)
+        case let .loaded(rows: rows):
+            EmptyStateList(
+                data: rows,
+                rowContent: { item in
                     switch item {
                     case .listItem(let uri):
-                        LocationSummaryView(viewModel: LocationSummaryViewModel(uri: uri))
-                            .frame(maxWidth: .infinity)
-                            .background(Color.surfaceColor)
-                            .card()
-                            .onAppear {
-                                if rows.last == item {
-                                    viewModel.loadMore()
-                                }
+                        ObservationSummaryViewSwiftUI(
+                            viewModel: ObservationListViewModel(uri: uri)
+                        )
+                        .onAppear {
+                            if rows.last == item {
+                                viewModel.loadMore()
                             }
+                        }
                         .onTapGesture {
-                            router.appendRoute(UserRoute.userFromLocation(locationUri: uri))
+                            router.appendRoute(ObservationRoute.detail(uri: uri))
                         }
                         .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.backgroundColor)
-                    case .sectionHeader(_):
+                        
+                    case .sectionHeader:
                         EmptyView()
                     }
-                    
-                }
-                .listStyle(.plain)
-                .listSectionSeparator(.hidden)
-                .emptyPlaceholder(rows) {
+                },
+                placeholder: {
                     VStack(alignment: .center, spacing: 16) {
-                        HStack(alignment: .center, spacing: 0) {
+                        HStack {
                             Spacer()
-                            Image(systemName: "figure.wave")
+                            Image("outline_not_listed_location")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(maxWidth: 200, maxHeight: 200)
-                                .padding([.trailing, .leading], 24)
+                                .padding(.horizontal, 24)
                                 .foregroundColor(Color.onSurfaceColor.opacity(0.45))
                             Spacer()
                         }
-                        Text("No Locations")
+                        Text("No Observations")
                             .font(.headline4)
                             .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
-                            .fixedSize(horizontal: false, vertical: true)
                             .multilineTextAlignment(.center)
-                        Text("No users have reported their location within your configured time filter for this event.")
+                        Text("This user has not submitted any observations for this event.")
                             .font(.body1)
                             .foregroundStyle(Color.onSurfaceColor.opacity(0.6))
-                            .fixedSize(horizontal: false, vertical: true)
                             .multilineTextAlignment(.center)
                             .padding(.bottom, 8)
-                        Button {
-                            router.appendRoute(MageRoute.locationFilter)
-                        } label: {
-                            Label {
-                                Text("Adjust Filter")
-                            } icon: {
-                                
-                            }
-                            .padding([.leading, .trailing], 16)
-
-                        }
                     }
                     .padding(64)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.surfaceColor)
+                    .background(Color.backgroundColor)
                 }
-                .transition(AnyTransition.opacity)
-            case let .failure(error: error):
-                Text(error.localizedDescription)
-            }
+            )
+            .transition(.opacity)
+        case let .failure(error: error):
+            Text(error.localizedDescription)
         }
-        .navigationTitle(DataSources.user.fullName)
-        .navigationBarTitleDisplayMode(.inline)
-        .background(Color.backgroundColor)
-        .foregroundColor(Color.onSurfaceColor)
-        .onAppear {
-            viewModel.fetchLocations()
-        }
+        
+//            .navigationTitle(DataSources.user.fullName)
+//            .navigationBarTitleDisplayMode(.inline)
+//            .background(Color.backgroundColor)
+//            .foregroundColor(Color.onSurfaceColor)
+//            .onAppear {
+//                viewModel.fetchLocations()
+//            }
     }
 }

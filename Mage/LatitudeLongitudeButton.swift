@@ -47,6 +47,6 @@ class LatitudeLongitudeButton : UIButton {
     
     @objc func copyLocation() {
         UIPasteboard.general.string = currentTitle ?? "No Location";
-        AlertManager.shared.show(title: "Location Copied", message: "Location \(location) copied to clipboard")
+        AlertManager.shared.show(title: "Location Copied", message: "Location \(currentTitle ?? "") copied to clipboard")
     }
 }

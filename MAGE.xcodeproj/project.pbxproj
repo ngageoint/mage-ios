@@ -103,6 +103,10 @@
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
 		84082F302E0C7892003F128D /* UITabBar+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */; };
 		84082F332E0C92F7003F128D /* UITextField+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84082F322E0C92F7003F128D /* UITextField+Factory.m */; };
+		841D02632E12E7E1006EBAE6 /* EmptyStateList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */; };
+		841D02652E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */; };
+		841D02692E144093006EBAE6 /* View+EmptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */; };
+		841D026B2E1441C9006EBAE6 /* ObservationListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
@@ -1125,6 +1129,10 @@
 		84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Theming.swift"; sourceTree = "<group>"; };
 		84082F312E0C92B4003F128D /* UITextField+Factory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+Factory.h"; sourceTree = "<group>"; };
 		84082F322E0C92F7003F128D /* UITextField+Factory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Factory.m"; sourceTree = "<group>"; };
+		841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateList.swift; sourceTree = "<group>"; };
+		841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitActivityIndicatorProgress.swift; sourceTree = "<group>"; };
+		841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+EmptyPlaceholder.swift"; sourceTree = "<group>"; };
+		841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListRow.swift; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -2912,6 +2920,7 @@
 		F734C1E62BC8474B00B2E8C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */,
 				84E713D12DF0ADDE00F52781 /* Theming */,
 				F78876942C6BE2A000E30300 /* Attachment */,
 				F73564F72C655C0000466813 /* Location */,
@@ -2925,6 +2934,7 @@
 				F734C1E72BC8475800B2E8C8 /* Action */,
 				F776AC882BC98939000FAFB4 /* MageHostingController.swift */,
 				F7049F722BD2CE4D004C68A9 /* ValueAnimator.swift */,
+				841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -2964,6 +2974,7 @@
 				F73564DD2C62BB7E00466813 /* ObservationList.swift */,
 				F73564DF2C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift */,
 				F73564E82C651D3300466813 /* ObservationListNavStack.swift */,
+				841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -3505,6 +3516,7 @@
 				F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */,
 				F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */,
 				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
+				841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */,
 				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
 				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
 				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
@@ -4932,6 +4944,7 @@
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,
+				841D02692E144093006EBAE6 /* View+EmptyPlaceholder.swift in Sources */,
 				84E713DF2DF0C75B00F52781 /* AppThemeManager.swift in Sources */,
 				F7225F4A2C5944F700B7D935 /* ImportantButton.swift in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
@@ -5039,6 +5052,7 @@
 				F7BFB8E52C504A4A00901479 /* StaticLayerFeatureSummary.swift in Sources */,
 				F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */,
 				F7EBAEBA2760F7EE00650F4F /* FilteredObservationsMap.swift in Sources */,
+				841D026B2E1441C9006EBAE6 /* ObservationListRow.swift in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
@@ -5229,6 +5243,7 @@
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
 				F763FF102C77CAF300403A00 /* ObservationSyncStatus.swift in Sources */,
 				F752B5F42760DD7600BFA6EC /* MageMapView.swift in Sources */,
+				841D02652E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */,
 				F734C1E52BC845BE00B2E8C8 /* CoordinateDisplayType.swift in Sources */,
@@ -5287,6 +5302,7 @@
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7225F5E2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
+				841D02632E12E7E1006EBAE6 /* EmptyStateList.swift in Sources */,
 				84E713F92DF7279700F52781 /* UITextField+Theming.swift in Sources */,
 				84E713FD2DF7472400F52781 /* ThemingConstants.swift in Sources */,
 				F7C0978F2C812502003FA115 /* ObservationLocationBottomSheetViewModel.swift in Sources */,

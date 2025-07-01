@@ -37,10 +37,10 @@ class UIImageCollectionViewCell: UICollectionViewCell {
         imageView.image = image
         titleLabel.text = title
         if let scheme = scheme {
-            titleLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            let smallFont = scheme.typographyScheme.body1.withSize(scheme.typographyScheme.body1.pointSize * 0.8)
+            titleLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+            let smallFont = scheme.typographyScheme.bodyFont.withSize(scheme.typographyScheme.bodyFont.pointSize * 0.8)
             titleLabel.font = smallFont
-            imageView.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.13)
+            imageView.backgroundColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.13)
         }
     }
 }

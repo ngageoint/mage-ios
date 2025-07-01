@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc extension UITextField {
+extension UITextField {
     enum TextFieldThemeType {
         case primary
         case disabled
@@ -95,13 +95,29 @@ import UIKit
             layer.borderWidth = 1.0
             layer.cornerRadius = 8.0
     }
-    
-    
-    @objc public func applyPrimaryTheme(withScheme scheme: AppContainerScheming?) {
-        self.applyTheme(type: .primary, colorScheme: scheme?.colorScheme, typographScheme: scheme?.typographyScheme)
+}
+
+@objc extension UITextField {
+    /// Expose primary theme to Objective-C
+    @objc func applyPrimaryThemeWithScheme(_ scheme: AppDefaultContainerScheme) {
+        self.applyTheme(
+            type: .primary,
+            scheme: scheme
+        )
     }
 
-    @objc public func applyDisabledTheme(withScheme scheme: AppContainerScheming?) {
-        self.applyTheme(type: .disabled, colorScheme: scheme?.colorScheme, typographScheme: scheme?.typographyScheme)
+    @objc func applyDisabledThemeWithScheme(_ scheme: AppDefaultContainerScheme) {
+        self.applyTheme(
+            type: .disabled,
+            scheme: scheme
+        )
+    }
+
+    @objc func applyErrorThemeWithScheme(_ scheme: AppDefaultContainerScheme) {
+        self.applyTheme(
+            type: .error,
+            scheme: scheme
+        )
     }
 }
+

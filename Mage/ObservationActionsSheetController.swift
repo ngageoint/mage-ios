@@ -30,7 +30,7 @@ class ObservationActionsSheetController: UITableViewController {
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.clipsToBounds = true
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
-        cancelButton.applySecondaryStyle(withScheme: scheme)
+        cancelButton.applySecondaryTheme(withScheme: scheme)
         return cancelButton
     }()
     
