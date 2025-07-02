@@ -53,16 +53,15 @@ class DateView : BaseFieldView {
         return toolbar
     }()
     
-    // TODO: BRENT - FIX STYLING
-    lazy var textField: UITextField = {
-        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+    lazy var textField: ThemedTextField = {
+        let textField = ThemedTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
         textField.delegate = self
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? ""
         textField.inputView = datePicker
         textField.inputAccessoryView = dateAccessoryView
-//        textField.leadingAssistiveLabel.text = " "
-//        textField.trailingView = UIImageView(image: UIImage(named: "today"))
-//        textField.trailingViewMode = .always
+        textField.leadingAssistiveLabel.text = " "
+        textField.rightView = UIImageView(image: UIImage(named: "today"))
+        textField.rightViewMode = .always
         textField.sizeToFit()
         return textField
     }()
@@ -73,7 +72,7 @@ class DateView : BaseFieldView {
         }
 
         textField.applyTheme(type: .primary, scheme: scheme)
-//        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+        textField.rightView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -105,11 +104,11 @@ class DateView : BaseFieldView {
         if (self.value != nil) {
             textField.text = (datePicker.date as NSDate).formattedDisplay()
             textField.clearButtonMode = .always
-//            textField.trailingViewMode = .never
+            textField.rightViewMode = .never
         } else {
             textField.text = nil
             textField.clearButtonMode = .never
-//            textField.trailingViewMode = .always
+            textField.rightViewMode = .always
         }
     }
     
@@ -117,7 +116,7 @@ class DateView : BaseFieldView {
         date = datePicker.date
         textField.text = (datePicker.date as NSDate).formattedDisplay()
         textField.clearButtonMode = .always
-//        textField.trailingViewMode = .never
+        textField.rightViewMode = .never
     }
     
     @objc func doneButtonPressed() {
@@ -153,10 +152,10 @@ class DateView : BaseFieldView {
                 datePicker.date = date
                 editMode ? (textField.text = (datePicker.date as NSDate).formattedDisplay()) : (fieldValue.text = (datePicker.date as NSDate).formattedDisplay())
                 textField.clearButtonMode = .always
-//                textField.trailingViewMode = .never
+                textField.rightViewMode = .never
             } else{
                 textField.clearButtonMode = .never
-//                textField.trailingViewMode = .always
+                textField.rightViewMode = .always
             }
         }
     }
@@ -168,7 +167,7 @@ class DateView : BaseFieldView {
     override func setValid(_ valid: Bool) {
         super.setValid(valid)
         if (valid) {
-//            textField.leadingAssistiveLabel.text = " "
+            textField.leadingAssistiveLabel.text = " "
             if let scheme = scheme {
                 textField.applyTheme(type: .primary, scheme: scheme)
             }

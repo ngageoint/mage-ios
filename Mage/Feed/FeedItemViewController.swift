@@ -42,7 +42,6 @@ private final class IntrinsicTableView: UITableView {
     var properties: [String: Any]?
     let propertiesHeader: CardHeader = CardHeader(headerText: "PROPERTIES")
     
-    // TODO: BRENT - Fix UI
     private lazy var propertiesCard: UIView = {
         let card = UIView()
         card.addSubview(tableView)
@@ -196,6 +195,7 @@ extension FeedItemViewController: FeedItemActionsDelegate {
                     case .success(let value):
                         image = value.image.aspectResize(to: CGSize(width: size, height: size))
                     case .failure(_):
+                        // TODO: BRENT - make these colors correct
                         image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: NamedColorTheme().colorScheme.primaryColor ?? UIColor.magenta)
                     }
                 }

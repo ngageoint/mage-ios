@@ -204,8 +204,6 @@ class ButtonFooterView: UICollectionReusableView {
         }
         
         
-        // TODO: BRENT - FIX COLORS
-        
         var backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
         backgroundConfiguration.backgroundColor = backgroundColor
         cell.contentConfiguration = configuration

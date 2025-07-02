@@ -174,6 +174,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
                         case .success(let value):
                             image = value.image.aspectResize(to: CGSize(width: size, height: size));
                         case .failure(_):
+                            // TODO: BRENT - MAKE THESE COLORS CORRECT
                             image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
                         }
                     }
@@ -186,6 +187,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
            let featureItem = FeatureItem.fromKey(jsonString: key)
         {
             title = featureItem.featureTitle ?? "Feature"
+            // TODO: BRENT - MAKE THESE COLORS CORRECT
             image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
             if let url: URL = featureItem.iconURL {
                 let size = 24;
@@ -202,6 +204,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
                     case .success(let value):
                         image = value.image.aspectResize(to: CGSize(width: size, height: size));
                     case .failure(_):
+                        // TODO: BRENT - MAKE THESE COLORS CORRECT
                         image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor ?? UIColor.magenta);
                     }
                 }

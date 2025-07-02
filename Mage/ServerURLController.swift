@@ -27,16 +27,16 @@ class ServerURLController: UIViewController {
         return progressView
     }()
     
-    private lazy var serverURL: UITextField = {
-        let serverURL = UITextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
+    private lazy var serverURL: ThemedTextField = {
+        let serverURL = ThemedTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         serverURL.autocapitalizationType = .none;
         serverURL.accessibilityLabel = "MAGE Server URL";
         serverURL.text = "MAGE Server URL"
         serverURL.placeholder = "MAGE Server URL"
         
         let worldImage = UIImageView(image: UIImage(systemName: "globe.americas.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate))
-//        serverURL.leadingView = worldImage
-//        serverURL.leadingViewMode = .always
+        serverURL.leftView = worldImage
+        serverURL.leftViewMode = .always
         serverURL.autocorrectionType = .no
         serverURL.autocapitalizationType = .none
         serverURL.keyboardType = .URL
@@ -158,14 +158,15 @@ class ServerURLController: UIViewController {
         self.scheme = scheme
         self.view.backgroundColor = scheme.colorScheme.backgroundColor
         self.setServerUrlTitle.textColor = scheme.colorScheme.primaryColorVariant
-//        self.setServerUrlTitle.font = scheme.typographyScheme.headline6
+        self.setServerUrlTitle.font = scheme.typographyScheme.headline6Font
         self.wandLabel.textColor = scheme.colorScheme.primaryColorVariant
         self.mageLabel.textColor = scheme.colorScheme.primaryColorVariant
         errorStatus.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
-//        okButton.applyContainedTheme(withScheme: scheme)
-//        cancelButton.applyContainedTheme(withScheme: scheme)
-//        serverURL.applyTheme(withScheme: scheme)
-//        serverURL.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        
+        okButton.applyPrimaryTheme(withScheme: scheme)
+        cancelButton.applyPrimaryTheme(withScheme: scheme)
+        serverURL.applyPrimaryThemeWithScheme(scheme)
+        serverURL.leftView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         errorImage.tintColor = scheme.colorScheme.errorColor
         errorInfoLink.textColor = scheme.colorScheme.primaryColorVariant
         errorInfoLink.font = UIFont.systemFont(ofSize: 12)
@@ -196,7 +197,7 @@ class ServerURLController: UIViewController {
             cancelButton.isHidden = true
             serverURL.text = url?.absoluteString
         } else if let scheme = scheme {
-//            serverURL.applyTheme(withScheme: scheme)
+            serverURL.applyPrimaryThemeWithScheme(scheme)
         }
         
         if let url = url {
@@ -212,14 +213,12 @@ class ServerURLController: UIViewController {
         errorInfoLink.isHidden = false
         errorImage.isHidden = false
         progressView.isHidden = true
-//        progressView.stopAnimating()
         errorStatus.text = "This URL does not appear to be a MAGE server."
         additionalErrorInfo = userInfo
         
-        // TODO: BRENT
-//        if let scheme = scheme {
-//            serverURL.applyErrorTheme(withScheme: scheme)
-//        }
+        if let scheme = scheme {
+            serverURL.applyErrorThemeWithScheme(scheme)
+        }
     }
 
     public override func updateViewConstraints() {
@@ -297,12 +296,11 @@ class ServerURLController: UIViewController {
             errorInfoLink.isHidden = true
             errorImage.isHidden = true
             progressView.isHidden = false
-//            progressView.startAnimating()
             delegate?.setServerURL(url: url)
             
-//            if let scheme = scheme {
-//                serverURL.applyTheme(withScheme: scheme)
-//            }
+            if let scheme = scheme {
+                serverURL.applyPrimaryThemeWithScheme(scheme)
+            }
         } else {
             showError(error: "Invalid URL")
         }

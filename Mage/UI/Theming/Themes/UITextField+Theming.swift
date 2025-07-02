@@ -99,21 +99,21 @@ extension UITextField {
 
 @objc extension UITextField {
     /// Expose primary theme to Objective-C
-    @objc func applyPrimaryThemeWithScheme(_ scheme: AppDefaultContainerScheme) {
+    @objc func applyPrimaryThemeWithScheme(_ scheme: AppContainerScheming) {
         self.applyTheme(
             type: .primary,
             scheme: scheme
         )
     }
 
-    @objc func applyDisabledThemeWithScheme(_ scheme: AppDefaultContainerScheme) {
+    @objc func applyDisabledThemeWithScheme(_ scheme: AppContainerScheming) {
         self.applyTheme(
             type: .disabled,
             scheme: scheme
         )
     }
 
-    @objc func applyErrorThemeWithScheme(_ scheme: AppDefaultContainerScheme) {
+    @objc func applyErrorThemeWithScheme(_ scheme: AppContainerScheming) {
         self.applyTheme(
             type: .error,
             scheme: scheme

@@ -17,11 +17,9 @@ class FeedItemTableViewCell : UITableViewCell {
     private var actionsDelegate: FeedItemActionsDelegate?;
     private var scheme: AppContainerScheming?;
 
-    // TODO: BRENT - Fix UI
     private lazy var card: UIView = {
         let card = UIView(forAutoLayout: ());
-//        card.enableRippleBehavior = true
-//        card.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
+        card.target(forAction: #selector(tap(_:)), withSender: self)
         return card;
     }()
     

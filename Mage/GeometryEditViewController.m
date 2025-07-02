@@ -720,8 +720,6 @@ static NSString *garsTitle = @"GARS";
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 1) {
         self.mgrsField.text = [GridSystems mgrs:coordinate];
-        // TODO: BRENT - Verify not needed
-//        [self applyThemeTextField:self.mgrsField];
     }
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 2) {
@@ -731,8 +729,6 @@ static NSString *garsTitle = @"GARS";
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 3) {
         self.garsField.text = [GridSystems gars:coordinate];
-        // TODO: BRENT - Verify not needed
-//        [self applyThemeTextField:self.garsField];
     }
 }
 
@@ -832,7 +828,6 @@ static NSString *garsTitle = @"GARS";
     
     if (themeField != nil) {
         if (self.validLocation || themeField.text.length == 0) {
-            // TODO: BRENT - Verify not needed
 //            [self applyThemeTextField:themeField];
         } else {
             [self applyErrorThemeTextField:themeField];

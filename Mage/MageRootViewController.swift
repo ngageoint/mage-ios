@@ -34,16 +34,14 @@ class MageRootViewController : UITabBarController {
         fatalError("init(coder:) not implemented")
     }
     
-//    @objc convenience init(containerScheme: Any?) {
-//        self.init(containerScheme: containerScheme as? AppContainerScheming)
-//    }
-    
     var scheme: AppContainerScheming?
     private var attachmentViewCoordinator: AttachmentViewCoordinator?
     
-    // TODO: BRENT - Remove FORCED unwrap
     private lazy var settingsNav: UINavigationController = {
-        let vc = SettingsTableViewController(scheme: scheme, context: context)!
+        guard let vc = SettingsTableViewController(scheme: scheme, context: context) else {
+            assertionFailure("Failed to initialize SettingsTableViewController")
+            return UINavigationController()
+        }
         let nav = UINavigationController(rootViewController: vc)
         
         nav.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape.fill"), tag: 4)

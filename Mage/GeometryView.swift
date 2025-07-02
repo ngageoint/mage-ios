@@ -18,23 +18,12 @@ class GeometryView : BaseFieldView {
     var mapItemCount: Int = 1
     var currentMapItem: Int = 1
 
-//    lazy var textField: MDCFilledTextField = {
-//        // this is just an estimated size
-//        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
-//        textField.label.text = fieldNameLabel.text
-//        textField.trailingView = UIImageView(image: UIImage(named: "outline_place"))
-//        textField.trailingViewMode = .always
-//        textField.sizeToFit()
-//        return textField
-//    }()
-
-    // TODO: BRENT - FIX STULING
-    lazy var textField: UITextField = {
+    lazy var textField: ThemedTextField = {
         // this is just an estimated size
-        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
+        let textField = ThemedTextField(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
         textField.text = fieldNameLabel.text
-//        textField.trailingView = UIImageView(image: UIImage(named: "outline_place"))
-//        textField.trailingViewMode = .always
+        textField.rightView = UIImageView(image: UIImage(named: "outline_place"))
+        textField.rightViewMode = .always
         textField.sizeToFit()
         return textField
     }()
@@ -59,12 +48,12 @@ class GeometryView : BaseFieldView {
             return
         }
 
-//        super.applyTheme(withScheme: scheme)
+        super.applyTheme(withScheme: scheme)
         accuracyLabel.textColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         accuracyLabel.font = scheme.typographyScheme.captionFont
         latitudeLongitudeButton.applyTheme(withScheme: scheme)
         textField.applyTheme(type: .primary, scheme: scheme)
-//        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
+        textField.rightView?.tintColor = scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6)
         mapView.applyTheme(scheme: scheme)
     }
     
@@ -216,13 +205,13 @@ class GeometryView : BaseFieldView {
     override func setValid(_ valid: Bool) {
         if let scheme = scheme {
             if (valid) {
-//                textField.applyTheme(withScheme: scheme)
-//                textField.leadingAssistiveLabel.text = nil
+                textField.applyPrimaryThemeWithScheme(scheme)
+                textField.leadingAssistiveLabel.text = nil
                 textField.sizeToFit()
                 applyTheme(withScheme: scheme)
             } else {
-//                textField.applyErrorTheme(withScheme: globalErrorContainerScheme())
-//                textField.leadingAssistiveLabel.text = "\(field[FieldKey.title.key] as? String ?? "") is required"
+                textField.applyErrorThemeWithScheme(globalContainerScheme())
+                textField.leadingAssistiveLabel.text = "\(field[FieldKey.title.key] as? String ?? "") is required"
                 textField.sizeToFit()
                 latitudeLongitudeButton.applyTheme(withScheme: globalErrorContainerScheme())
                 fieldNameLabel.textColor = scheme.colorScheme.errorColor

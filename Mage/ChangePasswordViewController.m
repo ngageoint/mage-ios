@@ -90,40 +90,40 @@
     
     UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     meImage.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-//    self.usernameField.leftView = meImage;
-//    self.usernameField.leftViewMode = UITextFieldViewModeAlways;
-//    self.usernameField.accessibilityLabel = @"Username";
-//    self.usernameField.placeholder = @"Username";
-//    self.usernameField.text = @"Username";
-//    [self.usernameField setLeadingAssistiveText:@"Minimum 8 characters"];
+    self.usernameField.leftView = meImage;
+    self.usernameField.leftViewMode = UITextFieldViewModeAlways;
+    self.usernameField.accessibilityLabel = @"Username";
+    self.usernameField.placeholder = @"Username";
+    self.usernameField.text = @"Username";
+    [self.usernameField setLeadingAssistiveText:@"Minimum 8 characters"];
     self.usernameField.leadingAssistiveLabel.text = @" ";
     [self.usernameField sizeToFit];
     
     UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-//    [self.passwordField setLeadingView:keyImage];
-//    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.passwordField.leftView = keyImage;
+    self.passwordField.leftViewMode = UITextFieldViewModeAlways;
     self.passwordField.accessibilityLabel = @"New Password";
     self.passwordField.placeholder = @"New Password";
     self.passwordField.text = @"New Password";
-//    self.passwordField.leadingAssistiveLabel.text = @" ";
+    self.passwordField.leadingAssistiveLabel.text = @" ";
     [self.passwordField sizeToFit];
     
     UIImageView *keyImage2 = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-//    [self.confirmPasswordField setLeadingView:keyImage2];
-//    self.confirmPasswordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.confirmPasswordField.leftView = keyImage2;
+    self.confirmPasswordField.leftViewMode = UITextFieldViewModeAlways;
     self.confirmPasswordField.accessibilityLabel = @"Confirm New Password";
     self.confirmPasswordField.placeholder = @"Confirm New Password";
     self.confirmPasswordField.text = @"Confirm New Password";
-//    self.confirmPasswordField.leadingAssistiveLabel.text = @" ";
+    self.confirmPasswordField.leadingAssistiveLabel.text = @" ";
     [self.confirmPasswordField sizeToFit];
     
     UIImageView *keyImage3 = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-//    [self.currentPasswordField setLeadingView:keyImage3];
-//    self.currentPasswordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.currentPasswordField.leftView = keyImage3;
+    self.currentPasswordField.leftViewMode = UITextFieldViewModeAlways;
     self.currentPasswordField.accessibilityLabel = @"Current Password";
     self.currentPasswordField.placeholder = @"Current Password";
     self.currentPasswordField.text = @"Current Password";
-//    self.currentPasswordField.leadingAssistiveLabel.text = @" ";
+    self.currentPasswordField.leadingAssistiveLabel.text = @" ";
     [self.currentPasswordField sizeToFit];
     
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
@@ -205,7 +205,7 @@
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithUrl: url
     success:^(MageServer *mageServer) {
-//        weakSelf.usernameField.enabled = !weakSelf.loggedIn;
+        weakSelf.usernameField.enabled = !weakSelf.loggedIn;
         User *user = [User fetchCurrentUserWithContext:self.context];
         weakSelf.usernameField.text = user.username;
         weakSelf.changePasswordView.hidden = NO;
@@ -217,10 +217,9 @@
             weakSelf.passwordField.placeholder = @"New Password";
             weakSelf.confirmPasswordField.placeholder = @"Confirm New Password";
 
-// TODO: BRENT - NEED TO ADD THIS SOMEHOW
             if ([server.parameters valueForKey:@"passwordMinLength"] != nil) {
-//                weakSelf.passwordField.leadingAssistiveLabel.text = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
-//                weakSelf.confirmPasswordField.leadingAssistiveLabel.text = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
+                weakSelf.passwordField.leadingAssistiveLabel.text = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
+                weakSelf.confirmPasswordField.leadingAssistiveLabel.text = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
             }
         }
     } failure:^(NSError *error) {
@@ -268,48 +267,47 @@
 }
 
 - (void) clearErrors {
-//    self.usernameField.leadingAssistiveLabel.text = @" ";
-//    self.currentPasswordField.leadingAssistiveLabel.text = @" ";
-//    self.passwordField.leadingAssistiveLabel.text = @" ";
-//    self.confirmPasswordField.leadingAssistiveLabel.text = @" ";
+    self.usernameField.leadingAssistiveLabel.text = @" ";
+    self.currentPasswordField.leadingAssistiveLabel.text = @" ";
+    self.passwordField.leadingAssistiveLabel.text = @" ";
+    self.confirmPasswordField.leadingAssistiveLabel.text = @" ";
     
-//    [self.usernameField applyThemeWithScheme:self.scheme];
-//    [self.currentPasswordField applyThemeWithScheme:self.scheme];
-//    [self.passwordField applyThemeWithScheme:self.scheme];
-//    [self.confirmPasswordField applyThemeWithScheme:self.scheme];
+    [self.usernameField applyPrimaryThemeWithScheme:self.scheme];
+    [self.currentPasswordField applyPrimaryThemeWithScheme:self.scheme];
+    [self.passwordField applyPrimaryThemeWithScheme:self.scheme];
+    [self.confirmPasswordField applyPrimaryThemeWithScheme:self.scheme];
 }
 
-// TODO: BRENT - NEED TO ADD THIESESOMEHOW
 - (IBAction)changeButtonTapped:(id)sender {
     [self clearErrors];
     NSMutableArray *requiredFields = [[NSMutableArray alloc] init];
     if ([self.usernameField.text length] == 0) {
-//        self.usernameField.leadingAssistiveLabel.text = @"Required";
-//        [self.usernameField applyErrorThemeWithScheme:self.scheme];
+        self.usernameField.leadingAssistiveLabel.text = @"Required";
+        [self.usernameField applyErrorThemeWithScheme:self.scheme];
         [requiredFields addObject:@"Username"];
     }
     if ([self.currentPasswordField.text length] == 0) {
-//        self.currentPasswordField.leadingAssistiveLabel.text = @"Required";
-//        [self.currentPasswordField applyErrorThemeWithScheme:self.scheme];
+        self.currentPasswordField.leadingAssistiveLabel.text = @"Required";
+        [self.currentPasswordField applyErrorThemeWithScheme:self.scheme];
         [requiredFields addObject:@"Current Password"];
     }
     if ([self.passwordField.text length] == 0) {
-//        self.passwordField.leadingAssistiveLabel.text = @"Required";
-//        [self.passwordField applyErrorThemeWithScheme:self.scheme];
+        self.passwordField.leadingAssistiveLabel.text = @"Required";
+        [self.passwordField applyErrorThemeWithScheme:self.scheme];
         [requiredFields addObject:@"New Password"];
     }
     if ([self.confirmPasswordField.text length] == 0) {
-//        self.confirmPasswordField.leadingAssistiveLabel.text = @"Required";
-//        [self.confirmPasswordField applyErrorThemeWithScheme:self.scheme];
+        self.confirmPasswordField.leadingAssistiveLabel.text = @"Required";
+        [self.confirmPasswordField applyErrorThemeWithScheme:self.scheme];
         [requiredFields addObject:@"Confirm New Password"];
     }
     if ([requiredFields count] != 0) {
         [self showDialogForRequiredFields:requiredFields];
     } else if (![self.passwordField.text isEqualToString:self.confirmPasswordField.text]) {
-//        self.passwordField.leadingAssistiveLabel.text = @"Passwords Do Not Match";
-//        self.confirmPasswordField.leadingAssistiveLabel.text = @"Passwords Do Not Match";
-//        [self.passwordField applyErrorThemeWithScheme:self.scheme];
-//        [self.confirmPasswordField applyErrorThemeWithScheme:self.scheme];
+        self.passwordField.leadingAssistiveLabel.text = @"Passwords Do Not Match";
+        self.confirmPasswordField.leadingAssistiveLabel.text = @"Passwords Do Not Match";
+        [self.passwordField applyErrorThemeWithScheme:self.scheme];
+        [self.confirmPasswordField applyErrorThemeWithScheme:self.scheme];
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
@@ -318,8 +316,8 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }  else if ([self.passwordField.text isEqualToString:self.currentPasswordField.text]) {
-//        self.passwordField.leadingAssistiveLabel.text = @"Password cannot be the same as the current password";
-//        [self.passwordField applyErrorThemeWithScheme:self.scheme];
+        self.passwordField.leadingAssistiveLabel.text = @"Password cannot be the same as the current password";
+        [self.passwordField applyErrorThemeWithScheme:self.scheme];
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Password cannot be the same as the current password"
                                      message:@"Please choose a new password."
@@ -331,7 +329,6 @@
         // delegate signup
         
         // All fields validated
-        
         NSDictionary *parameters = @{
                                      @"username": [self.usernameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
                                      @"password": [self.currentPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],

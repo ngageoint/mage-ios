@@ -6,7 +6,6 @@
 
 #import "AttachmentCollectionDataStore.h"
 #import "MAGE-Swift.h"
-// TODO: BRENT
 
 @interface AttachmentCollectionDataStore ()
 @property (strong, nonatomic) NSString *imageName;

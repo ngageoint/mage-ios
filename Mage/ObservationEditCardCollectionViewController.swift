@@ -76,7 +76,6 @@ import UIKit
         return formsHeader
     }()
     
-    // TODO: BRENT - FIX STYLING
     private lazy var addFormFAB: UIButton = {
         let faButton = FloatingButtonFactory.floatingButtonWithImageName("doc.text.fill", scheme: self.scheme, target: self, action: #selector(addForm(sender:)), tag: 99, accessibilityLabel: "Add Form")
         faButton.setTitle("Add Form", for: .normal)
@@ -352,7 +351,6 @@ import UIKit
         button.accessibilityLabel = "Delete Form"
         button.accessibilityIdentifier = "Delete Form"
         button.setTitle("Delete Form", for: .normal)
-//        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5)
         button.addTarget(self, action: #selector(deleteForm(sender:)), for: .allTouchEvents)
         button.tag = index
 
@@ -369,7 +367,6 @@ import UIKit
         button.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16)
         button.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
         button.autoPinEdge(.top, to: .bottom, of: divider, withOffset: 16)
-//        button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
         var tintColor: UIColor? = nil
         if let color = eventForm?.color {
