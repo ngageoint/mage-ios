@@ -40,6 +40,7 @@ class FetchEventsUseCase {
             }
             let formTask = Form.operationToPullFormIcons(eventId: remoteId) {
                 NSLog("Pulled form for event")
+                // TODO: add clearCache for formModelCache
                 self.imageRepository.clearCache()
                 NotificationCenter.default.post(name: .MAGEFormFetched, object: e)
             } failure: { error in

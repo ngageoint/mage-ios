@@ -43,8 +43,6 @@
             form = ObservationShapeStyleParser.formRepository.getForm(formId: formId)
         }
         
-//        let form = observation.primaryEventForm
-        
         // Check for a style
         var styleField = form?.style
         if styleField != nil, (styleField?.count ?? 0) > 0 {

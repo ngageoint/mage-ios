@@ -9,6 +9,8 @@ import SSZipArchive
 import CoreData
 
 @objc public class Form: NSManagedObject {
+    static var formCache: [NSNumber:Form] = [:]
+    
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
     

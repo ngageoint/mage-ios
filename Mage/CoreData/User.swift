@@ -12,6 +12,8 @@ import Kingfisher
 
 @objc public class User: NSManagedObject, Navigable {
     
+    static var userCache: [String: User] = [:]
+    
     var cllocation: CLLocation? {
         get {
             return location?.location
@@ -64,7 +66,7 @@ import Kingfisher
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
         return context.performAndWait {
             MageLogger.misc.debug("XXX current user \(String(describing: UserDefaults.standard.currentUserId))")
-            return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: UserDefaults.standard.currentUserId ?? "")
+            return User.userCache[UserDefaults.standard.currentUserId ?? ""] ?? context.fetchFirst(User.self, key: UserKey.remoteId.key, value: UserDefaults.standard.currentUserId ?? "")
         }
     }
     

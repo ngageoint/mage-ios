@@ -698,8 +698,6 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
     }
     
     func timestampUpdated(_ date: Date?) {
-        let formatter = ISO8601DateFormatter();
-        formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
         if let date = date {
             let formatter = ISO8601DateFormatter();
             formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]

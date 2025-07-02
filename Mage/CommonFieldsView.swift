@@ -121,8 +121,6 @@ extension CommonFieldsView: ObservationFormFieldListener {
         var newProperties = observation.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == dateField[FieldKey.name.key] as! String) {
-            let formatter = ISO8601DateFormatter();
-            formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
             if (value == nil) {
                 newProperties?.removeValue(forKey: dateField[FieldKey.name.key] as! String)
                 observation.timestamp = nil;

@@ -24,11 +24,20 @@ protocol FormRepository {
 }
 
 class FormRepositoryImpl: ObservableObject, FormRepository {
+    static var formModelCache: [NSNumber:FormModel] = [:]
+    
     @Injected(\.formLocalDataSource)
     var localDataSource: FormLocalDataSource
     
     // TODO: This needs to be a model not a managed object
     func getForm(formId: NSNumber) -> FormModel? {
-        localDataSource.getForm(formId: formId)
+        // NOTE: this gets called around 20K times with 5K observations
+        if let form = FormRepositoryImpl.formModelCache[formId] {
+            return form
+        } else {
+            let form = localDataSource.getForm(formId: formId)
+            FormRepositoryImpl.formModelCache[formId] = form
+            return form
+        }
     }
 }

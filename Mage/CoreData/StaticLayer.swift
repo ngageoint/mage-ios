@@ -29,10 +29,7 @@ import CoreData
         guard let timestamp = (feature["properties"] as? [AnyHashable : Any])?["timestamp"] as? String else {
             return nil
         }
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withTime, .withColonSeparatorInTime, .withTimeZone];
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-        let lastModifiedDate = formatter.date(from: timestamp) ?? Date();
+        let lastModifiedDate = Date.ISO8601FormatStyle.gmtZeroDate(from: timestamp) ?? Date();
         return lastModifiedDate
     }
     
