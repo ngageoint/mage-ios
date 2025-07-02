@@ -26,7 +26,6 @@ enum CoordinateActions {
             let coordinateDisplay = UserDefaults.standard.coordinateDisplay
             UIPasteboard.general.string = coordinateDisplay.format(coordinate: coordinate)
             
-            // TODO: - BRENT - should be renamed.
             NotificationCenter.default.post(
                 name: .SnackbarNotification,
                 object: SnackbarNotification(

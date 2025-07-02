@@ -107,6 +107,7 @@
 		841D02652E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */; };
 		841D02692E144093006EBAE6 /* View+EmptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */; };
 		841D026B2E1441C9006EBAE6 /* ObservationListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */; };
+		841D026D2E14620D006EBAE6 /* ThemedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D026C2E14620D006EBAE6 /* ThemedTextField.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
@@ -1133,6 +1134,7 @@
 		841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitActivityIndicatorProgress.swift; sourceTree = "<group>"; };
 		841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+EmptyPlaceholder.swift"; sourceTree = "<group>"; };
 		841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListRow.swift; sourceTree = "<group>"; };
+		841D026C2E14620D006EBAE6 /* ThemedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTextField.swift; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -2255,6 +2257,7 @@
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
 				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
+				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
 				2F52827024732B740023E974 /* IDPCoordinator.h */,
@@ -2491,6 +2494,7 @@
 				84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */,
 				84E714162DF7715D00F52781 /* DisabledAppTheme.swift */,
 				84E713E52DF235BB00F52781 /* NamedColorTheme.swift */,
+				841D026C2E14620D006EBAE6 /* ThemedTextField.swift */,
 				84E713EA2DF24ABA00F52781 /* ErrorColorTheme.swift */,
 				84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */,
 				84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */,
@@ -3536,7 +3540,6 @@
 			isa = PBXGroup;
 			children = (
 				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
-				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
 				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
@@ -5229,6 +5232,7 @@
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
 				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
+				841D026D2E14620D006EBAE6 /* ThemedTextField.swift in Sources */,
 				F734C1E32BC844DE00B2E8C8 /* CoordinateButton.swift in Sources */,
 				F73564E72C650BAC00466813 /* CurrentLocationLocalDataSource.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
@@ -5804,6 +5808,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
@@ -5811,6 +5816,7 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -5838,6 +5844,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
@@ -5845,6 +5852,7 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

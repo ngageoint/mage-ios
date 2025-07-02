@@ -17,7 +17,7 @@
 @interface ChangePasswordViewController () <ChangePasswordDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *currentPasswordView;
-@property (weak, nonatomic) IBOutlet UITextField *usernameField;
+@property (weak, nonatomic) IBOutlet ThemedTextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *currentPasswordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showCurrentPasswordSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *showCurrentPasswordLabel;
@@ -54,20 +54,15 @@
     }
 
     self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
-//    [self.usernameField applyThemeWithScheme:containerScheme];
-//    [self.passwordField applyThemeWithScheme:containerScheme];
-//    [self.currentPasswordField applyThemeWithScheme:containerScheme];
-//    [self.confirmPasswordField applyThemeWithScheme:containerScheme];
+//    [self.usernameField applyPrimaryThemeWithScheme:self.scheme];
+    [self.passwordField applyPrimaryThemeWithScheme:self.scheme];
+    [self.currentPasswordField applyPrimaryThemeWithScheme:self.scheme];
+    [self.confirmPasswordField applyPrimaryThemeWithScheme:self.scheme];
     
-//    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-//    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-//    self.confirmPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-//    self.currentPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-//    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
-//    [self.changeButton applyContainedThemeWithScheme:self.scheme];
+    [self.cancelButton applyPrimaryThemeWithScheme:self.scheme];
+    [self.changeButton applyPrimaryThemeWithScheme:self.scheme];
     self.showCurrentPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.showNewPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
@@ -94,12 +89,14 @@
     [super viewDidLoad];
     
     UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-//    [self.usernameField setLeadingView:meImage];
-//    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
-    self.usernameField.accessibilityLabel = @"Username";
-    self.usernameField.placeholder = @"Username";
-    self.usernameField.text = @"Username";
-//    self.usernameField.leadingAssistiveLabel.text = @" ";
+    meImage.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+//    self.usernameField.leftView = meImage;
+//    self.usernameField.leftViewMode = UITextFieldViewModeAlways;
+//    self.usernameField.accessibilityLabel = @"Username";
+//    self.usernameField.placeholder = @"Username";
+//    self.usernameField.text = @"Username";
+//    [self.usernameField setLeadingAssistiveText:@"Minimum 8 characters"];
+    self.usernameField.leadingAssistiveLabel.text = @" ";
     [self.usernameField sizeToFit];
     
     UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -208,7 +205,7 @@
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithUrl: url
     success:^(MageServer *mageServer) {
-        weakSelf.usernameField.enabled = !weakSelf.loggedIn;
+//        weakSelf.usernameField.enabled = !weakSelf.loggedIn;
         User *user = [User fetchCurrentUserWithContext:self.context];
         weakSelf.usernameField.text = user.username;
         weakSelf.changePasswordView.hidden = NO;
