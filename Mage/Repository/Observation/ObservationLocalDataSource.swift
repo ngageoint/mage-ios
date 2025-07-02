@@ -277,7 +277,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         let backgroundContext = persistence.getNewBackgroundContext(name: #function)
         
         return await backgroundContext.perform {
-            var chunks = propertyList.chunked(into: 250);
+            var chunks = propertyList.chunked(into: 1000);
             var newObservationCount = 0;
             var observationToNotifyAbout: Observation?;
             var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
