@@ -18,12 +18,12 @@
 
 @property (weak, nonatomic) IBOutlet UIView *currentPasswordView;
 @property (weak, nonatomic) IBOutlet ThemedTextField *usernameField;
-@property (weak, nonatomic) IBOutlet UITextField *currentPasswordField;
+@property (weak, nonatomic) IBOutlet ThemedTextField *currentPasswordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showCurrentPasswordSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *showCurrentPasswordLabel;
 @property (weak, nonatomic) IBOutlet UILabel *showNewPasswordLabel;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
-@property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
+@property (weak, nonatomic) IBOutlet ThemedTextField *passwordField;
+@property (weak, nonatomic) IBOutlet ThemedTextField *confirmPasswordField;
 @property (weak, nonatomic) IBOutlet UISwitch *showPasswordSwitch;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;

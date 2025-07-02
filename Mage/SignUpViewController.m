@@ -18,13 +18,13 @@
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *displayName;
-@property (weak, nonatomic) IBOutlet UITextField *username;
-@property (weak, nonatomic) IBOutlet UITextField *password;
-@property (weak, nonatomic) IBOutlet UITextField *passwordConfirm;
-@property (weak, nonatomic) IBOutlet UITextField *email;
-@property (weak, nonatomic) IBOutlet UITextField *phone;
-@property (weak, nonatomic) IBOutlet UITextField *captchaText;
+@property (weak, nonatomic) IBOutlet ThemedTextField *displayName;
+@property (weak, nonatomic) IBOutlet ThemedTextField *username;
+@property (weak, nonatomic) IBOutlet ThemedTextField *password;
+@property (weak, nonatomic) IBOutlet ThemedTextField *passwordConfirm;
+@property (weak, nonatomic) IBOutlet ThemedTextField *email;
+@property (weak, nonatomic) IBOutlet ThemedTextField *phone;
+@property (weak, nonatomic) IBOutlet ThemedTextField *captchaText;
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;

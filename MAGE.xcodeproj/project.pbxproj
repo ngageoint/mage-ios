@@ -103,11 +103,11 @@
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
 		84082F302E0C7892003F128D /* UITabBar+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */; };
 		84082F332E0C92F7003F128D /* UITextField+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84082F322E0C92F7003F128D /* UITextField+Factory.m */; };
+		84088DB02E15B49800D704BA /* ThemedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DAF2E15B49800D704BA /* ThemedTextField.swift */; };
 		841D02632E12E7E1006EBAE6 /* EmptyStateList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */; };
 		841D02652E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */; };
 		841D02692E144093006EBAE6 /* View+EmptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */; };
 		841D026B2E1441C9006EBAE6 /* ObservationListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */; };
-		841D026D2E14620D006EBAE6 /* ThemedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D026C2E14620D006EBAE6 /* ThemedTextField.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
@@ -1130,11 +1130,11 @@
 		84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Theming.swift"; sourceTree = "<group>"; };
 		84082F312E0C92B4003F128D /* UITextField+Factory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+Factory.h"; sourceTree = "<group>"; };
 		84082F322E0C92F7003F128D /* UITextField+Factory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Factory.m"; sourceTree = "<group>"; };
+		84088DAF2E15B49800D704BA /* ThemedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTextField.swift; sourceTree = "<group>"; };
 		841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateList.swift; sourceTree = "<group>"; };
 		841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitActivityIndicatorProgress.swift; sourceTree = "<group>"; };
 		841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+EmptyPlaceholder.swift"; sourceTree = "<group>"; };
 		841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListRow.swift; sourceTree = "<group>"; };
-		841D026C2E14620D006EBAE6 /* ThemedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTextField.swift; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -2251,8 +2251,10 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				2FCDC35422C2866A004189AD /* AuthenticationButton.h */,
 				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
+				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
@@ -2264,18 +2266,23 @@
 				2F52827124732B740023E974 /* IDPCoordinator.m */,
 				F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */,
 				F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */,
+				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
 				2F38DF1522B942C800485DA4 /* LdapLoginView.h */,
 				2F38DF1622B942C800485DA4 /* LdapLoginView.m */,
+				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
 				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
 				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
+				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
+				F7467B78209A2DC600EABA63 /* orView.xib */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
 				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
+				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -2494,7 +2501,7 @@
 				84E7141A2DF774D000F52781 /* ErrorAppTheme.swift */,
 				84E714162DF7715D00F52781 /* DisabledAppTheme.swift */,
 				84E713E52DF235BB00F52781 /* NamedColorTheme.swift */,
-				841D026C2E14620D006EBAE6 /* ThemedTextField.swift */,
+				84088DAF2E15B49800D704BA /* ThemedTextField.swift */,
 				84E713EA2DF24ABA00F52781 /* ErrorColorTheme.swift */,
 				84E713EC2DF24ACA00F52781 /* DisabledColorTheme.swift */,
 				84E713F02DF3384F00F52781 /* DarkNamedColorTheme.swift */,
@@ -3539,13 +3546,6 @@
 		F7A292291FC3938F00DE5463 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
-				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
-				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
-				F7C3DB9C207FE93100154281 /* local-authView.xib */,
-				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
-				F7467B78209A2DC600EABA63 /* orView.xib */,
-				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -5098,6 +5098,7 @@
 				F763FF322C79180F00403A00 /* EventModel.swift in Sources */,
 				F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */,
 				2F6D80D52B1FAB9900545221 /* Geocoder.swift in Sources */,
+				84088DB02E15B49800D704BA /* ThemedTextField.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F70C343B2C73D7BD007616FA /* AskToCacheImageView.swift in Sources */,
@@ -5232,7 +5233,6 @@
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
 				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
-				841D026D2E14620D006EBAE6 /* ThemedTextField.swift in Sources */,
 				F734C1E32BC844DE00B2E8C8 /* CoordinateButton.swift in Sources */,
 				F73564E72C650BAC00466813 /* CurrentLocationLocalDataSource.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,

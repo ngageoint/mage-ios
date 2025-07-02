@@ -13,8 +13,8 @@
 @interface LdapLoginView() <UITextFieldDelegate, AuthenticationButtonDelegate>
 
 // TODO: BRENT - Still need to update ALL fields and then change their types
-@property (weak, nonatomic) IBOutlet UITextField *usernameField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet ThemedTextField *usernameField;
+@property (weak, nonatomic) IBOutlet ThemedTextField *passwordField;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
