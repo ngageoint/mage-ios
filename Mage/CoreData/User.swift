@@ -62,7 +62,9 @@ import Kingfisher
     }
     
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
-        return context.performAndWait {
+        if let fetchedUser = User.userCache[UserDefaults.standard.currentUserId ?? ""], let userInContext = context.object(with: fetchedUser.objectID) as? User {
+            return userInContext
+        } else {
             MageLogger.misc.debug("XXX current user \(String(describing: UserDefaults.standard.currentUserId))")
             return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: UserDefaults.standard.currentUserId ?? "")
         }
