@@ -2251,7 +2251,6 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				2FCDC35422C2866A004189AD /* AuthenticationButton.h */,
 				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
 				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
@@ -2275,6 +2274,7 @@
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
+				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,

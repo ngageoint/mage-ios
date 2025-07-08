@@ -42,20 +42,25 @@
 
 @implementation LoginViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, IDPButtonDelegate>) delegate andScheme: (id<AppContainerScheming>) containerScheme {
+- (instancetype) initWithMageServer:(MageServer *)server andDelegate:(id<LoginDelegate, IDPButtonDelegate>)delegate andScheme:(id<AppContainerScheming>)scheme {
     self = [super initWithNibName:@"LoginView" bundle:nil];
-    if (!self) return nil;
-    
-    self.delegate = delegate;
-    self.server = server;
-    self.scheme = containerScheme;
-    
+    if (self) {
+        _server = server;
+        _delegate = delegate;
+        _scheme = scheme;
+    }
     return self;
 }
 
-- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<AppContainerScheming>) containerScheme {
-    if (self = [self initWithMageServer:server andDelegate:delegate andScheme:containerScheme]) {
-        self.user = user;
+- (instancetype) initWithMageServer:(MageServer *)server andUser:(User *)user andDelegate:(id<LoginDelegate, IDPButtonDelegate>)delegate andScheme:(id<AppContainerScheming>)scheme {
+    self = [super initWithNibName:@"LoginView" bundle:nil];
+    if (self) {
+        _server = server;
+        _delegate = delegate;
+        _scheme = scheme;
+        _user = user;
+        
+        NSLog(@"QQQ LoginViewController initWithMageServer QQQ");
     }
     return self;
 }
@@ -87,8 +92,18 @@
 
 #pragma mark -
 
+- (void)loadView {
+    [super loadView];
+    NSLog(@"QQQ LoginViewController loadView");
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    NSAssert(self.loginsStackView != nil, @"loginsStackView outlet not connected!");
+    
+    NSLog(@"QQQ LoginViewController viewDidLoad");
+    self.view.backgroundColor = UIColor.systemRedColor;
         
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
@@ -99,6 +114,13 @@
     self.wandLabel.text = @"\U0000f0d0";
     
     [self applyThemeWithScheme: self.scheme];
+    
+    NSLog(@"QQQ viewDidLoad for LoginViewController");
+    self.view.backgroundColor = [UIColor systemGreenColor];
+    
+    self.loginsStackView.layer.borderWidth = 1.0;
+    self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -115,11 +137,27 @@
 
     [self setupAuthentication];
     
+    for (UIView *v in self.loginsStackView.arrangedSubviews) {
+        v.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.3];
+    }
+    self.loginsStackView.layer.borderWidth = 2;
+    self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
+    
+    
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [self.versionLabel setText:[NSString stringWithFormat:@"v%@", versionString]];
     
     NSURL *url = [MageServer baseURL];
     [self.serverURL setTitle:[url absoluteString] forState:UIControlStateNormal];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSLog(@"QQQ LoginViewController did appear!");
+    NSLog(@"QQQ loginsStackView = %@", self.loginsStackView);
+    NSLog(@"QQQ loginsStackView frame = %@", NSStringFromCGRect(self.loginsStackView.frame));
+    NSLog(@"QQQ loginsStackView subviews = %@", self.loginsStackView.arrangedSubviews);
 }
 
 - (IBAction)serverURLTapped:(id)sender {
@@ -131,14 +169,20 @@
 }
 
 - (void) setupAuthentication {
-    NSArray *strategies = self.server.strategies;
+    NSLog(@"QQQ setupAuthentication called. strategies: %@", self.server.strategies);
     
     for (UIView *subview in [self.loginsStackView subviews]) {
+        NSLog(@"QQQ removing subview: %@", subview);
         [subview removeFromSuperview];
     }
     
+    NSArray *strategies = self.server.strategies;
+    NSLog(@"QQQ strategy count: %lu", strategies.count);
+    
     BOOL localAuth = NO;
     for (NSDictionary *strategy in strategies) {
+        NSLog(@"QQQ adding strategy: %@", strategy[@"identifier"]);
+        
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
             localAuth = YES;
             LocalLoginView *view = [[[UINib nibWithNibName:@"local-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
@@ -146,21 +190,33 @@
             view.delegate = self.delegate;
             view.user = self.user;
             [view applyThemeWithScheme: _scheme];
-            [self.loginsStackView addArrangedSubview:view];
+            
+            self.loginsStackView.backgroundColor = UIColor.blueColor;
+            
+            UIView *testView = [UIView newAutoLayoutView];
+            testView.backgroundColor = UIColor.redColor;
+            [self.loginsStackView addArrangedSubview:testView];
+            
+//            [self.loginsStackView addArrangedSubview:view];
+            NSLog(@"QQQ added view: %@", view);
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
             view.delegate = self.delegate;
             [view applyThemeWithScheme:_scheme];
             [self.loginsStackView addArrangedSubview:view];
+            NSLog(@"QQQ added view: %@", view);
         } else {
             IDPLoginView *view = [[[UINib nibWithNibName:@"idp-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
             view.delegate = self.delegate;
             [view applyThemeWithScheme:self.scheme];
             [self.loginsStackView addArrangedSubview:view];
+            NSLog(@"QQQ added view: %@", view);
         }
     }
+    
+    NSLog(@"QQQ final arrangedSubviews count: %lu", self.loginsStackView.arrangedSubviews.count);
     
     if (strategies.count > 1 && localAuth) {
         self.orView = [[[UINib nibWithNibName:@"orView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
@@ -175,10 +231,9 @@
     
     UIView *messageDetailButtonContainer = [UIView newAutoLayoutView];
     
-    self.messageDetailButton = [[UIButton alloc] init];
-//    self.messageDetailButton = [[MDCButton alloc] init];
-//    [self.messageDetailButton applyTextThemeWithScheme: _scheme];
+    self.messageDetailButton = [UIButton newAutoLayoutView];
     [self.messageDetailButton setTitle:@"Copy Error Message Detail" forState:UIControlStateNormal];
+    [self.messageDetailButton setTitleColor:UIColor.redColor forState:UIControlStateNormal];
     [self.messageDetailButton addTarget:self action:@selector(copyDetail) forControlEvents:UIControlEventTouchUpInside];
     self.messageDetailButton.hidden = YES;
     
@@ -187,7 +242,8 @@
     
     [self.loginsStackView addArrangedSubview:messageDetailButtonContainer];
     
-    self.statusView.hidden = !self.loginFailure;
+//    self.statusView.hidden = YES;
+//    self.statusView.hidden = !self.loginFailure;
 }
 
 - (void) copyDetail {

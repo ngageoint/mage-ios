@@ -173,7 +173,7 @@ BOOL signingIn = YES;
     [self.idpCoordinator start];
 }
 
-- (void) startLoginOnly {
+- (void) startLoginOnlyQQQ {
     NSURL *url = [MageServer baseURL];
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
@@ -183,16 +183,38 @@ BOOL signingIn = YES;
     }];
 }
 
+- (void) startLoginOnly {
+    NSLog(@"QQQ [AuthenticationCoordinator] startLoginOnly");
+    NSURL *url = [MageServer baseURL];
+    __weak __typeof__(self) weakSelf = self;
+    [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
+        NSLog(@"QQQ [AuthenticationCoordinator] serverWithUrl success");
+        [weakSelf showLoginViewForCurrentUserForServer:mageServer];
+    } failure:^(NSError *error) {
+        NSLog(@"QQQ [AuthenticationCoordinator] serverWithUrl failed: %@", error);
+    }];
+}
+
 - (void) start:(MageServer *) mageServer {
     [self showLoginViewForServer:mageServer];
 }
 
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
+    NSLog(@"QQQ [AuthenticationCoordinator] Pushing LoginViewController");
+    
     self.server = mageServer;
     User *currentUser = [User fetchCurrentUserWithContext:_context];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController pushViewController:self.loginView animated:NO];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"QQQ Setting LoginViewController as root");
+        UINavigationController *loginNav = [[UINavigationController alloc] initWithRootViewController:self.loginView];
+        [UIApplication sharedApplication].keyWindow.rootViewController = loginNav;
+    });
+    
+//    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+////    [self.navigationController pushViewController:self.loginView animated:NO];
+//    [self.navigationController setViewControllers:@[self.loginView] animated:NO];
 }
 
 - (void) showLoginViewForServer: (MageServer *) mageServer {
@@ -203,6 +225,7 @@ BOOL signingIn = YES;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
+    
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andScheme:_scheme];
     [self.navigationController pushViewController:self.loginView animated:NO];

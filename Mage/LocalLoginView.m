@@ -31,17 +31,9 @@
     if (containerScheme == nil) return;
     self.scheme = containerScheme;
     
-//    [self.usernameField applyThemeWithScheme: containerScheme];
-//    [self.passwordField applyThemeWithScheme: containerScheme];
-    
-//    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-//    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    
     self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.signupDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
-//    [self.loginButton applyContainedThemeWithScheme:self.scheme];
-//    [self.signupButton applyTextThemeWithScheme:self.scheme];
     [self.signupButton setTitleColor:[self.scheme.colorScheme.primaryColorVariant colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
 }
 
@@ -60,16 +52,16 @@
     [self.signupButton setTitle:@"Sign Up Here" forState:UIControlStateNormal];
     [self.loginButton setTitle:@"Sign In" forState:UIControlStateNormal];
     UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-//    [self.usernameField setLeadingView:meImage];
-//    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
+    [self.usernameField setLeftView:meImage];
+    self.usernameField.leftViewMode = UITextFieldViewModeAlways;
     self.usernameField.accessibilityLabel = @"Username";
     self.usernameField.placeholder = @"Username";
     self.usernameField.text = @"Username";
     [self.usernameField sizeToFit];
     self.passwordField.accessibilityLabel = @"Password";
     UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-//    [self.passwordField setLeadingView:keyImage];
-//    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
+    [self.passwordField setLeftView:keyImage];
+    self.passwordField.leftViewMode = UITextFieldViewModeAlways;
     self.passwordField.placeholder = @"Password";
     self.passwordField.text = @"Password";
     [self.passwordField sizeToFit];

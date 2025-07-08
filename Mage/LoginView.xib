@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -17,11 +18,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
-                <outlet property="loginsStackView" destination="zEg-A8-aMM" id="ca4-6i-hda"/>
+                <outlet property="loginsStackView" destination="zEg-A8-aMM" id="h7f-N7-zpo"/>
                 <outlet property="mageLabel" destination="AjL-hK-ohz" id="vZj-Un-uog"/>
                 <outlet property="serverURL" destination="6wE-Es-XY5" id="V2h-fy-Dgp"/>
                 <outlet property="versionLabel" destination="McJ-Ia-VcZ" id="xY3-Vu-rKe"/>
-                <outlet property="view" destination="HSM-eT-VRH" id="Xgh-Ms-s2S"/>
+                <outlet property="view" destination="HSM-eT-VRH" id="xpj-at-eAD"/>
                 <outlet property="wandLabel" destination="yBZ-Db-LW7" id="9nM-dy-f55"/>
             </connections>
         </placeholder>
@@ -51,10 +52,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jM-R6-Uqf">
-                    <rect key="frame" x="0.0" y="135" width="375" height="474"/>
+                    <rect key="frame" x="0.0" y="155" width="375" height="454"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zEg-A8-aMM">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="474"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="454"/>
+                            <color key="backgroundColor" systemColor="systemGreenColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="V0W-aJ-EIZ"/>
                             </constraints>
@@ -70,7 +72,7 @@
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Re4-gS-TLt">
-                    <rect key="frame" x="16" y="40" width="343" height="55"/>
+                    <rect key="frame" x="16" y="60" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yw6-zq-kyk">
                             <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
@@ -127,4 +129,9 @@
             <point key="canvasLocation" x="35.5" y="53.5"/>
         </view>
     </objects>
+    <resources>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

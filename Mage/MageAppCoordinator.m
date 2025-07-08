@@ -45,7 +45,22 @@
     return self;
 }
 
-- (void) start {
+- (void)start {
+    NSLog(@"QQQ [MageAppCoordinator] Starting 2...");
+
+    self.authCoordinator = [[AuthenticationCoordinator alloc]
+        initWithNavigationController:self.navigationController
+        andDelegate:self
+        andScheme:self.scheme
+        context:self.context];
+
+    NSLog(@"QQQ [MageAppCoordinator] Created authCoordinator: %@", self.authCoordinator);
+    [self.authCoordinator startLoginOnly];
+}
+
+- (void) startQQQ {
+    NSLog(@"QQQ [MageAppCoordinator] Starting...");
+    
     // check for a valid token
     if ([[UserUtility singleton] isTokenExpired]) {
         NSURL *url = [MageServer baseURL];
@@ -86,12 +101,15 @@
 }
 
 - (void) authenticationSuccessful {
+    NSLog(@"QQQ [MageAppCoordinator] Authentication succeeded");
+    
     [_childCoordinators removeLastObject];
     [self startEventChooser];
 }
 
 - (void) couldNotAuthenticate {
     // TODO figure out what to do here
+    NSLog(@"QQQ [MageAppCoordinator] Authentication failed");
 }
 
 - (void) changeServerUrl {

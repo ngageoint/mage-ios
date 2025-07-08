@@ -33,4 +33,9 @@
     self.wandLabel.text = @"\U0000f0d0";
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    NSLog(@"🔥 QQQ Splash screen is still showing!");
+}
+
 @end

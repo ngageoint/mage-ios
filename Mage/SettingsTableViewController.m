@@ -243,6 +243,29 @@
     UINavigationController *navigationController = [[UINavigationController alloc] init];
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
     navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
+    [self presentViewController:navigationController animated:YES completion:^{
+        NSLog(@"Presented nav controller: %@", navigationController);
+
+        // 🔴 TESTING: Inject a red view controller to confirm it appears
+        UIViewController *testVC = [[UIViewController alloc] init];
+        testVC.view.backgroundColor = UIColor.redColor;
+        testVC.title = @"DEBUG RED VC";
+        [navigationController setViewControllers:@[testVC] animated:NO];
+
+        // ✅ Now try pushing the real LoginViewController
+        /*
+        AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme context: self.context];
+        [self.childCoordinators addObject:coord];
+        [coord startLoginOnly];
+        */
+    }];
+}
+
+- (void) onLoginOLD {
+    UINavigationController *navigationController = [[UINavigationController alloc] init];
+    navigationController.modalPresentationStyle = UIModalPresentationCustom;
+    navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
     [self presentViewController:navigationController animated:YES completion:nil];
     

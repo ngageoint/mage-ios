@@ -125,12 +125,16 @@
 
 - (void) createLoadingView {
     [MAGEScheme setupApplicationAppearanceWithScheme:[MAGEScheme scheme]];
+    
     self.rootViewController = [[UINavigationController alloc] init];
     self.rootViewController.navigationBarHidden = YES;
+    
     [self.window setRootViewController:self.rootViewController];
+    
     TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
     [transitionView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     transitionView.modalPresentationStyle = UIModalPresentationFullScreen;
+    
     [self.rootViewController pushViewController:transitionView animated:NO];
 }
 
@@ -146,16 +150,22 @@
         canary.launchDate = [NSDate date];
         NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
+        NSLog(@"QQQ startMageApp canary save success? %d with error %@", contextDidSave, error);
         // error should be null and contextDidSave should be true
         if (contextDidSave && error == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme] context: self.context];
+            
+            UINavigationController *freshNav = [[UINavigationController alloc] init];
+            self.window.rootViewController = freshNav;
+
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:freshNav forApplication:self.application andScheme:[MAGEScheme scheme] context:self.context];
+            
             [self.appCoordinator start];
             [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
                 
             }];
         } else {
-            NSLog(@"Could not read or write from the database %@", error);
+            NSLog(@"QQQ Could not read or write from the database %@", error);
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
                                                                            message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
