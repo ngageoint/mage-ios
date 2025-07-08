@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *signupDescription;
 @property (weak, nonatomic) IBOutlet UIButton *signupButton;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+//@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (strong, nonatomic) id<AppContainerScheming>scheme;
@@ -74,7 +74,8 @@
         self.signupContainerView.hidden = YES;
     }
 
-    [self applyThemeWithScheme: self.scheme];
+    self.backgroundColor = UIColor.yellowColor;
+//    [self applyThemeWithScheme: self.scheme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -134,7 +135,7 @@
 
 - (void) endLogin {
     [self.loginButton setEnabled:YES];
-    [self.activityIndicator stopAnimating];
+//    [self.activityIndicator stopAnimating];
     [self.usernameField setEnabled:YES];
     [self.passwordField setEnabled:YES];
     [self.showPassword setEnabled:YES];
@@ -142,7 +143,7 @@
 
 - (void) startLogin {
     [self.loginButton setEnabled:NO];
-    [self.activityIndicator startAnimating];
+//    [self.activityIndicator startAnimating];
     [self.usernameField setEnabled:NO];
     [self.passwordField setEnabled:NO];
     [self.showPassword setEnabled:NO];

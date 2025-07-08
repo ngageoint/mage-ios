@@ -84,7 +84,7 @@
     self.usernameField.placeholder = [NSString stringWithFormat:@"%@ Username", title];
     self.passwordField.placeholder = [NSString stringWithFormat:@"%@ Password", title];
     
-    [self applyThemeWithScheme: self.scheme];
+//    [self applyThemeWithScheme: self.scheme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {

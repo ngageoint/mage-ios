@@ -102,9 +102,6 @@
     
     NSAssert(self.loginsStackView != nil, @"loginsStackView outlet not connected!");
     
-    NSLog(@"QQQ LoginViewController viewDidLoad");
-    self.view.backgroundColor = UIColor.systemRedColor;
-        
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
@@ -113,12 +110,12 @@
     [self.view addGestureRecognizer:tap];
     self.wandLabel.text = @"\U0000f0d0";
     
-    [self applyThemeWithScheme: self.scheme];
+//    [self applyThemeWithScheme: self.scheme];
     
     NSLog(@"QQQ viewDidLoad for LoginViewController");
     self.view.backgroundColor = [UIColor systemGreenColor];
     
-    self.loginsStackView.layer.borderWidth = 1.0;
+    self.loginsStackView.layer.borderWidth = 5.0;
     self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
 
 }
@@ -187,17 +184,18 @@
             localAuth = YES;
             LocalLoginView *view = [[[UINib nibWithNibName:@"local-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
-            view.delegate = self.delegate;
-            view.user = self.user;
-            [view applyThemeWithScheme: _scheme];
+//            view.delegate = self.delegate;
+//            view.user = self.user;
+//            [view applyThemeWithScheme: _scheme];
             
-            self.loginsStackView.backgroundColor = UIColor.blueColor;
+            UILabel *testLabel = [[UILabel alloc] init];
+            testLabel.text = @"TEST LABEL";
+//            self.loginsStackView.backgroundColor = UIColor.blueColor;
             
-            UIView *testView = [UIView newAutoLayoutView];
-            testView.backgroundColor = UIColor.redColor;
-            [self.loginsStackView addArrangedSubview:testView];
+//            view.backgroundColor = UIColor.magentaColor;
+            [self.loginsStackView addArrangedSubview:testLabel];
             
-//            [self.loginsStackView addArrangedSubview:view];
+            [self.loginsStackView addArrangedSubview:view];
             NSLog(@"QQQ added view: %@", view);
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
@@ -242,7 +240,7 @@
     
     [self.loginsStackView addArrangedSubview:messageDetailButtonContainer];
     
-//    self.statusView.hidden = YES;
+    self.statusView.hidden = YES;
 //    self.statusView.hidden = !self.loginFailure;
 }
 
