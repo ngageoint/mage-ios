@@ -2507,8 +2507,8 @@
 				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
 				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
 				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
-				F7481F0219A663B100E9C56D /* Edit */,
 				F770852E25915D61008903BA /* Fields */,
+				F7481F0219A663B100E9C56D /* Edit */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
 				F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */,
@@ -5732,7 +5732,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
@@ -5766,7 +5766,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;

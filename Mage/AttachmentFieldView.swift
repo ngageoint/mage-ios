@@ -17,7 +17,7 @@ import UIKit
     @objc func addGalleryAttachment();
 }
 
-class AttachmentFieldView : BaseFieldView {
+class AttachmentFieldView : BaseFieldView, UICollectionViewDelegate {
     private var attachments: [AttachmentModel]?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
@@ -36,14 +36,10 @@ class AttachmentFieldView : BaseFieldView {
     
     lazy var attachmentCollectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout();
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        layout.sectionInset = .zero
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.configureForAutoLayout()
         collectionView.backgroundColor = .yellow
         collectionView.register(AttachmentCell.self, forCellWithReuseIdentifier: "AttachmentCell")
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = attachmentCollectionDataStore;
         attachmentCollectionDataStore.attachmentCollection = collectionView;
@@ -495,18 +491,32 @@ extension AttachmentFieldView: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
-            return CGSize(width: 100, height: 100)
+            return CGSize(width: 100, height: 100);
         }
         
-        let isPortrait = collectionView.bounds.height > collectionView.bounds.width
-        let itemsPerRow: CGFloat = isPortrait ? 3 : 5
+        // Number of items per row fixed by orientation
         
+//        let isPortrait = collectionView.bounds.height > collectionView.bounds.width
+//        var itemsPerRow: CGFloat = isPortrait ? 3 : 5
+        let itemsPerRow: CGFloat = self.traitCollection.horizontalSizeClass == .compact ? 3 : 5
+
+        // Adjust these to reduce spacing and give more room for images
+        layout.minimumInteritemSpacing = 1
+        layout.minimumLineSpacing = 1
+        layout.sectionInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+        
+        // Total space taken by padding + spacing between cells
         let totalSpacing = layout.sectionInset.left
-                        + layout.sectionInset.right
-                        + (itemsPerRow - 1) * layout.minimumInteritemSpacing
+        + layout.sectionInset.right
+        + (itemsPerRow - 1) * layout.minimumInteritemSpacing
         
-        let width = (collectionView.bounds.width - totalSpacing) / itemsPerRow
+        // Calculate item width to fill the collectionView width fully
+        let itemWidth = (collectionView.bounds.width - totalSpacing) / itemsPerRow
         
-        return CGSize(width: width, height: width)
+        // Square cells
+        return CGSize(width: itemWidth, height: itemWidth)
     }
 }
+
+
+
