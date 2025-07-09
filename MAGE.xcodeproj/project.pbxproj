@@ -104,6 +104,14 @@
 		84082F302E0C7892003F128D /* UITabBar+Theming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84082F2F2E0C7892003F128D /* UITabBar+Theming.swift */; };
 		84082F332E0C92F7003F128D /* UITextField+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84082F322E0C92F7003F128D /* UITextField+Factory.m */; };
 		84088DB02E15B49800D704BA /* ThemedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DAF2E15B49800D704BA /* ThemedTextField.swift */; };
+		84088DB62E1EE42D00D704BA /* LocalLoginViewTest.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84088DB52E1EE42D00D704BA /* LocalLoginViewTest.xib */; };
+		84088DB82E1EE76900D704BA /* LocalLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DB72E1EE76900D704BA /* LocalLoginViewSwiftUI.swift */; };
+		84088DBA2E1EF00A00D704BA /* LoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DB92E1EF00A00D704BA /* LoginViewSwiftUI.swift */; };
+		84088DBC2E1EF02200D704BA /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DBB2E1EF02200D704BA /* LoginViewModel.swift */; };
+		84088DC02E1EF19E00D704BA /* OrViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DBF2E1EF19E00D704BA /* OrViewSwiftUI.swift */; };
+		84088DC22E1EF23F00D704BA /* IDPLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DC12E1EF23F00D704BA /* IDPLoginViewSwiftUI.swift */; };
+		84088DC42E1EF24F00D704BA /* LdapLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DC32E1EF24F00D704BA /* LdapLoginViewSwiftUI.swift */; };
+		84088DC62E1EF5B600D704BA /* LoginStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84088DC52E1EF5B600D704BA /* LoginStrategy.swift */; };
 		841D02632E12E7E1006EBAE6 /* EmptyStateList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */; };
 		841D02652E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */; };
 		841D02692E144093006EBAE6 /* View+EmptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */; };
@@ -1131,6 +1139,14 @@
 		84082F312E0C92B4003F128D /* UITextField+Factory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+Factory.h"; sourceTree = "<group>"; };
 		84082F322E0C92F7003F128D /* UITextField+Factory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Factory.m"; sourceTree = "<group>"; };
 		84088DAF2E15B49800D704BA /* ThemedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTextField.swift; sourceTree = "<group>"; };
+		84088DB52E1EE42D00D704BA /* LocalLoginViewTest.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocalLoginViewTest.xib; sourceTree = "<group>"; };
+		84088DB72E1EE76900D704BA /* LocalLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewSwiftUI.swift; sourceTree = "<group>"; };
+		84088DB92E1EF00A00D704BA /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
+		84088DBB2E1EF02200D704BA /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		84088DBF2E1EF19E00D704BA /* OrViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrViewSwiftUI.swift; sourceTree = "<group>"; };
+		84088DC12E1EF23F00D704BA /* IDPLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUI.swift; sourceTree = "<group>"; };
+		84088DC32E1EF24F00D704BA /* LdapLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewSwiftUI.swift; sourceTree = "<group>"; };
+		84088DC52E1EF5B600D704BA /* LoginStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStrategy.swift; sourceTree = "<group>"; };
 		841D02622E12E7E1006EBAE6 /* EmptyStateList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateList.swift; sourceTree = "<group>"; };
 		841D02642E12EB47006EBAE6 /* UIKitActivityIndicatorProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitActivityIndicatorProgress.swift; sourceTree = "<group>"; };
 		841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+EmptyPlaceholder.swift"; sourceTree = "<group>"; };
@@ -2271,10 +2287,18 @@
 				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
 				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
 				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
+				84088DB72E1EE76900D704BA /* LocalLoginViewSwiftUI.swift */,
+				84088DB52E1EE42D00D704BA /* LocalLoginViewTest.xib */,
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
 				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
+				84088DB92E1EF00A00D704BA /* LoginViewSwiftUI.swift */,
+				84088DBF2E1EF19E00D704BA /* OrViewSwiftUI.swift */,
+				84088DC12E1EF23F00D704BA /* IDPLoginViewSwiftUI.swift */,
+				84088DC32E1EF24F00D704BA /* LdapLoginViewSwiftUI.swift */,
+				84088DBB2E1EF02200D704BA /* LoginViewModel.swift */,
+				84088DC52E1EF5B600D704BA /* LoginStrategy.swift */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
@@ -4603,6 +4627,7 @@
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
+				84088DB62E1EE42D00D704BA /* LocalLoginViewTest.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F76B4A7028E61E720012BF4F /* CHANGELOG.md in Resources */,
@@ -4988,6 +5013,7 @@
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */,
 				2FAC84A72B50584B00FCAB37 /* SearchMapView.swift in Sources */,
+				84088DC62E1EF5B600D704BA /* LoginStrategy.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
 				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
@@ -5016,6 +5042,7 @@
 				F7ECDC9E27A83C8600D0AF92 /* GeoPackage.swift in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.swift in Sources */,
 				F776ACA52BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift in Sources */,
+				84088DBC2E1EF02200D704BA /* LoginViewModel.swift in Sources */,
 				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
 				F7BFB8D42C4AE84D00901479 /* PageController.swift in Sources */,
 				F72D42EC2694B60300F9AC3B /* Canary.swift in Sources */,
@@ -5126,6 +5153,7 @@
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.swift in Sources */,
 				F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */,
 				F73565032C66619200466813 /* UserViewViewModel.swift in Sources */,
+				84088DBA2E1EF00A00D704BA /* LoginViewSwiftUI.swift in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
 				F795ED0524B8DFB80028FBFC /* LocationUtilities.swift in Sources */,
 				F7C097AE2C8514D0003FA115 /* MageUseCases.swift in Sources */,
@@ -5214,6 +5242,7 @@
 				F776AC892BC98939000FAFB4 /* MageHostingController.swift in Sources */,
 				F73564F42C65579A00466813 /* LocationRepository.swift in Sources */,
 				F7402C88276CBE9300531613 /* PersistedMapState.swift in Sources */,
+				84088DC42E1EF24F00D704BA /* LdapLoginViewSwiftUI.swift in Sources */,
 				F754C65D2C49A87100E408E9 /* ObservationFavoritesModel.swift in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
 				F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */,
@@ -5233,6 +5262,7 @@
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
 				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
+				84088DC02E1EF19E00D704BA /* OrViewSwiftUI.swift in Sources */,
 				F734C1E32BC844DE00B2E8C8 /* CoordinateButton.swift in Sources */,
 				F73564E72C650BAC00466813 /* CurrentLocationLocalDataSource.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
@@ -5427,6 +5457,7 @@
 				F7C097AB2C85129A003FA115 /* EventRemoteDataSource.swift in Sources */,
 				F7DE98802C133B49005372F8 /* ObservationMapImage.swift in Sources */,
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
+				84088DC22E1EF23F00D704BA /* IDPLoginViewSwiftUI.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */,
 				F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */,
 				F7225F5C2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift in Sources */,
@@ -5466,6 +5497,7 @@
 				84E713F72DF34EE700F52781 /* UIButton+Theming.swift in Sources */,
 				84E714092DF76A2900F52781 /* DarkColorScheme.swift in Sources */,
 				F7BFB8E02C5019BA00901479 /* EmailButton.swift in Sources */,
+				84088DB82E1EE76900D704BA /* LocalLoginViewSwiftUI.swift in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */,
 				F7C0977D2C80E0A5003FA115 /* FormModel.swift in Sources */,

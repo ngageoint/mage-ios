@@ -10,11 +10,11 @@
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "IDPLoginView.h"
-#import "LocalLoginView.h"
 #import "LdapLoginView.h"
 #import "OrView.h"
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
+#import <SwiftUI/SwiftUI.h>
 
 @interface LoginViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -113,7 +113,7 @@
 //    [self applyThemeWithScheme: self.scheme];
     
     NSLog(@"QQQ viewDidLoad for LoginViewController");
-    self.view.backgroundColor = [UIColor systemGreenColor];
+//    self.view.backgroundColor = [UIColor systemGreenColor];
     
     self.loginsStackView.layer.borderWidth = 5.0;
     self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
@@ -152,9 +152,6 @@
     [super viewDidAppear:animated];
     
     NSLog(@"QQQ LoginViewController did appear!");
-    NSLog(@"QQQ loginsStackView = %@", self.loginsStackView);
-    NSLog(@"QQQ loginsStackView frame = %@", NSStringFromCGRect(self.loginsStackView.frame));
-    NSLog(@"QQQ loginsStackView subviews = %@", self.loginsStackView.arrangedSubviews);
 }
 
 - (IBAction)serverURLTapped:(id)sender {
@@ -169,34 +166,29 @@
     NSLog(@"QQQ setupAuthentication called. strategies: %@", self.server.strategies);
     
     for (UIView *subview in [self.loginsStackView subviews]) {
-        NSLog(@"QQQ removing subview: %@", subview);
         [subview removeFromSuperview];
     }
     
     NSArray *strategies = self.server.strategies;
-    NSLog(@"QQQ strategy count: %lu", strategies.count);
     
     BOOL localAuth = NO;
     for (NSDictionary *strategy in strategies) {
-        NSLog(@"QQQ adding strategy: %@", strategy[@"identifier"]);
         
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
             localAuth = YES;
-            LocalLoginView *view = [[[UINib nibWithNibName:@"local-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
-            view.strategy = strategy;
-//            view.delegate = self.delegate;
-//            view.user = self.user;
-//            [view applyThemeWithScheme: _scheme];
             
-            UILabel *testLabel = [[UILabel alloc] init];
-            testLabel.text = @"TEST LABEL";
-//            self.loginsStackView.backgroundColor = UIColor.blueColor;
-            
-//            view.backgroundColor = UIColor.magentaColor;
-            [self.loginsStackView addArrangedSubview:testLabel];
-            
-            [self.loginsStackView addArrangedSubview:view];
-            NSLog(@"QQQ added view: %@", view);
+            UIViewController *loginVC = [LocalLoginViewWrapper newWithUsername:@""
+                                                                      password:@""
+                                                                 loginHandler:^{
+                NSLog(@"Login tapped");
+            } signupHandler:^{
+                NSLog(@"Signup tapped");
+            }];
+
+            [self.loginsStackView addArrangedSubview:loginVC.view];
+            [self addChildViewController:loginVC];
+            [loginVC didMoveToParentViewController:self];
+
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
@@ -213,8 +205,6 @@
             NSLog(@"QQQ added view: %@", view);
         }
     }
-    
-    NSLog(@"QQQ final arrangedSubviews count: %lu", self.loginsStackView.arrangedSubviews.count);
     
     if (strategies.count > 1 && localAuth) {
         self.orView = [[[UINib nibWithNibName:@"orView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];

@@ -17,5 +17,6 @@
 @property (weak, nonatomic) id<LoginDelegate> delegate;
 
 - (void) applyThemeWithScheme:(id<AppContainerScheming>)containerScheme;
++ (instancetype)loadFromNib;
 
 @end

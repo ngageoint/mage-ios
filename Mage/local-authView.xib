@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,7 +25,6 @@
                                 <constraint firstAttribute="width" constant="49" id="QFY-52-aJU"/>
                             </constraints>
                             <connections>
-                                <action selector="showPasswordSwitchAction:" destination="-1" eventType="valueChanged" id="PZA-KY-lMy"/>
                                 <action selector="showPasswordSwitchAction:" destination="NGa-Oo-ehZ" eventType="valueChanged" id="o3n-0v-4Kc"/>
                             </connections>
                         </switch>
@@ -42,7 +40,6 @@
                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                             <connections>
                                 <action selector="resignAndLogin:" destination="NGa-Oo-ehZ" eventType="primaryActionTriggered" id="7X4-oI-dm2"/>
-                                <action selector="resignAndLogin:" destination="-1" eventType="primaryActionTriggered" id="eM3-Nt-auO"/>
                             </connections>
                         </textField>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjf-hp-DFx">
@@ -65,7 +62,6 @@
                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                             <connections>
                                 <action selector="resignAndLogin:" destination="NGa-Oo-ehZ" eventType="primaryActionTriggered" id="R2Z-1l-ikj"/>
-                                <action selector="resignAndLogin:" destination="-1" eventType="primaryActionTriggered" id="aVq-wF-kZ9"/>
                             </connections>
                         </textField>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YOc-FB-DT3">
@@ -77,7 +73,6 @@
                             </constraints>
                             <state key="normal" title="Sign In"/>
                             <connections>
-                                <action selector="signInTapped:" destination="-1" eventType="touchUpInside" id="nR6-Kh-0JN"/>
                                 <action selector="signInTapped:" destination="NGa-Oo-ehZ" eventType="touchUpInside" id="uIs-89-qmI"/>
                             </connections>
                         </button>
@@ -98,7 +93,6 @@
                                     </state>
                                     <connections>
                                         <action selector="signupTapped:" destination="NGa-Oo-ehZ" eventType="touchUpInside" id="3Ac-DG-08g"/>
-                                        <action selector="signupTapped:" destination="-1" eventType="touchUpInside" id="x75-BM-6VW"/>
                                     </connections>
                                 </button>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New to MAGE?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phf-Vy-Niu">
@@ -122,7 +116,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="swiftlee_orange"/>
+                    <color key="backgroundColor" red="1" green="0.97879051453200105" blue="0.15035457191020452" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
                     <accessibility key="accessibilityConfiguration" label="Local Login View"/>
                     <constraints>
                         <constraint firstItem="Bjf-hp-DFx" firstAttribute="leading" secondItem="Q8A-73-ehK" secondAttribute="trailing" constant="8" id="0jL-xo-6wJ"/>
@@ -147,7 +141,6 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="xRe-Ay-G16"/>
-            <color key="backgroundColor" name="secondary"/>
             <connections>
                 <outlet property="loginButton" destination="YOc-FB-DT3" id="GYE-fg-5jZ"/>
                 <outlet property="passwordField" destination="qOJ-dM-0H4" id="mcZ-vL-7ui"/>
@@ -156,19 +149,14 @@
                 <outlet property="signupButton" destination="a5e-Zq-EP3" id="hjw-FH-7mJ"/>
                 <outlet property="signupContainerView" destination="1Uw-e5-yJ1" id="GGd-ND-vxH"/>
                 <outlet property="signupDescription" destination="phf-Vy-Niu" id="bIg-oe-1jQ"/>
-                <outlet property="usernameField" destination="NAP-Uf-AMa" id="41h-94-aMJ"/>
+                <outlet property="usernameField" destination="NAP-Uf-AMa" id="gFp-sg-1Uk"/>
+                <outlet property="view" destination="vJE-2l-obt" id="m2b-Ol-xqs"/>
             </connections>
             <point key="canvasLocation" x="53.600000000000001" y="-3.1484257871064472"/>
         </stackView>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
     </objects>
     <resources>
-        <namedColor name="secondary">
-            <color red="1" green="0.42745098039215684" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="swiftlee_orange">
-            <color red="0.93300002813339233" green="0.3059999942779541" blue="0.22699999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="systemBrownColor">
             <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
