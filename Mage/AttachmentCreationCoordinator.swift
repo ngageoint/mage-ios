@@ -192,7 +192,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
         }
     }
     
-    func generateFilePath(for attachmentType: AttachmentType) -> (filePath: URL, fileName: String) {
+    func generateFilePath(for attachmentType: AttachmentType) -> URL {
         let timestamp = DateFormatter.timeStampFormatter.string(from: Date())
         let uniqueId = UUID().uuidString.prefix(8)
 
@@ -224,7 +224,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
                                                  attributes: [.protectionKey: FileProtectionType.complete])
 
         let filePath = attachmentDirectory.appendingPathComponent(fileName)
-        return (filePath, fileName)
+        return filePath
     }
 }
 
@@ -247,7 +247,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     return
                 }
 
-                let (filePath, _) = self.generateFilePath(for: .image)
+                let filePath = self.generateFilePath(for: .image)
 
                 guard let baseImage = UIImage(data: data) else { return }
                 guard let scaledImageData = baseImage.qualityScaled() else { return }
@@ -274,7 +274,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
         
         assetRequestOptions.isNetworkAccessAllowed = true
 
-        let (videoExportPath, _) = generateFilePath(for: .video)
+        let videoExportPath = generateFilePath(for: .video)
 
         Task(priority: .userInitiated) {
             guard let avAsset = try? await requestAVAssetAsync(forVideo: selectedAsset, options: assetRequestOptions) else {

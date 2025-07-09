@@ -165,7 +165,7 @@
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		A82BB07A2E0B0D8200AB657F /* AttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82BB0792E0B0D8200AB657F /* AttachmentType.swift */; };
-		A82BB07C2E0B0EB000AB657F /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82BB07B2E0B0EB000AB657F /* DateFormatter.swift */; };
+		A849BA312E1ECB4E0040BF5B /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A849BA302E1ECB4E0040BF5B /* DateFormatter.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
 		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
@@ -456,7 +456,6 @@
 		F7402C86276B80B600531613 /* FilteredUsersMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C85276B80B600531613 /* FilteredUsersMap.swift */; };
 		F7402C88276CBE9300531613 /* PersistedMapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C87276CBE9300531613 /* PersistedMapState.swift */; };
 		F7402C8A276D1A9B00531613 /* HasMapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C89276D1A9B00531613 /* HasMapSettings.swift */; };
-		F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F743008B254775AB00DCE050 /* SplitLayout.swift */; };
 		F744ACFB2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F744ACFA2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift */; };
 		F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F744ACFC2BFE73A900A6E4CA /* DataSourceMapViewModel.swift */; };
 		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
@@ -1102,7 +1101,7 @@
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		A82BB0792E0B0D8200AB657F /* AttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentType.swift; sourceTree = "<group>"; };
-		A82BB07B2E0B0EB000AB657F /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		A849BA302E1ECB4E0040BF5B /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B29DE4B6C2FE6308F8758572 /* Pods-MAGEGeoPackageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1424,7 +1423,6 @@
 		F7402C85276B80B600531613 /* FilteredUsersMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredUsersMap.swift; sourceTree = "<group>"; };
 		F7402C87276CBE9300531613 /* PersistedMapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedMapState.swift; sourceTree = "<group>"; };
 		F7402C89276D1A9B00531613 /* HasMapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasMapSettings.swift; sourceTree = "<group>"; };
-		F743008B254775AB00DCE050 /* SplitLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLayout.swift; sourceTree = "<group>"; };
 		F744ACFA2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsMapFeatureRepository.swift; sourceTree = "<group>"; };
 		F744ACFC2BFE73A900A6E4CA /* DataSourceMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceMapViewModel.swift; sourceTree = "<group>"; };
 		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
@@ -2913,7 +2911,6 @@
 				F7D9B825255DC65C00A76E2C /* MageImage.swift */,
 				F781609C273EE1A50055B5D2 /* ObjC.h */,
 				F781609D273EE1A50055B5D2 /* ObjC.m */,
-				F743008B254775AB00DCE050 /* SplitLayout.swift */,
 				F7489B4027A48B0D00A9E314 /* StringExtensions.swift */,
 				F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */,
 				F738871C258BA22500EDA036 /* UIButtonInsets.swift */,
@@ -2923,7 +2920,7 @@
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 				F7E079512C32EB750029C88D /* MKShapeExtensions.swift */,
 				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
-				A82BB07B2E0B0EB000AB657F /* DateFormatter.swift */,
+				A849BA302E1ECB4E0040BF5B /* DateFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -5176,7 +5173,7 @@
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */,
-				A82BB07C2E0B0EB000AB657F /* DateFormatter.swift in Sources */,
+				A849BA312E1ECB4E0040BF5B /* DateFormatter.swift in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
 				2F6D80D72B1FAD7100545221 /* NominatimService.swift in Sources */,
 				F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */,
@@ -5294,7 +5291,6 @@
 				F78D57A027BECFB9003594D3 /* SingleObservationMap.swift in Sources */,
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F73564FD2C65681300466813 /* LocationModel.swift in Sources */,
-				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F744ACFB2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				F7C0979B2C8125E8003FA115 /* GeoPackageFeatureKey.swift in Sources */,
@@ -5732,7 +5728,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
@@ -5766,7 +5762,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
