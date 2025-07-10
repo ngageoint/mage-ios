@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>showMapSearch</key>
-	<false/>
+	<true/>
 	<key>mapShowTraffic</key>
 	<false/>
 	<key>observationTimeFilterKey</key>
