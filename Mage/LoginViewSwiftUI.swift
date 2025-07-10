@@ -10,6 +10,10 @@ import SwiftUI
 
 struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
+    
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isLoggingIn = false
 
     var body: some View {
         ScrollView {
@@ -36,16 +40,25 @@ struct LoginViewSwiftUI: View {
                     ForEach(viewModel.authStrategies, id: \.id) { strategy in
                         switch strategy.id {
                         case "local":
-                            LocalLoginViewSwiftUI(
-                                username: viewModel.username,
-                                password: viewModel.password,
-                                onLoginTapped: viewModel.handleLogin,
-                                onSignupTapped: viewModel.handleSignup
+                            AnyView (
+                                LocalLoginViewSwiftUI(
+                                    username: $username,
+                                    password: $password,
+                                    strategy: strategy,
+                                    delegate: viewModel.delegate,
+                                    scheme: viewModel.scheme,
+                                    onLoginTapped: viewModel.handleLogin,
+                                    onSignupTapped: viewModel.handleSignup
+                                )
                             )
                         case "ldap":
-                            LdapLoginViewSwiftUI(strategy: strategy, delegate: viewModel.delegate, scheme: viewModel.scheme)
+                            AnyView (
+                                LdapLoginViewSwiftUI(strategy: strategy, delegate: viewModel.delegate, scheme: viewModel.scheme)
+                            )
                         default:
-                            IDPLoginViewSwiftUI(strategy: strategy, delegate: viewModel.delegate, scheme: viewModel.scheme)
+                            AnyView (
+                                IDPLoginViewSwiftUI(strategy: strategy, delegate: viewModel.delegate, scheme: viewModel.scheme)
+                            )
                         }
                     }
 
@@ -56,7 +69,7 @@ struct LoginViewSwiftUI: View {
                     if let message = viewModel.contactInfoMessage {
                         Text(message)
                             .font(.body)
-                            .foregroundColor(viewModel.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6))
+                            .foregroundColor(Color(uiColor: viewModel.scheme.colorScheme.onSurfaceColor?.withAlphaComponent(0.6) ?? .white))
                             .multilineTextAlignment(.center)
                     }
 
@@ -76,10 +89,39 @@ struct LoginViewSwiftUI: View {
             viewModel.onAppear()
         }
     }
+    
+    
+    func view(for strategy: LoginStrategy) -> AnyView {
+        switch strategy.id {
+        case "local":
+            return AnyView(
+                LocalLoginViewSwiftUI(
+                username: $viewModel.username,
+                password: $viewModel.password,
+                onLoginTapped: viewModel.handleLogin,
+                onSignupTapped: viewModel.handleSignup
+            ))
+
+        case "ldap":
+            return AnyView(LdapLoginViewSwiftUI(
+                strategy: strategy,
+                delegate: viewModel.delegate,
+                scheme: viewModel.scheme
+            ))
+
+        default:
+            return AnyView(IDPLoginViewSwiftUI(
+                strategy: strategy,
+                delegate: viewModel.delegate,
+                scheme: viewModel.scheme
+            ))
+        }
+    }
+
 }
 
 
-import SwiftUI
+
 
 @objcMembers
 class LoginViewSwiftUIWrapper: NSObject {

@@ -173,16 +173,6 @@ BOOL signingIn = YES;
     [self.idpCoordinator start];
 }
 
-- (void) startLoginOnlyQQQ {
-    NSURL *url = [MageServer baseURL];
-    __weak __typeof__(self) weakSelf = self;
-    [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
-        [weakSelf showLoginViewForCurrentUserForServer:mageServer];
-    } failure:^(NSError *error) {
-        NSLog(@"failed to contact server");
-    }];
-}
-
 - (void) startLoginOnly {
     NSLog(@"QQQ [AuthenticationCoordinator] startLoginOnly");
     NSURL *url = [MageServer baseURL];
@@ -209,12 +199,16 @@ BOOL signingIn = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"QQQ Setting LoginViewController as root");
         UINavigationController *loginNav = [[UINavigationController alloc] initWithRootViewController:self.loginView];
-        [UIApplication sharedApplication].keyWindow.rootViewController = loginNav;
+        
+        UIWindow *keyWindow = [UIApplication.sharedApplication activeKeyWindow];
+        if (keyWindow) {
+            keyWindow.rootViewController = loginNav;
+        } else {
+            NSLog(@"⚠️ No active key window found");
+        }
     });
     
-//    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-////    [self.navigationController pushViewController:self.loginView animated:NO];
-//    [self.navigationController setViewControllers:@[self.loginView] animated:NO];
+    [self.navigationController setViewControllers:@[self.loginView] animated:NO];
 }
 
 - (void) showLoginViewForServer: (MageServer *) mageServer {

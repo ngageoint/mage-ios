@@ -95,10 +95,10 @@
 
 - (BOOL)changeTextViewFocus:(id)sender {
     if ([[self.usernameField text] isEqualToString:@""]) {
-        [self.usernameField becomeFirstResponder];
+        (void)[self.usernameField becomeFirstResponder];
         return YES;
     } else if ([[self.passwordField text] isEqualToString:@""]) {
-        [self.passwordField becomeFirstResponder];
+        (void)[self.passwordField becomeFirstResponder];
         return YES;
     }
     return NO;
@@ -135,9 +135,9 @@
     if (![self changeTextViewFocus:sender]) {
         [sender resignFirstResponder];
         if ([self.usernameField isFirstResponder]) {
-            [self.usernameField resignFirstResponder];
+            (void)[self.usernameField resignFirstResponder];
         } else if ([self.passwordField isFirstResponder]) {
-            [self.passwordField resignFirstResponder];
+            (void)[self.passwordField resignFirstResponder];
         }
         [self verifyLogin];
     }
@@ -175,9 +175,11 @@
     __weak typeof(self) weakSelf = self;
     [self.delegate loginWithParameters:parameters
              withAuthenticationStrategy:self.strategy[@"identifier"]
-                               complete:^(AuthenticationStatus status, NSString *errorString) {
-        if (status == AUTHENTICATION_SUCCESS || status == REGISTRATION_SUCCESS) {
+                              complete:^(AuthenticationStatus status, NSString *errorString) {
+        if (status == AUTHENTICATION_SUCCESS) {
             [weakSelf resetLogin:YES];
+        } else if (status == REGISTRATION_SUCCESS) {
+            [weakSelf resetLogin:NO];
         } else {
             [weakSelf resetLogin:NO];
         }

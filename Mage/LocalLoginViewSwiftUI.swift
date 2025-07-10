@@ -11,6 +11,14 @@ import SwiftUI
 struct LocalLoginViewSwiftUI: View {
     @Binding var username: String
     @Binding var password: String
+    let strategy: LoginStrategy
+    let delegate: LocalLoginViewDelegate
+    let scheme: AppContainerScheming?
+    
+    @State private var isLoggingIn = false
+    @State private var showPassword = false
+
+    
     var onLoginTapped: () -> Void
     var onSignupTapped: () -> Void
 
@@ -19,25 +27,68 @@ struct LocalLoginViewSwiftUI: View {
             TextField("Username", text: $username)
                 .textFieldStyle(.roundedBorder)
 
-            SecureField("Password", text: $password)
-                .textFieldStyle(.roundedBorder)
-
-            Toggle("Show Password", isOn: .constant(false))
+            if showPassword {
+                TextField("Password", text: $password)
+                    .textFieldStyle(.roundedBorder)
+            } else {
+                SecureField("Password", text: $password)
+                    .textFieldStyle(.roundedBorder)
+            }
+            
+            Toggle("Show Password", isOn: $showPassword)
 
             Button("Sign In") {
-                onLoginTapped()
+                verifyLogin()
             }
             .buttonStyle(.borderedProminent)
+            .disabled(isLoggingIn)
 
             HStack {
                 Text("New to MAGE?")
                 Button("Sign Up Here") {
-                    onSignupTapped()
+                    delegate.createAccount()
                 }
             }
             .font(.footnote)
         }
         .padding()
+    }
+    
+    private func verifyLogin() {
+        isLoggingIn = true
+
+        
+        let deviceUUID = DeviceUUID.retrieveDeviceUUID()?.uuidString
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
+        let appVersion = "\(version)-\(build)"
+
+        let parameters: [String: String] = [
+            "username": username,
+            "password": password,
+            "strategy": strategy.id,
+            "uid": deviceUUID ?? "",
+            "appVersion": appVersion
+        ]
+
+        delegate.login(
+            with: parameters,
+            authenticationStrategy: strategy.id
+        ) { status, error in
+            DispatchQueue.main.async {
+                isLoggingIn = false
+
+                switch status {
+                case .AUTHENTICATION_SUCCESS:
+                    username = ""
+                    password = ""
+                case .REGISTRATION_SUCCESS, .UNABLE_TO_AUTHENTICATE:
+                    break
+                default:
+                    break
+                }
+            }
+        }
     }
 }
 
@@ -46,6 +97,9 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
         LocalLoginViewSwiftUI(
             username: .constant(""),
             password: .constant(""),
+            strategy: LoginStrategy(dictionary: ["identifier": "local"])!,
+            delegate: DummyLoginDelegate() as LocalLoginViewDelegate,    // mock delegate
+            scheme: AppDefaultContainerScheme(), // mock or real scheme
             onLoginTapped: {},
             onSignupTapped: {}
         )
@@ -59,6 +113,9 @@ public class LocalLoginViewWrapper: NSObject {
     @objc static func newWithUsername(
         _ username: String,
         password: String,
+        strategy: [String: String],
+        delegate: LocalLoginViewDelegate,
+        scheme: AppContainerScheming,
         loginHandler: @escaping () -> Void,
         signupHandler: @escaping () -> Void
     ) -> UIViewController {
@@ -72,9 +129,13 @@ public class LocalLoginViewWrapper: NSObject {
             set: { _ in }
         )
 
+        // TODO: BRENT - FORCE UNWRAP HERE NEEDS TO GO, TEMP FIX ONLY
         let swiftUIView = LocalLoginViewSwiftUI(
             username: user,
             password: pass,
+            strategy: LoginStrategy(dictionary: strategy)!,
+            delegate: delegate,
+            scheme: scheme,
             onLoginTapped: loginHandler,
             onSignupTapped: signupHandler
         )

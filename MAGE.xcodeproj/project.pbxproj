@@ -173,6 +173,9 @@
 		843A5E7D2D8DD42800E95F4B /* apiSuccessNoAuthStrategies.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */; };
 		843A5E7E2D8DD42800E95F4B /* polygonObservation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CDD7122601194600F3294C /* polygonObservation.json */; };
 		843A5E7F2D8DD42800E95F4B /* observationNoAttachmentResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */; };
+		843D89BE2E200410001BC993 /* UIApplication+TopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 843D89BD2E200410001BC993 /* UIApplication+TopWindow.m */; };
+		843D89C02E20541E001BC993 /* LocalLoginViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89BF2E20541E001BC993 /* LocalLoginViewDelegate.swift */; };
+		843D89C22E205661001BC993 /* DummyLoginDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89C12E205661001BC993 /* DummyLoginDelegate.swift */; };
 		846D0C002D834440009C68CB /* AuthenticationCoordinatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */; };
 		846D0C022D834519009C68CB /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */; };
 		846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
@@ -1152,6 +1155,10 @@
 		841D02682E144093006EBAE6 /* View+EmptyPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+EmptyPlaceholder.swift"; sourceTree = "<group>"; };
 		841D026A2E1441C9006EBAE6 /* ObservationListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListRow.swift; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
+		843D89BC2E2003EA001BC993 /* UIApplication+TopWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIApplication+TopWindow.h"; sourceTree = "<group>"; };
+		843D89BD2E200410001BC993 /* UIApplication+TopWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+TopWindow.m"; sourceTree = "<group>"; };
+		843D89BF2E20541E001BC993 /* LocalLoginViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewDelegate.swift; sourceTree = "<group>"; };
+		843D89C12E205661001BC993 /* DummyLoginDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyLoginDelegate.swift; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuthenticationCoordinator+Testing.h"; sourceTree = "<group>"; };
@@ -2267,6 +2274,8 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				843D89BC2E2003EA001BC993 /* UIApplication+TopWindow.h */,
+				843D89BD2E200410001BC993 /* UIApplication+TopWindow.m */,
 				2FCDC35422C2866A004189AD /* AuthenticationButton.h */,
 				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
 				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
@@ -2288,6 +2297,8 @@
 				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
 				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
 				84088DB72E1EE76900D704BA /* LocalLoginViewSwiftUI.swift */,
+				843D89C12E205661001BC993 /* DummyLoginDelegate.swift */,
+				843D89BF2E20541E001BC993 /* LocalLoginViewDelegate.swift */,
 				84088DB52E1EE42D00D704BA /* LocalLoginViewTest.xib */,
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
@@ -4934,6 +4945,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F767AC7A27D95811005684E5 /* Team.swift in Sources */,
+				843D89C02E20541E001BC993 /* LocalLoginViewDelegate.swift in Sources */,
 				F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */,
 				F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */,
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
@@ -5404,6 +5416,7 @@
 				F78D57A027BECFB9003594D3 /* SingleObservationMap.swift in Sources */,
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F73564FD2C65681300466813 /* LocationModel.swift in Sources */,
+				843D89BE2E200410001BC993 /* UIApplication+TopWindow.m in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F744ACFB2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
@@ -5466,6 +5479,7 @@
 				F73565052C668DB200466813 /* UserObservationList.swift in Sources */,
 				84E714152DF770CE00F52781 /* LightAppTheme.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
+				843D89C22E205661001BC993 /* DummyLoginDelegate.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				84E714232DF9D48A00F52781 /* UITextView+Theming.swift in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AppContainerScheming.h"
+#import "UIApplication+TopWindow.h"
 
 @class MageServer;
 
