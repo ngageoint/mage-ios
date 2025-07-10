@@ -44,6 +44,8 @@ protocol ObservationLocalDataSource {
         userUri: URL,
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[URIItem], Error>
+    func observeChangedRegions() -> AnyPublisher<[MKCoordinateRegion], Never>
+    func observationInRegionChanged(region: [MKCoordinateRegion])
 }
 
 struct ObservationModelPage {
@@ -55,6 +57,15 @@ struct ObservationModelPage {
 class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, ObservationLocalDataSource, ObservableObject {
     private enum FilterKeys: String {
         case userId
+    }
+    
+    private var changedRegionsPushSubject: PassthroughSubject<[MKCoordinateRegion], Never> = PassthroughSubject<[MKCoordinateRegion], Never>()
+    func observeChangedRegions() -> AnyPublisher<[MKCoordinateRegion], Never> {
+        return changedRegionsPushSubject.eraseToAnyPublisher()
+    }
+    
+    func observationInRegionChanged(region: [MKCoordinateRegion]) {
+        changedRegionsPushSubject.send(region)
     }
     
     func userObservations(
@@ -258,6 +269,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
     }
 
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int {
+        var regionsChanged: [MKCoordinateRegion] = []
         let initial = true
         let saveStart = Date()
         MageLogger.misc.debug("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
@@ -293,7 +305,8 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                         if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: backgroundContext) {
                             newObservationCount = newObservationCount + 1;
                             if (!initial) {
-                                observationToNotifyAbout = newObservation;
+                                observationToNotifyAbout = newObservation.observation;
+                                regionsChanged.append(contentsOf: newObservation.regionsChanged ?? [])
                             }
                         }
                     }
@@ -335,6 +348,8 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
             }
+            
+            self.changedRegionsPushSubject.send(regionsChanged)
 
             MageLogger.misc.debug("TIMING Saved Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
             return newObservationCount

@@ -139,140 +139,6 @@ enum ObservationState: Int, CustomStringConvertible {
         return observationFetchedResultsController
     }
     
-    @objc public static func operationToPullInitialObservations(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        return Observation.operationToPullObservations(initial: true, success: success, failure: failure);
-    }
-    
-    @objc public static func operationToPullObservations(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        return Observation.operationToPullObservations(initial: false, success: success, failure: failure);
-    }
-    
-    static func operationToPullObservations(initial: Bool, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return nil }
-        
-        guard let currentEventId = Server.currentEventId(), let baseURL = MageServer.baseURL() else {
-            return nil;
-        }
-        let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/observations";
-        MageLogger.misc.debug("Fetching observations from event \(currentEventId)");
-        
-        var parameters: [AnyHashable : Any] = [
-            // does this work on the server?
-            "sort" : "lastModified+DESC"
-        ]
-        
-        if let lastObservationDate = Observation.fetchLastObservationDate(context: context) {
-            parameters["startDate"] = ISO8601DateFormatter.string(from: lastObservationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
-        }
-        
-        let manager = MageSessionManager.shared();
-        let methodStart = Date()
-        MageLogger.misc.debug("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
-        let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
-            MageLogger.misc.debug("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
-            guard let features = responseObject as? [[AnyHashable : Any]] else {
-                success?(task, nil);
-                return;
-            }
-            
-            MageLogger.misc.debug("Fetched \(features.count) observations from the server, saving");
-            if features.count == 0 {
-                success?(task, responseObject)
-                return;
-            }
-            
-            let saveStart = Date()
-            MageLogger.misc.debug("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
-            let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
-            let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
-            localContext.perform {
-                MageLogger.misc.debug("TIMING There are \(features.count) features to save, chunking into groups of 250")
-                localContext.mr_setWorkingName(#function)
-                
-                var chunks = features.chunked(into: 250);
-                var newObservationCount = 0;
-                var observationToNotifyAbout: Observation?;
-                var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
-                if let event = Event.getEvent(eventId: currentEventId, context: localContext), let eventForms = event.forms {
-                    for eventForm in eventForms {
-                        if let formId = eventForm.formId, let json = eventForm.json?.json {
-                            eventFormDictionary[formId] = json[FormKey.fields.key] as? [[String: AnyHashable]]
-                        }
-                    }
-                }
-                localContext.reset();
-                MageLogger.misc.debug("TIMING we have \(chunks.count) groups to save")
-                while (chunks.count > 0) {
-                    autoreleasepool {
-                        guard let features = chunks.last else {
-                            return;
-                        }
-                        chunks.removeLast();
-                        let createObservationsDate = Date()
-                        MageLogger.misc.debug("TIMING creating \(features.count) observations for chunk \(chunks.count)")
-
-                        for observation in features {
-                            if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
-                                newObservationCount = newObservationCount + 1;
-                                if (!initial) {
-                                    observationToNotifyAbout = newObservation;
-                                }
-                            }
-                        }
-                        MageLogger.misc.debug("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
-                    }
-                    
-                    // only save once per chunk
-                    let localSaveDate = Date()
-                    do {
-                        MageLogger.misc.debug("TIMING saving \(features.count) observations on local context")
-                        try localContext.save()
-                    } catch {
-                        MageLogger.misc.error("Error saving observations: \(error)")
-                    }
-                    MageLogger.misc.debug("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
-                    
-                    rootSavingContext.perform {
-                        let rootSaveDate = Date()
-
-                        do {
-                            MageLogger.misc.debug("TIMING saving \(features.count) observations on root context")
-                            try rootSavingContext.save()
-                        } catch {
-                            MageLogger.misc.error("Error saving observations: \(error)")
-                        }
-                        MageLogger.misc.debug("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
-
-                    }
-                    
-                    localContext.reset();
-                    MageLogger.misc.debug("TIMING reset the local context for chunk \(chunks.count)")
-                    MageLogger.misc.debug("Saved chunk \(chunks.count)")
-                }
-                
-                MageLogger.misc.debug("Received \(newObservationCount) new observations and send bulk is \(initial)")
-                if ((initial && newObservationCount > 0) || newObservationCount > 1) {
-                    NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
-                } else if let observationToNotifyAbout = observationToNotifyAbout {
-                    NotificationRequester.observationPulled(observationToNotifyAbout);
-                }
-                
-                MageLogger.misc.debug("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-                DispatchQueue.main.async {
-                    success?(task, responseObject);
-                }
-            }
-        }, failure: { task, error in
-            MageLogger.misc.error("Error \(error)")
-            failure?(task, error);
-        })
-        
-        return task;
-    }
-    
     @objc public static func operationToPushObservation(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error?) -> Void)?) -> URLSessionDataTask? {
         let archived = (observation.state?.intValue ?? 0) == ObservationState.Archive.rawValue
         if observation.remoteId != nil {
@@ -544,7 +410,7 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    @objc public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
+    public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> ObservationChangeRegions {
         var observationDate = date ?? Date();
         observationDate = Calendar.current.date(bySetting: .second, value: 0, of: observationDate)!
         observationDate = Calendar.current.date(bySetting: .nanosecond, value: 0, of: observationDate)!
@@ -570,7 +436,11 @@ enum ObservationState: Int, CustomStringConvertible {
         observation.eventId = Server.currentEventId();
 
         observation.createObservationLocations(context: context)
-        return observation;
+        var regions: [MKCoordinateRegion] = []
+        for location in (observation.locations ?? Set<ObservationLocation>()) {
+            regions.append(location.region)
+        }
+        return ObservationChangeRegions(observation: observation, regionsChanged: regions)
     }
     
     static func idFromJson(json: [AnyHashable : Any]) -> String? {
@@ -589,8 +459,9 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    @objc public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, context:NSManagedObjectContext) -> Observation? {
+    public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, context:NSManagedObjectContext) -> ObservationChangeRegions? {
         var newObservation: Observation? = nil;
+        var regions: [MKCoordinateRegion] = []
         let remoteId = Observation.idFromJson(json: feature);
         
         let state = Observation.stateFromJson(json: feature);
@@ -609,7 +480,7 @@ enum ObservationState: Int, CustomStringConvertible {
                     let lastModifiedDate = formatter.date(from: lastModified) ?? Date();
                     if lastModifiedDate == existingObservation.lastModified {
                         // If the last modified date for this observation has not changed no need to update.
-                        return newObservation
+                        return ObservationChangeRegions(observation: newObservation, regionsChanged: regions)
                     }
                 }
                 
@@ -708,10 +579,14 @@ enum ObservationState: Int, CustomStringConvertible {
                 }
 
                 for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
+                    regions.append(location.region)
                     location.mr_deleteEntity(in: context)
                 }
 
                 existingObservation.createObservationLocations(context: context)
+                for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
+                    regions.append(location.region)
+                }
             }
         } else {
             if state != .Archive {
@@ -774,12 +649,16 @@ enum ObservationState: Int, CustomStringConvertible {
 
                     observation.createObservationLocations(context: context)
 
+                    for location in (observation.locations ?? Set<ObservationLocation>()) {
+                        regions.append(location.region)
+                    }
+                    
                     newObservation = observation;
                 }
             }
         }
         
-        return newObservation;
+        return ObservationChangeRegions(observation: newObservation, regionsChanged: regions)
     }
     
     @objc public static func isRectangle(points: [SFPoint]) -> Bool {

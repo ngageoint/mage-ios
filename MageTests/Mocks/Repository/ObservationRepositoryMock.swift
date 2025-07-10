@@ -12,6 +12,18 @@ import Combine
 @testable import MAGE
 
 class ObservationRepositoryMock: ObservationRepository {
+    var observeChangedRegionsToReturn: [MKCoordinateRegion] = []
+    func observeChangedRegions() -> AnyPublisher<[MKCoordinateRegion], Never> {
+        AnyPublisher(Just(observeChangedRegionsToReturn))
+    }
+    
+    var observationInRegionChangedCalled = false
+    var regionsChanged: [MKCoordinateRegion] = []
+    func observationInRegionChanged(region: [MKCoordinateRegion]) {
+        observationInRegionChangedCalled = true
+        regionsChanged = region
+    }
+    
     var refreshPublisher: AnyPublisher<Date, Never>?
     
     func getObservationNSManagedObject(observationUri: URL?) async -> MAGE.Observation? {

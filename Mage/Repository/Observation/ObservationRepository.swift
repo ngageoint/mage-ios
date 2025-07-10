@@ -38,6 +38,8 @@ protocol ObservationRepository {
     func syncObservation(uri: URL?)
     func fetchObservations() async -> Int
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
+    func observeChangedRegions() -> AnyPublisher<[MKCoordinateRegion], Never>
+    func observationInRegionChanged(region: [MKCoordinateRegion])
 }
 
 class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
@@ -113,6 +115,16 @@ class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
                 }
             }
             .store(in: &cancellable)
+    }
+    
+    func observationInRegionChanged(region: [MKCoordinateRegion]) {
+        localDataSource.observationInRegionChanged(region: region)
+    }
+    
+    // Instead of watching the entire list of ObservationLocations and diffing over it
+    // just watch the regions that have changed.  This allows the tiles to be redrawn.
+    func observeChangedRegions() -> AnyPublisher<[MKCoordinateRegion], Never> {
+        localDataSource.observeChangedRegions()
     }
     
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {

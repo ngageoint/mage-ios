@@ -41,19 +41,20 @@ class ObservationTransformationTests: AsyncMageCoreDataTestCase {
     
     func testShouldCreateAnObservationWithGeometry() {
         context.performAndWait {
-            let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: context);
+            let observationChangeRegions = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: context);
+            let observation = observationChangeRegions.observation
             expect(observation).toNot(beNil());
-            expect(observation.eventId).to(equal(1));
-            expect(observation.user?.username).to(equal("userabc"));
-            expect(observation.dirty).to(equal(false));
-            expect(observation.state).to(equal(1));
-            expect(observation.geometry).to(equal(SFPoint(x: 15, andY: 20)));
-            let observationProperties = observation.properties!;
-            expect(observationProperties["provider"] as? String).to(equal("gps"));
-            expect(observationProperties["accuracy"] as? NSNumber).to(equal(4.5));
-            expect(observationProperties["delta"] as? Double).to(equal(2));
-            expect(observationProperties["forms"]).toNot(beNil());
-            let observationLocations = observation.locations
+            expect(observation?.eventId).to(equal(1));
+            expect(observation?.user?.username).to(equal("userabc"));
+            expect(observation?.dirty).to(equal(false));
+            expect(observation?.state).to(equal(1));
+            expect(observation?.geometry).to(equal(SFPoint(x: 15, andY: 20)));
+            let observationProperties = observation?.properties!;
+            expect(observationProperties?["provider"] as? String).to(equal("gps"));
+            expect(observationProperties?["accuracy"] as? NSNumber).to(equal(4.5));
+            expect(observationProperties?["delta"] as? Double).to(equal(2));
+            expect(observationProperties?["forms"]).toNot(beNil());
+            let observationLocations = observation?.locations
             XCTAssertEqual(observationLocations?.count, 1)
         }
     }

@@ -129,8 +129,8 @@ class SingleObservationMapTests: KIFSpec {
             }
             
             it("initialize the SingleObservationMap with an observation") {
-                let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                
+                let observationChangeRegions = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                let observation = observationChangeRegions.observation
                 mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
@@ -150,8 +150,8 @@ class SingleObservationMapTests: KIFSpec {
             }
             
             it("initialize the SingleObservationMap with an observation and update location") {
-                let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                
+                let observationChangeRegions = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                let observation = observationChangeRegions.observation
                 mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
@@ -167,7 +167,7 @@ class SingleObservationMapTests: KIFSpec {
                 expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
                 expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
                 
-                observation.geometry = SFPoint(x: 20, andY: 30)
+                observation?.geometry = SFPoint(x: 20, andY: 30)
                 
                 expect(((testimpl.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
                 expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
@@ -179,8 +179,8 @@ class SingleObservationMapTests: KIFSpec {
             }
             
             it("initialize the SingleObservationMap with an observation and then change observation") {
-                let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                
+                let observationChangeRegions = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                let observation = observationChangeRegions.observation
                 mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
@@ -196,8 +196,8 @@ class SingleObservationMapTests: KIFSpec {
                 expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
                 expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
                 
-                let observation2 = Observation.create(geometry: SFPoint(x: 20, andY: 30), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                
+                let observation2ChangeRegions = Observation.create(geometry: SFPoint(x: 20, andY: 30), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                let observation2 = observation2ChangeRegions.observation
                 mixin.observation = observation2
                 expect(((testimpl.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
                 expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
