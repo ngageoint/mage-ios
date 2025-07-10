@@ -177,8 +177,18 @@
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
             localAuth = YES;
             
+            NSDictionary *strategyDict = @{
+                @"identifier": @"local",
+                @"strategy": @{}
+            };
+            
+            LoginStrategy *loginStrategy = [[LoginStrategy alloc] initWithDictionary:strategyDict];
+            
             UIViewController *loginVC = [LocalLoginViewWrapper newWithUsername:@""
                                                                       password:@""
+                                                                      strategy: loginStrategy
+                                                                      delegate: (id<LocalLoginViewDelegate>)self.delegate
+                                                                        scheme: self.scheme
                                                                  loginHandler:^{
                 NSLog(@"Login tapped");
             } signupHandler:^{

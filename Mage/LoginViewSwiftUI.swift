@@ -45,7 +45,7 @@ struct LoginViewSwiftUI: View {
                                     username: $username,
                                     password: $password,
                                     strategy: strategy,
-                                    delegate: viewModel.delegate,
+                                    delegate: viewModel.delegate as! LocalLoginViewDelegate,
                                     scheme: viewModel.scheme,
                                     onLoginTapped: viewModel.handleLogin,
                                     onSignupTapped: viewModel.handleSignup
@@ -98,6 +98,9 @@ struct LoginViewSwiftUI: View {
                 LocalLoginViewSwiftUI(
                 username: $viewModel.username,
                 password: $viewModel.password,
+                strategy: strategy,
+                delegate: viewModel.delegate as! LocalLoginViewDelegate,
+                scheme: viewModel.scheme,
                 onLoginTapped: viewModel.handleLogin,
                 onSignupTapped: viewModel.handleSignup
             ))

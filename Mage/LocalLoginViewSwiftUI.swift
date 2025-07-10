@@ -18,7 +18,6 @@ struct LocalLoginViewSwiftUI: View {
     @State private var isLoggingIn = false
     @State private var showPassword = false
 
-    
     var onLoginTapped: () -> Void
     var onSignupTapped: () -> Void
 
@@ -57,7 +56,6 @@ struct LocalLoginViewSwiftUI: View {
     private func verifyLogin() {
         isLoggingIn = true
 
-        
         let deviceUUID = DeviceUUID.retrieveDeviceUUID()?.uuidString
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
@@ -110,10 +108,11 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
 
 @objcMembers
 public class LocalLoginViewWrapper: NSObject {
-    @objc static func newWithUsername(
+    @objc(newWithUsername:password:strategy:delegate:scheme:loginHandler:signupHandler:)
+    static func newWithUsername(
         _ username: String,
         password: String,
-        strategy: [String: String],
+        strategy: LoginStrategy,
         delegate: LocalLoginViewDelegate,
         scheme: AppContainerScheming,
         loginHandler: @escaping () -> Void,
@@ -133,7 +132,7 @@ public class LocalLoginViewWrapper: NSObject {
         let swiftUIView = LocalLoginViewSwiftUI(
             username: user,
             password: pass,
-            strategy: LoginStrategy(dictionary: strategy)!,
+            strategy: strategy,
             delegate: delegate,
             scheme: scheme,
             onLoginTapped: loginHandler,
