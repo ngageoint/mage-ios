@@ -23,15 +23,6 @@ public enum LoginStrategyType: String {
         default: return .unknown
         }
     }
-    
-//    init(identifier: String) {
-//        switch identifier {
-//        case "local": self = .local
-//        case "ldap": self = .ldap
-//        case _ where identifier.hasPrefix("oauth"): self = .idp
-//        default: self = .unknown
-//        }
-//    }
 }
 
 @objcMembers
@@ -53,28 +44,17 @@ public class LoginStrategy: NSObject, Identifiable {
         let params = dictionary["strategy"] as? [String: Any] ?? [:]
         self.init(id: id, parameters: params)
     }
-    
-//    init?(dictionary: [String: Any]) {
-//        guard let id = dictionary["identifier"] as? String,
-//              let params = dictionary["strategy"] as? [String: Any] else {
-//            return nil
-//        }
-//        
-//        self.id = id
-//        self.parameters = params
-//        
-//        if let typeString = params["type"] as? String {
-//            self.type = LoginStrategyType(identifier: typeString)
-//        } else {
-//            self.type = id == "local" ? .local : .unknown
-//        }
-//    }
-
 
     static func loadAllFromUserDefaults() -> [LoginStrategy] {
         guard let strategies = UserDefaults.standard.dictionary(forKey: "serverAuthenticationStrategies") as? [String: [AnyHashable: Any]] else {
             return []
         }
         return strategies.compactMap { LoginStrategy(dictionary: ["identifier": $0.key, "strategy": $0.value]) }
+    }
+}
+
+extension LoginStrategy {
+    @objc public var objcDictionary: NSDictionary {
+        return ["identifier": id]
     }
 }

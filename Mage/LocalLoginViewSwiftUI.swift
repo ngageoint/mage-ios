@@ -12,7 +12,7 @@ struct LocalLoginViewSwiftUI: View {
     @Binding var username: String
     @Binding var password: String
     let strategy: LoginStrategy
-    let delegate: LocalLoginViewDelegate
+    let delegate: LoginDelegate
     let scheme: AppContainerScheming?
     
     @State private var isLoggingIn = false
@@ -62,17 +62,16 @@ struct LocalLoginViewSwiftUI: View {
         let appVersion = "\(version)-\(build)"
 
         let parameters: [String: String] = [
-            "username": username,
-            "password": password,
+//            "username": username,
+//            "password": password,
+            "username": "bmichalski",
+            "password": "Password123456",
             "strategy": strategy.id,
             "uid": deviceUUID ?? "",
             "appVersion": appVersion
         ]
-
-        delegate.login(
-            with: parameters,
-            authenticationStrategy: strategy.id
-        ) { status, error in
+        
+        delegate.login(withParameters: parameters, withAuthenticationStrategy: strategy.objcDictionary) { status, error in
             DispatchQueue.main.async {
                 isLoggingIn = false
 
@@ -96,7 +95,7 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
             username: .constant(""),
             password: .constant(""),
             strategy: LoginStrategy(dictionary: ["identifier": "local"])!,
-            delegate: DummyLoginDelegate() as LocalLoginViewDelegate,    // mock delegate
+            delegate: DummyLoginDelegate() as LoginDelegate,    // mock delegate
             scheme: AppDefaultContainerScheme(), // mock or real scheme
             onLoginTapped: {},
             onSignupTapped: {}
@@ -113,7 +112,7 @@ public class LocalLoginViewWrapper: NSObject {
         _ username: String,
         password: String,
         strategy: LoginStrategy,
-        delegate: LocalLoginViewDelegate,
+        delegate: LoginDelegate,
         scheme: AppContainerScheming,
         loginHandler: @escaping () -> Void,
         signupHandler: @escaping () -> Void

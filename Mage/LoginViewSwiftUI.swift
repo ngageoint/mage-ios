@@ -36,6 +36,7 @@ struct LoginViewSwiftUI: View {
                     }
                 }
 
+                // TODO: BRENT - Get rid of FORCED UNWRAP
                 VStack(spacing: 16) {
                     ForEach(viewModel.authStrategies, id: \.id) { strategy in
                         switch strategy.id {
@@ -45,7 +46,7 @@ struct LoginViewSwiftUI: View {
                                     username: $username,
                                     password: $password,
                                     strategy: strategy,
-                                    delegate: viewModel.delegate as! LocalLoginViewDelegate,
+                                    delegate: viewModel.delegate!,
                                     scheme: viewModel.scheme,
                                     onLoginTapped: viewModel.handleLogin,
                                     onSignupTapped: viewModel.handleSignup
@@ -90,7 +91,7 @@ struct LoginViewSwiftUI: View {
         }
     }
     
-    
+    // TODO: BRENT - Get rid of FORCED UNWRAP.
     func view(for strategy: LoginStrategy) -> AnyView {
         switch strategy.id {
         case "local":
@@ -99,7 +100,7 @@ struct LoginViewSwiftUI: View {
                 username: $viewModel.username,
                 password: $viewModel.password,
                 strategy: strategy,
-                delegate: viewModel.delegate as! LocalLoginViewDelegate,
+                delegate: viewModel.delegate!,
                 scheme: viewModel.scheme,
                 onLoginTapped: viewModel.handleLogin,
                 onSignupTapped: viewModel.handleSignup
