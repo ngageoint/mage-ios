@@ -417,7 +417,9 @@ static NSString *garsTitle = @"GARS";
     [self.hintView autoPinEdgeToSuperviewEdge:ALEdgeRight];
     [self.hintView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.slidescroll];
     
-    if (defaults.showMapSearch) {
+    // TODO: When this class is moved to Swift, properly observe the value change
+    int32_t code = [SettingsProvider.instance getMapSearchTypeCode];
+    if (code != 0) { // none search type
         self.searchButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
         self.searchButton.accessibilityLabel = @"search";
         [self.searchButton setImage:[UIImage systemImageNamed:@"magnifyingglass"] forState:UIControlStateNormal];

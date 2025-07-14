@@ -12,6 +12,7 @@ import MapFramework
 
 import mgrs_ios
 import gars_ios
+import Combine
 
 protocol HasMapSearch {
     var mapView: MKMapView? { get set }
@@ -22,6 +23,9 @@ protocol HasMapSearch {
 }
 
 class HasMapSearchMixin: NSObject, MapMixin {
+    @Injected(\.settingsRepository)
+    var settingsRepository: SettingsRepository
+    
     var hasMapSearch: HasMapSearch
     var rootView: UIStackView
     var indexInView: Int = 0
@@ -30,6 +34,8 @@ class HasMapSearchMixin: NSObject, MapMixin {
     var navigationController: UINavigationController?
     var annotation: MKPointAnnotation?
     var searchController: SearchSheetController
+    
+    var cancellables: Set<AnyCancellable> = Set()
 
     private lazy var mapSearchButton: MDCFloatingButton = {
         let mapSearchButton = MDCFloatingButton(shape: .mini)
@@ -63,14 +69,27 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
-        if UserDefaults.standard.showMapSearch {
+        settingsRepository.observeSettings()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { settingsModel in
+                self.updateView(settingsModel: settingsModel)
+            })
+            .store(in: &cancellables)
+    }
+    
+    func updateView(settingsModel: SettingsModel?) {
+        if let settings = settingsModel,
+           settings.mapSearchType != .none
+        {
+            mapSearchButton.isHidden = false
             if rootView.arrangedSubviews.count < indexInView {
                 rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
             } else {
                 rootView.insertArrangedSubview(mapSearchButton, at: indexInView)
             }
-            
             applyTheme(scheme: hasMapSearch.scheme)
+        } else {
+            mapSearchButton.isHidden = true
         }
     }
     

@@ -15,6 +15,9 @@ import Foundation
     
     @Injected(\.attachmentPushService)
     var attachmentPushService: AttachmentPushService
+    
+    @Injected(\.settingsRepository)
+    var settingsRepository: SettingsRepository
 
     @objc public static let singleton = Mage();
     
@@ -47,9 +50,8 @@ import Foundation
             tasks.append(usersPullTask)
         }
         
-        fetchSettings()
-        
         Task {
+            await fetchSettings()
             await observationPushService.start();
         }
         if let context = context {
@@ -71,17 +73,7 @@ import Foundation
         attachmentPushService.stop();
     }
     
-    private func fetchSettings() {
-        let manager = MageSessionManager.shared();
-        
-        let task = Settings.operationToPullMapSettings { task, response in
-            NSLog("Fetched settings");
-        } failure: { task, error in
-            NSLog("Failure to fetch settings");
-        }
-        
-        if let task = task {
-            manager?.addTask(task)
-        }
+    private func fetchSettings() async {
+        await settingsRepository.fetchMapSettings()
     }
 }
