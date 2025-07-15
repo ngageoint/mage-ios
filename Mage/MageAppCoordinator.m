@@ -16,6 +16,7 @@
 #import "StoredPassword.h"
 #import "MAGE-Swift.h"
 #import "MagicalRecord+MAGE.h"
+#import "UIViewController+TopMost.h"
 
 @interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationDelegate, EventChooserDelegate, ServerURLDelegate>
 
@@ -58,28 +59,28 @@
     [self.authCoordinator startLoginOnly];
 }
 
-- (void) startQQQ {
-    NSLog(@"QQQ [MageAppCoordinator] Starting...");
-    
-    // check for a valid token
-    if ([[UserUtility singleton] isTokenExpired]) {
-        NSURL *url = [MageServer baseURL];
-        if ([url absoluteString].length == 0) {
-            [self changeServerUrl];
-            return;
-        } else {
-            __weak __typeof__(self) weakSelf = self;
-            [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
-                [weakSelf startAuthentication:mageServer];
-            } failure:^(NSError *error) {
-                [weakSelf setServerURLWithError: error.localizedDescription];
-            }];
-        }
-    } else {
-        [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
-        [self startEventChooser];
-    }
-}
+//- (void) startQQQ {
+//    NSLog(@"QQQ [MageAppCoordinator] Starting...");
+//    
+//    // check for a valid token
+//    if ([[UserUtility singleton] isTokenExpired]) {
+//        NSURL *url = [MageServer baseURL];
+//        if ([url absoluteString].length == 0) {
+//            [self changeServerUrl];
+//            return;
+//        } else {
+//            __weak __typeof__(self) weakSelf = self;
+//            [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
+//                [weakSelf startAuthentication:mageServer];
+//            } failure:^(NSError *error) {
+//                [weakSelf setServerURLWithError: error.localizedDescription];
+//            }];
+//        }
+//    } else {
+//        [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
+//        [self startEventChooser];
+//    }
+//}
 
 - (void) startAuthentication:(MageServer *) mageServer {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -113,10 +114,19 @@
 }
 
 - (void) changeServerUrl {
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self error:nil scheme:self.scheme];
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController pushViewController:self.urlController animated:NO];
+
+    UIViewController *topVC = [UIViewController topMostViewController];
+    UIViewController *vc = [ServerURLViewWrapper setServerURLViewWithDelegate:self scheme:self.scheme];
+    [topVC presentViewController:vc animated:YES completion:nil];
+
+    
+    
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+//    self.urlController = [[ServerURLController alloc] initWithDelegate:self error:nil scheme:self.scheme];
+//    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    
+//    [self.navigationController setViewControllers:@[self.urlController] animated: NO];
+//    [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) setServerURLWithError: (NSString *) error {

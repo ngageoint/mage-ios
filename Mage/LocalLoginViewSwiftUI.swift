@@ -9,11 +9,13 @@
 import SwiftUI
 
 struct LocalLoginViewSwiftUI: View {
-    @Binding var username: String
-    @Binding var password: String
+    @ObservedObject var viewModel: LoginViewModel
+    
+//    @Binding var username: String
+//    @Binding var password: String
     let strategy: LoginStrategy
     let delegate: LoginDelegate
-    let scheme: AppContainerScheming?
+//    let scheme: AppContainerScheming?
     
     @State private var isLoggingIn = false
     @State private var showPassword = false
@@ -23,14 +25,14 @@ struct LocalLoginViewSwiftUI: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            TextField("Username", text: $username)
+            TextField("Username", text: $viewModel.username)
                 .textFieldStyle(.roundedBorder)
 
             if showPassword {
-                TextField("Password", text: $password)
+                TextField("Password", text: $viewModel.password)
                     .textFieldStyle(.roundedBorder)
             } else {
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $viewModel.password)
                     .textFieldStyle(.roundedBorder)
             }
             
@@ -56,51 +58,69 @@ struct LocalLoginViewSwiftUI: View {
     private func verifyLogin() {
         isLoggingIn = true
 
-        let deviceUUID = DeviceUUID.retrieveDeviceUUID()?.uuidString
+        let parameters = buildLoginParameters()
+        
+        delegate.login(
+            withParameters: parameters,
+            withAuthenticationStrategy: strategy.id
+        ) { status, error in
+            handleAuthenticationResult(status)
+        }
+    }
+    
+    
+    private func handleAuthenticationResult(_ status: AuthenticationStatus) {
+        DispatchQueue.main.async {
+            self.isLoggingIn = false
+
+            // TODO: BRENT - CLEAN-UP
+            switch status {
+            case .AUTHENTICATION_SUCCESS:
+                viewModel.username = ""
+                viewModel.password = ""
+                onLoginTapped()
+            case .AUTHENTICATION_ERROR:
+                print("!!! *** AUTHENTICATION_ERROR *** !!!")
+                break
+            case .REGISTRATION_SUCCESS:
+                print("!!! *** REGISTRATION_SUCCESS *** !!!")
+                break
+            case .UNABLE_TO_AUTHENTICATE:
+                print("!!! *** UNABLE_TO_AUTHENTICATE *** !!!")
+                break
+            default:
+                print("!!! *** DEFAULT *** !!!")
+                break
+            }
+        }
+    }
+    
+    private func buildLoginParameters() -> [String: Any] {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
         let appVersion = "\(version)-\(build)"
-
-        let parameters: [String: String] = [
-//            "username": username,
-//            "password": password,
-            "username": "bmichalski",
-            "password": "Password123456",
-            "strategy": strategy.id,
-            "uid": deviceUUID ?? "",
+        let uuid = DeviceUUID.retrieveDeviceUUID()?.uuidString ?? ""
+        
+        return [
+            "username": viewModel.username,
+            "password": viewModel.password,
+            "strategy": ["identifier": "local"],
+            "uid": uuid,
             "appVersion": appVersion
         ]
-        
-        delegate.login(withParameters: parameters, withAuthenticationStrategy: strategy.objcDictionary) { status, error in
-            DispatchQueue.main.async {
-                isLoggingIn = false
-
-                switch status {
-                case .AUTHENTICATION_SUCCESS:
-                    username = ""
-                    password = ""
-                case .REGISTRATION_SUCCESS, .UNABLE_TO_AUTHENTICATE:
-                    break
-                default:
-                    break
-                }
-            }
-        }
     }
 }
 
 struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
     static var previews: some View {
-        LocalLoginViewSwiftUI(
-            username: .constant(""),
-            password: .constant(""),
-            strategy: LoginStrategy(dictionary: ["identifier": "local"])!,
-            delegate: DummyLoginDelegate() as LoginDelegate,    // mock delegate
-            scheme: AppDefaultContainerScheme(), // mock or real scheme
-            onLoginTapped: {},
-            onSignupTapped: {}
-        )
-        .previewLayout(.sizeThatFits)
+        let mockServer = MageServer(url: URL(string: "https://test.mage.geointapps.com")!)
+        let mockScheme = AppDefaultContainerScheme()
+        let mockDelegate = DummyLoginDelegate() as LoginDelegate
+        let viewModel = LoginViewModel(server: mockServer, user: nil, scheme: mockScheme, delegate: mockDelegate)
+        let mockStrategy = LoginStrategy(dictionary: ["identifier": "local"])!
+        
+        LocalLoginViewSwiftUI(viewModel: viewModel, strategy: mockStrategy, delegate: mockDelegate, onLoginTapped: {}, onSignupTapped: {})
+            .previewLayout(.sizeThatFits)
     }
 }
 
@@ -109,7 +129,7 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
 public class LocalLoginViewWrapper: NSObject {
     @objc(newWithUsername:password:strategy:delegate:scheme:loginHandler:signupHandler:)
     static func newWithUsername(
-        _ username: String,
+        username: String,
         password: String,
         strategy: LoginStrategy,
         delegate: LoginDelegate,
@@ -117,26 +137,12 @@ public class LocalLoginViewWrapper: NSObject {
         loginHandler: @escaping () -> Void,
         signupHandler: @escaping () -> Void
     ) -> UIViewController {
-        let user = Binding<String>(
-            get: { username },
-            set: { _ in }
-        )
-
-        let pass = Binding<String>(
-            get: { password },
-            set: { _ in }
-        )
-
         // TODO: BRENT - FORCE UNWRAP HERE NEEDS TO GO, TEMP FIX ONLY
-        let swiftUIView = LocalLoginViewSwiftUI(
-            username: user,
-            password: pass,
-            strategy: strategy,
-            delegate: delegate,
-            scheme: scheme,
-            onLoginTapped: loginHandler,
-            onSignupTapped: signupHandler
-        )
+        let server = MageServer(url: MageServer.baseURL()!)
+
+        let user: User? = nil
+        let viewModel = LoginViewModel(server: server, user: user, scheme: scheme, delegate: delegate)
+        let swiftUIView = LocalLoginViewSwiftUI(viewModel: viewModel, strategy: strategy, delegate: delegate, onLoginTapped: loginHandler, onSignupTapped: signupHandler)
 
         return UIHostingController(rootView: swiftUIView)
     }

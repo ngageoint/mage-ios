@@ -176,6 +176,11 @@
 		843D89BE2E200410001BC993 /* UIApplication+TopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 843D89BD2E200410001BC993 /* UIApplication+TopWindow.m */; };
 		843D89C02E20541E001BC993 /* LocalLoginViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89BF2E20541E001BC993 /* LocalLoginViewDelegate.swift */; };
 		843D89C22E205661001BC993 /* DummyLoginDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89C12E205661001BC993 /* DummyLoginDelegate.swift */; };
+		843D89C42E26B7EE001BC993 /* ServerURLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89C32E26B7EE001BC993 /* ServerURLView.swift */; };
+		843D89C62E26BD2B001BC993 /* ThemedTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89C52E26BD2B001BC993 /* ThemedTextFieldView.swift */; };
+		843D89C82E26EF3F001BC993 /* ServerURLViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89C72E26EF3F001BC993 /* ServerURLViewModel.swift */; };
+		843D89CA2E26F282001BC993 /* ServerURLViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843D89C92E26F282001BC993 /* ServerURLViewSwiftUI.swift */; };
+		843D89CD2E27012A001BC993 /* UIViewController+TopMost.m in Sources */ = {isa = PBXBuildFile; fileRef = 843D89CC2E27012A001BC993 /* UIViewController+TopMost.m */; };
 		846D0C002D834440009C68CB /* AuthenticationCoordinatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */; };
 		846D0C022D834519009C68CB /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */; };
 		846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
@@ -1159,6 +1164,12 @@
 		843D89BD2E200410001BC993 /* UIApplication+TopWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+TopWindow.m"; sourceTree = "<group>"; };
 		843D89BF2E20541E001BC993 /* LocalLoginViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewDelegate.swift; sourceTree = "<group>"; };
 		843D89C12E205661001BC993 /* DummyLoginDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyLoginDelegate.swift; sourceTree = "<group>"; };
+		843D89C32E26B7EE001BC993 /* ServerURLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLView.swift; sourceTree = "<group>"; };
+		843D89C52E26BD2B001BC993 /* ThemedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTextFieldView.swift; sourceTree = "<group>"; };
+		843D89C72E26EF3F001BC993 /* ServerURLViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLViewModel.swift; sourceTree = "<group>"; };
+		843D89C92E26F282001BC993 /* ServerURLViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLViewSwiftUI.swift; sourceTree = "<group>"; };
+		843D89CB2E270113001BC993 /* UIViewController+TopMost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TopMost.h"; sourceTree = "<group>"; };
+		843D89CC2E27012A001BC993 /* UIViewController+TopMost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TopMost.m"; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuthenticationCoordinator+Testing.h"; sourceTree = "<group>"; };
@@ -2314,6 +2325,10 @@
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
+				843D89C32E26B7EE001BC993 /* ServerURLView.swift */,
+				843D89C72E26EF3F001BC993 /* ServerURLViewModel.swift */,
+				843D89C92E26F282001BC993 /* ServerURLViewSwiftUI.swift */,
+				843D89C52E26BD2B001BC993 /* ThemedTextFieldView.swift */,
 				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
@@ -3748,6 +3763,8 @@
 				F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */,
 				F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */,
 				F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */,
+				843D89CB2E270113001BC993 /* UIViewController+TopMost.h */,
+				843D89CC2E27012A001BC993 /* UIViewController+TopMost.m */,
 				04E0CB0D1C40161C00E34F9C /* MageConstants.h */,
 				04E0CB0E1C40161C00E34F9C /* MageConstants.m */,
 				F79116252491414B0043A529 /* MageInitializer.swift */,
@@ -5027,6 +5044,7 @@
 				2FAC84A72B50584B00FCAB37 /* SearchMapView.swift in Sources */,
 				84088DC62E1EF5B600D704BA /* LoginStrategy.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
+				843D89C42E26B7EE001BC993 /* ServerURLView.swift in Sources */,
 				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
@@ -5048,6 +5066,7 @@
 				F7C0979D2C812614003FA115 /* GeoPackageMediaRow.swift in Sources */,
 				F73564FB2C65650F00466813 /* UserLocationViewModel.swift in Sources */,
 				F7C097622C7FA822003FA115 /* RoleRepository.swift in Sources */,
+				843D89C62E26BD2B001BC993 /* ThemedTextFieldView.swift in Sources */,
 				F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */,
 				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				F7C097A12C812630003FA115 /* GeoPackageProperty.swift in Sources */,
@@ -5143,6 +5162,7 @@
 				F70C343B2C73D7BD007616FA /* AskToCacheImageView.swift in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
+				843D89C82E26EF3F001BC993 /* ServerURLViewModel.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				84E714072DF76A1100F52781 /* LightColorScheme.swift in Sources */,
 				F7D31F942CB962E100126468 /* CacheActiveSwitch.swift in Sources */,
@@ -5352,6 +5372,7 @@
 				84E713F92DF7279700F52781 /* UITextField+Theming.swift in Sources */,
 				84E713FD2DF7472400F52781 /* ThemingConstants.swift in Sources */,
 				F7C0978F2C812502003FA115 /* ObservationLocationBottomSheetViewModel.swift in Sources */,
+				843D89CA2E26F282001BC993 /* ServerURLViewSwiftUI.swift in Sources */,
 				2F3C9EE02B179E8F00FF5570 /* HasMapSearchMixin.swift in Sources */,
 				F70C34392C73D7A0007616FA /* DownloadingFileView.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
@@ -5526,6 +5547,7 @@
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
+				843D89CD2E27012A001BC993 /* UIViewController+TopMost.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,

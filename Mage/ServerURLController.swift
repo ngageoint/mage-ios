@@ -9,7 +9,7 @@
 import CoreGraphics
 import UIKit
 
-@objc public protocol ServerURLDelegate {
+@objc public protocol ServerURLDelegate: AnyObject {
     @objc func setServerURL(url: URL)
     @objc func cancelSetServerURL()
 }
@@ -183,7 +183,8 @@ class ServerURLController: UIViewController {
         view.addSubview(errorStatus)
         view.addSubview(errorInfoLink)
         
-        applyTheme(withContainerScheme: scheme)
+//        applyTheme(withContainerScheme: scheme)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
