@@ -204,9 +204,16 @@ class DateViewTests: XCTestCase {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
         formatter.locale = Locale(identifier: "en_US_POSIX");
         
-        let date = formatter.date(from: "2020-11-02T14:00:00.000Z")!;
+        var components = DateComponents()
+        components.year = 2020
+        components.month = 11
+        components.day = 2
+        components.hour = 8
+        components.minute = 0
+        components.second = 0
+        let expectedDate = Calendar.current.date(from: components)!
         
-        let expectedFormattedDate = formatDateToLocal(date)  // Convert to UI time zone
+        let expectedFormattedDate = formatDateToLocal(expectedDate)  // Convert to UI time zone
 
         expect(self.dateFieldView.textField.text).to(equal(expectedFormattedDate))
     }

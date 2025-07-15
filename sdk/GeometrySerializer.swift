@@ -6,8 +6,8 @@
 //  Copyright © 2017 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-import sf_ios
-import sf_geojson_ios
+import SimpleFeatures
+import SimpleFeaturesGeoJSON
 
 @objc public class GeometrySerializer: NSObject {
     

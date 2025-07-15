@@ -12,9 +12,6 @@ import Combine
 @testable import MAGE
 
 class ObservationLocationStaticLocalDataSource: ObservationLocationLocalDataSource {
-    func locationsPublisher() -> AnyPublisher<CollectionDifference<MAGE.ObservationMapItem>, Never> {
-        AnyPublisher(Just(list.difference(from: [])).setFailureType(to: Never.self))
-    }
     
     func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<MAGE.ObservationMapItem, Never>? {
         AnyPublisher(Just(list[0]))

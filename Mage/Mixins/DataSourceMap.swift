@@ -49,24 +49,32 @@ class DataSourceMap: MapMixin {
         self.mapView = mapView
         self.mapState = mapState
 
-        viewModel?.$annotations.sink { [weak self] annotations in
-            Task { [weak self] in
-                await self?.handleFeatureChanges(annotations: annotations)
+        viewModel?.$annotations
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] annotations in
+                Task { [weak self] in
+                    await self?.handleFeatureChanges(annotations: annotations)
+                }
             }
-        }
-        .store(in: &cancellable)
+            .store(in: &cancellable)
         
-        viewModel?.$featureOverlays.sink { [weak self] featureOverlays in
-            Task { [weak self] in
-                await self?.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
+        viewModel?.$featureOverlays
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] featureOverlays in
+                Task { [weak self] in
+                    await self?.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
+                }
             }
-        }
-        .store(in: &cancellable)
+            .store(in: &cancellable)
         
-        viewModel?.$tileOverlays.sink { [weak self] tileOverlays in
-            self?.updateTileOverlays(tileOverlays: tileOverlays)
-        }
-        .store(in: &cancellable)
+        viewModel?.$tileOverlays
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] tileOverlays in
+                Task { [weak self] in
+                    await self?.updateTileOverlays(tileOverlays: tileOverlays)
+                }
+            }
+            .store(in: &cancellable)
     }
     
     func currentTileOverlays() -> [DataSourceTileOverlay] {
@@ -77,6 +85,7 @@ class DataSourceMap: MapMixin {
         }) ?? []
     }
     
+    @MainActor
     private func updateTileOverlays(tileOverlays: [DataSourceTileOverlay]) {
         guard let mapView = mapView, let viewModel = viewModel else {
             return

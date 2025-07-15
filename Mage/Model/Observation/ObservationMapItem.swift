@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import sf_ios
+import SimpleFeatures
 
 struct ObservationMapItem: Equatable, Hashable {
     var observationId: URL?

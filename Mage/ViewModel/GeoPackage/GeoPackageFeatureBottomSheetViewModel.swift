@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import GeoPackage
 
 class GeoPackageFeatureBottomSheetViewModel: ObservableObject {
     @Published var itemKey: String
@@ -60,9 +61,9 @@ class GeoPackageFeatureBottomSheetViewModel: ObservableObject {
         
         if let dataType = featureItem.featureDataTypes?[key] {
             let gpkgDataType = GPKGDataTypes.fromName(dataType)
-            if (gpkgDataType == GPKG_DT_BOOLEAN) {
+            if (gpkgDataType == .DT_BOOLEAN) {
                 valueString = "\((value as? Int) == 0 ? "true" : "false")"
-            } else if (gpkgDataType == GPKG_DT_DATE) {
+            } else if (gpkgDataType == .DT_DATE) {
                 let dateDisplayFormatter = DateFormatter();
                 dateDisplayFormatter.dateFormat = "yyyy-MM-dd";
                 dateDisplayFormatter.timeZone = TimeZone(secondsFromGMT: 0);
@@ -70,7 +71,7 @@ class GeoPackageFeatureBottomSheetViewModel: ObservableObject {
                 if let date = value as? Date {
                     valueString = "\(dateDisplayFormatter.string(from: date))"
                 }
-            } else if (gpkgDataType == GPKG_DT_DATETIME) {
+            } else if (gpkgDataType == .DT_DATETIME) {
                 valueString = "\((value as? NSDate)?.formattedDisplay() ?? value)";
             } else {
                 valueString = "\(value)"

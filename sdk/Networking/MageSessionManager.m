@@ -89,7 +89,11 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
 }
 
 -(void) setTokenInRequestSerializer: (AFHTTPRequestSerializer *) requestSerializer{
-    [requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", _token] forHTTPHeaderField:@"Authorization"];
+    if (_token != nil) {
+        [requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", _token] forHTTPHeaderField:@"Authorization"];
+    } else { // Clear authorization from http headers
+        [requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
+    }
 }
 
 -(AFHTTPRequestSerializer *) httpRequestSerializer{
