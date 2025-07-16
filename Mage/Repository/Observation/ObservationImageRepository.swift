@@ -48,32 +48,9 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         return documentsDirectory as String
     }()
     
-    private var imageNameCache: [ImageNameCacheKey: String?] = [:]
-    
     func clearCache() {
         imageCache.removeAllObjects()
-        imageNameCache.removeAll()
     }
-    
-    // This is used as the key to a dictionary of imageNames
-    struct ImageNameCacheKey: Hashable {
-        let eventId: Int64
-        let formId: Int?
-        let primaryFieldText: String?
-        let secondaryFieldText: String?
-    }
-    
-    private let cacheQueue = DispatchQueue(label: "imageNameCacheQueue")
-    /**
-     # Returning an image location/name and storing it for later
-     - `rootIconFolder` = "\(documentsDirectory)/events/icons-\(eventId)/icons"
-       + this only changes with the `eventId`
-     - `iconPath` - each of the following variables gets appended to each other like this
-       + `formId/primaryFieldText/secondaryFieldText`
-       + one by one, if not found, removing the last variable from the string
-     - We end up with a fullpath to some icon, if we find one
-     - So the point of this cache and queue is to safely store them once to keep the lookup as close to O(N) as possible
-     */
     
     func imageName(
         eventId: Int64?,
@@ -83,20 +60,6 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
     ) -> String? {
         guard let eventId = eventId else {
             return nil
-        }
-        
-        let cacheKey = ImageNameCacheKey(
-            eventId: eventId,
-            formId: formId,
-            primaryFieldText: primaryFieldText,
-            secondaryFieldText: secondaryFieldText
-        )
-        
-        // Read from cache
-        if let cachedResult = cacheQueue.sync(execute: {
-            imageNameCache[cacheKey]
-        }) {
-            return cachedResult
         }
         
         let rootIconFolder = "\(documentsDirectory)/events/icons-\(eventId)/icons"
@@ -130,10 +93,6 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
                             let filename = url.lastPathComponent
                             if filename.hasPrefix("icon") {
                                 let fullpath = "\(directoryToSearch)\(path)"
-                                // Write to cache
-                                cacheQueue.sync {
-                                    imageNameCache[cacheKey] = fullpath
-                                }
                                 return fullpath
                             }
                         }
