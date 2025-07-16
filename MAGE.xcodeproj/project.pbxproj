@@ -164,6 +164,17 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
+		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
+		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
+		BD6E578C2DE0D3A000C046FD /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578B2DE0D3A000C046FD /* MGRS */; };
+		BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578E2DE0D3C000C046FD /* GARS */; };
+		BD6E57922DE0D3D700C046FD /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E57912DE0D3D700C046FD /* GeoPackage */; };
+		BDB16FA22DF770F900FDD03B /* SimpleFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA12DF770F900FDD03B /* SimpleFeatures */; };
+		BDB16FA52DF7713300FDD03B /* Projections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA42DF7713300FDD03B /* Projections */; };
+		BDB16FA82DF7715400FDD03B /* SimpleFeaturesWKT in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA72DF7715400FDD03B /* SimpleFeaturesWKT */; };
+		BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */; };
+		BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		D258D7802E253A4900A44AC4 /* SettingsLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */; };
 		D258D7852E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D7842E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift */; };
@@ -171,6 +182,7 @@
 		D258D7892E2549B400A44AC4 /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D7882E2549B400A44AC4 /* SettingsRepository.swift */; };
 		D258D78B2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D78A2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift */; };
 		D258D78E2E256F1E00A44AC4 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D78D2E256F1E00A44AC4 /* SettingsService.swift */; };
+		D2A46FF92E0DD73700CE0D72 /* ObservationChangeRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
 		F7003949200D425400E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
@@ -1106,6 +1118,7 @@
 		D258D7882E2549B400A44AC4 /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		D258D78A2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRemoteDataSource.swift; sourceTree = "<group>"; };
 		D258D78D2E256F1E00A44AC4 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationChangeRegions.swift; sourceTree = "<group>"; };
 		E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
@@ -1836,7 +1849,6 @@
 		F7EBAEBE2762400800650F4F /* MapNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNotifications.swift; sourceTree = "<group>"; };
 		F7EBAEC02762537100650F4F /* BottomSheetEnabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetEnabled.swift; sourceTree = "<group>"; };
 		F7ECDC9927A5A37200D0AF92 /* GeoPackageLayerMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageLayerMap.swift; sourceTree = "<group>"; };
-		F7ECDC9C27A83C8600D0AF92 /* GeoPackage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoPackage.h; sourceTree = "<group>"; };
 		F7ECDC9D27A83C8600D0AF92 /* GeoPackage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackage.swift; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
@@ -1919,20 +1931,30 @@
 			files = (
 				F734C1F42BC84C8300B2E8C8 /* MaterialViews in Frameworks */,
 				F70688832BA37ECE00D8E2EA /* Kingfisher in Frameworks */,
+				BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */,
 				2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */,
 				F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */,
+				BD6E57922DE0D3D700C046FD /* GeoPackage in Frameworks */,
 				F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */,
 				F706888F2BA3A85600D8E2EA /* DataSourceDefinition in Frameworks */,
+				BDB16FA82DF7715400FDD03B /* SimpleFeaturesWKT in Frameworks */,
 				F7DE98932C1B3B9B005372F8 /* DebugUtilities in Frameworks */,
 				F776AC902BC9E178000FAFB4 /* MapFramework in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
+				BDB16FA52DF7713300FDD03B /* Projections in Frameworks */,
 				F776AC952BCD9DE3000FAFB4 /* Alamofire in Frameworks */,
+				BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */,
+				BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */,
+				BDB16FA22DF770F900FDD03B /* SimpleFeatures in Frameworks */,
+				BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */,
 				F70688932BA3A85600D8E2EA /* StringExtensions in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
+				BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
 				F70688C12BB7400C00D8E2EA /* MKMapViewExtensions in Frameworks */,
+				BD6C27FE2DE111190086F310 /* GARS in Frameworks */,
 				F70688912BA3A85600D8E2EA /* DataSourceTileOverlay in Frameworks */,
 				F706889C2BA49CB100D8E2EA /* NSManagedObjectContextExtensions in Frameworks */,
 				F70688952BA3A85700D8E2EA /* UIImageExtensions in Frameworks */,
@@ -1942,6 +1964,7 @@
 				F734C1F12BC84B2000B2E8C8 /* ViewExtensions in Frameworks */,
 				F7E079462C2223B80029C88D /* ExceptionCatcher in Frameworks */,
 				BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */,
+				BD6E578C2DE0D3A000C046FD /* MGRS in Frameworks */,
 				F7BFB8D72C4F074E00901479 /* SwiftUIKitView in Frameworks */,
 				F706888D2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions in Frameworks */,
 			);
@@ -3842,6 +3865,7 @@
 		F7C097702C80C50D003FA115 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */,
 				F7225F472C57D48C00B7D935 /* ObservationModel.swift */,
 				F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */,
 				F754C65C2C49A87100E408E9 /* ObservationFavoritesModel.swift */,
@@ -4173,7 +4197,6 @@
 		F7ECDC9B27A83AC500D0AF92 /* GeoPackage */ = {
 			isa = PBXGroup;
 			children = (
-				F7ECDC9C27A83C8600D0AF92 /* GeoPackage.h */,
 				F7ECDC9D27A83C8600D0AF92 /* GeoPackage.swift */,
 				F7F08E9327E0EB7100640D89 /* GeoPackageImporter.swift */,
 			);
@@ -4301,6 +4324,17 @@
 				F7DE98922C1B3B9B005372F8 /* DebugUtilities */,
 				F7E079452C2223B80029C88D /* ExceptionCatcher */,
 				F7BFB8D62C4F074E00901479 /* SwiftUIKitView */,
+				BD6E578B2DE0D3A000C046FD /* MGRS */,
+				BD6E578E2DE0D3C000C046FD /* GARS */,
+				BD6E57912DE0D3D700C046FD /* GeoPackage */,
+				BD6C27F72DE10EE70086F310 /* GeoPackage */,
+				BD6C27FA2DE110FA0086F310 /* MGRS */,
+				BD6C27FD2DE111190086F310 /* GARS */,
+				BDB16FA12DF770F900FDD03B /* SimpleFeatures */,
+				BDB16FA42DF7713300FDD03B /* Projections */,
+				BDB16FA72DF7715400FDD03B /* SimpleFeaturesWKT */,
+				BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */,
+				BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */,
 			);
 			productName = Mage;
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
@@ -4400,6 +4434,14 @@
 				F776AC932BCD9DE3000FAFB4 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				F7E079442C2223B80029C88D /* XCRemoteSwiftPackageReference "ExceptionCatcher" */,
 				F7BFB8D52C4F074E00901479 /* XCRemoteSwiftPackageReference "SwiftUIKitView" */,
+				BD6C27F62DE10EE70086F310 /* XCRemoteSwiftPackageReference "geopackage-ios" */,
+				BD6C27F92DE110FA0086F310 /* XCRemoteSwiftPackageReference "mgrs-ios" */,
+				BD6C27FC2DE111190086F310 /* XCRemoteSwiftPackageReference "gars-ios" */,
+				BDB16FA02DF770F900FDD03B /* XCRemoteSwiftPackageReference "simple-features-ios" */,
+				BDB16FA32DF7713300FDD03B /* XCRemoteSwiftPackageReference "projections-ios" */,
+				BDB16FA62DF7715400FDD03B /* XCRemoteSwiftPackageReference "simple-features-wkt-ios" */,
+				BDB16FA92DF7717700FDD03B /* XCRemoteSwiftPackageReference "simple-features-proj-ios" */,
+				BDB16FAC2DF7719600FDD03B /* XCRemoteSwiftPackageReference "simple-features-geojson-ios" */,
 			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
@@ -4654,11 +4696,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/PROJ/PROJ.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/gars-ios/gars-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs-ios/mgrs-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/proj-ios/proj-ios.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
@@ -4685,11 +4722,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PROJ.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gars-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/proj-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
 			);
@@ -4766,11 +4798,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/PROJ/PROJ.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/gars-ios/gars-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs-ios/mgrs-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/proj-ios/proj-ios.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
@@ -4797,11 +4824,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PROJ.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gars-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/proj-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
 			);
@@ -4838,11 +4860,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/PROJ/PROJ.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/gars-ios/gars-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs-ios/mgrs-ios.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/proj-ios/proj-ios.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
 			);
@@ -4869,11 +4886,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PROJ.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gars-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/proj-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
 			);
@@ -4959,6 +4971,7 @@
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
+				D2A46FF92E0DD73700CE0D72 /* ObservationChangeRegions.swift in Sources */,
 				F7C097732C80C52C003FA115 /* AttachmentModel.swift in Sources */,
 				F781609E273EE1A50055B5D2 /* ObjC.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
@@ -5673,7 +5686,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -5688,6 +5701,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -5728,7 +5742,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -5738,6 +5752,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -5762,15 +5777,14 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 4.1.0;
+				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/geopackage_ios/geopackage-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/ogc_api_features_json_ios/ogc-api-features-json-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_geojson_ios/sf-geojson-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_ios/sf-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_proj_ios/sf-proj-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkb_ios/sf-wkb-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkt_ios/sf-wkt-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/tiff_ios/tiff-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = NO;
 				SWIFT_VERSION = 5.0;
@@ -5797,14 +5811,13 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 4.1.0;
+				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = NO;
 				SWIFT_VERSION = 5.0;
@@ -5832,7 +5845,6 @@
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -5881,7 +5893,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "MageGeoPackageTests/MAGEGeoPackageTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MAGE";
@@ -6003,7 +6014,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.MAGETests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MageTests/MAGETests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -6104,6 +6114,70 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		BD6C27F62DE10EE70086F310 /* XCRemoteSwiftPackageReference "geopackage-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/geopackage-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+		BD6C27F92DE110FA0086F310 /* XCRemoteSwiftPackageReference "mgrs-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/mgrs-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		BD6C27FC2DE111190086F310 /* XCRemoteSwiftPackageReference "gars-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/gars-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		BDB16FA02DF770F900FDD03B /* XCRemoteSwiftPackageReference "simple-features-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/simple-features-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		BDB16FA32DF7713300FDD03B /* XCRemoteSwiftPackageReference "projections-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/projections-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		BDB16FA62DF7715400FDD03B /* XCRemoteSwiftPackageReference "simple-features-wkt-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/simple-features-wkt-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		BDB16FA92DF7717700FDD03B /* XCRemoteSwiftPackageReference "simple-features-proj-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/simple-features-proj-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		BDB16FAC2DF7719600FDD03B /* XCRemoteSwiftPackageReference "simple-features-geojson-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/simple-features-geojson-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -6139,6 +6213,58 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		BD6C27F72DE10EE70086F310 /* GeoPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BD6C27F62DE10EE70086F310 /* XCRemoteSwiftPackageReference "geopackage-ios" */;
+			productName = GeoPackage;
+		};
+		BD6C27FA2DE110FA0086F310 /* MGRS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BD6C27F92DE110FA0086F310 /* XCRemoteSwiftPackageReference "mgrs-ios" */;
+			productName = MGRS;
+		};
+		BD6C27FD2DE111190086F310 /* GARS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BD6C27FC2DE111190086F310 /* XCRemoteSwiftPackageReference "gars-ios" */;
+			productName = GARS;
+		};
+		BD6E578B2DE0D3A000C046FD /* MGRS */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MGRS;
+		};
+		BD6E578E2DE0D3C000C046FD /* GARS */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GARS;
+		};
+		BD6E57912DE0D3D700C046FD /* GeoPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GeoPackage;
+		};
+		BDB16FA12DF770F900FDD03B /* SimpleFeatures */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDB16FA02DF770F900FDD03B /* XCRemoteSwiftPackageReference "simple-features-ios" */;
+			productName = SimpleFeatures;
+		};
+		BDB16FA42DF7713300FDD03B /* Projections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDB16FA32DF7713300FDD03B /* XCRemoteSwiftPackageReference "projections-ios" */;
+			productName = Projections;
+		};
+		BDB16FA72DF7715400FDD03B /* SimpleFeaturesWKT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDB16FA62DF7715400FDD03B /* XCRemoteSwiftPackageReference "simple-features-wkt-ios" */;
+			productName = SimpleFeaturesWKT;
+		};
+		BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDB16FA92DF7717700FDD03B /* XCRemoteSwiftPackageReference "simple-features-proj-ios" */;
+			productName = SimpleFeaturesProjections;
+		};
+		BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDB16FAC2DF7719600FDD03B /* XCRemoteSwiftPackageReference "simple-features-geojson-ios" */;
+			productName = SimpleFeaturesGeoJSON;
+		};
 		F70688822BA37ECE00D8E2EA /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */;

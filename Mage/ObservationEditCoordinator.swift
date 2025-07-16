@@ -132,10 +132,13 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     
     func createObservation(location: SFGeometry?, accuracy: CLLocationAccuracy, provider: String, delta: Double) -> Observation? {
         newObservation = true;
-        let observation = Observation.create(geometry: location, accuracy: accuracy, provider: provider, delta: delta, context: managedObjectContext);
-        observation.dirty = true;
-        addRequiredForms(observation: observation);
-        return observation;
+        let observationChangeRegions = Observation.create(geometry: location, accuracy: accuracy, provider: provider, delta: delta, context: managedObjectContext);
+        if let observation = observationChangeRegions.observation {
+            observation.dirty = true;
+            addRequiredForms(observation: observation);
+            return observation;
+        }
+        return nil
     }
     
     func setupObservation(observation: Observation) -> Observation? {
@@ -296,6 +299,15 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
             observationEditController = nil;
+            // Now that the observation is saved, notify the listeners that the tiles need to be redrawn
+            @Injected(\.observationRepository)
+            var observationRepository: ObservationRepository
+            
+            var regions: [MKCoordinateRegion] = []
+            for location in observation.locations ?? [] {
+                regions.append(location.region)
+            }
+            observationRepository.observationInRegionChanged(region: regions)
         }
     }
     

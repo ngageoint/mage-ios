@@ -10,9 +10,9 @@ import Foundation
 import MapKit
 import MapFramework
 
-import mgrs_ios
-import gars_ios
 import Combine
+import MGRS
+import GARS
 
 protocol HasMapSearch {
     var mapView: MKMapView? { get set }

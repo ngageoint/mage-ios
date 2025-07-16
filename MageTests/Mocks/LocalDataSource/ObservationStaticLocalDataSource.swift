@@ -13,6 +13,18 @@ import BackgroundTasks
 @testable import MAGE
 
 final class ObservationStaticLocalDataSource: ObservationLocalDataSource {
+    var observeChangedRegionsToReturn: [MKCoordinateRegion] = []
+    func observeChangedRegions() -> AnyPublisher<[MKCoordinateRegion], Never> {
+        AnyPublisher(Just(observeChangedRegionsToReturn))
+    }
+    
+    var observationInRegionChangedCalled = false
+    var regionsChanged: [MKCoordinateRegion] = []
+    func observationInRegionChanged(region: [MKCoordinateRegion]) {
+        observationInRegionChangedCalled = true
+        regionsChanged = region
+    }
+    
     var list: [ObservationModel] = [] {
         willSet {
             filteredCountSubject.send(newValue.count)

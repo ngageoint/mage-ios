@@ -6,19 +6,16 @@
 
 #import "GeometryEditViewController.h"
 #import "LocationService.h"
-#import "SFPoint.h"
-#import "SFGeometryUtils.h"
+@import SimpleFeatures;
+@import GeoPackage;
+@import Projections;
 #import "MapObservation.h"
 #import "MapObservationManager.h"
-#import "GPKGMapShapeConverter.h"
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"
-#import "PROJProjectionConstants.h"
-#import "SFGeometryEnvelopeBuilder.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
-#import "GPKGGeoPackageFactory.h"
 #import "AppDelegate.h"
 #import <PureLayout/PureLayout.h>
 #import "MAGE-Swift.h"
@@ -1128,7 +1125,7 @@ static NSString *garsTitle = @"GARS";
                     }
                     break;
                 default:
-                    [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+                    [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %ld", selectedType];
             }
         }
     }
@@ -1215,7 +1212,7 @@ static NSString *garsTitle = @"GARS";
                     break;
                     
                 default:
-                    [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+                    [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %ld", selectedType];
             }
         }
     }
@@ -1489,7 +1486,7 @@ static NSString *garsTitle = @"GARS";
                             }
                             break;
                         default:
-                            [NSException raise:@"Unsupported Geometry Type" format:@"Unsupported Geometry Type: %u", self.shapeType];
+                            [NSException raise:@"Unsupported Geometry Type" format:@"Unsupported Geometry Type: %ld", self.shapeType];
                     }
                     [self addMapShape:geometry];
                     [self updateGeometry];

@@ -7,7 +7,7 @@
 //
 
 #import "MapShapeObservation.h"
-#import "GPKGMapShapePoints.h"
+@import GeoPackage;
 
 @interface MapShapePointsObservation : MapShapeObservation
 

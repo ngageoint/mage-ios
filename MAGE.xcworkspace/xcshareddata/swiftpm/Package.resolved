@@ -1,5 +1,5 @@
 {
-  "originHash" : "207c6ed47e45e25f40d2ab20afcc890a28577e7ad35a49d3145f40980c999e56",
+  "originHash" : "ef6625289e51aefb73813613aa0ec36b02c43ab547fb3815c8dc0c494a068963",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -11,6 +11,24 @@
       }
     },
     {
+      "identity" : "color-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/color-ios",
+      "state" : {
+        "revision" : "1c588dafaf599a32d9adc29880264281dfbf286f",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "coordinate-reference-systems-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/coordinate-reference-systems-ios.git",
+      "state" : {
+        "revision" : "d0d8cd34710aa78adb1bef3cdb2bf09a18356fa0",
+        "version" : "2.0.0"
+      }
+    },
+    {
       "identity" : "exceptioncatcher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/ExceptionCatcher",
@@ -19,7 +37,33 @@
         "version" : "2.1.0"
       }
     },
-    
+    {
+      "identity" : "gars-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/gars-ios",
+      "state" : {
+        "revision" : "475c819730e97cb2608f071ae999aaae7018a6b5",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "geopackage-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/geopackage-ios",
+      "state" : {
+        "revision" : "55ef7d9221dd4c7bf8eef30fff9d65482e19e8ec",
+        "version" : "9.0.0"
+      }
+    },
+    {
+      "identity" : "grid-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/grid-ios",
+      "state" : {
+        "revision" : "9370e0042a6c78588486d345ab1133f450889508",
+        "version" : "2.0.0"
+      }
+    },
     {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
@@ -30,12 +74,102 @@
       }
     },
     {
+      "identity" : "mgrs-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/mgrs-ios",
+      "state" : {
+        "revision" : "8080304310058507e2818fd9f8138bc26a2567e3",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "ogc-api-features-json-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/ogc-api-features-json-ios",
+      "state" : {
+        "revision" : "fb7c085c30205d86dba22fdad38c4b63de1171de",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "proj",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/PROJ.git",
+      "state" : {
+        "revision" : "336fced3634f438f81e0d435ad99658688d1cf71",
+        "version" : "9.4.2"
+      }
+    },
+    {
+      "identity" : "projections-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/projections-ios",
+      "state" : {
+        "revision" : "f05c424664072bbc9bd177c62f82368b08414253",
+        "version" : "3.0.0"
+      }
+    },
+    {
+      "identity" : "simple-features-geojson-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/simple-features-geojson-ios",
+      "state" : {
+        "revision" : "fec8acaee9b793e402c3e4a7660883b9259a1c75",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "simple-features-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/simple-features-ios",
+      "state" : {
+        "revision" : "615127133c83122077dcf71daa53a9a93f05a347",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "simple-features-proj-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/simple-features-proj-ios",
+      "state" : {
+        "revision" : "61a4291a61dd60a1b17e804c68e1ad90ce078ebb",
+        "version" : "7.0.0"
+      }
+    },
+    {
+      "identity" : "simple-features-wkb-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/simple-features-wkb-ios",
+      "state" : {
+        "revision" : "5e33516668372d8c3b130e8f38237b65ae6b042a",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "simple-features-wkt-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/simple-features-wkt-ios",
+      "state" : {
+        "revision" : "b17eba292f15742853b604e3de2fa178f9eedeba",
+        "version" : "3.0.0"
+      }
+    },
+    {
       "identity" : "swiftuikitview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AvdLee/SwiftUIKitView.git",
       "state" : {
         "revision" : "56f2a1f8e35d5c258f633e8472cd59345ed5ae59",
         "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "tiff-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/tiff-ios",
+      "state" : {
+        "revision" : "2e019be5231352eef1854492bd25f80174b0f902",
+        "version" : "5.0.0"
       }
     }
   ],

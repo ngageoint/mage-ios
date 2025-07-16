@@ -8,7 +8,7 @@
 @import MaterialComponents;
 
 #import "LocationAnnotation.h"
-#import "SFGeometryUtils.h"
+@import SimpleFeatures;
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 

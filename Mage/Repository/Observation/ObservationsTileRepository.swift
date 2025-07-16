@@ -29,6 +29,9 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
     
     @Injected(\.observationIconRepository)
     var iconRepository: ObservationIconRepository
+    
+    @Injected(\.observationRepository)
+        var observationRepository: ObservationRepository
 
     var cancellable = Set<AnyCancellable>()
 
@@ -56,24 +59,10 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
 
     init() {
-        self.localDataSource.locationsPublisher()
-            .dropFirst()
-            .sink { changes in
+        self.observationRepository.observeChangedRegions()
+            .receive(on: DispatchQueue.main)
+            .sink { regions in
                 Task {
-                    var regions: [MKCoordinateRegion] = []
-                    for change in changes {
-                        switch (change) {
-                        case .insert(offset: _, element: let element, associatedWith: _):
-                            if let region = element.region {
-                                regions.append(region)
-                            }
-                        case .remove(offset: _, element: let element, associatedWith: _):
-                            if let region = element.region {
-                                regions.append(region)
-                            }
-                        }
-                    }
-
                     await self.clearCache(regions: regions)
                     self.refreshSubject?.send(Date())
                 }

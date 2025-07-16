@@ -1,0 +1,4 @@
+Improved batch import experience for large data sets (Thanks JIATF-S!).
+
+* Updated batch import logic to fix issues when importing 5,000+ observations from an event.
+* Updated login logic to clear the token credentials when switching servers
