@@ -459,13 +459,13 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, context:NSManagedObjectContext) -> ObservationChangeRegions? {
+    public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, observationIds: [String], users: [String:User], context:NSManagedObjectContext) -> ObservationChangeRegions? {
         var newObservation: Observation? = nil;
         var regions: [MKCoordinateRegion] = []
         let remoteId = Observation.idFromJson(json: feature);
         let state = Observation.stateFromJson(json: feature);
         
-        if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
+        if let remoteId = remoteId, observationIds.contains(remoteId), let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
             // if the observation is archived, delete it
             if state == .Archive {
                 MageLogger.misc.debug("Deleting archived observation with id: \(String(describing: remoteId))")
@@ -482,30 +482,8 @@ enum ObservationState: Int, CustomStringConvertible {
                 
                 existingObservation.populate(json: feature, eventForms: eventForms);
                 if let userId = existingObservation.userId {
-                    if let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context) {
-                        existingObservation.user = user
-                        if user.lastUpdated == nil {
-                            // new user, go fetch
-                            let manager = MageSessionManager.shared();
-                            
-                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
-                            } failure: { task, error in
-                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
-                            }
-                            manager?.addTask(fetchUserTask)
-                        }
-                    } else {
-                        // new user, go fetch
-                        let manager = MageSessionManager.shared();
-                        
-                        let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                            MageLogger.misc.debug("Fetched user \(userId) successfully.")
-                            existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
-                        } failure: { task, error in
-                            MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
-                        }
-                        manager?.addTask(fetchUserTask)
+                    if let user = users[userId], let userInContext = context.object(with: user.objectID) as? User {
+                        existingObservation.user = userInContext
                     }
                 }
                 
@@ -590,32 +568,8 @@ enum ObservationState: Int, CustomStringConvertible {
                 if let observation = Observation.mr_createEntity(in: context) {
                     observation.populate(json: feature, eventForms: eventForms);
                     if let userId = observation.userId {
-                        if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
-                            observation.user = user
-                            // this could happen if we pulled the teams and know this user belongs on a team
-                            // but did not pull the user information because the bulk user pull failed
-                            if user.lastUpdated == nil {
-                                // new user, go fetch
-                                let manager = MageSessionManager.shared();
-                                
-                                let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                    MageLogger.misc.debug("Fetched user \(userId) successfully.")
-                                } failure: { task, error in
-                                    MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
-                                }
-                                manager?.addTask(fetchUserTask)
-                            }
-                        } else {
-                            // new user, go fetch
-                            let manager = MageSessionManager.shared();
-                            
-                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
-                                observation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
-                            } failure: { task, error in
-                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
-                            }
-                            manager?.addTask(fetchUserTask)
+                        if let user = users[userId], let userInContext = context.object(with: user.objectID) as? User {
+                            observation.user = userInContext
                         }
                     }
                     

@@ -275,30 +275,49 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         MageLogger.misc.debug("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
         
         let backgroundContext = persistence.getNewBackgroundContext(name: #function)
+        var observationIds: [String] = []
+        var users: [String:User] = [:]
         
-        return await backgroundContext.perform {
-            var chunks = propertyList.chunked(into: 1000);
-            var newObservationCount = 0;
-            var observationToNotifyAbout: Observation?;
-            var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
+        // fetch Users before doing all batching
+        await backgroundContext.perform {
+            let request = NSFetchRequest<NSDictionary>(entityName: "Observation")
+            request.resultType = .dictionaryResultType
+            request.propertiesToFetch = ["remoteId"]
+            if let results = try? backgroundContext.fetch(request) {
+                observationIds = results.compactMap { $0["remoteId"] as? String }
+            }
+            let fetchedUsers = backgroundContext.fetchAll(User.self) ?? []
+            for user in fetchedUsers {
+                if let remoteId = user.remoteId {
+                    users[remoteId] = user
+                }
+            }
+        }
+        
+        var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
+        await backgroundContext.perform {
             if let event = Event.getEvent(eventId: eventId as NSNumber, context: backgroundContext), let eventForms = event.forms {
                 for eventForm in eventForms {
                     if let formId = eventForm.formId, let json = eventForm.json?.json {
                         eventFormDictionary[formId] = json[FormKey.fields.key] as? [[String: AnyHashable]]
                     }
                 }
+                backgroundContext.reset();
             }
-            backgroundContext.reset();
+        }
+
+        return await backgroundContext.perform {
+            var chunks = propertyList.chunked(into: 250);
+            var newObservationCount = 0;
+            var observationToNotifyAbout: Observation?;
             while (chunks.count > 0) {
                 autoreleasepool {
                     guard let features = chunks.last else {
                         return;
                     }
                     chunks.removeLast();
-                    let createObservationsDate = Date()
-
                     for observation in features {
-                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: backgroundContext) {
+                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, observationIds: observationIds, users: users, context: backgroundContext) {
                             newObservationCount = newObservationCount + 1;
                             if (!initial) {
                                 observationToNotifyAbout = newObservation.observation;
@@ -309,7 +328,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                 }
 
                 // only save once per chunk
-                let localSaveDate = Date()
                 do {
                     try backgroundContext.save()
                 } catch {
@@ -318,8 +336,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
 
                 let rootContext = self.persistence.getRootContext()
                 rootContext.perform {
-                    let rootSaveDate = Date()
-
                     do {
                         try rootContext.save()
                     } catch {
