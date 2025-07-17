@@ -21,7 +21,7 @@ class LoginViewModel: ObservableObject {
     var user: User?
     weak var delegate: LoginDelegate?
 
-    init(server: MageServer, user: User?, scheme: AppContainerScheming, delegate: LoginDelegate?) {
+    init(server: MageServer, user: User? = nil, scheme: AppContainerScheming, delegate: LoginDelegate?) {
         self.server = server
         self.user = user
         self.scheme = scheme

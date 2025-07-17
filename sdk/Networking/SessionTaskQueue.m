@@ -88,7 +88,7 @@ static int defaultMaxConcurrentTasks = 4;
         _stop = NO;
         _log = NO;
         
-        NSLog(@"%@ Init, Max Concurrent Tasks: %d", NSStringFromClass([self class]), _maxConcurrentTasks);
+//        NSLog(@"%@ Init, Max Concurrent Tasks: %d", NSStringFromClass([self class]), _maxConcurrentTasks);
         
         // Observe task notifications
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -175,7 +175,7 @@ static int defaultMaxConcurrentTasks = 4;
         
         // Start the next task if active space available
         if(![self startNextTask]){
-            [self logQueueStatus];
+//            [self logQueueStatus];
         }
     }
 }
@@ -236,7 +236,7 @@ static int defaultMaxConcurrentTasks = 4;
             [activeTask setTask:runTask];
             [activeTask setStartTime:[NSDate date]];
             
-            [self logTaskStatusWithActiveTask:activeTask andLogName:@"Request" andEndTime:nil];
+//            [self logTaskStatusWithActiveTask:activeTask andLogName:@"Request" andEndTime:nil];
             
             [runTask resume];
             
@@ -253,7 +253,7 @@ static int defaultMaxConcurrentTasks = 4;
             }
             
             started = YES;
-            [self logQueueStatus];
+//            [self logQueueStatus];
             
             // Check if another task should be started
             [self startNextTask];
@@ -321,11 +321,11 @@ static int defaultMaxConcurrentTasks = 4;
                 [_activePerSessionTask removeObjectForKey:sessionTaskIdentifier];
             }
             
-            [self logTaskStatusWithActiveTask:activeTask andLogName:@"Response" andEndTime:endTime];
+//            [self logTaskStatusWithActiveTask:activeTask andLogName:@"Response" andEndTime:endTime];
             
             // Start the next task
             if(![self startNextTask]){
-                [self logQueueStatus];
+//                [self logQueueStatus];
             }
             
             // Close the queue if stopped and finished

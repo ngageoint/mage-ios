@@ -103,12 +103,12 @@
          <EnvironmentVariable
             key = "OS_ACTIVITY_MODE"
             value = "enable"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "CFNETWORK_DIAGNOSTICS"
             value = "3"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
       <LocationScenarioReference

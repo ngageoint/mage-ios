@@ -8,9 +8,13 @@
 
 
 class DummyLoginDelegate: NSObject, LoginDelegate {
-    func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy authenticationStrategy: String!, complete: ((AuthenticationStatus, String?) -> Void)!) {
+    func login(withParameters parameters: [String : Any], withAuthenticationStrategy authenticationStrategy: String, complete: @escaping (AuthenticationStatus, String?) -> Void) {
         complete(.AUTHENTICATION_SUCCESS, nil)
     }
+    
+//    func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy authenticationStrategy: String!, complete: ((AuthenticationStatus, String?) -> Void)!) {
+//        complete(.AUTHENTICATION_SUCCESS, nil)
+//    }
     
     func changeServerURL() {
         print("changeServerURL() called")

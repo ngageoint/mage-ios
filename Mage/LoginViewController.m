@@ -115,8 +115,8 @@
     NSLog(@"QQQ viewDidLoad for LoginViewController");
 //    self.view.backgroundColor = [UIColor systemGreenColor];
     
-    self.loginsStackView.layer.borderWidth = 5.0;
-    self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
+//    self.loginsStackView.layer.borderWidth = 5.0;
+//    self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
 
 }
 
@@ -134,11 +134,11 @@
 
     [self setupAuthentication];
     
-    for (UIView *v in self.loginsStackView.arrangedSubviews) {
-        v.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.3];
-    }
-    self.loginsStackView.layer.borderWidth = 2;
-    self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
+//    for (UIView *v in self.loginsStackView.arrangedSubviews) {
+//        v.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.3];
+//    }
+//    self.loginsStackView.layer.borderWidth = 2;
+//    self.loginsStackView.layer.borderColor = UIColor.redColor.CGColor;
     
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -187,10 +187,27 @@
             UIViewController *loginVC = [LocalLoginViewWrapper newWithUsername:@""
                                                                       password:@""
                                                                       strategy: loginStrategy
-                                                                      delegate: (id<LocalLoginViewDelegate>)self.delegate
+                                                                      delegate: (id<LoginDelegate>)self.delegate
                                                                         scheme: self.scheme
                                                                  loginHandler:^{
-                NSLog(@"Login tapped");
+                NSLog(@"Login tapped (success)");
+                
+                if ([self.delegate respondsToSelector:@selector(authenticationSuccessful)]) {
+//                    [self.delegate authenticationSuccessful];
+                }
+                
+//                // If presented modally:
+//                if (self.presentingViewController) {
+//                    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+//                }
+//                
+//                // Or, if LoginViewController is in a navigation stack and you want to pop it:
+//                // [self.navigationController popViewControllerAnimated:YES];
+//                // Or, if coordinator is responsible, call a delegate method to handle transition
+//                if ([self.delegate respondsToSelector:@selector(loginDidSucceed)]) {
+//                    [self.delegate loginDidSucceed];
+//                }
+                
             } signupHandler:^{
                 NSLog(@"Signup tapped");
             }];

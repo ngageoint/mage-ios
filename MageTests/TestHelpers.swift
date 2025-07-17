@@ -58,22 +58,22 @@ class TestHelpers {
         return setupNavigationController()
     }
 
-    @MainActor
-    public static func executeTestLogin(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation? = nil) {
-        let loginDelegate = coordinator as! LoginDelegate
-        let parameters: [String: Any] = [
-            "username": "test",
-            "password": "test",
-            "uid": "uuid",
-            "strategy": ["identifier": "local"],
-            "appVersion": "6.0.0"
-        ]
-
-        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "Authentication failed")
-            expectation?.fulfill()
-        }
-    }
+//    @MainActor
+//    public static func executeTestLogin(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation? = nil) {
+//        let loginDelegate = coordinator as! LoginDelegate
+//        let parameters: [String: Any] = [
+//            "username": "test",
+//            "password": "test",
+//            "uid": "uuid",
+//            "strategy": ["identifier": "local"],
+//            "appVersion": "6.0.0"
+//        ]
+//
+//        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+//            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "Authentication failed")
+//            expectation?.fulfill()
+//        }
+//    }
 
     
     @MainActor
@@ -406,27 +406,27 @@ extension TestHelpers {
     }
 }
 
-extension TestHelpers {
-    static func executeTestLoginForRegistration(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation) {
-        let loginDelegate = coordinator as! LoginDelegate
-        let parameters: [String: Any] = [
-            "username": "test",
-            "password": "test",
-            "uid": "uuid",
-            "strategy": ["identifier": "local"],
-            "appVersion": "6.0.0"
-        ]
-
-        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
-            let token = StoredPassword.retrieveStoredToken()
-            let mageSessionToken = MageSessionManager.shared().getToken()
-            XCTAssertEqual(token, "TOKEN")
-            XCTAssertEqual(token, mageSessionToken)
-            expectation.fulfill()
-        }
-    }
-}
+//extension TestHelpers {
+//    static func executeTestLoginForRegistration(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation) {
+//        let loginDelegate = coordinator as! LoginDelegate
+//        let parameters: [String: Any] = [
+//            "username": "test",
+//            "password": "test",
+//            "uid": "uuid",
+//            "strategy": ["identifier": "local"],
+//            "appVersion": "6.0.0"
+//        ]
+//
+//        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+//            XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
+//            let token = StoredPassword.retrieveStoredToken()
+//            let mageSessionToken = MageSessionManager.shared().getToken()
+//            XCTAssertEqual(token, "TOKEN")
+//            XCTAssertEqual(token, mageSessionToken)
+//            expectation.fulfill()
+//        }
+//    }
+//}
 
 extension TestHelpers {
     @MainActor

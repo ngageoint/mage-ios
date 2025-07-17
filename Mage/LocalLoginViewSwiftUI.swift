@@ -10,12 +10,8 @@ import SwiftUI
 
 struct LocalLoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
-    
-//    @Binding var username: String
-//    @Binding var password: String
     let strategy: LoginStrategy
     let delegate: LoginDelegate
-//    let scheme: AppContainerScheming?
     
     @State private var isLoggingIn = false
     @State private var showPassword = false
@@ -113,6 +109,7 @@ struct LocalLoginViewSwiftUI: View {
 
 struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
     static var previews: some View {
+        
         let mockServer = MageServer(url: URL(string: "https://test.mage.geointapps.com")!)
         let mockScheme = AppDefaultContainerScheme()
         let mockDelegate = DummyLoginDelegate() as LoginDelegate

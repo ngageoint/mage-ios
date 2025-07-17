@@ -105,7 +105,7 @@ BOOL signingIn = YES;
     
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups/verifications"];
     
-    NSLog(@"Parameters to sign up with %@", parameters);
+    NSLog(@"QQQ Parameters to sign up with %@", parameters);
 
     MageSessionManager *manager = [MageSessionManager sharedManager];
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
@@ -230,7 +230,7 @@ BOOL signingIn = YES;
 }
 
 - (BOOL) didUserChange: (NSString *) username {
-    NSLog(@"Context is to search %@", _context);
+    NSLog(@"QQQ Context is to search %@", _context);
     User *currentUser = [User fetchCurrentUserWithContext:_context];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
@@ -300,6 +300,7 @@ BOOL signingIn = YES;
 }
 
 - (void) failedToAuthenticate:(NSString *) message username: (NSString *) username {
+    NSLog(@"QQQ failedToAuthenticate");
     NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
     
     ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
@@ -308,6 +309,7 @@ BOOL signingIn = YES;
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSLog(@"QQQ unableToAuthenticate");
     __weak typeof(self) weakSelf = self;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -358,7 +360,7 @@ BOOL signingIn = YES;
 - (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
     __weak typeof(self) weakSelf = self;
 
-    NSLog(@"work offline");
+    NSLog(@"QQQ work offline");
     id<AuthenticationProtocol> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
     if (!offlineAuthenticationModel) {
         [weakSelf unableToAuthenticate: parameters complete:complete];
@@ -390,9 +392,9 @@ BOOL signingIn = YES;
             
             if ([defaults objectForKey:@"showDisclaimer"] == nil || ![[defaults objectForKey:@"showDisclaimer"] boolValue]) {
                 [self disclaimerAgree];
-                NSLog(@"Skip the disclaimer screen");
+                NSLog(@"QQQ Skip the disclaimer screen");
             } else {
-                NSLog(@"Segue to the disclaimer screen");
+                NSLog(@"QQQ Segue to the disclaimer screen");
                 DisclaimerViewController *viewController = [[DisclaimerViewController alloc] init];
                 viewController.delegate = self;
                 [viewController applyThemeWithContainerScheme:self.scheme];
