@@ -23,6 +23,41 @@ protocol AttachmentCreationCoordinatorDelegate: AnyObject {
     func attachmentCreationCancelled();
 }
 
+enum MediaType {
+    case livePhoto
+    case mp3
+    case wav
+    case quickTimeMovie
+    case mpeg
+    case mpeg4Movie
+    case mpeg4Audio
+    case png
+    case jpeg
+    case image
+    case audio
+    case movie
+    case video
+
+    var fileExtension: String {
+        switch self {
+        case .livePhoto: return "livephoto"
+        case .mp3: return "mp3"
+        case .wav: return "wav"
+        case .quickTimeMovie: return "mov"
+        case .mpeg: return "mpeg"
+        case .mpeg4Movie: return "mp4"
+        case .mpeg4Audio: return "m4a"
+        case .png: return "png"
+        case .jpeg: return "jpeg"
+        case .image: return "img"
+        case .audio: return "audio"
+        case .movie: return "movie"
+        case .video: return "video"
+        }
+    }
+}
+
+
 class AttachmentCreationCoordinator: NSObject {
     weak var scheme: MDCContainerScheming?
     var photoLocations: [TimeInterval : CLLocation] = [:]
@@ -192,37 +227,72 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
         }
     }
     
-    func generateFilePath(for attachmentType: AttachmentType) -> URL {
-        let timestamp = DateFormatter.timeStampFormatter.string(from: Date())
-        let uniqueId = UUID().uuidString.prefix(8)
-
-        let (fileExtension, baseDirectory): (String, String)
-        switch attachmentType {
-        case .image:
-            fileExtension = "jpeg"
+    func generateFilePath(for type: UTType) -> URL {
+        let uniqueId = UUID().uuidString
+        let baseDirectory: String
+        let fileExtension: String
+        
+        switch true {
+        case
+            type.conforms(to: .jpeg),
+            type.conforms(to: .png),
+            type.conforms(to: .rawImage),
+            type.conforms(to: .livePhoto),
+            type.conforms(to: .image):
             baseDirectory = "images"
-        case .video:
-            fileExtension = "mp4"
+            
+        case type.conforms(to: .quickTimeMovie),
+            type.conforms(to: .mpeg4Movie),
+            type.conforms(to: .movie),
+            type.conforms(to: .video):
             baseDirectory = "videos"
-        case .audio:
-            fileExtension = "m4a"
+            
+        case type.conforms(to: .mp3),
+            type.conforms(to: .wav),
+            type.conforms(to: .audio):
             baseDirectory = "audio"
-        case .document:
-            fileExtension = "pdf"
-            baseDirectory = "documents"
+            
+        case type.conforms(to: .pdf):
+            baseDirectory = "pdf"
+            
+        case type.conforms(to: .url),
+            type.conforms(to: .fileURL):
+            baseDirectory = "urls"
+            
         default:
-            fileExtension = "dat"
             baseDirectory = "attachments"
         }
-
-        let fileName = "MAGE_\(timestamp)_\(uniqueId).\(fileExtension)"
+        
+        if let ext = type.preferredFilenameExtension {
+            fileExtension = ext
+        } else {
+            switch true {
+            case type.conforms(to: .mp3): fileExtension = MediaType.mp3.fileExtension
+            case type.conforms(to: .wav): fileExtension = MediaType.wav.fileExtension
+            case type.conforms(to: .quickTimeMovie): fileExtension = MediaType.quickTimeMovie.fileExtension
+            case type.conforms(to: .mpeg4Movie): fileExtension = MediaType.mpeg4Movie.fileExtension
+            case type.conforms(to: .mpeg4Audio): fileExtension = MediaType.mpeg4Audio.fileExtension
+            case type.conforms(to: .png): fileExtension = MediaType.png.fileExtension
+            case type.conforms(to: .jpeg): fileExtension = MediaType.jpeg.fileExtension
+            case type.conforms(to: .image): fileExtension = MediaType.image.fileExtension
+            case type.conforms(to: .audio): fileExtension = MediaType.audio.fileExtension
+            case type.conforms(to: .movie): fileExtension = MediaType.movie.fileExtension
+            case type.conforms(to: .video): fileExtension = MediaType.video.fileExtension
+            default:
+                fileExtension = "data"
+            }
+        }
+        
+        let fileName = "MAGE_\(uniqueId).\(fileExtension)"
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let attachmentDirectory = documentsPath.appendingPathComponent("attachments").appendingPathComponent(baseDirectory)
-
+        let attachmentDirectory = documentsPath
+            .appendingPathComponent("attachments")
+            .appendingPathComponent(baseDirectory)
+        
         try? FileManager.default.createDirectory(at: attachmentDirectory,
                                                  withIntermediateDirectories: true,
                                                  attributes: [.protectionKey: FileProtectionType.complete])
-
+        
         let filePath = attachmentDirectory.appendingPathComponent(fileName)
         return filePath
     }
@@ -261,7 +331,6 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             }
         }
     }
-
     
     func handleVideo(selectedAsset: PHAsset?, utType: UTType?) {
         guard let selectedAsset else {
@@ -303,7 +372,6 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             self.addAttachmentForSaving(location: videoExportPath, contentType: "video/mp4")
         }
     }
-
     
     private func requestAVAssetAsync(forVideo: PHAsset, options: PHVideoRequestOptions?) async throws -> AVAsset? {
         try await withCheckedThrowingContinuation { continuation in

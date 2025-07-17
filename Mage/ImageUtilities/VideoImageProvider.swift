@@ -9,9 +9,9 @@ import AVKit
 import Kingfisher
 
 extension CGImage {
-    var png: Data? {
+    var jpeg: Data? {
         guard let mutableData = CFDataCreateMutable(nil, 0),
-            let destination = CGImageDestinationCreateWithData(mutableData, "public.png" as CFString, 1, nil) else { return nil }
+            let destination = CGImageDestinationCreateWithData(mutableData, "public.jpeg" as CFString, 1, nil) else { return nil }
         CGImageDestinationAddImage(destination, self, nil)
         guard CGImageDestinationFinalize(destination) else { return nil }
         return mutableData as Data
@@ -76,7 +76,7 @@ struct VideoImageProvider: ImageDataProvider {
         generator.appliesPreferredTrackTransform = true;
         let time: CMTime = CMTimeMakeWithSeconds(0, preferredTimescale: 30);
         let imageRef = try generator.copyCGImage(at: time, actualTime: nil)
-        let data: Data = imageRef.png!;
+        let data: Data = imageRef.jpeg!;
         return data;
     }
 }
