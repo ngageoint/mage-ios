@@ -216,7 +216,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             MageLogger.misc.debug("Present the gallery")
             var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
             configuration.filter = .any(of: [.images, .videos])
-            configuration.selectionLimit = 0
+            configuration.selectionLimit = 10
             
             // This is to compensate for iOS not setting all the colors on the PHPicker
             // it only sets the tint color not anything else, so let's make the button actually viewable
@@ -241,21 +241,25 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             type.conforms(to: .image):
             baseDirectory = "images"
             
-        case type.conforms(to: .quickTimeMovie),
+        case
+            type.conforms(to: .quickTimeMovie),
             type.conforms(to: .mpeg4Movie),
             type.conforms(to: .movie),
             type.conforms(to: .video):
             baseDirectory = "videos"
             
-        case type.conforms(to: .mp3),
+        case
+            type.conforms(to: .mp3),
             type.conforms(to: .wav),
             type.conforms(to: .audio):
             baseDirectory = "audio"
             
-        case type.conforms(to: .pdf):
+        case
+            type.conforms(to: .pdf):
             baseDirectory = "pdf"
             
-        case type.conforms(to: .url),
+        case
+            type.conforms(to: .url),
             type.conforms(to: .fileURL):
             baseDirectory = "urls"
             
