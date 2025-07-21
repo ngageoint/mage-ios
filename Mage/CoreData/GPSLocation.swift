@@ -49,18 +49,7 @@ import SimpleFeatures
     }
     
     @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation? {
-        var gpsLocation: GPSLocation? {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            if let context = context {
-                return GPSLocation(context: context)
-            }
-            return nil
-        }
-        
-        guard let gpsLocation = gpsLocation else {
-            return nil;
-        }
+        let gpsLocation = GPSLocation(context: context)
         
         let device = UIDevice.current
         device.isBatteryMonitoringEnabled = true;
