@@ -161,19 +161,23 @@ struct ManagedObjectChangesPublisher<Object: NSManagedObject, TransformedObject:
         private var lastSentState: [TransformedObject] = []
         private var currentDifferences = CollectionDifference<TransformedObject>([])!
 
+        // This function is fetching objects, transforming json to mapItems, then inserting them into CoreData
         private func updateDiff() {
-            currentDifferences
-            = Array(fetchedResultsController?.fetchedObjects ?? []).map(transformer).difference(
-                from: lastSentState)
-            fulfillDemand()
+            guard let fetchedObjects = fetchedResultsController?.fetchedObjects else { return }
+            // array of ObservationMapItems
+            let transformed = fetchedObjects.map(transformer)
+            // array of Insertions and Removals -> they are literally labeled as "insert" while debugging
+            let diff = transformed.difference(from: lastSentState)
+            currentDifferences = diff
+            fulfillDemand(with: transformed, difference: diff)
         }
 
-        private func fulfillDemand() {
+        private func fulfillDemand(with transformed: [TransformedObject]? = nil, difference: CollectionDifference<TransformedObject>? = nil) {
             if demand > 0 && (!currentDifferences.isEmpty || firstTime) {
                 firstTime = false
                 let newDemand = downstream.receive(currentDifferences)
-                lastSentState = Array(fetchedResultsController?.fetchedObjects ?? []).map(transformer)
-                currentDifferences = lastSentState.difference(from: lastSentState)
+                lastSentState = transformed ?? Array(fetchedResultsController?.fetchedObjects ?? []).map(transformer)
+                currentDifferences = difference ?? lastSentState.difference(from: lastSentState)
 
                 demand += newDemand
                 demand -= 1
