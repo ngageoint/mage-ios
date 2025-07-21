@@ -48,7 +48,7 @@ import SimpleFeatures
         }
     }
     
-    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation? {
+    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation {
         let gpsLocation = GPSLocation(context: context)
         
         let device = UIDevice.current
