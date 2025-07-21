@@ -61,6 +61,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         guard let eventId = eventId else {
             return nil
         }
+        
         let rootIconFolder = "\(documentsDirectory)/events/icons-\(eventId)/icons"
         var foundIcon = false
         let fileManager = FileManager.default
@@ -91,7 +92,8 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
                             let url = URL(fileURLWithPath: path)
                             let filename = url.lastPathComponent
                             if filename.hasPrefix("icon") {
-                                return "\(directoryToSearch)\(path)"
+                                let fullpath = "\(directoryToSearch)\(path)"
+                                return fullpath
                             }
                         }
                     }
