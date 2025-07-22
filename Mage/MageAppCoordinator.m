@@ -8,8 +8,8 @@
 
 #import "MageAppCoordinator.h"
 
-#import "AuthenticationCoordinator.h"
-#import "AuthenticationCoordinator_Server5.h"
+//#import "AuthenticationCoordinator.h"
+//#import "AuthenticationCoordinator_Server5.h"
 
 #import <UserNotifications/UserNotifications.h>
 #import "MageSessionManager.h"
@@ -18,14 +18,14 @@
 #import "MagicalRecord+MAGE.h"
 #import "UIViewController+TopMost.h"
 
-@interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationDelegate, EventChooserDelegate, ServerURLDelegate>
+@interface MageAppCoordinator() <UNUserNotificationCenterDelegate, AuthenticationCoordinatorDelegate, EventChooserDelegate, ServerURLDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (strong, nonatomic) ImageCacheProvider *imageCacheProvider;
 @property (strong, nonatomic) id<AppContainerScheming> scheme;
 @property (strong, nonatomic) ServerURLController *urlController;
-@property (strong, nonatomic) AuthenticationCoordinator *authCoordinator;
+@property (strong, nonatomic) AuthenticationCoordinatorSwift *authCoordinator;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
@@ -47,56 +47,48 @@
 }
 
 - (void)start {
-    NSLog(@"QQQ [MageAppCoordinator] Starting 2...");
+    NSLog(@"ZZZ [MageAppCoordinator] Starting ===...");
 
-    self.authCoordinator = [[AuthenticationCoordinator alloc]
-        initWithNavigationController:self.navigationController
-        andDelegate:self
-        andScheme:self.scheme
-        context:self.context];
+    NSURL *url = [MageServer baseURL];
+    if ([url.absoluteString length] == 0) {
+        [self changeServerUrl];
+        return;
+    }
 
-    NSLog(@"QQQ [MageAppCoordinator] Created authCoordinator: %@", self.authCoordinator);
-    [self.authCoordinator startLoginOnly];
+    __weak typeof(self) weakSelf = self;
+  
+    [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
+        weakSelf.authCoordinator = [[AuthenticationCoordinatorSwift alloc]
+            initWithNavigationController:self.navigationController
+            delegate:(id<AuthenticationCoordinatorDelegate>)weakSelf
+            scheme:weakSelf.scheme
+            context:weakSelf.context
+        ];
+        NSLog(@"ZZZ [MageAppCoordinator] Created authCoordinator: %@", weakSelf.authCoordinator);
+        [weakSelf.authCoordinator start:mageServer];
+    } failure:^(NSError *error) {
+        [weakSelf setServerURLWithError:error.localizedDescription];
+    }];
 }
-
-//- (void) startQQQ {
-//    NSLog(@"QQQ [MageAppCoordinator] Starting...");
-//    
-//    // check for a valid token
-//    if ([[UserUtility singleton] isTokenExpired]) {
-//        NSURL *url = [MageServer baseURL];
-//        if ([url absoluteString].length == 0) {
-//            [self changeServerUrl];
-//            return;
-//        } else {
-//            __weak __typeof__(self) weakSelf = self;
-//            [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
-//                [weakSelf startAuthentication:mageServer];
-//            } failure:^(NSError *error) {
-//                [weakSelf setServerURLWithError: error.localizedDescription];
-//            }];
-//        }
-//    } else {
-//        [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
-//        [self startEventChooser];
-//    }
-//}
 
 - (void) startAuthentication:(MageServer *) mageServer {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
+    
     if (self.authCoordinator != nil) {
-        [_childCoordinators removeObject:self.authCoordinator];
+        [self.childCoordinators removeObject:self.authCoordinator];
         self.authCoordinator = nil;
     }
-    if ([MageServer isServerVersion5]) {
-        self.authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
-    } else {
-        self.authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
-    }
+
+    self.authCoordinator = [[AuthenticationCoordinatorSwift alloc]
+                            initWithNavigationController:self.navigationController
+                            delegate:(id<AuthenticationCoordinatorDelegate>)self
+                            scheme:self.scheme
+                            context:self.context
+    ];
     
-    [_childCoordinators addObject:self.authCoordinator];
+    [self.childCoordinators addObject:self.authCoordinator];
     [self.authCoordinator start:mageServer];
     [FeedService.shared stop];
 }
@@ -104,7 +96,7 @@
 - (void) authenticationSuccessful {
     NSLog(@"QQQ [MageAppCoordinator] Authentication succeeded");
     
-    [_childCoordinators removeLastObject];
+    [self.childCoordinators removeLastObject];
     [self startEventChooser];
 }
 
@@ -118,15 +110,7 @@
     UIViewController *topVC = [UIViewController topMostViewController];
     UIViewController *vc = [ServerURLViewWrapper setServerURLViewWithDelegate:self scheme:self.scheme];
     [topVC presentViewController:vc animated:YES completion:nil];
-
-    
-    
-//    [self.navigationController popToRootViewControllerAnimated:NO];
-//    self.urlController = [[ServerURLController alloc] initWithDelegate:self error:nil scheme:self.scheme];
-//    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    
-//    [self.navigationController setViewControllers:@[self.urlController] animated: NO];
-//    [self.navigationController pushViewController:self.urlController animated:NO];
+    [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) setServerURLWithError: (NSString *) error {
@@ -171,13 +155,13 @@
 
 
 - (void) startEventChooser {
-    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController delegate:self scheme:_scheme];
-    [_childCoordinators addObject:eventChooser];
+    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController delegate:self scheme:self.scheme];
+    [self.childCoordinators addObject:eventChooser];
     [eventChooser start];
 }
 
 - (void) eventChosenWithEvent:(Event *)event {
-    [_childCoordinators removeLastObject];
+    [self.childCoordinators removeLastObject];
     [Event sendRecentEvent];
     [FeedService.shared restart];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -186,7 +170,7 @@
         svc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:svc animated:YES completion:NULL];
     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:_scheme];
+        MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:self.scheme];
         vc.modalPresentationStyle = UIModalPresentationFullScreen;
         vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:vc animated:NO completion:^{
@@ -221,5 +205,19 @@
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge + UNAuthorizationOptionAlert + UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
     }];
 }
+
+#pragma mark - AuthenticationCoordinatorDelegate
+-(void)authenticationDidSucceed {
+    NSLog(@"[MageAppCoordinator] Authentication succeeded (Swift)");
+    [self.childCoordinators removeLastObject];
+    [self startEventChooser];
+}
+
+-(void)authenticationDidFailWithError:(NSError *)error {
+    NSLog(@"[MageAppCoordinator] Authentication failed (Swift): %@", error);
+    
+    // TODO: Handle error
+}
+
 
 @end

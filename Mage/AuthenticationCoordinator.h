@@ -17,6 +17,7 @@
 - (void) authenticationSuccessful;
 - (void) couldNotAuthenticate;
 - (void) changeServerUrl;
+- (void) createAccount;
 
 @end
 

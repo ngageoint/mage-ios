@@ -7,41 +7,58 @@
 //
 
 import Foundation
+import UIKit
 import CoreData
+
+@objc public protocol AuthenticationCoordinatorDelegate where Self: NSObjectProtocol {
+    @objc func authenticationDidSucceed()
+    @objc func authenticationDidFail(error: NSError)
+}
 
 @objcMembers
 class AuthenticationCoordinatorSwift: NSObject {
+    
     // MARK: - Properties
-    private(set) var server: MageServer?
-    weak var delegate: AuthenticationDelegate?
-    var scheme: AppContainerScheming?
-    var context: NSManagedObjectContext?
+    //    weak var delegate: AuthenticationDelegate?
+    @objc public private(set) var server: MageServer?
+    @objc public weak var delegate: AuthenticationCoordinatorDelegate?
+    @objc public var scheme: AppContainerScheming?
+    @objc public var context: NSManagedObjectContext?
+    @objc public var navigationController: UIViewController?
     
     // MARK: - Initialization
-    init(server: MageServer? = nil,
-         delegate: AuthenticationDelegate? = nil,
+    @objc public init(
+        navigationController: UINavigationController,
+         delegate: AuthenticationCoordinatorDelegate? = nil,
          scheme: AppContainerScheming? = nil,
          context: NSManagedObjectContext? = nil)
     {
-        self.server = server
         self.delegate = delegate
         self.scheme = scheme
         self.context = context
         super.init()
     }
     
-    // MARK: - Main API (mirrors Objective-C signatures)
-    func start(server: MageServer?) {
-        self.server = server
-        // TODO: Implement flow: Show login view for server (can be SwiftUI in a UIHostingController or UIKit for now)
+    // MARK: - Main API (trying to mirror Objective-C signatures)
+    @objc func start(_ mageServer: MageServer) {
+        self.server = mageServer
+        NSLog("XXX [AuthenticationCoordinatorSwift] start: called with server: %@", mageServer)
+        
+        // TODO: Present your SwiftUI/UIViewController login view here, or trigger your login process.
+        // For testing: call authenticationDidSucceed after a short delay to confirm bridge works.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.delegate?.authenticationDidSucceed()
+        }
+        
+        showLoginView(for: mageServer)
         
     }
     
-    func startLoginOnly() {
+    @objc func startLoginOnly() {
         // TODO: Fetch MageServer from source, then call start(server:)
     }
     
-    func showLoginView(for server: MageServer?) {
+    @objc func showLoginView(for server: MageServer?) {
         self.server = server
         // TODO: Present login view (UIKit or SwiftUI)
     }

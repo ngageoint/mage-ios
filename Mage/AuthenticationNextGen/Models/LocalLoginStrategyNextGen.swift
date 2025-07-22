@@ -10,6 +10,7 @@ import Foundation
 
 struct LocalLoginStrategyNextGen: LoginStrategyNextGen {
     let displayName: String = "Local Login"
+    let server: MageServer
     
     func login(username: String, password: String) async throws -> UserNextGen {
         // TODO: - Add our REAL implementation here
