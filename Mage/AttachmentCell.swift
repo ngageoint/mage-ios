@@ -13,7 +13,9 @@ import Kingfisher
     private lazy var imageView: AttachmentUIImageView = {
         let imageView: AttachmentUIImageView = AttachmentUIImageView(image: nil);
         imageView.configureForAutoLayout();
-        imageView.clipsToBounds = true;
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView;
     }();
     
@@ -21,7 +23,12 @@ import Kingfisher
         super.init(frame: frame);
         self.configureForAutoLayout();
         self.addSubview(imageView);
-        imageView.autoPinEdgesToSuperviewEdges();
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: self.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        ]);
         setNeedsLayout();
     }
     
