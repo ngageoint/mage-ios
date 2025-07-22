@@ -21,10 +21,6 @@ enum MapSearchType: Int32 {
         set { self.mapSearchTypeCode = newValue.rawValue }
     }
     
-    @objc public static func getSettings() -> Settings? {
-        return Settings.mr_findFirst()
-    }
-    
     @objc public func populate(_ json: [AnyHashable : Any]) {
         self.mapSearchUrl = json[SettingsKey.mobileNominatimUrl.key] as? String
         let mapSearchType = json[SettingsKey.mobileSearchType.key] as? String
@@ -33,50 +29,5 @@ enum MapSearchType: Int32 {
             case "NOMINATIM": self.mapSearchType = .nominatim
             default: self.mapSearchType = .none
         }
-    }
-    
-    @objc public static func operationToPullMapSettings(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        guard let manager = MageSessionManager.shared(), let baseURL = MageServer.baseURL() else {
-            return nil;
-        }
-        let url = "\(baseURL)/api/settings/map";
-        
-        let task = manager.get_TASK(url, parameters: nil, progress: nil) { task, response in
-            guard let response = response as? [AnyHashable : Any] else {
-                return;
-            }
-
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            guard let context = context else {
-                success?(task, nil)
-                return
-            }
-            context.performAndWait {
-                var settings: Settings = {
-                    if let settings = try? context.fetchFirst(Settings.self) {
-                        return settings
-                    } else {
-                        let settings = Settings(context: context)
-                        try? context.obtainPermanentIDs(for: [settings])
-                        return settings
-                    }
-                }()
-
-                settings.populate(response)
-                do {
-                    try context.save()
-                    success?(task, response)
-                } catch {
-                    failure?(task, error)
-                }
-            }
-        } failure: { task, error in
-            NSLog("Error \(error)")
-            failure?(task, error);
-        };
-
-        return task;
     }
 }

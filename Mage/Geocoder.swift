@@ -49,8 +49,10 @@ class Geocoder {
             let result = GeocoderResult(name: "MGRS", address: text, location: point)
             completion(SearchResponse.success(type: .mgrs, results: [result]))
         } else {
-            let settings = Settings.getSettings()
-            let searchType = settings?.mapSearchType ?? .native
+            @Injected(\.settingsRepository)
+            var settingsRepository: SettingsRepository
+            let settings = settingsRepository.getSettings()
+            let searchType = settings?.mapSearchType ?? .none
             switch searchType {
             case .native:
                 NativeGeocoder().search(text: text, region: region, completion: completion)
