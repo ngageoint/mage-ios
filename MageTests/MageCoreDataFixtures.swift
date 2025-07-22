@@ -128,9 +128,9 @@ class MageCoreDataFixtures {
         return context.performAndWait({
             let location: CLLocation = location ?? CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
             
-            let gpsLocation = GPSLocation.gpsLocation(location: location, context: context);
+            let gpsLocation = GPSLocation.gpsLocation(location: location, context: context)
             
-            try? context.obtainPermanentIDs(for: [gpsLocation!])
+            try? context.obtainPermanentIDs(for: [gpsLocation])
             try? context.save()
         })
     }
