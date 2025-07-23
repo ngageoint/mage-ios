@@ -179,7 +179,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             MageLogger.misc.debug("Present the gallery")
             var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
             configuration.filter = .any(of: [.images, .videos])
-            configuration.selectionLimit = 1;
+            configuration.selectionLimit = 10;
             
             // This is to compensate for iOS not setting all the colors on the PHPicker
             // it only sets the tint color not anything else, so let's make the button actually viewable
@@ -202,8 +202,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
                 return
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
+            let uniqueId = UUID().uuidString
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
             let requestOptions = PHImageRequestOptions()
             requestOptions.isSynchronous = true
@@ -213,7 +212,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 guard let data else {
                     return
                 }
-                let scaledImagePath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg")
+                let scaledImagePath = attachmentsDirectory.appendingPathComponent("MAGE_\(uniqueId).jpeg")
                 do {
                     try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
                 }
@@ -246,10 +245,9 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return
         }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
+        let uniqueId = UUID().uuidString
         let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
-        let videoExportPath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4")
+        let videoExportPath = attachmentsDirectory.appendingPathComponent("MAGE_\(uniqueId).mp4")
         let assetRequestOptions = PHVideoRequestOptions()
         assetRequestOptions.deliveryMode = .highQualityFormat
         assetRequestOptions.isNetworkAccessAllowed = true
@@ -282,7 +280,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             self.addAttachmentForSaving(location: videoExportPath, contentType: "video/mp4")
         }
     }
-
+    
     private func requestAVAssetAsync(forVideo: PHAsset, options: PHVideoRequestOptions?) async throws -> AVAsset? {
         try await withCheckedThrowingContinuation { continuation in
             PHImageManager.default().requestAVAsset(forVideo: forVideo, options: options) { avAsset, audioMix, info in
@@ -294,7 +292,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             }
         }
     }
-
+    
     func galleryPermissionDenied() {
         // The user selected certain photos to share with MAGE and this wasn't one of them
         // prompt the user to pick more photos to share
@@ -316,47 +314,50 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        MageLogger.misc.debug("picked a photo \(results)")
         // This is to compensate for iOS not setting all the colors on the PHPicker so now we have to set it back
+        MageLogger.misc.debug("picked photos \(results)")
+        
         UINavigationBar.appearance().tintColor = self.scheme?.colorScheme.onPrimaryColor
-
+        
         guard !results.isEmpty else {
             picker.dismiss(animated: true, completion: nil)
             return
         }
         
-        let dateFormatter = DateFormatter();
-        dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
-        
+        var invalidAssetTypes: Set<String> = []
+
         for result in results {
             let itemProvider = result.itemProvider
             
-            // find the first type that we can handle
             for typeIdentifier in itemProvider.registeredTypeIdentifiers {
-                guard let utType = UTType(typeIdentifier) else {
-                    continue
-                }
-                // Matches both com.apple.live-photo-bundle and com.apple.private.live-photo-bundle
-                if utType.conforms(to: .image) || typeIdentifier.contains("live-photo-bundle") {
-                    if let assetIdentifier = result.assetIdentifier {
-                        let options = PHFetchOptions()
-                        options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                if let utType = UTType(typeIdentifier) {
+                    // Handle images
+                    if utType.conforms(to: .image) || typeIdentifier.contains("live-photo-bundle") {
+                        if let assetIdentifier = result.assetIdentifier {
+                            let options = PHFetchOptions()
+                            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                            handlePhoto(selectedAsset: fetchResult.firstObject, utType: utType)
+                        }
+                    } else if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
                         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                        handlePhoto(selectedAsset: fetchResult.firstObject, utType: utType)
-                        picker.dismiss(animated: true, completion: nil)
-                        return
+                        handleVideo(selectedAsset: fetchResult.firstObject, utType: utType)
+                    } else {
+                        // Track unhandled file types
+                        for type in itemProvider.registeredTypeIdentifiers {
+                            invalidAssetTypes.insert(type)
+                        }
                     }
                 }
-                // otherwise it should be a movie
-                if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
-                    let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                    handleVideo(selectedAsset: fetchResult.firstObject, utType: utType)
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
             }
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset types: \(itemProvider.registeredTypeIdentifiers)"))
+            
         }
+        if !invalidAssetTypes.isEmpty {
+            let types = invalidAssetTypes.map { $0 }.joined(separator: ", ")
+            MageLogger.misc.debug("Could not handle asset types: \(types)")
+            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset types: \(types)"))
+        }
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -395,6 +396,8 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     func handleCameraImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
         locationManager?.stopUpdatingHeading();
         locationManager?.stopUpdatingLocation();
+        let uniqueId = UUID().uuidString
+        let date = Date()
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         
@@ -402,9 +405,9 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
-                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
-                let originalFileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date()))_original.jpeg");
-
+                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(uniqueId).jpeg");
+                let originalFileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(uniqueId) \(dateFormatter.string(from: date))_original.jpeg");
+                
                 do {
                     try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
                     guard let imageData = chosenImage.qualityScaled() else { return };
@@ -428,13 +431,13 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                     guard let originalWithGPS = writeMetadataIntoImageData(imagedata: originalImageData, metadata: NSDictionary(dictionary: metadata)) else { return };
                     do {
                         try originalWithGPS.write(to: originalFileToWriteTo, options: .completeFileProtection)
-
+                        
                         try? PHPhotoLibrary.shared().performChangesAndWait {
                             PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: originalFileToWriteTo)
                         }
                         
                         try FileManager.default.removeItem(at: originalFileToWriteTo);
-
+                        
                     } catch {
                         MageLogger.misc.error("Unable to write image to file \(originalFileToWriteTo): \(error)")
                     }
@@ -532,11 +535,10 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         }
         return nil;
     }
-
+    
     func handleMovie(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
         MageLogger.misc.debug("handling movie \(info)")
-        let dateFormatter = DateFormatter();
-        dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+        let uniqueId = UUID().uuidString
         guard let videoUrl = info[.mediaURL] as? URL else { return }
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
@@ -544,7 +546,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
             UISaveVideoAtPathToSavedPhotosAlbum(videoUrl.path, nil, nil, nil);
         }
         let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
-        let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4");
+        let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(uniqueId).mp4");
         
         let videoQuality: String = videoUploadQuality();
         MageLogger.misc.debug("video quality \(videoQuality)")
@@ -563,22 +565,22 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                 exportSession.exportAsynchronously {
                     let foo = exportSession.status
                     switch (exportSession.status) {
-                        case .completed:
-                            print("Export complete")
-                            self.addAttachmentForSaving(location: fileToWriteTo, contentType: "video/mp4")
-                        case .failed:
-                            print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
-                        case .cancelled:
-                            print("Export cancelled");
-                        case .unknown:
-                            print("Unknown")
-                        case .waiting:
-                            print("Waiting")
-                        case .exporting:
-                            print("Exporting")
-                        @unknown default:
-                            print("Unknown")
-                        }
+                    case .completed:
+                        print("Export complete")
+                        self.addAttachmentForSaving(location: fileToWriteTo, contentType: "video/mp4")
+                    case .failed:
+                        print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
+                    case .cancelled:
+                        print("Export cancelled");
+                    case .unknown:
+                        print("Unknown")
+                    case .waiting:
+                        print("Waiting")
+                    case .exporting:
+                        print("Exporting")
+                    @unknown default:
+                        print("Unknown")
+                    }
                 }
             } catch {
                 MageLogger.misc.error("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
@@ -603,12 +605,8 @@ extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         for url in urls {
             let securityScoped = url.startAccessingSecurityScopedResource()
-            
-            let dateFormatter = DateFormatter();
-            dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
-            
+            let uniqueId = UUID().uuidString
             let uttype = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType
-
             let fileType = uttype?.preferredFilenameExtension ?? url.pathExtension
             let mimeType = uttype?.preferredMIMEType ?? UTType.data.identifier
             
@@ -619,11 +617,11 @@ extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
             let urlWithoutExtension = url.deletingPathExtension()
             let filename = urlWithoutExtension.lastPathComponent
-            let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(filename)_\(dateFormatter.string(from: Date())).\(fileType)");
+            let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(filename)_\(uniqueId).\(fileType)");
             
             do {
                 try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                                
+                
                 
                 do {
                     let attachmentData = try Data(contentsOf: url)
@@ -653,7 +651,7 @@ extension AttachmentCreationCoordinator: AudioRecordingDelegate {
     func recordingAvailable(recording: Recording) {
         MageLogger.misc.debug("Recording available")
         addAttachmentForSaving(location: URL(fileURLWithPath: recording.filePath!), contentType: recording.mediaType!)
-    
+        
         self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
     }
 }
