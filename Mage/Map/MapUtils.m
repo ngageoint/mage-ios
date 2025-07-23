@@ -25,31 +25,49 @@
     return tolerance;
 }
 
-+ (BOOL) polygonHasIntersections: (SFPolygon *) wkbPolygon {
-    for (SFLineString *line1 in wkbPolygon.rings) {
-        SFPoint *lastPoint = [line1.points objectAtIndex:[line1 numPoints] - 1];
-        for (SFLineString *line2 in wkbPolygon.rings) {
-            for (int i = 0; i < [line1 numPoints] - 1; i++) {
-                SFPoint *point1 = [line1.points objectAtIndex:i];
-                SFPoint *nextPoint1 = [line1.points objectAtIndex:i+1];
-                for (int k = i; k < [line2 numPoints] - 1; k++) {
-                    SFPoint *point2 = [line2.points objectAtIndex:k];
-                    SFPoint *nextPoint2 = [line2.points objectAtIndex:k+1];
-                    if (line1 != line2) continue;
-                    if (abs(i-k) == 1) {
++ (BOOL)polygonHasIntersections:(SFPolygon *)polygon {
+    // Iterate over each ring in the polygon
+    for (SFLineString *ring1 in polygon.rings) {
+        NSUInteger ring1PointCount = [ring1 numPoints];
+        SFPoint *lastPoint = ring1.points[ring1PointCount - 1]; // last point for closure checks
+        
+        // Compare each ring against every ring (including itself)
+        for (SFLineString *ring2 in polygon.rings) {
+            NSUInteger ring2PointCount = [ring2 numPoints];
+            
+            // Check all segments in ring1
+            for (NSUInteger i = 0; i < ring1PointCount - 1; i++) {
+                SFPoint *p1Start = ring1.points[i];
+                SFPoint *p1End = ring1.points[i + 1];
+                
+                // Check all segments in ring2
+                for (NSUInteger k = 0; k < ring2PointCount - 1; k++) {
+                    SFPoint *p2Start = ring2.points[k];
+                    SFPoint *p2End = ring2.points[k + 1];
+                    
+                    // Skip comparing a segment with itself or immediate neighbors
+                    if (ring1 == ring2 && labs((NSInteger)i - (NSInteger)k) <= 1) continue;
+                    
+                    // Skip first and last segment overlap in a closed ring
+                    if (ring1 == ring2 && i == 0 && k == ring1PointCount - 2 &&
+                        [p1Start.x isEqual:lastPoint.x] && [p1Start.y isEqual:lastPoint.y]) {
                         continue;
                     }
-                    if (i == 0 && k == [line1 numPoints] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) {
-                        continue;
-                    }
-                    BOOL intersects = [MapUtils line1Start:CGPointMake([point1.x doubleValue], [point1.y doubleValue]) andEnd:CGPointMake([nextPoint1.x doubleValue], [nextPoint1.y doubleValue]) intersectsLine2Start:CGPointMake([point2.x doubleValue], [point2.y doubleValue]) andEnd:CGPointMake([nextPoint2.x doubleValue], [nextPoint2.y doubleValue])];
-                    if (intersects) return YES;
+                    
+                    // Check for intersection
+                    BOOL intersects = [MapUtils line1Start:CGPointMake(p1Start.x.doubleValue, p1Start.y.doubleValue)
+                                                    andEnd:CGPointMake(p1End.x.doubleValue, p1End.y.doubleValue)
+                                        intersectsLine2Start:CGPointMake(p2Start.x.doubleValue, p2Start.y.doubleValue)
+                                                     andEnd:CGPointMake(p2End.x.doubleValue, p2End.y.doubleValue)];
+                    
+                    if (intersects) return YES; // Found intersection, early exit
                 }
             }
         }
     }
-    return NO;
+    return NO; // No intersections found
 }
+
 
 + (BOOL) line1Start: (CGPoint) line1Start andEnd: (CGPoint) line1End intersectsLine2Start: (CGPoint) line2Start andEnd: (CGPoint) line2End {
     CGFloat q =
