@@ -10,7 +10,6 @@ import SwiftUI
 
 struct LocalLoginViewSwiftUI: View {
     @ObservedObject var viewModel: LocalLoginViewModel
-//    var scheme: AppContainerScheming
     
     var body: some View {
         VStack(spacing: 16) {
@@ -63,7 +62,7 @@ struct LocalLoginViewSwiftUI: View {
                         .progressViewStyle(CircularProgressViewStyle())
                         .frame(maxWidth: .infinity)
                 } else {
-                    Text("Sign In Eh?")
+                    Text("Sign In")
                         .bold()
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -76,7 +75,7 @@ struct LocalLoginViewSwiftUI: View {
             
             // Sign Up
             Button(action: { viewModel.signupTapped() }) {
-                Text("Sign Up Here Eh?")
+                Text("Sign Up Here")
                     .foregroundStyle(Color.blue)
             }
             .padding(.top, 8)
@@ -85,3 +84,52 @@ struct LocalLoginViewSwiftUI: View {
         .background(Color(.systemBackground))
     }
 }
+
+
+class PreviewLocalLoginViewModel: LocalLoginViewModel {
+    override init(strategy: [String : Any] = [:], delegate: LoginDelegate? = nil) {
+        super.init(strategy: strategy, delegate: delegate)
+        self.username = "previewuser"
+        self.password = "password123"
+        self.showPassword = false
+        self.isLoading = false
+        self.errorMessage = nil
+    }
+    
+    override func loginTapped() {
+        isLoading = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.isLoading = false
+            self.errorMessage = "Invalid login. Try again."
+        }
+    }
+    
+    override func signupTapped() {
+        self.errorMessage = "Signup not implemented in preview."
+    }
+}
+
+struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            LocalLoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
+                .previewDisplayName("Default")
+            LocalLoginViewSwiftUI(viewModel: {
+                let vm = PreviewLocalLoginViewModel()
+                vm.errorMessage = "Bad username or password!"
+                return vm
+            }())
+            .previewDisplayName("With Error")
+            LocalLoginViewSwiftUI(viewModel: {
+                let vm = PreviewLocalLoginViewModel()
+                vm.isLoading = true
+                return vm
+            }())
+            .previewDisplayName("Loading State")
+        }
+        .padding()
+        .background(Color(.systemGroupedBackground))
+        .previewLayout(.sizeThatFits)
+    }
+}
+
