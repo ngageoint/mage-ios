@@ -140,12 +140,36 @@
     for (NSDictionary *strategy in strategies) {
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
             localAuth = YES;
-            LocalLoginView *view = [[[UINib nibWithNibName:@"local-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
-            view.strategy = strategy;
-            view.delegate = self.delegate;
-            view.user = self.user;
-            [view applyThemeWithContainerScheme:_scheme];
-            [self.loginsStackView addArrangedSubview:view];
+            
+            // 1. Create the SwiftUI ViewModel via wrapper
+            LocalLoginViewModelWrapper *swiftUIViewModel = [[LocalLoginViewModelWrapper alloc] initWithStrategy:strategy delegate:self.delegate user:self.user];
+            
+            // 2. Create the SwiftUI hosting controller
+            UIViewController *swiftUILoginVC = [LocalLoginViewHoster hostingControllerWithViewModel:swiftUIViewModel.viewModel];
+            
+            // 3. Embed in a stack view as a child view controller
+            [self addChildViewController:swiftUILoginVC];
+            swiftUILoginVC.view.translatesAutoresizingMaskIntoConstraints = NO;
+            
+            UIView *swiftUIWrapper = [[UIView alloc] init];
+            [swiftUIWrapper addSubview:swiftUILoginVC.view];
+            
+            [swiftUILoginVC.view.topAnchor constraintEqualToAnchor:swiftUIWrapper.topAnchor].active = YES;
+            [swiftUILoginVC.view.bottomAnchor constraintEqualToAnchor:swiftUIWrapper.bottomAnchor].active = YES;
+            [swiftUILoginVC.view.leadingAnchor constraintEqualToAnchor:swiftUIWrapper.leadingAnchor].active = YES;
+            [swiftUILoginVC.view.trailingAnchor constraintEqualToAnchor:swiftUIWrapper.trailingAnchor].active = YES;
+            
+            [self.loginsStackView addArrangedSubview:swiftUIWrapper];
+            
+            [swiftUILoginVC didMoveToParentViewController:self];
+            
+            
+//            LocalLoginView *view = [[[UINib nibWithNibName:@"local-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            view.strategy = strategy;
+//            view.delegate = self.delegate;
+//            view.user = self.user;
+//            [view applyThemeWithContainerScheme:_scheme];
+//            [self.loginsStackView addArrangedSubview:view];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
