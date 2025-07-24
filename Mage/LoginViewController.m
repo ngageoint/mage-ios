@@ -10,7 +10,6 @@
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "IDPLoginView.h"
-#import "LocalLoginView.h"
 #import "LdapLoginView.h"
 #import "OrView.h"
 #import <PureLayout.h>

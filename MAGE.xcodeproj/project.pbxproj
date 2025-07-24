@@ -723,8 +723,6 @@
 		F7C097BF2C87B857003FA115 /* settingsMap.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C097BE2C87B857003FA115 /* settingsMap.json */; };
 		F7C097C22C889A3A003FA115 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097C12C889A3A003FA115 /* Persistence.swift */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
-		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
-		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
@@ -1744,9 +1742,6 @@
 		F7C097C32C88F4A7003FA115 /* TestPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPersistence.swift; sourceTree = "<group>"; };
 		F7C183A82CD2E13400BA7DCD /* MAGEGeoPackageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGEGeoPackageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBuilder.swift; sourceTree = "<group>"; };
-		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
-		F7C3DB9E207FECEB00154281 /* LocalLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalLoginView.h; sourceTree = "<group>"; };
-		F7C3DB9F207FECEB00154281 /* LocalLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalLoginView.m; sourceTree = "<group>"; };
 		F7C5C8951F4B8F7E002C78D3 /* GeometryEditMapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditMapDelegate.h; sourceTree = "<group>"; };
 		F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditMapDelegate.m; sourceTree = "<group>"; };
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
@@ -2191,8 +2186,6 @@
 				F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */,
 				2F38DF1522B942C800485DA4 /* LdapLoginView.h */,
 				2F38DF1622B942C800485DA4 /* LdapLoginView.m */,
-				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
-				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
@@ -3398,7 +3391,6 @@
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
 				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
-				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
@@ -4455,7 +4447,6 @@
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
 				2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */,
 				2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */,
-				F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
@@ -5365,7 +5356,6 @@
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
 				F73564D72C62547600466813 /* ObservationFavoriteLocalDataSource.swift in Sources */,
-				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F72D43252694B60300F9AC3B /* Role.swift in Sources */,
 				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,
 				F754C65B2C48689900E408E9 /* ObservationLocationBottomSheetActionBar.swift in Sources */,
