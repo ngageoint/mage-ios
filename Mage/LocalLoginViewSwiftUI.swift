@@ -18,6 +18,7 @@ struct LocalLoginViewSwiftUI: View {
             
             if let error = viewModel.errorMessage {
                 Text(error)
+                    .lineLimit(nil)
                     .foregroundColor(.red)
             }
             
