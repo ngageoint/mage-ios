@@ -27,7 +27,6 @@ import SwiftUI
 @objc public class LocalLoginViewHoster: NSObject {
     /// Returns a ready-to-use UIHostingController containing the SwiftUI login view.
     @objc public static func hostingController(withViewModel viewModel: LocalLoginViewModel) -> UIViewController {
-        let scheme = AppDefaultContainerScheme()
         let swiftUIView = LocalLoginViewSwiftUI(viewModel: viewModel)
         return UIHostingController(rootView: swiftUIView)
     }

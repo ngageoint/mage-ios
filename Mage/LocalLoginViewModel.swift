@@ -7,27 +7,28 @@
 //
 
 import Foundation
-//import Combine
 
 @objc public class LocalLoginViewModel: NSObject, ObservableObject {
-    // Inputs
-    //    @Published var username: String = ""
     @Published @objc public dynamic var username: String = ""
     @Published @objc public dynamic var password: String = ""
     @Published @objc public dynamic var showPassword: Bool = false
-    
-    // Outputs
     @Published @objc public dynamic var isLoading: Bool = false
     @Published @objc public dynamic var errorMessage: String? = nil
     
-    // Dependencies
     public let strategy: [String: Any]
     @objc public weak var delegate: LoginDelegate?
     
-    @objc public init(strategy: [String: Any], delegate: LoginDelegate?) {
+    @objc public dynamic var userExists: Bool = false
+    
+    @objc public init(strategy: [String: Any], delegate: LoginDelegate?, user: User? = nil) {
         self.strategy = strategy
         self.delegate = delegate
         super.init()
+        
+        if let user {
+            self.username = user.username ?? ""
+            self.userExists = true
+        }
     }
     
     @objc public func loginTapped() {
@@ -39,10 +40,8 @@ import Foundation
         isLoading = true
         errorMessage = nil
         
-        // --- Adding more expected parameters
         let deviceUUID = DeviceUUID.retrieveDeviceUUID()
         let uidString = deviceUUID?.uuidString
-        
         let infoDict = Bundle.main.infoDictionary
         let appVersion = infoDict?["CFBundleShortVersionString"] as? String ?? ""
         let buildNumber = infoDict?["CFBundleVersion"] as? String ?? ""

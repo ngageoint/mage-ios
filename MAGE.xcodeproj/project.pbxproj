@@ -163,6 +163,10 @@
 		846224CD2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */; };
 		846224CF2E3142D10029FE98 /* SchemeTemporaryReplacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CE2E3142D10029FE98 /* SchemeTemporaryReplacement.swift */; };
 		846224D12E3148100029FE98 /* LocalLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */; };
+		846224D32E327D170029FE98 /* UsernameFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D22E327D170029FE98 /* UsernameFieldView.swift */; };
+		846224D52E327F010029FE98 /* PasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D42E327F010029FE98 /* PasswordFieldView.swift */; };
+		846224D72E3280B30029FE98 /* SignInButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D62E3280B30029FE98 /* SignInButtonView.swift */; };
+		846224D92E3285BB0029FE98 /* SignUpButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D82E3285BB0029FE98 /* SignUpButtonView.swift */; };
 		846D0C002D834440009C68CB /* AuthenticationCoordinatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */; };
 		846D0C022D834519009C68CB /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */; };
 		846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
@@ -1097,6 +1101,10 @@
 		846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewSwiftUI.swift; sourceTree = "<group>"; };
 		846224CE2E3142D10029FE98 /* SchemeTemporaryReplacement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeTemporaryReplacement.swift; sourceTree = "<group>"; };
 		846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModelWrapper.swift; sourceTree = "<group>"; };
+		846224D22E327D170029FE98 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
+		846224D42E327F010029FE98 /* PasswordFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordFieldView.swift; sourceTree = "<group>"; };
+		846224D62E3280B30029FE98 /* SignInButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInButtonView.swift; sourceTree = "<group>"; };
+		846224D82E3285BB0029FE98 /* SignUpButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpButtonView.swift; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuthenticationCoordinator+Testing.h"; sourceTree = "<group>"; };
@@ -2195,6 +2203,10 @@
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
 				846224CA2E313A8D0029FE98 /* LocalLoginViewModel.swift */,
 				846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */,
+				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
+				846224D42E327F010029FE98 /* PasswordFieldView.swift */,
+				846224D62E3280B30029FE98 /* SignInButtonView.swift */,
+				846224D82E3285BB0029FE98 /* SignUpButtonView.swift */,
 				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
 				846224CE2E3142D10029FE98 /* SchemeTemporaryReplacement.swift */,
 			);
@@ -4879,6 +4891,7 @@
 				F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */,
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
+				846224D32E327D170029FE98 /* UsernameFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserWrapperViewController.swift in Sources */,
 				F7225F582C5A783B00B7D935 /* AttachmentRepository.swift in Sources */,
 				F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */,
@@ -4971,6 +4984,7 @@
 				F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */,
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
 				F7C0979D2C812614003FA115 /* GeoPackageMediaRow.swift in Sources */,
+				846224D92E3285BB0029FE98 /* SignUpButtonView.swift in Sources */,
 				F73564FB2C65650F00466813 /* UserLocationViewModel.swift in Sources */,
 				F7C097622C7FA822003FA115 /* RoleRepository.swift in Sources */,
 				F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */,
@@ -5271,7 +5285,9 @@
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				846224D12E3148100029FE98 /* LocalLoginViewModelWrapper.swift in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
+				846224D52E327F010029FE98 /* PasswordFieldView.swift in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
+				846224D72E3280B30029FE98 /* SignInButtonView.swift in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
