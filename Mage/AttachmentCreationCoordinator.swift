@@ -338,10 +338,12 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                             options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                             let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
                             handlePhoto(selectedAsset: fetchResult.firstObject, utType: utType)
+                            break
                         }
                     } else if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
                         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
                         handleVideo(selectedAsset: fetchResult.firstObject, utType: utType)
+                        break
                     } else {
                         // Track unhandled file types
                         for type in itemProvider.registeredTypeIdentifiers {
