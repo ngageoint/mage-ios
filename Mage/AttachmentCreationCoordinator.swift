@@ -314,49 +314,29 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        // This is to compensate for iOS not setting all the colors on the PHPicker so now we have to set it back
         MageLogger.misc.debug("picked photos \(results)")
-        
-        UINavigationBar.appearance().tintColor = self.scheme?.colorScheme.onPrimaryColor
+        UINavigationBar.appearance().tintColor = self.scheme?.colorScheme.onPrimaryColor // This is to compensate for iOS not setting all the colors on the PHPicker so now we have to set it back
         
         guard !results.isEmpty else {
             picker.dismiss(animated: true, completion: nil)
             return
         }
         
-        var invalidAssetTypes: Set<String> = []
-
         for result in results {
             let itemProvider = result.itemProvider
-            
-            for typeIdentifier in itemProvider.registeredTypeIdentifiers {
-                if let utType = UTType(typeIdentifier) {
-                    // Handle images
-                    if utType.conforms(to: .image) || typeIdentifier.contains("live-photo-bundle") {
-                        if let assetIdentifier = result.assetIdentifier {
-                            let options = PHFetchOptions()
-                            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-                            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                            handlePhoto(selectedAsset: fetchResult.firstObject, utType: utType)
-                            break
-                        }
-                    } else if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
-                        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                        handleVideo(selectedAsset: fetchResult.firstObject, utType: utType)
-                        break
-                    } else {
-                        // Track unhandled file types
-                        for type in itemProvider.registeredTypeIdentifiers {
-                            invalidAssetTypes.insert(type)
-                        }
-                    }
-                }
+            guard let assetIdentifier = result.assetIdentifier else {
+                continue // Skip invalid asset (edge case: potentially deleted during upload)
             }
-        }
-        if !invalidAssetTypes.isEmpty {
-            let types = invalidAssetTypes.map { $0 }.joined(separator: ", ")
-            MageLogger.misc.debug("Could not handle asset types: \(types)")
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset types: \(types)"))
+            
+            if itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+                let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                handleVideo(selectedAsset: fetchResult.firstObject, utType: .movie)
+            } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+                let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                handlePhoto(selectedAsset: fetchResult.firstObject, utType: .image)
+            } else {
+                MageLogger.misc.debug("Could not handle asset types: \(itemProvider.registeredTypeIdentifiers)")
+            }
         }
         picker.dismiss(animated: true, completion: nil)
     }
