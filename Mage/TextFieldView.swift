@@ -12,7 +12,7 @@ import MaterialComponents.MDCTextField;
 class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
-    private var shouldResign: Bool = false;
+//    private var shouldResign: Bool = false;
     
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
@@ -199,7 +199,7 @@ class TextFieldView : BaseFieldView {
 
 extension TextFieldView {
     func resignFieldFirstResponder() {
-        shouldResign = true;
+//        shouldResign = true;
         if (self.multiline) {
             multilineTextField.textView.resignFirstResponder();
         } else {
@@ -219,13 +219,13 @@ extension TextFieldView {
 
 extension TextFieldView: UITextFieldDelegate {
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        shouldResign = false;
-    }
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        shouldResign = false;
+//    }
     
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        return shouldResign;
-    }
+//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+//        return shouldResign;
+//    }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         if (value as? String != textField.text) {
@@ -236,15 +236,15 @@ extension TextFieldView: UITextFieldDelegate {
             }
             delegate?.fieldValueChanged(field, value: value);
         }
-        shouldResign = false;
+//        shouldResign = false;
     }
 }
 
 extension TextFieldView: UITextViewDelegate {
     
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        return shouldResign;
-    }
+//    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+//        return shouldResign;
+//    }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if (value as? String != textView.text) {
@@ -255,6 +255,6 @@ extension TextFieldView: UITextViewDelegate {
             }
             delegate?.fieldValueChanged(field, value: value);
         }
-        shouldResign = false;
+//        shouldResign = false;
     }
 }
