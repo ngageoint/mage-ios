@@ -350,7 +350,6 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     }
                 }
             }
-            
         }
         if !invalidAssetTypes.isEmpty {
             let types = invalidAssetTypes.map { $0 }.joined(separator: ", ")
