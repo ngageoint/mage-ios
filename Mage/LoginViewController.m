@@ -161,14 +161,6 @@
             [self.loginsStackView addArrangedSubview:swiftUIWrapper];
             
             [swiftUILoginVC didMoveToParentViewController:self];
-            
-            
-//            LocalLoginView *view = [[[UINib nibWithNibName:@"local-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
-//            view.strategy = strategy;
-//            view.delegate = self.delegate;
-//            view.user = self.user;
-//            [view applyThemeWithContainerScheme:_scheme];
-//            [self.loginsStackView addArrangedSubview:view];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;

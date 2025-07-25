@@ -20,9 +20,13 @@ struct PasswordFieldView: View {
             if showPassword {
                 TextField("Password", text: $password)
                     .textContentType(.password)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
             } else {
                 SecureField("Password", text: $password)
                     .textContentType(.password)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
             }
             
             Button(action: { showPassword.toggle() }) {
