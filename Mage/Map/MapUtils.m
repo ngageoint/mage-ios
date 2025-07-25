@@ -57,10 +57,7 @@
                     if (i == 0 && k == [line1 numPoints] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) continue;
                     
                     // Check if the two line segments (point1->nextPoint1 and point2->nextPoint2) intersect
-                    BOOL intersects = [MapUtils line1Start:CGPointMake([point1.x doubleValue], [point1.y doubleValue])
-                                                  andEnd:CGPointMake([nextPoint1.x doubleValue], [nextPoint1.y doubleValue])
-                                      intersectsLine2Start:CGPointMake([point2.x doubleValue], [point2.y doubleValue])
-                                                  andEnd:CGPointMake([nextPoint2.x doubleValue], [nextPoint2.y doubleValue])];
+                    BOOL intersects = [MapUtils line1Start:CGPointMake([point1.x doubleValue], [point1.y doubleValue]) andEnd:CGPointMake([nextPoint1.x doubleValue], [nextPoint1.y doubleValue]) intersectsLine2Start:CGPointMake([point2.x doubleValue], [point2.y doubleValue]) andEnd:CGPointMake([nextPoint2.x doubleValue], [nextPoint2.y doubleValue])];
                     
                     // If an intersection is found, return YES immediately
                     if (intersects) return YES;
