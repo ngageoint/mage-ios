@@ -140,6 +140,7 @@ import MaterialComponents.MDCCard
         self.view.addSubview(scrollView)
         addScrollViewConstraints();
         scrollView.addSubview(stackView)
+        
         addStackViewConstraints();
         setupStackView(stackView: stackView);
         self.view.addSubview(addFormFAB);
@@ -171,50 +172,9 @@ import MaterialComponents.MDCCard
                 self.navigationItem.leftBarButtonItem?.isEnabled = true;
                 self.bottomConstraint?.constant = -60;
                 self.view.layoutIfNeeded();
-                self.enableDisabledFormFields(parent: self.stackView)
             
             case .keyboardDidShow:
-                self.disableNonFirstResponderViews(parent: self.stackView)
-            }
-        }
-    }
-    
-    func disableNonFirstResponderViews(parent: UIView) {
-        for view: UIView in parent.subviews as [UIView] {
-            if let view = view as? RadioFieldView {
-                view.isUserInteractionEnabled = false
-            } else if let view = view as? GeometryView {
-                view.isUserInteractionEnabled = false
-            } else if let view = view as? DropdownFieldView {
-                view.isUserInteractionEnabled = false
-            } else if let view = view as? MultiDropdownFieldView {
-                view.isUserInteractionEnabled = false
-            } else if let view = view as? AttachmentFieldView {
-                view.isUserInteractionEnabled = false
-            } else if let view = view as? CheckboxFieldView {
-                view.isUserInteractionEnabled = false
-            } else {
-                disableNonFirstResponderViews(parent: view);
-            }
-        }
-    }
-    
-    func enableDisabledFormFields(parent: UIView) {
-        for view: UIView in parent.subviews as [UIView] {
-            if let view = view as? RadioFieldView, !view.isUserInteractionEnabled {
-                view.isUserInteractionEnabled = true
-            } else if let view = view as? GeometryView, !view.isUserInteractionEnabled {
-                view.isUserInteractionEnabled = true
-            } else if let view = view as? DropdownFieldView, !view.isUserInteractionEnabled {
-                view.isUserInteractionEnabled = true
-            } else if let view = view as? MultiDropdownFieldView, !view.isUserInteractionEnabled {
-                view.isUserInteractionEnabled = true
-            } else if let view = view as? AttachmentFieldView, !view.isUserInteractionEnabled {
-                view.isUserInteractionEnabled = true
-            } else if let view = view as? CheckboxFieldView, !view.isUserInteractionEnabled {
-                view.isUserInteractionEnabled = true
-            } else {
-                enableDisabledFormFields(parent: view);
+                NSLog("keyboard did show")
             }
         }
     }
