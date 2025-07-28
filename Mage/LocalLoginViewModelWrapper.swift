@@ -10,11 +10,11 @@ import Foundation
 import SwiftUI
 
 @objc public class LocalLoginViewModelWrapper: NSObject {
-    @objc public let viewModel: LocalLoginViewModel
+    @objc public let viewModel: LoginViewModel
     
     @objc public init(strategy: NSDictionary, delegate: LoginDelegate?, user: User?) {
         let swiftStrategy = strategy as? [String: Any]  ?? [:]
-        self.viewModel = LocalLoginViewModel(strategy: swiftStrategy, delegate: delegate)
+        self.viewModel = LoginViewModel(strategy: swiftStrategy, delegate: delegate)
         
         if let user {
             self.viewModel.username = user.username ?? ""
@@ -26,7 +26,7 @@ import SwiftUI
 
 @objc public class LocalLoginViewHoster: NSObject {
     /// Returns a ready-to-use UIHostingController containing the SwiftUI login view.
-    @objc public static func hostingController(withViewModel viewModel: LocalLoginViewModel) -> UIViewController {
+    @objc public static func hostingController(withViewModel viewModel: LoginViewModel) -> UIViewController {
         let swiftUIView = LocalLoginViewSwiftUI(viewModel: viewModel)
         return UIHostingController(rootView: swiftUIView)
     }

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct LocalLoginViewSwiftUI: View {
-    @ObservedObject var viewModel: LocalLoginViewModel
+    @ObservedObject var viewModel: LoginViewModel
     
     var body: some View {
         VStack(spacing: 16) {
@@ -60,7 +60,7 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
 }
 
 
-class PreviewLocalLoginViewModel: LocalLoginViewModel {
+class PreviewLocalLoginViewModel: LoginViewModel {
     init(strategy: [String : Any] = [:], delegate: LoginDelegate? = nil) {
         super.init(strategy: strategy, delegate: delegate)
         self.username = "previewuser"

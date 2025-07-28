@@ -1,5 +1,5 @@
 //
-//  LocalLoginViewModel.swift
+//  LoginViewModel.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 7/23/25.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public class LocalLoginViewModel: NSObject, ObservableObject {
+@objc public class LoginViewModel: NSObject, ObservableObject {
     @Published @objc public dynamic var username: String = ""
     @Published @objc public dynamic var password: String = ""
     @Published @objc public dynamic var showPassword: Bool = false
