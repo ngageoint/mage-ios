@@ -1,5 +1,5 @@
 //
-//  LocalLoginViewSwiftUI.swift
+//  LoginViewSwiftUI.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 7/23/25.
@@ -8,13 +8,22 @@
 
 import SwiftUI
 
-struct LocalLoginViewSwiftUI: View {
+struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
     
     var body: some View {
         VStack(spacing: 16) {
-            UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
-            PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
+            UsernameFieldView(
+                username: $viewModel.username,
+                isDisabled: viewModel.userExists,
+                isLoading: viewModel.isLoading,
+                placeholder: viewModel.usernamePlaceholder
+            )
+            PasswordFieldView(
+                password: $viewModel.password,
+                showPassword: $viewModel.showPassword,
+                placeholder: viewModel.passwordPlaceholder
+            )
             
             if let error = viewModel.errorMessage {
                 Text(error)
@@ -38,15 +47,15 @@ struct LocalLoginViewSwiftUI: View {
 struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LocalLoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
+            LoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
                 .previewDisplayName("Default")
-            LocalLoginViewSwiftUI(viewModel: {
+            LoginViewSwiftUI(viewModel: {
                 let vm = PreviewLocalLoginViewModel()
                 vm.errorMessage = "Bad username or password!"
                 return vm
             }())
             .previewDisplayName("With Error")
-            LocalLoginViewSwiftUI(viewModel: {
+            LoginViewSwiftUI(viewModel: {
                 let vm = PreviewLocalLoginViewModel()
                 vm.isLoading = true
                 return vm

@@ -12,12 +12,13 @@ struct UsernameFieldView: View {
     @Binding var username: String
     var isDisabled: Bool = false
     var isLoading: Bool = false
+    var placeholder: String = "Password"
     
     var body: some View {
         HStack {
             Image(systemName: "person.fill")
                 .foregroundStyle(Color.secondary)
-            TextField("Username", text: $username)
+            TextField(placeholder, text: $username)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .textContentType(.username)
