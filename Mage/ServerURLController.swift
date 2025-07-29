@@ -42,6 +42,7 @@ class ServerURLController: UIViewController {
         serverURL.keyboardType = .URL
         serverURL.delegate = self
         serverURL.sizeToFit();
+        serverURL.text = "https://test.mage.geointapps.com" // FIXME: Do not MERGE (Debug testing only)
         return serverURL;
     }()
     

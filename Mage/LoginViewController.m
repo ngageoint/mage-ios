@@ -114,7 +114,9 @@
     [self setupAuthentication];
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [self.versionLabel setText:[NSString stringWithFormat:@"v%@", versionString]];
+    NSString *strategyType = [(NSDictionary *)[self.server.strategies firstObject] objectForKey:@"identifier"];
+    
+    [self.versionLabel setText:[NSString stringWithFormat:@"v%@ - %@", versionString, strategyType]];
     
     NSURL *url = [MageServer baseURL];
     [self.serverURL setTitle:[url absoluteString] forState:UIControlStateNormal];
@@ -137,6 +139,7 @@
     
     BOOL localAuth = NO;
     for (NSDictionary *strategy in strategies) {
+        // TEMP CHANGED FROM @"local" to validate if LDAP works
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
             localAuth = YES;
             
@@ -162,11 +165,23 @@
             
             [swiftUILoginVC didMoveToParentViewController:self];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
-            LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
-            view.strategy = strategy;
-            view.delegate = self.delegate;
-            [view applyThemeWithContainerScheme:_scheme];
-            [self.loginsStackView addArrangedSubview:view];
+            
+            LdapLoginViewModelWrapper *ldapViewModel = [[LdapLoginViewModelWrapper alloc] initWithStrategy:strategy delegate:self.delegate user:self.user];
+            UIViewController *swiftUILoginVC = [LdapLoginViewHoster hostingControllerWithViewModel:ldapViewModel.viewModel];
+            [self addChildViewController:swiftUILoginVC];
+            swiftUILoginVC.view.translatesAutoresizingMaskIntoConstraints = NO;
+            
+            UIView *swiftUIWrapper = [[UIView alloc] init];
+            [swiftUIWrapper addSubview:swiftUILoginVC.view];
+            
+            [swiftUILoginVC.view.topAnchor constraintEqualToAnchor:swiftUIWrapper.topAnchor].active = YES;
+            [swiftUILoginVC.view.bottomAnchor constraintEqualToAnchor:swiftUIWrapper.bottomAnchor].active = YES;
+            [swiftUILoginVC.view.leadingAnchor constraintEqualToAnchor:swiftUIWrapper.leadingAnchor].active = YES;
+            [swiftUILoginVC.view.trailingAnchor constraintEqualToAnchor:swiftUIWrapper.trailingAnchor].active = YES;
+            
+            [self.loginsStackView addArrangedSubview:swiftUIWrapper];
+
+            [swiftUILoginVC didMoveToParentViewController:self];
         } else {
             IDPLoginView *view = [[[UINib nibWithNibName:@"idp-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;

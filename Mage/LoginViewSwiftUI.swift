@@ -13,6 +13,8 @@ struct LoginViewSwiftUI: View {
     
     var body: some View {
         VStack(spacing: 16) {
+            Text(viewModel.strategyType ?? "Unknown Strategy")
+            
             UsernameFieldView(
                 username: $viewModel.username,
                 isDisabled: viewModel.userExists,
@@ -44,19 +46,19 @@ struct LoginViewSwiftUI: View {
     }
 }
 
-struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
+struct LoginViewSwiftUI_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
+            LoginViewSwiftUI(viewModel: PreviewLoginViewModel())
                 .previewDisplayName("Default")
             LoginViewSwiftUI(viewModel: {
-                let vm = PreviewLocalLoginViewModel()
+                let vm = PreviewLoginViewModel()
                 vm.errorMessage = "Bad username or password!"
                 return vm
             }())
             .previewDisplayName("With Error")
             LoginViewSwiftUI(viewModel: {
-                let vm = PreviewLocalLoginViewModel()
+                let vm = PreviewLoginViewModel()
                 vm.isLoading = true
                 return vm
             }())
@@ -68,17 +70,15 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
     }
 }
 
-
-class PreviewLocalLoginViewModel: LoginViewModel {
-    init(strategy: [String : Any] = [:], delegate: LoginDelegate? = nil) {
-        super.init(strategy: strategy, delegate: delegate)
-        self.username = "previewuser"
+class PreviewLoginViewModel: LoginViewModel {
+    override init(strategy: [String : Any] = [:], delegate: LoginDelegate? = nil, user: User? = nil) {
+        super.init(strategy: strategy, delegate: delegate, user: user)
+        self.username = "ldapuser"
         self.password = "password123"
         self.showPassword = false
         self.isLoading = false
         self.errorMessage = nil
     }
-    
     override func loginTapped() {
         isLoading = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -86,7 +86,6 @@ class PreviewLocalLoginViewModel: LoginViewModel {
             self.errorMessage = "Invalid login. Try again."
         }
     }
-    
     override func signupTapped() {
         self.errorMessage = "Signup not implemented in preview."
     }

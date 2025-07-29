@@ -9,8 +9,8 @@
 import Foundation
 
 @objc public class LoginViewModel: NSObject, ObservableObject {
-    @Published @objc public dynamic var username: String = ""
-    @Published @objc public dynamic var password: String = ""
+    @Published @objc public dynamic var username: String = "bmichalski"
+    @Published @objc public dynamic var password: String = "Password123456"
     @Published @objc public dynamic var showPassword: Bool = false
     @Published @objc public dynamic var isLoading: Bool = false
     @Published @objc public dynamic var errorMessage: String? = nil
@@ -21,20 +21,22 @@ import Foundation
     
     public var userExists: Bool { user != nil }
     
-    public var usernamePlaceholder: String {
-        if let title = (strategy["strategy"] as? [String: Any])?["title"] as? String {
-            return "\(title) Username"
-        }
-        return "Username"
+    let usernamePlaceholder = "Username"
+    let passwordPlaceholder = "Password"
+
+    public var strategyName: String? {
+        (strategy["strategy"] as? [String: Any])?["name"] as? String
     }
     
-    public var passwordPlaceholder: String {
-        if let title = (strategy["strategy"] as? [String: Any])?["title"] as? String {
-            return "\(title) Password"
-        }
-        return "Password"
+    public var strategyTitle: String? {
+        (strategy["strategy"] as? [String: Any])?["title"] as? String
     }
-
+    
+    public var strategyType: String? {
+        (strategy["strategy"] as? [String: Any])?["type"] as? String
+    }
+    
+    
     // MARK: - Init
     @objc public init(strategy: [String: Any], delegate: LoginDelegate?, user: User? = nil) {
         self.strategy = strategy
@@ -45,6 +47,23 @@ import Foundation
         if let user {
             self.username = user.username ?? ""
         }
+        
+        if let title = (strategy["strategy"] as? [String: Any])?["title"] as? String {
+            print(title)
+        }
+        
+//        let foo_name = (strategy["strategy"] as? [String: Any])?["name"] as? String
+//        let foo_title = (strategy["strategy"] as? [String: Any])?["title"] as? String
+//        let foo_type = (strategy["strategy"] as? [String: Any])?["type"] as? String
+        
+        print("\n----------")
+        print(strategyName  ?? "UNKNOWN STRATEGY NAME")
+        print(strategyType  ?? "UNKNOWN STRATEGY TYPE")
+        print(strategyTitle ?? "UNKNOWN STRATEGY TITLE")
+//        print("----------")
+//        print(strategy["strategy"] as Any)
+        print("----------\n\n")
+
     }
     
     @objc public func loginTapped() {
