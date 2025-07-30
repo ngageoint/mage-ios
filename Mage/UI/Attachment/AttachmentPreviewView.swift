@@ -22,7 +22,8 @@ struct AttachmentPreviewView: View {
                 )
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                 .cacheOriginalImage()
-                .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
+                // .all == download freely, .wifi == download once selected, .none == don't download unless specified
+                .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
                 .placeholder {
                     Image("observations")
                         .symbolRenderingMode(.monochrome)
