@@ -58,3 +58,5 @@
 #import "WMSTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
+
+#import "IDPCoordinator.h"

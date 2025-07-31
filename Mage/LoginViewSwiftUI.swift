@@ -96,3 +96,11 @@ class PreviewLoginViewModel: LoginViewModel {
         self.errorMessage = "Signup not implemented in preview."
     }
 }
+
+
+//extension LoginViewSwiftUI: IDPLoginDelegate {
+//    func signinForStrategy(_ strategy: [String: Any]) {
+//        let coordinator = IDPCoordinator(viewController: <#T##UIViewController#>, url: <#T##String#>, strategy: <#T##[AnyHashable : Any]#>, delegate: <#T##any LoginDelegate#>)
+//        
+//    }
+//}

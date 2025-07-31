@@ -165,7 +165,6 @@
             
             [swiftUILoginVC didMoveToParentViewController:self];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
-            
             LdapLoginViewModelWrapper *ldapViewModel = [[LdapLoginViewModelWrapper alloc] initWithStrategy:strategy delegate:self.delegate user:self.user];
             UIViewController *swiftUILoginVC = [LdapLoginViewHoster hostingControllerWithViewModel:ldapViewModel.viewModel];
             [self addChildViewController:swiftUILoginVC];
@@ -183,11 +182,21 @@
 
             [swiftUILoginVC didMoveToParentViewController:self];
         } else {
-            IDPLoginView *view = [[[UINib nibWithNibName:@"idp-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
-            view.strategy = strategy;
-            view.delegate = self.delegate;
-            [view applyThemeWithContainerScheme:self.scheme];
-            [self.loginsStackView addArrangedSubview:view];
+            IDPLoginViewModelWrapper *idpViewModelWrapper = [[IDPLoginViewModelWrapper alloc] initWithStrategy:strategy delegate: self.delegate];
+            UIViewController *swiftUILoginVC = [IDPLoginViewHoster hostingControllerWithViewModel:idpViewModelWrapper.viewModel];
+            [self addChildViewController:swiftUILoginVC];
+            swiftUILoginVC.view.translatesAutoresizingMaskIntoConstraints = NO;
+            
+            UIView *swiftUIWrapper = [[UIView alloc] init];
+            [swiftUIWrapper addSubview:swiftUILoginVC.view];
+            
+            [swiftUILoginVC.view.topAnchor constraintEqualToAnchor:swiftUIWrapper.topAnchor].active = YES;
+            [swiftUILoginVC.view.bottomAnchor constraintEqualToAnchor:swiftUIWrapper.bottomAnchor].active = YES;
+            [swiftUILoginVC.view.leadingAnchor constraintEqualToAnchor:swiftUIWrapper.leadingAnchor].active = YES;
+            [swiftUILoginVC.view.trailingAnchor constraintEqualToAnchor:swiftUIWrapper.trailingAnchor].active = YES;
+
+            [self.loginsStackView addArrangedSubview:swiftUIWrapper];
+            [swiftUILoginVC didMoveToParentViewController:self];
         }
     }
     

@@ -106,6 +106,9 @@
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
 		84299DAB2E3BFBD2007E51B1 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */; };
+		84299DAD2E3C0F05007E51B1 /* IDPLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */; };
+		84299DAF2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */; };
+		84299DB12E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1097,6 +1100,9 @@
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
+		84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModel.swift; sourceTree = "<group>"; };
+		84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUI.swift; sourceTree = "<group>"; };
+		84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -2197,6 +2203,8 @@
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
 				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
+				84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */,
+				84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */,
 				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
 				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
 				846224D42E327F010029FE98 /* PasswordFieldView.swift */,
@@ -2204,6 +2212,7 @@
 				846224D82E3285BB0029FE98 /* SignUpButtonView.swift */,
 				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
 				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
+				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -4959,6 +4968,7 @@
 				F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */,
 				2FAC84A72B50584B00FCAB37 /* SearchMapView.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
+				84299DAD2E3C0F05007E51B1 /* IDPLoginViewModel.swift in Sources */,
 				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
@@ -5122,6 +5132,7 @@
 				F79D2943282C36C6008FD45E /* NumberBadge.swift in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
+				84299DB12E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift in Sources */,
 				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
 				F73564F12C6548A900466813 /* LocationsViewModel.swift in Sources */,
 				F73564EF2C65356500466813 /* LocationListNavStack.swift in Sources */,
@@ -5375,6 +5386,7 @@
 				F73565052C668DB200466813 /* UserObservationList.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
+				84299DAF2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
 				04E2C8A028D387C2001F0812 /* GridSystems.swift in Sources */,
 				F70C34352C73D735007616FA /* DownloadingImageView.swift in Sources */,

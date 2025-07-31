@@ -35,20 +35,20 @@ class MockLoginDelegateSwiftUI: LoginDelegate {
 
 
 final class LoginViewModelTests: XCTestCase {
-    var server: MageServer!
-    var delegate: MockLoginDelegateSwiftUI!
-    var strategy: [String: Any] = [
-        "identifier": "local",
-        "strategy": ["title", "Local Login", "name": "Local", "type": "local"]
-    ]
-    let dummyUser = User()
-    
-    override func setUp() {
-        super.setUp()
-        
-        delegate = MockLoginDelegateSwiftUI()
-        viewModel = LoginViewModel(server: server, strategy: <#T##[String : Any]#>, delegate: <#T##LoginDelegate?#>, user: <#T##User?#>)
-    }
+//    var server: MageServer!
+//    var delegate: MockLoginDelegateSwiftUI!
+//    var strategy: [String: Any] = [
+//        "identifier": "local",
+//        "strategy": ["title", "Local Login", "name": "Local", "type": "local"],
+//    ]
+//    let dummyUser = User()
+//    
+//    override func setUp() {
+//        super.setUp()
+//        
+//        delegate = MockLoginDelegateSwiftUI()
+//        viewModel = LoginViewModel(server: server, strategy: <#T##[String : Any]#>, delegate: <#T##LoginDelegate?#>, user: <#T##User?#>)
+//    }
 
     
 }
