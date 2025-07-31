@@ -12,7 +12,7 @@ struct UsernameFieldView: View {
     @Binding var username: String
     var isDisabled: Bool = false
     var isLoading: Bool = false
-    var placeholder: String = "Password"
+    var placeholder: String = "Username"
     
     var body: some View {
         HStack {
