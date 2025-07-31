@@ -25,13 +25,16 @@ struct LocalLoginViewSwiftUI: View {
             SignInButtonView(isLoading: viewModel.isLoading) {
                 viewModel.loginTapped()
             }
+            .accessibilityLabel("Sign In")
             
             SignUpButtonView {
                 viewModel.signupTapped()
             }
         }
+        .accessibilityIdentifier("Local Login View")
         .padding()
         .background(Color(.systemBackground))
+        
     }
 }
 
