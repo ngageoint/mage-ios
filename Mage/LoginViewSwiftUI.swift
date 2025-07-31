@@ -13,7 +13,10 @@ struct LoginViewSwiftUI: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Text(viewModel.strategyType ?? "Unknown Strategy")
+            Text(viewModel.strategyTitle ?? "Unknown Strategy Title")
+                .font(.system(size: 24, weight: .semibold))
+                .tracking(0.5)
+                .padding(.bottom, 8)
             
             UsernameFieldView(
                 username: $viewModel.username,

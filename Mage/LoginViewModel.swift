@@ -52,18 +52,11 @@ import Foundation
             print(title)
         }
         
-//        let foo_name = (strategy["strategy"] as? [String: Any])?["name"] as? String
-//        let foo_title = (strategy["strategy"] as? [String: Any])?["title"] as? String
-//        let foo_type = (strategy["strategy"] as? [String: Any])?["type"] as? String
-        
         print("\n----------")
         print(strategyName  ?? "UNKNOWN STRATEGY NAME")
         print(strategyType  ?? "UNKNOWN STRATEGY TYPE")
         print(strategyTitle ?? "UNKNOWN STRATEGY TITLE")
-//        print("----------")
-//        print(strategy["strategy"] as Any)
         print("----------\n\n")
-
     }
     
     @objc public func loginTapped() {
