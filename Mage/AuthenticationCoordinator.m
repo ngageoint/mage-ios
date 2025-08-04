@@ -21,7 +21,7 @@
 #import "ContactInfo.h"
 #import "MAGE-Swift.h"
 
-@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
+@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPLoginDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic, readwrite) MageServer *server;

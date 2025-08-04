@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "IDPLoginView.h"
+#import "MAGE-Swift.h"
+
 @import MaterialComponents;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AuthenticationButton : UIView
 
 @property (strong, nonatomic) NSDictionary *strategy;
-@property (weak, nonatomic) id<IDPButtonDelegate> delegate;
+@property (weak, nonatomic) id<IDPLoginDelegate> delegate;
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 

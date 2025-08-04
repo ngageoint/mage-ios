@@ -27,7 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loginFailure;
-@property (weak, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
+@property (weak, nonatomic) id<LoginDelegate, IDPLoginDelegate> delegate;
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
@@ -41,7 +41,7 @@
 
 @implementation LoginViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, IDPButtonDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, IDPLoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithNibName:@"LoginView" bundle:nil];
     if (!self) return nil;
     

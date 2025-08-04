@@ -6,15 +6,15 @@
 ////  Copyright © 2018 National Geospatial Intelligence Agency. All rights reserved.
 ////
 //
-#import <UIKit/UIKit.h>
-@import MaterialComponents;
-
-@protocol IDPButtonDelegate <NSObject>
-
-- (void) signinForStrategy: (NSDictionary *) strategy;
-
-@end
-
+//#import <UIKit/UIKit.h>
+//@import MaterialComponents;
+//
+//@protocol IDPButtonDelegate <NSObject>
+//
+//- (void) signinForStrategy: (NSDictionary *) strategy;
+//
+//@end
+//
 //@interface IDPLoginView : UIStackView
 //
 //@property (strong, nonatomic) NSDictionary *strategy;
