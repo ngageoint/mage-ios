@@ -79,7 +79,7 @@
 
 
 - (IBAction)onAuthenticationButtonTapped:(id)sender {
-    [self.delegate onAuthenticationButtonTapped:sender];
+    [self.delegate signinForStrategy:self.strategy];
 }
 
 -(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
