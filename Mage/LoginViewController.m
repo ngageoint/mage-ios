@@ -12,6 +12,7 @@
 #import "IDPLoginView.h"
 #import "LdapLoginView.h"
 #import "OrView.h"
+#import "MAGE-Swift.h"
 #import <PureLayout.h>
 
 @interface LoginViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
@@ -182,7 +183,7 @@
 
             [swiftUILoginVC didMoveToParentViewController:self];
         } else {
-            IDPLoginViewModelWrapper *idpViewModelWrapper = [[IDPLoginViewModelWrapper alloc] initWithStrategy:strategy delegate: self.delegate];
+            IDPLoginViewModelWrapper *idpViewModelWrapper = [[IDPLoginViewModelWrapper alloc] initWithStrategy:strategy delegate:(id<IDPLoginDelegate>)self.delegate];
             UIViewController *swiftUILoginVC = [IDPLoginViewHoster hostingControllerWithViewModel:idpViewModelWrapper.viewModel];
             [self addChildViewController:swiftUILoginVC];
             swiftUILoginVC.view.translatesAutoresizingMaskIntoConstraints = NO;
