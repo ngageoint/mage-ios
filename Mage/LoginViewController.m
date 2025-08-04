@@ -9,8 +9,6 @@
 #import "LoginViewController.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
-#import "IDPLoginView.h"
-#import "LdapLoginView.h"
 #import "OrView.h"
 #import "MAGE-Swift.h"
 #import <PureLayout.h>

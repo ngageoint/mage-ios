@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "IDPLoginView.h"
 #import "MAGE-Swift.h"
 
 @import MaterialComponents;

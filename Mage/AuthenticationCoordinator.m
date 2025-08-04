@@ -10,7 +10,6 @@
 #import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "SignUpViewController_Server5.h"
-#import "IDPLoginView.h"
 #import "IDPCoordinator.h"
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
