@@ -30,7 +30,7 @@ struct IDPLoginViewSwiftUI: View {
 
 // MARK: - Mock Delegate for Preview
 class MockIDPLoginDelegate: NSObject, IDPLoginDelegate {
-    func signinForStrategy(_ strategy: [String : Any]) {
+    func signinForStrategy(_ strategy: NSDictionary) {
         print("Sign in tapped for strategy: \(strategy)")
     }
 }
