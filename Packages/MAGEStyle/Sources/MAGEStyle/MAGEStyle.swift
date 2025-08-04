@@ -109,6 +109,14 @@ public extension Color {
     static var backgroundColor: Color {
         return Color("background")
     }
+    
+    static var gradientDarkBlue: Color {
+        return Color("gradientDarkBlue")
+    }
+    
+    static var gradientLightBlue: Color {
+        return Color("gradientLightBlue")
+    }
 
     static var onBackgroundUIColor: UIColor {
         return UIColor.label

@@ -9,11 +9,48 @@
 import SwiftUI
 
 struct MageIntroButtonView: View {
+    @Binding var isIntroViewsShown:Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Text("Have questions?")
+            Spacer()
+            Button {
+                isIntroViewsShown.toggle()
+            } label: {
+                Text("Take a Tour")
+                    .foregroundStyle(.blue)
+            }
+            .sheet(isPresented: $isIntroViewsShown) {
+                IntroTabView()
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+            }
+
+        }
+        .frame(height: 50)
     }
 }
 
-#Preview {
-    MageIntroButtonView()
+struct MageIntroButtonView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            LocalLoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
+                .previewDisplayName("Default")
+            LocalLoginViewSwiftUI(viewModel: {
+                let vm = PreviewLocalLoginViewModel()
+                vm.errorMessage = "Bad username or password!"
+                return vm
+            }())
+            .previewDisplayName("With Error")
+            LocalLoginViewSwiftUI(viewModel: {
+                let vm = PreviewLocalLoginViewModel()
+                vm.isLoading = true
+                return vm
+            }())
+            .previewDisplayName("Loading State")
+        }
+        .padding()
+        .previewLayout(.sizeThatFits)
+    }
 }
