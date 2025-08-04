@@ -9,11 +9,6 @@
 import Foundation
 import Combine
 
-//@objc public protocol IDPLoginDelegate: AnyObject {
-//    func signinForStrategy(_ strategy: [String: Any])
-//}
-
-
 @objcMembers
 public class IDPLoginViewModel: NSObject, ObservableObject {
     let strategy: [String: Any]
