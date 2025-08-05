@@ -9,8 +9,8 @@
 import Foundation
 
 @objc public class LoginViewModel: NSObject, ObservableObject {
-    @Published @objc public dynamic var username: String = "bmichalski"
-    @Published @objc public dynamic var password: String = "Password123456"
+    @Published @objc public dynamic var username: String = ""
+    @Published @objc public dynamic var password: String = ""
     @Published @objc public dynamic var showPassword: Bool = false
     @Published @objc public dynamic var isLoading: Bool = false
     @Published @objc public dynamic var errorMessage: String? = nil
@@ -51,12 +51,6 @@ import Foundation
         if let title = (strategy["strategy"] as? [String: Any])?["title"] as? String {
             print(title)
         }
-        
-        print("\n----------")
-        print(strategyName  ?? "UNKNOWN STRATEGY NAME")
-        print(strategyType  ?? "UNKNOWN STRATEGY TYPE")
-        print(strategyTitle ?? "UNKNOWN STRATEGY TITLE")
-        print("----------\n\n")
     }
     
     @objc public func loginTapped() {
