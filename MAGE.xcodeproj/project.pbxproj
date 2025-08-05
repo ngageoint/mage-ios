@@ -115,6 +115,7 @@
 		8429C8F62E42621300F5B3AF /* IDPLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */; };
 		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
 		8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */; };
+		8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1110,6 +1111,7 @@
 		8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelTests.swift; sourceTree = "<group>"; };
 		8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUITests.swift; sourceTree = "<group>"; };
 		8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAllLoginViews.swift; sourceTree = "<group>"; };
+		8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginDelegateSwiftUI.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -2679,6 +2681,7 @@
 				F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */,
 				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
 				84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */,
+				8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */,
 				84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */,
 				8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */,
 				8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */,
@@ -5527,6 +5530,7 @@
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
+				8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */,
 				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,
 				F76BB96825E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,

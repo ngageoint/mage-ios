@@ -19,6 +19,4 @@ final class IDPLoginViewSwiftUITests: XCTestCase {
         try button.tap()
         XCTAssertEqual(delegate.calledWith?["identifier"] as? String, "idp")
     }
-
-
 }
