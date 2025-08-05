@@ -109,6 +109,8 @@
 		84299DB12E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */; };
 		84299DB32E4117BF007E51B1 /* LoginRootViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */; };
 		84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 84299DB52E423D39007E51B1 /* ViewInspector */; };
+		84299DB82E424A18007E51B1 /* LoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */; };
+		8429C8F22E425C5200F5B3AF /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 8429C8F12E425C5200F5B3AF /* ViewInspector */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1099,6 +1101,7 @@
 		84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUI.swift; sourceTree = "<group>"; };
 		84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewSwiftUI.swift; sourceTree = "<group>"; };
+		84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUITests.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -1986,6 +1989,7 @@
 			files = (
 				7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */,
 				84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */,
+				8429C8F22E425C5200F5B3AF /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2666,6 +2670,7 @@
 				F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */,
 				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
 				84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */,
+				84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -4420,7 +4425,7 @@
 				BDB16FA62DF7715400FDD03B /* XCRemoteSwiftPackageReference "simple-features-wkt-ios" */,
 				BDB16FA92DF7717700FDD03B /* XCRemoteSwiftPackageReference "simple-features-proj-ios" */,
 				BDB16FAC2DF7719600FDD03B /* XCRemoteSwiftPackageReference "simple-features-geojson-ios" */,
-				84299DB42E423D39007E51B1 /* XCRemoteSwiftPackageReference "ViewInspector" */,
+				8429C8F02E425C5200F5B3AF /* XCRemoteSwiftPackageReference "ViewInspector" */,
 			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
@@ -5513,6 +5518,7 @@
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */,
 				F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */,
+				84299DB82E424A18007E51B1 /* LoginViewSwiftUITests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F7C0976D2C7FC70E003FA115 /* RoleStaticLocalDataSource.swift in Sources */,
 				F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */,
@@ -6099,7 +6105,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector.git";
 			requirement = {
-				kind = upToNextMajorVersion;
+				kind = exactVersion;
+				version = 0.10.3;
+			};
+		};
+		8429C8F02E425C5200F5B3AF /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector.git";
+			requirement = {
+				kind = versionRange;
+				maximumVersion = 0.10.3;
 				minimumVersion = 0.10.2;
 			};
 		};
@@ -6205,6 +6220,11 @@
 		84299DB52E423D39007E51B1 /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 84299DB42E423D39007E51B1 /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+		8429C8F12E425C5200F5B3AF /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8429C8F02E425C5200F5B3AF /* XCRemoteSwiftPackageReference "ViewInspector" */;
 			productName = ViewInspector;
 		};
 		BD6C27F72DE10EE70086F310 /* GeoPackage */ = {

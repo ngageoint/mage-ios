@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/ExceptionCatcher",
       "state" : {
-        "revision" : "3cd1997e3663078812efca8652af06104b5160bb",
-        "version" : "2.1.0"
+        "revision" : "9e57a89e7ed5e11cbc04fbaa5f1397448f91bb73",
+        "version" : "2.2.0"
       }
     },
     {
