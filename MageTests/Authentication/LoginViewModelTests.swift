@@ -9,46 +9,68 @@
 import XCTest
 @testable import MAGE
 
-class MockLoginDelegateSwiftUI: LoginDelegate {
-    var loginCalled = false
-    var loginParameters: [AnyHashable: Any]?
-    var authenticationStrategy: String?
-    var createAccountCalled = false
-    var changeServerURLCalled = false
-    var statusToReturn: AuthenticationStatus = .UNABLE_TO_AUTHENTICATE
-    var errorStringToReturn: String? = "Login failed"
+class MockLoginDelegateSwiftUI: NSObject, LoginDelegate {
+    var didLogin = false
+    var receivedParameters: [AnyHashable: Any]?
+    var receivedStrategy: String?
+    var completeCalled = false
+    var status: AuthenticationStatus?
+    var error: String?
     
     func login(
-        withParameters parameters: [AnyHashable: Any]!,
+        withParameters parameters: [AnyHashable: Any],
         withAuthenticationStrategy: String,
-        complete: ((AuthenticationStatus, String?) -> Void)!
-    ) {
-        loginCalled = true
-        loginParameters = parameters
-        authenticationStrategy = withAuthenticationStrategy
-        complete?(statusToReturn, errorStringToReturn)
+        complete: @escaping (AuthenticationStatus, String?) -> Void)
+    {
+        didLogin = true
+        receivedParameters = parameters
+        receivedStrategy = withAuthenticationStrategy
+        completeCalled = false
+        complete(.AUTHENTICATION_SUCCESS, nil)
+        completeCalled = true
     }
     
-    func changeServerURL() { changeServerURLCalled = true }
-    func createAccount() { createAccountCalled = true }
+    func changeServerURL() { }
+    func createAccount() { }
 }
 
 
 final class LoginViewModelTests: XCTestCase {
-//    var server: MageServer!
-//    var delegate: MockLoginDelegateSwiftUI!
-//    var strategy: [String: Any] = [
-//        "identifier": "local",
-//        "strategy": ["title", "Local Login", "name": "Local", "type": "local"],
-//    ]
-//    let dummyUser = User()
-//    
-//    override func setUp() {
-//        super.setUp()
-//        
-//        delegate = MockLoginDelegateSwiftUI()
-//        viewModel = LoginViewModel(server: server, strategy: <#T##[String : Any]#>, delegate: <#T##LoginDelegate?#>, user: <#T##User?#>)
-//    }
+    func testLoginTapped_withValidInput_callsDelegate() {
+        let delegate = MockLoginDelegateSwiftUI()
+        let vm = LoginViewModel(strategy: ["identifier": "local"], delegate: delegate)
+        vm.username = "vm.username"
+        vm.password = "vm.password"
+        
+        vm.loginTapped()
+        
+        XCTAssertTrue(delegate.didLogin)
+        XCTAssertEqual(delegate.receivedStrategy, "local")
+        XCTAssertTrue(delegate.completeCalled)
+        XCTAssertNil(vm.errorMessage)
+    }
+    
+    func testLoginTapped_withMissingInput_setsError() {
+        let vm = LoginViewModel(strategy: ["identifier": "local"], delegate: nil)
+        vm.username = ""
+        vm.password = ""
+        
+        vm.loginTapped()
+        
+        XCTAssertEqual(vm.errorMessage, "Username and password are required.")
+    }
 
+    func testSignupTapped_callsDelegate() {
+        class Delegate: NSObject, LoginDelegate {
+            var didCallCreate = false
+            func login(withParameters: [AnyHashable : Any], withAuthenticationStrategy: String, complete: @escaping (AuthenticationStatus, String?) -> Void) {}
+            func changeServerURL() { }
+            func createAccount() { didCallCreate = true }
+        }
+        let delegate = Delegate()
+        let vm = LoginViewModel(strategy: ["identifier": "local"], delegate: delegate)
+        vm.signupTapped()
+        XCTAssertTrue(delegate.didCallCreate)
+    }
     
 }
