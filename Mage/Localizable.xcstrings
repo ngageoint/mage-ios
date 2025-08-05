@@ -427,7 +427,20 @@
       }
     },
     "Have questions?" : {
-
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tiene preguntas?"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tiene preguntas?"
+          }
+        }
+      }
     },
     "Important Description" : {
       "localizations" : {
@@ -475,7 +488,20 @@
       }
     },
     "Let's Go!" : {
-
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Vamos!"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Vamos!"
+          }
+        }
+      }
     },
     "Loading Observations" : {
       "localizations" : {
@@ -875,7 +901,20 @@
       }
     },
     "Take a Tour" : {
-
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haga un recorrido"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haga un recorrido"
+          }
+        }
+      }
     },
     "This user has not submitted any observations for this event." : {
       "localizations" : {
