@@ -111,6 +111,9 @@
 		84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 84299DB52E423D39007E51B1 /* ViewInspector */; };
 		84299DB82E424A18007E51B1 /* LoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */; };
 		8429C8F22E425C5200F5B3AF /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 8429C8F12E425C5200F5B3AF /* ViewInspector */; };
+		8429C8F42E4260AB00F5B3AF /* MockIDPLoginDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */; };
+		8429C8F62E42621300F5B3AF /* IDPLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */; };
+		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1102,6 +1105,9 @@
 		84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewSwiftUI.swift; sourceTree = "<group>"; };
 		84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUITests.swift; sourceTree = "<group>"; };
+		8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockIDPLoginDelegate.swift; sourceTree = "<group>"; };
+		8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelTests.swift; sourceTree = "<group>"; };
+		8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUITests.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -2671,6 +2677,9 @@
 				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
 				84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */,
 				84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */,
+				8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */,
+				8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */,
+				8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -5476,6 +5485,7 @@
 				F7F264392806FDF100758C5B /* EventChooserControllerTests.swift in Sources */,
 				F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
+				8429C8F62E42621300F5B3AF /* IDPLoginViewModelTests.swift in Sources */,
 				F7C097B22C8756F8003FA115 /* UserRemoteDataSourceTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */,
 				F70D19E12742C5F3006E12F8 /* FormTests.swift in Sources */,
@@ -5498,6 +5508,7 @@
 				F7489B37279A13CE00A9E314 /* CoordinateFieldTests.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* GeometryViewTests.swift in Sources */,
 				F763FF142C78DF1400403A00 /* BottomSheetRepositoryTests.swift in Sources */,
+				8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */,
 				F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */,
 				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
@@ -5524,6 +5535,7 @@
 				F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */,
 				F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
+				8429C8F42E4260AB00F5B3AF /* MockIDPLoginDelegate.swift in Sources */,
 				F70688A82BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift in Sources */,
 				F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
@@ -6113,8 +6125,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector.git";
 			requirement = {
-				kind = versionRange;
-				maximumVersion = 0.10.3;
+				kind = upToNextMajorVersion;
 				minimumVersion = 0.10.2;
 			};
 		};

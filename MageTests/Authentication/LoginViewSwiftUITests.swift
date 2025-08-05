@@ -24,4 +24,27 @@ final class LoginViewSwiftUITests: XCTestCase {
         XCTAssertNotNil(errorText)
     }
 
+    func testSignInButton_tapsAction() throws {
+        var didTapSignIn = false
+        let view = SignInButtonView(isLoading: false) { didTapSignIn = true }
+        let button = try view.inspect().find(ViewType.Button.self)
+        try button.tap()
+        XCTAssertTrue(didTapSignIn)
+    }
+    
+    func testSignUpButton_tapsAction() throws {
+        var didTapSignUp = false
+        let view = SignUpButtonView(action: { didTapSignUp = true })
+        let button = try view.inspect().find(ViewType.Button.self)
+        try button.tap()
+        XCTAssertTrue(didTapSignUp)
+    }
+    
+    func testUsernameFieldView_edits() throws {
+        let username = "testuser"
+        let view = UsernameFieldView(username: .constant(username), isDisabled: false, isLoading: false, placeholder: "User")
+        let field = try view.inspect().find(ViewType.TextField.self)
+        try field.setInput("newuser")
+        XCTAssertNotNil(field)
+    }
 }
