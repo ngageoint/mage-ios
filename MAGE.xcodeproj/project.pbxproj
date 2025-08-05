@@ -83,8 +83,6 @@
 		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
 		2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */; };
 		2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCDC35222C27B9C004189AD /* UIColor+Adjust.m */; };
-		2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCDC35522C2866A004189AD /* AuthenticationButton.m */; };
-		2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FCDC35722C2888C004189AD /* AuthenticationButton.xib */; };
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
@@ -1073,9 +1071,6 @@
 		2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreTableViewDelegate.swift; sourceTree = "<group>"; };
 		2FCDC35122C27B9C004189AD /* UIColor+Adjust.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Adjust.h"; sourceTree = "<group>"; };
 		2FCDC35222C27B9C004189AD /* UIColor+Adjust.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Adjust.m"; sourceTree = "<group>"; };
-		2FCDC35422C2866A004189AD /* AuthenticationButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationButton.h; sourceTree = "<group>"; };
-		2FCDC35522C2866A004189AD /* AuthenticationButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationButton.m; sourceTree = "<group>"; };
-		2FCDC35722C2888C004189AD /* AuthenticationButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AuthenticationButton.xib; sourceTree = "<group>"; };
 		2FD37EC71DF0AC1700429653 /* MAGE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MAGE.entitlements; path = ../MAGE/MAGE.entitlements; sourceTree = "<group>"; };
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
@@ -2188,8 +2183,6 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				2FCDC35422C2866A004189AD /* AuthenticationButton.h */,
-				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
@@ -3410,7 +3403,6 @@
 		F7A292291FC3938F00DE5463 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
@@ -4466,7 +4458,6 @@
 				F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */,
 				2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
-				2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */,
 				2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
@@ -4993,7 +4984,6 @@
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				F7813A8824647C62003666ED /* DateView.swift in Sources */,
 				F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */,
-				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
 				F7C0979D2C812614003FA115 /* GeoPackageMediaRow.swift in Sources */,
 				846224D92E3285BB0029FE98 /* SignUpButtonView.swift in Sources */,
 				F73564FB2C65650F00466813 /* UserLocationViewModel.swift in Sources */,
