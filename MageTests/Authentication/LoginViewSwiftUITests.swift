@@ -47,4 +47,33 @@ final class LoginViewSwiftUITests: XCTestCase {
         try field.setInput("newuser")
         XCTAssertNotNil(field)
     }
+    
+    func testStrategyTitleDisplayed() throws {
+        let vm = LoginViewModel(strategy: ["identifier": "local", "strategy": ["title": "Email"]], delegate: nil)
+        let view = LoginViewSwiftUI(viewModel: vm)
+        let title = try view.inspect().find(ViewType.Text.self, where: { try $0.string() == "Email" })
+        XCTAssertNotNil(title)
+    }
+    
+    func testMultipleStrategiesShowAllViews() throws {
+        // This assumes you have a wrapper like `AuthenticationStrategiesView`
+        // that shows multiple LoginViewSwiftUI and/or IDPLoginViewSwiftUI in a VStack or similar.
+
+        let strategies = [
+            ["identifier": "local", "strategy": ["title": "Local"]],
+            ["identifier": "idp",   "strategy": ["title": "OIDC"]]
+        ]
+        let viewModels = strategies.map { LoginViewModel(strategy: $0, delegate: nil) }
+        let views = viewModels.map { LoginViewSwiftUI(viewModel: $0) }
+
+        // Example composite view for test, replace as needed:
+        let wrapper = VStack { ForEach(views.indices, id: \.self) { i in views[i] } }
+
+        // Use ViewInspector to verify both "Local" and "OIDC" appear
+        let localText = try wrapper.inspect().find(ViewType.Text.self, where: { try $0.string() == "Local" })
+        let idpText   = try wrapper.inspect().find(ViewType.Text.self, where: { try $0.string() == "OIDC" })
+
+        XCTAssertNotNil(localText)
+        XCTAssertNotNil(idpText)
+    }
 }

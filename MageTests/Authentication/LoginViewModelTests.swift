@@ -73,4 +73,11 @@ final class LoginViewModelTests: XCTestCase {
         XCTAssertTrue(delegate.didCallCreate)
     }
     
+    func testLoginTappedWithNilDelegateDoesNotCrash() {
+        let vm = LoginViewModel(strategy: ["identifier": "local"], delegate: nil)
+        vm.username = "testuser"
+        vm.password = "testpass"
+        XCTAssertNoThrow(vm.loginTapped())
+    }
+    
 }

@@ -114,6 +114,7 @@
 		8429C8F42E4260AB00F5B3AF /* MockIDPLoginDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */; };
 		8429C8F62E42621300F5B3AF /* IDPLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */; };
 		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
+		8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1108,6 +1109,7 @@
 		8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockIDPLoginDelegate.swift; sourceTree = "<group>"; };
 		8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelTests.swift; sourceTree = "<group>"; };
 		8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUITests.swift; sourceTree = "<group>"; };
+		8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAllLoginViews.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -2214,6 +2216,7 @@
 				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
 				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
 				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
+				8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -5381,6 +5384,7 @@
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */,
 				F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */,
+				8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */,
 				F7225F5C2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
