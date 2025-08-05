@@ -18,10 +18,11 @@ final class LoginViewSwiftUITests: XCTestCase {
         let vm = LoginViewModel(strategy: ["identifier": "local", "strategy": ["title": "Email"]], delegate: nil)
         vm.errorMessage = "Invalid!"
         let view = LoginViewSwiftUI(viewModel: vm)
-//        let errorText = try view.inspect().find(text: "Invalid!")  // If you want to be less specific
-        let errorText = try view.inspect().find(ViewType.Text.self, where: { try $0.string() == "Invalid!" })
+        let errorText1 = try view.inspect().find(text: "Invalid!")  // If you want to be less specific
+        let errorText2 = try view.inspect().find(ViewType.Text.self, where: { try $0.string() == "Invalid!" })
         
-        XCTAssertNotNil(errorText)
+        XCTAssertNotNil(errorText1)
+        XCTAssertNotNil(errorText2)
     }
 
     func testSignInButton_tapsAction() throws {
