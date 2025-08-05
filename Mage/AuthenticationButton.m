@@ -77,11 +77,6 @@
     [self setStrategy:self.strategy];
 }
 
-
-//- (IBAction)onAuthenticationButtonTapped:(id)sender {
-//    [self.delegate signinForStrategy:self.strategy];
-//}
-
 -(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     [self setButtonBackgroundColor:self.buttonColorHighlighted];

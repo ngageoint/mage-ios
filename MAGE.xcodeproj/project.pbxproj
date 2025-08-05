@@ -108,6 +108,7 @@
 		84299DAF2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */; };
 		84299DB12E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */; };
 		84299DB32E4117BF007E51B1 /* LoginRootViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */; };
+		84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 84299DB52E423D39007E51B1 /* ViewInspector */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1984,6 +1985,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */,
+				84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4418,6 +4420,7 @@
 				BDB16FA62DF7715400FDD03B /* XCRemoteSwiftPackageReference "simple-features-wkt-ios" */,
 				BDB16FA92DF7717700FDD03B /* XCRemoteSwiftPackageReference "simple-features-proj-ios" */,
 				BDB16FAC2DF7719600FDD03B /* XCRemoteSwiftPackageReference "simple-features-geojson-ios" */,
+				84299DB42E423D39007E51B1 /* XCRemoteSwiftPackageReference "ViewInspector" */,
 			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
@@ -6092,6 +6095,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		84299DB42E423D39007E51B1 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.2;
+			};
+		};
 		BD6C27F62DE10EE70086F310 /* XCRemoteSwiftPackageReference "geopackage-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ngageoint/geopackage-ios";
@@ -6191,6 +6202,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		84299DB52E423D39007E51B1 /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84299DB42E423D39007E51B1 /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
 		BD6C27F72DE10EE70086F310 /* GeoPackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BD6C27F62DE10EE70086F310 /* XCRemoteSwiftPackageReference "geopackage-ios" */;
