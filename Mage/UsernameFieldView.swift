@@ -18,6 +18,7 @@ struct UsernameFieldView: View {
             Image(systemName: "person.fill")
                 .foregroundStyle(Color.secondary)
             TextField("Username", text: $username)
+                .accessibilityLabel("Username")
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .textContentType(.username)

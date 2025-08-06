@@ -26,6 +26,7 @@ struct LocalLoginViewSwiftUI: View {
             SignInButtonView(isLoading: viewModel.isLoading) {
                 viewModel.loginTapped()
             }
+            .accessibilityLabel("Sign In")
             
             SignUpButtonView {
                 viewModel.signupTapped()
@@ -33,8 +34,10 @@ struct LocalLoginViewSwiftUI: View {
             
             MageIntroButtonView(isIntroViewsShown: $isIntroViewsShown)
         }
+        .accessibilityIdentifier("Local Login View")
         .padding()
         .background(Color(.systemBackground))
+        
     }
 }
 
