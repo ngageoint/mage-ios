@@ -14,7 +14,6 @@ import MaterialViews
 
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
-//    @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var router: MageRouter
     // We need to get the "context" from our "persistence" object
     @Injected(\.persistence) var persistence: Persistence
