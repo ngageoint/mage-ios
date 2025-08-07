@@ -14,10 +14,10 @@ import MaterialViews
 
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
-    @Environment(\.managedObjectContext) private var context
-
-    @EnvironmentObject
-    var router: MageRouter
+//    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var router: MageRouter
+    // We need to get the "context" from our "persistence" object
+    @Injected(\.persistence) var persistence: Persistence
 
     var body: some View {
         Group {
@@ -94,9 +94,9 @@ struct ObservationList: View {
         switch uriItem {
         case .listItem(let uri):
             // Convert URL to NSManagedObjectID
-            if let objectID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: uri) {
+            if let objectID = persistence.getContext().persistentStoreCoordinator?.managedObjectID(forURIRepresentation: uri) {
                 ObservationSummaryViewSwiftUI(
-                    viewModel: ObservationListViewModel(observationObjectID: objectID, context: context)
+                    viewModel: ObservationListViewModel(observationObjectID: objectID, context: persistence.getContext())
                 )
                 .onAppear {
                     if rows.first == uriItem {
