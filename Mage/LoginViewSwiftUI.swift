@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
+    @Binding var isIntroViewsShown = false
     
     var body: some View {
         VStack(spacing: 16) {
