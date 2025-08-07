@@ -1,5 +1,5 @@
 {
-  "originHash" : "ef6625289e51aefb73813613aa0ec36b02c43ab547fb3815c8dc0c494a068963",
+  "originHash" : "d45b7cc4a46f00bfdd36b8afe434c27b82ac35a14b42330689197a539df9fab7",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/ExceptionCatcher",
       "state" : {
-        "revision" : "3cd1997e3663078812efca8652af06104b5160bb",
-        "version" : "2.1.0"
+        "revision" : "9e57a89e7ed5e11cbc04fbaa5f1397448f91bb73",
+        "version" : "2.2.0"
       }
     },
     {
@@ -170,6 +170,15 @@
       "state" : {
         "revision" : "2e019be5231352eef1854492bd25f80174b0f902",
         "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "viewinspector",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nalexn/ViewInspector.git",
+      "state" : {
+        "revision" : "a6fcac8485bc8f57b2d2b55bb6d97138e8659e4b",
+        "version" : "0.10.2"
       }
     }
   ],

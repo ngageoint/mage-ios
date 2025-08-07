@@ -1,5 +1,5 @@
 //
-//  LocalLoginViewSwiftUI.swift
+//  LoginViewSwiftUI.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 7/23/25.
@@ -8,14 +8,28 @@
 
 import SwiftUI
 
-struct LocalLoginViewSwiftUI: View {
-    @ObservedObject var viewModel: LocalLoginViewModel
-    @State var isIntroViewsShown: Bool = false
+struct LoginViewSwiftUI: View {
+    @ObservedObject var viewModel: LoginViewModel
+    @Binding var isIntroViewsShown = false
     
     var body: some View {
         VStack(spacing: 16) {
-            UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
-            PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
+            Text(viewModel.strategyTitle ?? "Unknown Strategy Title")
+                .font(.system(size: 24, weight: .semibold))
+                .tracking(0.5)
+                .padding(.bottom, 8)
+            
+            UsernameFieldView(
+                username: $viewModel.username,
+                isDisabled: viewModel.userExists,
+                isLoading: viewModel.isLoading,
+                placeholder: viewModel.usernamePlaceholder
+            )
+            PasswordFieldView(
+                password: $viewModel.password,
+                showPassword: $viewModel.showPassword,
+                placeholder: viewModel.passwordPlaceholder
+            )
             
             if let error = viewModel.errorMessage {
                 Text(error)
@@ -41,19 +55,19 @@ struct LocalLoginViewSwiftUI: View {
     }
 }
 
-struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
+struct LoginViewSwiftUI_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LocalLoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
+            LoginViewSwiftUI(viewModel: PreviewLoginViewModel())
                 .previewDisplayName("Default")
-            LocalLoginViewSwiftUI(viewModel: {
-                let vm = PreviewLocalLoginViewModel()
+            LoginViewSwiftUI(viewModel: {
+                let vm = PreviewLoginViewModel()
                 vm.errorMessage = "Bad username or password!"
                 return vm
             }())
             .previewDisplayName("With Error")
-            LocalLoginViewSwiftUI(viewModel: {
-                let vm = PreviewLocalLoginViewModel()
+            LoginViewSwiftUI(viewModel: {
+                let vm = PreviewLoginViewModel()
                 vm.isLoading = true
                 return vm
             }())
@@ -64,17 +78,15 @@ struct LocalLoginViewSwiftUI_Previews: PreviewProvider {
     }
 }
 
-
-class PreviewLocalLoginViewModel: LocalLoginViewModel {
-    init(strategy: [String : Any] = [:], delegate: LoginDelegate? = nil) {
-        super.init(strategy: strategy, delegate: delegate)
-        self.username = "previewuser"
+class PreviewLoginViewModel: LoginViewModel {
+    override init(strategy: [String : Any] = [:], delegate: LoginDelegate? = nil, user: User? = nil) {
+        super.init(strategy: strategy, delegate: delegate, user: user)
+        self.username = "ldapuser"
         self.password = "password123"
         self.showPassword = false
         self.isLoading = false
         self.errorMessage = nil
     }
-    
     override func loginTapped() {
         isLoading = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -82,7 +94,6 @@ class PreviewLocalLoginViewModel: LocalLoginViewModel {
             self.errorMessage = "Invalid login. Try again."
         }
     }
-    
     override func signupTapped() {
         self.errorMessage = "Signup not implemented in preview."
     }

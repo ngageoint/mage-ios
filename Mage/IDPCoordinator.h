@@ -1,5 +1,5 @@
 //
-//  OAuthCoordinator.h
+//  IDPCoordinator.h
 //  MAGE
 //
 //  Created by William Newman on 5/18/20.

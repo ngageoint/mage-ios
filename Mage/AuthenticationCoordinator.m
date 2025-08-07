@@ -10,7 +10,6 @@
 #import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "SignUpViewController_Server5.h"
-#import "IDPLoginView.h"
 #import "IDPCoordinator.h"
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
@@ -21,7 +20,7 @@
 #import "ContactInfo.h"
 #import "MAGE-Swift.h"
 
-@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
+@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPLoginDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic, readwrite) MageServer *server;
