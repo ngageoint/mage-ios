@@ -938,6 +938,9 @@
         }
       }
     },
+    "Unable to load observation" : {
+
+    },
     "Use forms to enhance observations with photos, videos, notes, and audio." : {
       "extractionState" : "manual",
       "localizations" : {

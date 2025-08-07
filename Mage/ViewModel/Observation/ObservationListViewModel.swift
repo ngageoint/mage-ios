@@ -7,11 +7,25 @@
 //
 
 import Foundation
+import CoreData
+import Combine
 
-class ObservationListViewModel: ObservationViewViewModel {
-    var attachments: [AttachmentModel]?
+class ObservationListViewModel: ObservationViewViewModel, NSFetchedResultsControllerDelegate {
+    @Published var attachments: [AttachmentModel] = []
     
-    var orderedAttachments: [AttachmentModel]? {
+    private var fetchedResultsController: NSFetchedResultsController<Attachment>?
+    private var context: NSManagedObjectContext?
+    private var observableObjectID: NSManagedObjectID
+    
+    // Computed property for ordered attachments
+    var orderedAttachments: [AttachmentModel] {
+        // Replicate the ordering logic from your previous code if needed,
+        // or just return attachments (which are already sorted by lastModified)
+        // You can replace this with your own sorting logic if necessary
+        return attachments
+    }
+    
+    var orderedAttachmentsFart: [AttachmentModel] {
         var observationForms: [[String: Any]] = []
         if let properties = observationModel?.properties as? [String: Any] {
             if (properties.keys.contains("forms")) {
@@ -19,7 +33,7 @@ class ObservationListViewModel: ObservationViewViewModel {
             }
         }
         
-        return attachments?.sorted(by: { first, second in
+        return attachments.sorted(by: { first, second in
             // return true if first comes before second, false otherwise
             
             if first.formId == second.formId {
@@ -55,23 +69,58 @@ class ObservationListViewModel: ObservationViewViewModel {
             }
         })
     }
-    
-    override init(uri: URL) {
-        super.init(uri: uri)
+
+    // Pass in observation's objectID so we can safely fetch (never switches)
+    init(observationObjectID: NSManagedObjectID, context: NSManagedObjectContext? = nil) {
+        self.observableObjectID = observationObjectID
+        super.init(uri: observationObjectID.uriRepresentation())
         
-        $observationModel.sink { [weak self] observationModel in
-            guard let observationModel = observationModel else {
-                return
-            }
-            Task { @MainActor [weak self] in
-                self?.attachments = await self?.attachmentRepository.getAttachments(
-                    observationUri:observationModel.observationId,
-                    observationFormId: nil,
-                    fieldName: nil
-                )
-            }
+        // Use injected context if not provided
+        if let context {
+            self.context = context
+        } else {
+            @Injected(\.nsManagedObjectContext) var injectedContext: NSManagedObjectContext?
+            self.context = injectedContext
         }
-        .store(in: &cancellables)
+        
+        setupFetchedResultsController()
+    }
+    
+    private func setupFetchedResultsController() {
+        guard let context = context, let observation = context.object(with: observableObjectID) as? Observation else { return }
+        
+        let fetchRequest: NSFetchRequest<Attachment> = Attachment.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "observation == %@", observation)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "lastModified", ascending: true)
+        ]
+        
+        let frc = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        
+        frc.delegate = self
+        self.fetchedResultsController = frc
+        
+        do {
+            try frc.performFetch()
+            self.updateAttachments()
+        } catch {
+            print("Error fetching attachments \(error.localizedDescription)")
+        }
+    }
+    
+    // Called whenever the underlying attachments change in Core Data
+    @objc func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        updateAttachments()
+    }
+    
+    private func updateAttachments() {
+        let fetched = fetchedResultsController?.fetchedObjects ?? []
+        self.attachments = fetched.map { AttachmentModel(attachment: $0) }
     }
     
     func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
