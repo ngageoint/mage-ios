@@ -42,7 +42,7 @@ struct ObservationSummaryViewSwiftUI: View {
             }
             if !(viewModel.attachments).isEmpty {
                 TabView {
-                    ForEach(viewModel.orderedAttachments) { attachment in
+                    ForEach(viewModel.orderedAttachments ?? []) { attachment in
                         AttachmentPreviewView(attachment: attachment) {
                             viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                         }

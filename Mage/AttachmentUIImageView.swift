@@ -19,6 +19,8 @@ import Kingfisher
     public var loaded: Bool = false;
     public var loadedThumb: Bool = false;
     
+    private var healedLocalURL: URL?
+    
     override init(image: UIImage?) {
         super.init(image: image)
     }
@@ -64,16 +66,60 @@ import Kingfisher
         self.kf.cancelDownloadTask();
     }
     
-    public func showThumbnail(cacheOnly: Bool = false,
-                              indicator: Indicator? = nil,
-                              progressBlock: DownloadProgressBlock? = nil,
-                              completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), cacheOnly: cacheOnly, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+//    public func showThumbnailxxxxx(cacheOnly: Bool = false,
+//                              indicator: Indicator? = nil,
+//                              progressBlock: DownloadProgressBlock? = nil,
+//                              completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+//        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), cacheOnly: cacheOnly, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+//    }
+    
+    public func showThumbnail(cacheOnly: Bool,
+                       indicator: Indicator? = nil,
+                       progressBlock: DownloadProgressBlock? = nil,
+                       completionHandler: @escaping (Result<RetrieveImageResult, KingfisherError>) -> Void) {
+
+        // Prefer healed local URL if it exists
+        if let localURL = healedLocalURL {
+            // local load
+            self.kf.setImage(with: localURL,
+                             options: [
+                               .scaleFactor(UIScreen.main.scale),
+                               .processor(DownsamplingImageProcessor(size: self.bounds.size)),
+                               .cacheOriginalImage
+                             ],
+                             completionHandler: completionHandler)
+            return
+        }
+
+        // Fallback: remote URL (unchanged)
+        if let remote = attachment?.url.flatMap(URL.init(string:)) {
+            self.kf.setImage(with: remote,
+                             options: [
+                               .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                               .transition(.fade(0.2)),
+                               .scaleFactor(UIScreen.main.scale),
+                               .processor(DownsamplingImageProcessor(size: self.bounds.size)),
+                               .cacheOriginalImage
+                             ],
+                             completionHandler: completionHandler)
+            return
+        }
+
+        // Final fallback: placeholder
+        self.image = UIImage(named: "placeholder")
+        completionHandler(.failure(.requestError(reason: .emptyRequest)))
     }
+
     
     public func setAttachment(attachment: AttachmentModel) {
         self.placeholderIsRealImage = false;
         self.attachment = attachment;
+        
+        // NEW: normalize and keep a healed local URL handy
+        self.healedLocalURL = AttachmentPathResolver.resolve(
+            attachment.localPath,
+            fileName: attachment.name
+        )
     }
     
     public func setURL(url: URL?) {
@@ -285,3 +331,44 @@ import Kingfisher
         }
     }
 }
+
+
+enum AttachmentPathResolver {
+  /// Rewrites a stored absolute path (possibly from an old container) to THIS run’s /Documents,
+  /// optionally appending `fileName` if `storedPath` points to a directory.
+  static func resolve(_ storedPath: String?, fileName: String?) -> URL? {
+    guard var path = storedPath, !path.isEmpty else { return nil }
+    let fm = FileManager.default
+
+    // If the path includes "/Documents/", rebuild it under current container’s Documents
+    if let r = path.range(of: "/Documents/") {
+      let relative = String(path[r.upperBound...])
+      if let docs = fm.urls(for: .documentDirectory, in: .userDomainMask).first {
+        path = docs.appendingPathComponent(relative).path
+      }
+    }
+
+    var url = URL(fileURLWithPath: path)
+
+    // If this is a directory (or missing the file), append the fileName
+    var isDir: ObjCBool = false
+    if fm.fileExists(atPath: url.path, isDirectory: &isDir), isDir.boolValue,
+       let name = fileName, !name.isEmpty {
+      url.appendPathComponent(name)
+    }
+
+    // If exact file exists, done
+    if fm.fileExists(atPath: url.path) { return url }
+
+    // Fallback: prefix search in the directory
+    let dir = url.deletingLastPathComponent()
+    let prefix = url.lastPathComponent
+    if let contents = try? fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil),
+       let match = contents.first(where: { $0.lastPathComponent.hasPrefix(prefix) }) {
+      return match
+    }
+
+    return nil
+  }
+}
+

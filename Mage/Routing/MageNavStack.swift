@@ -189,6 +189,15 @@ class MageNavStack: UIViewController {
         }
     }
     
+    private func fileURL(from maybePath: String?) -> URL? {
+        guard let s = maybePath, !s.isEmpty else { return nil }
+        if s.hasPrefix("file://") {
+            return URL(string: s)            // already a file URL string
+        } else {
+            return URL(fileURLWithPath: s)   // plain filesystem path
+        }
+    }
+    
     func handleFileRoute(route: FileRoute) {
         switch(route) {
         case .showCachedImage(cacheKey: let cacheKey):
@@ -242,14 +251,19 @@ class MageNavStack: UIViewController {
                 }
             }
         case .showFileImage(filePath: let filePath):
-            if let url = URL(string: filePath) {
+            guard let url = fileURL(from: filePath) else {
+                MageLogger.misc.error("BBB: Could not convert filePath to URL: \(filePath)")
+                return
+            }
                 DocumentController.shared.presentQL(url: url, viewControllerToPresentFrom: self)
-            }
         case .showLocalVideo(filePath: let filePath):
-            if let url = URL(string: filePath) {
-                let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
-                self.pushViewController(vc: vc)
+            guard let url = fileURL(from: filePath) else {
+                MageLogger.misc.error("BBB: Could not convert filePath to URL: \(filePath)")
+                return
             }
+
+            let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
+            self.pushViewController(vc: vc)
         case .showRemoteVideo(url: let url):
             var url2 = url
             url2.append(queryItems: [URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())])
@@ -257,10 +271,13 @@ class MageNavStack: UIViewController {
             self.pushViewController(vc: vc)
             
         case .showLocalAudio(filePath: let filePath):
-            if let url = URL(string: filePath) {
-                let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
-                self.pushViewController(vc: vc)
+            guard let url = fileURL(from: filePath) else {
+                MageLogger.misc.error("BBB: Could not convert filePath to URL: \(filePath)")
+                return
             }
+
+            let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
+            self.pushViewController(vc: vc)
         case .showRemoteAudio(url: let url):
             var url2 = url
             url2.append(queryItems: [URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())])

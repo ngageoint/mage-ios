@@ -9,8 +9,8 @@
 import Foundation
 
 // TODO: this is only a class so that it can be in a method marked @objc fix this later
-@objc class AttachmentModel: NSObject, Identifiable {
-    var id: URL {
+@objc public class AttachmentModel: NSObject, Identifiable {
+    public var id: URL {
         attachmentUri
     }
     
@@ -45,6 +45,14 @@ import Foundation
 //
 //extension AttachmentModel {
     init(attachment: Attachment) {
+        // 🔒 Ensure we don't store a URI from a temporary objectID
+        if attachment.objectID.isTemporaryID {
+            print("\n---------------------------------------------")
+            print("🚨 WARNING: Temporary ObjectID used for Attachment URI \(attachment.objectID.uriRepresentation())")
+            print("---------------------------------------------\n")
+            try? attachment.managedObjectContext?.obtainPermanentIDs(for: [attachment])
+        }
+        
         attachmentUri = attachment.objectID.uriRepresentation()
         url = attachment.url
         formId = attachment.observationFormId

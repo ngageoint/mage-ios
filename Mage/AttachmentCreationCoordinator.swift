@@ -60,12 +60,17 @@ class AttachmentCreationCoordinator: NSObject {
     }
     
     func addAttachmentForSaving(location: URL, contentType: String) {
+        
         var attachmentJson: [String: AnyHashable] = [
             "type": contentType,
             "contentType": contentType,
             "localPath": location.path,
             "name": location.lastPathComponent
         ]
+        
+        assert(location.lastPathComponent == (attachmentJson["name"] as? String),
+               "localPath basename and name mismatch: \(location.lastPathComponent) vs \(String(describing: attachmentJson["name"]))")
+        
         DispatchQueue.main.async { [self] in
             // once server 5 goes away, this will always be the case
             if (self.observationFormId != nil || self.fieldName != nil) {

@@ -105,9 +105,8 @@ class AttachmentRepositoryImpl: ObservableObject, AttachmentRepository {
             if let urlStr = attachment.url,
                let url = URL(string: urlStr) {
                 if let localPath = attachment.localPath,
-                   FileManager.default.fileExists(atPath: localPath),
-                   let fileUrl = URL(string: localPath)
-                {
+                   FileManager.default.fileExists(atPath: localPath) {
+                    let fileUrl = URL(fileURLWithPath: localPath)
                     route = FileRoute.showDownloadedFile(fileUrl: fileUrl, url: url)
                 } else if DataConnectionUtilities.shouldFetchAttachments() {
                     route = FileRoute.downloadFile(url: url)

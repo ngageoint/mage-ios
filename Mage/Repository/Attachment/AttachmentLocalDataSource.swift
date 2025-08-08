@@ -117,19 +117,50 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
     }
     
     func saveLocalPath(attachmentUri: URL?, localPath: String) {
-        guard let attachmentUri = attachmentUri
-        else {
-            return
-        }
+        guard let attachmentUri else { return }
         
-        MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
-            if let id = localContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: attachmentUri) {
-                if let attachment = try? localContext.existingObject(with: id) as? Attachment {
-                    attachment.localPath = localPath;
+        MagicalRecord.save({ localContext in
+            guard let psc = localContext.persistentStoreCoordinator else {
+                MageLogger.db.error("BBB: PSC is nil in saveLocalPath")
+                return
+            }
+            
+            guard let objectID = psc.managedObjectID(forURIRepresentation: attachmentUri) else {
+                MageLogger.db.error("BBB: Could not resolve objectID for URI: \(attachmentUri)")
+                return
+            }
+            
+            guard let attachment = try? localContext.existingObject(with: objectID) as? Attachment else {
+                MageLogger.db.error("BBB: No Attachment for objectID: \(objectID)")
+                return
+            }
+            
+//            attachment.localPath = localPath
+//            attachment.lastModified = Date()
+//            MageLogger.db.debug("BBB: Saved localPath for attachment \(objectID): \(localPath)")
+            
+            var finalPath = localPath
+
+            // 🔧 If someone passed a directory/prefix, try to fix it by appending name
+            if !FileManager.default.fileExists(atPath: finalPath),
+               let name = attachment.name {
+                // If localPath looks like a directory/prefix, append the file name
+                let candidate = URL(fileURLWithPath: finalPath).appendingPathComponent(name).path
+                if FileManager.default.fileExists(atPath: candidate) {
+                    finalPath = candidate
                 }
             }
-        }) { (success, error) in
-        };
+
+            // Last sanity: only store if the file actually exists
+            if FileManager.default.fileExists(atPath: finalPath) {
+                attachment.localPath = finalPath
+                attachment.lastModified = Date()
+                MageLogger.db.debug("BBB: saveLocalPath: set \(finalPath) for \(attachment.objectID)")
+            } else {
+                MageLogger.db.error("BBB: saveLocalPath: file not found at \(finalPath); name=\(attachment.name ?? "nil"); original=\(localPath)")
+            }
+            
+        })
     }
     
     func markForDeletion(attachmentUri: URL?) {

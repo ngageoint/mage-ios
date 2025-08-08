@@ -260,8 +260,13 @@ extension AttachmentViewCoordinator : AVAssetResourceLoaderDelegate {
 
 extension AttachmentViewCoordinator : MediaLoaderDelegate {
     func mediaLoadComplete(filePath: String, newFile: Bool) {
-        MageLogger.misc.debug("Media load complete");
-        if (newFile) {
+        MageLogger.misc.debug("BBB: Media load complete")
+        
+        if newFile {
+            // ✅ update the current model so UI can show the image immediately
+            self.attachment?.localPath = filePath
+            
+            // existing: persist to Core Data for future launches
             attachmentRepository.saveLocalPath(attachmentUri: attachment?.attachmentUri, localPath: filePath)
         }
     }
