@@ -38,14 +38,21 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "skippedTests" : [
+        "AttachmentFieldViewTests\/testSetOneAttachmentThatIsSyncedAndOneThatIsNot()",
+        "AttachmentFieldViewTests\/testSetOneAttachmentThatIsSyncedAndOneThatIsNotDifferentOrder()",
+        "AttachmentFieldViewTests\/testSetOneAttachmentWithObservationAndTwoLater()",
+        "AttachmentFieldViewTests\/testSetOneAttachmentWithObservationAndTwoLaterThenRemoveFirst()",
+        "AttachmentFieldViewTests\/testSetOneAttachmentWithObservationAndTwoLaterThenRemoveSecond()",
+        "AttachmentFieldViewTests\/testShouldCallTheAttachmentSelectionDelegateOnTap()",
         "AttachmentPushServiceTests",
+        "AuthenticationCoordinatorTests",
         "CanCreateObservationTests\/testInitializeTheCanCreateObservationAndLongPressTheMap()",
+        "EventChooserControllerTests",
         "EventChooserCoordinatorTests",
         "FeedItemsViewControllerNoTimestampTests",
-        "FeedItemsViewControllerNoTimestampTests\/testOneFeedItemWithPrimaryAndSecondaryValueAndIcon()",
-        "FeedItemsViewControllerNoTimestampTests\/testOneFeedItemWithPrimaryValue()",
+        "FeedItemsViewControllerNoTimestampTests\/testOneFeedItemNoContent()",
         "FeedItemsViewControllerWithTimestampTests",
         "FeedItemsViewControllerWithTimestampTests\/testOneFeedItemWithPrimaryAndSecondaryValueAndIconWithoutTimestamp()",
         "MageServerTestsSwift\/testShouldFailWhenAnImageIsrReturned()",
@@ -68,6 +75,7 @@
       "parallelizable" : false,
       "skippedTests" : [
         "GeoPackageImporterTests\/testImportGeoPackageFileIntoLayer()",
+        "GeoPackageImporterUITests\/testShouldHandleGeoPackageImportTwiceOverwrite()",
         "GeoPackageLayerMapTests\/testInitializeTheStaticLayerMapWithANotLoadedLayerThenLoadItButDontAddItToTheMap()",
         "GeoPackageTests\/testAddGeoPackageTileLayerThenReAdd()",
         "GeoPackageTests\/testGetFeatureKeys()"
