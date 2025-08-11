@@ -11,16 +11,22 @@ import Kingfisher
     private var button: MDCFloatingButton?
 
     private lazy var imageView: AttachmentUIImageView = {
-        let iv = AttachmentUIImageView(image: nil)
-        iv.configureForAutoLayout()
-        iv.clipsToBounds = true
-        return iv
+        let imageView = AttachmentUIImageView(image: nil)
+        imageView.configureForAutoLayout()
+        imageView.clipsToBounds = true
+        return imageView
     }()
+
+    /// Centralized toggle derived from your app’s policy (Wi-Fi only, etc.)
+    /// If `false`, we’ll pass `.onlyFromCache` so Kingfisher won’t hit the network.
+    private var allowRemoteFetch: Bool {
+        DataConnectionUtilities.shouldFetchAttachments()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // Important: don't call configureForAutoLayout() on the cell itself
-        contentView.addSubview(imageView)
+        self.configureForAutoLayout()
+        self.addSubview(imageView)
         imageView.autoPinEdgesToSuperviewEdges()
         setNeedsLayout()
     }
@@ -30,98 +36,116 @@ import Kingfisher
     }
 
     override func prepareForReuse() {
-        super.prepareForReuse()
-        imageView.kf.cancelDownloadTask()
-        imageView.image = nil
-        imageView.subviews.forEach { $0.removeFromSuperview() }
+        self.imageView.kf.cancelDownloadTask()
+        self.imageView.image = nil
+        for view in self.imageView.subviews {
+            view.removeFromSuperview()
+        }
         button?.removeFromSuperview()
-        button = nil
+    }
+
+    // MARK: - Existing helpers updated to use normalized path
+
+    func getAttachmentUrl(attachment: AttachmentModel) -> URL? {
+        if let localPath = attachment.localPath {
+            if let healed = resolveLocalFileURL(from: localPath, fileName: attachment.name),
+               FileManager.default.fileExists(atPath: healed.path) {
+                return healed
+            }
+        }
+        if let url = attachment.url { return URL(string: url) }
+        return nil
+    }
+
+    func getAttachmentUrl(size: Int, attachment: AttachmentModel) -> URL? {
+        if let localPath = attachment.localPath {
+            if let healed = resolveLocalFileURL(from: localPath, fileName: attachment.name),
+               FileManager.default.fileExists(atPath: healed.path) {
+                return healed
+            }
+        }
+        if let url = attachment.url {
+            return URL(string: String(format: "%@?size=%ld", url, size))
+        }
+        return nil
     }
 
     override func removeFromSuperview() {
-        imageView.cancel()
-        super.removeFromSuperview()
-    }
-
-    // MARK: - Helpers (prefer healed local else remote)
-
-    private func healedLocalURL(localPath: String?, name: String?) -> URL? {
-        guard let localPath = localPath else { return nil }
-        guard let healed = resolveLocalFileURL(from: localPath, fileName: name) else { return nil }
-        return FileManager.default.fileExists(atPath: healed.path) ? healed : nil
-    }
-
-    private func remoteURLString(_ dict: [String: AnyHashable]) -> String? {
-        dict["url"] as? String
+        self.imageView.cancel()
     }
 
     // MARK: - Dictionary-based API
 
     @objc public func setImage(newAttachment: [String : AnyHashable],
-                               button: MDCFloatingButton? = nil,
-                               scheme: MDCContainerScheming? = nil) {
-
+                              button: MDCFloatingButton? = nil,
+                              scheme: MDCContainerScheming? = nil) {
         self.button = button
-        imageView.kf.indicatorType = .none
-        imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
+        self.imageView.contentMode = .scaleAspectFill
+        self.imageView.kf.indicatorType = .none
 
         guard let contentType = newAttachment["contentType"] as? String else { return }
         let storedLocalPath = newAttachment["localPath"] as? String
         let fileName       = newAttachment["name"] as? String
 
         if contentType.hasPrefix("image") {
-            if let localURL = healedLocalURL(localPath: storedLocalPath, name: fileName) {
-                imageView.setImage(
-                    url: localURL,
-                    cacheOnly: !DataConnectionUtilities.shouldFetchAttachments()
-                )
-                imageView.accessibilityLabel = "attachment \(localURL.lastPathComponent) loaded"
+            let healedURL = resolveLocalFileURL(from: storedLocalPath, fileName: fileName)
+
+            if let localURL = healedURL, FileManager.default.fileExists(atPath: localURL.path) {
+                self.imageView.setImage(url: localURL,
+                                        cacheOnly: !allowRemoteFetch)
+                self.imageView.accessibilityLabel = "attachment \(localURL.lastPathComponent) loaded"
             } else if
-                let remote = remoteURLString(newAttachment),
-                let remoteURL = URL(string: remote)
-            {
-                imageView.setImage(url: remoteURL, cacheOnly: false)
-                imageView.accessibilityLabel = "attachment \(remoteURL.lastPathComponent) loaded"
+                let remote = newAttachment["url"] as? String,
+                let remoteURL = URL(string: remote) {
+                self.imageView.setImage(url: remoteURL,
+                                        cacheOnly: !allowRemoteFetch)
+                self.imageView.accessibilityLabel = "attachment \(remoteURL.lastPathComponent) loaded"
             } else {
-                imageView.image = UIImage(systemName: "photo")
-                imageView.contentMode = .scaleAspectFit
-                imageView.accessibilityLabel = "image attachment placeholder"
+                self.imageView.image = UIImage(systemName: "photo")
+                self.imageView.contentMode = .scaleAspectFit
+                self.imageView.accessibilityLabel = "image attachment placeholder"
             }
 
         } else if contentType.hasPrefix("video") {
-            // Prefer a normalized local poster if we have one
-            let normalizedLocal = healedLocalURL(localPath: storedLocalPath, name: fileName)
-            let provider = VideoImageProvider(localPath: normalizedLocal?.path ?? storedLocalPath ?? "")
+            // Prefer a normalized local poster frame if present
+            let normalizedLocal = resolveLocalFileURL(from: storedLocalPath, fileName: fileName)
+            let normalizedLocalPath = normalizedLocal?.path ?? storedLocalPath ?? ""
+            let provider = VideoImageProvider(localPath: normalizedLocalPath)
 
             let overlay = UIImageView(image: UIImage(systemName: "play.circle.fill"))
             overlay.contentMode = .scaleAspectFit
-            imageView.addSubview(overlay)
+            self.imageView.addSubview(overlay)
             overlay.autoCenterInSuperview()
 
             DispatchQueue.main.async {
+                var opts: KingfisherOptionsInfo = [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .transition(.fade(0.2)),
+                    .scaleFactor(UIScreen.main.scale),
+                    .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
+                    .diskCacheExpiration(.seconds(300))
+                ]
+                if !self.allowRemoteFetch {
+                    opts.append(.onlyFromCache)
+                }
+
                 self.imageView.kf.setImage(
                     with: provider,
                     placeholder: UIImage(systemName: "play.circle.fill"),
-                    options: [
-                        .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                        .transition(.fade(0.2)),
-                        .scaleFactor(UIScreen.main.scale),
-                        .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
-                        .diskCacheExpiration(.seconds(300))
-                    ]
+                    options: opts
                 )
             }
 
         } else if contentType.hasPrefix("audio") {
-            imageView.image = UIImage(systemName: "speaker.wave.2.fill")
-            imageView.contentMode = .scaleAspectFit
-            imageView.accessibilityLabel = "audio attachment loaded"
+            self.imageView.image = UIImage(systemName: "speaker.wave.2.fill")
+            self.imageView.contentMode = .scaleAspectFit
+            self.imageView.accessibilityLabel = "audio attachment loaded"
 
         } else {
-            imageView.image = UIImage(systemName: "paperclip")
-            imageView.contentMode = .scaleAspectFit
-            imageView.accessibilityLabel = "\(contentType) loaded"
+            self.imageView.image = UIImage(systemName: "paperclip")
+            self.imageView.contentMode = .scaleAspectFit
+            self.imageView.accessibilityLabel = "\(contentType) loaded"
 
             let label = UILabel.newAutoLayout()
             label.text = fileName ?? contentType
@@ -137,12 +161,12 @@ import Kingfisher
             )
         }
 
-        backgroundColor = scheme?.colorScheme.surfaceColor
+        self.backgroundColor = scheme?.colorScheme.surfaceColor
 
         if let button = button {
-            addSubview(button)
-            button.autoPinEdge(.bottom, to: .bottom, of: imageView, withOffset: -8)
-            button.autoPinEdge(.right,  to: .right,  of: imageView, withOffset: -8)
+            self.addSubview(button)
+            button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8)
+            button.autoPinEdge(.right,  to: .right,  of: self.imageView, withOffset: -8)
         }
     }
 
@@ -152,60 +176,56 @@ import Kingfisher
                                formatName: NSString,
                                button: MDCFloatingButton? = nil,
                                scheme: MDCContainerScheming? = nil) {
-
         self.button = button
-        imageView.kf.indicatorType = .none
-        imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
+        self.imageView.kf.indicatorType = .none
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
 
         if (attachment.contentType?.hasPrefix("image") ?? false) {
-            // Uses AttachmentUIImageView’s existing helpers; they should consult healed local paths internally
-            imageView.setAttachment(attachment: attachment)
-            imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-            imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading"
-
-            imageView.showThumbnail(
-                cacheOnly: !DataConnectionUtilities.shouldFetchAttachments()
-            ) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
-                    NSLog("Loaded the image \(self?.imageView.accessibilityLabel ?? "")")
-                case .failure(let error):
-                    print(error)
+            // Local-first; AttachmentUIImageView handles thumb/full selection
+            self.imageView.setAttachment(attachment: attachment)
+            self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading"
+            self.imageView.showThumbnail(
+                cacheOnly: !allowRemoteFetch,
+                completionHandler: { [weak self] result in
+                    switch result {
+                    case .success:
+                        self?.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
+                        NSLog("Loaded the image \(self?.imageView.accessibilityLabel ?? "")")
+                    case .failure(let error):
+                        print(error)
+                    }
                 }
-            }
+            )
 
         } else if (attachment.contentType?.hasPrefix("video") ?? false) {
-            // Source is remote-or-local URL used by the provider; prefer local if present
-            let sourceURL: URL? = {
-                if let healed = healedLocalURL(localPath: attachment.localPath, name: attachment.name) {
-                    return healed
-                }
-                // fall back to tokenized remote
-                return attachment.urlWithToken
-            }()
-
-            guard let src = sourceURL else {
-                imageView.contentMode = .scaleAspectFit
-                imageView.image = UIImage(named: "upload")
+            guard let sourceURL = self.getAttachmentUrl(attachment: attachment) else {
+                self.imageView.contentMode = .scaleAspectFit
+                self.imageView.image = UIImage(named: "upload")
                 return
             }
 
-            let normalizedLocalPath = healedLocalURL(localPath: attachment.localPath, name: attachment.name)?.path
-            let provider = VideoImageProvider(sourceUrl: src, localPath: normalizedLocalPath)
+            // Normalize local path for poster frame if available
+            let normalizedLocal = resolveLocalFileURL(from: attachment.localPath, fileName: attachment.name)?.path
+            let provider = VideoImageProvider(sourceUrl: sourceURL, localPath: normalizedLocal)
 
-            imageView.contentMode = .scaleAspectFit
+            self.imageView.contentMode = .scaleAspectFit
             DispatchQueue.main.async {
+                var opts: KingfisherOptionsInfo = [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .transition(.fade(0.2)),
+                    .scaleFactor(UIScreen.main.scale),
+                    .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
+                    .cacheOriginalImage
+                ]
+                if !self.allowRemoteFetch {
+                    opts.append(.onlyFromCache)
+                }
+
                 self.imageView.kf.setImage(
                     with: provider,
                     placeholder: UIImage(systemName: "play.circle.fill"),
-                    options: [
-                        .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                        .transition(.fade(0.2)),
-                        .scaleFactor(UIScreen.main.scale),
-                        .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
-                        .cacheOriginalImage
-                    ]
+                    options: opts
                 ) { result in
                     switch result {
                     case .success:
@@ -222,15 +242,14 @@ import Kingfisher
             }
 
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
-            imageView.image = UIImage(systemName: "speaker.wave.2.fill")
-            imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
-            imageView.contentMode = .scaleAspectFit
+            self.imageView.image = UIImage(systemName: "speaker.wave.2.fill")
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
+            self.imageView.contentMode = .scaleAspectFit
 
         } else {
-            imageView.image = UIImage(systemName: "paperclip")
-            imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
-            imageView.contentMode = .scaleAspectFit
-
+            self.imageView.image = UIImage(systemName: "paperclip")
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
+            self.imageView.contentMode = .scaleAspectFit
             let label = UILabel.newAutoLayout()
             label.text = attachment.name
             label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
@@ -245,12 +264,12 @@ import Kingfisher
             )
         }
 
-        backgroundColor = scheme?.colorScheme.backgroundColor
+        self.backgroundColor = scheme?.colorScheme.backgroundColor
 
         if let button = button {
-            addSubview(button)
-            button.autoPinEdge(.bottom, to: .bottom, of: imageView, withOffset: -8)
-            button.autoPinEdge(.right,  to: .right,  of: imageView, withOffset: -8)
+            self.addSubview(button)
+            button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8)
+            button.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8)
         }
     }
 }

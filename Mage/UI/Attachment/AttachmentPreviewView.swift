@@ -2,9 +2,6 @@
 //  AttachmentPreviewView.swift
 //  MAGE
 //
-//  Created by Dan Barela on 8/19/24.
-//  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
-//
 
 import SwiftUI
 import Kingfisher
@@ -14,8 +11,12 @@ struct AttachmentPreviewView: View {
     var attachment: AttachmentModel
     var onTap: () -> Void
 
+    // Respect the user's setting (All / Wi-Fi Only / None)
+    private var allowRemoteFetch: Bool {
+        DataConnectionUtilities.shouldFetchAttachments()
+    }
+
     // Prefer a local file if we have it; otherwise use a remote thumb for images.
-    // For list/grid cells a 512px thumb is a good balance.
     private var imageDisplayURL: URL? {
         attachment.bestDisplayURL(preferredThumbSize: 512)
     }
@@ -44,11 +45,13 @@ struct AttachmentPreviewView: View {
     private var imageBody: some View {
         if let url = imageDisplayURL {
             KFImage(url)
-                // Applies token header for remote http(s); ignored for file://
+                // token is ignored for file://, used for http(s)
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                 .cacheOriginalImage()
-                // allow network fetch if not cached
+                // 🔑 Respect network policy: if not allowed, read cache only
+                .onlyFromCache(!allowRemoteFetch)
                 .placeholder { imagePlaceholder }
+                .onFailure { _ in /* keep placeholder if cache-miss and fetch disallowed */ }
                 .fade(duration: 0.3)
                 .resizable()
                 .scaledToFill()
@@ -66,14 +69,10 @@ struct AttachmentPreviewView: View {
     @ViewBuilder
     private var videoBody: some View {
         if let local = localVideoURL {
-            KFImage(
-                source: .provider(
-                    AVAssetImageDataProvider(
-                        assetURL: local,
-                        time: CMTime(seconds: 0, preferredTimescale: 1)
-                    )
-                )
-            )
+            KFImage(source: .provider(AVAssetImageDataProvider(
+                assetURL: local,
+                time: CMTime(seconds: 0, preferredTimescale: 1)
+            )))
             .cacheOriginalImage()
             .placeholder { videoPlaceholder }
             .fade(duration: 0.3)
@@ -83,17 +82,16 @@ struct AttachmentPreviewView: View {
             .overlay { videoOverlay }
             .onTapGesture { onTap() }
         } else if let remote = remoteVideoURL {
-            KFImage(
-                source: .provider(
-                    AVAssetImageDataProvider(
-                        assetURL: remote,
-                        time: CMTime(seconds: 0, preferredTimescale: 1)
-                    )
-                )
-            )
+            KFImage(source: .provider(AVAssetImageDataProvider(
+                assetURL: remote,
+                time: CMTime(seconds: 0, preferredTimescale: 1)
+            )))
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             .cacheOriginalImage()
+            // 🔑 Respect network policy: cache-only if not allowed
+            .onlyFromCache(!allowRemoteFetch)
             .placeholder { videoPlaceholder }
+            .onFailure { _ in /* keep placeholder on cache-miss when fetch disallowed */ }
             .fade(duration: 0.3)
             .resizable()
             .scaledToFill()
@@ -163,4 +161,3 @@ struct AttachmentPreviewView: View {
             .padding(16)
     }
 }
-
