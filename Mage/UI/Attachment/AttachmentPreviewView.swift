@@ -14,26 +14,23 @@ struct AttachmentPreviewView: View {
     var attachment: AttachmentModel
     var onTap: () -> Void
 
-    // Convenience: healed local URL if it exists
-    private var healedLocalURL: URL? {
-        resolveLocalFileURL(from: attachment.localPath, fileName: attachment.name)
+    // Prefer a local file if we have it; otherwise use a remote thumb for images.
+    // For list/grid cells a 512px thumb is a good balance.
+    private var imageDisplayURL: URL? {
+        attachment.bestDisplayURL(preferredThumbSize: 512)
     }
 
-    // Convenience: remote URL (tokenized where needed)
-    private var remoteURL: URL? {
-        if attachment.contentType?.hasPrefix("video") ?? false {
-            return attachment.urlWithToken
-        }
-        return URL(string: attachment.url ?? "")
-    }
+    // For videos we need the tokenized remote URL when local file is absent.
+    private var localVideoURL: URL? { attachment.healedLocalURL }
+    private var remoteVideoURL: URL? { attachment.urlWithToken }
 
     var body: some View {
         Group {
-            if attachment.contentType?.hasPrefix("image") ?? false {
+            if attachment.contentType?.hasPrefix("image") == true {
                 imageBody
-            } else if attachment.contentType?.hasPrefix("video") ?? false {
+            } else if attachment.contentType?.hasPrefix("video") == true {
                 videoBody
-            } else if attachment.contentType?.hasPrefix("audio") ?? false {
+            } else if attachment.contentType?.hasPrefix("audio") == true {
                 audioBody
             } else {
                 otherBody
@@ -41,24 +38,13 @@ struct AttachmentPreviewView: View {
         }
     }
 
-    // MARK: - Sections
+    // MARK: - Image
 
     @ViewBuilder
     private var imageBody: some View {
-        // Prefer local thumbnail if available, else remote
-        if let local = healedLocalURL {
-            KFImage(local)
-                .cacheOriginalImage()
-                .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
-                .placeholder { imagePlaceholder }
-                .fade(duration: 0.3)
-                .resizable()
-                .scaledToFill()
-                .onTapGesture { onTap() }
-                .frame(maxWidth: .infinity, maxHeight: 150)
-        } else if let remote = remoteURL {
-            KFImage(remote)
-                .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
+        if let url = imageDisplayURL {
+            KFImage(url)
+                .requestModifier(ImageCacheProvider.shared.accessTokenModifier) // ignored for file://, used for http(s)
                 .cacheOriginalImage()
                 .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
                 .placeholder { imagePlaceholder }
@@ -74,18 +60,15 @@ struct AttachmentPreviewView: View {
         }
     }
 
+    // MARK: - Video
+
     @ViewBuilder
     private var videoBody: some View {
-        // Use AVAsset provider; prefer local asset if we have one
-        if let local = healedLocalURL {
-            KFImage(
-                source: .provider(
-                    AVAssetImageDataProvider(
-                        assetURL: local,
-                        time: CMTime(seconds: 0.0, preferredTimescale: 1)
-                    )
-                )
-            )
+        if let local = localVideoURL {
+            KFImage(source: .provider(AVAssetImageDataProvider(
+                assetURL: local,
+                time: CMTime(seconds: 0, preferredTimescale: 1)
+            )))
             .cacheOriginalImage()
             .placeholder { videoPlaceholder }
             .fade(duration: 0.3)
@@ -94,15 +77,11 @@ struct AttachmentPreviewView: View {
             .frame(maxWidth: .infinity, maxHeight: 150)
             .overlay { videoOverlay }
             .onTapGesture { onTap() }
-        } else if let remote = remoteURL {
-            KFImage(
-                source: .provider(
-                    AVAssetImageDataProvider(
-                        assetURL: remote,
-                        time: CMTime(seconds: 0.0, preferredTimescale: 1)
-                    )
-                )
-            )
+        } else if let remote = remoteVideoURL {
+            KFImage(source: .provider(AVAssetImageDataProvider(
+                assetURL: remote,
+                time: CMTime(seconds: 0, preferredTimescale: 1)
+            )))
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             .cacheOriginalImage()
             .placeholder { videoPlaceholder }
@@ -118,6 +97,8 @@ struct AttachmentPreviewView: View {
                 .onTapGesture { onTap() }
         }
     }
+
+    // MARK: - Audio / Other
 
     @ViewBuilder
     private var audioBody: some View {
@@ -145,7 +126,7 @@ struct AttachmentPreviewView: View {
             .background { Color.gray.opacity(0.27) }
     }
 
-    // MARK: - Common UI bits
+    // MARK: - Placeholders / overlays
 
     private var imagePlaceholder: some View {
         Image("observations")

@@ -41,10 +41,17 @@ import Foundation
         }
         return nil
     }
-//}
-//
-//extension AttachmentModel {
+
     init(attachment: Attachment) {
+        print("\n---------------------------------------------")
+        print(attachment.fieldName ?? "No Field Name")
+        print(attachment.name ?? "No Name")
+        print("🚨 OBJECT-ID: ObjectID used for Attachment URI \(attachment.objectID.uriRepresentation())")
+        print("---------------------------------------------")
+        print(attachment.debugDescription)
+        print("---------------------------------------------\n")
+
+        
         // 🔒 Ensure we don't store a URI from a temporary objectID
         if attachment.objectID.isTemporaryID {
             print("\n---------------------------------------------")

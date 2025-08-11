@@ -18,12 +18,12 @@ class ObservationListViewModel: ObservationViewViewModel, NSFetchedResultsContro
     private var observableObjectID: NSManagedObjectID
     
     // Computed property for ordered attachments
-    var orderedAttachmentsxx: [AttachmentModel] {
-        // Replicate the ordering logic from your previous code if needed,
-        // or just return attachments (which are already sorted by lastModified)
-        // You can replace this with your own sorting logic if necessary
-        return attachments
-    }
+//    var orderedAttachmentsxx: [AttachmentModel] {
+//        // Replicate the ordering logic from your previous code if needed,
+//        // or just return attachments (which are already sorted by lastModified)
+//        // You can replace this with your own sorting logic if necessary
+//        return attachments
+//    }
     
     var orderedAttachments: [AttachmentModel]? {
         var observationForms: [[String: Any]] = []

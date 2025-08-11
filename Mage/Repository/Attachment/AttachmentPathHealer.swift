@@ -49,10 +49,37 @@ public func resolveLocalFileURL(from storedPath: String?, fileName: String?) -> 
     return nil
 }
 
-
 public extension AttachmentModel {
+    /// Best-effort healed local file URL (if the asset exists on this device).
     var healedLocalURL: URL? {
         resolveLocalFileURL(from: self.localPath, fileName: self.name)
     }
-}
 
+    /// Remote API URL as provided by the model (`attachment.url`).
+    /// (We use what's already on the model instead of rebuilding from IDs.)
+    var remoteAPIURL: URL? {
+        guard let s = self.url else { return nil }
+        return URL(string: s)
+    }
+
+    /// Remote API URL with a `size` query param (if you want server-sized thumbnails).
+    func remoteAPIURL(size: Int) -> URL? {
+        guard let s = self.url, var comps = URLComponents(string: s) else { return nil }
+        var items = comps.queryItems ?? []
+        items.append(URLQueryItem(name: "size", value: String(size)))
+        comps.queryItems = items
+        return comps.url
+    }
+
+    /// Choose the best URL to display: prefer healed local, otherwise remote.
+    /// For images you can pass a preferred thumbnail size; for videos ignore size.
+    func bestDisplayURL(preferredThumbSize: Int? = nil) -> URL? {
+        if let local = healedLocalURL, FileManager.default.fileExists(atPath: local.path) {
+            return local
+        }
+        if let size = preferredThumbSize, contentType?.hasPrefix("image") == true {
+            return remoteAPIURL(size: size) ?? remoteAPIURL
+        }
+        return remoteAPIURL
+    }
+}
