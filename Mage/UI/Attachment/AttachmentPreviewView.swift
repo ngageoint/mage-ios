@@ -44,9 +44,10 @@ struct AttachmentPreviewView: View {
     private var imageBody: some View {
         if let url = imageDisplayURL {
             KFImage(url)
-                .requestModifier(ImageCacheProvider.shared.accessTokenModifier) // ignored for file://, used for http(s)
+                // Applies token header for remote http(s); ignored for file://
+                .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                 .cacheOriginalImage()
-                .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
+                // allow network fetch if not cached
                 .placeholder { imagePlaceholder }
                 .fade(duration: 0.3)
                 .resizable()
@@ -65,10 +66,14 @@ struct AttachmentPreviewView: View {
     @ViewBuilder
     private var videoBody: some View {
         if let local = localVideoURL {
-            KFImage(source: .provider(AVAssetImageDataProvider(
-                assetURL: local,
-                time: CMTime(seconds: 0, preferredTimescale: 1)
-            )))
+            KFImage(
+                source: .provider(
+                    AVAssetImageDataProvider(
+                        assetURL: local,
+                        time: CMTime(seconds: 0, preferredTimescale: 1)
+                    )
+                )
+            )
             .cacheOriginalImage()
             .placeholder { videoPlaceholder }
             .fade(duration: 0.3)
@@ -78,10 +83,14 @@ struct AttachmentPreviewView: View {
             .overlay { videoOverlay }
             .onTapGesture { onTap() }
         } else if let remote = remoteVideoURL {
-            KFImage(source: .provider(AVAssetImageDataProvider(
-                assetURL: remote,
-                time: CMTime(seconds: 0, preferredTimescale: 1)
-            )))
+            KFImage(
+                source: .provider(
+                    AVAssetImageDataProvider(
+                        assetURL: remote,
+                        time: CMTime(seconds: 0, preferredTimescale: 1)
+                    )
+                )
+            )
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             .cacheOriginalImage()
             .placeholder { videoPlaceholder }
@@ -154,3 +163,4 @@ struct AttachmentPreviewView: View {
             .padding(16)
     }
 }
+
