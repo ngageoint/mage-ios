@@ -7,20 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MAGE-Swift.h"
+
 @import MaterialComponents;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol AuthenticationButtonDelegate
-
-- (void) onAuthenticationButtonTapped:(id) sender;
-
-@end
-
 @interface AuthenticationButton : UIView
 
 @property (strong, nonatomic) NSDictionary *strategy;
-@property (weak, nonatomic) id<AuthenticationButtonDelegate> delegate;
+@property (weak, nonatomic) id<IDPLoginDelegate> delegate;
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 

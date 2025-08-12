@@ -55,6 +55,7 @@
         "FeedItemsViewControllerNoTimestampTests\/testOneFeedItemNoContent()",
         "FeedItemsViewControllerWithTimestampTests",
         "FeedItemsViewControllerWithTimestampTests\/testOneFeedItemWithPrimaryAndSecondaryValueAndIconWithoutTimestamp()",
+        "LocalLoginViewTests",
         "MageServerTestsSwift\/testShouldFailWhenAnImageIsrReturned()",
         "MageServiceTests",
         "MageTests",

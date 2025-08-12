@@ -11,6 +11,7 @@ import SwiftUI
 struct PasswordFieldView: View {
     @Binding var password: String
     @Binding var showPassword: Bool
+    var placeholder: String = "Password"
     
     var body: some View {
         HStack {
@@ -18,12 +19,12 @@ struct PasswordFieldView: View {
                 .foregroundStyle(.secondary)
             
             if showPassword {
-                TextField("Password", text: $password)
+                TextField(placeholder, text: $password)
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
             } else {
-                SecureField("Password", text: $password)
+                SecureField(placeholder, text: $password)
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)

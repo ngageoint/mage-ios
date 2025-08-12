@@ -42,6 +42,7 @@ class ServerURLController: UIViewController {
         serverURL.keyboardType = .URL
         serverURL.delegate = self
         serverURL.sizeToFit();
+        serverURL.text = ""
         return serverURL;
     }()
     

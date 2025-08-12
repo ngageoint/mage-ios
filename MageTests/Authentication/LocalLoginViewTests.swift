@@ -75,14 +75,14 @@ class LocalLoginViewTests: AsyncMageCoreDataTestCase {
     }
     
     @MainActor
-    private func setupLoginView(with delegate: MockLoginDelegate, user: User? = nil) -> LocalLoginViewModel {
-        let viewModel = LocalLoginViewModel(strategy: defaultLoginStrategy(), delegate: delegate)
+    private func setupLoginView(with delegate: MockLoginDelegate, user: User? = nil) -> LoginViewModel {
+        let viewModel = LoginViewModel(strategy: defaultLoginStrategy(), delegate: delegate)
         
         if let user {
             viewModel.username = user.username ?? ""
         }
         
-        let swiftUIView = LocalLoginViewSwiftUI(viewModel: viewModel)
+        let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         controller?.addChild(hostingController)
@@ -103,8 +103,8 @@ class LocalLoginViewTests: AsyncMageCoreDataTestCase {
     @MainActor
     func testShouldLoadTheLocalLoginView() {
         let delegate = MockLoginDelegate()
-        let viewModel = LocalLoginViewModel(strategy: defaultLoginStrategy(), delegate: delegate)
-        let swiftUIView = LocalLoginViewSwiftUI(viewModel: viewModel)
+        let viewModel = LoginViewModel(strategy: defaultLoginStrategy(), delegate: delegate)
+        let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         controller?.addChild(hostingController)

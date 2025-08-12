@@ -1,5 +1,5 @@
 //
-//  LocalLoginViewModel.swift
+//  LoginViewModel.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 7/23/25.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public class LocalLoginViewModel: NSObject, ObservableObject {
+@objc public class LoginViewModel: NSObject, ObservableObject {
     @Published @objc public dynamic var username: String = ""
     @Published @objc public dynamic var password: String = ""
     @Published @objc public dynamic var showPassword: Bool = false
@@ -16,18 +16,40 @@ import Foundation
     @Published @objc public dynamic var errorMessage: String? = nil
     
     public let strategy: [String: Any]
+    public let user: User?
     @objc public weak var delegate: LoginDelegate?
     
-    @objc public dynamic var userExists: Bool = false
+    public var userExists: Bool { user != nil }
     
+    let usernamePlaceholder = "Username"
+    let passwordPlaceholder = "Password"
+
+    public var strategyName: String? {
+        (strategy["strategy"] as? [String: Any])?["name"] as? String
+    }
+    
+    public var strategyTitle: String? {
+        (strategy["strategy"] as? [String: Any])?["title"] as? String
+    }
+    
+    public var strategyType: String? {
+        (strategy["strategy"] as? [String: Any])?["type"] as? String
+    }
+    
+    
+    // MARK: - Init
     @objc public init(strategy: [String: Any], delegate: LoginDelegate?, user: User? = nil) {
         self.strategy = strategy
         self.delegate = delegate
+        self.user = user
         super.init()
         
         if let user {
             self.username = user.username ?? ""
-            self.userExists = true
+        }
+        
+        if let title = (strategy["strategy"] as? [String: Any])?["title"] as? String {
+            print(title)
         }
     }
     
@@ -55,7 +77,10 @@ import Foundation
             "appVersion": appVersionFull
         ]
         
-        delegate?.login(withParameters: parameters, withAuthenticationStrategy: strategy["identifier"] as? String ?? "") { [weak self] status, errorString in
+        delegate?.login(
+            withParameters: parameters,
+            withAuthenticationStrategy: strategy["identifier"] as? String ?? ""
+        ) { [weak self] status, errorString in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 
