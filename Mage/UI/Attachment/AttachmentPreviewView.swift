@@ -48,7 +48,7 @@ struct AttachmentPreviewView: View {
                 // token is ignored for file://, used for http(s)
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                 .cacheOriginalImage()
-                // 🔑 Respect network policy: if not allowed, read cache only
+                // Respect network policy: if not allowed, read cache only
                 .onlyFromCache(!allowRemoteFetch)
                 .placeholder { imagePlaceholder }
                 .onFailure { _ in /* keep placeholder if cache-miss and fetch disallowed */ }
@@ -88,7 +88,7 @@ struct AttachmentPreviewView: View {
             )))
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             .cacheOriginalImage()
-            // 🔑 Respect network policy: cache-only if not allowed
+            // Respect network policy: cache-only if not allowed
             .onlyFromCache(!allowRemoteFetch)
             .placeholder { videoPlaceholder }
             .onFailure { _ in /* keep placeholder on cache-miss when fetch disallowed */ }
