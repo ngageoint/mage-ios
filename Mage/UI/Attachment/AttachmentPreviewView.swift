@@ -18,7 +18,7 @@ struct AttachmentPreviewView: View {
 
     // Prefer a local file if we have it; otherwise use a remote thumb for images.
     private var imageDisplayURL: URL? {
-        attachment.bestDisplayURL(preferredThumbSize: 512)
+        attachment.bestDisplayURL
     }
 
     // For videos we need the tokenized remote URL when local file is absent.

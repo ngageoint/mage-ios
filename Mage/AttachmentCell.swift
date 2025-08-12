@@ -17,7 +17,7 @@ import Kingfisher
         return imageView
     }()
 
-    /// Centralized toggle derived from your app’s policy (Wi-Fi only, etc.)
+    /// Centralized toggle derived from app’s policy (Wi-Fi only, etc.)
     /// If `false`, we’ll pass `.onlyFromCache` so Kingfisher won’t hit the network.
     private var allowRemoteFetch: Bool {
         DataConnectionUtilities.shouldFetchAttachments()
@@ -44,34 +44,33 @@ import Kingfisher
         button?.removeFromSuperview()
     }
 
-    // MARK: - Existing helpers updated to use normalized path
-
-    func getAttachmentUrl(attachment: AttachmentModel) -> URL? {
-        if let localPath = attachment.localPath {
-            if let healed = resolveLocalFileURL(from: localPath, fileName: attachment.name),
-               FileManager.default.fileExists(atPath: healed.path) {
-                return healed
-            }
-        }
-        if let url = attachment.url { return URL(string: url) }
-        return nil
-    }
-
-    func getAttachmentUrl(size: Int, attachment: AttachmentModel) -> URL? {
-        if let localPath = attachment.localPath {
-            if let healed = resolveLocalFileURL(from: localPath, fileName: attachment.name),
-               FileManager.default.fileExists(atPath: healed.path) {
-                return healed
-            }
-        }
-        if let url = attachment.url {
-            return URL(string: String(format: "%@?size=%ld", url, size))
-        }
-        return nil
-    }
-
     override func removeFromSuperview() {
         self.imageView.cancel()
+        super.removeFromSuperview()
+    }
+
+    // MARK: - Helpers
+
+    /// Prefer local (healed) URL if it exists; else remote.
+    func getAttachmentUrl(attachment: AttachmentModel) -> URL? {
+        if let localURL = AttachmentPath.localURL(fromStored: attachment.localPath,
+                                                 fileName: attachment.name) {
+            return localURL
+        }
+        if let urlString = attachment.url { return URL(string: urlString) }
+        return nil
+    }
+
+    /// Prefer local (healed) URL if it exists; else remote with `?size=...`.
+    func getAttachmentUrl(size: Int, attachment: AttachmentModel) -> URL? {
+        if let localURL = AttachmentPath.localURL(fromStored: attachment.localPath,
+                                                 fileName: attachment.name) {
+            return localURL
+        }
+        if let urlString = attachment.url {
+            return URL(string: String(format: "%@?size=%ld", urlString, size))
+        }
+        return nil
     }
 
     // MARK: - Dictionary-based API
@@ -89,17 +88,15 @@ import Kingfisher
         let fileName       = newAttachment["name"] as? String
 
         if contentType.hasPrefix("image") {
-            let healedURL = resolveLocalFileURL(from: storedLocalPath, fileName: fileName)
+            let healedURL = AttachmentPath.localURL(fromStored: storedLocalPath, fileName: fileName)
 
-            if let localURL = healedURL, FileManager.default.fileExists(atPath: localURL.path) {
-                self.imageView.setImage(url: localURL,
-                                        cacheOnly: !allowRemoteFetch)
+            if let localURL = healedURL {
+                self.imageView.setImage(url: localURL, cacheOnly: !allowRemoteFetch)
                 self.imageView.accessibilityLabel = "attachment \(localURL.lastPathComponent) loaded"
             } else if
                 let remote = newAttachment["url"] as? String,
                 let remoteURL = URL(string: remote) {
-                self.imageView.setImage(url: remoteURL,
-                                        cacheOnly: !allowRemoteFetch)
+                self.imageView.setImage(url: remoteURL, cacheOnly: !allowRemoteFetch)
                 self.imageView.accessibilityLabel = "attachment \(remoteURL.lastPathComponent) loaded"
             } else {
                 self.imageView.image = UIImage(systemName: "photo")
@@ -109,7 +106,7 @@ import Kingfisher
 
         } else if contentType.hasPrefix("video") {
             // Prefer a normalized local poster frame if present
-            let normalizedLocal = resolveLocalFileURL(from: storedLocalPath, fileName: fileName)
+            let normalizedLocal = AttachmentPath.localURL(fromStored: storedLocalPath, fileName: fileName)
             let normalizedLocalPath = normalizedLocal?.path ?? storedLocalPath ?? ""
             let provider = VideoImageProvider(localPath: normalizedLocalPath)
 
@@ -205,8 +202,8 @@ import Kingfisher
                 return
             }
 
-            // Normalize local path for poster frame if available
-            let normalizedLocal = resolveLocalFileURL(from: attachment.localPath, fileName: attachment.name)?.path
+            let normalizedLocal = AttachmentPath.localURL(fromStored: attachment.localPath,
+                                                          fileName: attachment.name)?.path
             let provider = VideoImageProvider(sourceUrl: sourceURL, localPath: normalizedLocal)
 
             self.imageView.contentMode = .scaleAspectFit

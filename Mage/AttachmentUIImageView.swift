@@ -66,13 +66,6 @@ import Kingfisher
         self.kf.cancelDownloadTask();
     }
     
-//    public func showThumbnailxxxxx(cacheOnly: Bool = false,
-//                              indicator: Indicator? = nil,
-//                              progressBlock: DownloadProgressBlock? = nil,
-//                              completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-//        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), cacheOnly: cacheOnly, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
-//    }
-    
     public func showThumbnail(cacheOnly: Bool,
                        indicator: Indicator? = nil,
                        progressBlock: DownloadProgressBlock? = nil,

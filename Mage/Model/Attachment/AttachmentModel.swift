@@ -43,11 +43,8 @@ import Foundation
     }
 
     init(attachment: Attachment) {
-        // 🔒 Ensure we don't store a URI from a temporary objectID
+        // Ensure we don't store a URI from a temporary objectID
         if attachment.objectID.isTemporaryID {
-            print("\n---------------------------------------------")
-            print("🚨 WARNING: Temporary ObjectID used for Attachment URI \(attachment.objectID.uriRepresentation())")
-            print("---------------------------------------------\n")
             try? attachment.managedObjectContext?.obtainPermanentIDs(for: [attachment])
         }
         
@@ -65,4 +62,31 @@ import Foundation
         contentType = attachment.contentType
         markedForDeletion = attachment.markedForDeletion
     }
+}
+
+extension AttachmentModel {
+    // Centralized remote URL lookup
+    var remoteURL: URL? {
+        url.flatMap(URL.init(string:))
+    }
+
+    var localFileURL: URL? {
+        AttachmentPath.localURL(fromStored: localPath, fileName: name)
+    }
+
+    // Centralized local URL healing (formerly "healedLocalURL")
+    var healedLocalURL: URL? {
+        AttachmentPath.localURL(fromStored: localPath, fileName: name)
+    }
+
+    // Prefer local if present, else remote (formerly "bestDisplayURL")
+    var bestDisplayURL: URL? {
+        healedLocalURL ?? remoteURL
+    }
+
+    private var _ctype: String { (contentType ?? "").lowercased() }
+
+    var isImage: Bool { _ctype.hasPrefix("image/") }
+    var isVideo: Bool { _ctype.hasPrefix("video/") }
+    var isAudio: Bool { _ctype.hasPrefix("audio/") }
 }

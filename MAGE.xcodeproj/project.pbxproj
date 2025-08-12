@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -102,13 +102,11 @@
 		6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
+		840D60752E4A8CC4005B0353 /* AttachmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60742E4A8CC4005B0353 /* AttachmentPath.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
-		8423B10B2E464EE20069C1CD /* AttachmentPathHealer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B10A2E464EE20069C1CD /* AttachmentPathHealer.swift */; };
-		8423B10D2E4667450069C1CD /* RelativePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B10C2E4667450069C1CD /* RelativePaths.swift */; };
 		8423B10F2E46676E0069C1CD /* Attachment+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */; };
-		8423B1112E466C2F0069C1CD /* Attachment+Normalize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B1102E466C2F0069C1CD /* Attachment+Normalize.swift */; };
 		8423B1132E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
@@ -1100,11 +1098,9 @@
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
+		840D60742E4A8CC4005B0353 /* AttachmentPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPath.swift; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
-		8423B10A2E464EE20069C1CD /* AttachmentPathHealer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPathHealer.swift; sourceTree = "<group>"; };
-		8423B10C2E4667450069C1CD /* RelativePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelativePaths.swift; sourceTree = "<group>"; };
 		8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attachment+FileURL.swift"; sourceTree = "<group>"; };
-		8423B1102E466C2F0069C1CD /* Attachment+Normalize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attachment+Normalize.swift"; sourceTree = "<group>"; };
 		8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentImageLoadingTests.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LocalLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -2636,10 +2632,8 @@
 			children = (
 				F7225F572C5A783B00B7D935 /* AttachmentRepository.swift */,
 				F7225F592C5A784700B7D935 /* AttachmentLocalDataSource.swift */,
-				8423B10A2E464EE20069C1CD /* AttachmentPathHealer.swift */,
-				8423B10C2E4667450069C1CD /* RelativePaths.swift */,
+				840D60742E4A8CC4005B0353 /* AttachmentPath.swift */,
 				8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */,
-				8423B1102E466C2F0069C1CD /* Attachment+Normalize.swift */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -5222,7 +5216,6 @@
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
 				F78D578B27B46F49003594D3 /* FeedsMap.swift in Sources */,
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
-				8423B10D2E4667450069C1CD /* RelativePaths.swift in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
@@ -5250,7 +5243,6 @@
 				4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */,
 				F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
-				8423B1112E466C2F0069C1CD /* Attachment+Normalize.swift in Sources */,
 				F776ACA32BCDC362000FAFB4 /* CoreDataDataSource.swift in Sources */,
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
 				F73564E92C651D3300466813 /* ObservationListNavStack.swift in Sources */,
@@ -5278,6 +5270,7 @@
 				F70C34332C73D712007616FA /* DownloadingImageViewModel.swift in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift in Sources */,
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
+				840D60752E4A8CC4005B0353 /* AttachmentPath.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
@@ -5427,7 +5420,6 @@
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */,
-				8423B10B2E464EE20069C1CD /* AttachmentPathHealer.swift in Sources */,
 				A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7DE98832C133CDB005372F8 /* ObservationMapItemAnnotation.swift in Sources */,

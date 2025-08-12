@@ -343,56 +343,6 @@ extension InjectedValues {
         }
 
     }
-
-    
-    func pushAttachment_OLD(_ attachment: Attachment) {
-        guard let localPath = attachment.localPath,
-            let attachmentData = try? Data(contentsOf: URL(filePath: localPath))
-        else {
-            MageLogger.misc.debug("Attachment data nil for observation: \(attachment.observation?.remoteId ?? "") at path: \(attachment.localPath ?? "")")
-            guard let context = self.context else { return }
-            context.performAndWait {
-                guard let attachment = context.object(with: attachment.objectID) as? Attachment else {
-                    return
-                }
-                context.delete(attachment)
-                try? context.save()
-            }
-            return
-        }
-        
-        let push = MAGERoutes.attachment().push(attachment)
-        
-        MageLogger.misc.debug("pushing attachment \(push.route)")
-
-        guard let observationRemoteId = attachment.observation?.remoteId,
-              let attachmentRemoteId = attachment.remoteId,
-              let eventId = attachment.observation?.eventId?.intValue
-        else { return }
-        let formData = MultipartFormData()
-        formData.append(attachmentData, withName: "attachment", fileName: attachment.name, mimeType: attachment.contentType ?? "application/octet-stream")
-        let uploader = MageSession.shared.session.upload(multipartFormData: formData, with: AttachmentService.uploadAttachment(eventId: eventId, observationRemoteId: observationRemoteId, attachmentRemoteId: attachmentRemoteId))
-        uploader.onURLSessionTaskCreation { task in
-            if let taskIdentifier = uploader.task?.taskIdentifier,
-               self.pushTasks.contains(taskIdentifier) == false
-            {
-                self.pushTasks.append(taskIdentifier)
-                guard let context = self.context else { return }
-                context.performAndWait {
-                    attachment.taskIdentifier = NSNumber(value: taskIdentifier)
-                    
-                    try? context.save()
-                }
-            }
-        }
-        .uploadProgress { progress in
-            print("Upload Progress: \(progress.fractionCompleted)")
-        }
-        .response { response in
-            self.attachmentUploadCompleteWithTask(response: response, task: uploader.task, error: response.error)
-        }
-    }
-    
     
     func attachmentUploadReceivedData(data: Data, forTask: URLSessionTask) {
         MageLogger.misc.debug("ATTACHMENT - upload received data for task \(forTask)")
@@ -449,7 +399,7 @@ extension InjectedValues {
             guard let taskIdentifier = task?.taskIdentifier,
                   let attachment = context.fetchFirst(Attachment.self, key: "taskIdentifier", value: taskIdentifier)
             else {
-                MageLogger.misc.debug("ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id \("\(task?.taskIdentifier)")")
+                MageLogger.misc.debug("ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id \("\(String(describing: task?.taskIdentifier))")")
                 return
             }
             

@@ -26,7 +26,7 @@ protocol AttachmentLocalDataSource {
     func saveLocalPath(attachmentUri: URL?, localPath: String)
     func markForDeletion(attachmentUri: URL?)
     func undelete(attachmentUri: URL?)
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>?
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>
 }
 
 class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLocalDataSource, ObservableObject {
@@ -62,18 +62,18 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
         }
     }
     
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>? {
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never> {
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         
-        guard let context = context else { return nil }
-        
-        guard let observationUri = observationUri,
-              let observationFormId = observationFormId,
-              let fieldName = fieldName,
-              let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri)
+        guard
+            let context = context,
+            let observationUri = observationUri,
+            let observationFormId = observationFormId,
+            let fieldName = fieldName,
+            let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri)
         else {
-            return nil
+            return Empty<CollectionDifference<AttachmentModel>, Never>(completeImmediately: true).eraseToAnyPublisher()
         }
         var itemChanges: AnyPublisher<CollectionDifference<AttachmentModel>, Never> {
             let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
@@ -91,7 +91,7 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
             .catch { _ in Empty() }
             .eraseToAnyPublisher()
         }
-
+        
         return itemChanges
     }
     
@@ -116,6 +116,7 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
         }
     }
     
+    // Normalize to Documents-relative & use AttachmentPath for healing/existence
     func saveLocalPath(attachmentUri: URL?, localPath: String) {
         guard let attachmentUri else { return }
         
@@ -135,31 +136,28 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
                 return
             }
             
-//            attachment.localPath = localPath
-//            attachment.lastModified = Date()
-//            MageLogger.db.debug("BBB: Saved localPath for attachment \(objectID): \(localPath)")
-            
-            var finalPath = localPath
-
-            // 🔧 If someone passed a directory/prefix, try to fix it by appending name
-            if !FileManager.default.fileExists(atPath: finalPath),
-               let name = attachment.name {
-                // If localPath looks like a directory/prefix, append the file name
-                let candidate = URL(fileURLWithPath: finalPath).appendingPathComponent(name).path
-                if FileManager.default.fileExists(atPath: candidate) {
-                    finalPath = candidate
+            // 1) Resolve the actual file URL (handles /Documents from other installs, directory prefixes, etc.)
+            let resolvedURL: URL? = {
+                // If caller already passed a valid file path, prefer it.
+                if FileManager.default.fileExists(atPath: localPath) {
+                    return URL(fileURLWithPath: localPath)
                 }
-            }
-
-            // Last sanity: only store if the file actually exists
-            if FileManager.default.fileExists(atPath: finalPath) {
-                attachment.localPath = finalPath
-                attachment.lastModified = Date()
-                MageLogger.db.debug("BBB: saveLocalPath: set \(finalPath) for \(attachment.objectID)")
-            } else {
-                MageLogger.db.error("BBB: saveLocalPath: file not found at \(finalPath); name=\(attachment.name ?? "nil"); original=\(localPath)")
+                // Otherwise try to heal it using the stored name as a hint.
+                return AttachmentPath.localURL(fromStored: localPath, fileName: attachment.name)
+            }()
+            
+            guard let fileURL = resolvedURL, FileManager.default.fileExists(atPath: fileURL.path) else {
+                MageLogger.db.error("BBB: saveLocalPath: file not found (input: \(localPath)); name=\(attachment.name ?? "nil")")
+                return
             }
             
+            // 2) ALWAYS store Documents-relative for stability across reinstalls/containers.
+            let relative = AttachmentPath.stripToDocumentsRelative(fileURL.path)
+            
+            // 3) Save.
+            attachment.localPath = relative // <— normalized
+            attachment.lastModified = Date() // or Date.now if your min iOS supports it
+            MageLogger.db.debug("BBB: saveLocalPath stored relative path '\(relative)' for \(attachment.objectID)")
         })
     }
     

@@ -23,7 +23,7 @@ extension InjectedValues {
 
 protocol AttachmentRepository {
     func getAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) async -> [AttachmentModel]?
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>?
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>
     func getAttachment(attachmentUri: URL?) async -> AttachmentModel?
     func saveLocalPath(attachmentUri: URL?, localPath: String)
     func markForDeletion(attachmentUri: URL?)
@@ -43,7 +43,7 @@ class AttachmentRepositoryImpl: ObservableObject, AttachmentRepository {
         )
     }
     
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>? {
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never> {
         localDataSource.observeAttachments(observationUri: observationUri, observationFormId: observationFormId, fieldName: fieldName)
     }
     
