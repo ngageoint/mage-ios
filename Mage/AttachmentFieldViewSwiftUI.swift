@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-//import Kingfisher
 import Combine
 
 class AttachmentFieldViewModel: ObservableObject {
