@@ -117,11 +117,6 @@ struct UserObservationRow: View {
     var body: some View {
         switch item {
         case .listItem(let uri):
-            let _ = print("\n-----------------------------------")
-            let _ = debugPrint(uri)
-            let _ = debugPrint(persistence.getContext())
-            let _ = print("-----------------------------------\n")
-            
             if let coordinator = persistence.getContext().persistentStoreCoordinator,
                let objectID = coordinator.managedObjectID(forURIRepresentation: uri) {
                 ObservationSummaryViewSwiftUI(

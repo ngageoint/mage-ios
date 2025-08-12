@@ -149,8 +149,6 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
     }
     
     func imageAtPath(imagePath: String?) -> UIImage {
-        print("ObservationImageRepository: input imagePath=\(imagePath ?? "nil")")
-
         // 0) Fallback
         let fallback = UIImage(named: "defaultMarker")!
 
@@ -182,14 +180,9 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
             }
         }
 
-        // 🔎 DEBUG: see what we ended up with
-        print("BBB: ObservationImageRepository: resolvedPath=\(resolvedPath) exists? \(fm.fileExists(atPath: resolvedPath))")
-
         // 4) Cache key based on the resolved path
         let cacheKey = resolvedPath as NSString
         if let cached = imageCache.object(forKey: cacheKey) {
-            print("BBB: ObservationImageRepository: returning CACHED image for \(resolvedPath)")
-            
             cached.accessibilityIdentifier = resolvedPath
             return cached
         }
