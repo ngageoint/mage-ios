@@ -103,6 +103,12 @@
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
 		840D60752E4A8CC4005B0353 /* AttachmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60742E4A8CC4005B0353 /* AttachmentPath.swift */; };
+		840D60772E4B9501005B0353 /* KingfisherHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60762E4B9501005B0353 /* KingfisherHelpers.swift */; };
+		840D60792E4BC751005B0353 /* AttachmentRepository+Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60782E4BC751005B0353 /* AttachmentRepository+Env.swift */; };
+		840D607C2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D607A2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift */; };
+		840D60802E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */; };
+		840D60822E4BE55E005B0353 /* URL+AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60812E4BE55E005B0353 /* URL+AccessToken.swift */; };
+		840D60842E4BE9E3005B0353 /* String+ContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
@@ -1099,6 +1105,12 @@
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
 		840D60742E4A8CC4005B0353 /* AttachmentPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPath.swift; sourceTree = "<group>"; };
+		840D60762E4B9501005B0353 /* KingfisherHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingfisherHelpers.swift; sourceTree = "<group>"; };
+		840D60782E4BC751005B0353 /* AttachmentRepository+Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentRepository+Env.swift"; sourceTree = "<group>"; };
+		840D607A2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentRoutingTests+Helpers.swift"; sourceTree = "<group>"; };
+		840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentRepositoryRoutingTests.swift; sourceTree = "<group>"; };
+		840D60812E4BE55E005B0353 /* URL+AccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+AccessToken.swift"; sourceTree = "<group>"; };
+		840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+ContentTypes.swift"; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attachment+FileURL.swift"; sourceTree = "<group>"; };
 		8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentImageLoadingTests.swift; sourceTree = "<group>"; };
@@ -2413,6 +2425,7 @@
 				F763FF1D2C79042E00403A00 /* User */,
 				F763FF122C78DEF400403A00 /* BottomSheet */,
 				F70688AC2BB1FAFC00D8E2EA /* Observation */,
+				840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2631,9 +2644,12 @@
 			isa = PBXGroup;
 			children = (
 				F7225F572C5A783B00B7D935 /* AttachmentRepository.swift */,
+				840D607A2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift */,
+				840D60782E4BC751005B0353 /* AttachmentRepository+Env.swift */,
 				F7225F592C5A784700B7D935 /* AttachmentLocalDataSource.swift */,
 				840D60742E4A8CC4005B0353 /* AttachmentPath.swift */,
 				8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */,
+				840D60762E4B9501005B0353 /* KingfisherHelpers.swift */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -3385,6 +3401,8 @@
 				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
 				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
 				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
+				840D60812E4BE55E005B0353 /* URL+AccessToken.swift */,
+				840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */,
 				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
 			);
 			name = Attachment;
@@ -4931,6 +4949,7 @@
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F70C343D2C73D7E6007616FA /* AskToDownloadFileView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
+				840D60842E4BE9E3005B0353 /* String+ContentTypes.swift in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
 				F7BFB8EE2C51572600901479 /* GeoPackageMediaView.swift in Sources */,
 				F7E079522C32EB750029C88D /* MKShapeExtensions.swift in Sources */,
@@ -5123,6 +5142,7 @@
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift in Sources */,
+				840D60822E4BE55E005B0353 /* URL+AccessToken.swift in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				2FAC84A92B505A9800FCAB37 /* SearchMapViewController.swift in Sources */,
 				F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */,
@@ -5181,6 +5201,7 @@
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F776AC8B2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift in Sources */,
 				F73564ED2C65354B00466813 /* LocationList.swift in Sources */,
+				840D60792E4BC751005B0353 /* AttachmentRepository+Env.swift in Sources */,
 				F72D42DE2694B60300F9AC3B /* Mage.swift in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */,
@@ -5204,6 +5225,7 @@
 				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
 				F7225F3F2C542C1400B7D935 /* FormLocalDataSource.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
+				840D60772E4B9501005B0353 /* KingfisherHelpers.swift in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
 				F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */,
@@ -5563,6 +5585,7 @@
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7CE22BC2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift in Sources */,
 				F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */,
+				840D607C2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift in Sources */,
 				F7F118222602A1F600C7DE9A /* ObservationTransformationTests.swift in Sources */,
 				F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */,
 				F763FF282C790F4600403A00 /* EventRepositoryMock.swift in Sources */,
@@ -5583,6 +5606,7 @@
 				F789EB622BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift in Sources */,
 				F7C0975A2C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift in Sources */,
 				F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */,
+				840D60802E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift in Sources */,
 				F7C097B92C878269003FA115 /* EventRepositoryTests.swift in Sources */,
 				F7F08EA427EB984200640D89 /* BottomSheetEnabledTests.swift in Sources */,
 				F79A09472694D1A200EB2ABA /* AttachmentPushServiceTests.swift in Sources */,

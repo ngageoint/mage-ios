@@ -64,13 +64,15 @@ import Kingfisher
     /// Prefer local (healed) URL if it exists; else remote with `?size=...`.
     func getAttachmentUrl(size: Int, attachment: AttachmentModel) -> URL? {
         if let localURL = AttachmentPath.localURL(fromStored: attachment.localPath,
-                                                 fileName: attachment.name) {
+                                                  fileName: attachment.name) {
             return localURL
         }
-        if let urlString = attachment.url {
-            return URL(string: String(format: "%@?size=%ld", urlString, size))
-        }
-        return nil
+        guard let raw = attachment.url, let base = URL(string: raw) else { return nil }
+        var comps = URLComponents(url: base, resolvingAgainstBaseURL: false)
+        var items = comps?.queryItems ?? []
+        items.append(URLQueryItem(name: "size", value: "\(size)"))
+        comps?.queryItems = items
+        return comps?.url
     }
 
     // MARK: - Dictionary-based API
@@ -87,7 +89,7 @@ import Kingfisher
         let storedLocalPath = newAttachment["localPath"] as? String
         let fileName       = newAttachment["name"] as? String
 
-        if contentType.hasPrefix("image") {
+        if contentType.isImageContentType {
             let healedURL = AttachmentPath.localURL(fromStored: storedLocalPath, fileName: fileName)
 
             if let localURL = healedURL {
@@ -104,11 +106,24 @@ import Kingfisher
                 self.imageView.accessibilityLabel = "image attachment placeholder"
             }
 
-        } else if contentType.hasPrefix("video") {
+        } else if contentType.isVideoContentType {
             // Prefer a normalized local poster frame if present
             let normalizedLocal = AttachmentPath.localURL(fromStored: storedLocalPath, fileName: fileName)
-            let normalizedLocalPath = normalizedLocal?.path ?? storedLocalPath ?? ""
-            let provider = VideoImageProvider(localPath: normalizedLocalPath)
+            let remoteURL = (newAttachment["url"] as? String).flatMap(URL.init(string:))
+
+            let provider: VideoImageProvider
+            if let remoteURL {
+                // Pass both: VideoImageProvider will use local if available, else tokenized remote
+                provider = VideoImageProvider(sourceUrl: remoteURL, localPath: normalizedLocal?.path)
+            } else if let local = normalizedLocal {
+                provider = VideoImageProvider(localPath: local.path)
+            } else {
+                // Nothing usable; show a safe placeholder
+                self.imageView.image = UIImage(systemName: "play.circle.fill")
+                self.imageView.contentMode = .scaleAspectFit
+                self.imageView.accessibilityLabel = "video attachment placeholder"
+                return
+            }
 
             let overlay = UIImageView(image: UIImage(systemName: "play.circle.fill"))
             overlay.contentMode = .scaleAspectFit
@@ -133,8 +148,7 @@ import Kingfisher
                     options: opts
                 )
             }
-
-        } else if contentType.hasPrefix("audio") {
+        } else if contentType.isAudioContentType {
             self.imageView.image = UIImage(systemName: "speaker.wave.2.fill")
             self.imageView.contentMode = .scaleAspectFit
             self.imageView.accessibilityLabel = "audio attachment loaded"
@@ -150,7 +164,8 @@ import Kingfisher
             label.font = scheme?.typographyScheme.overline
             label.numberOfLines = 1
             label.lineBreakMode = .byTruncatingTail
-            label.autoSetDimension(.height, toSize: label.font.pointSize)
+            label.setContentCompressionResistancePriority(.required, for: .vertical)
+            label.setContentHuggingPriority(.required, for: .vertical)
             imageView.addSubview(label)
             label.autoPinEdgesToSuperviewEdges(
                 with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
@@ -177,7 +192,7 @@ import Kingfisher
         self.imageView.kf.indicatorType = .none
         self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
 
-        if (attachment.contentType?.hasPrefix("image") ?? false) {
+        if attachment.isImage {
             // Local-first; AttachmentUIImageView handles thumb/full selection
             self.imageView.setAttachment(attachment: attachment)
             self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
@@ -195,7 +210,7 @@ import Kingfisher
                 }
             )
 
-        } else if (attachment.contentType?.hasPrefix("video") ?? false) {
+        } else if attachment.isVideo {
             guard let sourceURL = self.getAttachmentUrl(attachment: attachment) else {
                 self.imageView.contentMode = .scaleAspectFit
                 self.imageView.image = UIImage(named: "upload")
@@ -237,12 +252,10 @@ import Kingfisher
                     }
                 }
             }
-
-        } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
+        } else if attachment.isAudio {
             self.imageView.image = UIImage(systemName: "speaker.wave.2.fill")
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
             self.imageView.contentMode = .scaleAspectFit
-
         } else {
             self.imageView.image = UIImage(systemName: "paperclip")
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded"
@@ -253,7 +266,8 @@ import Kingfisher
             label.font = scheme?.typographyScheme.overline
             label.numberOfLines = 1
             label.lineBreakMode = .byTruncatingTail
-            label.autoSetDimension(.height, toSize: label.font.pointSize)
+            label.setContentCompressionResistancePriority(.required, for: .vertical)
+            label.setContentHuggingPriority(.required, for: .vertical)
             imageView.addSubview(label)
             label.autoPinEdgesToSuperviewEdges(
                 with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),

@@ -21,34 +21,52 @@ class AttachmentFieldViewModel: ObservableObject {
     
     init(observationUri: URL?, observationFormId: String, fieldName: String, fieldTitle: String) {
         self.fieldTitle = fieldTitle
-        
+
         repository.observeAttachments(
             observationUri: observationUri,
             observationFormId: observationFormId,
             fieldName: fieldName
         )
         .receive(on: DispatchQueue.main)
-        .sink { [weak self] changes in
-            guard let self else { return }
-            
-            for change in changes {
-                switch change {
-                case .insert(_, let element, _):
-                    if !self.attachments.contains(where: { $0.attachmentUri == element.attachmentUri }) {
-                        self.attachments.append(element)
-                    } else {
-                        // Refresh existing element if fields like lastModified changed
-                        if let idx = self.attachments.firstIndex(where: { $0.attachmentUri == element.attachmentUri }) {
-                            self.attachments[idx] = element
-                        }
-                    }
-                case .remove(_, element: let element, _):
-                    self.attachments.removeAll { $0.attachmentUri == element.attachmentUri }
-                }
-            }
+        .scan([AttachmentModel]()) { current, diff in
+            Self.apply(diff: diff, to: current)
+        }
+        .sink { [weak self] snapshot in
+            self?.attachments = snapshot
         }
         .store(in: &cancellable)
     }
+
+    // Apply a CollectionDifference to an Array without using .applying(_:)
+    private static func apply(
+        diff: CollectionDifference<AttachmentModel>,
+        to base: [AttachmentModel]
+    ) -> [AttachmentModel] {
+        var result = base
+
+        for change in diff {
+            switch change {
+            case let .insert(offset, element, _):
+                // If offset is within bounds, respect it; otherwise append.
+                if offset <= result.count {
+                    result.insert(element, at: offset)
+                } else {
+                    result.append(element)
+                }
+
+            case let .remove(_, element, _):
+                // Prefer identity by attachmentUri; fall back to equality if needed.
+                if let idx = result.firstIndex(where: { $0.attachmentUri == element.attachmentUri }) {
+                    result.remove(at: idx)
+                } else if let idx = result.firstIndex(of: element) { // if Equatable
+                    result.remove(at: idx)
+                }
+            }
+        }
+
+        return result
+    }
+
     
     func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
         repository.appendAttachmentViewRoute(router: router, attachment: attachment)
@@ -58,7 +76,9 @@ class AttachmentFieldViewModel: ObservableObject {
         attachments.sorted { first, second in
             let firstOrder = first.order.intValue
             let secondOrder = second.order.intValue
+            
             if firstOrder != secondOrder { return firstOrder < secondOrder }
+            
             return (first.lastModified ?? Date()) < (second.lastModified ?? Date())
         }
     }

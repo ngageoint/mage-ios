@@ -27,11 +27,11 @@ struct AttachmentPreviewView: View {
 
     var body: some View {
         Group {
-            if attachment.contentType?.hasPrefix("image") == true {
+            if attachment.isImage {
                 imageBody
-            } else if attachment.contentType?.hasPrefix("video") == true {
+            } else if attachment.isVideo {
                 videoBody
-            } else if attachment.contentType?.hasPrefix("audio") == true {
+            } else if attachment.isAudio {
                 audioBody
             } else {
                 otherBody
