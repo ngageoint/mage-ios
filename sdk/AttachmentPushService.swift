@@ -126,13 +126,11 @@ extension InjectedValues {
     
     func onTimerFire() {
         if !UserUtility.singleton.isTokenExpired {
-            MageLogger.misc.debug("ATTACHMENT - push timer fired, checking for attachments to push")
             pushAttachments(fetchedResultsController?.fetchedObjects as? [Attachment] ?? [])
         }
     }
         
     func pushAttachments(_ attachments: [Attachment]) {
-        MageLogger.misc.debug("XXX told to push attachments \(attachments)")
         if !DataConnectionUtilities.shouldPushAttachments() { return }
                 
         for attachment in attachments {
@@ -160,7 +158,6 @@ extension InjectedValues {
             .responseData { response in
                 switch response.result {
                 case .success(_):
-                    MageLogger.misc.debug("Attachment deleted")
                     guard let context = self.context else { return }
                     context.performAndWait {
                         guard let attachment = context.object(with: attachment.objectID) as? Attachment else {
@@ -179,7 +176,6 @@ extension InjectedValues {
     func pushAttachment(_ attachment: Attachment) {
         // Always work on the attachment's own context
         guard let context = self.context else {
-            MageLogger.misc.debug("BBB: ATTACHMENT - no context available")
             return
         }
 
@@ -193,8 +189,9 @@ extension InjectedValues {
                     attachment.taskIdentifier = nil
                     try? context.save()
                 }
-            } else {
-                MageLogger.misc.debug("BBB: ATTACHMENT - missing localPath for \(attachment.name ?? "<unnamed>"); leaving dirty (not deleting).")
+            }
+            else {
+                MageLogger.misc.warning("ATTACHMENT - missing localPath for \(attachment.name ?? "<unnamed>"); leaving dirty (not deleting).")
             }
             return
         }
@@ -203,7 +200,6 @@ extension InjectedValues {
         let fileURL: URL
         if let localPath = attachment.localPath, localPath.hasPrefix("file://") {
             guard let u = URL(string: localPath) else {
-                MageLogger.misc.debug("BBB: ATTACHMENT - invalid file:// URL string: \(localPath)")
                 return
             }
             fileURL = u
@@ -211,7 +207,6 @@ extension InjectedValues {
             fileURL = URL(fileURLWithPath: localPath)
         } else {
             // Shouldn't get here but be defensive
-            MageLogger.misc.debug("BBB: ATTACHMENT - no localPath after earlier guard")
             return
         }
 
@@ -226,14 +221,12 @@ extension InjectedValues {
                 }
                 return
             } else {
-                MageLogger.misc.debug("BBB: ATTACHMENT - file missing at path: \(fileURL.path); leaving dirty (not deleting).")
                 return
             }
         }
 
         // Load the data to send
         guard let attachmentData = try? Data(contentsOf: fileURL) else {
-            MageLogger.misc.debug("BBB: ATTACHMENT - failed reading data at path: \(fileURL.path)")
             return
         }
 
@@ -242,7 +235,6 @@ extension InjectedValues {
               let attachmentRemoteId = attachment.remoteId,
               let eventId = attachment.observation?.eventId?.intValue
         else {
-            MageLogger.misc.debug("BBB: ATTACHMENT - missing identifiers (eventId/observationRemoteId/attachmentRemoteId)")
             return
         }
 
@@ -262,8 +254,6 @@ extension InjectedValues {
             observationRemoteId: observationRemoteId,
             attachmentRemoteId: attachmentRemoteId
         )
-
-        MageLogger.misc.debug("BBB: ATTACHMENT - uploading \(fileName) (\(mimeType)) to \(request.urlRequest?.url?.absoluteString ?? "<nil>")")
 
         // Start the upload
         let uploader = MageSession.shared.session.upload(
@@ -287,7 +277,7 @@ extension InjectedValues {
             }
         }
         .uploadProgress { progress in
-            MageLogger.misc.debug("BBB: ATTACHMENT - upload progress \(progress.fractionCompleted)")
+            MageLogger.misc.debug("ATTACHMENT - upload progress \(progress.fractionCompleted)")
         }
         .response { [weak self] response in
             guard let self = self else { return }
@@ -338,14 +328,11 @@ extension InjectedValues {
                let idx = self.pushTasks.firstIndex(of: id) {
                 self.pushTasks.remove(at: idx)
             }
-
-            MageLogger.misc.debug("BBB: ATTACHMENT - upload completed successfully for task \(finishedTaskId.map(String.init) ?? "<nil>")")
         }
 
     }
     
     func attachmentUploadReceivedData(data: Data, forTask: URLSessionTask) {
-        MageLogger.misc.debug("ATTACHMENT - upload received data for task \(forTask)")
         let taskIdentifier = forTask.taskIdentifier
         
         if let existingData = pushData[taskIdentifier] {
@@ -372,20 +359,13 @@ extension InjectedValues {
             return
         }
         
-        if let httpResponse = task?.response as? HTTPURLResponse,
-           httpResponse.statusCode != 200
-        {
-            MageLogger.misc.debug("ATTACHMENT - non 200 response, \(httpResponse)")
-            if let json {
-                MageLogger.misc.debug("ATTACHMENT - non 200 json response, \(json)")
-            }
+        if let httpResponse = task?.response as? HTTPURLResponse, httpResponse.statusCode != 200 {
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
         }
         
         if data == nil {
-            MageLogger.misc.debug("ATTACHMENT - error uploading attachment, did not receive response from the server")
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
@@ -399,7 +379,6 @@ extension InjectedValues {
             guard let taskIdentifier = task?.taskIdentifier,
                   let attachment = context.fetchFirst(Attachment.self, key: "taskIdentifier", value: taskIdentifier)
             else {
-                MageLogger.misc.debug("ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id \("\(String(describing: task?.taskIdentifier))")")
                 return
             }
             
@@ -442,7 +421,6 @@ extension InjectedValues {
         }
         
         if let handler = self.backgroundSessionCompletionHandler {
-            MageLogger.misc.debug("ATTACHMENT - MageBackgroundSessionManager calling backgroundSessionCompletionHandler");
             self.backgroundSessionCompletionHandler = nil;
             handler()
         }

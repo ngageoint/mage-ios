@@ -122,17 +122,17 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
         
         MagicalRecord.save({ localContext in
             guard let psc = localContext.persistentStoreCoordinator else {
-                MageLogger.db.error("BBB: PSC is nil in saveLocalPath")
+                MageLogger.db.error("PSC is nil in saveLocalPath")
                 return
             }
             
             guard let objectID = psc.managedObjectID(forURIRepresentation: attachmentUri) else {
-                MageLogger.db.error("BBB: Could not resolve objectID for URI: \(attachmentUri)")
+                MageLogger.db.error("Could not resolve objectID for URI: \(attachmentUri)")
                 return
             }
             
             guard let attachment = try? localContext.existingObject(with: objectID) as? Attachment else {
-                MageLogger.db.error("BBB: No Attachment for objectID: \(objectID)")
+                MageLogger.db.error("No Attachment for objectID: \(objectID)")
                 return
             }
             
@@ -147,7 +147,7 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
             }()
             
             guard let fileURL = resolvedURL, FileManager.default.fileExists(atPath: fileURL.path) else {
-                MageLogger.db.error("BBB: saveLocalPath: file not found (input: \(localPath)); name=\(attachment.name ?? "nil")")
+                MageLogger.db.error("saveLocalPath: file not found (input: \(localPath)); name=\(attachment.name ?? "nil")")
                 return
             }
             
@@ -157,7 +157,6 @@ class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLo
             // 3) Save.
             attachment.localPath = relative // <— normalized
             attachment.lastModified = Date() // or Date.now if your min iOS supports it
-            MageLogger.db.debug("BBB: saveLocalPath stored relative path '\(relative)' for \(attachment.objectID)")
         })
     }
     

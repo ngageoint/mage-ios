@@ -30,13 +30,9 @@ class RemoteDataSource<T> {
     }()
 
     func registerBackgroundTask(name: String) {
-        MageLogger.misc.debug("Register the background task \(name)")
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: name) { [weak self] in
-            MageLogger.misc.debug("iOS has signaled time has expired \(name)")
             self?.cleanup?()
-            MageLogger.misc.debug("canceling \(name)")
             self?.operation?.cancel()
-            MageLogger.misc.debug("calling endBackgroundTask \(name)")
             self?.endBackgroundTaskIfActive()
         }
     }
@@ -44,7 +40,6 @@ class RemoteDataSource<T> {
     func endBackgroundTaskIfActive() {
         let isBackgroundTaskActive = backgroundTask != .invalid
         if isBackgroundTaskActive {
-            MageLogger.misc.debug("Background task ended. \(String(describing: self.dataSource.name)) Fetch")
             UIApplication.shared.endBackgroundTask(backgroundTask)
             backgroundTask = .invalid
         }
@@ -63,7 +58,6 @@ class RemoteDataSource<T> {
             self.operation?.cancel()
         }
 
-        MageLogger.misc.debug("Start the operation to fetch new data \(operation)")
         // Start the operation.
         self.backgroundFetchQueue.addOperation(operation)
 
@@ -72,7 +66,6 @@ class RemoteDataSource<T> {
             // when the operation completes.
             operation.completionBlock = {
                 task?.setTaskCompleted(success: !(self.operation?.isCancelled ?? false))
-                MageLogger.misc.debug("\(self.dataSource.name) Remote Data Source count \(self.operation?.data.count ?? 0)")
                 continuation.resume(returning: self.operation?.data ?? [])
             }
         }

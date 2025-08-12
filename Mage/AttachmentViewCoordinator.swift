@@ -165,7 +165,6 @@ import QuickLook
     }
 
     func downloadApproved() {
-        MageLogger.misc.debug("Download the attachment")
         onMain {
             FadeTransitionSegue.addFadeTransition(to: self.rootViewController.view)
             self.ignoreNextDelegateCall = true
@@ -237,10 +236,8 @@ import QuickLook
         if let attachment = self.attachment {
             name = attachment.name ?? "file"
             if let localURL = healedLocalURL(for: attachment) {
-                MageLogger.misc.debug("Playing locally: \(localURL.path)")
                 self.urlToLoad = localURL
             } else if let s = attachment.url, let remote = URL(string: s) {
-                MageLogger.misc.debug("Playing from link \(remote.absoluteString)")
                 self.urlToLoad = AccessTokenURL.tokenized(remote)
             }
         }
@@ -286,7 +283,6 @@ extension AttachmentViewCoordinator: AVAssetResourceLoaderDelegate {}
 // MARK: - MediaLoaderDelegate (must remain nonisolated)
 extension AttachmentViewCoordinator: MediaLoaderDelegate {
     func mediaLoadComplete(filePath: String, newFile: Bool) {
-        MageLogger.misc.debug("BBB: Media load complete")
         guard newFile else { return }
 
         // Update in-memory model for immediate UI

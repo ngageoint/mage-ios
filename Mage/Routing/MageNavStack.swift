@@ -61,8 +61,6 @@ class MageNavStack: UIViewController {
                         print("something else")
                     }
                 }
-                
-                MageLogger.misc.debug("new value in router path \(value)")
             }
             .store(in: &cancellables)
         
@@ -85,7 +83,6 @@ class MageNavStack: UIViewController {
     func handleUserRoute(route: UserRoute) {
         switch(route) {
         case .detail(uri: let uri):
-            MageLogger.misc.debug("User uri")
             guard let uri = uri else { return }
             Task { @MainActor [weak self] in
                 guard let self = self else { return }
