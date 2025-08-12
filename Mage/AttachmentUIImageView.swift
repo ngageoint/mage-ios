@@ -22,8 +22,7 @@ import Kingfisher
     // Keep a healed local URL produced by AttachmentPath (single source of truth)
     private var healedLocalURL: URL?
 
-    // MARK: - Small helpers (new)
-
+    // MARK: - Small helpers
     private var remoteURL: URL? {
         attachment?.url.flatMap(URL.init(string:))
     }
@@ -71,13 +70,11 @@ import Kingfisher
     }
 
     // MARK: - Lifecycle
-
     override init(image: UIImage?) { super.init(image: image) }
     override init(frame: CGRect) { super.init(frame: frame) }
     required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
 
     // MARK: - Cache Queries
-
     public func isFullSizeCached() -> Bool {
         guard let key = attachment?.url else { return false }
         return ImageCache.default.isCached(forKey: key)
@@ -106,7 +103,6 @@ import Kingfisher
     }
 
     // MARK: - API
-
     public func showThumbnail(
         cacheOnly: Bool,
         indicator: Indicator? = nil,
@@ -213,7 +209,7 @@ import Kingfisher
 
         // Remote flow
         let targetSize = frame.size
-        var options = kfOptions(cacheOnly: cacheOnly, targetSize: targetSize) + [.transition(.fade(0.3))]
+        let options = kfOptions(cacheOnly: cacheOnly, targetSize: targetSize) + [.transition(.fade(0.3))]
 
         let placeholder = makePlaceholder(thumbnail: thumbnail)
         let fullRemote = remoteURL // may be nil if attachment missing URL
