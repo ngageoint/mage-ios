@@ -211,10 +211,10 @@ class AttachmentSlideShow: UIView {
             guard let imageView = imageView else {
                 return;
             }
-            if (attachment.contentType?.hasPrefix("image") ?? false) {
+            if attachment.isImage {
                 imageView.setAttachment(attachment: attachment);
                 showThumbnail(imageView: imageView);
-            } else if (attachment.contentType?.hasPrefix("video") ?? false) {
+            } else if attachment.isVideo {
                 let url = self.getAttachmentUrl(attachment: attachment);
                 imageView.setAttachment(attachment: attachment);
                 let localPath: String? = (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) ? attachment.localPath : nil
@@ -245,7 +245,7 @@ class AttachmentSlideShow: UIView {
                             }
                         });
                 }
-            } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
+            } else if attachment.isAudio {
                 imageView.image = UIImage(systemName: "speaker.wave.2.fill");
                 imageView.contentMode = .scaleAspectFit;
                 imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)

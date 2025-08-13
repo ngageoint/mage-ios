@@ -16,12 +16,10 @@ final class ObservationCoreDataDataSourceTests: MageCoreDataTestCase {
     
     override func setUp() {
         super.setUp()
-        print("XXX SET UP")
     }
     
     override func tearDown() {
         super.tearDown()
-        print("XXX TEAR DOWN")
     }
     
     func testGetLastObservationDateNoObservationsFromOtherUsers() {
@@ -633,7 +631,6 @@ final class ObservationCoreDataDataSourceTests: MageCoreDataTestCase {
             )
             .scan([]) { $0 + $1 }
             .map {
-                print("new rows \($0)")
                 return State.loaded(rows: $0)
             }
             .catch { error in

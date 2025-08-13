@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-class ObservationViewViewModel: ObservableObject {
+class ObservationViewViewModel: NSObject, ObservableObject {
     @Injected(\.observationRepository)
     var repository: ObservationRepository
     
@@ -100,6 +100,8 @@ class ObservationViewViewModel: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     
     init(uri: URL) {
+        super.init()
+        
         $observationModel.sink { [weak self] observationModel in
             Task { [weak self] in
                 await self?.setupModels()

@@ -70,3 +70,26 @@ import CoreData
         }
     }
 }
+
+extension Attachment {
+    /// Returns the actual file URL for this attachment on disk.
+    /// Works whether `localPath` is a full filename (with extension)
+    /// or just the prefix without the extension.
+    func resolvedLocalURL() -> URL? {
+        guard let lp = self.localPath, !lp.isEmpty else { return nil }
+        let candidate = URL(fileURLWithPath: lp)
+
+        // Case A: localPath already points to a real file
+        if FileManager.default.fileExists(atPath: candidate.path) {
+            return candidate
+        }
+
+        // Case B: localPath is a prefix; look for the real file next to it
+        let dir = candidate.deletingLastPathComponent()
+        let prefix = candidate.lastPathComponent
+        guard let urls = try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil) else {
+            return nil
+        }
+        return urls.first { $0.lastPathComponent.hasPrefix(prefix) }
+    }
+}

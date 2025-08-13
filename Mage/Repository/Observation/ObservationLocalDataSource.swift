@@ -119,7 +119,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         }()
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.predicate = predicate
-        MageLogger.misc.debug("Predicate \(predicate.debugDescription)")
 
         request.includesSubentities = false
         request.propertiesToFetch = ["timestamp", "user"]
@@ -260,7 +259,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
 
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int {
         let count = observations.count
-        MageLogger.misc.debug("Received \(count) \(DataSources.observation.key) records.")
 
         // Create an operation that performs the main part of the background task.
         operation = ObservationDataLoadOperation(observations: observations, eventId: eventId)
@@ -272,7 +270,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         var regionsChanged: [MKCoordinateRegion] = []
         let initial = true
         let saveStart = Date()
-        MageLogger.misc.debug("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
         
         let backgroundContext = persistence.getNewBackgroundContext(name: #function)
         var observationIds: [String] = []
@@ -354,7 +351,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
             
             self.changedRegionsPushSubject.send(regionsChanged)
 
-            MageLogger.misc.debug("TIMING Saved \(newObservationCount) Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
             return newObservationCount
         }
     }

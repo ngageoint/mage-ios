@@ -40,7 +40,7 @@ struct ObservationSummaryViewSwiftUI: View {
             .onTapGesture {
                 router.appendRoute(ObservationRoute.detail(uri: viewModel.observationModel?.observationId))
             }
-            if !(viewModel.attachments ?? []).isEmpty {
+            if !(viewModel.attachments).isEmpty {
                 TabView {
                     ForEach(viewModel.orderedAttachments ?? []) { attachment in
                         AttachmentPreviewView(attachment: attachment) {

@@ -29,8 +29,8 @@ struct VideoImageProvider: ImageDataProvider {
     }
     
     init(url: URL) {
-        self.sourceUrl = url;
-        self.localUrl = nil;
+        self.sourceUrl = url
+        self.localUrl = nil
     }
     
     init(localPath: String) {
@@ -41,42 +41,38 @@ struct VideoImageProvider: ImageDataProvider {
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             if let localFile = self.localUrl, FileManager.default.fileExists(atPath: localFile.path) {
-                let asset: AVURLAsset = AVURLAsset(url: localFile);
+                let asset: AVURLAsset = AVURLAsset(url: localFile)
                 do {
-                    handler(.success(try self.generateThumb(asset: asset)));
+                    handler(.success(try self.generateThumb(asset: asset)))
                 } catch let error as NSError {
                     MageLogger.misc.error("\(error.description).")
-                    handler(.failure(error));
+                    handler(.failure(error))
                 }
-                return;
+                return
             }
+            
             if (!DataConnectionUtilities.shouldFetchAttachments()) {
                 return handler(.failure(NSError(domain: "MAGE", code: -1, userInfo: [ NSLocalizedDescriptionKey: "attachment fetching is disabled" ])))
             }
-            let token: String = StoredPassword.retrieveStoredToken();
-            var urlComponents: URLComponents? = URLComponents(url: sourceUrl, resolvingAgainstBaseURL: false);
-            if (urlComponents?.queryItems) != nil {
-                urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
-            } else {
-                urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
-            }
-            let realUrl: URL = (urlComponents?.url)!;
-            let asset: AVURLAsset = AVURLAsset(url: realUrl);
+
+            let realUrl = AccessTokenURL.tokenized(sourceUrl)
+            let asset: AVURLAsset = AVURLAsset(url: realUrl)
+            
             do {
-                handler(.success(try self.generateThumb(asset: asset)));
+                handler(.success(try self.generateThumb(asset: asset)))
             } catch let error as NSError {
                 MageLogger.misc.error("thrown error from generate thumb for url \(realUrl) \(error.description).")
-                handler(.failure(error));
+                handler(.failure(error))
             }
         }
     }
     
     func generateThumb(asset: AVURLAsset) throws -> Data {
-        let generator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset);
-        generator.appliesPreferredTrackTransform = true;
-        let time: CMTime = CMTimeMakeWithSeconds(0, preferredTimescale: 30);
+        let generator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        let time: CMTime = CMTimeMakeWithSeconds(0, preferredTimescale: 30)
         let imageRef = try generator.copyCGImage(at: time, actualTime: nil)
-        let data: Data = imageRef.png!;
-        return data;
+        let data: Data = imageRef.png!
+        return data
     }
 }
