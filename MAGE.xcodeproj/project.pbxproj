@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -181,6 +181,7 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
 		A811F2B22E3BFB9C0016C5AB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
@@ -278,7 +279,6 @@
 		F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
-		F718CCF22CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */; };
 		F718CCF42CA468580015DF87 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
 		F718CCFB2CA719620015DF87 /* MockCacheOverlayListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */; };
@@ -886,7 +886,6 @@
 		F7FC67FA2CD3C3A50022BAF1 /* GeoPackageImporterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F882CB8871B00126468 /* GeoPackageImporterUITests.swift */; };
 		F7FC67FB2CD3C3AA0022BAF1 /* GeoPackageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F892CB8871B00126468 /* GeoPackageTests.swift */; };
 		F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
-		F7FC67FD2CD3C3D80022BAF1 /* KIFMageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */; };
 		F7FC67FE2CD3C3D80022BAF1 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F7FC67FF2CD3C46C0022BAF1 /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
 		F7FC68002CD3C46C0022BAF1 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
@@ -1131,6 +1130,7 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAccessTokenTests.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1228,7 +1228,6 @@
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
-		F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KIFMageCoreDataTestCase.swift; sourceTree = "<group>"; };
 		F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageCoreDataTestCase.swift; sourceTree = "<group>"; };
 		F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageInjectionTestCase.swift; sourceTree = "<group>"; };
 		F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCacheOverlayListener.swift; sourceTree = "<group>"; };
@@ -2438,6 +2437,7 @@
 				F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */,
 				F7C0974D2C7E7395003FA115 /* ObservationRepositoryTests.swift */,
 				F7DDF46E2748023A00689550 /* ObservationImageRepositoryTests.swift */,
+				84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -3644,7 +3644,6 @@
 			children = (
 				F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */,
 				F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */,
-				F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */,
 				F7C097782C80C79F003FA115 /* Model */,
 				F7C097532C7F62E3003FA115 /* UI */,
 				F70688AB2BB1FAF600D8E2EA /* Repository */,
@@ -5487,7 +5486,6 @@
 				F73E17E12CD3C13C008F2216 /* MAGEGeoPackageTests.swift in Sources */,
 				F7FC68012CD3C4880022BAF1 /* MageCoreDataFixtures.swift in Sources */,
 				F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */,
-				F7FC67FD2CD3C3D80022BAF1 /* KIFMageCoreDataTestCase.swift in Sources */,
 				F7FC68032CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h in Sources */,
 				F7FC68082CD3CC560022BAF1 /* ObservationIconStaticLocalDataSource.swift in Sources */,
 				F7FC68092CD3CC560022BAF1 /* ObservationStaticLocalDataSource.swift in Sources */,
@@ -5549,6 +5547,7 @@
 				F7DDF46F2748023A00689550 /* ObservationImageRepositoryTests.swift in Sources */,
 				F7C097502C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift in Sources */,
 				F7E5749427DBDC28009A6E0D /* UserTrackingMapTests.swift in Sources */,
+				84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
@@ -5641,7 +5640,6 @@
 				846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */,
 				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
 				F7C097582C7F6404003FA115 /* ObservationRepositoryMock.swift in Sources */,
-				F718CCF22CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */,
