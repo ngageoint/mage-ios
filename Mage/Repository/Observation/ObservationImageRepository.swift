@@ -194,8 +194,6 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
             imageCache.setObject(scaledImage, forKey: cacheKey)
             scaledImage.accessibilityIdentifier = resolvedPath
             return scaledImage
-        } else {
-            print("BBB: ObservationImageRepository: returning CACHED image for \(resolvedPath)")
         }
 
         // 6) Fallback
