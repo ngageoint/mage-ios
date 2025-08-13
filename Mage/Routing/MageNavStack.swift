@@ -9,6 +9,8 @@
 import Foundation
 import Combine
 import Kingfisher
+import UIKit
+import CoreLocation
 
 class MageNavStack: UIViewController {
     @Injected(\.currentLocationRepository)
@@ -43,12 +45,16 @@ class MageNavStack: UIViewController {
         self.scheme = scheme
         super.init(nibName: nil, bundle: nil)
         
+        // Observe navigation path
         router.$path
             .receive(on: DispatchQueue.main)
-            .sink { value in
+            .sink { [weak self] value in
+                guard let self else { return }
+                
                 if value.count > self.currentPathElementCount, let last = value.last {
                     self.currentPathElementCount = value.count
-                    switch (last) {
+                    
+                    switch last {
                     case let value as ObservationRoute:
                         self.handleObservationRoute(route: value)
                     case let value as FileRoute:
@@ -58,19 +64,22 @@ class MageNavStack: UIViewController {
                     case let value as UserRoute:
                         self.handleUserRoute(route: value)
                     default:
-                        print("something else")
+                        break
                     }
                 }
             }
             .store(in: &cancellables)
         
+        // Observe bottom sheet routing
         router.$bottomSheetRoute
             .receive(on: DispatchQueue.main)
-            .sink { route in
-                if let route = route {
+            .sink { [weak self] route in
+                guard let self else { return }
+                
+                if let route {
                     self.handleBottomSheetRoute(route: route)
                 } else {
-                    self.bottomSheet?.dismiss(animated: true, completion: nil)
+                    self.bottomSheet?.dismiss(animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -80,114 +89,148 @@ class MageNavStack: UIViewController {
         fatalError("This class does not support NSCoding")
     }
     
+    // MARK: User routing
     func handleUserRoute(route: UserRoute) {
-        switch(route) {
+        switch route {
         case .detail(uri: let uri):
-            guard let uri = uri else { return }
+            guard let uri else { return }
+            
             Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                if let user = await self.userRepository.getUser(userUri: uri),
-                   let userId = user.userId
-                {
+                guard let self else { return }
+                
+                if let user = await self.userRepository.getUser(userUri: uri), let userId = user.userId {
                     let uvc = UserViewWrapperViewController(userUri: userId, scheme: self.scheme, router: self.router)
                     self.pushViewController(vc: uvc)
                 }
             }
         case .userFromLocation(locationUri: let locationUri):
-            guard let locationUri = locationUri else { return }
+            guard let locationUri else { return }
+            
             Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                if let location = await self.locationRepository.getLocation(locationUri: locationUri),
-                   let userId = location.userModel?.userId
-                {
+                guard let self else { return }
+                
+                if let location = await self.locationRepository.getLocation(locationUri: locationUri), let userId = location.userModel?.userId {
                     let uvc = UserViewWrapperViewController(userUri: userId, scheme: self.scheme, router: self.router)
                     self.pushViewController(vc: uvc)
                 }
             }
+            
         case .showFavoritedUsers(remoteIds: let remoteIds):
-            if (remoteIds.count != 0) {
-                let locationViewController = LocationListWrapperViewController(userRemoteIds: remoteIds, scheme: scheme, router: router)
-                locationViewController.title = "Favorited By";
-                self.pushViewController(vc: locationViewController)
-            }
+            guard !remoteIds.isEmpty else { return }
+            
+            let locationViewController = LocationListWrapperViewController(userRemoteIds: remoteIds, scheme: scheme, router: router)
+            locationViewController.title = "Favorited By"
+            pushViewController(vc: locationViewController)
         }
     }
     
+    // MARK: - Bottom sheet rounting
     func handleBottomSheetRoute(route: BottomSheetRoute) {
-        switch (route) {
+        switch route {
         case .observationMoreActions(observationUri: let uri):
-            Task {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                
+                // NOTE: This uses the NSManagedObject path. To fully remove the deprecation warning,
+                // switch to a model-based initializer in ObservationActionsSheetController.
                 guard let observation = await self.observationRepository.getObservationNSManagedObject(observationUri: uri) else {
                     return
                 }
-                let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self, router: router);
-                actionsSheet.applyTheme(withContainerScheme: self.scheme);
-                self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+                
+                let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self, router: self.router)
+                actionsSheet.applyTheme(withContainerScheme: self.scheme)
+                
+                self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet)
                 self.bottomSheet?.delegate = self
-                self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
+                
+                if let sheet = self.bottomSheet {
+                    self.present(sheet, animated: true)
+                }
             }
+            
         case .userAvatarActions(userUri: let uri):
-            Task {
-                guard let user = await userRepository.getUser(userUri: uri) else {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                
+                guard let user = await self.userRepository.getUser(userUri: uri) else {
                     return
                 }
-                let alert = UIAlertController(title: "Avatar", message: "Change or view your avatar", preferredStyle: .actionSheet);
+                
+                let alert = UIAlertController(title: "Avatar", message: "Change or view your avatar", preferredStyle: .actionSheet)
+                
                 if let avatarUrl = user.avatarUrl {
-                    alert.addAction(UIAlertAction(title: "View Avatar", style: .default, handler: { (action) in
-                        self.router.appendRoute(FileRoute.showCachedImage(cacheKey: avatarUrl))
-                    }));
-                }
-                alert.addAction(UIAlertAction(title: "New Avatar Photo", style: .default, handler: { (action) in
-                    ExternalDevice.checkCameraPermissions(for: self.navigationController) { (granted) in
-                        let picker = UIImagePickerController();
-                        self.avatarChooserDelegate = UserAvatarChooserDelegate(user: user)
-                        picker.delegate = self.avatarChooserDelegate
-                        picker.allowsEditing = true;
-                        picker.sourceType = .camera;
-                        picker.cameraDevice = .front;
-                        self.navigationController?.present(picker, animated: true, completion: nil);
-                    }
-                }));
-                alert.addAction(UIAlertAction(title: "New Avatar From Gallery", style: .default, handler: { (action) in
-                    ExternalDevice.checkGalleryPermissions(for: self.navigationController) { (granted) in
-                        let picker = UIImagePickerController();
-                        self.avatarChooserDelegate = UserAvatarChooserDelegate(user: user)
-                        picker.delegate = self.avatarChooserDelegate
-                        picker.allowsEditing = true;
-                        picker.sourceType = .photoLibrary;
-                        self.navigationController?.present(picker, animated: true, completion: nil);
-                    }
-                }));
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
-                
-                if let popoverController = alert.popoverPresentationController {
-//                    popoverController.sourceView = self.navigationController?.view
-//                    popoverController.sourceRect = CGRect(x: self.bounds.midX, y: self.bounds.midY, width: 0, height: 0)
-//                    popoverController.permittedArrowDirections = []
+                    alert.addAction(UIAlertAction(title: "View Avatar", style: .default) { [weak self] _ in
+                        self?.router.appendRoute(FileRoute.showCachedImage(cacheKey: avatarUrl))
+                    })
                 }
                 
-                UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
+                alert.addAction(UIAlertAction(title: "New Avatar Photo", style: .default) { [weak self] _ in
+                    guard let self else { return }
+                    
+                    ExternalDevice.checkCameraPermissions(for: self.navigationController) { granted in
+                        guard granted else { return }
+                        
+                        let picker = UIImagePickerController()
+                        self.avatarChooserDelegate = UserAvatarChooserDelegate(user: user)
+                        picker.delegate = self.avatarChooserDelegate
+                        picker.allowsEditing = true
+                        picker.sourceType = .camera
+                        picker.cameraDevice = .front
+                        self.present(picker, animated: true)
+                    }
+                })
+                
+                alert.addAction(UIAlertAction(title: "New Avatar From Gallery", style: .default) { [weak self] _ in
+                    guard let self else { return }
+                    
+                    ExternalDevice.checkGalleryPermissions(for: self.navigationController) { granted in
+                        guard granted else { return }
+                        
+                        let picker = UIImagePickerController()
+                        self.avatarChooserDelegate = UserAvatarChooserDelegate(user: user)
+                        picker.delegate = self.avatarChooserDelegate
+                        picker.allowsEditing = true
+                        picker.sourceType = .photoLibrary
+                        self.present(picker, animated: true)
+                    }
+                })
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                
+                // iPad popover anchor (safe no-op on iPhone)
+                if let pop = alert.popoverPresentationController {
+                    pop.sourceView = self.view
+                    pop.sourceRect = CGRect(x: self.view.bounds.midX,
+                                            y: self.view.bounds.midY,
+                                            width: 0, height: 0)
+                    pop.permittedArrowDirections = []
+                }
+                
+                self.present(alert, animated: true)
             }
         }
     }
     
+    // MARK: - App-level routing
     func handleMageRoute(route: MageRoute) {
-        switch (route) {
+        switch route {
         case .observationFilter:
-            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil);
-            let fvc: ObservationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "observationFilter");
-            fvc.applyTheme(withContainerScheme: self.scheme);
-            self.pushViewController(vc: fvc)
+            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
+            let fvc: ObservationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "observationFilter")
+            fvc.applyTheme(withContainerScheme: self.scheme)
+            pushViewController(vc: fvc)
         case .locationFilter:
-            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil);
-            let fvc: LocationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "locationFilter");
-            fvc.applyTheme(withContainerScheme: self.scheme);
-            self.pushViewController(vc: fvc)
+            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
+            let fvc: LocationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "locationFilter")
+            fvc.applyTheme(withContainerScheme: self.scheme)
+            pushViewController(vc: fvc)
         }
     }
     
+    // MARK: - File routing
     private func fileURL(from maybePath: String?) -> URL? {
         guard let s = maybePath, !s.isEmpty else { return nil }
+        
         if s.hasPrefix("file://") {
             return URL(string: s)            // already a file URL string
         } else {
@@ -196,48 +239,41 @@ class MageNavStack: UIViewController {
     }
     
     func handleFileRoute(route: FileRoute) {
-        switch(route) {
+        switch route {
         case .showCachedImage(cacheKey: let cacheKey):
-            let lastIndexOfCache = router.path.lastIndex(where: { element in
-                switch element {
-                case let value as FileRoute:
-                    switch(value) {
-                    case .cacheImage(url: let url):
-                        if url.absoluteString == cacheKey {
-                            return true
-                        }
-                    default:
-                        break
-                    }
-                default:
-                    break
+            let lastIndexOfCache = router.path.lastIndex { element in
+                if let r = element as? FileRoute, case let .cacheImage(url) = r {
+                    return url.absoluteString == cacheKey
                 }
                 return false
-            })
+            }
             
             var vcs: [UIViewController]?
-            if let lastIndexOfCache = lastIndexOfCache {
+            if let lastIndexOfCache {
                 // we were told to cache this, pop it off the path and replace the view controller without animation
                 vcs = navigationController?.viewControllers
-                let _ = vcs?.popLast()
+                _ = vcs?.popLast()
                 router.path.remove(at: lastIndexOfCache)
-                currentPathElementCount = currentPathElementCount - 1
+                currentPathElementCount -= 1
             }
-            if let cacheKey = cacheKey {
+            
+            if let cacheKey {
                 let cache = ImageCache.default
+                
                 cache.retrieveImage(forKey: cacheKey) { result in
                     switch result {
                     case .success(let value):
                         if let image = value.image, let imageData = image.pngData() {
                             let docsUrl = URL.documentsDirectory
-                            
                             let filename = docsUrl.appendingPathComponent("image.png")
+                            
                             try? imageData.write(to: filename)
-                            if vcs != nil {
+                            
+                            if var stack = vcs {
                                 let ql = DocumentController.shared.getQuickLookViewController(url: filename)
                                 self.navigationControllerObserver?.observePopTransition(of: ql, delegate: self)
-                                vcs?.append(ql)
-                                self.navigationController?.viewControllers = vcs!
+                                stack.append(ql)
+                                self.navigationController?.viewControllers = stack
                             } else {
                                 DocumentController.shared.presentQL(url: filename, viewControllerToPresentFrom: self)
                             }
@@ -247,165 +283,141 @@ class MageNavStack: UIViewController {
                     }
                 }
             }
+            
         case .showFileImage(filePath: let filePath):
             guard let url = fileURL(from: filePath) else {
-                MageLogger.misc.error("BBB: Could not convert filePath to URL: \(filePath)")
+                MageLogger.misc.error("Could not convert filePath to URL: \(filePath)")
                 return
             }
-                DocumentController.shared.presentQL(url: url, viewControllerToPresentFrom: self)
+            DocumentController.shared.presentQL(url: url, viewControllerToPresentFrom: self)
+            
         case .showLocalVideo(filePath: let filePath):
             guard let url = fileURL(from: filePath) else {
-                MageLogger.misc.error("BBB: Could not convert filePath to URL: \(filePath)")
+                MageLogger.misc.error("Could not convert filePath to URL: \(filePath)")
                 return
             }
-
+            
             let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
             self.pushViewController(vc: vc)
+            
         case .showRemoteVideo(url: let url):
-            var url2 = url
-            url2.append(queryItems: [URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())])
+            var url2 = AccessTokenURL.tokenized(url)
             let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url2))
             self.pushViewController(vc: vc)
             
         case .showLocalAudio(filePath: let filePath):
             guard let url = fileURL(from: filePath) else {
-                MageLogger.misc.error("BBB: Could not convert filePath to URL: \(filePath)")
+                MageLogger.misc.error("Could not convert filePath to URL: \(filePath)")
                 return
             }
-
+            
             let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
             self.pushViewController(vc: vc)
+            
         case .showRemoteAudio(url: let url):
-            var url2 = url
-            url2.append(queryItems: [URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())])
+            var url2 = AccessTokenURL.tokenized(url)
             let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url2))
             self.pushViewController(vc: vc)
             
         case .askToDownload(url: let url):
             let vc = SwiftUIViewController(swiftUIView: AskToDownloadFileView(url: url).environmentObject(router))
             self.pushViewController(vc: vc)
-        
+            
         case .downloadFile(url: let url):
-            let lastIndexOfCache = router.path.lastIndex(where: { element in
-                switch element {
-                case let value as FileRoute:
-                    switch(value) {
-                    case .askToDownload(url: let url):
-                        if url == url {
-                            return true
-                        }
-                    default:
-                        break
-                    }
-                default:
-                    break
+            let target = url
+            
+            let lastIndexOfAsk = router.path.lastIndex { element in
+                if let r = element as? FileRoute, case let .askToDownload(u) = r {
+                    return u == target
                 }
                 return false
-            })
+            }
             
             var vcs: [UIViewController]?
-            if let lastIndexOfCache = lastIndexOfCache {
-                // we were told to cache this, pop it off the path and replace the view controller without animation
+            
+            if let lastIndexOfAsk {
                 vcs = navigationController?.viewControllers
-                let _ = vcs?.popLast()
-                router.path.remove(at: lastIndexOfCache)
-                currentPathElementCount = currentPathElementCount - 1
+                _ = vcs?.popLast()
+                router.path.remove(at: lastIndexOfAsk)
+                currentPathElementCount -= 1
             }
             
             let ovc2 = SwiftUIViewController(swiftUIView: DownloadingFileView(viewModel: DownloadingFileViewModel(url: url, router: router)))
-            if vcs != nil {
-                self.navigationControllerObserver?.observePopTransition(of: ovc2, delegate: self)
-                vcs?.append(ovc2)
-                self.navigationController?.viewControllers = vcs!
+            if var stack = vcs {
+                navigationControllerObserver?.observePopTransition(of: ovc2, delegate: self)
+                stack.append(ovc2)
+                navigationController?.viewControllers = stack
             } else {
-                self.pushViewController(vc: ovc2)
+                pushViewController(vc: ovc2)
             }
+            
         case .showDownloadedFile(fileUrl: let fileUrl, url: let url):
-            let lastIndexOfDownload = router.path.lastIndex(where: { element in
-                switch element {
-                case let value as FileRoute:
-                    switch(value) {
-                    case .downloadFile(url: let downloadedUrl):
-                        if downloadedUrl == url {
-                            return true
-                        }
-                    default:
-                        break
-                    }
-                default:
-                    break
+            let lastIndexOfDownload = router.path.lastIndex { element in
+                if let r = element as? FileRoute, case let .downloadFile(downloadedUrl) = r {
+                    return downloadedUrl == url
                 }
                 return false
-            })
+            }
             
             var vcs: [UIViewController]?
-            if let lastIndexOfDownload = lastIndexOfDownload {
-                // we were told to download this, pop it off the path and replace the view controller without animation
+            if let lastIndexOfDownload {
                 vcs = navigationController?.viewControllers
-                let _ = vcs?.popLast()
+                _ = vcs?.popLast()
                 router.path.remove(at: lastIndexOfDownload)
-                currentPathElementCount = currentPathElementCount - 1
+                currentPathElementCount -= 1
             }
-            if vcs != nil {
+            
+            if var stack = vcs {
                 let ql = DocumentController.shared.getQuickLookViewController(url: fileUrl)
-                self.navigationControllerObserver?.observePopTransition(of: ql, delegate: self)
-                vcs?.append(ql)
-                self.navigationController?.viewControllers = vcs!
+                navigationControllerObserver?.observePopTransition(of: ql, delegate: self)
+                stack.append(ql)
+                navigationController?.viewControllers = stack
             } else {
                 DocumentController.shared.presentQL(url: fileUrl, viewControllerToPresentFrom: self)
             }
+            
         case .cacheImage(url: let url):
-            let lastIndexOfCache = router.path.lastIndex(where: { element in
-                switch element {
-                case let value as FileRoute:
-                    switch(value) {
-                    case .askToCache(url: let url):
-                        if url == url {
-                            return true
-                        }
-                    default:
-                        break
-                    }
-                default:
-                    break
+            let target = url
+            
+            let lastIndexOfAsk = router.path.lastIndex { element in
+                if let r = element as? FileRoute, case let .askToCache(u) = r {
+                    return u == target
                 }
                 return false
-            })
+            }
             
             var vcs: [UIViewController]?
-            if let lastIndexOfCache = lastIndexOfCache {
-                // we were told to cache this, pop it off the path and replace the view controller without animation
+            if let lastIndexOfAsk {
                 vcs = navigationController?.viewControllers
-                let _ = vcs?.popLast()
-                router.path.remove(at: lastIndexOfCache)
-                currentPathElementCount = currentPathElementCount - 1
+                _ = vcs?.popLast()
+                router.path.remove(at: lastIndexOfAsk)
+                currentPathElementCount -= 1
             }
             
             let ovc2 = SwiftUIViewController(swiftUIView: DownloadingImageView(viewModel: DownloadingImageViewModel(imageUrl: url, router: router)))
-            if vcs != nil {
-                self.navigationControllerObserver?.observePopTransition(of: ovc2, delegate: self)
-                vcs?.append(ovc2)
-                self.navigationController?.viewControllers = vcs!
+            if var stack = vcs {
+                navigationControllerObserver?.observePopTransition(of: ovc2, delegate: self)
+                stack.append(ovc2)
+                navigationController?.viewControllers = stack
             } else {
-                self.pushViewController(vc: ovc2)
+                pushViewController(vc: ovc2)
             }
+            
         case .askToCache(url: let url):
             let vc = SwiftUIViewController(swiftUIView: AskToCacheImageView(imageUrl: url).environmentObject(router))
-            self.pushViewController(vc: vc)
+            pushViewController(vc: vc)
         }
     }
     
+    // MARK: - Observation routing
     func handleObservationRoute(route: ObservationRoute) {
-        switch(route) {
-            
+        switch route {
         case .detail(uri: let uri):
-            if let uri = uri {
-                self.viewObservation(uri: uri)
-            }
+            if let uri { viewObservation(uri: uri) }
         case .create:
-            self.startCreateNewObservation(location: self.currentLocationRepository.getLastLocation(), provider: "gps")
+            startCreateNewObservation(location: currentLocationRepository.getLastLocation(), provider: "gps")
         case .edit(uri: let uri):
-            if let uri = uri {
+            if let uri {
                 Task { [weak self] in
                     await self?.editObservation(uri: uri)
                 }
@@ -413,129 +425,126 @@ class MageNavStack: UIViewController {
         }
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let nav = self.navigationController {
-            self.navigationControllerObserver = NavigationControllerObserver(navigationController: nav)
+        if let nav = navigationController {
+            navigationControllerObserver = NavigationControllerObserver(navigationController: nav)
         }
     }
     
-    @objc func launchFilter() {
-    }
+    @objc func launchFilter() { }
     
     func pushViewController(vc: UIViewController) {
-        self.bottomSheet?.dismiss(animated: true, completion: nil)
-        self.navigationController?.pushViewController(vc, animated: true)
-        self.navigationControllerObserver?.observePopTransition(of: vc, delegate: self)
-        
+        bottomSheet?.dismiss(animated: true)
+        navigationController?.pushViewController(vc, animated: true)
+        navigationControllerObserver?.observePopTransition(of: vc, delegate: self)
     }
     
     func startCreateNewObservation(location: CLLocation?, provider: String) {
-        var point: SFPoint? = nil;
-        var accuracy: CLLocationAccuracy = 0;
-        var delta: Double = 0.0;
+        var point: SFPoint? = nil
+        var accuracy: CLLocationAccuracy = 0
+        var delta: Double = 0.0
         
         if let location = location ?? currentLocationRepository.getLastLocation() {
-            if (location.altitude != 0) {
-                point = SFPoint(x: NSDecimalNumber(value: location.coordinate.longitude), andY: NSDecimalNumber(value: location.coordinate.latitude), andZ: NSDecimalNumber(value: location.altitude));
+            if location.altitude != 0 {
+                point = SFPoint(x: NSDecimalNumber(value: location.coordinate.longitude), andY: NSDecimalNumber(value: location.coordinate.latitude), andZ: NSDecimalNumber(value: location.altitude))
             } else {
-                point = SFPoint(x: NSDecimalNumber(value: location.coordinate.longitude), andY: NSDecimalNumber(value: location.coordinate.latitude));
+                point = SFPoint(x: NSDecimalNumber(value: location.coordinate.longitude), andY: NSDecimalNumber(value: location.coordinate.latitude))
             }
-            accuracy = location.horizontalAccuracy;
-            delta = location.timestamp.timeIntervalSinceNow * -1000;
+            accuracy = location.horizontalAccuracy
+            delta = location.timestamp.timeIntervalSinceNow * -1000
         }
         
-        let edit: ObservationEditCoordinator = ObservationEditCoordinator(rootViewController: self, delegate: self, location: point, accuracy: accuracy, provider: provider, delta: delta);
-        edit.applyTheme(withContainerScheme: self.scheme);
-        childCoordinators.append(edit);
-        edit.start();
+        let edit = ObservationEditCoordinator(rootViewController: self, delegate: self, location: point, accuracy: accuracy, provider: provider, delta: delta)
+        edit.applyTheme(withContainerScheme: scheme)
+        childCoordinators.append(edit)
+        edit.start()
     }
     
     func viewObservation(uri: URL) {
-        let observationView = ObservationFullView(
-            viewModel: ObservationViewViewModel(uri: uri)
-        )
-        { localPath, contentType in
-            
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: uri)) { localPath, contentType in
+            // no-op for now
         }
         .environmentObject(router)
         
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
-        self.pushViewController(vc: ovc2)
+        pushViewController(vc: ovc2)
     }
 }
 
+// MARK: - AttachmentViewDelegate
 extension MageNavStack: AttachmentViewDelegate {
     func doneViewing(coordinator: NSObject) {
         router.path.removeLast()
-        self.currentPathElementCount = router.path.count
+        currentPathElementCount = router.path.count
     }
 }
 
+// MARK: - ObservationActionsDelegate
 extension MageNavStack: ObservationActionsDelegate {
     func deleteObservation(_ observation: Observation) {
-        bottomSheet?.dismiss(animated: true, completion: nil);
-        ObservationActionHandler.deleteObservation(observation: observation, viewController: self) { (success, error) in
-            self.navigationController?.popViewController(animated: true);
+        bottomSheet?.dismiss(animated: true)
+        ObservationActionHandler.deleteObservation(observation: observation, viewController: self) { _, _ in
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
     func editObservation(uri: URL) async {
-        self.bottomSheet?.dismiss(animated: true, completion: nil)
-        guard let observation = await self.observationRepository.getObservationNSManagedObject(observationUri: uri) else {
-            return;
+        bottomSheet?.dismiss(animated: true)
+        // NOTE: NSManagedObject path; see note above to remove deprecation by switching to a model API.
+        
+        guard let observation = await observationRepository.getObservationNSManagedObject(observationUri: uri) else {
+            return
         }
-        let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
-        observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator.start();
-        self.childCoordinators.append(observationEditCoordinator)
+        
+        let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation)
+        observationEditCoordinator.applyTheme(withContainerScheme: scheme)
+        observationEditCoordinator.start()
+        childCoordinators.append(observationEditCoordinator)
     }
     
     func editObservation(_ observation: Observation) {
-        self.bottomSheet?.dismiss(animated: true, completion: nil);
+        bottomSheet?.dismiss(animated: true)
         router.appendRoute(ObservationRoute.edit(uri: observation.objectID.uriRepresentation()))
     }
     
     func cancelAction() {
-        bottomSheet?.dismiss(animated: true, completion: nil);
+        bottomSheet?.dismiss(animated: true)
     }
-    
 }
 
+// MARK: - ObservationEditDelegate
 extension MageNavStack: ObservationEditDelegate {
     func editCancel(_ coordinator: NSObject) {
-        removeChildCoordinator(coordinator);
+        removeChildCoordinator(coordinator)
         router.path.removeLast()
-        self.currentPathElementCount = router.path.count
+        currentPathElementCount = router.path.count
     }
     
     func editComplete(_ observation: Observation, coordinator: NSObject) {
-        removeChildCoordinator(coordinator);
+        removeChildCoordinator(coordinator)
         router.path.removeLast()
-        self.currentPathElementCount = router.path.count
+        currentPathElementCount = router.path.count
     }
     
     func removeChildCoordinator(_ coordinator: NSObject) {
-        if let index = self.childCoordinators.firstIndex(where: { (child) -> Bool in
-            return coordinator == child;
-        }) {
-            self.childCoordinators.remove(at: index);
+        if let index = self.childCoordinators.firstIndex(where: { $0 == coordinator}) {
+            childCoordinators.remove(at: index)
         }
     }
 }
 
+// MARK: - NavigationControllerObserverDelegate
 extension MageNavStack: NavigationControllerObserverDelegate {
-    func navigationControllerObserver(
-        _ observer: NavigationControllerObserver,
-        didObservePopTransitionFor viewController: UIViewController
-    ) {
+    func navigationControllerObserver(_ observer: NavigationControllerObserver, didObservePopTransitionFor viewController: UIViewController) {
         router.path.removeLast()
-        self.currentPathElementCount = router.path.count
+        currentPathElementCount = router.path.count
     }
 }
 
+// MARK: - MDCBottomSheetControllerDelegate
 extension MageNavStack: MDCBottomSheetControllerDelegate {
-    
     func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
         router.bottomSheetRoute = nil
     }
