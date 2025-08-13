@@ -286,14 +286,14 @@ class MageNavStack: UIViewController {
             
         case .showFileImage(filePath: let filePath):
             guard let url = fileURL(from: filePath) else {
-                MageLogger.misc.error("Could not convert filePath to URL: \(filePath)")
+                MageLogger.misc.error("showFileImage: Could not convert filePath to URL: \(filePath)")
                 return
             }
             DocumentController.shared.presentQL(url: url, viewControllerToPresentFrom: self)
             
         case .showLocalVideo(filePath: let filePath):
             guard let url = fileURL(from: filePath) else {
-                MageLogger.misc.error("Could not convert filePath to URL: \(filePath)")
+                MageLogger.misc.error("showLocalVideo: Could not convert filePath to URL: \(filePath)")
                 return
             }
             
@@ -307,7 +307,7 @@ class MageNavStack: UIViewController {
             
         case .showLocalAudio(filePath: let filePath):
             guard let url = fileURL(from: filePath) else {
-                MageLogger.misc.error("Could not convert filePath to URL: \(filePath)")
+                MageLogger.misc.error("showLocalAudio: Could not convert filePath to URL: \(filePath)")
                 return
             }
             
