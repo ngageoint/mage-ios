@@ -226,16 +226,31 @@
     }
 }
 
+#pragma mark - Contact Us
+
 - (void) onContactUs {
-    NSString *recipient = @"magesuitesupport@nga.mil";
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    // Prefer the Swift-exposed property if it exists, otherwise read by key.
+    NSString *recipient = nil;
+    if ([defaults respondsToSelector:@selector(contactInfoEmail)]) {
+        recipient = [defaults contactInfoEmail]; // from your UserDefaults extension
+    } else {
+        recipient = [defaults stringForKey:@"contactInfoEmail"]; // safe fallback
+    }
+
+    // Fallback to your current hardcoded address only if nothing is set.
+    if (recipient.length == 0) {
+        recipient = @"magesuitesupport@nga.mil";
+    }
+
     NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@", recipient];
     NSURL *mailtoURL = [NSURL URLWithString:mailtoURLString];
 
-    // Open the mail client
     if ([[UIApplication sharedApplication] canOpenURL:mailtoURL]) {
         [[UIApplication sharedApplication] openURL:mailtoURL options:@{} completionHandler:nil];
     } else {
-        NSLog(@"Cannot open mail client.");
+        NSLog(@"Cannot open mail client for: %@", mailtoURL);
     }
 }
 
