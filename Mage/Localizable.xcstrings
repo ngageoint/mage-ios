@@ -249,6 +249,9 @@
         }
       }
     },
+    "Done" : {
+
+    },
     "Downloaded %@ of %@" : {
       "localizations" : {
         "en" : {
@@ -359,6 +362,9 @@
           }
         }
       }
+    },
+    "Filter" : {
+
     },
     "Flag As Important" : {
       "localizations" : {
