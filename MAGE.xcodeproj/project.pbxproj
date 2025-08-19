@@ -168,6 +168,7 @@
 		843A5E7D2D8DD42800E95F4B /* apiSuccessNoAuthStrategies.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */; };
 		843A5E7E2D8DD42800E95F4B /* polygonObservation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CDD7122601194600F3294C /* polygonObservation.json */; };
 		843A5E7F2D8DD42800E95F4B /* observationNoAttachmentResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */; };
+		8440ACE62E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */; };
 		846224CB2E313A8D0029FE98 /* LocalLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CA2E313A8D0029FE98 /* LocalLoginViewModel.swift */; };
 		846224CD2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */; };
 		846224D12E3148100029FE98 /* LocalLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */; };
@@ -1113,6 +1114,7 @@
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attachment+FileURL.swift"; sourceTree = "<group>"; };
 		8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentImageLoadingTests.swift; sourceTree = "<group>"; };
+		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LocalLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewSwiftUI.swift; sourceTree = "<group>"; };
 		846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModelWrapper.swift; sourceTree = "<group>"; };
@@ -3679,6 +3681,7 @@
 				F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */,
 				F7613D5027EE03B300570145 /* ReleaseTestPlan.md */,
 				F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */,
+				8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -5639,6 +5642,7 @@
 				F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */,
 				846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */,
 				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
+				8440ACE62E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift in Sources */,
 				F7C097582C7F6404003FA115 /* ObservationRepositoryMock.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
