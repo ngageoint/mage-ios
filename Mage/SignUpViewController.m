@@ -186,6 +186,9 @@
 
     self.zxcvbn = [[DBZxcvbn alloc] init];
     self.password.delegate = self;
+    self.captchaText.delegate = self;
+    self.password.returnKeyType = UIReturnKeyGo;
+    self.captchaText.returnKeyType = UIReturnKeyGo;
     
     [self.signupButton setTitle:@"Sign Up" forState:UIControlStateNormal];
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
@@ -206,8 +209,11 @@
         [self onSignup:textField];
     }
     
-    return YES;
+    if (textField == self.captchaText) {
+        [self onSignup:textField];
+    }
     
+    return YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
