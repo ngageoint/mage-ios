@@ -185,9 +185,7 @@
     [self.captchaText sizeToFit];
 
     self.zxcvbn = [[DBZxcvbn alloc] init];
-    self.password.delegate = self;
     self.captchaText.delegate = self;
-    self.password.returnKeyType = UIReturnKeyGo;
     self.captchaText.returnKeyType = UIReturnKeyGo;
     
     [self.signupButton setTitle:@"Sign Up" forState:UIControlStateNormal];
@@ -204,11 +202,7 @@
     if ([textField respondsToSelector:@selector(nextField)] && [textField nextField]) {
         [[textField nextField] becomeFirstResponder];
     }
-    
-    if (textField == self.passwordConfirm) {
-        [self onSignup:textField];
-    }
-    
+
     if (textField == self.captchaText) {
         [self onSignup:textField];
     }
