@@ -44,6 +44,8 @@ struct LoginViewSwiftUI: View {
             SignUpButtonView {
                 viewModel.signupTapped()
             }
+            
+            MageIntroButtonView(isIntroViewsShown: $isIntroViewsShown)
         }
         .accessibilityIdentifier("Local Login View")
         .padding()
@@ -71,7 +73,6 @@ struct LoginViewSwiftUI_Previews: PreviewProvider {
             .previewDisplayName("Loading State")
         }
         .padding()
-        .background(Color(.systemGroupedBackground))
         .previewLayout(.sizeThatFits)
     }
 }

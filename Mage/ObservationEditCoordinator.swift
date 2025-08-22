@@ -280,7 +280,6 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func saveObservation(observation: Observation) {
-        MageLogger.misc.debug("Save observation");
         if let user = user {
             self.observation!.userId = user.remoteId;
         }
@@ -293,7 +292,6 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
                 MageLogger.misc.error("Error saving observation to persistent store \(safeError)");
             }
             
-            MageLogger.misc.debug("Saved the observation \(observation.remoteId ?? "")");
             observation.createObservationLocations(context: self.managedObjectContext)
             try? self.managedObjectContext.save()
             delegate?.editComplete(observation, coordinator: self as NSObject);
@@ -312,7 +310,6 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func cancelEdit() {
-        MageLogger.misc.debug("Cancel the edit")
         let alert = UIAlertController(title: "Discard Changes", message: "Do you want to discard your changes?", preferredStyle: .alert);
         alert.addAction(UIAlertAction(title: "Yes, Discard", style: .destructive, handler: { [self] (action) in
             self.navigationController?.dismiss(animated: true, completion: nil);

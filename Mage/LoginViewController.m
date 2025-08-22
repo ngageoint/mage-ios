@@ -20,8 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
-@property (weak, nonatomic) IBOutlet UILabel *mageLabel;
-@property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loginFailure;
@@ -67,8 +65,6 @@
         self.scheme = containerScheme;
     }
     self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.loginStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     if (self.user) {
         [self.serverURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
@@ -93,7 +89,6 @@
     tap.delegate = self;
     
     [self.view addGestureRecognizer:tap];
-    self.wandLabel.text = @"\U0000f0d0";
     
     [self applyThemeWithContainerScheme:self.scheme];
 }

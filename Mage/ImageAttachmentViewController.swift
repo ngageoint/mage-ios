@@ -133,7 +133,6 @@ extension PlaceholderImage: Placeholder {}
         if let attachment = self.attachment, !self.isFullSizeCached() {
             let attachmentMbs: Double = ((attachment.size?.doubleValue ?? 0) / (1000.0 * 1024.0));
             alert.addAction(UIAlertAction(title: String.init(format: "Download and Save Full Size Image %.2F MBs", attachmentMbs), style: .default , handler:{ (UIAlertAction)in
-                MageLogger.misc.debug("Go Download Full size")
                 self.showAttachment(fullSize: true)
                 { result in
                     switch result {

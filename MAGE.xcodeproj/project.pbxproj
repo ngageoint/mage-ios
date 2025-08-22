@@ -98,6 +98,13 @@
 		6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
+		840D60752E4A8CC4005B0353 /* AttachmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60742E4A8CC4005B0353 /* AttachmentPath.swift */; };
+		840D60772E4B9501005B0353 /* KingfisherHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60762E4B9501005B0353 /* KingfisherHelpers.swift */; };
+		840D60792E4BC751005B0353 /* AttachmentRepository+Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60782E4BC751005B0353 /* AttachmentRepository+Env.swift */; };
+		840D607C2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D607A2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift */; };
+		840D60802E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */; };
+		840D60822E4BE55E005B0353 /* URL+AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60812E4BE55E005B0353 /* URL+AccessToken.swift */; };
+		840D60842E4BE9E3005B0353 /* String+ContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
@@ -114,6 +121,8 @@
 		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
 		8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */; };
 		8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */; };
+		8423B10F2E46676E0069C1CD /* Attachment+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */; };
+		8423B1132E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -184,6 +193,9 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		84E9E1BE2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */; };
 		84E9E1C02E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9E1BF2E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift */; };
+		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
+		A811F2B22E3BFB9C0016C5AB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */; };
+		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
 		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
@@ -279,7 +291,6 @@
 		F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
-		F718CCF22CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */; };
 		F718CCF42CA468580015DF87 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
 		F718CCFB2CA719620015DF87 /* MockCacheOverlayListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */; };
@@ -885,7 +896,6 @@
 		F7FC67FA2CD3C3A50022BAF1 /* GeoPackageImporterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F882CB8871B00126468 /* GeoPackageImporterUITests.swift */; };
 		F7FC67FB2CD3C3AA0022BAF1 /* GeoPackageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F892CB8871B00126468 /* GeoPackageTests.swift */; };
 		F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
-		F7FC67FD2CD3C3D80022BAF1 /* KIFMageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */; };
 		F7FC67FE2CD3C3D80022BAF1 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F7FC67FF2CD3C46C0022BAF1 /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
 		F7FC68002CD3C46C0022BAF1 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
@@ -1097,6 +1107,13 @@
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
+		840D60742E4A8CC4005B0353 /* AttachmentPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPath.swift; sourceTree = "<group>"; };
+		840D60762E4B9501005B0353 /* KingfisherHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingfisherHelpers.swift; sourceTree = "<group>"; };
+		840D60782E4BC751005B0353 /* AttachmentRepository+Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentRepository+Env.swift"; sourceTree = "<group>"; };
+		840D607A2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentRoutingTests+Helpers.swift"; sourceTree = "<group>"; };
+		840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentRepositoryRoutingTests.swift; sourceTree = "<group>"; };
+		840D60812E4BE55E005B0353 /* URL+AccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+AccessToken.swift"; sourceTree = "<group>"; };
+		840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+ContentTypes.swift"; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModel.swift; sourceTree = "<group>"; };
@@ -1112,6 +1129,11 @@
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
+		8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attachment+FileURL.swift"; sourceTree = "<group>"; };
+		8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentImageLoadingTests.swift; sourceTree = "<group>"; };
+		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
+		846224CA2E313A8D0029FE98 /* LocalLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModel.swift; sourceTree = "<group>"; };
+		846224CC2E313C7B0029FE98 /* LocalLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewSwiftUI.swift; sourceTree = "<group>"; };
 		846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224D22E327D170029FE98 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
 		846224D42E327F010029FE98 /* PasswordFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordFieldView.swift; sourceTree = "<group>"; };
@@ -1129,9 +1151,12 @@
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
 		84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		84E9E1BF2E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPCoordinatorSwiftUI.swift; sourceTree = "<group>"; };
+		84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAccessTokenTests.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
+		A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A89A21CE2E3959A00080A11C /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B29DE4B6C2FE6308F8758572 /* Pods-MAGEGeoPackageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1224,7 +1249,6 @@
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
-		F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KIFMageCoreDataTestCase.swift; sourceTree = "<group>"; };
 		F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageCoreDataTestCase.swift; sourceTree = "<group>"; };
 		F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageInjectionTestCase.swift; sourceTree = "<group>"; };
 		F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCacheOverlayListener.swift; sourceTree = "<group>"; };
@@ -1938,6 +1962,10 @@
 		F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoAuthStrategies.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		F7A94D6318AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -2418,6 +2446,7 @@
 				F763FF1D2C79042E00403A00 /* User */,
 				F763FF122C78DEF400403A00 /* BottomSheet */,
 				F70688AC2BB1FAFC00D8E2EA /* Observation */,
+				840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2430,6 +2459,7 @@
 				F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */,
 				F7C0974D2C7E7395003FA115 /* ObservationRepositoryTests.swift */,
 				F7DDF46E2748023A00689550 /* ObservationImageRepositoryTests.swift */,
+				84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2636,7 +2666,12 @@
 			isa = PBXGroup;
 			children = (
 				F7225F572C5A783B00B7D935 /* AttachmentRepository.swift */,
+				840D607A2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift */,
+				840D60782E4BC751005B0353 /* AttachmentRepository+Env.swift */,
 				F7225F592C5A784700B7D935 /* AttachmentLocalDataSource.swift */,
+				840D60742E4A8CC4005B0353 /* AttachmentPath.swift */,
+				8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */,
+				840D60762E4B9501005B0353 /* KingfisherHelpers.swift */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -2963,6 +2998,7 @@
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 				F7E079512C32EB750029C88D /* MKShapeExtensions.swift */,
 				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
+				A89A21CE2E3959A00080A11C /* UIScreen.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3393,6 +3429,8 @@
 				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
 				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
 				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
+				840D60812E4BE55E005B0353 /* URL+AccessToken.swift */,
+				840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */,
 				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
 			);
 			name = Attachment;
@@ -3548,6 +3586,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				A811F2832E3BEAF80016C5AB /* IntroViews */,
 				F7C097C02C889A07003FA115 /* Persistence */,
 				F7C097AC2C8514B9003FA115 /* UseCase */,
 				F7C097872C811133003FA115 /* ViewModel */,
@@ -3608,6 +3647,7 @@
 				F7B1C473267404A80005FCE4 /* ViewLoader */,
 				2F389C931DCD24E200F05C95 /* Views */,
 				F734C1EA2BC847C300B2E8C8 /* Notifications.swift */,
+				A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -3629,7 +3669,6 @@
 			children = (
 				F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */,
 				F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */,
-				F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */,
 				F7C097782C80C79F003FA115 /* Model */,
 				F7C097532C7F62E3003FA115 /* UI */,
 				F70688AB2BB1FAF600D8E2EA /* Repository */,
@@ -3665,6 +3704,7 @@
 				F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */,
 				F7613D5027EE03B300570145 /* ReleaseTestPlan.md */,
 				F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */,
+				8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -3738,6 +3778,7 @@
 				F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */,
 				F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */,
 				F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */,
+				8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -4302,6 +4343,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				A811F2832E3BEAF80016C5AB /* IntroViews */,
+			);
 			name = MAGE;
 			packageProductDependencies = (
 				F70688822BA37ECE00D8E2EA /* Kingfisher */,
@@ -4423,6 +4467,8 @@
 			knownRegions = (
 				Base,
 				en,
+				"es-419",
+				"es-US",
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
 			packageReferences = (
@@ -4925,6 +4971,7 @@
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F70C343D2C73D7E6007616FA /* AskToDownloadFileView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
+				840D60842E4BE9E3005B0353 /* String+ContentTypes.swift in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
 				F7BFB8EE2C51572600901479 /* GeoPackageMediaView.swift in Sources */,
 				F7E079522C32EB750029C88D /* MKShapeExtensions.swift in Sources */,
@@ -5120,6 +5167,7 @@
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift in Sources */,
+				840D60822E4BE55E005B0353 /* URL+AccessToken.swift in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				2FAC84A92B505A9800FCAB37 /* SearchMapViewController.swift in Sources */,
 				F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */,
@@ -5179,6 +5227,7 @@
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F776AC8B2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift in Sources */,
 				F73564ED2C65354B00466813 /* LocationList.swift in Sources */,
+				840D60792E4BC751005B0353 /* AttachmentRepository+Env.swift in Sources */,
 				F72D42DE2694B60300F9AC3B /* Mage.swift in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */,
@@ -5202,6 +5251,7 @@
 				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
 				F7225F3F2C542C1400B7D935 /* FormLocalDataSource.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
+				840D60772E4B9501005B0353 /* KingfisherHelpers.swift in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
 				F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */,
@@ -5267,6 +5317,7 @@
 				F70C34332C73D712007616FA /* DownloadingImageViewModel.swift in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift in Sources */,
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
+				840D60752E4A8CC4005B0353 /* AttachmentPath.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
@@ -5418,6 +5469,7 @@
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */,
+				A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7DE98832C133CDB005372F8 /* ObservationMapItemAnnotation.swift in Sources */,
 				F7BFB8E02C5019BA00901479 /* EmailButton.swift in Sources */,
@@ -5435,6 +5487,7 @@
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
+				8423B10F2E46676E0069C1CD /* Attachment+FileURL.swift in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
@@ -5461,7 +5514,6 @@
 				F73E17E12CD3C13C008F2216 /* MAGEGeoPackageTests.swift in Sources */,
 				F7FC68012CD3C4880022BAF1 /* MageCoreDataFixtures.swift in Sources */,
 				F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */,
-				F7FC67FD2CD3C3D80022BAF1 /* KIFMageCoreDataTestCase.swift in Sources */,
 				F7FC68032CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h in Sources */,
 				F7FC68082CD3CC560022BAF1 /* ObservationIconStaticLocalDataSource.swift in Sources */,
 				F7FC68092CD3CC560022BAF1 /* ObservationStaticLocalDataSource.swift in Sources */,
@@ -5525,6 +5577,7 @@
 				F7DDF46F2748023A00689550 /* ObservationImageRepositoryTests.swift in Sources */,
 				F7C097502C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift in Sources */,
 				F7E5749427DBDC28009A6E0D /* UserTrackingMapTests.swift in Sources */,
+				84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
@@ -5564,6 +5617,7 @@
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,
 				F7CE22BC2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift in Sources */,
 				F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */,
+				840D607C2E4BC7ED005B0353 /* AttachmentRoutingTests+Helpers.swift in Sources */,
 				F7F118222602A1F600C7DE9A /* ObservationTransformationTests.swift in Sources */,
 				F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */,
 				F763FF282C790F4600403A00 /* EventRepositoryMock.swift in Sources */,
@@ -5585,6 +5639,7 @@
 				F789EB622BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift in Sources */,
 				F7C0975A2C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift in Sources */,
 				F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */,
+				840D60802E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift in Sources */,
 				F7C097B92C878269003FA115 /* EventRepositoryTests.swift in Sources */,
 				F7F08EA427EB984200640D89 /* BottomSheetEnabledTests.swift in Sources */,
 				F79A09472694D1A200EB2ABA /* AttachmentPushServiceTests.swift in Sources */,
@@ -5618,11 +5673,12 @@
 				F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */,
 				846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */,
 				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
+				8440ACE62E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift in Sources */,
 				F7C097582C7F6404003FA115 /* ObservationRepositoryMock.swift in Sources */,
-				F718CCF22CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */,
+				8423B1132E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift in Sources */,
 				F74020B92491904200B5A8BA /* TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5706,6 +5762,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5757,6 +5814,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

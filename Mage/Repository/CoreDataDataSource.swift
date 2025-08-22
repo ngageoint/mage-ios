@@ -34,11 +34,8 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     func registerBackgroundTask(name: String) {
         NSLog("Register the background task \(name)")
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: name) { [weak self] in
-            MageLogger.misc.debug("iOS has signaled time has expired \(name)")
             self?.cleanup?()
-            MageLogger.misc.debug("canceling \(name)")
             self?.operation?.cancel()
-            MageLogger.misc.debug("calling endBackgroundTask \(name)")
             self?.endBackgroundTaskIfActive()
         }
     }
@@ -46,7 +43,6 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     func endBackgroundTaskIfActive() {
         let isBackgroundTaskActive = backgroundTask != .invalid
         if isBackgroundTaskActive {
-            MageLogger.misc.debug("Background task ended. \(NSStringFromClass(type(of: self))) Load")
             UIApplication.shared.endBackgroundTask(backgroundTask)
             backgroundTask = .invalid
         }
@@ -113,7 +109,6 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         let request = getFetchRequest(parameters: parameters)
         request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit
-        MageLogger.misc.debug("XXX request \(request)")
         let previousHeader: String? = currentHeader
         var users: [URIItem] = []
         context?.performAndWait {
