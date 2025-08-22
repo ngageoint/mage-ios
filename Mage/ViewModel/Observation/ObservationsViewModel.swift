@@ -50,10 +50,10 @@ class ObservationsViewModel: ObservableObject {
     
     enum State {
         case loading
-        case loaded(rows: [URIItem])
+        case loaded(rows: [ObservationItem])
         case failure(error: Error)
         
-        fileprivate var rows: [URIItem] {
+        fileprivate var rows: [ObservationItem] {
             if case let .loaded(rows: rows) = self {
                 return rows
             } else {
@@ -110,6 +110,19 @@ class ObservationsViewModel: ObservableObject {
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([]) { $0 + $1 }
+            .map { uriItems in
+                // Convert [URIItem] to [ObservationItem]
+                uriItems.compactMap { uriItem in
+                    switch uriItem {
+                    case .listItem(let uri):
+                        return ObservationItem.listItem(uri)
+                    case .sectionHeader:
+                        // If you want to support section headers as well:
+                        // return ObservationItem.sectionHeader(header)
+                        return nil
+                    }
+                }
+            }
             .map { State.loaded(rows: $0) }
             .catch { error in
                 return Just(State.failure(error: error))

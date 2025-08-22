@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
+    @State var isIntroViewsShown: Bool = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -44,6 +45,8 @@ struct LoginViewSwiftUI: View {
             SignUpButtonView {
                 viewModel.signupTapped()
             }
+            
+            MageIntroButtonView(isIntroViewsShown: $isIntroViewsShown)
         }
         .accessibilityIdentifier("Local Login View")
         .padding()
@@ -71,7 +74,6 @@ struct LoginViewSwiftUI_Previews: PreviewProvider {
             .previewDisplayName("Loading State")
         }
         .padding()
-        .background(Color(.systemGroupedBackground))
         .previewLayout(.sizeThatFits)
     }
 }

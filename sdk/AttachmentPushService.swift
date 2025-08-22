@@ -126,13 +126,11 @@ extension InjectedValues {
     
     func onTimerFire() {
         if !UserUtility.singleton.isTokenExpired {
-            MageLogger.misc.debug("ATTACHMENT - push timer fired, checking for attachments to push")
             pushAttachments(fetchedResultsController?.fetchedObjects as? [Attachment] ?? [])
         }
     }
         
     func pushAttachments(_ attachments: [Attachment]) {
-        MageLogger.misc.debug("XXX told to push attachments \(attachments)")
         if !DataConnectionUtilities.shouldPushAttachments() { return }
                 
         for attachment in attachments {
@@ -160,7 +158,6 @@ extension InjectedValues {
             .responseData { response in
                 switch response.result {
                 case .success(_):
-                    MageLogger.misc.debug("Attachment deleted")
                     guard let context = self.context else { return }
                     context.performAndWait {
                         guard let attachment = context.object(with: attachment.objectID) as? Attachment else {
@@ -177,56 +174,165 @@ extension InjectedValues {
     }
     
     func pushAttachment(_ attachment: Attachment) {
-        guard let localPath = attachment.localPath,
-            let attachmentData = try? Data(contentsOf: URL(filePath: localPath))
-        else {
-            MageLogger.misc.debug("Attachment data nil for observation: \(attachment.observation?.remoteId ?? "") at path: \(attachment.localPath ?? "")")
-            guard let context = self.context else { return }
-            context.performAndWait {
-                guard let attachment = context.object(with: attachment.objectID) as? Attachment else {
-                    return
+        // Always work on the attachment's own context
+        guard let context = self.context else {
+            return
+        }
+
+        // If we don't have a local path anymore, do NOT delete.
+        // If server already knows about this attachment (remoteId or url), just mark it clean.
+        // Otherwise leave it dirty and bail (user can retry when the file exists again).
+        if (attachment.localPath == nil || attachment.localPath?.isEmpty == true) {
+            if attachment.remoteId != nil || attachment.url != nil {
+                context.performAndWait {
+                    attachment.dirty = false
+                    attachment.taskIdentifier = nil
+                    try? context.save()
                 }
-                context.delete(attachment)
-                try? context.save()
+            }
+            else {
+                MageLogger.misc.warning("ATTACHMENT - missing localPath for \(attachment.name ?? "<unnamed>"); leaving dirty (not deleting).")
             }
             return
         }
-        
-        let push = MAGERoutes.attachment().push(attachment)
-        
-        MageLogger.misc.debug("pushing attachment \(push.route)")
 
+        // Resolve the file URL from localPath
+        let fileURL: URL
+        if let localPath = attachment.localPath, localPath.hasPrefix("file://") {
+            guard let u = URL(string: localPath) else {
+                return
+            }
+            fileURL = u
+        } else if let localPath = attachment.localPath {
+            fileURL = URL(fileURLWithPath: localPath)
+        } else {
+            // Shouldn't get here but be defensive
+            return
+        }
+
+        // If the file is missing on disk after a reinstall/new container, do NOT delete the row.
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            if attachment.remoteId != nil || attachment.url != nil {
+                // We already uploaded before — just mark clean
+                context.performAndWait {
+                    attachment.dirty = false
+                    attachment.taskIdentifier = nil
+                    try? context.save()
+                }
+                return
+            } else {
+                return
+            }
+        }
+
+        // Load the data to send
+        guard let attachmentData = try? Data(contentsOf: fileURL) else {
+            return
+        }
+
+        // Build request identifiers
         guard let observationRemoteId = attachment.observation?.remoteId,
               let attachmentRemoteId = attachment.remoteId,
               let eventId = attachment.observation?.eventId?.intValue
-        else { return }
+        else {
+            return
+        }
+
+        let mimeType = attachment.contentType ?? "application/octet-stream"
+        let fileName = attachment.name ?? fileURL.lastPathComponent
+
+        // Multipart body
         let formData = MultipartFormData()
-        formData.append(attachmentData, withName: "attachment", fileName: attachment.name, mimeType: attachment.contentType ?? "application/octet-stream")
-        let uploader = MageSession.shared.session.upload(multipartFormData: formData, with: AttachmentService.uploadAttachment(eventId: eventId, observationRemoteId: observationRemoteId, attachmentRemoteId: attachmentRemoteId))
-        uploader.onURLSessionTaskCreation { task in
+        formData.append(attachmentData,
+                        withName: "attachment",
+                        fileName: fileName,
+                        mimeType: mimeType)
+
+        // Build the request via your existing service
+        let request = AttachmentService.uploadAttachment(
+            eventId: eventId,
+            observationRemoteId: observationRemoteId,
+            attachmentRemoteId: attachmentRemoteId
+        )
+
+        // Start the upload
+        let uploader = MageSession.shared.session.upload(
+            multipartFormData: formData,
+            with: request
+        )
+
+        // Track the URLSession task id on the attachment
+        uploader.onURLSessionTaskCreation { [weak self] _ in
+            guard let self = self else { return }
             if let taskIdentifier = uploader.task?.taskIdentifier,
                self.pushTasks.contains(taskIdentifier) == false
             {
                 self.pushTasks.append(taskIdentifier)
-                guard let context = self.context else { return }
-                context.performAndWait {
-                    attachment.taskIdentifier = NSNumber(value: taskIdentifier)
-                    
-                    try? context.save()
+                self.context?.performAndWait {
+                    if let obj = self.context?.object(with: attachment.objectID) as? Attachment {
+                        obj.taskIdentifier = NSNumber(value: taskIdentifier)
+                        try? self.context?.save()
+                    }
                 }
             }
         }
         .uploadProgress { progress in
-            print("Upload Progress: \(progress.fractionCompleted)")
+            MageLogger.misc.debug("ATTACHMENT - upload progress \(progress.fractionCompleted)")
         }
-        .response { response in
-            self.attachmentUploadCompleteWithTask(response: response, task: uploader.task, error: response.error)
+        .response { [weak self] response in
+            guard let self = self else { return }
+
+            // If Alamofire gave us an error, use the existing handler (it expects the task id to still be set).
+            if let error = response.error {
+                self.attachmentUploadCompleteWithTask(response: response,
+                                                      task: uploader.task,
+                                                      error: error)
+                return
+            }
+
+            // --- SUCCESS PATH ---
+            // Parse server json (optional, best-effort)
+            var returnedJSON: [AnyHashable: Any] = [:]
+            if let data = response.data, !data.isEmpty,
+               let obj = try? JSONSerialization.jsonObject(with: data) as? [AnyHashable: Any] {
+                returnedJSON = obj
+            }
+
+            let finishedTaskId = uploader.task?.taskIdentifier
+
+            // Persist fields and clear dirty flag
+            if let context = self.context {
+                context.performAndWait {
+                    if let obj = context.object(with: attachment.objectID) as? Attachment {
+                        if let urlStr = (returnedJSON["url"] as? String) ?? (returnedJSON["remotePath"] as? String) {
+                            obj.url = urlStr
+                        }
+                        if let sizeNum = (returnedJSON["size"] as? NSNumber) ?? (returnedJSON["length"] as? NSNumber) {
+                            obj.size = sizeNum
+                        }
+                        if let lm = returnedJSON["lastModified"] as? String {
+                            obj.lastModified = Date.ISO8601FormatStyle.gmtZeroDate(from: lm)
+                        } else {
+                            obj.lastModified = Date()
+                        }
+                        obj.dirty = false
+                        // IMPORTANT: clear it AFTER we grabbed finishedTaskId
+                        obj.taskIdentifier = nil
+                        try? context.save()
+                    }
+                }
+            }
+
+            // Remove from our in-memory queue
+            if let id = finishedTaskId,
+               let idx = self.pushTasks.firstIndex(of: id) {
+                self.pushTasks.remove(at: idx)
+            }
         }
+
     }
     
-    
     func attachmentUploadReceivedData(data: Data, forTask: URLSessionTask) {
-        MageLogger.misc.debug("ATTACHMENT - upload received data for task \(forTask)")
         let taskIdentifier = forTask.taskIdentifier
         
         if let existingData = pushData[taskIdentifier] {
@@ -253,20 +359,13 @@ extension InjectedValues {
             return
         }
         
-        if let httpResponse = task?.response as? HTTPURLResponse,
-           httpResponse.statusCode != 200
-        {
-            MageLogger.misc.debug("ATTACHMENT - non 200 response, \(httpResponse)")
-            if let json {
-                MageLogger.misc.debug("ATTACHMENT - non 200 json response, \(json)")
-            }
+        if let httpResponse = task?.response as? HTTPURLResponse, httpResponse.statusCode != 200 {
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
         }
         
         if data == nil {
-            MageLogger.misc.debug("ATTACHMENT - error uploading attachment, did not receive response from the server")
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
@@ -280,7 +379,6 @@ extension InjectedValues {
             guard let taskIdentifier = task?.taskIdentifier,
                   let attachment = context.fetchFirst(Attachment.self, key: "taskIdentifier", value: taskIdentifier)
             else {
-                MageLogger.misc.debug("ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id \("\(task?.taskIdentifier)")")
                 return
             }
             
@@ -323,7 +421,6 @@ extension InjectedValues {
         }
         
         if let handler = self.backgroundSessionCompletionHandler {
-            MageLogger.misc.debug("ATTACHMENT - MageBackgroundSessionManager calling backgroundSessionCompletionHandler");
             self.backgroundSessionCompletionHandler = nil;
             handler()
         }

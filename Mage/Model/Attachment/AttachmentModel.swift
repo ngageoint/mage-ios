@@ -9,8 +9,8 @@
 import Foundation
 
 // TODO: this is only a class so that it can be in a method marked @objc fix this later
-@objc class AttachmentModel: NSObject, Identifiable {
-    var id: URL {
+@objc public class AttachmentModel: NSObject, Identifiable {
+    public var id: URL {
         attachmentUri
     }
     
@@ -41,10 +41,13 @@ import Foundation
         }
         return nil
     }
-//}
-//
-//extension AttachmentModel {
+
     init(attachment: Attachment) {
+        // Ensure we don't store a URI from a temporary objectID
+        if attachment.objectID.isTemporaryID {
+            try? attachment.managedObjectContext?.obtainPermanentIDs(for: [attachment])
+        }
+        
         attachmentUri = attachment.objectID.uriRepresentation()
         url = attachment.url
         formId = attachment.observationFormId
@@ -59,4 +62,31 @@ import Foundation
         contentType = attachment.contentType
         markedForDeletion = attachment.markedForDeletion
     }
+}
+
+extension AttachmentModel {
+    // Centralized remote URL lookup
+    var remoteURL: URL? {
+        url.flatMap(URL.init(string:))
+    }
+
+    var localFileURL: URL? {
+        AttachmentPath.localURL(fromStored: localPath, fileName: name)
+    }
+
+    // Centralized local URL healing (formerly "healedLocalURL")
+    var healedLocalURL: URL? {
+        AttachmentPath.localURL(fromStored: localPath, fileName: name)
+    }
+
+    // Prefer local if present, else remote (formerly "bestDisplayURL")
+    var bestDisplayURL: URL? {
+        healedLocalURL ?? remoteURL
+    }
+
+    private var _ctype: String { (contentType ?? "").lowercased() }
+
+    var isImage: Bool { _ctype.hasPrefix("image/") }
+    var isVideo: Bool { _ctype.hasPrefix("video/") }
+    var isAudio: Bool { _ctype.hasPrefix("audio/") }
 }

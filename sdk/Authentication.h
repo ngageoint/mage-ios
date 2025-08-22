@@ -23,4 +23,9 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 
 @interface Authentication : NSObject
 + (id<AuthenticationProtocol>) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters;
+
++ (BOOL)isLocalStrategy:(NSString *)strategy;
++ (BOOL)isLdapStrategy:(NSString *)strategy;
++ (BOOL)isIdpStrategy:(NSString *)strategy;
++ (BOOL)isOfflineStrategy:(NSString *)strategy;
 @end
