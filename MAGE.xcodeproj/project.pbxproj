@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -177,6 +177,8 @@
 		843A5E7D2D8DD42800E95F4B /* apiSuccessNoAuthStrategies.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */; };
 		843A5E7E2D8DD42800E95F4B /* polygonObservation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CDD7122601194600F3294C /* polygonObservation.json */; };
 		843A5E7F2D8DD42800E95F4B /* observationNoAttachmentResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */; };
+		8448CA332E5CFBFF00EE689B /* LoginRootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */; };
+		8448CA352E5D076F00EE689B /* LoginHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA342E5D076F00EE689B /* LoginHostViewController.swift */; };
 		8454447D2E3805960068E6AC /* LdapLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */; };
 		846224CB2E313A8D0029FE98 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CA2E313A8D0029FE98 /* LoginViewModel.swift */; };
 		846224CD2E313C7B0029FE98 /* LoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */; };
@@ -1128,6 +1130,8 @@
 		8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAllLoginViews.swift; sourceTree = "<group>"; };
 		8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginDelegateSwiftUI.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
+		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
+		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -2214,35 +2218,37 @@
 			children = (
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
-				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
 				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
+				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
+				8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */,
 				2F52827024732B740023E974 /* IDPCoordinator.h */,
 				2F52827124732B740023E974 /* IDPCoordinator.m */,
 				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
 				84E9E1BF2E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift */,
+				84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */,
+				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
+				84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */,
+				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
+				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
+				8448CA342E5D076F00EE689B /* LoginHostViewController.swift */,
+				8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */,
+				84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
+				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
+				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
+				846224D42E327F010029FE98 /* PasswordFieldView.swift */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
+				846224D62E3280B30029FE98 /* SignInButtonView.swift */,
+				846224D82E3285BB0029FE98 /* SignUpButtonView.swift */,
 				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
-				84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */,
-				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
-				84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */,
-				84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */,
-				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
 				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
-				846224D42E327F010029FE98 /* PasswordFieldView.swift */,
-				846224D62E3280B30029FE98 /* SignInButtonView.swift */,
-				846224D82E3285BB0029FE98 /* SignUpButtonView.swift */,
-				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
-				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
-				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
-				8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -4963,6 +4969,7 @@
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
 				F7DE98762C12493B005372F8 /* ObservationLocationRepository.swift in Sources */,
+				8448CA332E5CFBFF00EE689B /* LoginRootViewModel.swift in Sources */,
 				F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */,
 				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.swift in Sources */,
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
@@ -5124,6 +5131,7 @@
 				F763FF322C79180F00403A00 /* EventModel.swift in Sources */,
 				F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */,
 				2F6D80D52B1FAB9900545221 /* Geocoder.swift in Sources */,
+				8448CA352E5D076F00EE689B /* LoginHostViewController.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F70C343B2C73D7BD007616FA /* AskToCacheImageView.swift in Sources */,
