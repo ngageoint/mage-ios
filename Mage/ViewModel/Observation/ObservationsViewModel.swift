@@ -109,7 +109,9 @@ class ObservationsViewModel: ObservableObject {
             repository.observations(
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
-            .scan([]) { $0 + $1 }
+            .scan([]) { existing, new in
+                (existing + new).uniqued() // NOTE: this is a band-aid to fix duplicates issue #1370
+            }
             .map { uriItems in
                 // Convert [URIItem] to [ObservationItem]
                 uriItems.compactMap { uriItem in

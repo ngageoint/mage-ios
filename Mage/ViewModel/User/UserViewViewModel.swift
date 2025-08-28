@@ -76,7 +76,9 @@ class UserViewViewModel: ObservableObject {
                 userUri: uri,
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
-            .scan([]) { $0 + $1 }
+            .scan([]) { existing, new in
+                (existing + new).uniqued() // NOTE: this is a band-aid to fix duplicates issue #1370
+            }
             .map { State.loaded(rows: $0) }
             .catch { error in
                 return Just(State.failure(error: error))
