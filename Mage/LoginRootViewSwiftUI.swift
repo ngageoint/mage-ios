@@ -13,6 +13,10 @@ struct LoginRootViewSwiftUI: View {
     @ObservedObject var viewModel: LoginRootViewModel
     @State private var showCopiedToast = false
     
+    init(viewModel: LoginRootViewModel) {
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -102,7 +106,7 @@ private struct StrategyStackView: View {
 private struct StrategyRow: View {
     let strategy: [String: Any]
     weak var user: User?
-    weak var delegate: (NSObjectProtocol & LoginDelegate & IDPLoginDelegate)?
+    weak var delegate: AuthDelegates?
     
     var body: some View {
         // Render SwiftUI directly for Local/LDAP; use provided SwiftUI for IDP

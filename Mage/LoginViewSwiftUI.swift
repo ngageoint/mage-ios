@@ -25,11 +25,13 @@ struct LoginViewSwiftUI: View {
                 isLoading: viewModel.isLoading,
                 placeholder: viewModel.usernamePlaceholder
             )
+
             PasswordFieldView(
                 password: $viewModel.password,
                 showPassword: $viewModel.showPassword,
                 placeholder: viewModel.passwordPlaceholder
             )
+
             
             if let error = viewModel.errorMessage {
                 Text(error)
@@ -38,9 +40,12 @@ struct LoginViewSwiftUI: View {
             }
             
             SignInButtonView(isLoading: viewModel.isLoading) {
+                print("KIF PROBE: Local Sign In tapped u=\(viewModel.username) p.len=\(viewModel.password.count)")
+
                 viewModel.loginTapped()
             }
             .accessibilityLabel("Sign In")
+            .accessibilityIdentifier("Sign In")
             
             SignUpButtonView {
                 viewModel.signupTapped()

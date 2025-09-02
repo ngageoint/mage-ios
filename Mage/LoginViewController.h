@@ -22,11 +22,11 @@
 
 @end
 
-@interface LoginViewController : UIViewController
-
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
-- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme;
-
-- (void) setContactInfo: (ContactInfo *) contactInfo;
-
-@end
+//@interface LoginViewController : UIViewController
+//
+//- (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+//- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+//
+//- (void) setContactInfo: (ContactInfo *) contactInfo;
+//
+//@end

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -43,7 +43,6 @@
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
 		2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.swift */; };
-		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B20CD25FA69950063A940 /* UIColor+Hex.m */; };
 		2F3C9EE02B179E8F00FF5570 /* HasMapSearchMixin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3C9EDF2B179E8F00FF5570 /* HasMapSearchMixin.swift */; };
@@ -179,6 +178,14 @@
 		843A5E7F2D8DD42800E95F4B /* observationNoAttachmentResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */; };
 		8448CA332E5CFBFF00EE689B /* LoginRootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */; };
 		8448CA352E5D076F00EE689B /* LoginHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA342E5D076F00EE689B /* LoginHostViewController.swift */; };
+		8448CA372E5DEF9000EE689B /* OrDividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA362E5DEF9000EE689B /* OrDividerView.swift */; };
+		8448CA392E5E3B9500EE689B /* AuthDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA382E5E3B9500EE689B /* AuthDelegates.swift */; };
+		8448CA3B2E5E69A500EE689B /* LoginDelegatesDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA3A2E5E69A500EE689B /* LoginDelegatesDouble.swift */; };
+		8448CA3D2E5FABB500EE689B /* AuthenticationCoordinator_NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA3C2E5FABB500EE689B /* AuthenticationCoordinator_NetworkTests.swift */; };
+		8448CA3F2E60921700EE689B /* Test+Helpers_NoUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA3E2E60921700EE689B /* Test+Helpers_NoUI.swift */; };
+		8448CA412E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA402E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift */; };
+		8448CA432E609D4B00EE689B /* AuthTestKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA422E609D4B00EE689B /* AuthTestKit.swift */; };
+		8448CA482E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */; };
 		8454447D2E3805960068E6AC /* LdapLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */; };
 		846224CB2E313A8D0029FE98 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CA2E313A8D0029FE98 /* LoginViewModel.swift */; };
 		846224CD2E313C7B0029FE98 /* LoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */; };
@@ -490,7 +497,6 @@
 		F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F743008B254775AB00DCE050 /* SplitLayout.swift */; };
 		F744ACFB2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F744ACFA2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift */; };
 		F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F744ACFC2BFE73A900A6E4CA /* DataSourceMapViewModel.swift */; };
-		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
 		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
 		F7489B35278E29C300A9E314 /* CoordinateField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B34278E29C300A9E314 /* CoordinateField.swift */; };
 		F7489B37279A13CE00A9E314 /* CoordinateFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */; };
@@ -747,7 +753,6 @@
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
-		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
 		F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */; };
 		F7C640FF257EB29100C02335 /* geometryField.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C640FE257EB29100C02335 /* geometryField.json */; };
 		F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C6410925817BC000C02335 /* MockLocationService.swift */; };
@@ -1132,6 +1137,14 @@
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
 		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
+		8448CA362E5DEF9000EE689B /* OrDividerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrDividerView.swift; sourceTree = "<group>"; };
+		8448CA382E5E3B9500EE689B /* AuthDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDelegates.swift; sourceTree = "<group>"; };
+		8448CA3A2E5E69A500EE689B /* LoginDelegatesDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDelegatesDouble.swift; sourceTree = "<group>"; };
+		8448CA3C2E5FABB500EE689B /* AuthenticationCoordinator_NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator_NetworkTests.swift; sourceTree = "<group>"; };
+		8448CA3E2E60921700EE689B /* Test+Helpers_NoUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+Helpers_NoUI.swift"; sourceTree = "<group>"; };
+		8448CA402E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator_NoUITests.swift; sourceTree = "<group>"; };
+		8448CA422E609D4B00EE689B /* AuthTestKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTestKit.swift; sourceTree = "<group>"; };
+		8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator_FlowTests.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -1482,7 +1495,6 @@
 		F743008B254775AB00DCE050 /* SplitLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLayout.swift; sourceTree = "<group>"; };
 		F744ACFA2BFD440400A6E4CA /* ObservationsMapFeatureRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsMapFeatureRepository.swift; sourceTree = "<group>"; };
 		F744ACFC2BFE73A900A6E4CA /* DataSourceMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceMapViewModel.swift; sourceTree = "<group>"; };
-		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
 		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
 		F7467B7B209A2F0B00EABA63 /* OrView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrView.m; sourceTree = "<group>"; };
 		F7489B34278E29C300A9E314 /* CoordinateField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateField.swift; sourceTree = "<group>"; };
@@ -1785,7 +1797,6 @@
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
 		F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageAppCoordinator.h; sourceTree = "<group>"; };
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
-		F7C5C8D81F5F5473002C78D3 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
 		F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormListener.swift; sourceTree = "<group>"; };
 		F7C640FE257EB29100C02335 /* geometryField.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryField.json; sourceTree = "<group>"; };
 		F7C6410925817BC000C02335 /* MockLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationService.swift; sourceTree = "<group>"; };
@@ -2235,7 +2246,9 @@
 				8448CA342E5D076F00EE689B /* LoginHostViewController.swift */,
 				8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */,
 				84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */,
+				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
+				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
 				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
 				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
@@ -2710,19 +2723,25 @@
 			isa = PBXGroup;
 			children = (
 				F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */,
+				8448CA3E2E60921700EE689B /* Test+Helpers_NoUI.swift */,
+				8448CA402E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift */,
+				8448CA422E609D4B00EE689B /* AuthTestKit.swift */,
+				84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */,
+				84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */,
+				8448CA3C2E5FABB500EE689B /* AuthenticationCoordinator_NetworkTests.swift */,
 				846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */,
 				846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */,
 				F7ED5D2E20052248007BD768 /* AuthenticationTests.swift */,
+				8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */,
 				F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */,
 				F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */,
 				F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */,
 				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
-				84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */,
 				8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */,
-				84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */,
 				8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */,
 				8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */,
 				8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */,
+				8448CA3A2E5E69A500EE689B /* LoginDelegatesDouble.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -3451,8 +3470,6 @@
 			isa = PBXGroup;
 			children = (
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
-				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
-				F7467B78209A2DC600EABA63 /* orView.xib */,
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 			);
 			name = Authentication;
@@ -4516,11 +4533,9 @@
 				2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
-				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
-				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F76B4A7028E61E720012BF4F /* CHANGELOG.md in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
@@ -5000,7 +5015,6 @@
 				F73564CC2C613BA400466813 /* ObservationImportantRepository.swift in Sources */,
 				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
-				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,
@@ -5152,6 +5166,7 @@
 				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.swift in Sources */,
 				F7BFB8D22C4AB07300901479 /* NavigateToButton.swift in Sources */,
+				8448CA372E5DEF9000EE689B /* OrDividerView.swift in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.swift in Sources */,
@@ -5281,6 +5296,7 @@
 				F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */,
 				F734C1E52BC845BE00B2E8C8 /* CoordinateDisplayType.swift in Sources */,
 				F763FF092C765D9200403A00 /* UserAvatarChooserDelegate.swift in Sources */,
+				8448CA392E5E3B9500EE689B /* AuthDelegates.swift in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */,
 				F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */,
@@ -5554,12 +5570,15 @@
 				F763FF2C2C79128200403A00 /* UserRemoteDataSourceMock.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
 				F71EFE4C2757F824001E6134 /* DataConnectionUtilitiesTests.swift in Sources */,
+				8448CA3B2E5E69A500EE689B /* LoginDelegatesDouble.swift in Sources */,
 				F7C0976B2C7FBE67003FA115 /* RoleRepositoryMock.swift in Sources */,
 				F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */,
 				F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */,
 				F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */,
+				8448CA3D2E5FABB500EE689B /* AuthenticationCoordinator_NetworkTests.swift in Sources */,
 				F763FF262C790C7C00403A00 /* ObservationLocationRepositoryMock.swift in Sources */,
 				F789EB602BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift in Sources */,
+				8448CA482E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift in Sources */,
 				F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */,
 				F7E5749027DA8D21009A6E0D /* CanCreateObservationTests.swift in Sources */,
 				F7C097562C7F6301003FA115 /* ObservationViewViewModelTests.swift in Sources */,
@@ -5587,6 +5606,7 @@
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
 				8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */,
+				8448CA432E609D4B00EE689B /* AuthTestKit.swift in Sources */,
 				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,
 				F76BB96825E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
@@ -5639,6 +5659,7 @@
 				F7F08E9A27E9163000640D89 /* OnlineLayerMapTests.swift in Sources */,
 				F7E5749827DF8700009A6E0D /* StaticLayerMapTests.swift in Sources */,
 				84299DAB2E3BFBD2007E51B1 /* LoginViewModelTests.swift in Sources */,
+				8448CA412E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift in Sources */,
 				F70A708C27D932FE000881F5 /* FilteredUsersMapTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F789EB622BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift in Sources */,
@@ -5679,6 +5700,7 @@
 				846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */,
 				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
 				F7C097582C7F6404003FA115 /* ObservationRepositoryMock.swift in Sources */,
+				8448CA3F2E60921700EE689B /* Test+Helpers_NoUI.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */,

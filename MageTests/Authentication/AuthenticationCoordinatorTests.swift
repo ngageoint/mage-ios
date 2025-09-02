@@ -13,6 +13,7 @@ import PureLayout
 import OHHTTPStubs
 import Kingfisher
 import MagicalRecord
+import ViewInspector
 
 @testable import MAGE
 import UIKit
@@ -142,9 +143,70 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         coordinator?.start(mageServer);
         
         expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request did not happened")
-        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginHostViewController.self));
     }
 
+    @MainActor
+    func testLocalLogin_TriggersSigninAndTokenRequests() async throws {
+        // Arrange
+        let nav = UINavigationController()
+        let delegate = MockAuthenticationCoordinatorDelegate()
+        let coordinator = AuthenticationCoordinator(
+            navigationController: nav,
+            andDelegate: delegate,
+            andScheme: MAGEScheme.scheme(),
+            context: context
+        )!
+        
+        UserDefaults.standard.baseServerUrl = "https://magetest"
+        UserDefaults.standard.deviceRegistered = true
+        
+        // stub the API, signin, token
+        let serverDelegate = MockMageServerDelegate()
+        MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/server", filePath: "server_response.json", delegate: serverDelegate)
+        MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess6.json", delegate: serverDelegate)
+        MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate)
+        MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate)
+
+        // Fetch a server and start coordinator (populates authenticationModules, etc.)
+        let server: MageServer = await TestHelpers.getTestServer()
+        coordinator.start(server)
+        
+        // simulate view calling into the coordinator with LoginDelegate
+        let params: [String: Any] = [
+            "username": "username",
+            "password": "password",
+            "uid": "uuid",
+            "strategy": ["identifier": "local"],
+            "appVersion": "6.0.0"
+        ]
+        
+        coordinator.login(withParameters: params, withAuthenticationStrategy: "local", complete: { _, _ in })
+        
+        // Assert: wait asynchronously for both URLs to appear
+        let signinURL = URL(string: "https://magetest/auth/local/signin")!
+        let tokenURL  = URL(string: "https://magetest/auth/token")!
+
+        let expectedSignin = expectation(description: "signin called")
+        let expectedToken = expectation(description: "token called")
+        
+        Task { [weak serverDelegate] in
+            while !(serverDelegate?.urls.contains(signinURL) ?? false) {
+                try? await Task.sleep(nanoseconds: 50_000_000)  // 50ms
+            }
+            expectedSignin.fulfill()
+        }
+
+        Task { [weak serverDelegate] in
+            while !(serverDelegate?.urls.contains(tokenURL) ?? false) {
+                try? await Task.sleep(nanoseconds: 50_000_000)  // 50ms
+            }
+            expectedToken.fulfill()
+        }
+        
+        await fulfillment(of: [expectedSignin, expectedToken], timeout: 3.0)
+    }
+    
     func testShouldLoginWithRegisteredDevice() {
         UserDefaults.standard.deviceRegistered = true;
         
@@ -676,7 +738,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         expect(view.attributedText.string).to(contain("Your device has been registered."));
         expect(view.attributedText.string).to(contain("An administrator has been notified to approve this device."));
         
-        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginHostViewController.self));
     }
             
     func testShouldLoginWithRegisteredDeviceAndDisagreeToTheDisclaimer() {
@@ -780,7 +842,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         expect(alert.message).to(contain("Your account is now active."));
         tester().tapView(withAccessibilityLabel: "OK");
 
-        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginHostViewController.self));
     }
             
     func testShouldCreateAnInactiveAccount() {
@@ -844,7 +906,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         expect(alert.message).to(contain("An administrator must approve your account before you can login"));
         tester().tapView(withAccessibilityLabel: "OK");
         
-        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginHostViewController.self));
     }
    
     func testShouldFailToCreateAccount() {
@@ -928,7 +990,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "CANCEL");
         tester().tapView(withAccessibilityLabel: "CANCEL");
         
-        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+        expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginHostViewController.self));
     }
             
     func testShouldTellTheDelegateToShowTheChangeServerUrlView() {
@@ -967,7 +1029,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             XCTAssertNotNil(self.coordinator?.server, "Expected a valid MageServer to be set")
-            XCTAssertNotNil(self.navigationController?.topViewController as? LoginViewController, "Expected LoginViewController to be shown")
+            XCTAssertNotNil(self.navigationController?.topViewController as? LoginHostViewController, "Expected LoginHostViewController to be shown")
             expectation.fulfill()
         }
 

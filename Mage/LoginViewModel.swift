@@ -77,6 +77,8 @@ import Foundation
             "appVersion": appVersionFull
         ]
         
+        MageLogger.misc.debug("\n\nBBB Login Strategy Identifier: \(self.strategy["identifier"] as? String ?? "")\n\n")
+        
         delegate?.login(
             withParameters: parameters,
             withAuthenticationStrategy: strategy["identifier"] as? String ?? ""

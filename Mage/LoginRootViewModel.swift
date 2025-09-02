@@ -14,7 +14,7 @@ import UIKit
 final class LoginRootViewModel: ObservableObject {
     // Inputs
     let server: MageServer?
-    weak var delegate: (NSObjectProtocol & LoginDelegate & IDPLoginDelegate)?
+    weak var delegate: AuthDelegates?
     let user: User?
     
     @Published var loginFailure: Bool = false
@@ -27,7 +27,7 @@ final class LoginRootViewModel: ObservableObject {
     
     init(server: MageServer?,
          user: User?,
-         delegate: (NSObjectProtocol & LoginDelegate & IDPLoginDelegate)?,
+         delegate: AuthDelegates?,
          loginFailure: Bool = false) {
         self.server = server
         self.user = user

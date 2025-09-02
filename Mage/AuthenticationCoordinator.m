@@ -7,7 +7,7 @@
 //
 
 #import "AuthenticationCoordinator.h"
-#import "LoginViewController.h"
+//#import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "SignUpViewController_Server5.h"
 #import "IDPCoordinator.h"
@@ -28,7 +28,7 @@
 @property (strong, nonatomic) NSString *captchaToken;
 @property (strong, nonatomic) NSDictionary *signupParameters;
 @property (weak, nonatomic) id<AuthenticationDelegate> delegate;
-@property (strong, nonatomic) LoginViewController *loginView;
+@property (strong, nonatomic) LoginViewController *loginViewController;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (strong, nonatomic) NSManagedObjectContext *context;
@@ -139,7 +139,7 @@ BOOL signingIn = YES;
         alert.accessibilityLabel = @"Account Created";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf.navigationController popToViewController:self.loginView animated:NO];
+            [weakSelf.navigationController popToViewController:self.loginViewController animated:NO];
         }]];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -161,12 +161,21 @@ BOOL signingIn = YES;
 - (void) cancel {
     signingIn = YES;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController popToViewController:self.loginView animated:NO];
+    [self.navigationController popToViewController:self.loginViewController animated:NO];
 }
 
 
 - (void) signinForStrategy:(NSDictionary *)strategy {
-    NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
+    NSString *identifier = strategy[@"identifier"];
+    if (identifier.length == 0) {
+        NSLog(@"[Auth] Ignoring IDP signin: missing identifier in strategy: %@", strategy);
+        return;
+    }
+    
+    NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], identifier];
+    
+    NSLog(@"[Auth] signinForStrategy raw: %@", strategy);
+    NSLog(@"[Auth] using identifier: '%@'", identifier);
     
     self.idpCoordinator = [[IDPCoordinator alloc] initWithViewController:self.navigationController url:url strategy:strategy delegate:self];
     [self.idpCoordinator start];
@@ -189,9 +198,10 @@ BOOL signingIn = YES;
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
     User *currentUser = [User fetchCurrentUserWithContext:_context];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
+    self.loginViewController = [[LoginViewController alloc] initWithMageServer:mageServer user:currentUser delegate:self scheme:self.scheme];
+    
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController pushViewController:self.loginView animated:NO];
+    [self.navigationController pushViewController:self.loginViewController animated:NO];
 }
 
 - (void) showLoginViewForServer: (MageServer *) mageServer {
@@ -203,8 +213,8 @@ BOOL signingIn = YES;
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andScheme:_scheme];
-    [self.navigationController pushViewController:self.loginView animated:NO];
+    self.loginViewController = [[LoginViewController alloc] initWithMageServer:mageServer delegate:self scheme:self.scheme];
+    [self.navigationController pushViewController:self.loginViewController animated:NO];
 }
 
 - (void) changeServerURL {
@@ -218,6 +228,11 @@ BOOL signingIn = YES;
 }
 
 - (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationStrategy:(NSString *) authenticationStrategy complete:(void (^)(AuthenticationStatus, NSString *))complete {
+    
+    // TODO: BRENT REMOVE
+    NSLog(@"[TEST] AC.login called, strategy=%@, params=%@", authenticationStrategy, parameters);
+    NSLog(@"[TEST] AC.modules = %@", self.server.authenticationModules.allKeys);
+    
     id<AuthenticationProtocol> authenticationModule = [self.server.authenticationModules objectForKey:authenticationStrategy];
     if (!authenticationModule) {
         authenticationModule = [self.server.authenticationModules objectForKey:@"offline"];
@@ -270,7 +285,7 @@ BOOL signingIn = YES;
 }
 
 - (void) accountCreationSuccess: (NSDictionary *) parameters {
-    [self.navigationController popToViewController:self.loginView animated:NO];
+    [self.navigationController popToViewController:self.loginViewController animated:NO];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"MAGE Account Created"
                                                                    message:@"Account created, please contact your MAGE administrator to activate your account."
@@ -286,7 +301,7 @@ BOOL signingIn = YES;
     
     ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
     info.username = username;
-    [self.loginView  setContactInfo:info];
+    [self.loginViewController setContactInfo:info];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -385,7 +400,7 @@ BOOL signingIn = YES;
             }
         } else {
             ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString andDetailedInfo: errorDetail];
-            [self.loginView setContactInfo:info];
+            [self.loginViewController setContactInfo:info];
         }
     }];
 }
@@ -396,7 +411,7 @@ BOOL signingIn = YES;
     ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
     info.username = username;
     
-    [self.loginView setContactInfo:info];
+    [self.loginViewController setContactInfo:info];
     
 }
 

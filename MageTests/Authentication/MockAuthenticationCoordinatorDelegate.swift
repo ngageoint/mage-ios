@@ -8,19 +8,21 @@
 import Foundation
 
 class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
-    var authenticationSuccessfulCalled = false;
-    var couldNotAuthenticateCalled = false;
-    var changeServerUrlCalled = false;
+    var authenticationSuccessfulCalled = false
+    var couldNotAuthenticateCalled = false
+    var changeServerUrlCalled = false
+    var onAuthenticationSuccessful: (() -> Void)?
     
     func authenticationSuccessful() {
-        authenticationSuccessfulCalled = true;
+        authenticationSuccessfulCalled = true
+        onAuthenticationSuccessful?()
     }
     
     func couldNotAuthenticate() {
-        couldNotAuthenticateCalled = true;
+        couldNotAuthenticateCalled = true
     }
     
     func changeServerUrl() {
-        changeServerUrlCalled = true;
+        changeServerUrlCalled = true
     }
 }

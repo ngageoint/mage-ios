@@ -23,18 +23,25 @@ struct PasswordFieldView: View {
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .accessibilityLabel(placeholder)
+                    .accessibilityIdentifier(placeholder)
             } else {
                 SecureField(placeholder, text: $password)
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .accessibilityLabel(placeholder)
+                    .accessibilityIdentifier(placeholder)
             }
             
             Button(action: { showPassword.toggle() }) {
                 Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
                     .foregroundStyle(.secondary)
             }
+            .accessibilityLabel(showPassword ? "Hide password" : "Show password")
+            .accessibilityIdentifier("Toggle Password Visibility")
         }
+        .accessibilityElement(children: .contain)
         .padding()
         .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2)))
     }

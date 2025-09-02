@@ -22,7 +22,7 @@ end
 def test_pods
   pod 'OCMock'
   pod 'OHHTTPStubs'
-  pod 'OHHTTPStubs/Swift'
+  pod 'OHHTTPStubs/Swift', '~> 9.0'
   pod 'Quick', '~> 6'
   pod 'Nimble', '~> 9'
   pod 'KIF'

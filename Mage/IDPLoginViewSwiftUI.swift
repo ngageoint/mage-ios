@@ -17,11 +17,15 @@ struct IDPLoginViewSwiftUI: View {
         }) {
             HStack {
                 Image(systemName: "person.crop.circle.badge.checkmark")
-                Text(viewModel.displayName)
+//                Text(viewModel.displayName)
+                // TODO: BRENT - Fix me
+                Text("Sign in with SSO")
                     .font(.headline)
             }
             .frame(maxWidth: .infinity)
         }
+        .accessibilityLabel("Sign in with SSO")
+        .accessibilityIdentifier("Sign in with SSO")
         .buttonStyle(.borderedProminent)
         .padding(.vertical, 12)
     }
@@ -31,7 +35,7 @@ struct IDPLoginViewSwiftUI: View {
 // MARK: - Mock Delegate for Preview
 class MockIDPLoginDelegate: NSObject, IDPLoginDelegate {
     func signinForStrategy(_ strategy: NSDictionary) {
-        print("Sign in tapped for strategy: \(strategy)")
+        print("ZZZ MockIDPLoginDelegate: Sign in tapped for strategy: \(strategy)")
     }
 }
 

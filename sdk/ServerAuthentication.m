@@ -30,6 +30,15 @@
     NSDictionary *strategy = [parameters objectForKey:@"strategy"];
     
     MageSessionManager *manager = [MageSessionManager sharedManager];
+    
+    NSString *identifier = strategy[@"identifier"];
+    if (identifier.length == 0) {
+        NSLog(@"[Auth] SA Ignoring IDP signin: missing identifier in strategy: %@", strategy);
+        return;
+    }
+    NSLog(@"[Auth] SA signinForStrategy raw: %@", strategy);
+    NSLog(@"[Auth] SA using identifier: '%@'", identifier);
+    
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
     
     NSURL *URL = [NSURL URLWithString:url];

@@ -12,6 +12,7 @@ import XCTest
 class MockIDPLoginDelegate: NSObject, IDPLoginDelegate {
     var calledWith: NSDictionary?
     func signinForStrategy(_ strategy: NSDictionary) {
+        print("ZZZ MockIDPLoginDelegate FILE: Sign in tapped for strategy: \(strategy)")
         calledWith = strategy
     }
 }

@@ -390,7 +390,7 @@ extension TestHelpers {
     @MainActor
     static func waitForLoginScreen(navigationController: UINavigationController, timeout: TimeInterval = 2) async {
         await awaitBlockTrue(block: {
-            navigationController.topViewController is LoginViewController
+            navigationController.topViewController is LoginHostViewController
         }, timeout: timeout)
     }
 

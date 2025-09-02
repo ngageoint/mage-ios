@@ -47,7 +47,6 @@
         "AttachmentFieldViewTests\/testSetOneAttachmentWithObservationAndTwoLaterThenRemoveSecond()",
         "AttachmentFieldViewTests\/testShouldCallTheAttachmentSelectionDelegateOnTap()",
         "AttachmentPushServiceTests",
-        "AuthenticationCoordinatorTests",
         "CanCreateObservationTests\/testInitializeTheCanCreateObservationAndLongPressTheMap()",
         "EventChooserControllerTests",
         "EventChooserCoordinatorTests",

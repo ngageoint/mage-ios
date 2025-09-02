@@ -24,6 +24,8 @@ struct UsernameFieldView: View {
                 .textContentType(.username)
                 .disabled(isDisabled || isLoading)
                 .opacity((isDisabled || isLoading) ? 0.6 : 1)
+                .accessibilityLabel(placeholder)
+                .accessibilityIdentifier(placeholder)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2)))
