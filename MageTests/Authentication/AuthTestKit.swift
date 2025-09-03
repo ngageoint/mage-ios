@@ -39,41 +39,51 @@ enum Stubs {
     static func api(
         apiFixture: String = "apiSuccess6.json",
         serverFixture: String = "server_response.json",
-        delegate: MockMageServerDelegate
-    ) -> MockMageServerDelegate {
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.apiServer, filePath: serverFixture, delegate: delegate)
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.api, filePath: apiFixture, delegate: delegate)
-        return delegate
-    }
+        delegate: MockMageServerDelegate) -> MockMageServerDelegate {
+            installJSONStub(urlString: TestURLs.api, file: apiFixture, delegate: delegate)
+            installJSONStub(urlString: TestURLs.apiServer, file: serverFixture, delegate: delegate)
+            return delegate
+        }
     
     // ---- Local auth happy path (signin + token)
     @discardableResult
     static func authSuccess(
         signinFixture: String = "signinSuccess.json",
         tokenFixture: String = "tokenSuccess.json",
-        delegate: MockMageServerDelegate
-    ) -> MockMageServerDelegate {
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.signinLocal, filePath: signinFixture, delegate: delegate)
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.token, filePath: tokenFixture, delegate: delegate)
-        return delegate
+        delegate: MockMageServerDelegate) -> MockMageServerDelegate {
+            installJSONStub(urlString: TestURLs.signinLocal, file: signinFixture, delegate: delegate)
+            installJSONStub(urlString: TestURLs.token, file: tokenFixture, delegate: delegate)
+            return delegate
+        }
+    
+    /// silence /api/users/.../(avatar | icon) to avoid host-not-found spam during flows
+    static func userAssetsNoop() {
+        HTTPStubs.stubRequests(passingTest: { req in
+            guard let url = req.url, url.host == "magetest" else { return false }
+            let p = url.path
+            return p.hasPrefix( "/api/users/" ) && ( p.hasSuffix( "/avatar" ) || p.hasSuffix( "/icon" ) )
+        }) { _ in
+            HTTPStubsResponse(data: Data(), statusCode: 200, headers: ["Content-Type": "image/png"]).responseTime(0.01)
+        }
     }
     
     // ---- Local auth: only signin success (token omitted if you want to assert failure separately)
     @discardableResult
     static func authSigninSuccessOnly(
         signinFixture: String = "signinSuccess.json",
-        delegate: MockMageServerDelegate
-    ) -> MockMageServerDelegate {
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.signinLocal, filePath: signinFixture, delegate: delegate)
-        return delegate
-    }
+        delegate: MockMageServerDelegate) -> MockMageServerDelegate {
+            installJSONStub(urlString: TestURLs.signinLocal, file: signinFixture, delegate: delegate)
+            return delegate
+        }
     
     // ---- Force a network error on /auth/local/signin
     @discardableResult
     static func signinError(_ error: NSError, delegate: MockMageServerDelegate) -> HTTPStubsDescriptor {
         let u = URL(string: TestURLs.signinLocal)!
         
-        return stub(condition: isHost(u.host!) && isPath(u.path)) { req in
+        return HTTPStubs.stubRequests(passingTest: { req in
+            req.url?.host == u.host && req.url?.path == u.path
+        }) { req in
             delegate.urlCalled(req.url, method: req.httpMethod)
             return HTTPStubsResponse(error: error)
         }
@@ -85,49 +95,52 @@ enum Stubs {
         status: Int32 = 401,
         body: String = "Failed to get a token",
         headers: [String: String]? = nil,
-        delegate: MockMageServerDelegate
-    ) -> HTTPStubsDescriptor {
-        let u = URL(string: TestURLs.token)!
-        return stub(condition: isHost(u.host!) && isPath(u.path)) { req in
-            delegate.urlCalled(req.url, method: req.httpMethod)
-            return HTTPStubsResponse(data: Data(body.utf8), statusCode: status, headers: headers)
+        delegate: MockMageServerDelegate) -> HTTPStubsDescriptor {
+            let u = URL(string: TestURLs.token)!
+            
+            return HTTPStubs.stubRequests(passingTest: { req in
+                req.url?.host == u.host && req.url?.path == u.path
+            }) { req in
+                delegate.urlCalled(req.url, method: req.httpMethod)
+                return HTTPStubsResponse(
+                    data: Data(body.utf8), statusCode: status, headers: headers)
+            }
         }
-    }
     
     // ---- Captcha (signups) success
     @discardableResult
     static func signupCaptcha(
         fixture: String = "signups.json",
-        delegate: MockMageServerDelegate
-    ) -> MockMageServerDelegate {
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.signups, filePath: fixture, delegate: delegate)
-        return delegate
-    }
+        delegate: MockMageServerDelegate) -> MockMageServerDelegate {
+            MockMageServer.stubJSONSuccessRequest(url: TestURLs.signups, filePath: fixture, delegate: delegate)
+            return delegate
+        }
     
     // ---- Signup verification success (JSON body optional for matching)
     @discardableResult
     static func signupVerificationSuccess(
         fixture: String,
         jsonBody: [String: Any]? = nil,
-        delegate: MockMageServerDelegate
-    ) -> MockMageServerDelegate {
-        MockMageServer.stubJSONSuccessRequest(url: TestURLs.signupsVerify, filePath: fixture, delegate: delegate)
-        return delegate
-    }
+        delegate: MockMageServerDelegate) -> MockMageServerDelegate {
+            MockMageServer.stubJSONSuccessRequest(url: TestURLs.signupsVerify, filePath: fixture, delegate: delegate)
+            return delegate
+        }
     
     // ---- Signup verification failure (e.g., 503)
     @discardableResult
     static func signupVerificationFailure(
         status: Int32 = 503,
-    body: String = "error message",
-        delegate: MockMageServerDelegate
-    ) -> HTTPStubsDescriptor {
-        let u = URL(string: TestURLs.signupsVerify)!
-        return stub(condition: isHost(u.host!) && isPath(u.path)) { req in
-            delegate.urlCalled(req.url, method: req.httpMethod)
-            return HTTPStubsResponse(data: Data(body.utf8), statusCode: status, headers: ["Content-Type": "text/plain"])
+        body: String = "error message",
+        delegate: MockMageServerDelegate) -> HTTPStubsDescriptor {
+            let u = URL(string: TestURLs.signupsVerify)!
+            
+            return HTTPStubs.stubRequests(passingTest: { req in
+                req.url?.host == u.host && req.url?.path == u.path
+            }) { req in
+                delegate.urlCalled(req.url, method: req.httpMethod)
+                return HTTPStubsResponse(data: Data(body.utf8), statusCode: status, headers: ["Content-Type": "text/plain"])
+            }
         }
-    }
 }
 
 
@@ -223,5 +236,32 @@ func stubUserAssets() {
     
 }
 
+private final class _AuthTestKitBundleSentinel: NSObject { }
 
+private extension Stubs {
+    @discardableResult
+    static func installJSONStub(urlString: String,
+                                file: String,
+                                contentType: String = "application/json",
+                                delegate: MockMageServerDelegate) -> HTTPStubsDescriptor {
+        
+        let u = URL(string: urlString)!
+        return HTTPStubs.stubRequests(passingTest: { req in
+            req.url?.host == u.host && req.url?.path == u.path
+        }) { req in
+            delegate.urlCalled(req.url, method: req.httpMethod)
+            
+            // Resolve the fixture inside the *test* bundle
+            guard let path = Bundle(for: _AuthTestKitBundleSentinel.self)
+                .path(forResource: file, ofType: nil) else {
+                assertionFailure("Fixture '\(file)' not found in test bundle")
+                return HTTPStubsResponse(data: Data(), statusCode: 500, headers: nil)
+            }
+            
+            // tiny delay avoids 0-latency races
+            return HTTPStubsResponse(fileAtPath: path, statusCode: 200, headers: ["Content-Type": contentType])
+                .responseTime(0.01)
+        }
+    }
+}
 

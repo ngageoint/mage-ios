@@ -25,6 +25,17 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
     override func setUp() async throws {
         try await super.setUp()
         
+        net = MockMageServerDelegate()
+        Stubs.removeAll()
+        Stubs.api(delegate: net)    // /api and /apa/server
+        Stubs.userAssetsNoop()
+
+        HTTPStubs.onStubActivation { [weak self] request, _, response in
+            guard let self, let url = request.url else { return }
+            self.net?.urlCalled(url, method: request.httpMethod)
+            print("[STUB] Matched \(url.absoluteString) -> \(response.statusCode)")
+        }
+
         // Defaults common to many tests
         UserDefaults.standard.baseServerUrl = TestURLs.base
         UserDefaults.standard.deviceRegistered = true
@@ -36,23 +47,13 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
         win.makeKeyAndVisible()
         
         delegate = MockAuthenticationCoordinatorDelegate()
+        
         coordinator = AuthenticationCoordinator(
             navigationController: nav,
             andDelegate: delegate,
             andScheme: MAGEScheme.scheme(),
             context: context
         )
-        
-        net = MockMageServerDelegate()
-        Stubs.removeAll()
-        
-        HTTPStubs.onStubActivation { [weak self] request, _, response in
-            guard let self, let url = request.url else { return }
-            self.net?.urlCalled(url, method: request.httpMethod)
-          print("[STUB] Matched \(url.absoluteString) -> \(response.statusCode)")
-        }
-
-        Stubs.api(delegate: net)    // /api and /apa/server
     }
     
     override func tearDown() async throws {
@@ -128,9 +129,7 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
     
     
     func test_Start_HitsAPI() async throws {
-        // Arrange
-        Stubs.removeAll()
-        Stubs.api(delegate: net)
+        // Arrange done in setUp()
         
         // Act
         let s = try await server()
@@ -139,7 +138,8 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
         // Assert
         expect(self.net.urls).toEventually(
             contain(URL(string: TestURLs.api)!),
-            timeout: .seconds(4), pollInterval: .milliseconds(50)
+            timeout: .seconds(4),
+            pollInterval: .milliseconds(50)
         )
     }
     
