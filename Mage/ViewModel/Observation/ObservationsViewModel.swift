@@ -112,7 +112,7 @@ class ObservationsViewModel: ObservableObject {
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([URIItem]()) { existing, new in
-                return (existing + new)
+                (existing + new).uniqued() // FIX: loadMore appears to duplicate fresh observations until they sync
             }
             .map { uriItems in
                 // Convert [URIItem] to [ObservationItem]

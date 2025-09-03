@@ -79,7 +79,7 @@ class UserViewViewModel: ObservableObject {
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([]) { existing, new in
-                (existing + new)
+                (existing + new).uniqued() // FIX: loadMore appears to duplicate fresh observations until they sync
             }
             .map { State.loaded(rows: $0) }
             .catch { error in
