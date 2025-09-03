@@ -230,7 +230,8 @@ class MapDirectionsMixin: NSObject, MapMixin {
             NotificationCenter.default.post(name: .MapRequestFocus, object: nil)
         }));
         
-        let appleMapsQueryString = "daddr=\(location.coordinate.latitude),\(location.coordinate.longitude)&ll=\(location.coordinate.latitude),\(location.coordinate.longitude)&q=\(title ?? "")".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
+        let appleMapsQueryString = "daddr=\(location.coordinate.latitude),\(location.coordinate.longitude)&dirflg=d".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
+        
         let appleMapsUrl = URL(string: "https://maps.apple.com/?\(appleMapsQueryString ?? "")");
         
         let googleMapsUrl = URL(string: "https://maps.google.com/?\(appleMapsQueryString ?? "")");
