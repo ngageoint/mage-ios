@@ -66,9 +66,11 @@ class UserViewViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .assign(to: &$user)
+        
+        createFetchObservationsPublisher()
     }
     
-    func fetchObservations(limit: Int = 100) {
+    func createFetchObservationsPublisher(limit: Int = 100) {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, observationRepository, uri] in
@@ -77,7 +79,7 @@ class UserViewViewModel: ObservableObject {
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([]) { existing, new in
-                (existing + new).uniqued() // NOTE: this is a band-aid to fix duplicates issue #1370
+                (existing + new)
             }
             .map { State.loaded(rows: $0) }
             .catch { error in

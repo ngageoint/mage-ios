@@ -68,6 +68,8 @@ class ObservationsViewModel: ObservableObject {
     }
     
     init() {
+        createFetchObservationsPublisher()
+
         repository.refreshPublisher?.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] _ in
             self?.reload()
         })
@@ -102,15 +104,15 @@ class ObservationsViewModel: ObservableObject {
         }
     }
     
-    func fetchObservations(limit: Int = 100) {
+    func createFetchObservationsPublisher(limit: Int = 100) {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, repository] in
             repository.observations(
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
-            .scan([]) { existing, new in
-                (existing + new).uniqued() // NOTE: this is a band-aid to fix duplicates issue #1370
+            .scan([URIItem]()) { existing, new in
+                return (existing + new)
             }
             .map { uriItems in
                 // Convert [URIItem] to [ObservationItem]
