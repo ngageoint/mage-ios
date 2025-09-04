@@ -11,7 +11,7 @@ import Foundation
 class ObservationActionHandler {
     
     static func getDirections(latitude: CLLocationDegrees, longitude: CLLocationDegrees, title: String, viewController: UIViewController, extraActions: [UIAlertAction]? = nil, sourceView: UIView? = nil) {
-        let appleMapsQueryString = "daddr=\(latitude),\(longitude)&ll=\(latitude),\(longitude)&q=\(title)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
+        let appleMapsQueryString = "daddr=\(latitude),\(longitude)&dirflg=d".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
         let appleMapsUrl = URL(string: "https://maps.apple.com/?\(appleMapsQueryString ?? "")");
         
         let googleMapsUrl = URL(string: "https://maps.google.com/?\(appleMapsQueryString ?? "")");
