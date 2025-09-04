@@ -15,3 +15,10 @@ extension Array {
         }
     }
 }
+
+extension Array where Element: Identifiable {
+    func uniqued() -> [Element] {
+        var seen = Set<Element.ID>()
+        return self.filter { seen.insert($0.id).inserted }
+    }
+}

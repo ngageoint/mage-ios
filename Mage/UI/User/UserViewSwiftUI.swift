@@ -139,7 +139,7 @@ struct UserViewSwiftUI: View {
         .listSectionSeparator(.hidden)
         .background(Color.backgroundColor)
         .onAppear {
-            viewModel.fetchObservations()
+            viewModel.reload()
             mixins.addMixin(OnlineLayerMapMixin())
             mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(userUri: viewModel.uri)))
         }

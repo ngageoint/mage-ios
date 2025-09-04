@@ -39,7 +39,7 @@ struct ObservationList: View {
         .background(Color.backgroundColor)
         .foregroundColor(Color.onSurfaceColor)
         .onAppear {
-            viewModel.fetchObservations()
+            viewModel.reload()
         }
     }
 
