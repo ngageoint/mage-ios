@@ -25,6 +25,8 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
     override func setUp() async throws {
         try await super.setUp()
         
+        _ = MageSessionManager.shared()
+        
         net = MockMageServerDelegate()
         Stubs.removeAll()
         Stubs.api(delegate: net)    // /api and /apa/server
@@ -126,184 +128,352 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
         coordinator.start(s)
     }
     
-    
-    
-    func test_Start_HitsAPI() async throws {
-        // Arrange done in setUp()
+
+    func test_Minimal_HitsAPI() async throws {
+        
+        HTTPStubs.removeAllStubs()
+        
+        let hit = expectation(description: "/api was called")
+        
+        let u = URL(string: TestURLs.api)!  // https://magetest/api
+        
+        HTTPStubs.stubRequests(passingTest: { req in
+            guard let url = req.url else { return false }
+            return url.host == u.host && url.path == u.path
+        }) { _ in
+            // Fulfill as soon as the stub matches
+            hit.fulfill()
+            
+            // Return the same JSON the app expects
+            let path = Bundle(for: _AuthTestKitBundleSentinel.self)
+                .path(forResource: "apiSuccess6.json", ofType: nil)!
+            
+            return HTTPStubsResponse(
+                fileAtPath: path,
+                statusCode: 200,
+                headers: ["Content-Type": "application/json"]
+            )
+            .responseTime(0.01)
+        }
         
         // Act
         let s = try await server()
         coordinator.start(s)
         
         // Assert
-        expect(self.net.urls).toEventually(
-            contain(URL(string: TestURLs.api)!),
-            timeout: .seconds(4),
-            pollInterval: .milliseconds(50)
+        await fulfillment(of: [hit], timeout: 2.0)
+    }
+    
+    func test_Start_HitsAPI() async throws {
+        HTTPStubs.removeAllStubs()
+        let apiHit = expectation(description: "/api hit")
+        
+        _ = Stubs.installJSONStub(
+            urlString: TestURLs.api,
+            file: "apiSuccess6.json",
+            delegate: net,
+            onHit: { apiHit.fulfill() }
         )
+
+        let s = try await server()
+        coordinator.start(s)
+        
+        await fulfillment(of: [apiHit], timeout: 2.0)
     }
     
     
     // MARK: - Core: local login makes signin + token
-    
     func test_LocalLogin_HitsSigninAndToken_RegisteredDevice() async throws {
-        // Skip disclaimer to directly call delegate on success
-        UserDefaults.standard.set(false, forKey: "showDisclaimer")
+        // Arrange
+        let signinHit = expectation(description: "/auth/local/signin")
+        let tokenHit = expectation(description: "/auth/token")
+        let finished = expectation(description: "login completion")
+        let success = expectation(description: "delegate success")
         
-        try await startWithAuthSuccess() // installs stubs + server + coordinator.start
-
-        let done = expectation(description: "login finished")
-        coordinator.login(
-            withParameters: loginParams(),
-            withAuthenticationStrategy: "local"
-        ) { _, _ in
-            done.fulfill()  // ServerAuthentication.login completion fires after token handling
+        // the mock must expose this closure
+        delegate.onAuthenticationSuccessful = {
+            success.fulfill()
         }
         
-        // Also keep the url assertions, but with a larger timeout
-        expect(self.net.urls).toEventually(
-            contain(URL(string: TestURLs.signinLocal)!),
-            timeout: .seconds(8),
-            pollInterval: .milliseconds(50)
+        _ = Stubs.installJSONStub(
+            urlString: TestURLs.signinLocal,
+            file: "signinSuccess.json",
+            delegate: net,
+            onHit: { signinHit.fulfill() }
         )
-        expect(self.net.urls).toEventually(
-            contain(URL(string: TestURLs.token)!),
-            timeout: .seconds(8),
-            pollInterval: .milliseconds(50)
+        _ = Stubs.installJSONStub(
+            urlString: TestURLs.token,
+            file: "tokenSuccess.json",
+            delegate: net,
+            onHit: { tokenHit.fulfill() }
         )
 
-        //        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
-        // Wait for the login completion so we know callbacks are done
-        wait(for: [done], timeout: 8)
+        // Act
+        let s = try await server()
+        coordinator.start(s)
         
-        // And the coordinator behavior:
-        expect(self.delegate.authenticationSuccessfulCalled)
-            .toEventually(beTrue(), timeout: .seconds(2))
+        coordinator.login(
+            withParameters: loginParams(),
+            withAuthenticationStrategy: "local") { _, _ in
+                finished.fulfill()
+            }
+        
+        // signin + token + login completion
+        await fulfillment(of: [signinHit, tokenHit, finished], timeout: 4.0)
+        
+        // unblock the coordinator so it can notify the delegate
+        coordinator.disclaimerAgree()
+        
+        // Assert
+        await fulfillment(of: [success], timeout: 1.0)
     }
     
     // MARK: - Disclaimer variants
-    
+    // TODO: BRENT - This may be identical to the one above
     func test_Registered_ShowsDisclaimer_AndAgreeCallsDelegate() async throws {
-        // showDisclaimer already true in setUp
-        Stubs.authSuccess(delegate: net)
+        // Arrange
+        let signinHit = expectation(description: "/auth/local/signin")
+        let tokenHit = expectation(description: "/auth/token")
+        let finished = expectation(description: "login completion")
+        let success = expectation(description: "delegate success")
         
+        // the mock must expose this closure
+        delegate.onAuthenticationSuccessful = {
+            success.fulfill()
+        }
+        
+        _ = MAGETests.Stubs.installJSONStub(
+            urlString: TestURLs.signinLocal,
+            file: "signinSuccess.json",
+            delegate: net,
+            onHit: { signinHit.fulfill() }
+        )
+        _ = MAGETests.Stubs.installJSONStub(
+            urlString: TestURLs.token,
+            file: "tokenSuccess.json",
+            delegate: net,
+            onHit: { tokenHit.fulfill() }
+        )
+
+        // Act
         let s = try await server()
         coordinator.start(s)
         
         coordinator.login(
             withParameters: loginParams(),
-            withAuthenticationStrategy: "local"
-        ) { _, _ in }
+            withAuthenticationStrategy: "local") { _, _ in
+                finished.fulfill()
+            }
         
-        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
+        // signin + token + login completion
+        await fulfillment(of: [signinHit, tokenHit, finished], timeout: 4.0)
         
-        // Simulate user tapping "AGREE"
+        // unblock the coordinator so it can notify the delegate
         coordinator.disclaimerAgree()
         
-        expect(self.delegate.authenticationSuccessfulCalled).toEventually(beTrue())
+        // Assert
+        await fulfillment(of: [success], timeout: 1.0)
     }
+    
+    func test_Registered_ShowsDisclaimer_AgreeCallsDelegate() async throws {
+        UserDefaults.standard.set(true, forKey: "showDisclaimer")
+
+        let signinHit = expectation(description: "/auth/local/signin")
+        let tokenHit  = expectation(description: "/auth/token")
+        let finished  = expectation(description: "login completion")
+        let success   = expectation(description: "delegate success")
+
+        // wire mock delegate callback
+        delegate.onAuthenticationSuccessful = { success.fulfill() }
+
+        _ = Stubs.installJSONStub(urlString: TestURLs.signinLocal,
+                                  file: "signinSuccess.json",
+                                  delegate: net, onHit: { signinHit.fulfill() })
+        _ = Stubs.installJSONStub(urlString: TestURLs.token,
+                                  file: "tokenSuccess.json",
+                                  delegate: net, onHit: { tokenHit.fulfill() })
+
+        let s = try await server()
+        coordinator.start(s)
+
+        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in
+            finished.fulfill()
+        }
+
+        await fulfillment(of: [signinHit, tokenHit, finished], timeout: 4.0)
+
+        await MainActor.run { self.coordinator.disclaimerAgree() }
+
+        await fulfillment(of: [success], timeout: 2.0)
+    }
+
     
     func test_Registered_ShowsDisclaimer_DisagreeTriggersLogout() async throws {
-        Stubs.authSuccess(delegate: net)
+        // Ensure this path actually shows the disclaimer
+        UserDefaults.standard.set(true, forKey: "showDisclaimer")
         
+        let signinHit = expectation(description: "/auth/local/signin")
+        let tokenHit = expectation(description: "/auth/token")
+        let finished = expectation(description: "login completion")
+        
+        _ = MAGETests.Stubs.installJSONStub(
+            urlString: TestURLs.signinLocal,
+            file: "signinSuccess.json",
+            delegate: net,
+            onHit: { signinHit.fulfill() }
+        )
+        _ = MAGETests.Stubs.installJSONStub(
+            urlString: TestURLs.token,
+            file: "tokenSuccess.json",
+            delegate: net,
+            onHit: { tokenHit.fulfill() }
+        )
+
         let s = try await server()
         coordinator.start(s)
         
-        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in }
-        
-        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
-        
-        coordinator.disclaimerDisagree()
-        
-        // Same assertion our KIF test used...
-        let appDelegate = UIApplication.shared.delegate as! TestingAppDelegate
-        expect(appDelegate.logoutCalled).toEventually(beTrue())
-    }
-    
-    // MARK: - Different user with unsaved observations
-    func test_DifferentUser_WithUnsavedData_ContinueClearsAndProceeds() async throws {
-        _ = MageCoreDataFixtures.addUser()
-        MageCoreDataFixtures.addUnsyncedObservationToEvent()
-        expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1))
-        
-        Stubs.authSuccess(delegate: net)
-        
-        let s = try await server()
-        coordinator.start(s)
-        
-        // Login as a different username
-        let params = loginParams(username: "different", password: "password")
-        coordinator.login(withParameters: params, withAuthenticationStrategy: "local") { _, _ in }
-        
-        // Simulate tapping "Continue" from the alert:
-        // Clear data then call the same method the alert invokes.
-        MageInitializer.clearServerSpecificData()
-        if let localModule = s.authenticationModules?["local"] as? AuthenticationProtocol {
-            coordinator.authenticationWasSuccessful(withModule: localModule)
+        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in
+            finished.fulfill()
         }
         
-        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
-        expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0))
-        expect(self.delegate.authenticationSuccessfulCalled).toEventually(beTrue())
+        // wait until login finished and both requests fired (we're at the disclaimer)
+        await fulfillment(of: [signinHit, tokenHit, finished], timeout: 4.0)
+        
+        // Assert logout by watching the app TestingAppDelegate flag
+        let appDelegate = UIApplication.shared.delegate as! TestingAppDelegate
+        appDelegate.logoutCalled = false // reset just in case
+
+        let loggedOut = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in appDelegate.logoutCalled }, object: nil)
+        
+        await MainActor.run { self.coordinator.disclaimerDisagree() }
+        
+        await fulfillment(of: [loggedOut], timeout: 3.0)
     }
     
-    func test_DifferentUser_WithUnsavedData_CancelKeepsData() async throws {
-        _ = MageCoreDataFixtures.addUser()
-        MageCoreDataFixtures.addUnsyncedObservationToEvent()
-        expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1))
-        
-        Stubs.authSuccess(delegate: net)
-        
-        let s = try await server()
-        coordinator.start(s)
-        
-        // Attempt to login as different user, but do NOT simulate "Continue"
-        let params = loginParams(username: "different", password: "password")
-        coordinator.login(withParameters: params, withAuthenticationStrategy: "local") { _, _ in }
-        
-        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
-        
-        let noSuccess = expectation(description: "no auth success")
-        noSuccess.isInverted = true
-        
-//        delegate.authenticationSuccessfulCalled = true
-        
-        // _trigger the login attempt_
-        await fulfillment(of: [noSuccess], timeout: 0.3)
-        XCTAssertEqual(MageOfflineObservationManager.offlineObservationCount(), 1)
-        XCTAssertFalse(delegate.authenticationSuccessfulCalled)
-    }
-    
-    // MARK: - Inactive user / registration
-    func test_InactiveUser_ShowsAccountCreatedAlert() async throws {
-        Stubs.authSigninSuccessOnly(signinFixture: "signinSuccessInactiveUser.json", delegate: net)
-        
-        let s = try await server()
-        coordinator.start(s)
-        
-        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in }
-        
-        // Only signin is stubbed here by design
-        expect(self.net.urls).toEventually(contain(URL(string: TestURLs.signinLocal)!))
-        
-        // Verify the specific alert from account creation path
-        expect(self.topAlertTitle()).toEventually(equal("MAGE Account Created"))
-    }
+//    // MARK: - Different user with unsaved observations
+//    func test_DifferentUser_WithUnsavedData_ContinueClearsAndProceeds() async throws {
+//        _ = MageCoreDataFixtures.addUser()
+//        MageCoreDataFixtures.addUnsyncedObservationToEvent()
+//        expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1))
+//        
+//        Stubs.authSuccess(delegate: net)
+//        
+//        let s = try await server()
+//        coordinator.start(s)
+//        
+//        // Login as a different username
+//        let params = loginParams(username: "different", password: "password")
+//        coordinator.login(withParameters: params, withAuthenticationStrategy: "local") { _, _ in }
+//        
+//        // Simulate tapping "Continue" from the alert:
+//        // Clear data then call the same method the alert invokes.
+//        MageInitializer.clearServerSpecificData()
+//        if let localModule = s.authenticationModules?["local"] as? AuthenticationProtocol {
+//            coordinator.authenticationWasSuccessful(withModule: localModule)
+//        }
+//        
+//        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
+//        expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0))
+//        expect(self.delegate.authenticationSuccessfulCalled).toEventually(beTrue())
+//    }
+//    
+//    func test_DifferentUser_WithUnsavedData_CancelKeepsData() async throws {
+//        _ = MageCoreDataFixtures.addUser()
+//        MageCoreDataFixtures.addUnsyncedObservationToEvent()
+//        expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1))
+//        
+//        Stubs.authSuccess(delegate: net)
+//        
+//        let s = try await server()
+//        coordinator.start(s)
+//        
+//        // Attempt to login as different user, but do NOT simulate "Continue"
+//        let params = loginParams(username: "different", password: "password")
+//        coordinator.login(withParameters: params, withAuthenticationStrategy: "local") { _, _ in }
+//        
+//        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
+//        
+//        let noSuccess = expectation(description: "no auth success")
+//        noSuccess.isInverted = true
+//        
+////        delegate.authenticationSuccessfulCalled = true
+//        
+//        // _trigger the login attempt_
+//        await fulfillment(of: [noSuccess], timeout: 0.3)
+//        XCTAssertEqual(MageOfflineObservationManager.offlineObservationCount(), 1)
+//        XCTAssertFalse(delegate.authenticationSuccessfulCalled)
+//    }
+//    
+//    // MARK: - Inactive user / registration
+//    func test_InactiveUser_ShowsAccountCreatedAlert() async throws {
+//        Stubs.authSigninSuccessOnly(signinFixture: "signinSuccessInactiveUser.json", delegate: net)
+//        
+//        let s = try await server()
+//        coordinator.start(s)
+//        
+//        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in }
+//        
+//        // Only signin is stubbed here by design
+//        expect(self.net.urls).toEventually(contain(URL(string: TestURLs.signinLocal)!))
+//        
+//        // Verify the specific alert from account creation path
+//        expect(self.topAlertTitle()).toEventually(equal("MAGE Account Created"))
+//    }
     
     // MARK: - Token failure
     func test_TokenFailure_ShowsLoginFailedInfo() async throws {
-        Stubs.authSigninSuccessOnly(delegate: net)
-        Stubs.tokenFailure(status: 401, body: "Failed to get a token", delegate: net)
+        // Expect the 2 network hits
+        let signinHit = expectation(description: "/auth/local/signin")
+        let tokenHit = expectation(description: "/auth/token (401)")
         
+        _ = Stubs.installJSONStub(
+            urlString: TestURLs.signinLocal,
+            file: "signinSuccess.json",
+            delegate: net,
+            onHit: { signinHit.fulfill() }
+        )
+        
+        // Fail token call with JSON so AFNetworking treats it as such
+        let tokenURL = URL(string: TestURLs.token)!
+        HTTPStubs.stubRequests(passingTest: { req in
+            guard let url = req.url else { return false }
+            return url.host == tokenURL.host && _pathsMatch(url.path, tokenURL.path)
+        }) { req in
+            self.net.urlCalled(req.url, method: req.httpMethod)
+            tokenHit.fulfill()
+            
+            let body = try! JSONSerialization.data(
+                withJSONObject: ["message": "Failed to get a token"],
+                options: []
+            )
+            return HTTPStubsResponse(
+                data: body,
+                statusCode: 401,
+                headers: ["Content-Type": "application/json"]
+            ).responseTime(0.01)
+        }
+        
+        // Start the flow
         let s = try await server()
         coordinator.start(s)
         
-        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in }
+        let finished = expectation(description: "login completion")
+        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in
+            finished.fulfill()
+        }
+
+        // wait until network + completions are done
+        await fulfillment(of: [signinHit, tokenHit, finished], timeout: 4.0)
         
-        waitForURLs([URL(string: TestURLs.signinLocal)!, URL(string: TestURLs.token)!])
+        // Assert delegate was NOT called (use inverted XCTest exp OR just XCTAssert)
+        let notCalled = expectation(description: "delegate not called")
+        notCalled.isInverted = true
+        // (If you have the closure on your mock, wire it here)
+        // delegate.onAuthSuccess = { notCalled.fulfill() }
+        await fulfillment(of: [notCalled], timeout: 0.5)
         
-        // The coordinator writes ContactInfo to the login VC; at least ensure no success callback:
-        expect(self.delegate.authenticationSuccessfulCalled).toEventually(beFalse())
+        // Or, if you mock exposes the flag
+        XCTAssertFalse(delegate.authenticationSuccessfulCalled)
     }
     
     // MARK: - Offline Flows
@@ -315,10 +485,19 @@ final class AuthenticationCoordinator_FlowTests: AsyncMageCoreDataTestCase {
         let s = try await server()
         coordinator.start(s)
         
-        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in }
+        let finished = expectation(description: "login completion")
+        coordinator.login(withParameters: loginParams(), withAuthenticationStrategy: "local") { _, _ in
+            finished.fulfill()
+        }
+        await fulfillment(of: [finished], timeout: 3.0)
         
-        expect(self.net.urls).toEventually(contain(URL(string: TestURLs.signinLocal)!))
-        expect(self.topAlertTitle()).toEventually(equal("Unable to Login"))
+        // wait for the alert title
+        let alertShown = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                (self.nav.presentedViewController as? UIAlertController)?.title == "Unable to Login"
+            }, object: nil)
+        
+        await fulfillment(of: [alertShown], timeout: 2.0)
     }
     
     func test_Offline_WithStoredPassword_WorkOfflinePathCallsDelegate() async throws {

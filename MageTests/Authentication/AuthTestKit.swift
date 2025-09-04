@@ -82,12 +82,15 @@ enum Stubs {
         let u = URL(string: TestURLs.signinLocal)!
         
         return HTTPStubs.stubRequests(passingTest: { req in
-            req.url?.host == u.host && req.url?.path == u.path
+            guard let url = req.url else { return false }
+            return url.host == u.host && _pathsMatch(url.path, u.path)
         }) { req in
             delegate.urlCalled(req.url, method: req.httpMethod)
             return HTTPStubsResponse(error: error)
         }
     }
+    
+
     
     // ---- Force an HTTP failure on /auth/token
     @discardableResult
@@ -99,7 +102,8 @@ enum Stubs {
             let u = URL(string: TestURLs.token)!
             
             return HTTPStubs.stubRequests(passingTest: { req in
-                req.url?.host == u.host && req.url?.path == u.path
+                guard let url = req.url else { return false }
+                return url.host == u.host && _pathsMatch(url.path, u.path)
             }) { req in
                 delegate.urlCalled(req.url, method: req.httpMethod)
                 return HTTPStubsResponse(
@@ -135,7 +139,8 @@ enum Stubs {
             let u = URL(string: TestURLs.signupsVerify)!
             
             return HTTPStubs.stubRequests(passingTest: { req in
-                req.url?.host == u.host && req.url?.path == u.path
+                guard let url = req.url else { return false }
+                return url.host == u.host && _pathsMatch(url.path, u.path)
             }) { req in
                 delegate.urlCalled(req.url, method: req.httpMethod)
                 return HTTPStubsResponse(data: Data(body.utf8), statusCode: status, headers: ["Content-Type": "text/plain"])
@@ -236,7 +241,7 @@ func stubUserAssets() {
     
 }
 
-private final class _AuthTestKitBundleSentinel: NSObject { }
+final class _AuthTestKitBundleSentinel: NSObject { }
 
 private extension Stubs {
     @discardableResult
@@ -247,7 +252,8 @@ private extension Stubs {
         
         let u = URL(string: urlString)!
         return HTTPStubs.stubRequests(passingTest: { req in
-            req.url?.host == u.host && req.url?.path == u.path
+            guard let url = req.url else { return false }
+            return url.host == u.host && _pathsMatch(url.path, u.path)
         }) { req in
             delegate.urlCalled(req.url, method: req.httpMethod)
             
@@ -265,3 +271,43 @@ private extension Stubs {
     }
 }
 
+@inline(__always)
+func _pathsMatch(_ a: String, _ b: String) -> Bool {
+    // treat "/api" and "/api/" as the same
+    let norm: (String) -> String = { p in p.hasSuffix("/") ? String(p.dropLast()) : p }
+    return norm(a) == norm(b)
+}
+
+extension Stubs {
+    @discardableResult
+    static func installJSONStub(
+        urlString: String,
+        file: String,
+        contentType: String = "application/json",
+        delegate: MockMageServerDelegate,
+        onHit: (() -> Void)? = nil
+    ) -> HTTPStubsDescriptor {
+        let u = URL(string: urlString)!
+        
+        return HTTPStubs.stubRequests(passingTest: { req in
+            guard let url = req.url else { return false }
+            
+            return url.host == u.host && _pathsMatch(url.path, u.path)
+        }) { req in
+            delegate.urlCalled(req.url, method: req.httpMethod)
+            onHit?() // Fulfill caller's expectation
+            
+            guard let path = Bundle(for: _AuthTestKitBundleSentinel.self)
+                .path(forResource: file, ofType: nil) else {
+                assertionFailure("Fixture '\(file)' not found in test bundle")
+                return HTTPStubsResponse(data: Data(), statusCode: 500, headers: nil)
+            }
+            
+            return HTTPStubsResponse(
+                fileAtPath: path,
+                statusCode: 200,
+                headers: ["Content-Type": contentType]
+            ).responseTime(0.01)
+        }
+    }
+}
