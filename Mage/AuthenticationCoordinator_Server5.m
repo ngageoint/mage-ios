@@ -7,7 +7,6 @@
 //
 
 #import "AuthenticationCoordinator_Server5.h"
-#import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "IDPCoordinator.h"
 #import "MAGE-Swift.h"

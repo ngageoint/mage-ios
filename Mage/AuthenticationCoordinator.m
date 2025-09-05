@@ -20,6 +20,9 @@
 #import "ContactInfo.h"
 #import "MAGE-Swift.h"
 
+@import Authentication;
+#import <Authentication/Authentication-Swift.h>
+
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPLoginDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;

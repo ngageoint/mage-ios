@@ -26,7 +26,7 @@
 #import "MapSettings.h"
 #import "MageSessionManager.h"
 #import "AuthenticationCoordinator.h"
-#import "LoginViewController.h"
+//#import "LoginViewController.h"
 #import "SignUpViewController.h"
 #import "SignUpViewController_Server5.h"
 #import "ChangePasswordViewController.h"
@@ -60,3 +60,7 @@
 #import "XYZTileOverlay.h"
 
 #import "IDPCoordinator.h"
+#import "MageAuthAPI.h"
+#import "ContactInfo.h"
+#import "MageSessionManager.h"
+#import "LegacyAuthNames.h"

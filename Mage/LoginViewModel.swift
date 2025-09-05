@@ -86,7 +86,7 @@ import Foundation
             DispatchQueue.main.async {
                 self?.isLoading = false
                 
-                if status == .AUTHENTICATION_SUCCESS {
+                if status == .success {
                     self?.username = ""
                     self?.password = ""
                 } else {

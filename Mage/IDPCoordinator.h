@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "IdpAuthentication.h"
-#import "LoginViewController.h"
+//#import "LoginViewController.h"
 #import <SafariServices/SafariServices.h>
+#import <Authentication/Authentication-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

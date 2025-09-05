@@ -63,6 +63,7 @@ public protocol SessionStore: Sendable {
 
 public final class AuthDependencies {
     public static let shared = AuthDependencies()
+    private init() {}
     public var authService: AuthService!
 }
 
