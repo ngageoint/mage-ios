@@ -58,14 +58,9 @@ BOOL signingIn = YES;
     signingIn = NO;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     
-    SignUpViewController *signupView;
-    if ([MageServer isServerVersion5]) {
-        signupView = [[SignUpViewController_Server5 alloc] initWithDelegate:self andScheme:self.scheme];
-    } else {
-        signupView = [[SignUpViewController alloc] initWithDelegate:self andScheme:self.scheme];
-    }
+    UIViewController *signup = [SignupHost make];
     
-    [self.navigationController pushViewController:signupView animated:NO];
+    [self.navigationController pushViewController:signup animated:NO];
 }
 
 - (void) getCaptcha:(NSString *) username completion:(void (^)(NSString* captcha)) completion  {

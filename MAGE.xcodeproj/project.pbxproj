@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -122,6 +122,14 @@
 		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
 		8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */; };
 		8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */; };
+		842F626A2E6A2FC00066497D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62692E6A2FC00066497D /* AuthService.swift */; };
+		842F626E2E6A31E30066497D /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F626D2E6A31E30066497D /* SignupViewModel.swift */; };
+		842F62702E6A34160066497D /* SignupViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F626F2E6A34160066497D /* SignupViewSwiftUI.swift */; };
+		842F62732E6A379B0066497D /* AuthenticationPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62722E6A379B0066497D /* AuthenticationPreviews.swift */; };
+		842F62752E6A3C7D0066497D /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62742E6A3C7D0066497D /* ChangePasswordViewModel.swift */; };
+		842F62772E6A3DF80066497D /* ChangePasswordViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62762E6A3DF80066497D /* ChangePasswordViewSwiftUI.swift */; };
+		842F62792E6A3FD50066497D /* SignupHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62782E6A3FD50066497D /* SignupHost.swift */; };
+		842F627B2E6A40F30066497D /* ChangePasswordHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F627A2E6A40F30066497D /* ChangePasswordHost.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1134,6 +1142,14 @@
 		8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUITests.swift; sourceTree = "<group>"; };
 		8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAllLoginViews.swift; sourceTree = "<group>"; };
 		8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginDelegateSwiftUI.swift; sourceTree = "<group>"; };
+		842F62692E6A2FC00066497D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		842F626D2E6A31E30066497D /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
+		842F626F2E6A34160066497D /* SignupViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewSwiftUI.swift; sourceTree = "<group>"; };
+		842F62722E6A379B0066497D /* AuthenticationPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationPreviews.swift; sourceTree = "<group>"; };
+		842F62742E6A3C7D0066497D /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
+		842F62762E6A3DF80066497D /* ChangePasswordViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewSwiftUI.swift; sourceTree = "<group>"; };
+		842F62782E6A3FD50066497D /* SignupHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupHost.swift; sourceTree = "<group>"; };
+		842F627A2E6A40F30066497D /* ChangePasswordHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordHost.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
 		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
@@ -2227,6 +2243,9 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				842F62682E6A2F7A0066497D /* UIKitGlue */,
+				842F62672E6A2F5F0066497D /* NewUI */,
+				842F62662E6A2F570066497D /* Core */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
@@ -2438,6 +2457,59 @@
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		842F62662E6A2F570066497D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				842F62692E6A2FC00066497D /* AuthService.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		842F62672E6A2F5F0066497D /* NewUI */ = {
+			isa = PBXGroup;
+			children = (
+				842F62712E6A37810066497D /* Previews */,
+				842F626C2E6A31C20066497D /* ChangePassword */,
+				842F626B2E6A31AB0066497D /* Signup */,
+			);
+			path = NewUI;
+			sourceTree = "<group>";
+		};
+		842F62682E6A2F7A0066497D /* UIKitGlue */ = {
+			isa = PBXGroup;
+			children = (
+				842F62782E6A3FD50066497D /* SignupHost.swift */,
+				842F627A2E6A40F30066497D /* ChangePasswordHost.swift */,
+			);
+			path = UIKitGlue;
+			sourceTree = "<group>";
+		};
+		842F626B2E6A31AB0066497D /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+				842F626D2E6A31E30066497D /* SignupViewModel.swift */,
+				842F626F2E6A34160066497D /* SignupViewSwiftUI.swift */,
+			);
+			path = Signup;
+			sourceTree = "<group>";
+		};
+		842F626C2E6A31C20066497D /* ChangePassword */ = {
+			isa = PBXGroup;
+			children = (
+				842F62742E6A3C7D0066497D /* ChangePasswordViewModel.swift */,
+				842F62762E6A3DF80066497D /* ChangePasswordViewSwiftUI.swift */,
+			);
+			path = ChangePassword;
+			sourceTree = "<group>";
+		};
+		842F62712E6A37810066497D /* Previews */ = {
+			isa = PBXGroup;
+			children = (
+				842F62722E6A379B0066497D /* AuthenticationPreviews.swift */,
+			);
+			path = Previews;
 			sourceTree = "<group>";
 		};
 		8474FD9426FB8AFE0041891A /* Contact */ = {
@@ -5016,6 +5088,7 @@
 				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
+				842F62772E6A3DF80066497D /* ChangePasswordViewSwiftUI.swift in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,
 				F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */,
@@ -5030,6 +5103,7 @@
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				D2A46FF92E0DD73700CE0D72 /* ObservationChangeRegions.swift in Sources */,
+				842F62792E6A3FD50066497D /* SignupHost.swift in Sources */,
 				F7C097732C80C52C003FA115 /* AttachmentModel.swift in Sources */,
 				F781609E273EE1A50055B5D2 /* ObjC.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
@@ -5044,6 +5118,7 @@
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
+				842F62732E6A379B0066497D /* AuthenticationPreviews.swift in Sources */,
 				F7C097752C80C73C003FA115 /* ObservationFormModel.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F776AC9D2BCDB271000FAFB4 /* DataFetchOperation.swift in Sources */,
@@ -5274,6 +5349,7 @@
 				840D60772E4B9501005B0353 /* KingfisherHelpers.swift in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
+				842F62702E6A34160066497D /* SignupViewSwiftUI.swift in Sources */,
 				F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
@@ -5293,6 +5369,7 @@
 				F763FF102C77CAF300403A00 /* ObservationSyncStatus.swift in Sources */,
 				F752B5F42760DD7600BFA6EC /* MageMapView.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
+				842F62752E6A3C7D0066497D /* ChangePasswordViewModel.swift in Sources */,
 				F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */,
 				F734C1E52BC845BE00B2E8C8 /* CoordinateDisplayType.swift in Sources */,
 				F763FF092C765D9200403A00 /* UserAvatarChooserDelegate.swift in Sources */,
@@ -5315,6 +5392,7 @@
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
 				F73564E92C651D3300466813 /* ObservationListNavStack.swift in Sources */,
 				F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */,
+				842F626E2E6A31E30066497D /* SignupViewModel.swift in Sources */,
 				F7225F3D2C542BC300B7D935 /* FormRepository.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
@@ -5405,6 +5483,7 @@
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F72D42F72694B60300F9AC3B /* LocationFetchService.swift in Sources */,
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
+				842F626A2E6A2FC00066497D /* AuthService.swift in Sources */,
 				F78D57A027BECFB9003594D3 /* SingleObservationMap.swift in Sources */,
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F73564FD2C65681300466813 /* LocationModel.swift in Sources */,
@@ -5430,6 +5509,7 @@
 				F78D579827BC5E4A003594D3 /* OnlineLayerMap.swift in Sources */,
 				F7225F412C543B7800B7D935 /* ObservationViewViewModel.swift in Sources */,
 				F7AA61BA27ADB19100D617B7 /* MediaPreviewController.swift in Sources */,
+				842F627B2E6A40F30066497D /* ChangePasswordHost.swift in Sources */,
 				F70688992BA4920D00D8E2EA /* ObservationLocalDataSource.swift in Sources */,
 				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
