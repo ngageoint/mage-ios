@@ -249,6 +249,22 @@
         }
       }
     },
+    "Continue" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        }
+      }
+    },
     "Downloaded %@ of %@" : {
       "localizations" : {
         "en" : {
@@ -483,22 +499,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unirse a un evento"
-          }
-        }
-      }
-    },
-    "Let's Go!" : {
-      "localizations" : {
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Vamos!"
-          }
-        },
-        "es-US" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Vamos!"
           }
         }
       }
@@ -939,7 +939,20 @@
       }
     },
     "Unable to load observation" : {
-
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede cargar la observación"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede cargar la observación"
+          }
+        }
+      }
     },
     "Use forms to enhance observations with photos, videos, notes, and audio." : {
       "extractionState" : "manual",
