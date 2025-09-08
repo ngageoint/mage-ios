@@ -13,6 +13,40 @@ import SwiftUI
 // MARK: - Preview Doubles
 
 final class PreviewAuthService: AuthService {
+    func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
+        switch captchaMode {
+        case .success:
+            return SignupCaptcha(token: "preview-captcha-token", imageBase64: PreviewAuthService.sampleCaptchaBase64)
+        case .unauthorized:
+            throw AuthError.unauthorized
+        case .invalidInput(let msg):
+            throw AuthError.invalidInput(msg)
+        case .rateLimited:
+            throw AuthError.rateLimited
+        case .network:
+            throw AuthError.network
+        case .server(let msg):
+            throw AuthError.server(msg)
+        }
+    }
+    
+    func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession {
+        switch signupMode {
+        case .success:
+            return AuthSession(token: "preview-auth-token")
+        case .unauthorized:
+            throw AuthError.unauthorized
+        case .invalidInput(let msg):
+            throw AuthError.invalidInput(msg)
+        case .rateLimited:
+            throw AuthError.rateLimited
+        case .network:
+            throw AuthError.network
+        case .server(let msg):
+            throw AuthError.server(msg)
+        }
+    }
+    
     enum Mode {
         case success
         case unauthorized
@@ -22,6 +56,8 @@ final class PreviewAuthService: AuthService {
         case server(String)
     }
     
+    // Control preview outcomes
+    var captchaMode: Mode = .success
     var signupMode: Mode = .success
     var changePasswordMode: Mode = .success
     
@@ -46,6 +82,8 @@ final class PreviewAuthService: AuthService {
         case .server(let msg): throw AuthError.server(msg)
         }
     }
+    
+    static let sampleCaptchaBase64 = "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"
 }
 
 final class PreviewSessionStore: SessionStore {

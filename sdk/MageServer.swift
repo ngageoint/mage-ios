@@ -8,7 +8,7 @@
 import Foundation
 import OSLog
 
-@objc class MageServer: NSObject {
+@objc public class MageServer: NSObject {
     
     // Single source of truth for "special" names the client treats specially.
     private enum StrategyKey {

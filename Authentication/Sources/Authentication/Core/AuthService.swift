@@ -51,7 +51,8 @@ public enum AuthError: Error, Equatable {
 }
 
 public protocol AuthService {
-    func signup(_ req: SignupRequest) async throws -> AuthSession
+    func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha
+    func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession
     func changePassword(_ req: ChangePasswordRequest) async throws
 }
 
@@ -71,3 +72,14 @@ public final class SessionStoreDependencies {
     public static let shared = SessionStoreDependencies()
     public var sessionStore: SessionStore!
 }
+
+public struct SignupCaptcha: Sendable, Equatable {
+    public var token: String
+    public var imageBase64: String
+    
+    public init(token: String, imageBase64: String) {
+        self.token = token
+        self.imageBase64 = imageBase64
+    }
+}
+

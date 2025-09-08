@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 public struct SignupViewSwiftUI: View {
     @StateObject private var model: SignupViewModel
@@ -25,31 +26,43 @@ public struct SignupViewSwiftUI: View {
                 TextField("Display Name", text: $model.displayName)
                     .textContentType(.name)
                     .submitLabel(.next)
+                
                 TextField("Username", text: $model.username)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
+                    .noAutoCapsAndCorrection()
                     .textContentType(.username)
                     .submitLabel(.next)
+                
                 TextField("Email", text: $model.email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .submitLabel(.next)
+                
                 SecureField("Password (help message)", text: $model.password)
                     .textContentType(.newPassword)
                     .submitLabel(.next)
+                
                 SecureField("Confirm Password", text: $model.confirmPassword)
                     .textContentType(.newPassword)
                     .submitLabel(.go)
-                    .onSubmit { Task { await model.submit() } }
+                    .onSubmit {
+                        Task {
+                            guard model.isFormValid else { return }
+                            await model.beginSignup()
+                        }
+                    }
             }
-            .textFieldStyle(.roundedBorder)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
             
             if let err = model.errorMessage {
                 Text(err).foregroundColor(.red).font(.footnote)
             }
             
             Button {
-                Task { await model.submit() }
+                Task {
+                    // validate form first
+                    guard model.isFormValid else { return }
+                    await model.beginSignup()
+                }
             } label: {
                 if model.isSubmitting { ProgressView() } else { Text("Sign Up").bold() }
             }
@@ -57,14 +70,61 @@ public struct SignupViewSwiftUI: View {
             .disabled(!model.isFormValid || model.isSubmitting)
             
             Button("Cancel") { dismiss() }
-                .buttonStyle(.borderless)
+                .buttonStyle(BorderlessButtonStyle())
         }
         .padding()
         .onChange(of: model.didSucceed) { ok in if ok { dismiss() } }
-        // TODO: Integrate theming, if we still want to
+        
+        .sheet(isPresented: $model.showCaptcha) {
+            VStack(spacing: 12) {
+                Text("Verify you're human").font(.headline)
+                
+                if let b64 = model.captchaImageBase64,
+                   let data = Data(base64Encoded: b64),
+                   let uiimg = UIImage(data: data) {
+                    Image(uiImage: uiimg)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 120)
+                } else {
+                    ProgressView()
+                }
+                
+                TextField("Enter the characters", text: $model.captchaText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .submitLabel(.done)
+                    .onSubmit { Task { await model.completeSignup() }}
+                
+                HStack {
+                    Button("Cancel") { model.showCaptcha = false }
+                    Spacer()
+                    Button {
+                        Task { await model.completeSignup() }
+                    } label: { model.isSubmitting ? AnyView(ProgressView()) : AnyView(Text("Submit")) }
+                        .disabled(model.captchaText.isEmpty || model.isSubmitting)
+                }
+            }
+            .padding()
+        }
     }
 }
 
 //#Preview {
 //    SignupViewSwiftUI()
 //}
+
+private struct NoAutoCapsAndCorrection: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 15.0, *) {
+            content.textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+        } else {
+            content.autocapitalization(.none)
+                .disableAutocorrection(true)
+        }
+    }
+}
+
+private extension View {
+    func noAutoCapsAndCorrection() -> some View { modifier(NoAutoCapsAndCorrection()) }
+}

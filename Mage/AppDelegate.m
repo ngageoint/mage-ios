@@ -50,6 +50,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
 
+    [MageDependencyBootstrap configure];
+    
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];

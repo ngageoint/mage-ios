@@ -20,6 +20,18 @@ NS_ASSUME_NONNULL_BEGIN
                                            NSData * _Nullable errorBody,
                                            NSError * _Nullable error))completion;
 
++ (void)requestSignupCaptchaForUsername:(NSString *)username
+                             background:(NSString *)backgroundHex
+                             completion:(void(^)(NSString * _Nullable token,
+                                                 NSString * _Nullable captchaBase64,
+                                                 NSError * _Nullable error))completion;
+
++ (void)completeSignupWithParameters:(NSDictionary *)parameters
+                               token:(NSString *)token
+                          completion:(void(^)(NSHTTPURLResponse * _Nullable http,
+                                              NSData * _Nullable errorBody,
+                                              NSError * _Nullable error))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import Authentication
 
 @objc(LoginViewController)
 @objcMembers
@@ -21,7 +22,7 @@ final class LoginHostViewController: UIViewController {
     private var host: UIHostingController<LoginRootViewSwiftUI>
     
     // MARK: - Designated Swift init
-    private init(server: MageServer, user: User?, delegate: AuthDelegates?, scheme: AnyObject?) {
+    private init(server: MageServer, user: User?, delegate: LoginDelegate?, scheme: AnyObject?) {
         self.viewModel = LoginRootViewModel(server: server, user: user, delegate: delegate)
         let root: LoginRootViewSwiftUI = .init(viewModel: self.viewModel)
         self.host = UIHostingController<LoginRootViewSwiftUI>(rootView: root)
@@ -33,7 +34,7 @@ final class LoginHostViewController: UIViewController {
     // 3-arg WITH “and”
     @objc(initWithMageServer:andDelegate:andScheme:)
     convenience init(mageServer: MageServer,
-                     andDelegate delegate: AuthDelegates,
+                     andDelegate delegate: LoginDelegate,
                      andScheme scheme: AnyObject? = nil) {
 
         self.init(server: mageServer, user: nil, delegate: delegate, scheme: scheme)
@@ -63,7 +64,7 @@ final class LoginHostViewController: UIViewController {
                      userNoAnd user: User,
                      delegateNoAnd delegate: AuthDelegates,
                      schemeNoAnd scheme: AnyObject? = nil) {
-        self.init(server: mageServer, user: nil, delegate: delegate, scheme: scheme)
+        self.init(server: mageServer, user: user, delegate: delegate, scheme: scheme)
     }
 
     required init?(coder: NSCoder) {

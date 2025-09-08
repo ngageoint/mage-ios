@@ -7,5 +7,6 @@
 //
 
 import Foundation
+import Authentication
 
 typealias AuthDelegates = (NSObjectProtocol & LoginDelegate & IDPLoginDelegate)
