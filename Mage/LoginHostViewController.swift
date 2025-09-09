@@ -23,10 +23,10 @@ final class LoginHostViewController: UIViewController {
     
     // MARK: - Designated Swift init
     private init(server: MageServer, user: User?, delegate: LoginDelegate?, scheme: AnyObject?) {
-        self.viewModel = LoginRootViewModel(server: server, user: user, delegate: delegate)
-        let root: LoginRootViewSwiftUI = .init(viewModel: self.viewModel)
-        self.host = UIHostingController<LoginRootViewSwiftUI>(rootView: root)
-        
+        let composed = delegate as? AuthDelegates  // Swift-only composed protocols
+        self.viewModel = LoginRootViewModel(server: server, user: user, delegate: composed)
+        let root = LoginRootViewSwiftUI(viewModel: self.viewModel)
+        self.host = UIHostingController(rootView: root)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,7 +43,7 @@ final class LoginHostViewController: UIViewController {
     // 3-arg NO “and”
     @objc(initWithMageServer:delegate:scheme:)
     convenience init(mageServerNoAnd mageServer: MageServer,
-                     delegateNoAnd delegate: AuthDelegates,
+                     delegateNoAnd delegate: LoginDelegate,
                      schemeNoAnd scheme: AnyObject? = nil) {
         self.init(server: mageServer, user: nil, delegate: delegate, scheme: scheme)
     }
@@ -52,7 +52,7 @@ final class LoginHostViewController: UIViewController {
     @objc(initWithMageServer:andUser:andDelegate:andScheme:)
     convenience init(mageServer: MageServer,
                      andUser user: User,
-                     andDelegate delegate: AuthDelegates,
+                     andDelegate delegate: LoginDelegate,
                      andScheme scheme: AnyObject? = nil) {
 
         self.init(server: mageServer, user: user, delegate: delegate, scheme: scheme)
@@ -62,7 +62,7 @@ final class LoginHostViewController: UIViewController {
     @objc(initWithMageServer:user:delegate:scheme:)
     convenience init(mageServerNoAnd mageServer: MageServer,
                      userNoAnd user: User,
-                     delegateNoAnd delegate: AuthDelegates,
+                     delegateNoAnd delegate: LoginDelegate,
                      schemeNoAnd scheme: AnyObject? = nil) {
         self.init(server: mageServer, user: user, delegate: delegate, scheme: scheme)
     }
@@ -76,8 +76,7 @@ final class LoginHostViewController: UIViewController {
     func setMageServer(_ mageServer: MageServer) {
         self.viewModel = LoginRootViewModel(server: mageServer,
                                             user: viewModel.user,
-                                            delegate: viewModel.delegate,
-                                            loginFailure: viewModel.loginFailure)
+                                            delegate: viewModel.delegate)
         self.host.rootView = LoginRootViewSwiftUI(viewModel: self.viewModel)
     }
     
@@ -87,8 +86,8 @@ final class LoginHostViewController: UIViewController {
     }
     
     override func loadView() {
-        self.view = UIView(frame: .zero)
-        self.view.backgroundColor = .systemBackground
+        view = UIView()
+        view.backgroundColor = .systemBackground
     }
     
     override func viewDidLoad() {

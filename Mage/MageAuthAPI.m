@@ -8,7 +8,6 @@
 
 #import "MageAuthAPI.h"
 #import "MageSessionManager.h"
-//#import "MAGE-Bridging-Header.h"
 #import "MAGE-Swift.h"
 
 @implementation MageAuthAPI

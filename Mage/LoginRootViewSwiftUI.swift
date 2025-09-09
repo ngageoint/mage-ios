@@ -105,8 +105,8 @@ private struct StrategyStackView: View {
 
 private struct StrategyRow: View {
     let strategy: [String: Any]
-    weak var user: User?
-    weak var delegate: AuthDelegates?
+    let user: User?
+    let delegate: AuthDelegates?
     
     var body: some View {
         let _ = print("QQQ: Identifier: \(strategy["identifier"] as? String ?? "N/A" )")

@@ -8,7 +8,14 @@
 
 import Foundation
 
+public protocol AuthService {
+    func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha
+    func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession
+    func changePassword(_ req: ChangePasswordRequest) async throws
+}
+
 public struct ServerConfig: Sendable, Equatable { public init() {} }
+
 public struct AuthSession: Sendable, Equatable {
     public init(token: String) { self.token = token }
     public let token: String
@@ -48,12 +55,6 @@ public enum AuthError: Error, Equatable {
     case unauthorized
     case rateLimited
     case server(String)
-}
-
-public protocol AuthService {
-    func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha
-    func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession
-    func changePassword(_ req: ChangePasswordRequest) async throws
 }
 
 public protocol SessionStore: Sendable {
