@@ -315,7 +315,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                     chunks.removeLast();
                     for observation in features {
                         if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, observationIds: observationIds, users: users, context: backgroundContext) {
-                            newObservationCount = newObservationCount + 1;
+                            if (newObservation.observation != nil) { newObservationCount = newObservationCount + 1; }
                             if (!initial) {
                                 observationToNotifyAbout = newObservation.observation;
                                 regionsChanged.append(contentsOf: newObservation.regionsChanged ?? [])
@@ -347,6 +347,8 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                 NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: backgroundContext));
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
+            } else {
+                MageLogger.misc.debug("No new observations to notify about")
             }
             
             self.changedRegionsPushSubject.send(regionsChanged)
