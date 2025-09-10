@@ -314,11 +314,11 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                     }
                     chunks.removeLast();
                     for observation in features {
-                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, observationIds: observationIds, users: users, context: backgroundContext) {
-                            if (newObservation.observation != nil) { newObservationCount = newObservationCount + 1; }
+                        if let observationChangeRegions = Observation.create(feature: observation, eventForms: eventFormDictionary, observationIds: observationIds, users: users, context: backgroundContext) {
+                            if (observationChangeRegions.observation != nil) { newObservationCount += 1; }
                             if (!initial) {
-                                observationToNotifyAbout = newObservation.observation;
-                                regionsChanged.append(contentsOf: newObservation.regionsChanged ?? [])
+                                observationToNotifyAbout = observationChangeRegions.observation;
+                                regionsChanged.append(contentsOf: observationChangeRegions.regionsChanged ?? [])
                             }
                         }
                     }
