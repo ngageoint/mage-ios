@@ -8,26 +8,41 @@
 
 import Foundation
 
-extension AuthenticationCoordinator {
-    func workOffline(parameters: [String: Any], completion: @escaping (AuthenticationStatus, String?) -> Void) {
+@MainActor
+extension AuthFlowCoordinator {
+    
+    /// Objective-C compatible signature (keeps old selector: `workOffline:complete:`)
+    @objc(workOffline:complete:)
+    public func workOffline(parameters: NSDictionary,
+                            completion: @escaping (AuthenticationStatus, String?) -> Void) {
 
-        guard let offlineAuthModule = (self.server?.authenticationModules as? [String: AuthenticationProtocol])?["offline"] else {
-            completion(.UNABLE_TO_AUTHENTICATE, "Offline authentication is not available.")
+        // Pull the offline module off the current server
+        guard let modules = server?.authenticationModules as? [String: Any],
+              let offline = modules["offline"] as? AuthenticationProtocol
+        else {
+            completion(.unableToAuthenticate, "Offline authentication is not available.")
             return
         }
-
-        offlineAuthModule.login(withParameters: parameters) { authenticationStatus, errorString in
+        
+        // Bridge params to swift dictionary
+        let params = (parameters as? [String: Any]) ?? [:]
+        
+        // Call the Authentication module API
+        offline.login(withParameters: params) { authenticationStatus, errorString in
             switch authenticationStatus {
-            case .AUTHENTICATION_SUCCESS:
-                completion(.AUTHENTICATION_SUCCESS, nil)
+            case .success:
+                completion(.success, nil)
                 
-            case .REGISTRATION_SUCCESS:
-                completion(.REGISTRATION_SUCCESS, nil)
+            case .unableToAuthenticate:
+                completion(.unableToAuthenticate, "Could not log in offline.")
                 
-            case .UNABLE_TO_AUTHENTICATE:
-                completion(.UNABLE_TO_AUTHENTICATE, "Could not log in offline.")
+            case .registrationSuccess:
+                completion(.registrationSuccess, nil)
                 
-            default:
+            case .accountCreationSuccess, .error:
+                completion(authenticationStatus, errorString)
+                
+            @unknown default:
                 completion(authenticationStatus, errorString)
             }
         }

@@ -35,10 +35,6 @@ public final class SignupViewModel: ObservableObject {
     }
     
     public func beginSignup() async {
-        print("\n--------------------1-------------------------")
-        print("beginSignup() called")
-        print("----------------------1-----------------------\n")
-        
         isSubmitting = true
         defer { isSubmitting = false }
         
@@ -48,15 +44,7 @@ public final class SignupViewModel: ObservableObject {
             captchaImageBase64 = res.imageBase64
             captchaToken = res.token
             showCaptcha = true
-            print("\n-------------------2--------------------------")
-            print("captcha: \(res.imageBase64)")
-            print("token: \(res.token)")
-            print("---------------------2------------------------\n")
         } catch {
-            print("\n-------------------3--------------------------")
-            print("Error: \(error.localizedDescription)")
-            print("---------------------3------------------------\n")
-            
             errorMessage = "Could not fetch CAPTCHA. \(error.localizedDescription)"
             showCaptcha = false
         }

@@ -8,8 +8,8 @@
 
 #import "MageAppCoordinator.h"
 
-#import "AuthenticationCoordinator.h"
-#import "AuthenticationCoordinator_Server5.h"
+@import Authentication;
+#import <Authentication/Authentication-Swift.h>
 
 #import <UserNotifications/UserNotifications.h>
 #import "MageSessionManager.h"
@@ -74,11 +74,11 @@
         [_childCoordinators removeObject:self.authCoordinator];
         self.authCoordinator = nil;
     }
-    if ([MageServer isServerVersion5]) {
-        self.authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
-    } else {
+//    if ([MageServer isServerVersion5]) {
+//        self.authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
+//    } else {
         self.authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme context: self.context];
-    }
+//    }
     
     [_childCoordinators addObject:self.authCoordinator];
     [self.authCoordinator start:mageServer];

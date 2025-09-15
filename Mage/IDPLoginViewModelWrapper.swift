@@ -13,6 +13,7 @@ import SwiftUI
     @objc func signinForStrategy(_ strategy: NSDictionary)
 }
 
+@MainActor
 @objc public class IDPLoginViewModelWrapper: NSObject {
     @objc public var viewModel: IDPLoginViewModel
     
@@ -23,6 +24,7 @@ import SwiftUI
     }
 }
 
+@MainActor
 @objc public class IDPLoginViewHoster: NSObject {
     @objc public static func hostingController(withViewModel viewModel: IDPLoginViewModel) -> UIViewController {
         let swiftUIView = IDPLoginViewSwiftUI(viewModel: viewModel)

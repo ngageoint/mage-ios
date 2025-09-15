@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import Authentication
 
+@MainActor
 @objc public class LoginViewModel: NSObject, ObservableObject {
     @Published @objc public dynamic var username: String = ""
     @Published @objc public dynamic var password: String = ""
@@ -80,18 +82,17 @@ import Foundation
         MageLogger.misc.debug("\n\nBBB Login Strategy Identifier: \(self.strategy["identifier"] as? String ?? "")\n\n")
         
         delegate?.login(
-            withParameters: parameters,
+            withParameters: parameters as NSDictionary,
             withAuthenticationStrategy: strategy["identifier"] as? String ?? ""
         ) { [weak self] status, errorString in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                
-                if status == .success {
-                    self?.username = ""
-                    self?.password = ""
-                } else {
-                    self?.errorMessage = errorString
-                }
+            guard let self else { return }
+            self.isLoading = false
+            
+            if status == .success {
+                self.username = ""
+                self.password = ""
+            } else {
+                self.errorMessage = errorString
             }
         }
     }

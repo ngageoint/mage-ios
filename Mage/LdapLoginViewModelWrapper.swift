@@ -8,7 +8,9 @@
 
 import Foundation
 import SwiftUI
+import Authentication
 
+@MainActor
 @objc public class LdapLoginViewModelWrapper: NSObject {
     @objc public let viewModel: LoginViewModel
 
@@ -19,6 +21,7 @@ import SwiftUI
     }
 }
 
+@MainActor
 @objc public class LdapLoginViewHoster: NSObject {
     @objc public static func hostingController(withViewModel viewModel: LoginViewModel) -> UIViewController {
         let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)

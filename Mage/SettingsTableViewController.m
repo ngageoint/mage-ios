@@ -23,6 +23,9 @@
 #import "LocationServicesSettingsTableViewController.h"
 #import "ObservationServicesSettingsTableViewController.h"
 
+@import Authentication;
+#import <Authentication/Authentication-Swift.h>
+
 @interface SettingsTableViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;

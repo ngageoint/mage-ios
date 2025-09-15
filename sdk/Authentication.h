@@ -2,14 +2,7 @@
 //  Authentication.h
 //  mage-ios-sdk
 //
-
-typedef NS_ENUM(NSInteger, AuthenticationStatus) {
-    AUTHENTICATION_SUCCESS,
-    AUTHENTICATION_ERROR,
-    UNABLE_TO_AUTHENTICATE,
-    REGISTRATION_SUCCESS,
-    ACCOUNT_CREATION_SUCCESS
-};
+#import <Authentication/Authentication-Swift.h>
 
 @protocol AuthenticationProtocol <NSObject>
 
@@ -17,12 +10,20 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 - (instancetype) initWithParameters: (NSDictionary *) parameters;
 - (NSDictionary *) parameters;
 - (BOOL) canHandleLoginToURL: (NSString *) url;
-- (void) loginWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail)) complete;
+
+// Now using swift enum
+- (void) loginWithParameters: (NSDictionary *) loginParameters
+                    complete:(void (^) (AuthenticationStatus authenticationStatus,
+                                        NSString *errorString)) complete;
+
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus,
+                                NSString *errorString,
+                                NSString *errorDetail)) complete;
 @end
 
 @interface Authentication : NSObject
-+ (id<AuthenticationProtocol>) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters;
++ (id<AuthenticationProtocol>) authenticationModuleForStrategy: (NSString *)strategy
+                                                    parameters:(NSDictionary *)parameters;
 
 + (BOOL)isLocalStrategy:(NSString *)strategy;
 + (BOOL)isLdapStrategy:(NSString *)strategy;

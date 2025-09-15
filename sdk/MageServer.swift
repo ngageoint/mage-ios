@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Authentication
 import OSLog
 
 @objc public class MageServer: NSObject {
@@ -142,6 +143,20 @@ import OSLog
         return NSError(domain: "MAGE", code: 1, userInfo: [
             NSLocalizedDescriptionKey: "Invalid server response"
         ])
+    }
+
+    /// Swift-typed view of `authenticationModules`.
+    public var authenticationModulesTyped: [String: AuthenticationProtocol] {
+        (authenticationModules as? [String: AuthenticationProtocol]) ?? [:]
+    }
+    
+    // MARK: - Swift convenience that mirrors Obj-C selector `serverWithUrl:success:failure:`
+    public class func server(
+        withUrl url: URL,
+        success: ((MageServer) -> Void)?,
+        failure: ((NSError) -> Void)?
+    ) {
+        server(url: url, policy: .useCachedIfAvailable, success: success, failure: failure)
     }
     
     @objc public static func server(

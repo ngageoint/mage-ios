@@ -34,7 +34,7 @@ public struct LegacyAuthBridge {
                       params: [AnyHashable: Any],
                       complete: @escaping (AuthenticationStatus, String?) -> Void) {
         guard let mod = modules[strategy] ?? modules["offline"] else {
-            complete(.UNABLE_TO_AUTHENTICATE, "No module"); return
+            complete(.unableToAuthenticate, "No module"); return
         }
         
         mod.login(withParameters: params, complete: complete)
@@ -43,7 +43,7 @@ public struct LegacyAuthBridge {
     public func finishLogin(strategy: String,
                             complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
         guard let mod = modules[strategy] ?? modules["offline"] else {
-            complete(.UNABLE_TO_AUTHENTICATE, "No module", nil); return
+            complete(.unableToAuthenticate, "No module", nil); return
         }
         
         mod.finishLogin(complete)
