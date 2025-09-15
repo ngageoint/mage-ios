@@ -12,32 +12,31 @@ import CoreData
 
 // Expose the same Objective-C name the app used before.
 @objc(AuthenticationCoordinator)
-@MainActor
 public final class AuthFlowCoordinator: NSObject {
     
-    // Keep these weak so we don't create retain cycles with UIKit
-    public weak var nav: UINavigationController?
-    public weak var delegate: AnyObject?                 // Should conform to AuthDelegates
-    public weak var scheme: AnyObject?
-    public weak var context: NSManagedObjectContext?
+    // NOTE: not private — used by the Offline extension below
+    var server: MageServer?
     
-    // Make public so other modules (MAGE target) can read it if needed
-    public private(set) var server: MageServer?
+    // MARK: - Stored
+    private weak var nav: UINavigationController?
+    private weak var appDelegate: AuthenticationDelegate?                 // the *external* app-level delegate
+    private weak var scheme: AnyObject?
+    private weak var context: NSManagedObjectContext?
     
     // MARK: - Obj-C compatible initializer (matches old selector exactly)
     // TODO: SettingsTableViewController.m and others call this selector (currently)
     @objc(initWithNavigationController:andDelegate:andScheme:context:)
     public init(navigationController: UINavigationController,
-                andDelegate delegate: AnyObject?,
+                andDelegate delegate: AuthenticationDelegate,
                 andScheme scheme: AnyObject? = nil,
                 context: NSManagedObjectContext? = nil) {
         self.nav = navigationController
-        self.delegate = delegate
+        self.appDelegate = delegate
         self.scheme = scheme
         self.context = context
         super.init()
     }
-
+    
     // MARK: - Entry points that legacy code calls
     
     // Old: -startLoginOnly
@@ -47,30 +46,23 @@ public final class AuthFlowCoordinator: NSObject {
             return
         }
         
-        // Note: MageServer.server calls back on a background queue sometimes
-        MageServer.server(withUrl: url) { [weak self] server in
+        MageServer.server(url: url, policy: .useCachedIfAvailable, success: { [weak self] server in
             guard let self else { return }
-            
-            Task { @MainActor in
-                self.server = server
-                self.showLoginView(for: server)
-            }
-        } failure: { error in
+            self.server = server
+            DispatchQueue.main.async { self.showLoginView(for: server) }
+        }, failure: { error in
             NSLog("[Auth] Failed to contact server: \(error.localizedDescription)")
-        }
+        })
     }
     
     // Old: -start:
-    @objc(start:)
-    public func start(_ mageServer: MageServer) {
-        self.server = mageServer
-        showLoginView(for: mageServer)
-    }
-    
-    // Old: -createAccount
-    @objc public func createAccount() {
-        let signupVC = SignupHostObjC.make()
-        nav?.pushViewController(signupVC, animated: false)
+    @objc public func start(_ mageServer: MageServer) {
+        server = mageServer
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.showLoginView(for: mageServer)
+        }
     }
     
     // MARK: - Helpers
@@ -78,18 +70,79 @@ public final class AuthFlowCoordinator: NSObject {
     private func showLoginView(for server: MageServer) {
         guard let nav = nav else { return }
         
-        // We must pass a value conforming to AuthDelegates
-        guard let authDelegates = delegate as? AuthDelegates else {
-            assertionFailure("AuthFlowCoordinator: delegate must conform to AuthDelegates")
-            return
-        }
-        
         // Use the Obj-C-compatible convenience init we exposed
         let vc = LoginHostViewController(
             mageServer: server,
-            andDelegate: authDelegates,
+            andDelegate: self,  // <-- self conforms to both protocols
             andScheme: scheme
         )
         nav.pushViewController(vc, animated: false)
+    }
+}
+
+
+// MARK: - LoginDelegate + IDPLoginDelegate
+extension AuthFlowCoordinator: LoginDelegate, IDPLoginDelegate {
+
+    @objc public func changeServerURL() {
+        appDelegate?.changeServerUrl()     // keep legacy behavior
+    }
+
+    // Obj-C entry point preserved
+    @objc public func createAccount() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let signup = SignupHostObjC.make()
+            self.nav?.pushViewController(signup, animated: false)
+        }
+    }
+
+    // EXACT selector: loginWithParameters:withAuthenticationStrategy:complete:
+    @objc(loginWithParameters:withAuthenticationStrategy:complete:)
+    public func login(withParameters parameters: NSDictionary,
+                      withAuthenticationStrategy authenticationStrategy: String,
+                      complete: @escaping (AuthenticationStatus, String?) -> Void) {
+
+        let params = parameters as? [AnyHashable: Any] ?? [:]
+
+        let module =
+            (server?.authenticationModules?[authenticationStrategy] as? AuthenticationProtocol) ??
+            (server?.authenticationModules?["offline"] as? AuthenticationProtocol)
+
+        guard let auth = module else {
+            complete(.unableToAuthenticate, "No authentication module for \(authenticationStrategy).")
+            return
+        }
+
+        auth.login(withParameters: params) { status, errorString in
+            complete(status, errorString)
+        }
+    }
+
+    // EXACT selector: signinForStrategy:
+    @objc(signinForStrategy:)
+    public func signinForStrategy(_ strategy: NSDictionary) {
+        // unwrap nav safely
+        guard let nav = self.nav else { return }
+        // pull essentials from the Obj-C dictionary
+        guard
+            let identifier = strategy["identifier"] as? String,
+            let base = MageServer.baseURL()?.absoluteString
+        else { return }
+
+        // NOTE: no stray ')' at the end
+        let url = "\(base)/auth/\(identifier)/signin"
+
+        // IDPCoordinator expects a non-optional Swift dictionary
+        let strategyDict: [AnyHashable: Any] = strategy as? [AnyHashable: Any] ?? [:]
+
+        // IDPCoordinator wants a LoginDelegate, not an IDPLoginDelegate
+        let idp = IDPCoordinator(
+            viewController: nav,
+            url: url,
+            strategy: strategyDict,
+            delegate: self as LoginDelegate
+        )
+        idp.start()
     }
 }
