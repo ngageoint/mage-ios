@@ -67,11 +67,11 @@ class DataSourceMap: MapMixin {
             }
             .store(in: &cancellable)
         
-        viewModel?.$tileOverlays
+        viewModel?.$tileOverlay
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] tileOverlays in
+            .sink { [weak self] tileOverlay in
                 Task { [weak self] in
-                    await self?.updateTileOverlays(tileOverlays: tileOverlays)
+                    await self?.updateTileOverlays(tileOverlay: tileOverlay)
                 }
             }
             .store(in: &cancellable)
@@ -86,7 +86,7 @@ class DataSourceMap: MapMixin {
     }
     
     @MainActor
-    private func updateTileOverlays(tileOverlays: [DataSourceTileOverlay]) {
+    private func updateTileOverlays(tileOverlay: DataSourceTileOverlay?) {
         guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
@@ -96,7 +96,8 @@ class DataSourceMap: MapMixin {
             clearPreviousTiles(previousTiles: previousTiles)
             return
         }
-        mapView.addOverlays(tileOverlays, level: .aboveLabels)
+        guard let tileOverlay = tileOverlay else { return }
+        mapView.addOverlay(tileOverlay, level: .aboveLabels)
         // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
         DispatchQueue.main.async {
             Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
@@ -269,7 +270,9 @@ class DataSourceMap: MapMixin {
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
         mapView.removeAnnotations(viewModel?.annotations ?? [])
-        mapView.removeOverlays(viewModel?.tileOverlays ?? [])
+        if let tileOverlay = viewModel?.tileOverlay {
+            mapView.removeOverlay(tileOverlay)
+        }
         for cancellable in cancellable {
             cancellable.cancel()
         }
