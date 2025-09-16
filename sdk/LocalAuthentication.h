@@ -4,7 +4,7 @@
 //
 //
 
-#import "Authentication.h"
+@import Authentication;
 
 @interface LocalAuthentication : NSObject<AuthenticationProtocol>
 

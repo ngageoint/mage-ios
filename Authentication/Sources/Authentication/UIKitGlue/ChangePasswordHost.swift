@@ -12,6 +12,7 @@ import SwiftUI
 /// Usage from Obj-C stays: `[ChangePasswordHost make]`
 @objc(ChangePasswordHost)
 public final class ChangePasswordHostObjC: NSObject {
+    /// Returns a ready-to-present controller for the Change Password flow.
     @MainActor
     @objc public static func make() -> UIViewController {
         let deps = AuthDependencies.shared
@@ -22,6 +23,7 @@ public final class ChangePasswordHostObjC: NSObject {
         
         let vc = UIHostingController(rootView: root)
         vc.view.backgroundColor = .systemBackground
+        vc.modalPresentationStyle = .formSheet
         return vc
     }
 }

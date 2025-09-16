@@ -12,7 +12,7 @@ import CoreData
 
 // Expose the same Objective-C name the app used before.
 @objc(AuthenticationCoordinator)
-public final class AuthFlowCoordinator: NSObject {
+public final class AuthFlowCoordinator: NSObject, IDPCoordinatorDelegate {
     
     // NOTE: not private — used by the Offline extension below
     var server: MageServer?
@@ -83,11 +83,11 @@ public final class AuthFlowCoordinator: NSObject {
 
 // MARK: - LoginDelegate + IDPLoginDelegate
 extension AuthFlowCoordinator: LoginDelegate, IDPLoginDelegate {
-
+    
     @objc public func changeServerURL() {
         appDelegate?.changeServerUrl()     // keep legacy behavior
     }
-
+    
     // Obj-C entry point preserved
     @objc public func createAccount() {
         DispatchQueue.main.async { [weak self] in
@@ -96,29 +96,29 @@ extension AuthFlowCoordinator: LoginDelegate, IDPLoginDelegate {
             self.nav?.pushViewController(signup, animated: false)
         }
     }
-
+    
     // EXACT selector: loginWithParameters:withAuthenticationStrategy:complete:
     @objc(loginWithParameters:withAuthenticationStrategy:complete:)
     public func login(withParameters parameters: NSDictionary,
                       withAuthenticationStrategy authenticationStrategy: String,
                       complete: @escaping (AuthenticationStatus, String?) -> Void) {
-
+        
         let params = parameters as? [AnyHashable: Any] ?? [:]
-
+        
         let module =
-            (server?.authenticationModules?[authenticationStrategy] as? AuthenticationProtocol) ??
-            (server?.authenticationModules?["offline"] as? AuthenticationProtocol)
-
+        (server?.authenticationModules?[authenticationStrategy] as? AuthenticationProtocol) ??
+        (server?.authenticationModules?["offline"] as? AuthenticationProtocol)
+        
         guard let auth = module else {
             complete(.unableToAuthenticate, "No authentication module for \(authenticationStrategy).")
             return
         }
-
+        
         auth.login(withParameters: params) { status, errorString in
             complete(status, errorString)
         }
     }
-
+    
     // EXACT selector: signinForStrategy:
     @objc(signinForStrategy:)
     public func signinForStrategy(_ strategy: NSDictionary) {
@@ -129,20 +129,47 @@ extension AuthFlowCoordinator: LoginDelegate, IDPLoginDelegate {
             let identifier = strategy["identifier"] as? String,
             let base = MageServer.baseURL()?.absoluteString
         else { return }
-
+        
         // NOTE: no stray ')' at the end
         let url = "\(base)/auth/\(identifier)/signin"
-
-        // IDPCoordinator expects a non-optional Swift dictionary
-        let strategyDict: [AnyHashable: Any] = strategy as? [AnyHashable: Any] ?? [:]
-
-        // IDPCoordinator wants a LoginDelegate, not an IDPLoginDelegate
-        let idp = IDPCoordinator(
-            viewController: nav,
+        let strategyDict = (strategy as? [String: Any]) ?? [:]
+        
+        let idp = IDPCoordinatorSwiftUI(
+            presenter: nav,
             url: url,
             strategy: strategyDict,
-            delegate: self as LoginDelegate
+            delegate: self
         )
+        
         idp.start()
     }
+    
+    // MARK: - IDPCoordinatorDelegate
+    
+    /// Finish the login by calling the existing login path
+    func idpCoordinatorDidCompleteSignIn(parameters: [String: Any]) {
+        // Extract the strategy string
+        let strategyDict = parameters["strategy"] as? [String: Any]
+        let authenticationStrategy =
+        (strategyDict?["identifier"] as? String) ??
+        (strategyDict?["type"] as? String) ?? "idp"
+        
+        // Bridge to existing APU
+        self.login(withParameters: parameters as NSDictionary,
+                   withAuthenticationStrategy: authenticationStrategy) { [weak self] status, error in
+            // Optional: handle status / error here if you need to update UI
+            // e.g., self?.handleAuthResult(status, error: error)
+            
+        }
+    }
+    
+    /// On IdP sign-up completion, just return the user to the login screen
+    func idpCoordinatorDidCompleteSignUp() {
+        if let server {
+            self.showLoginView(for: server)
+        }
+    }
+    
+    
+    
 }

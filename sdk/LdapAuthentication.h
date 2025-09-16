@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Authentication.h"
+@import Authentication;
 
 NS_ASSUME_NONNULL_BEGIN
 

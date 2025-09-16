@@ -12,11 +12,9 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "AuthenticationCoordinator.h"
-#import "LoginViewController.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
-#import "Authentication.h"
+@import Authentication;
 #import "MAGE-Swift.h"
 
 @interface AuthenticationCoordinator ()

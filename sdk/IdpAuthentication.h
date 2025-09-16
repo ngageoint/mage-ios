@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Authentication.h"
+@import Authentication;
 
 @interface IdpAuthentication : NSObject<AuthenticationProtocol>
 @end

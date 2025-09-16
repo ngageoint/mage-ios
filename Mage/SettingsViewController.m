@@ -9,10 +9,9 @@
 #import "SettingsViewController.h"
 #import "SettingsTableViewController.h"
 #import "SettingsDataSource.h"
-#import "AuthenticationCoordinator.h"
 #import "EventInformationCoordinator.h"
 #import "AttributionsViewController.h"
-#import "ChangePasswordViewController.h"
+//#import "ChangePasswordViewController.h"
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
 #import "DataSynchronizationSettingsTableViewController.h"
@@ -227,7 +226,7 @@
             break;
         }
         case kChangePassword: {
-            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme context: self.context];
+            UIViewController *viewController = [ChangePasswordHost make];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }

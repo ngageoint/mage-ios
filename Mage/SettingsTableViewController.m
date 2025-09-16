@@ -9,12 +9,9 @@
 #import "LocationService.h"
 #import "NSDate+display.h"
 #import "AppDelegate.h"
-#import "ChangePasswordViewController.h"
-#import "AuthenticationCoordinator.h"
+#import <Authentication/Authentication-Swift.h>
 #import "ObservationTableHeaderView.h"
-
 #import "SettingsDataSource.h"
-#import "AuthenticationCoordinator.h"
 #import "EventInformationCoordinator.h"
 #import "AttributionsViewController.h"
 #import "LocationDisplayTableViewController.h"
@@ -189,7 +186,7 @@
             break;
         }
         case kChangePassword: {
-            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme context: self.context];
+            UIViewController *viewController = [ChangePasswordHost make];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }
