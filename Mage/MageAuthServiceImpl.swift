@@ -12,7 +12,7 @@ import Authentication
 final class MageAuthServiceImpl: AuthService {
     func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
         try await withCheckedThrowingContinuation { cont in
-            MageAuthAPI.requestSignupCaptcha(forUsername: username, background: backgroundHex) { token, captcha, error in
+            MageAuthAPI.getSignupCaptcha(forUsername: username, background: backgroundHex) { token, captcha, error in
                 if let error { cont.resume(throwing: AuthError.server(error.localizedDescription)); return }
                 guard let token, let captcha else {
                     cont.resume(throwing: AuthError.server("Missing captcha or token"))
@@ -33,50 +33,56 @@ final class MageAuthServiceImpl: AuthService {
             "captcha": captchaText
         ]
         
-        try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+        return try await withCheckedThrowingContinuation { cont in
             MageAuthAPI.completeSignup(withParameters: params, token: token) { http, body, error in
                 if let error {
-                    let status = http?.statusCode ?? -1
-                    switch status {
-                    case 401: cont.resume(throwing: AuthError.unauthorized)
-                    case 429: cont.resume(throwing: AuthError.rateLimited)
-                    case 0: cont.resume(throwing: AuthError.network)
-                    default:
-                        let msg = body.flatMap { String(data: $0, encoding: .utf8) } ?? error.localizedDescription
-                        cont.resume(throwing: AuthError.server(msg))
-                    }
+                    cont.resume(throwing: AuthError.server(error.localizedDescription))
                     return
                 }
-                cont.resume(returning: ())
+                
+                let status = http?.statusCode ?? 0
+                switch status {
+                case 200, 201:
+                    // Adjust i server returns a session token on success
+                    cont.resume(returning: AuthSession(token: "signup-created"))
+                case 401:
+                    cont.resume(throwing: AuthError.unauthorized)
+                case 429:
+                    cont.resume(throwing: AuthError.rateLimited)
+                default:
+                    let msg = body.flatMap { String(data: $0, encoding: .utf8) } ?? "Signup failed (\(status))"
+                    cont.resume(throwing: AuthError.server(msg))
+                }
             }
         }
-        
-        // After server says OK, you may want automatic session/login
-        // For now, mirror legacy UX: return a "pending" session or require manual login.
-        return AuthSession(token: "signup-created")  // placeholder if your server returns a token; swap when available
     }
     
     
     func changePassword(_ req: ChangePasswordRequest) async throws {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+        try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+            
             MageAuthAPI.changePassword(
-                withCurrent: req.currentPassword,
+                currentPassword: req.currentPassword,
                 newPassword: req.newPassword,
-                confirmNewPassword: req.confirmNewPassword
-            ) { http, errorBody, error in
+                confirmedPassword: req.confirmNewPassword
+            ) { http, error in
                 if let error {
-                    let status = http?.statusCode ?? -1
-                    switch status {
-                    case 401: continuation.resume(throwing: AuthError.unauthorized)
-                    case 429: continuation.resume(throwing: AuthError.rateLimited)
-                    case 0:   continuation.resume(throwing: AuthError.network)
-                    default:
-                        let msg = (errorBody.flatMap { String(data: $0, encoding: .utf8) }) ?? error.localizedDescription
-                        continuation.resume(throwing: AuthError.server(msg))
-                    }
+                    cont.resume(throwing: AuthError.server(error.localizedDescription))
                     return
                 }
-                continuation.resume(returning: ()) // Success
+                
+                let status = http?.statusCode ?? 0
+                
+                switch status {
+                case 200, 204:
+                    cont.resume(returning: ())  // Return void to the continuation
+                case 401:
+                    cont.resume(throwing: AuthError.unauthorized)
+                case 429:
+                    cont.resume(throwing: AuthError.rateLimited)
+                default:
+                    cont.resume(throwing: AuthError.server("Password change failed (\(status))"))
+                }
             }
         }
     }
