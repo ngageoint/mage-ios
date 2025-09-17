@@ -129,6 +129,7 @@
 		842F62E72E7075A50066497D /* MageSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62E62E7075A50066497D /* MageSessionStore.swift */; };
 		842F62F72E7211CA0066497D /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */; };
 		842F62FB2E7A0F1F0066497D /* SignupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */; };
+		842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1161,6 +1162,7 @@
 		842F62E62E7075A50066497D /* MageSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageSessionStore.swift; sourceTree = "<group>"; };
 		842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupDelegate.swift; sourceTree = "<group>"; };
+		842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageAuthAPI.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
 		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
@@ -2300,6 +2302,7 @@
 				842F62E62E7075A50066497D /* MageSessionStore.swift */,
 				842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */,
 				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
+				842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -5529,6 +5532,7 @@
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				2F6D80D32B1F6DF800545221 /* SearchViewController.swift in Sources */,
 				F754C6562C48064800E408E9 /* ObservationLocationSummary.swift in Sources */,
+				842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F72D43142694B60300F9AC3B /* Event.swift in Sources */,
 				F7DE988C2C1A4478005372F8 /* UserLocalDataSource.swift in Sources */,
