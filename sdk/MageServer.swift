@@ -30,6 +30,9 @@ import OSLog
     
     public private(set) var authenticationModules: [String: AuthenticationModule] = [:]
     
+    private typealias StrategyParams = [AnyHashable: Any]
+    private typealias Strategies     = [String: StrategyParams]
+    
     // MARK: - Server meta
     
     @objc public static func baseURL() -> URL? {
@@ -38,7 +41,7 @@ import OSLog
     }
     
     @objc public var serverHasLocalAuthenticationStrategy: Bool {
-        (UserDefaults.standard.serverAuthenticationStrategies?["local"] != nil)
+        (UserDefaults.standard.serverAuthenticationStrategies?[StrategyKey.local] != nil)
     }
     
     public static var isServerVersion5: Bool {
@@ -49,7 +52,7 @@ import OSLog
         UserDefaults.standard.serverMajorVersion == 6 && UserDefaults.standard.serverMinorVersion == 0
     }
     
-    private func isIdpStrategy(_ key: String) -> Bool {
+    private static func isIdpStrategy(_ key: String) -> Bool {
         switch key.lowercased() {
         case "oauth", "oauth2", "oidc", "saml", "geoaxisconnect", "idp": return true
         default: return false
@@ -58,14 +61,13 @@ import OSLog
     
     /// Strategies that the client treats as "IdP" (oauth2/oidc/saml/geoaxisconnect/idp).
     @objc public var oauthStrategies: [[String: Any]] {
-        var result: [[String: Any]] = []
-        if let strategies = UserDefaults.standard.serverAuthenticationStrategies {
-            for (key, raw) in strategies where isIdpStrategy(key) {
-                let strategyDict = raw as? [String: Any] ?? [:]
-                result.append(["identifier": key, "strategy": strategyDict])
-            }
+        guard let strategies = UserDefaults.standard.serverAuthenticationStrategies else { return [] }
+        
+        return strategies.compactMap { key, raw in
+            guard Self.isIdpStrategy(key) else { return nil }
+            let dict = raw as? [String: Any] ?? [:]
+            return["identifier": key, "strategy": dict]
         }
-        return result
     }
     
     /// All strategies from the server ordered for UI (non-local first, then local).
@@ -73,22 +75,20 @@ import OSLog
         guard let defaults = UserDefaults.standard.serverAuthenticationStrategies else { return [] }
         
         var nonLocal: [[String: Any]] = []
-        var local: [[String: Any]] = []
+        var local:    [[String: Any]] = []
         
         for (key, raw) in defaults {
-            let strategyDict = raw as? [String: Any] ?? [:]
-            let item: [String: Any] = ["identifier": key, "strategy": strategyDict]
+            let dict: [String: Any] = ["identifier": key, "strategy": (raw as? [String: Any] ?? [:])]
             
             if key == StrategyKey.local {
-                local.append(item)
+                local.append(dict)
             } else {
-                nonLocal.append(item)
+                nonLocal.append(dict)
             }
         }
         
         // Optional: stable order within each bucket
         nonLocal.sort { ($0["identifier"] as? String ?? "") < ($1["identifier"] as? String ?? "") }
-        
         return nonLocal + local
     }
     
@@ -169,8 +169,8 @@ import OSLog
             return
         }
         
-        let manager = MageSessionManager.shared()
-        let apiURL = "\(url.absoluteString)/api"
+        let manager     = MageSessionManager.shared()
+        let apiURL      = "\(url.absoluteString)/api"
         let methodStart = Date()
         os_log("TIMING API @ %{public}@", "\(methodStart)")
         
@@ -216,6 +216,10 @@ import OSLog
                  NSURLErrorNetworkConnectionLost,
                  NSURLErrorNotConnectedToInternet,
                  NSURLErrorTimedOut].contains(ns.code) {
+                
+                if let offline = Self.offlineModuleIfEligible(for: url.absoluteString) {
+                    
+                }
                 
                 if let oldLogin = UserDefaults.standard.loginParameters,
                    let oldUrl = oldLogin[LoginParametersKey.serverUrl.key] as? String,
@@ -300,6 +304,37 @@ import OSLog
         server.authenticationModules = built
     }
     
+    private static func buildModules(from strategies: Strategies, baseURLString: String) -> [String: AuthenticationModule] {
+        var built: [String: AuthenticationModule] = [:]
+        
+        for (strategy, params) in strategies {
+            if let module = AuthFactory.make(strategy: strategy, parameters: params) {
+                built[strategy] = module
+            }
+        }
+        
+        if let offline = offlineModuleIfEligible(for: baseURLString) {
+            built[StrategyKey.offline] = offline
+        }
+        
+        return built
+    }
+    
+    /// Centralized policy for enableing Offline
+    private static func offlineModuleIfEligible(for baseURLString: String) -> AuthenticationModule? {
+        guard
+            let oldLogin = UserDefaults.standard.loginParameters,
+            let oldUrl   = oldLogin[LoginParametersKey.serverUrl.key] as? String,
+            oldUrl == baseURLString,
+            StoredPassword.retrieveStoredPassword() != nil,
+            let offline = AuthFactory.make(strategy: StrategyKey.offline, parameters: nil),
+            offline.canHandleLogin(toURL: baseURLString)
+        else {
+            return nil
+        }
+        return offline
+    }
+    
     @objc(serverWithUrl:success:failure:)
     public static func serverObjC(
         url: URL?,
@@ -311,26 +346,12 @@ import OSLog
     
     public init(url: URL) {
         super.init()
-        if url.absoluteString != UserDefaults.standard.baseServerUrl { return }
         
-        if let strategies = UserDefaults.standard.authenticationStrategies {
-            var modules: [String: AuthenticationModule] = [:]
-            
-            for (strategy, params) in strategies {
-                if let module = AuthFactory.make(strategy: strategy, parameters: params) {
-                    modules[strategy] = module
-                }
-            }
-            
-            if let oldLogin = UserDefaults.standard.loginParameters,
-                let oldUrl = oldLogin[LoginParametersKey.serverUrl.key] as? String,
-                oldUrl == url.absoluteString,
-                StoredPassword.retrieveStoredPassword() != nil,
-               let offline = AuthFactory.make(strategy: StrategyKey.offline, parameters: nil) {
-                modules[StrategyKey.offline] = offline
-            }
-            
-            self.authenticationModules = modules
+        // Only populate from cache if URL matches stored base URL.
+        guard url.absoluteString == UserDefaults.standard.baseServerUrl else { return }
+        
+        if let strategies = UserDefaults.standard.authenticationStrategies as? Strategies {
+            self.authenticationModules = Self.buildModules(from: strategies, baseURLString: url.absoluteString)
         }
     }
 }
