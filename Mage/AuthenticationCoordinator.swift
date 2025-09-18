@@ -10,6 +10,10 @@ import UIKit
 import CoreData
 @preconcurrency import Authentication // AuthenticationStatus + AuthenticationProtocol
 
+private enum AuthKey {
+    static let offline = "offline"
+}
+
 // Expose the same Objective-C name the app used before.
 @objc(AuthenticationCoordinator)
 @MainActor
@@ -104,28 +108,24 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     public nonisolated(unsafe) func login(withParameters parameters: NSDictionary,
                                           withAuthenticationStrategy authenticationStrategy: String,
                                           complete: @escaping (AuthenticationStatus, String?) -> Void) {
-        
-        // This method does not touch UIKit; no main hop required.
-        let params = parameters as? [AnyHashable: Any] ?? [:]
-        
+
         Task { @MainActor [weak self] in
-            guard let self else {
+            guard let self, let server = self.server else {
                 complete(.unableToAuthenticate, "Internal Error.")
                 return
             }
             
-            let auth = self.server?.authenticationModulesTyped[authenticationStrategy]
-            ?? self.server?.authenticationModulesTyped["offline"]
+            let params = (parameters as? [AnyHashable: Any]) ?? [:]
             
-            guard let auth else {
+            let modules = server.authenticationModules
+            guard let auth = modules[authenticationStrategy] ?? modules[AuthKey.offline] else {
                 complete(.unableToAuthenticate, "No authentication module for \(authenticationStrategy).")
                 return
             }
-            // Call into the module off the main actor if it doesn’t require UI
-            Task.detached {
-                auth.login(withParameters: params, complete: complete)
-            }
             
+            auth.login(withParameters: params) { status, error in
+                complete(status, error)
+            }
         }
     }
     

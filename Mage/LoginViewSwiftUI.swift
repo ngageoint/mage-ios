@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Authentication
 
 struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel

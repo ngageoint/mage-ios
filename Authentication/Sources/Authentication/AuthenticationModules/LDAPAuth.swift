@@ -16,7 +16,7 @@ public final class LDAPAuth: AuthenticationModule {
     
     public func login(withParameters params: [AnyHashable : Any], complete: @escaping (AuthenticationStatus, String?) -> Void) {
         guard
-            let base = (params["serverUrl"] as? String) ?? UserDefaults.standard.baseServerUrl,
+            let base = (params["serverUrl"] as? String) ?? AuthDefaults.baseServerUrl,
             let url = URL(string: "\(base)/auth/ldap/signin"),
             let username = params.string("username") ?? params.string("email"),
             let password = params.string("password")

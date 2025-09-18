@@ -130,7 +130,6 @@
 		842F62F72E7211CA0066497D /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */; };
 		842F62FB2E7A0F1F0066497D /* SignupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */; };
 		842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */; };
-		842F630D2E7B39570066497D /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
 		842F631D2E7C44860066497D /* KeychainAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F631C2E7C44860066497D /* KeychainAuthStore.swift */; };
 		842F631E2E7C66D90066497D /* AuthFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F63042E7B192F0066497D /* AuthFactory.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
@@ -5086,7 +5085,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				842F630D2E7B39570066497D /* MageUserDefaultKeys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

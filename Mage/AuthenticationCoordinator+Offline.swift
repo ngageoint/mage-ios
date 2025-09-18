@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Authentication
 
 @MainActor
 extension AuthFlowCoordinator {
@@ -17,34 +18,17 @@ extension AuthFlowCoordinator {
                             completion: @escaping (AuthenticationStatus, String?) -> Void) {
 
         // Pull the offline module off the current server
-        guard let modules = server?.authenticationModules as? [String: Any],
-              let offline = modules["offline"] as? AuthenticationProtocol
-        else {
-            completion(.unableToAuthenticate, "Offline authentication is not available.")
+        guard let offline = server?.authenticationModules["offline"] else {
+            completion(AuthenticationStatus.unableToAuthenticate, "Offline authentication is not available.")
             return
         }
         
         // Bridge params to swift dictionary
-        let params = (parameters as? [String: Any]) ?? [:]
+        let params = (parameters as? [AnyHashable: Any]) ?? [:]
         
         // Call the Authentication module API
         offline.login(withParameters: params) { authenticationStatus, errorString in
-            switch authenticationStatus {
-            case .success:
-                completion(.success, nil)
-                
-            case .unableToAuthenticate:
-                completion(.unableToAuthenticate, "Could not log in offline.")
-                
-            case .registrationSuccess:
-                completion(.registrationSuccess, nil)
-                
-            case .accountCreationSuccess, .error:
-                completion(authenticationStatus, errorString)
-                
-            @unknown default:
-                completion(authenticationStatus, errorString)
-            }
+            completion(authenticationStatus, errorString)
         }
     }
 }
