@@ -36,15 +36,3 @@ public final class Authentication: NSObject {
     }
     public class func isOfflineStrategy(_ s: String) -> Bool { s == "offline" }
 }
-
-/// Minimal factory we can flesh out or replace with DI
-public final class AuthFactory {
-    public static let shared = AuthFactory()
-    private init() {}
-    
-    public func make(strategy: String, parameters: [AnyHashable: Any]?) -> AuthenticationProtocol? {
-        // TODO: instantiate the right module for `strategy`
-                // Return nil for now if you’re still using the existing implementations elsewhere.
-                return nil
-    }
-}

@@ -130,6 +130,8 @@
 		842F62F72E7211CA0066497D /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */; };
 		842F62FB2E7A0F1F0066497D /* SignupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */; };
 		842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */; };
+		842F630D2E7B39570066497D /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
+		842F631D2E7C44860066497D /* KeychainAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F631C2E7C44860066497D /* KeychainAuthStore.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -354,7 +356,6 @@
 		F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42482694B60300F9AC3B /* RouteMethod.m */; };
 		F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.swift */; };
 		F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */; };
-		F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42502694B60300F9AC3B /* ServerAuthentication.m */; };
 		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */; };
 		F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */; };
 		F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */; };
@@ -1156,13 +1157,13 @@
 		842F62852E6B43DF0066497D /* Authentication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Authentication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62982E6B47DE0066497D /* AuthenticationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuthenticationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageAuthServiceImpl.swift; sourceTree = "<group>"; };
-		842F62DF2E6B72DB0066497D /* LegacyAuthNames.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LegacyAuthNames.h; sourceTree = "<group>"; };
 		842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageDependencyBootstrap.swift; sourceTree = "<group>"; };
 		842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyAuthBridge.swift; sourceTree = "<group>"; };
 		842F62E62E7075A50066497D /* MageSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageSessionStore.swift; sourceTree = "<group>"; };
 		842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupDelegate.swift; sourceTree = "<group>"; };
 		842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageAuthAPI.swift; sourceTree = "<group>"; };
+		842F631C2E7C44860066497D /* KeychainAuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainAuthStore.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
 		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
@@ -2274,7 +2275,8 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				842F62DF2E6B72DB0066497D /* LegacyAuthNames.h */,
+				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
+				842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */,
 				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
 				8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */,
 				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
@@ -2283,26 +2285,25 @@
 				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
 				84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */,
 				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
+				842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */,
 				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
 				8448CA342E5D076F00EE689B /* LoginHostViewController.swift */,
 				8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */,
 				84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */,
-				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
-				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
 				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
 				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
+				842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */,
+				842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */,
+				842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */,
+				842F62E62E7075A50066497D /* MageSessionStore.swift */,
+				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
 				846224D42E327F010029FE98 /* PasswordFieldView.swift */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
 				846224D62E3280B30029FE98 /* SignInButtonView.swift */,
 				846224D82E3285BB0029FE98 /* SignUpButtonView.swift */,
-				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
-				842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */,
-				842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */,
-				842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */,
-				842F62E62E7075A50066497D /* MageSessionStore.swift */,
-				842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */,
 				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
-				842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */,
+				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
+				842F631C2E7C44860066497D /* KeychainAuthStore.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -5082,6 +5083,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842F630D2E7B39570066497D /* MageUserDefaultKeys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5178,7 +5180,6 @@
 				84E9E1C02E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
 				84299DAD2E3C0F05007E51B1 /* IDPLoginViewModel.swift in Sources */,
-				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
@@ -5210,6 +5211,7 @@
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */,
+				842F631D2E7C44860066497D /* KeychainAuthStore.swift in Sources */,
 				F7489B3B27A1A31000A9E314 /* UserHeadingDisplay.swift in Sources */,
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */,

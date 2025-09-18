@@ -53,8 +53,5 @@
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
 
-//#import "IDPCoordinator.h"
-//#import "MageAuthAPI.h"
 #import "ContactInfo.h"
 #import "MageSessionManager.h"
-#import "LegacyAuthNames.h"
