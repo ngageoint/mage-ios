@@ -10,8 +10,6 @@ import Foundation
 import Authentication
 
 struct KeychainAuthStore: AuthStore {
-    init() {}
-    
     func hasStoredPassword() -> Bool {
         StoredPassword.retrieveStoredPassword() != nil
     }

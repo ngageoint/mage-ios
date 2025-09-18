@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import Authentication
 
-public enum AuthFactory {
-    public static func make(strategy: String,
-                            parameters: [AnyHashable: Any]?,
-                            store: AuthStore = KeychainAuthStore()
-    ) -> AuthenticationModule? {
+enum AuthFactory {
+    /// Pure, nonisolated factory. Safe to call from any queue.
+    static func make(strategy: String,
+                     parameters: [AnyHashable: Any]?,
+                     store: AuthStore = KeychainAuthStore()) -> AuthenticationModule? {
         switch strategy.lowercased() {
         case "local":   return LocalAuth(parameters: parameters)
         case "ldap":    return LDAPAuth(parameters: parameters)

@@ -18,8 +18,6 @@ import Foundation
 }
 
 /// All auth modules (local/ldap/offline/idp) conform to this.
-/// Marked @MainActor because modules are driven by UI flows.
-
 public protocol AuthenticationModule: AnyObject {
     /// Factory-style init. Params come from the server / strategy record.
     init(parameters: [AnyHashable: Any]?)

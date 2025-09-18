@@ -13,33 +13,31 @@ public final class OfflineAuth: AuthenticationModule {
     
     public init(parameters: [AnyHashable: Any]?) {
         // If one isn't passed, use default
-        self.store = KeychainAuthStore()
+        self.store = NullAuthStore()
     }
     
+    // Convenience init for callers that want to inject a real store.
     public init(parameters: [AnyHashable: Any]?, store: AuthStore) {
         self.store = store
     }
     
-    public func canHandleLogin(toURL url: String) -> Bool { store.hasStoredPassword() }
+    public func canHandleLogin(toURL url: String) -> Bool {
+        store.hasStoredPassword()
+    }
     
-    public func login(
-        withParameters params: [AnyHashable: Any],
-        complete: @escaping (AuthenticationStatus, String?) -> Void) {
+    public func login(withParameters params: [AnyHashable: Any],
+                      complete: @escaping (AuthenticationStatus, String?) -> Void) {
         guard store.hasStoredPassword() else {
-            return complete(.unableToAuthenticate, "No stored password.")
+            complete(.unableToAuthenticate, "No stored password.")
+            return
         }
         
+        // Your offline verification here if we still need it
         complete(.success, nil)
     }
     
     public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
+        // Offline has nothing to finish.
         complete(.success, nil, nil)
     }
 }
-
-
-private struct NullStore: AuthStore {
-    init() {}
-    func hasStoredPassword() -> Bool { false }
-}
-

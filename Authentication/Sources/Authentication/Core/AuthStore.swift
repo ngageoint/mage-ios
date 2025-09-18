@@ -8,16 +8,13 @@
 
 import Foundation
 
+/// Abstraction OfflineAuth uses to decide if offline is possible.
 public protocol AuthStore {
-    init()
     func hasStoredPassword() -> Bool
 }
 
-public protocol OfflineCredentialStore: AnyObject {
-    func loadOfflineSecret() -> String?
-}
-
-public struct AuthFactoryDeps {
-    public var offlineStore: OfflineCredentialStore?
-    public init(offlineStore: OfflineCredentialStore? = nil) { self.offlineStore = offlineStore }
+/// Framework-default that never allows offline.
+/// (The app will inject a real store.)
+struct NullAuthStore: AuthStore {
+    func hasStoredPassword() -> Bool { false }
 }

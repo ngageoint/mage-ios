@@ -223,6 +223,7 @@ import OSLog
                     
                     if let offline = AuthFactory.make(strategy: StrategyKey.offline, parameters: nil),
                        offline.canHandleLogin(toURL: url.absoluteString) {
+                        
                         server.authenticationModules = [StrategyKey.offline: offline]
                         success?(server)
                         return
