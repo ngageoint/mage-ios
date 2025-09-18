@@ -49,14 +49,6 @@ public struct ChangePasswordRequest: Sendable, Equatable {
     }
 }
 
-public enum AuthError: Error, Equatable {
-    case invalidInput(String)
-    case network
-    case unauthorized
-    case rateLimited
-    case server(String)
-}
-
 public protocol SessionStore: Sendable {
     var current: AuthSession? { get }
     func set(_ session: AuthSession?) async

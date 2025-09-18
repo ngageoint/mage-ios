@@ -1,3 +1,7 @@
+// 09/2025 NOTE:
+// Keeping file around, but it is not in a target
+// Delete file once we've verified everything works properly
+//
 ////
 ////  LocalAuthentication.m
 ////  mage-ios-sdk
