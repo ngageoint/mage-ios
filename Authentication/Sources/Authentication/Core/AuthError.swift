@@ -9,10 +9,20 @@
 import Foundation
 
 public enum AuthError: Error, Equatable {
-    case invalidCredentials     // 401/403 or server says "bad username/password"
-    case accountDisabled        // Server indicates disabled/locked
+    // Login-ish
+    case invalidCredentials                 // bad username/password or equivalent
+    case unauthorized                       // 401/403 or server says "bad username/password"
+    
+    // Validation / throttling
+    case invalidInput(message: String?)        // 400/422 with field validation errors
+    case rateLimited(retryAfterSeconds: Int?)  // 429, optional Retry-After
+    
+    // Transport / server
     case network(underlying: Error)
-    case server(status: Int)    // 5xx, unexpected 4xx
+    case server(status: Int, message: String?)    // 5xx, unexpected 4xx
+    
+    // Misc
+    case accountDisabled        // Server indicates disabled/locked
     case malformedResponse      // parsing error
     case configuration          // missing url info
     case cancelled              // user cancelled / task cancelled
@@ -22,14 +32,21 @@ public extension AuthError {
     static func == (lhs: AuthError, rhs: AuthError) -> Bool {
         switch (lhs, rhs) {
         case (.invalidCredentials, .invalidCredentials),
-            (.accountDisabled, .accountDisabled),
+            (.unauthorized, .unauthorized),
             (.malformedResponse, .malformedResponse),
             (.configuration, .configuration),
-            (.cancelled, .cancelled):
+            (.cancelled, .cancelled),
+            (.accountDisabled, .accountDisabled):
             return true
             
-        case let (.server(a), .server(b)):
+        case let (.invalidInput(a), .invalidInput(b)):
             return a == b
+            
+        case let (.rateLimited(a), .rateLimited(b)):
+            return a == b
+            
+        case let (.server(sa, ma), .server(sb, mb)):
+            return sa == sb && ma == mb
             
         case let (.network(e1), .network(e2)):
             // Compare by domain + code so tests remain stable while allowing different instances

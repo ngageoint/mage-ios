@@ -44,12 +44,7 @@ public final class ChangePasswordViewModel: ObservableObject {
             try await auth.changePassword(req)
             didSucceed = true
         } catch let err as AuthError {
-            switch err {
-            case .invalidInput(let msg), .server(let msg): errorMessage = msg
-            case .unauthorized: errorMessage = "Current password is incorrect"
-            case .rateLimited: errorMessage = "Too many requests. Please try again later."
-            case .network: errorMessage = "Network error. Check your connection and retry."
-            }
+            errorMessage = err.uiMessage(flow: .changePassword)
         } catch {
             errorMessage = "Unexpected error. Please try again."
         }

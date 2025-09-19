@@ -13,9 +13,12 @@ final class MageAuthServiceImpl: AuthService {
     func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
         try await withCheckedThrowingContinuation { cont in
             MageAuthAPI.getSignupCaptcha(forUsername: username, background: backgroundHex) { token, captcha, error in
-                if let error { cont.resume(throwing: AuthError.server(error.localizedDescription)); return }
+                if let error {
+                    cont.resume(throwing: AuthError.server(status: 500, message: error.localizedDescription))
+                    return
+                }
                 guard let token, let captcha else {
-                    cont.resume(throwing: AuthError.server("Missing captcha or token"))
+                    cont.resume(throwing: AuthError.invalidInput(message: "Missing captcha or token"))
                     return
                 }
                 cont.resume(returning: SignupCaptcha(token: token, imageBase64: captcha))
@@ -29,34 +32,26 @@ final class MageAuthServiceImpl: AuthService {
             "displayName": req.displayName,
             "email": req.email,
             "password": req.password,
-            "passwordconfirm": req.confirmPassword,
+            "confirmPasword": req.confirmPassword,  // TODO: BRENT - double check the proper term (had passwordconfirm)
             "captcha": captchaText
         ]
         
         return try await withCheckedThrowingContinuation { cont in
             MageAuthAPI.completeSignup(withParameters: params, token: token) { http, body, error in
                 if let error {
-                    cont.resume(throwing: AuthError.server(error.localizedDescription))
+                    cont.resume(throwing: AuthError.server(status: http?.statusCode ?? 500, message: error.localizedDescription))
                     return
                 }
                 
                 let status = http?.statusCode ?? 0
-                switch status {
-                case 200, 201:
-                    // Adjust i server returns a session token on success
-                    cont.resume(returning: AuthSession(token: "signup-created"))
-                case 401:
-                    cont.resume(throwing: AuthError.unauthorized)
-                case 429:
-                    cont.resume(throwing: AuthError.rateLimited)
-                default:
-                    let msg = body.flatMap { String(data: $0, encoding: .utf8) } ?? "Signup failed (\(status))"
-                    cont.resume(throwing: AuthError.server(msg))
+                
+                if let mapped = HTTPErrorMapper.map(status: status, headers: http?.allHeaderFields ?? [:], bodyData: body) {
+                    cont.resume(throwing: mapped)
+                    return
                 }
             }
         }
     }
-    
     
     func changePassword(_ req: ChangePasswordRequest) async throws {
         try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
@@ -67,22 +62,18 @@ final class MageAuthServiceImpl: AuthService {
                 confirmedPassword: req.confirmNewPassword
             ) { http, error in
                 if let error {
-                    cont.resume(throwing: AuthError.server(error.localizedDescription))
+                    cont.resume(throwing: AuthError.server(status: http?.statusCode ?? 500,
+                                                           message: error.localizedDescription))
                     return
                 }
                 
                 let status = http?.statusCode ?? 0
                 
-                switch status {
-                case 200, 204:
-                    cont.resume(returning: ())  // Return void to the continuation
-                case 401:
-                    cont.resume(throwing: AuthError.unauthorized)
-                case 429:
-                    cont.resume(throwing: AuthError.rateLimited)
-                default:
-                    cont.resume(throwing: AuthError.server("Password change failed (\(status))"))
+                if let mapped = HTTPErrorMapper.map(status: status, headers: http?.allHeaderFields ?? [:], bodyData: nil) {
+                    cont.resume(throwing: mapped)
+                    return
                 }
+                cont.resume(returning: ())
             }
         }
     }

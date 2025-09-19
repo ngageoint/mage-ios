@@ -56,20 +56,15 @@ public final class SignupViewModel: ObservableObject {
         do {
             let req = SignupRequest(displayName: displayName, username: username, email: email, password: password, confirmPassword: confirmPassword)
             _ = try await auth.submitSignup(req, captchaText: captchaText, token: token)
+            didSucceed = true
     } catch let err as AuthError {
-        switch err {
-        case .invalidInput(let msg), .server(let msg): errorMessage = msg
-        case .unauthorized: errorMessage = "Unauthorized. Check your credentials."
-        case .rateLimited: errorMessage = "Too many attempts. Please wait and try again."
-        case .network: errorMessage = "Network error. Check your connection and retry."
-        }
+        errorMessage = err.uiMessage(flow: .signup)
     } catch {
         errorMessage = "Unexpected error. Please try again."
     }
     
     isSubmitting = false
     showCaptcha = false
-    
 }
 
     // TODO: Brent - need to change to use the rules set by the server

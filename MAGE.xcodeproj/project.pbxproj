@@ -2276,6 +2276,7 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */,
 				842F63042E7B192F0066497D /* AuthFactory.swift */,
 				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
 				842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */,
@@ -2295,7 +2296,6 @@
 				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
 				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
 				842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */,
-				842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */,
 				842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */,
 				842F62E62E7075A50066497D /* MageSessionStore.swift */,
 				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
