@@ -132,6 +132,7 @@
 		842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */; };
 		842F631D2E7C44860066497D /* KeychainAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F631C2E7C44860066497D /* KeychainAuthStore.swift */; };
 		842F631E2E7C66D90066497D /* AuthFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F63042E7B192F0066497D /* AuthFactory.swift */; };
+		842F63362E7DF8C20066497D /* AuthHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F63352E7DF8C20066497D /* AuthHostingController.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -1165,6 +1166,7 @@
 		842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageAuthAPI.swift; sourceTree = "<group>"; };
 		842F63042E7B192F0066497D /* AuthFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFactory.swift; sourceTree = "<group>"; };
 		842F631C2E7C44860066497D /* KeychainAuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainAuthStore.swift; sourceTree = "<group>"; };
+		842F63352E7DF8C20066497D /* AuthHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHostingController.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
 		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
@@ -2008,10 +2010,27 @@
 			);
 			target = 842F62972E6B47DE0066497D /* AuthenticationTests */;
 		};
+		847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ChangePasswordHost.swift,
+				SignupHost.swift,
+			);
+			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
+		};
+		847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ChangePasswordHost.swift,
+				SignupHost.swift,
+			);
+			target = 842F62842E6B43DF0066497D /* Authentication */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		842F62A42E6B48FB0066497D /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
+		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UIKitGlue; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -2276,6 +2295,7 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				842F633C2E7DFE0C0066497D /* UIKitGlue */,
 				842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */,
 				842F63042E7B192F0066497D /* AuthFactory.swift */,
 				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
@@ -2306,6 +2326,7 @@
 				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
 				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
 				842F631C2E7C44860066497D /* KeychainAuthStore.swift */,
+				842F63372E7DF8C70066497D /* Bridge */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -2490,6 +2511,14 @@
 				842F627D2E6B41AA0066497D /* FakeAuthService.swift */,
 			);
 			path = TestDoubles;
+			sourceTree = "<group>";
+		};
+		842F63372E7DF8C70066497D /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				842F63352E7DF8C20066497D /* AuthHostingController.swift */,
+			);
+			path = Bridge;
 			sourceTree = "<group>";
 		};
 		8474FD9426FB8AFE0041891A /* Contact */ = {
@@ -4424,6 +4453,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				842F62A42E6B48FB0066497D /* Authentication */,
+				842F633C2E7DFE0C0066497D /* UIKitGlue */,
 			);
 			name = Authentication;
 			packageProductDependencies = (
@@ -5304,6 +5334,7 @@
 				F79116262491414B0043A529 /* MageInitializer.swift in Sources */,
 				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
 				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
+				842F63362E7DF8C20066497D /* AuthHostingController.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.swift in Sources */,
 				F7BFB8D22C4AB07300901479 /* NavigateToButton.swift in Sources */,
 				8448CA372E5DEF9000EE689B /* OrDividerView.swift in Sources */,

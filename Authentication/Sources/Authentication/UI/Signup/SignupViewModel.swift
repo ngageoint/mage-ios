@@ -34,6 +34,12 @@ public final class SignupViewModel: ObservableObject {
         self.sessionStore = sessionStore
     }
     
+    public convenience init(deps: AuthDependencies) {
+        precondition(deps.authService != nil, "AuthDependencies.authService must be injected")
+        precondition(deps.sessionStore != nil, "AuthDependencies.sessionStore must be injected")
+        self.init(auth: deps.authService!, sessionStore: deps.sessionStore!)
+    }
+    
     public func beginSignup() async {
         isSubmitting = true
         defer { isSubmitting = false }
@@ -53,6 +59,12 @@ public final class SignupViewModel: ObservableObject {
     public func completeSignup() async {
         guard let token = captchaToken else { errorMessage = "Missing CAPTCHA token"; return }
         isSubmitting = true
+        
+        defer {
+            isSubmitting = false
+            showCaptcha = false
+        }
+        
         do {
             let req = SignupRequest(displayName: displayName, username: username, email: email, password: password, confirmPassword: confirmPassword)
             _ = try await auth.submitSignup(req, captchaText: captchaText, token: token)
@@ -62,18 +74,24 @@ public final class SignupViewModel: ObservableObject {
     } catch {
         errorMessage = "Unexpected error. Please try again."
     }
-    
-    isSubmitting = false
-    showCaptcha = false
 }
 
     // TODO: Brent - need to change to use the rules set by the server
     public var isFormValid: Bool {
-        guard !displayName.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
-        guard !username.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
-        guard email.contains("@"), email.contains(".") else { return false }
+        guard !displayName.isBlank else { return false }
+        guard !username.isBlank else { return false }
+        guard email.isPlausibleEmail else { return false }
         guard password.count >= 8 else { return false }
         guard password == confirmPassword else { return false }
         return true
+    }
+}
+
+
+private extension String {
+    var isBlank: Bool { trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    
+    var isPlausibleEmail: Bool {
+        contains("@") && contains(".")
     }
 }

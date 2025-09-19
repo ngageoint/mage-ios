@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 public struct SignupViewSwiftUI: View {
     @StateObject private var model: SignupViewModel
@@ -105,10 +104,6 @@ public struct SignupViewSwiftUI: View {
         }
     }
 }
-
-//#Preview {
-//    SignupViewSwiftUI()
-//}
 
 private struct NoAutoCapsAndCorrection: ViewModifier {
     func body(content: Content) -> some View {

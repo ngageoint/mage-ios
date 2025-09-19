@@ -55,13 +55,6 @@ public protocol SessionStore: Sendable {
     func clear() async
 }
 
-public final class AuthDependencies {
-    public static let shared = AuthDependencies()
-    public var authService: AuthService?
-    public var sessionStore: SessionStore?
-    private init() {}
-}
-
 public final class SessionStoreDependencies {
     public static let shared = SessionStoreDependencies()
     public var sessionStore: SessionStore!

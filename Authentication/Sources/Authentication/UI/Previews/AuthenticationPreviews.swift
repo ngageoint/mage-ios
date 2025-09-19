@@ -9,7 +9,7 @@
 import SwiftUI
 import Foundation
 
-//#if DEBUG
+#if DEBUG
 
 // MARK: - Preview Doubles
 
@@ -372,4 +372,4 @@ auth: PreviewAuthService = .init()) -> ChangePasswordViewModel {
     ChangePasswordViewSwiftUI(model: makeChangePwModel(.valid)).preferredColorScheme(.dark)
   }
 
-//  #endif // DEBUG
+#endif // DEBUG

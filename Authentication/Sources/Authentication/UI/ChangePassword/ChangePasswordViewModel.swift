@@ -22,9 +22,14 @@ public final class ChangePasswordViewModel: ObservableObject {
     
     public init(auth: AuthService) { self.auth = auth }
     
+    public convenience init(deps: AuthDependencies) {
+        precondition(deps.authService != nil, "AuthDependencies.authService must be injected")
+        self.init(auth: deps.authService!)
+    }
+    
     // TODO: Brent - Need to wire to proper validation code
     public var isFormValid: Bool {
-        guard !currentPassword.isEmpty else { return false }
+        guard !currentPassword.isBlank else { return false }
         guard newPassword.count >= 8 else { return false }
         guard newPassword == confirmNewPassword else { return false }
         guard newPassword != currentPassword else { return false }
@@ -35,6 +40,8 @@ public final class ChangePasswordViewModel: ObservableObject {
         guard !isSubmitting else { return }
         isSubmitting = true
         errorMessage = nil
+        
+        defer { isSubmitting = false }
         
         do {
             let req = ChangePasswordRequest(currentPassword: currentPassword,
@@ -48,6 +55,9 @@ public final class ChangePasswordViewModel: ObservableObject {
         } catch {
             errorMessage = "Unexpected error. Please try again."
         }
-        isSubmitting = false
     }
+}
+
+private extension String { // CHANGED
+    var isBlank: Bool { trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } // CHANGED
 }
