@@ -22,7 +22,19 @@ final class ChangePasswordHost: AuthHostingController {
         
         let vm = ChangePasswordViewModel(deps: resolved)
         
-                
+        let view = ChangePasswordViewSwiftUI(model: vm)
+        
+        super.init(root: AnyView(view), title: "Change Password")
+    }
+    
+    @objc convenience init() {
+        let deps = AuthFactory.makeDeps()
+        self.init(swiftDeps: deps)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 

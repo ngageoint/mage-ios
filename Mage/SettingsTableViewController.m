@@ -186,7 +186,7 @@
             break;
         }
         case kChangePassword: {
-            UIViewController *viewController = [ChangePasswordHost make];
+            UIViewController *viewController = [[AuthChangePasswordHost alloc] init];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }

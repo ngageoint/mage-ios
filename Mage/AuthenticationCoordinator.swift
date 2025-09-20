@@ -73,7 +73,7 @@ public final class AuthFlowCoordinator: NSObject {
         // Protocol is nonisolated; hop to main for UI.
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            let signup = SignupHostObjC.make()
+            let signup = SignupHost()
             self.nav?.pushViewController(signup, animated: false)
         }
     }

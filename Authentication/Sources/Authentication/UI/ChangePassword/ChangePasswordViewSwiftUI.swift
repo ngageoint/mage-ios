@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ChangePasswordViewSwiftUI: View {
+public struct ChangePasswordViewSwiftUI: View {
     @StateObject private var model: ChangePasswordViewModel
     @Environment(\.dismiss) private var dismiss
     
@@ -16,7 +16,7 @@ struct ChangePasswordViewSwiftUI: View {
         _model = StateObject(wrappedValue: model)
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             Text("Change Password").font(.title.bold())
             
