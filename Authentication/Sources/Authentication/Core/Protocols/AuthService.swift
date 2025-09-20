@@ -49,15 +49,11 @@ public struct ChangePasswordRequest: Sendable, Equatable {
     }
 }
 
+
 public protocol SessionStore: Sendable {
     var current: AuthSession? { get }
     func set(_ session: AuthSession?) async
     func clear() async
-}
-
-public final class SessionStoreDependencies {
-    public static let shared = SessionStoreDependencies()
-    public var sessionStore: SessionStore!
 }
 
 public struct SignupCaptcha: Sendable, Equatable {
