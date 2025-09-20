@@ -102,37 +102,26 @@
 		840D60842E4BE9E3005B0353 /* String+ContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
-		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
 		8423B10F2E46676E0069C1CD /* Attachment+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */; };
 		8423B1132E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */; };
 		84299DAB2E3BFBD2007E51B1 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */; };
 		84299DAD2E3C0F05007E51B1 /* IDPLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */; };
-		84299DAF2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */; };
 		84299DB12E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */; };
-		84299DB32E4117BF007E51B1 /* LoginRootViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */; };
 		84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 84299DB52E423D39007E51B1 /* ViewInspector */; };
 		84299DB82E424A18007E51B1 /* LoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */; };
 		8429C8F22E425C5200F5B3AF /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 8429C8F12E425C5200F5B3AF /* ViewInspector */; };
 		8429C8F42E4260AB00F5B3AF /* MockIDPLoginDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */; };
 		8429C8F62E42621300F5B3AF /* IDPLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */; };
 		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
-		8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */; };
 		8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */; };
 		842F627E2E6B41AA0066497D /* FakeAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F627D2E6B41AA0066497D /* FakeAuthService.swift */; };
 		842F627F2E6B41AA0066497D /* FakeAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F627D2E6B41AA0066497D /* FakeAuthService.swift */; };
 		842F628D2E6B43DF0066497D /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; };
 		842F628E2E6B43DF0066497D /* Authentication.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		842F629C2E6B47DE0066497D /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; };
-		842F62D92E6B660C0066497D /* MageAuthServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */; };
 		842F62E12E6F38CB0066497D /* MageDependencyBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */; };
 		842F62E52E6F708A0066497D /* LegacyAuthBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */; };
-		842F62E72E7075A50066497D /* MageSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62E62E7075A50066497D /* MageSessionStore.swift */; };
-		842F62F72E7211CA0066497D /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */; };
 		842F62FB2E7A0F1F0066497D /* SignupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */; };
-		842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */; };
-		842F631D2E7C44860066497D /* KeychainAuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F631C2E7C44860066497D /* KeychainAuthStore.swift */; };
-		842F631E2E7C66D90066497D /* AuthFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F63042E7B192F0066497D /* AuthFactory.swift */; };
-		842F63362E7DF8C20066497D /* AuthHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F63352E7DF8C20066497D /* AuthHostingController.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -199,12 +188,7 @@
 		8448CA482E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */; };
 		8454447D2E3805960068E6AC /* LdapLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */; };
 		846224CB2E313A8D0029FE98 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CA2E313A8D0029FE98 /* LoginViewModel.swift */; };
-		846224CD2E313C7B0029FE98 /* LoginViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */; };
 		846224D12E3148100029FE98 /* LocalLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */; };
-		846224D32E327D170029FE98 /* UsernameFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D22E327D170029FE98 /* UsernameFieldView.swift */; };
-		846224D52E327F010029FE98 /* PasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D42E327F010029FE98 /* PasswordFieldView.swift */; };
-		846224D72E3280B30029FE98 /* SignInButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D62E3280B30029FE98 /* SignInButtonView.swift */; };
-		846224D92E3285BB0029FE98 /* SignUpButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D82E3285BB0029FE98 /* SignUpButtonView.swift */; };
 		846D0C022D834519009C68CB /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */; };
 		846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
@@ -212,7 +196,6 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
 		84E9E1BE2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */; };
-		84E9E1C02E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9E1BF2E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
@@ -1140,33 +1123,22 @@
 		840D607F2E4BDC7D005B0353 /* AttachmentRepositoryRoutingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentRepositoryRoutingTests.swift; sourceTree = "<group>"; };
 		840D60812E4BE55E005B0353 /* URL+AccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+AccessToken.swift"; sourceTree = "<group>"; };
 		840D60832E4BE9E3005B0353 /* String+ContentTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+ContentTypes.swift"; sourceTree = "<group>"; };
-		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
 		8423B10E2E46676E0069C1CD /* Attachment+FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Attachment+FileURL.swift"; sourceTree = "<group>"; };
 		8423B1122E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentImageLoadingTests.swift; sourceTree = "<group>"; };
 		84299DAA2E3BFBD2007E51B1 /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModel.swift; sourceTree = "<group>"; };
-		84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUI.swift; sourceTree = "<group>"; };
 		84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelWrapper.swift; sourceTree = "<group>"; };
-		84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewSwiftUI.swift; sourceTree = "<group>"; };
 		84299DB72E424A18007E51B1 /* LoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUITests.swift; sourceTree = "<group>"; };
 		8429C8F32E4260AB00F5B3AF /* MockIDPLoginDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockIDPLoginDelegate.swift; sourceTree = "<group>"; };
 		8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelTests.swift; sourceTree = "<group>"; };
 		8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUITests.swift; sourceTree = "<group>"; };
-		8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAllLoginViews.swift; sourceTree = "<group>"; };
 		8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginDelegateSwiftUI.swift; sourceTree = "<group>"; };
 		842F627D2E6B41AA0066497D /* FakeAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeAuthService.swift; sourceTree = "<group>"; };
 		842F62852E6B43DF0066497D /* Authentication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Authentication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62982E6B47DE0066497D /* AuthenticationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuthenticationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageAuthServiceImpl.swift; sourceTree = "<group>"; };
 		842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageDependencyBootstrap.swift; sourceTree = "<group>"; };
 		842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyAuthBridge.swift; sourceTree = "<group>"; };
-		842F62E62E7075A50066497D /* MageSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageSessionStore.swift; sourceTree = "<group>"; };
-		842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupDelegate.swift; sourceTree = "<group>"; };
-		842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageAuthAPI.swift; sourceTree = "<group>"; };
-		842F63042E7B192F0066497D /* AuthFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFactory.swift; sourceTree = "<group>"; };
-		842F631C2E7C44860066497D /* KeychainAuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainAuthStore.swift; sourceTree = "<group>"; };
-		842F63352E7DF8C20066497D /* AuthHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHostingController.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
 		8448CA342E5D076F00EE689B /* LoginHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHostViewController.swift; sourceTree = "<group>"; };
@@ -1180,12 +1152,7 @@
 		8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator_FlowTests.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwiftUI.swift; sourceTree = "<group>"; };
 		846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModelWrapper.swift; sourceTree = "<group>"; };
-		846224D22E327D170029FE98 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
-		846224D42E327F010029FE98 /* PasswordFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordFieldView.swift; sourceTree = "<group>"; };
-		846224D62E3280B30029FE98 /* SignInButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInButtonView.swift; sourceTree = "<group>"; };
-		846224D82E3285BB0029FE98 /* SignUpButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpButtonView.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		8474FD9526FB8B220041891A /* EmailBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmailBuilder.h; sourceTree = "<group>"; };
@@ -1196,7 +1163,6 @@
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
 		84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAccessTokenTests.swift; sourceTree = "<group>"; };
 		84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPCoordinatorDelegate.swift; sourceTree = "<group>"; };
-		84E9E1BF2E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPCoordinatorSwiftUI.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2013,6 +1979,7 @@
 		847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AuthHostingController.swift,
 				ChangePasswordHost.swift,
 				SignupHost.swift,
 			);
@@ -2021,6 +1988,7 @@
 		847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AuthHostingController.swift,
 				ChangePasswordHost.swift,
 				SignupHost.swift,
 			);
@@ -2031,6 +1999,11 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		842F62A42E6B48FB0066497D /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
 		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UIKitGlue; sourceTree = "<group>"; };
+		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		847428FF2E7F265600572BB4 /* Stores */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Stores; sourceTree = "<group>"; };
+		847429002E7F266000572BB4 /* Coordinators */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Coordinators; sourceTree = "<group>"; };
+		847429012E7F266A00572BB4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
+		847429022E7F267400572BB4 /* Factory */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Factory; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -2295,38 +2268,24 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				842F633C2E7DFE0C0066497D /* UIKitGlue */,
-				842F62D82E6B660C0066497D /* MageAuthServiceImpl.swift */,
-				842F63042E7B192F0066497D /* AuthFactory.swift */,
+				847429022E7F267400572BB4 /* Factory */,
+				847429012E7F266A00572BB4 /* Views */,
+				847429002E7F266000572BB4 /* Coordinators */,
+				847428FF2E7F265600572BB4 /* Stores */,
+				847428FE2E7F264C00572BB4 /* Services */,
 				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
-				842F62EC2E71C9AA0066497D /* AuthenticationCoordinator.swift */,
-				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
-				8429C8F92E4264F200F5B3AF /* DemoAllLoginViews.swift */,
+				842F63372E7DF8C70066497D /* Bridge */,
 				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
-				84E9E1BF2E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift */,
 				84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */,
-				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
-				84299DAE2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift */,
-				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
 				842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */,
-				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
 				8448CA342E5D076F00EE689B /* LoginHostViewController.swift */,
 				8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */,
-				84299DB22E4117BF007E51B1 /* LoginRootViewSwiftUI.swift */,
 				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
-				846224CC2E313C7B0029FE98 /* LoginViewSwiftUI.swift */,
-				842F62FE2E7AEC2B0066497D /* MageAuthAPI.swift */,
 				842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */,
-				842F62E62E7075A50066497D /* MageSessionStore.swift */,
 				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
-				846224D42E327F010029FE98 /* PasswordFieldView.swift */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
-				846224D62E3280B30029FE98 /* SignInButtonView.swift */,
-				846224D82E3285BB0029FE98 /* SignUpButtonView.swift */,
 				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
-				846224D22E327D170029FE98 /* UsernameFieldView.swift */,
-				842F631C2E7C44860066497D /* KeychainAuthStore.swift */,
-				842F63372E7DF8C70066497D /* Bridge */,
+				842F633C2E7DFE0C0066497D /* UIKitGlue */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -2516,7 +2475,9 @@
 		842F63372E7DF8C70066497D /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
-				842F63352E7DF8C20066497D /* AuthHostingController.swift */,
+				84299DB02E3C12D2007E51B1 /* IDPLoginViewModelWrapper.swift */,
+				8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */,
+				846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -4500,6 +4461,11 @@
 				842F628C2E6B43DF0066497D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				847428FE2E7F264C00572BB4 /* Services */,
+				847428FF2E7F265600572BB4 /* Stores */,
+				847429002E7F266000572BB4 /* Coordinators */,
+				847429012E7F266A00572BB4 /* Views */,
+				847429022E7F267400572BB4 /* Factory */,
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
 			);
 			name = MAGE;
@@ -5134,7 +5100,6 @@
 				F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */,
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
-				846224D32E327D170029FE98 /* UsernameFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserWrapperViewController.swift in Sources */,
 				F7225F582C5A783B00B7D935 /* AttachmentRepository.swift in Sources */,
 				F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */,
@@ -5159,7 +5124,6 @@
 				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.swift in Sources */,
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F70C343D2C73D7E6007616FA /* AskToDownloadFileView.swift in Sources */,
-				842F62F72E7211CA0066497D /* AuthenticationCoordinator.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				840D60842E4BE9E3005B0353 /* String+ContentTypes.swift in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
@@ -5208,7 +5172,6 @@
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */,
 				2FAC84A72B50584B00FCAB37 /* SearchMapView.swift in Sources */,
-				84E9E1C02E429ADB0010A2D6 /* IDPCoordinatorSwiftUI.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
 				84299DAD2E3C0F05007E51B1 /* IDPLoginViewModel.swift in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
@@ -5227,7 +5190,6 @@
 				F7813A8824647C62003666ED /* DateView.swift in Sources */,
 				F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */,
 				F7C0979D2C812614003FA115 /* GeoPackageMediaRow.swift in Sources */,
-				846224D92E3285BB0029FE98 /* SignUpButtonView.swift in Sources */,
 				F73564FB2C65650F00466813 /* UserLocationViewModel.swift in Sources */,
 				F7C097622C7FA822003FA115 /* RoleRepository.swift in Sources */,
 				F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */,
@@ -5242,7 +5204,6 @@
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */,
-				842F631D2E7C44860066497D /* KeychainAuthStore.swift in Sources */,
 				F7489B3B27A1A31000A9E314 /* UserHeadingDisplay.swift in Sources */,
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */,
@@ -5254,13 +5215,11 @@
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
 				04E2C89B28D34C29001F0812 /* GridTypeTableViewCell.m in Sources */,
-				84299DB32E4117BF007E51B1 /* LoginRootViewSwiftUI.swift in Sources */,
 				F7DE987E2C133B21005372F8 /* ObservationsTileRepository.swift in Sources */,
 				F73564E02C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift in Sources */,
 				F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
-				842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */,
 				F706888B2BA3A7D900D8E2EA /* DataSourceMap.swift in Sources */,
 				F7D31F912CB887A000126468 /* LayerLocalDataSource.swift in Sources */,
 				F7D31F922CB887A000126468 /* LayerRepository.swift in Sources */,
@@ -5279,7 +5238,6 @@
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
 				F70C343F2C73D801007616FA /* VideoView.swift in Sources */,
 				F776AC9F2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift in Sources */,
-				842F631E2E7C66D90066497D /* AuthFactory.swift in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				F776ACB02BD18CED000FAFB4 /* ObservationMapItemRepository.swift in Sources */,
@@ -5334,7 +5292,6 @@
 				F79116262491414B0043A529 /* MageInitializer.swift in Sources */,
 				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
 				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
-				842F63362E7DF8C20066497D /* AuthHostingController.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.swift in Sources */,
 				F7BFB8D22C4AB07300901479 /* NavigateToButton.swift in Sources */,
 				8448CA372E5DEF9000EE689B /* OrDividerView.swift in Sources */,
@@ -5468,7 +5425,6 @@
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */,
 				F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */,
-				842F62E72E7075A50066497D /* MageSessionStore.swift in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
 				043FF1231C22F6E4000CA07F /* CacheOverlay.swift in Sources */,
 				F7DE98982C20D4D7005372F8 /* FeedItemRepository.swift in Sources */,
@@ -5537,9 +5493,7 @@
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				846224D12E3148100029FE98 /* LocalLoginViewModelWrapper.swift in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
-				846224D52E327F010029FE98 /* PasswordFieldView.swift in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
-				846224D72E3280B30029FE98 /* SignInButtonView.swift in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
@@ -5555,7 +5509,6 @@
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7225F462C54492C00B7D935 /* EventLocalDataSource.swift in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationFullView.swift in Sources */,
-				842F62D92E6B660C0066497D /* MageAuthServiceImpl.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7FB04602CDEB8D5009C1041 /* AttachmentService.swift in Sources */,
 				F734C1DE2BC72FA600B2E8C8 /* ObservationMapItemView.swift in Sources */,
@@ -5567,7 +5520,6 @@
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				2F6D80D32B1F6DF800545221 /* SearchViewController.swift in Sources */,
 				F754C6562C48064800E408E9 /* ObservationLocationSummary.swift in Sources */,
-				842F62FF2E7AEC2B0066497D /* MageAuthAPI.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F72D43142694B60300F9AC3B /* Event.swift in Sources */,
 				F7DE988C2C1A4478005372F8 /* UserLocalDataSource.swift in Sources */,
@@ -5628,14 +5580,12 @@
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */,
 				F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */,
-				8429C8FA2E4264F200F5B3AF /* DemoAllLoginViews.swift in Sources */,
 				F7225F5C2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
 				F73565052C668DB200466813 /* UserObservationList.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
-				84299DAF2E3C0FDD007E51B1 /* IDPLoginViewSwiftUI.swift in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
 				04E2C8A028D387C2001F0812 /* GridSystems.swift in Sources */,
 				F70C34352C73D735007616FA /* DownloadingImageView.swift in Sources */,
@@ -5653,7 +5603,6 @@
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				842F62E12E6F38CB0066497D /* MageDependencyBootstrap.swift in Sources */,
-				846224CD2E313C7B0029FE98 /* LoginViewSwiftUI.swift in Sources */,
 				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,
 				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetView.swift in Sources */,
 				F7402C842769395C00531613 /* MapDirectionsMixin.swift in Sources */,
