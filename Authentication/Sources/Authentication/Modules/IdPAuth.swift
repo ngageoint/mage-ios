@@ -25,16 +25,32 @@ public final class IdPAuth: AuthenticationModule {
             return
         }
         
-        HTTP.postJSON(url, body: ["username": username, "password": password]) { code, data, err in
-            if let err = err { return complete(.error, err.localizedDescription) }
-            switch code {
-            case 200: complete(.success, nil)
-            case 401: complete(.unableToAuthenticate, "Invalid IDP credentials.")
-            default:
-                let msg = data.flatMap { String(data: $0, encoding: .utf8) } ?? "IDP login failed (\(code))"
-                complete(.error, msg)
+        Task {
+            do {
+                let (status, data) = try await AuthDependencies.shared.http.postJSON(
+                    url: url,
+                    headers: [:],
+                    body: ["username": username, "password": password],
+                    timeout: 30
+                )
+                
+                if let authErr = HTTPErrorMapper.map(
+                    status: status,
+                    headers: [:],
+                    bodyData: data
+                ) {
+                    let (mappedStatus, message) = authErr.toAuthStatusAndMessage(fallbackInvalidCredsMessage: "Invalid IdP credentials.")
+                    complete(mappedStatus, message)
+                } else {
+                    // 2xx
+                    complete(.success, nil)
+                }
+            } catch {
+                complete(.error, error.localizedDescription)
             }
         }
+        
+        
     }
     
     public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
