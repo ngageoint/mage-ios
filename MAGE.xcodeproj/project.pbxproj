@@ -1966,6 +1966,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/AuthenticationTests/AuthenticationTests.swift,
+				Tests/AuthenticationTests/AuthErrorMappingTests.swift,
 			);
 			target = 842F62842E6B43DF0066497D /* Authentication */;
 		};
@@ -1973,6 +1974,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/AuthenticationTests/AuthenticationTests.swift,
+				Tests/AuthenticationTests/AuthErrorMappingTests.swift,
 			);
 			target = 842F62972E6B47DE0066497D /* AuthenticationTests */;
 		};

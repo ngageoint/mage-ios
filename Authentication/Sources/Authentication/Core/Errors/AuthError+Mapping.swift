@@ -60,7 +60,7 @@ private func _friendlyURLErrorMessage(from error: Error) -> String {
     if let urlErr = error as? URLError {
         switch urlErr.code {
         case .notConnectedToInternet: return "No internet connection."
-        case .timedOut: return "The request timed out."
+        case .timedOut: return "Request timed out."
         case .cannotFindHost,
                 .cannotConnectToHost: return "Couldn't connect to the server."
         case .networkConnectionLost: return "Network connection was lost."
