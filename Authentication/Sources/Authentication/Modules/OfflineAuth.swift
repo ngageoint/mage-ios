@@ -9,31 +9,31 @@
 import Foundation
 
 public final class OfflineAuth: AuthenticationModule {
-    private let store: AuthStore
-    
-    public init(parameters: [AnyHashable: Any]?) {
-        // If one isn't passed, use default
-        self.store = NullAuthStore()
-    }
-    
-    // Convenience init for callers that want to inject a real store.
-    public init(parameters: [AnyHashable: Any]?, store: AuthStore) {
-        self.store = store
-    }
+
+    // Protocol requires this initializer
+    public required init(parameters: [AnyHashable: Any]?) { }
     
     public func canHandleLogin(toURL url: String) -> Bool {
-        store.hasStoredPassword()
+        guard let store = AuthDependencies.shared.authStore else { return false }
+        return store.hasStoredPassword()
     }
     
+    // NOTE: Offline auth succeeds if a password has been stored previously
     public func login(withParameters params: [AnyHashable: Any],
                       complete: @escaping (AuthenticationStatus, String?) -> Void) {
-        guard store.hasStoredPassword() else {
-            complete(.unableToAuthenticate, "No stored password.")
-            return
-        }
         
-        // Your offline verification here if we still need it
-        complete(.success, nil)
+        Task {
+            guard let store = AuthDependencies.shared.authStore else {
+                complete(.error, "Authentication store is not configured.")
+                return
+            }
+            
+            if store.hasStoredPassword() {
+                complete(.success, nil)
+            } else {
+                complete(.unableToAuthenticate, "No stored password.")
+            }
+        }
     }
     
     public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {

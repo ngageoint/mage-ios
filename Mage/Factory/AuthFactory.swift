@@ -14,10 +14,15 @@ enum AuthFactory {
     static func make(strategy: String,
                      parameters: [AnyHashable: Any]?,
                      store: AuthStore = KeychainAuthStore()) -> AuthenticationModule? {
+        
+        // Ensure DI is configured for every module we create
+        let deps = makeDeps()
+        deps.authStore = store
+        
         switch strategy.lowercased() {
         case "local":   return LocalAuth(parameters: parameters)
         case "ldap":    return LDAPAuth(parameters: parameters)
-        case "offline": return OfflineAuth(parameters: parameters, store: store)
+        case "offline": return OfflineAuth(parameters: parameters)
             
         // Treat all IdP variants the same here; your coordinator will launch the web flow.
         case "idp", "oidc", "saml", "geoaxisconnect":
@@ -31,7 +36,7 @@ enum AuthFactory {
         let authService: AuthService = MageAuthServiceImpl()
         let sessionStore: SessionStore = MageSessionStore.shared
         
-        var deps = AuthDependencies.shared
+        let deps = AuthDependencies.shared
         deps.authService = authService
         deps.sessionStore = sessionStore
         return deps

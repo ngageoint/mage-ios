@@ -12,6 +12,7 @@ public final class AuthDependencies {
     public var authService: AuthService?
     public var sessionStore: SessionStore?
     public var http: HTTPPerforming = HTTPLoginPerformer()
+    public var authStore: AuthStore!
     private init() {}
 }
 
