@@ -8,7 +8,40 @@
 
 import Foundation
 
-public struct HTTPLoginPerformer {
+// MARK: - Protocol
+
+public protocol HTTPPerforming: Sendable {
+    @discardableResult
+    func postJSON(
+        url: URL,
+        headers: [String: String],
+        body: [String: Any],
+        timeout: TimeInterval
+    ) async throws -> (status: Int, data: Data)
+    
+}
+
+
+// MARK: - Concrete Performer (Adapter)
+
+public final class HTTPLoginPerformer: HTTPPerforming {
+    public init() {}
+    
+    @discardableResult
+    public func postJSON(
+url: URL,
+    headers: [String: String] = [:],
+    body: [String: Any],
+    timeout: TimeInterval = 30
+    ) async throws -> (status: Int, data: Data) {
+        // NOTE: This keeps current behavior by delegating to the legacy helper.
+        return try await RESTAuthCommon.HTTP.postJSONAsync(
+            url: url,
+            headers: headers,
+            body: body,
+            timeout: timeout
+        )
+    }
     
     public struct Request {
         public var baseURL: URL
@@ -36,29 +69,6 @@ public struct HTTPLoginPerformer {
         public let statusCode: Int
         public let bodyJSON: [String: Any]?
     }
-    
-//    private static func bestMessage(from json: [String: Any]?) -> String? {
-//        guard let json else { return nil }
-//        if let msg = json["message"] as? String { return msg }
-//        if let err = json["error"] as? String { return err }
-//        if let errors = json["errors"] as? [String: Any] {
-//            // Pull the first error string we can find
-//            for value in errors.values {
-//                if let s = value as? String { return s }
-//                if let arr = value as? [String], let s = arr.first { return s }
-//            }
-//        }
-//        return nil
-//    }
-//    
-//    private static func retryAfterSeconds(from headers: [AnyHashable: Any]) -> Int? {
-//        for (k, v) in headers {
-//            guard let key = k as? String, key.caseInsensitiveCompare( "Retry-After" ) == .orderedSame else { continue }
-//            if let s = v as? String, let i = Int(s.trimmingCharacters(in: .whitespaces)) { return i }
-//            if let n = v as? NSNumber { return n.intValue }
-//        }
-//        return nil
-//    }
     
     public static func perform(_ req: Request,
                                session: URLSession = .shared,
