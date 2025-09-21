@@ -27,31 +27,13 @@ public final class LocalAuth: AuthenticationModule {
             return
         }
         
-        Task {
-            do {
-                let (status, data, headers) = try await AuthDependencies.shared.http.postJSONWithHeaders(
-                    url: url,
-                    headers: [:],
-                    body: ["username": username, "password": password],
-                    timeout: 30
-                )
-                
-                if let authErr = HTTPErrorMapper.map(
-                    status: status,
-                    headers: headers,
-                    bodyData: data
-                ) {
-                    let (mappedStatus, message) = authErr.toAuthStatusAndMessage(fallbackInvalidCredsMessage: "Invalid username or password.")
-                    complete(mappedStatus, message)
-                } else {
-                    // Transport / no HTTP response
-                    complete(.success, nil)
-                }
-            } catch {
-                // Transport or serialization error
-                complete(.error, error.localizedDescription)
-            }
-        }
+        CredentialLogin.perform(
+            url: url,
+            username: username,
+            password: password,
+            unauthorizedMessage: "Invalid username or password.",
+            complete: complete
+        )
     }
     
     public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
