@@ -10,7 +10,10 @@ import Foundation
 
 // MARK: - Protocol
 
+/// Transport used by auth modules. Prefer `postJSONWithHeaders(...)` so callers
+/// can pass real headers (e.g., Retry-After) to HTTPErrorMapper.
 public protocol HTTPPerforming: Sendable {
+    /// Legacy-friendly: kept for callers that don't need headers.
     @discardableResult
     func postJSON(
         url: URL,

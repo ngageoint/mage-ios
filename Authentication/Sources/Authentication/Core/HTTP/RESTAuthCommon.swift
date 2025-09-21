@@ -24,6 +24,7 @@ enum RESTAuthCommon {
             return (status, data)
         }
         
+        @available(*, deprecated, message: "Use postJSONWithHeadersAsync via HTTPLoginPerformer.postJSONWithHeaders(...) instead.")
         static func postJSON(
             _ url: URL,
             body: [String: Any],
