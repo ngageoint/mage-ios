@@ -11,16 +11,18 @@ public final class AuthDependencies {
     public static let shared = AuthDependencies()
     public var authService: AuthService?
     public var sessionStore: SessionStore?
+    public var http: HTTPPerforming = HTTPLoginPerformer()
     private init() {}
 }
 
 #if DEBUG
 extension AuthDependencies {
-    func resolvedForDebug() -> AuthDependencies {
-        var copy = self
-        if copy.authService == nil { copy.authService = PreviewAuthService() }
-        if copy.sessionStore == nil { copy.sessionStore = PreviewSessionStore() }
-        return copy
+    public static func resolvedForDebug(
+        http: HTTPPerforming = HTTPLoginPerformer()
+    ) -> AuthDependencies {
+        let d = AuthDependencies.shared
+        d.http = http
+        return d
     }
 }
 #endif

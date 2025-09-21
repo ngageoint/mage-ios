@@ -27,17 +27,46 @@ public final class LocalAuth: AuthenticationModule {
             return
         }
         
-        HTTP.postJSON(url, body: ["username": username, "password": password]) { code, data, err in
-            if let err { return complete(.error, err.localizedDescription) }
-            
-            switch code {
-            case 200: complete(.success, nil)
-            case 401: complete(.unableToAuthenticate, "Invalid username or password.")
-            default:
-                let msg = data.flatMap { String(data: $0, encoding: .utf8) } ?? "Login failed (\(code))"
-                complete(.error, msg)
+        Task {
+            do {
+                let (status, data) = try await AuthDependencies.shared.http.postJSON(
+                    url: url,
+                    headers: [:],
+                    body: ["username": username, "password": password],
+                    timeout: 30
+                )
+                
+                switch status {
+                case 200:
+                    complete(.success, nil)
+                case 401:
+                    complete(.unableToAuthenticate, "Invalid username or password.")
+                default:
+                    let msg = String(data: data, encoding: .utf8)?
+                        .trimmingCharacters(in: .whitespacesAndNewlines) ?? "Login failed (\(status))"
+                    complete(.error, msg)
+                }
+            } catch {
+                // Transport or serialization error
+                complete(.error, error.localizedDescription)
             }
         }
+//        
+//        
+//        HTTP.postJSON(url, body: ["username": username, "password": password]) { code, data, err in
+//            if let err { return complete(.error, err.localizedDescription) }
+//            
+//            switch code {
+//            case 200: complete(.success, nil)
+//            case 401: complete(.unableToAuthenticate, "Invalid username or password.")
+//            default:
+//                let msg = data.flatMap { String(data: $0, encoding: .utf8) } ?? "Login failed (\(code))"
+//                complete(.error, msg)
+//            }
+//        }
+        
+        
+        
     }
     
     public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
