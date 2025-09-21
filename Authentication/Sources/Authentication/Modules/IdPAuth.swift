@@ -27,7 +27,7 @@ public final class IdPAuth: AuthenticationModule {
         
         Task {
             do {
-                let (status, data) = try await AuthDependencies.shared.http.postJSON(
+                let (status, data, headers) = try await AuthDependencies.shared.http.postJSONWithHeaders(
                     url: url,
                     headers: [:],
                     body: ["username": username, "password": password],
@@ -36,7 +36,7 @@ public final class IdPAuth: AuthenticationModule {
                 
                 if let authErr = HTTPErrorMapper.map(
                     status: status,
-                    headers: [:],
+                    headers: headers,
                     bodyData: data
                 ) {
                     let (mappedStatus, message) = authErr.toAuthStatusAndMessage(fallbackInvalidCredsMessage: "Invalid IdP credentials.")

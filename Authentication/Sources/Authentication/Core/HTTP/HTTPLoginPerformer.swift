@@ -19,6 +19,13 @@ public protocol HTTPPerforming: Sendable {
         timeout: TimeInterval
     ) async throws -> (status: Int, data: Data)
     
+    @discardableResult
+    func postJSONWithHeaders(
+        url: URL,
+        headers: [String: String],
+        body: [String: Any],
+        timeout: TimeInterval
+    ) async throws -> (status: Int, data: Data, headers: [AnyHashable: Any])
 }
 
 
@@ -29,10 +36,10 @@ public final class HTTPLoginPerformer: HTTPPerforming {
     
     @discardableResult
     public func postJSON(
-url: URL,
-    headers: [String: String] = [:],
-    body: [String: Any],
-    timeout: TimeInterval = 30
+        url: URL,
+        headers: [String: String] = [:],
+        body: [String: Any],
+        timeout: TimeInterval = 30
     ) async throws -> (status: Int, data: Data) {
         // NOTE: This keeps current behavior by delegating to the legacy helper.
         return try await RESTAuthCommon.HTTP.postJSONAsync(
@@ -132,5 +139,20 @@ url: URL,
                 cont.resume(returning: result)
             }
         }
+    }
+    
+    @discardableResult
+    public func postJSONWithHeaders(
+        url: URL,
+        headers: [String: String] = [:],
+        body: [String: Any],
+        timeout: TimeInterval = 30
+    ) async throws -> (status: Int, data: Data, headers: [AnyHashable: Any]) {
+        return try await RESTAuthCommon.HTTP.postJSONWithHeadersAsync(
+            url: url,
+            headers: headers,
+            body: body,
+            timeout: timeout
+        )
     }
 }
