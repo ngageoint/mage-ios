@@ -39,5 +39,4 @@ public final class LocalAuth: AuthenticationModule {
     public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
         complete(.success, nil, nil)
     }
-    
 }

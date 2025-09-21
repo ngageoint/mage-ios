@@ -17,10 +17,7 @@ enum RESTAuthCommon {
             body: [String: Any],
             timeout: TimeInterval = 30
         ) async throws -> (status: Int, data: Data) {
-            
-            let (status, data, _) = try await postJSONWithHeadersAsync(
-                url: url, headers: headers, body: body, timeout: timeout
-            )
+            let (status, data, _) = try await postJSONWithHeadersAsync(url: url, headers: headers, body: body, timeout: timeout)
             return (status, data)
         }
         
@@ -52,35 +49,8 @@ enum RESTAuthCommon {
             body: [String: Any],
             timeout: TimeInterval = 30
         ) async throws -> (status: Int, data: Data, headers: [AnyHashable: Any]) {
-            
-            // Encode body
-            let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
-            
-            // Build request
-            var req = URLRequest(url: url)
-            req.httpMethod = "POST"
-            req.httpBody = jsonData
-            req.timeoutInterval = timeout
-            
-            // Merge headers (defaults + caller)
-            var merged = [
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            ]
-            headers.forEach { merged[$0.key] = $0.value }
-            merged.forEach { req.setValue($0.value, forHTTPHeaderField: $0.key) }
-            
-            // Session with explicit timeouts
-            let cfg = URLSessionConfiguration.ephemeral
-            cfg.timeoutIntervalForRequest = timeout
-            cfg.timeoutIntervalForResource = timeout
-            let session = URLSession(configuration: cfg)
-            
-            let (data, resp) = try await session.data(for: req)
-            guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
-            
-            // Do not throw on non-2xx here; mapping happens above this layer
-            return (http.statusCode, data, http.allHeaderFields)
+            // Forward to the single implementation
+            return try await HTTPLoginPerformer().postJSONWithHeaders(url: url, headers: headers, body: body, timeout: timeout)
         }
     }
 }

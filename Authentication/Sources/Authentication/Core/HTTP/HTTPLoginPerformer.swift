@@ -22,6 +22,7 @@ public protocol HTTPPerforming: Sendable {
         timeout: TimeInterval
     ) async throws -> (status: Int, data: Data)
     
+    /// Preferred: returns status, raw data, and response headers.
     @discardableResult
     func postJSONWithHeaders(
         url: URL,
@@ -44,13 +45,52 @@ public final class HTTPLoginPerformer: HTTPPerforming {
         body: [String: Any],
         timeout: TimeInterval = 30
     ) async throws -> (status: Int, data: Data) {
-        // NOTE: This keeps current behavior by delegating to the legacy helper.
-        return try await RESTAuthCommon.HTTP.postJSONAsync(
+        let (status, data, _) = try await postJSONWithHeaders(
             url: url,
             headers: headers,
             body: body,
             timeout: timeout
         )
+        return (status, data)
+    }
+    
+    @discardableResult
+    public func postJSONWithHeaders(
+        url: URL,
+        headers: [String: String] = [:],
+        body: [String: Any],
+        timeout: TimeInterval = 30
+    ) async throws -> (status: Int, data: Data, headers: [AnyHashable: Any]) {
+        
+        // Encode JSON body
+        let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        // Build request
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.httpBody = jsonData
+        req.timeoutInterval = timeout
+        
+        // Merge headers (defaults first, then caller overrides)
+        var merged = [
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        ]
+        headers.forEach { merged[$0.key] = $0.value }
+        merged.forEach { req.setValue($0.value, forHTTPHeaderField: $0.key) }
+        
+        // Epmemeral session w/ explicit timeouts
+        let cfg = URLSessionConfiguration.ephemeral
+        cfg.timeoutIntervalForRequest = timeout
+        cfg.timeoutIntervalForResource = timeout
+        let session = URLSession(configuration: cfg)
+        
+        // Execute
+        let (data, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
+        
+        // NOTE: Do not throw on non-2xx. Upstream mapping handles errors.
+        return (http.statusCode, data, http.allHeaderFields)
     }
     
     public struct Request {
@@ -144,18 +184,5 @@ public final class HTTPLoginPerformer: HTTPPerforming {
         }
     }
     
-    @discardableResult
-    public func postJSONWithHeaders(
-        url: URL,
-        headers: [String: String] = [:],
-        body: [String: Any],
-        timeout: TimeInterval = 30
-    ) async throws -> (status: Int, data: Data, headers: [AnyHashable: Any]) {
-        return try await RESTAuthCommon.HTTP.postJSONWithHeadersAsync(
-            url: url,
-            headers: headers,
-            body: body,
-            timeout: timeout
-        )
-    }
+
 }
