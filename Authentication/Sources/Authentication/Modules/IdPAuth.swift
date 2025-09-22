@@ -8,36 +8,11 @@
 
 import Foundation
 
-public final class IdPAuth: AuthenticationModule {
-    private let params: [AnyHashable: Any]?
-    public required init(parameters: [AnyHashable: Any]?) { self.params = parameters }
+public final class IdPAuth: CredentialBasedModule {
+    public required init(parameters: [AnyHashable: Any]?) { }
     
     public func canHandleLogin(toURL url: String) -> Bool { true }
     
-    public func login(withParameters params: [AnyHashable : Any], complete: @escaping (AuthenticationStatus, String?) -> Void) {
-        let path = (params["signinPath"] as? String) ?? "/auth/idp/signin"
-        
-        guard
-            let req = CredentialInput.make(
-                from: params,
-                path: path,
-                defaultBase: AuthDefaults.baseServerUrl
-                )
-        else {
-            complete(.unableToAuthenticate, "Missing credentials or server URL")
-            return
-        }
-        
-        CredentialLogin.perform(
-            url: req.url,
-            username: req.username,
-            password: req.password,
-            unauthorizedMessage: "Invalid IdP credentials.",
-            complete: complete
-        )
-    }
-    
-    public func finishLogin(complete: @escaping (AuthenticationStatus, String?, String?) -> Void) {
-        complete(.success, nil, nil)
-    }
+    public var defaultSigninPath: String { "auth/idp/signin" }
+    public var unauthorizedMessage: String { "Invalid IdP credentials"}
 }
