@@ -5,29 +5,38 @@
 //  Created by Brent Michalski on 9/22/25.
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
+//  Purpose: Normalize username/password form parameters and safely build the login URL
+//  for credential-based modules (Local, LDAP, IdP). This keeps parameter parsing and
+//  URL joining consistent across modules.
+//
 
 import Foundation
 
-/// A single, typed input for credential-based logins.
+/// Typed request value produced from loose `[AnyHashable: Any]` form parameters.
 struct CredentialRequest {
+    /// Fully-qualified endpoint (e.g., https://server.example.com/auth/local/signin)
     let url: URL
+    /// Username field; falls back to `email` if `username` is absent.
     let username: String
+    /// Plaintext password from the form. (Transport layer handles TLS.)
     let password: String
 }
 
+/// Utilities for building `CredentialRequest` values from form dictionaries.
 enum CredentialInput {
     /// Build a `CredentialRequest` from loose form params.
     /// - Parameters:
-    ///   - params: Form fields from the UI/server.
-    ///   - path:   Endpoint path like "/auth/local/signin".
-    ///   - defaultBase: Fallback base URL (e.g., `AuthDefaults.baseServerUrl`).
-    /// - Returns: A request if all required parts exist; otherwise `nil`.
-    
+    ///   - params: Mixed form fields gathered from UI/server (e.g., `username`, `email`, `password`, `serverUrl`).
+    ///   - path: Endpoint path (e.g., `"/auth/local/signin"`).
+    ///   - defaultBase: Fallback base URL string if `params["serverUrl"]` is not provided.
+    /// - Returns: A fully validated `CredentialRequest`, or `nil` if any required value is missing/invalid.
+
     static func make(
         from params: [AnyHashable: Any],
         path: String,
         defaultBase: String?
     ) -> CredentialRequest? {
+        // Resolve base URL string: prefer the per-request value, else fallback.
         let baseString: String? = (params["serverUrl"] as? String) ?? defaultBase
         
         guard
@@ -44,7 +53,7 @@ enum CredentialInput {
         return CredentialRequest(url: endpoint, username: username, password: password)
     }
     
-    // Robust join that avoids "//" and supports leading and trailing slashes
+    /// Joins a base URL and path, avoiding double slashes and leading/trailing issues.
     private static func join(base: String, path: String) -> URL? {
         let trimmedBase = base.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedBase.isEmpty else { return nil }

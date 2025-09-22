@@ -5,6 +5,12 @@
 //  Created by Brent Michalski on 9/21/25.
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
+//  Purpose: Single place to perform credential-based sign-in:
+//   1) POST JSON (username/password) via HTTP performer
+//   2) Map (status, data, headers) → AuthError via HTTPErrorMapper
+//   3) Map AuthError → (AuthenticationStatus, message)
+//  Modules call this with one line, keeping behavior and messages consistent.
+//
 
 import Foundation
 
@@ -13,6 +19,16 @@ import Foundation
 /// then invokes the provided completion on success/failure.
 
 enum CredentialLogin {
+    
+    /// Performs the credential sign-in flow and completes with a user-facing status/message.
+    ///
+    /// - Parameters:
+    ///   - url: Fully-qualified endpoint (e.g., `https://host/auth/local/signin`).
+    ///   - username: Finalized username (or email) value.
+    ///   - password: Plaintext password from the form.
+    ///   - unauthorizedMessage: Module-specific wording for invalid credentials.
+    ///   - timeout: Request timeout in seconds (default 30).
+    ///   - complete: Completion handler with `(AuthenticationStatus, message?)`.
     static func perform(
         url: URL,
         username: String,
