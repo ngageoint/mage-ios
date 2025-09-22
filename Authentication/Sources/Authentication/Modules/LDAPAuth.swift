@@ -16,19 +16,20 @@ public final class LDAPAuth: AuthenticationModule {
     
     public func login(withParameters params: [AnyHashable : Any], complete: @escaping (AuthenticationStatus, String?) -> Void) {
         guard
-            let base = (params["serverUrl"] as? String) ?? AuthDefaults.baseServerUrl,
-            let url = URL(string: "\(base)/auth/ldap/signin"),
-            let username = params.string("username") ?? params.string("email"),
-            let password = params.string("password")
+            let req = CredentialInput.make(
+                from: params,
+                path: "/auth/ldap/signin",
+                defaultBase: AuthDefaults.baseServerUrl
+            )
         else {
             complete(.unableToAuthenticate, "Missing credentials or server URL")
             return
         }
 
         CredentialLogin.perform(
-            url: url,
-            username: username,
-            password: password,
+            url: req.url,
+            username: req.username,
+            password: req.password,
             unauthorizedMessage: "Invalid LDAP credentials.",
             complete: complete
         )

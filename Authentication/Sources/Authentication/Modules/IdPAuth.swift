@@ -15,20 +15,23 @@ public final class IdPAuth: AuthenticationModule {
     public func canHandleLogin(toURL url: String) -> Bool { true }
     
     public func login(withParameters params: [AnyHashable : Any], complete: @escaping (AuthenticationStatus, String?) -> Void) {
+        let path = (params["signinPath"] as? String) ?? "/auth/idp/signin"
+        
         guard
-            let base = (params["serverUrl"] as? String) ?? AuthDefaults.baseServerUrl,
-            let url = URL(string: "\(base)/auth/ldap/signin"),
-            let username = params.string("username") ?? params.string("email"),
-            let password = params.string("password")
+            let req = CredentialInput.make(
+                from: params,
+                path: path,
+                defaultBase: AuthDefaults.baseServerUrl
+                )
         else {
             complete(.unableToAuthenticate, "Missing credentials or server URL")
             return
         }
         
         CredentialLogin.perform(
-            url: url,
-            username: username,
-            password: password,
+            url: req.url,
+            username: req.username,
+            password: req.password,
             unauthorizedMessage: "Invalid IdP credentials.",
             complete: complete
         )

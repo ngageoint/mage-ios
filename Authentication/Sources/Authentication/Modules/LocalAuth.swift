@@ -18,19 +18,20 @@ public final class LocalAuth: AuthenticationModule {
     public func login(withParameters params: [AnyHashable : Any],
                       complete: @escaping (AuthenticationStatus, String?) -> Void) {
         guard
-            let base = (params["serverUrl"] as? String) ?? AuthDefaults.baseServerUrl,
-            let url = URL(string: "\(base)/auth/local/signin"),
-            let username = params.string("username") ?? params.string("email"),
-            let password = params.string("password")
+            let req = CredentialInput.make(
+                from: params,
+                path: "/auth/local/signin",
+                defaultBase: AuthDefaults.baseServerUrl
+            )
         else {
             complete(.unableToAuthenticate, "Missing credentials or server URL")
             return
         }
         
         CredentialLogin.perform(
-            url: url,
-            username: username,
-            password: password,
+            url: req.url,
+            username: req.username,
+            password: req.password,
             unauthorizedMessage: "Invalid username or password.",
             complete: complete
         )
