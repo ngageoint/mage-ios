@@ -9,7 +9,7 @@
 import Foundation
 
 /// Status codes used across all modules.
-@objc public enum AuthenticationStatus: Int {
+@objc public enum AuthenticationStatus: Int, Sendable {
     case success                // -> AuthenticationStatusSuccess
     case error                  // -> AuthenticationStatusError
     case unableToAuthenticate   // -> AuthenticationStatusUnableToAuthenticate

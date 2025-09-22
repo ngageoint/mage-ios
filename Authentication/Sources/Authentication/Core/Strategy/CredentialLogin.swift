@@ -35,9 +35,20 @@ enum CredentialLogin {
         password: String,
         unauthorizedMessage: String,
         timeout: TimeInterval = 30,
+        deliverOnMain: Bool = true,
         complete: @escaping (AuthenticationStatus, String?) -> Void
     ) {
         Task {
+            @inline(__always)
+            func finish(_ s: AuthenticationStatus, _ m: String?) async {
+                
+                if deliverOnMain {
+                    await MainActor.run { complete(s, m) }
+                } else {
+                    complete(s, m)
+                }
+            }
+            
             do {
                 let (status, data, headers) = try await AuthDependencies.shared.http.postJSONWithHeaders(
                     url: url,
