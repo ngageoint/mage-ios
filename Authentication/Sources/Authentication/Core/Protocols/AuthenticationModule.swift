@@ -8,6 +8,8 @@
 
 import Foundation
 
+public typealias AuthParams = [AnyHashable: Any]
+
 /// Status codes used across all modules.
 @objc public enum AuthenticationStatus: Int, Sendable {
     case success                // -> AuthenticationStatusSuccess

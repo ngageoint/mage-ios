@@ -27,3 +27,20 @@ extension AuthDependencies {
     }
 }
 #endif
+
+public extension AuthDependencies {
+    var requireAuthStore: AuthStore {
+        guard let s = authStore else { fatalError("AuthDependencies.authStore is not configured") }
+        return s
+    }
+ 
+    var requireSessionStore: SessionStore {
+        guard let s = sessionStore else { fatalError("AuthDependencies.sessionStore is not configured") }
+        return s
+    }
+    
+    var requireAuthService: AuthService {
+        guard let s = authService else { fatalError("AuthDependencies.authService is not configured") }
+        return s
+    }
+}

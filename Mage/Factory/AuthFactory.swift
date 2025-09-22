@@ -10,8 +10,8 @@ import Foundation
 import Authentication
 
 enum AuthFactory {
-    /// Pure, nonisolated factory. Safe to call from any queue.
-    static func make(strategy: String,
+    /// Primary entry point for callers that *already* know the kind.
+    static func make(kind: StrategyKind,
                      parameters: [AnyHashable: Any]?,
                      store: AuthStore = KeychainAuthStore()) -> AuthenticationModule? {
         
@@ -19,17 +19,22 @@ enum AuthFactory {
         let deps = makeDeps()
         deps.authStore = store
         
-        switch strategy.lowercased() {
-        case "local":   return LocalAuth(parameters: parameters)
-        case "ldap":    return LDAPAuth(parameters: parameters)
-        case "offline": return OfflineAuth(parameters: parameters)
-            
-        // Treat all IdP variants the same here; your coordinator will launch the web flow.
-        case "idp", "oidc", "saml", "geoaxisconnect":
+        switch kind {
+        case .local:   return LocalAuth(parameters: parameters)
+        case .ldap:    return LDAPAuth(parameters: parameters)
+        case .offline: return OfflineAuth(parameters: parameters)
+        case .idp:
+            // Your coordinator will handle launching the web flow.
             return IdPAuth(parameters: parameters)
-        default:
-            return nil
         }
+    }
+    
+    /// Backward-compatible version
+    static func make(strategy: String,
+                     parameters: [AnyHashable: Any]?,
+                     store: AuthStore = KeychainAuthStore()) -> AuthenticationModule? {
+        guard let kind = StrategyKind(string: strategy) else { return nil }
+        return make(kind: kind, parameters: parameters, store: store)
     }
     
     static func makeDeps() -> AuthDependencies {

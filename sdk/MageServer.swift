@@ -15,12 +15,6 @@ import OSLog
     static let kServerMinorVersionKey             = "serverMinorVersion"
     static let kServerAuthenticationStrategiesKey = "serverAuthenticationStrategies"
     
-    // Single source of truth for "special" names the client treats specially.
-    private enum StrategyKey {
-        static let local   = "local"     // server-defined; we special-case ordering
-        static let offline = "offline"   // client-only fallback
-    }
-    
     @objc public enum ServerConfigLoadPolicy: Int {
         /// Use cached server config if present; otherwise fetch from network.
         case useCachedIfAvailable
@@ -41,7 +35,7 @@ import OSLog
     }
     
     @objc public var serverHasLocalAuthenticationStrategy: Bool {
-        (UserDefaults.standard.serverAuthenticationStrategies?[StrategyKey.local] != nil)
+        (UserDefaults.standard.serverAuthenticationStrategies?[StrategyKind.local.rawValue] != nil)
     }
     
     public static var isServerVersion5: Bool {
@@ -80,7 +74,7 @@ import OSLog
         for (key, raw) in defaults {
             let dict: [String: Any] = ["identifier": key, "strategy": (raw as? [String: Any] ?? [:])]
             
-            if key == StrategyKey.local {
+            if key == StrategyKind.local.rawValue {
                 local.append(dict)
             } else {
                 nonLocal.append(dict)
@@ -218,20 +212,9 @@ import OSLog
                  NSURLErrorTimedOut].contains(ns.code) {
                 
                 if let offline = Self.offlineModuleIfEligible(for: url.absoluteString) {
-                    
-                }
-                
-                if let oldLogin = UserDefaults.standard.loginParameters,
-                   let oldUrl = oldLogin[LoginParametersKey.serverUrl.key] as? String,
-                   oldUrl == url.absoluteString {
-                    
-                    if let offline = AuthFactory.make(strategy: StrategyKey.offline, parameters: nil),
-                       offline.canHandleLogin(toURL: url.absoluteString) {
-                        
-                        server.authenticationModules = [StrategyKey.offline: offline]
-                        success?(server)
-                        return
-                    }
+                    server.authenticationModules = [StrategyKind.offline.rawValue: offline]
+                    success?(server)
+                    return
                 }
                 
                 failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: ns.localizedDescription]))
@@ -283,25 +266,8 @@ import OSLog
         UserDefaults.standard.authenticationStrategies = strategies
         UserDefaults.standard.serverAuthenticationStrategies = strategies
         
-        var built: [String: AuthenticationModule] = [:]
-        
-        
-        for (strategy, params) in strategies {
-            if let module = AuthFactory.make(strategy: strategy, parameters: params) {
-                built[strategy] = module
-            }
-        }
-        
-        // Offline authentication when appropriate
-        if let oldLogin = UserDefaults.standard.loginParameters,
-           let oldUrl = oldLogin[LoginParametersKey.serverUrl.key] as? String,
-           oldUrl == UserDefaults.standard.baseServerUrl,
-           StoredPassword.retrieveStoredPassword() != nil,
-           let offline = AuthFactory.make(strategy: StrategyKey.offline, parameters: nil) {
-            built[StrategyKey.offline] = offline
-        }
-        
-        server.authenticationModules = built
+        let base = UserDefaults.standard.baseServerUrl ?? ""
+        server.authenticationModules = Self.buildModules(from: strategies, baseURLString: base)
     }
     
     private static func buildModules(from strategies: Strategies, baseURLString: String) -> [String: AuthenticationModule] {
@@ -314,20 +280,20 @@ import OSLog
         }
         
         if let offline = offlineModuleIfEligible(for: baseURLString) {
-            built[StrategyKey.offline] = offline
+            built[StrategyKind.offline.rawValue] = offline
         }
         
         return built
     }
     
-    /// Centralized policy for enableing Offline
+    /// Centralized policy for enabling Offline
     private static func offlineModuleIfEligible(for baseURLString: String) -> AuthenticationModule? {
         guard
             let oldLogin = UserDefaults.standard.loginParameters,
             let oldUrl   = oldLogin[LoginParametersKey.serverUrl.key] as? String,
             oldUrl == baseURLString,
             StoredPassword.retrieveStoredPassword() != nil,
-            let offline = AuthFactory.make(strategy: StrategyKey.offline, parameters: nil),
+            let offline = AuthFactory.make(kind: .offline, parameters: nil),
             offline.canHandleLogin(toURL: baseURLString)
         else {
             return nil
@@ -350,7 +316,7 @@ import OSLog
         // Only populate from cache if URL matches stored base URL.
         guard url.absoluteString == UserDefaults.standard.baseServerUrl else { return }
         
-        if let strategies = UserDefaults.standard.authenticationStrategies as? Strategies {
+        if let strategies = UserDefaults.standard.authenticationStrategies {
             self.authenticationModules = Self.buildModules(from: strategies, baseURLString: url.absoluteString)
         }
     }
