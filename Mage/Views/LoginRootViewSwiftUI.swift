@@ -5,9 +5,34 @@
 //  Created by Brent Michalski on 8/4/25.
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
-
+import Foundation
 import SwiftUI
 import UIKit
+
+private extension Font {
+    static func mageLogoFont(size: CGFloat) -> Font {
+        if let _ = UIFont(name: "GondolaMage-Regular", size: size) {
+            return Font.custom("GondolaMage-Regular", size: size)
+        } else {
+            return .system(size: size, weight: .black, design: .default)
+        }
+    }
+}
+
+private struct MageLogoView: View {
+    var body: some View {
+        
+        Image(.mageLogo)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 120, height: 120)
+        
+        Text("MAGE")
+            .font(.mageLogoFont(size: 40))
+            .kerning(2.0)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
 
 struct LoginRootViewSwiftUI: View {
     @ObservedObject var viewModel: LoginRootViewModel
@@ -21,7 +46,6 @@ struct LoginRootViewSwiftUI: View {
         ScrollView {
             VStack(spacing: 16) {
                 
-                // statusView.hidden = (server != nil)
                 if !viewModel.statusViewHidden {
                     HStack(spacing: 8) {
                         Image(systemName: "exclamationmark.triangle")
@@ -36,13 +60,20 @@ struct LoginRootViewSwiftUI: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Button(action: { viewModel.onServerURLTapped() }) {
-                            Text(viewModel.baseURLString ?? "Set Server URL")
+                        Button(action: {
+//                            print("\n---------------------------------------------")
+//                            print("Calling: viewModel.onServerURLTapped()")
+//                            print("---------------------------------------------\n")
+                            viewModel.onServerURLTapped()
+                        }) {
+                            Text(viewModel.serverURLLabel)
                                 .lineLimit(1)
                                 .truncationMode(.middle)
-                                .underline(viewModel.serverURLButtonEnabled)
+                                .underline(true)
+                                .contentShape(Rectangle())  // Makes the whole text area tappable
                         }
-                        .disabled(!viewModel.serverURLButtonEnabled)
+                        .buttonStyle(.plain)
+                        
                         Spacer()
                     }
                     

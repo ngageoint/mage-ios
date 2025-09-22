@@ -36,7 +36,16 @@ final class LoginRootViewModel: ObservableObject {
     }
     
     var statusViewHidden: Bool { server != nil }
-    var serverURLButtonEnabled: Bool { server != nil }
+    var serverURLButtonEnabled: Bool { true }
+    
+    var isLocalOnly: Bool {
+        let ids = strategies.compactMap { $0["identifier"] as? String }
+        return ids.count == 1 && ids.first == StrategyKind.local.rawValue
+    }
+    
+    var serverURLLabel: String {
+        baseURLString ?? "Set Server URL"
+    }
     
     var baseURLString: String? {
         guard let url = MageServer.baseURL() else { return nil }
