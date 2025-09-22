@@ -56,8 +56,3 @@ enum RESTAuthCommon {
 }
 
 typealias HTTP = RESTAuthCommon.HTTP
-    
-    
-extension Dictionary where Key == AnyHashable, Value == Any {
-    func string(_ key: String) -> String? { self[key] as? String }
-}
