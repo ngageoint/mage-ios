@@ -69,8 +69,8 @@ class MageServerTestsSwift: MageInjectionTestCase {
         expect(UserDefaults.standard.showDisclaimer).to(beTrue())
         
         expect(MageServer.baseURL).to(equal(URL(string: "https://magetest")))
-        expect(MageServer.isServerVersion5).to(beFalse())
-        expect(MageServer.isServerVersion6_0).to(beTrue())
+        expect(MageServer.isServer(major: 5)).to(beFalse())
+        expect(MageServer.isServer(major: 6)).to(beTrue())
     }
     
     func testShouldSetAnInvalidUrl() {
@@ -444,8 +444,8 @@ class MageServerTestsSwift: MageInjectionTestCase {
         expect(apiCalled).toEventually(beTrue())
         expect(serverSetup).toEventually(beTrue())
         
-        expect(MageServer.isServerVersion5).to(beTrue())
-        expect(MageServer.isServerVersion6_0).to(beFalse())
+        expect(MageServer.isServer(major: 5)).to(beTrue())
+        expect(MageServer.isServer(major: 6)).to(beFalse())
         
         StoredPassword.clear()
     }

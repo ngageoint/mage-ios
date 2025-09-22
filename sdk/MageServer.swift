@@ -38,19 +38,18 @@ import OSLog
         (UserDefaults.standard.serverAuthenticationStrategies?[StrategyKind.local.rawValue] != nil)
     }
     
-    public static var isServerVersion5: Bool {
-        UserDefaults.standard.serverMajorVersion == 5
+    public static func isServer(major: Int, minor: Int? = nil) -> Bool {
+        let mj = UserDefaults.standard.serverMajorVersion
+        let mn = UserDefaults.standard.serverMinorVersion
+        if let minor { return mj == major && mn == minor }
+        return mj == major
     }
     
-    @objc public static var isServerVersion6_0: Bool {
-        UserDefaults.standard.serverMajorVersion == 6 && UserDefaults.standard.serverMinorVersion == 0
-    }
-    
-    private static func isIdpStrategy(_ key: String) -> Bool {
-        switch key.lowercased() {
-        case "oauth", "oauth2", "oidc", "saml", "geoaxisconnect", "idp": return true
-        default: return false
-        }
+    public static func isServerAtLeast(major: Int, minor: Int = 0) -> Bool {
+        let mj = UserDefaults.standard.serverMajorVersion
+        let mn = UserDefaults.standard.serverMinorVersion
+        if mj != major { return mj > major }
+        return mn >= minor
     }
     
     /// Strategies that the client treats as "IdP" (oauth2/oidc/saml/geoaxisconnect/idp).
@@ -58,7 +57,7 @@ import OSLog
         guard let strategies = UserDefaults.standard.serverAuthenticationStrategies else { return [] }
         
         return strategies.compactMap { key, raw in
-            guard Self.isIdpStrategy(key) else { return nil }
+            guard StrategyKind(string: key) == .idp else { return nil }
             let dict = raw as? [String: Any] ?? [:]
             return["identifier": key, "strategy": dict]
         }
@@ -130,22 +129,23 @@ import OSLog
         return NSError(domain: "MAGE", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
     }
     
-    // MARK: - Swift convenience that mirrors Obj-C selector `serverWithUrl:success:failure:`
-    // TODO: - Needed? (BRENT)
-    public class func server(
-        withUrl url: URL,
-        success: ((MageServer) -> Void)?,
-        failure: ((NSError) -> Void)?
-    ) {
-        server(url: url, policy: .useCachedIfAvailable, success: success, failure: failure)
-    }
-    
     @objc public static func server(
         url: URL?,
         policy: ServerConfigLoadPolicy = .useCachedIfAvailable,
         success: ((MageServer) -> Void)?,
         failure: ((NSError) -> Void)?
     ) {
+        // Always deliver results on the main thread for UI safety.
+        @inline(__always)
+        func finishSuccess(_ s: MageServer) {
+            DispatchQueue.main.async { success?(s) }
+        }
+        
+        @inline(__always)
+        func finishFailure(_ e: NSError) {
+            DispatchQueue.main.async { failure?(e) }
+        }
+        
         guard let url, url.scheme != nil, url.host != nil else {
             failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
@@ -159,7 +159,7 @@ import OSLog
             && !server.authenticationModules.isEmpty
         
         if canServeFromCache {
-            success?(server)
+            finishSuccess(server)
             return
         }
         
@@ -174,31 +174,31 @@ import OSLog
             os_log("TIMING Fetched API. Elapsed: %.3f seconds", elapsed)
             
             if let data = response as? Data, data.count == 0 {
-                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Empty API response received from server."]))
+                finishFailure(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Empty API response received from server."]))
                 return
             }
             
             guard let api = response as? [AnyHashable: Any] else {
                 let mime = (task?.response as? HTTPURLResponse)?.mimeType ?? "unknown mime type"
-                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Unknown API response received from server. \(mime)"]))
+                finishFailure(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Unknown API response received from server. \(mime)"]))
                 return
             }
             
             if Self.checkServerCompatibility(api: api) {
                 UserDefaults.standard.baseServerUrl = url.absoluteString
             } else {
-                failure?(Self.generateServerCompatibilityError(api: api))
+                finishFailure(Self.generateServerCompatibilityError(api: api))
                 return
             }
             
             do {
                 try Self.applyApiResponse(api, to: server)
             } catch let err as NSError {
-                failure?(err)
+                finishFailure(err)
                 return
             }
             
-            success?(server)
+            finishSuccess(server)
         }
         
         // FAILURE
@@ -213,14 +213,14 @@ import OSLog
                 
                 if let offline = Self.offlineModuleIfEligible(for: url.absoluteString) {
                     server.authenticationModules = [StrategyKind.offline.rawValue: offline]
-                    success?(server)
+                    finishSuccess(server)
                     return
                 }
                 
-                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: ns.localizedDescription]))
+                finishFailure(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: ns.localizedDescription]))
             } else {
                 let status = (task?.response as? HTTPURLResponse)?.statusCode
-                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL,
+                finishFailure(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL,
                                  userInfo: [NSLocalizedDescriptionKey: ns.localizedDescription,
                                             "statusCode": status as Any,
                                             "originalError": ns]))
@@ -292,7 +292,7 @@ import OSLog
             let oldLogin = UserDefaults.standard.loginParameters,
             let oldUrl   = oldLogin[LoginParametersKey.serverUrl.key] as? String,
             oldUrl == baseURLString,
-            StoredPassword.retrieveStoredPassword() != nil,
+            AuthDependencies.shared.requireAuthStore.hasStoredPassword(),
             let offline = AuthFactory.make(kind: .offline, parameters: nil),
             offline.canHandleLogin(toURL: baseURLString)
         else {
