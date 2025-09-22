@@ -34,7 +34,7 @@ struct IntroView: View {
                 Button {
                    dismiss()
                 } label: {
-                    Text("Let's Go!")
+                    Text("Continue")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)

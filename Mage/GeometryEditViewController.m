@@ -1369,9 +1369,9 @@ static NSString *garsTitle = @"GARS";
                                                          message:[NSString stringWithFormat:@"Do you want to delete this point?\n%f, %f", mapPoint.coordinate.latitude, mapPoint.coordinate.longitude]
                                                          preferredStyle:UIAlertControllerStyleAlert];
                             
-                            [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:nil]];
+                            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Alert cancel button") style:UIAlertActionStyleDefault handler:nil]];
                             
-                            [alert addAction:[UIAlertAction actionWithTitle:@"DELETE" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", @"Alert delete button") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                                 NSArray<GPKGMapPoint *> *points = [self shapePoints];
                                 
                                 // Find the index of the point being deleted

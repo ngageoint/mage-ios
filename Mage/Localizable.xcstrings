@@ -181,6 +181,17 @@
         }
       }
     },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
     "Capture a point of interest by placing a pin or drawing a shape on the map." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -245,6 +256,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conéctese a un servidor de equipo para sincronizar y compartir datos de campo."
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
           }
         }
       }
@@ -483,22 +510,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unirse a un evento"
-          }
-        }
-      }
-    },
-    "Let's Go!" : {
-      "localizations" : {
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Vamos!"
-          }
-        },
-        "es-US" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Vamos!"
           }
         }
       }
@@ -939,7 +950,20 @@
       }
     },
     "Unable to load observation" : {
-
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede cargar la observación"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede cargar la observación"
+          }
+        }
+      }
     },
     "Use forms to enhance observations with photos, videos, notes, and audio." : {
       "extractionState" : "manual",

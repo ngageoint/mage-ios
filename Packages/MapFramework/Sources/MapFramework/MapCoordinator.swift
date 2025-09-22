@@ -90,7 +90,6 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
             guard let annotation = view.annotation as? DataSourceAnnotation else {
                 continue
             }
-            NSLog("check if should enlarge \(annotation.shouldEnlarge)")
             if annotation.shouldEnlarge {
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
                     annotation.enlargeAnnoation()
