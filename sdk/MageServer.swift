@@ -238,6 +238,30 @@ import OSLog
         if let task { manager?.addTask(task) }
     }
     
+    // MARK: - Async API
+    
+    /// Loads/refreshes the server config and returns a `MageServer`.
+    /// Main-thread guaranteed (safe to touch UI after).
+    @MainActor
+    public static func server(
+        url: URL?,
+        policy: ServerConfigLoadPolicy = .useCachedIfAvailable
+    ) async throws -> MageServer {
+        try await withCheckedThrowingContinuation { cont in
+            server(url: url, policy: policy, success: { srv in
+                cont.resume(returning: srv)
+            }, failure: { err in
+                cont.resume(throwing: err)
+            })
+        }
+    }
+
+    /// Convenience overload that defaults to `.useCachedIfAvailable`.
+    @MainActor
+    public static func server(url: URL?) async throws -> MageServer {
+        try await server(url: url, policy: .useCachedIfAvailable)
+    }
+    
     // One place to apply API -> defaults/modules (also handles contactInfo change detection).
     private static func applyApiResponse(_ api: [AnyHashable: Any], to server: MageServer) throws {
         UserDefaults.standard.locationServiceDisabled = api[ApiKey.locationServiceDisabled.key] as? Bool ?? false
@@ -319,5 +343,15 @@ import OSLog
         if let strategies = UserDefaults.standard.authenticationStrategies {
             self.authenticationModules = Self.buildModules(from: strategies, baseURLString: url.absoluteString)
         }
+    }
+    
+    // MARK - Typed accessors for modules
+    
+    public func module(for kind: StrategyKind) -> AuthenticationModule? {
+        authenticationModules[kind.rawValue]
+    }
+    
+    public func setModule(_ module: AuthenticationModule, for kind: StrategyKind) {
+        authenticationModules[kind.rawValue] = module
     }
 }

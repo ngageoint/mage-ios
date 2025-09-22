@@ -49,7 +49,6 @@ public final class AuthFlowCoordinator: NSObject {
         }
         
         MageServer.server(url: url,
-                          policy: .useCachedIfAvailable,
                           success: { [weak self] srv in
             guard let self else { return }
             Task { @MainActor in
