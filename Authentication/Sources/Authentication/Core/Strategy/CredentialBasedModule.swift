@@ -20,6 +20,9 @@ public protocol CredentialBasedModule: AuthenticationModule {
 }
 
 public extension CredentialBasedModule {
+    // Default: credential-based modules can handle any base URL.
+    func canHandleLogin(toURL url: String) -> Bool { true }
+    
     func login(withParameters params: [AnyHashable: Any],
                complete: @escaping (AuthenticationStatus, String?) -> Void) {
         
