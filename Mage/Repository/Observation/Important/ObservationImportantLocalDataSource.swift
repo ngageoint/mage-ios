@@ -145,7 +145,6 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
 
             do {
                 try context.save()
-                MageLogger.misc.debug("Saved")
             } catch {
                 MageLogger.misc.error("Error saving important \(error)")
 

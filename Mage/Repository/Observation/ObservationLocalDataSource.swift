@@ -119,7 +119,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         }()
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.predicate = predicate
-        MageLogger.misc.debug("Predicate \(predicate.debugDescription)")
 
         request.includesSubentities = false
         request.propertiesToFetch = ["timestamp", "user"]
@@ -260,7 +259,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
 
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int {
         let count = observations.count
-        MageLogger.misc.debug("Received \(count) \(DataSources.observation.key) records.")
 
         // Create an operation that performs the main part of the background task.
         operation = ObservationDataLoadOperation(observations: observations, eventId: eventId)
@@ -272,7 +270,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         var regionsChanged: [MKCoordinateRegion] = []
         let initial = true
         let saveStart = Date()
-        MageLogger.misc.debug("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
         
         let backgroundContext = persistence.getNewBackgroundContext(name: #function)
         var observationIds: [String] = []
@@ -317,11 +314,11 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                     }
                     chunks.removeLast();
                     for observation in features {
-                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, observationIds: observationIds, users: users, context: backgroundContext) {
-                            newObservationCount = newObservationCount + 1;
+                        if let observationChangeRegions = Observation.create(feature: observation, eventForms: eventFormDictionary, observationIds: observationIds, users: users, context: backgroundContext) {
+                            if (observationChangeRegions.observation != nil) { newObservationCount += 1; }
                             if (!initial) {
-                                observationToNotifyAbout = newObservation.observation;
-                                regionsChanged.append(contentsOf: newObservation.regionsChanged ?? [])
+                                observationToNotifyAbout = observationChangeRegions.observation;
+                                regionsChanged.append(contentsOf: observationChangeRegions.regionsChanged ?? [])
                             }
                         }
                     }
@@ -350,11 +347,12 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                 NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: backgroundContext));
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
+            } else {
+                MageLogger.misc.debug("No new observations to notify about")
             }
             
             self.changedRegionsPushSubject.send(regionsChanged)
 
-            MageLogger.misc.debug("TIMING Saved \(newObservationCount) Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
             return newObservationCount
         }
     }

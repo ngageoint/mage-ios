@@ -8,64 +8,84 @@
 
 import Foundation
 import SwiftUI
-import Kingfisher
 import Combine
 
 class AttachmentFieldViewModel: ObservableObject {
-    @Injected(\.attachmentRepository)
-    var repository: AttachmentRepository
+    @Injected(\.attachmentRepository) var repository: AttachmentRepository
     
-    @Published
-    var attachments: [AttachmentModel]?
-    
-    @Published
-    var fieldTitle: String
+    @Published var attachments: [AttachmentModel] = []
+    @Published var fieldTitle: String
     
     var cancellable = Set<AnyCancellable>()
     
     init(observationUri: URL?, observationFormId: String, fieldName: String, fieldTitle: String) {
         self.fieldTitle = fieldTitle
-        self.repository.observeAttachments(
+
+        repository.observeAttachments(
             observationUri: observationUri,
             observationFormId: observationFormId,
             fieldName: fieldName
-        )?
+        )
         .receive(on: DispatchQueue.main)
-        .sink { changes in
-            var attachments: [AttachmentModel] = []
-            for change in changes {
-                switch (change) {
-                case .insert(offset: _, element: let element, associatedWith: _):
-                    attachments.append(element)
-                case .remove(offset: _, element: let element, associatedWith: _):
-                    attachments.removeAll { model in
-                        model.attachmentUri == element.attachmentUri
-                    }
-                }
-            }
-            self.attachments = attachments
+        .scan([AttachmentModel]()) { current, diff in
+            Self.apply(diff: diff, to: current)
+        }
+        .sink { [weak self] snapshot in
+            self?.attachments = snapshot
         }
         .store(in: &cancellable)
     }
+
+    // Apply a CollectionDifference to an Array without using .applying(_:)
+    private static func apply(
+        diff: CollectionDifference<AttachmentModel>,
+        to base: [AttachmentModel]
+    ) -> [AttachmentModel] {
+        var result = base
+
+        for change in diff {
+            switch change {
+            case let .insert(offset, element, _):
+                // If offset is within bounds, respect it; otherwise append.
+                if offset <= result.count {
+                    result.insert(element, at: offset)
+                } else {
+                    result.append(element)
+                }
+
+            case let .remove(_, element, _):
+                // Prefer identity by attachmentUri; fall back to equality if needed.
+                if let idx = result.firstIndex(where: { $0.attachmentUri == element.attachmentUri }) {
+                    result.remove(at: idx)
+                } else if let idx = result.firstIndex(of: element) { // if Equatable
+                    result.remove(at: idx)
+                }
+            }
+        }
+
+        return result
+    }
+
     
     func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
         repository.appendAttachmentViewRoute(router: router, attachment: attachment)
     }
     
-    var orderedAttachments: [AttachmentModel]? {
-        return attachments?.sorted(by: { first, second in
+    var orderedAttachments: [AttachmentModel] {
+        attachments.sorted { first, second in
             let firstOrder = first.order.intValue
             let secondOrder = second.order.intValue
-            return (firstOrder != secondOrder) ? (firstOrder < secondOrder) : (first.lastModified ?? Date()) < (second.lastModified ?? Date())
-        })
+            
+            if firstOrder != secondOrder { return firstOrder < secondOrder }
+            
+            return (first.lastModified ?? Date()) < (second.lastModified ?? Date())
+        }
     }
 }
 
 struct AttachmentFieldViewSwiftUI: View {
     @StateObject var viewModel: AttachmentFieldViewModel
-    
-    @EnvironmentObject
-    var router: MageRouter
+    @EnvironmentObject var router: MageRouter
     
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
@@ -75,12 +95,12 @@ struct AttachmentFieldViewSwiftUI: View {
     ]
     
     var body: some View {
-        if !(viewModel.attachments ?? []).isEmpty {
+        if !viewModel.attachments.isEmpty {
             VStack(alignment: .leading, spacing: 2) {
                 Text(viewModel.fieldTitle)
                     .secondaryText()
                 LazyVGrid(columns:layout) {
-                    ForEach(viewModel.orderedAttachments ?? []) { attachment in
+                    ForEach(viewModel.orderedAttachments) { attachment in
                         AttachmentPreviewView(attachment: attachment) {
                             viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                         }

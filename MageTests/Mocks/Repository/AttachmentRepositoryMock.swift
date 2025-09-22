@@ -18,7 +18,7 @@ class AttachmentRepositoryMock: AttachmentRepository {
         nil
     }
     
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<MAGE.AttachmentModel>, Never>? {
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<MAGE.AttachmentModel>, Never> {
         AnyPublisher(Just(list.difference(from: [])).setFailureType(to: Never.self))
     }
     

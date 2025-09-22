@@ -23,7 +23,7 @@ extension InjectedValues {
 
 protocol AttachmentRepository {
     func getAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) async -> [AttachmentModel]?
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>?
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>
     func getAttachment(attachmentUri: URL?) async -> AttachmentModel?
     func saveLocalPath(attachmentUri: URL?, localPath: String)
     func markForDeletion(attachmentUri: URL?)
@@ -43,7 +43,7 @@ class AttachmentRepositoryImpl: ObservableObject, AttachmentRepository {
         )
     }
     
-    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>? {
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never> {
         localDataSource.observeAttachments(observationUri: observationUri, observationFormId: observationFormId, fieldName: fieldName)
     }
     
@@ -64,60 +64,63 @@ class AttachmentRepositoryImpl: ObservableObject, AttachmentRepository {
     }
     
     func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
-        var route: (any Hashable)?
-        guard let contentType = attachment.contentType else {
+        // 1) Prefer healed local file
+        if let local = AttachmentPath.localURL(fromStored: attachment.localPath, fileName: attachment.name) {
+            if attachment.isImage {
+                router.appendRoute(FileRoute.showFileImage(filePath: local.path))
+            } else if attachment.isVideo {
+                router.appendRoute(FileRoute.showDownloadedFile(fileUrl: local, url: local))
+            } else if attachment.isAudio {
+                router.appendRoute(FileRoute.showDownloadedFile(fileUrl: local, url: local))
+            } else {
+                router.appendRoute(FileRoute.showDownloadedFile(fileUrl: local, url: local))
+            }
             return
         }
-        
-        if contentType.hasPrefix("image") {
-            if let localPath = attachment.localPath,
-               FileManager.default.fileExists(atPath: localPath)
-            {
-                route = FileRoute.showFileImage(filePath: localPath)
-            } else if let urlString = attachment.url,
-                      let url = URL(string: urlString)
-            {
-                if ImageCache.default.isCached(forKey: urlString) {
-                    route = FileRoute.showCachedImage(cacheKey: urlString)
-                } else if DataConnectionUtilities.shouldFetchAttachments() {
-                    route = FileRoute.cacheImage(url: url)
-                } else {
-                    route = FileRoute.askToCache(url: url)
-                }
+
+        // 2) Remote fallbacks
+        guard let remote = attachment.url.flatMap(URL.init(string:)) else { return }
+
+        if attachment.isImage {
+            if AttachmentRepoEnv.isCached(remote.absoluteString) {
+                router.appendRoute(FileRoute.showCachedImage(cacheKey: remote.absoluteString))
+            } else if AttachmentRepoEnv.fetchPolicy() {
+                router.appendRoute(FileRoute.cacheImage(url: remote))
+            } else {
+                router.appendRoute(FileRoute.askToCache(url: remote))
             }
-        } else if contentType.hasPrefix("video") {
-            if let localPath = attachment.localPath,
-               FileManager.default.fileExists(atPath: localPath)
-            {
-                route = FileRoute.showLocalVideo(filePath: localPath)
-            } else if let url = URL(string: attachment.url ?? "") {
-                route = FileRoute.showRemoteVideo(url: url)
-            }
-        } else if contentType.hasPrefix("audio") {
-            if let localPath = attachment.localPath,
-               FileManager.default.fileExists(atPath: localPath)
-            {
-                route = FileRoute.showLocalAudio(filePath: localPath)
-            } else if let url = URL(string: attachment.url ?? "") {
-                route = FileRoute.showRemoteAudio(url: url)
-            }
-        } else {
-            if let urlStr = attachment.url,
-               let url = URL(string: urlStr) {
-                if let localPath = attachment.localPath,
-                   FileManager.default.fileExists(atPath: localPath),
-                   let fileUrl = URL(string: localPath)
-                {
-                    route = FileRoute.showDownloadedFile(fileUrl: fileUrl, url: url)
-                } else if DataConnectionUtilities.shouldFetchAttachments() {
-                    route = FileRoute.downloadFile(url: url)
-                } else {
-                    route = FileRoute.askToDownload(url: url)
-                }
-            }
+            return
         }
-        if let route = route {
-            router.appendRoute(route)
+
+        if attachment.isVideo {
+            if AttachmentRepoEnv.preferStreamingVideo() {
+                // READY for future streaming UI
+                router.appendRoute(FileRoute.showRemoteVideo(url: remote))
+            } else if AttachmentRepoEnv.fetchPolicy() {
+                router.appendRoute(FileRoute.downloadFile(url: remote))
+            } else {
+                router.appendRoute(FileRoute.askToDownload(url: remote))
+            }
+            return
+        }
+
+        if attachment.isAudio {
+            if AttachmentRepoEnv.preferStreamingAudio() {
+                // READY for future streaming UI
+                router.appendRoute(FileRoute.showRemoteAudio(url: remote))
+            } else if AttachmentRepoEnv.fetchPolicy() {
+                router.appendRoute(FileRoute.downloadFile(url: remote))
+            } else {
+                router.appendRoute(FileRoute.askToDownload(url: remote))
+            }
+            return
+        }
+
+        // Other
+        if AttachmentRepoEnv.fetchPolicy() {
+            router.appendRoute(FileRoute.downloadFile(url: remote))
+        } else {
+            router.appendRoute(FileRoute.askToDownload(url: remote))
         }
     }
 }

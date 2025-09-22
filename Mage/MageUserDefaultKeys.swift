@@ -29,6 +29,7 @@ extension Notification.Name {
     public static let ViewFeedItem = Notification.Name("ViewFeedItem")
     public static let MapRequestFocus = Notification.Name("MapRequestFocus")
     public static let AttachmentPushed = Notification.Name("AttachmentPushed")
+    public static let ContactInfoDidChange = Notification.Name("ContactInfoDidChange")
 }
 
 @objc public enum LocationDisplay : Int {

@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "Simulator Screenshot - iPhone 16 Pro Max - 2025-08-04 at 14.14.16.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

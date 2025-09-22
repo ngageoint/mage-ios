@@ -149,26 +149,104 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
     }
     
     func imageAtPath(imagePath: String?) -> UIImage {
-        guard let imagePath = imagePath as? NSString else {
-            return UIImage(named: "defaultMarker")!
-        }
-        if let image = imageCache.object(forKey: imagePath) {
-            // image is cached
-            image.accessibilityIdentifier = imagePath as String
-            return image
+        // 0) Fallback
+        let fallback = UIImage(named: "defaultMarker")!
+
+        // 1) Validate input
+        guard var rawPath = imagePath, !rawPath.isEmpty else { return fallback }
+
+        // 2) If the saved path points into an old container, remap it to THIS install’s Documents
+        //    We do this by taking the suffix starting at "/Documents/" and joining to the current docs dir.
+        if let docsRange = rawPath.range(of: "/Documents/") {
+            let relativeFromDocs = String(rawPath[docsRange.upperBound...]) // e.g. "attachments/MAGE_ABC123"
+            if let currentDocs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                rawPath = currentDocs.appendingPathComponent(relativeFromDocs).path
+            }
         }
 
-        if let image = UIImage(contentsOfFile: imagePath as String), let cgImage = image.cgImage {
+        let fm = FileManager.default
+        var resolvedPath = rawPath
+
+        // 3) If the exact file doesn't exist, treat path as a prefix and search its directory
+        if !fm.fileExists(atPath: resolvedPath) {
+            let candidate = URL(fileURLWithPath: resolvedPath)
+            let dirURL = candidate.deletingLastPathComponent()
+            let prefix = candidate.lastPathComponent
+
+            if let urls = try? fm.contentsOfDirectory(at: dirURL, includingPropertiesForKeys: nil) {
+                if let match = urls.first(where: { $0.lastPathComponent.hasPrefix(prefix) }) {
+                    resolvedPath = match.path
+                }
+            }
+        }
+
+        // 4) Cache key based on the resolved path
+        let cacheKey = resolvedPath as NSString
+        if let cached = imageCache.object(forKey: cacheKey) {
+            cached.accessibilityIdentifier = resolvedPath
+            return cached
+        }
+
+        // 5) Load, scale, cache
+        if let image = UIImage(contentsOfFile: resolvedPath), let cgImage = image.cgImage {
             let scale = image.size.width / annotationScaleWidth
-
             let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
-            imageCache.setObject(scaledImage, forKey: imagePath)
-            scaledImage.accessibilityIdentifier = imagePath as String
+            imageCache.setObject(scaledImage, forKey: cacheKey)
+            scaledImage.accessibilityIdentifier = resolvedPath
             return scaledImage
         }
 
-        let image = UIImage(named:"defaultMarker")!
-        image.accessibilityIdentifier = imagePath as String
-        return image
+        // 6) Fallback
+        fallback.accessibilityIdentifier = resolvedPath
+        return fallback
     }
+
+    
+    func imageAtPath_ugh(imagePath: String?) -> UIImage {
+        // Default if we can’t find anything
+        let fallback = UIImage(named: "defaultMarker")!
+
+        // 1) Validate input
+        guard let rawPath = imagePath, !rawPath.isEmpty else {
+            return fallback
+        }
+
+        // 2) Resolve to an actual file on disk
+        var resolvedPath = rawPath
+        let fm = FileManager.default
+
+        if !fm.fileExists(atPath: rawPath) {
+            // Treat rawPath as a prefix, search its directory for a file that starts with it
+            let candidate = URL(fileURLWithPath: rawPath)
+            let dirURL = candidate.deletingLastPathComponent()
+            let prefix = candidate.lastPathComponent
+
+            if let urls = try? fm.contentsOfDirectory(at: dirURL, includingPropertiesForKeys: nil) {
+                if let match = urls.first(where: { $0.lastPathComponent.hasPrefix(prefix) }) {
+                    resolvedPath = match.path
+                }
+            }
+        }
+
+        // 3) Use a cache key based on the resolved path
+        let cacheKey = resolvedPath as NSString
+        if let cached = imageCache.object(forKey: cacheKey) {
+            cached.accessibilityIdentifier = resolvedPath
+            return cached
+        }
+
+        // 4) Load, scale, cache
+        if let image = UIImage(contentsOfFile: resolvedPath), let cgImage = image.cgImage {
+            let scale = image.size.width / annotationScaleWidth
+            let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
+            imageCache.setObject(scaledImage, forKey: cacheKey)
+            scaledImage.accessibilityIdentifier = resolvedPath
+            return scaledImage
+        }
+
+        // 5) Fallback if the file still wasn’t found/readable
+        fallback.accessibilityIdentifier = resolvedPath
+        return fallback
+    }
+
 }
