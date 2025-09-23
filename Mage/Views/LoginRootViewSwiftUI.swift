@@ -9,28 +9,16 @@ import Foundation
 import SwiftUI
 import UIKit
 
-private extension Font {
-    static func mageLogoFont(size: CGFloat) -> Font {
-        if let _ = UIFont(name: "GondolaMage-Regular", size: size) {
-            return Font.custom("GondolaMage-Regular", size: size)
-        } else {
-            return .system(size: size, weight: .black, design: .default)
-        }
-    }
-}
-
-private struct MageLogoView: View {
+private struct MageHeaderView: View {
     var body: some View {
-        
-        Image(.mageLogo)
+        Image("LogoClear")
+            .renderingMode(.original) // to keep it's colors
             .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 120, height: 120)
-        
-        Text("MAGE")
-            .font(.mageLogoFont(size: 40))
-            .kerning(2.0)
+            .scaledToFit()
+            .frame(maxWidth: 240, maxHeight: 72)
+            .accessibilityLabel("MAGE")
             .accessibilityAddTraits(.isHeader)
+            .padding(.bottom, 4)
     }
 }
 
@@ -82,7 +70,11 @@ struct LoginRootViewSwiftUI: View {
                         .font(.footnote)
                 }
                 
-                StrategyStackView(viewModel: viewModel)
+//                if viewModel.isLocalOnly {
+                    LocalOnlyLoginSection(viewModel: viewModel)
+//                } else {
+//                    StrategyStackView(viewModel: viewModel)
+//                }
                 
                 if viewModel.showContact, let attr = viewModel.contactMessage {
                     AttributedMessageView(attributed: attr, accessibilityLabel: viewModel.contactTitle)
@@ -192,23 +184,27 @@ private struct AttributedMessageView: UIViewRepresentable {
     }
 }
 
-
-
-
-//@objc public protocol LoginRootViewDelegate: AnyObject {
-//    func loginWithParameters(_ parameters: NSDictionary, withAuthenticationStrategy authenticationStrategy: String, complete: (Int, String?) -> Void)
-//    func changeServerURL()
-//    func createAccount()
-//}
-
-
-//@MainActor
-//class LoginRootViewModel: ObservableObject {
-//    // Strategies to show [local, ldap, idp]
-//    @Published var strategies: [[String: Any]]
-//    
-//    // Server & User Info
-//    let server: MageServer
-//    let user: User?
-//    let scheme: AppContainerScheming
-//}
+// MARK: - Local-only layout
+private struct LocalOnlyLoginSection: View {
+    @ObservedObject var viewModel: LoginRootViewModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Header
+            VStack(alignment: .leading, spacing: 4) {
+                MageHeaderView()
+                
+                Text("Sign in")
+                    .font(.title2.weight(.semibold))
+                    .accessibilityIdentifier("local_only_sign_in_title")
+            }
+            
+            if let local = viewModel.strategies.first {
+                StrategyRow(strategy: local, user: viewModel.user, delegate: viewModel.delegate)
+            }
+            
+            // Footer goes here
+        }
+        .frame(maxWidth: 400)
+    }
+}
