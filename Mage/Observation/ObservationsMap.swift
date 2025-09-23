@@ -23,9 +23,6 @@ class ObservationsMap: DataSourceMap {
     
     @Injected(\.observationIconRepository)
     var iconRepository: ObservationIconRepository
-    
-    @Injected(\.observationImageRepository)
-    var imageRepository: ObservationImageRepository
 
     init() {
         super.init(
@@ -192,7 +189,7 @@ class ObservationsMap: DataSourceMap {
             annotationView?.isEnabled = true
         }
 
-        let image = imageRepository.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
+        let image = ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
         if let annotationView = annotationView {
             annotationView.image = image
 

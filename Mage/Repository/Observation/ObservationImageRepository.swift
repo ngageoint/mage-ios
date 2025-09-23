@@ -8,17 +8,6 @@
 
 import Foundation
 
-private struct ObservationImageRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationImageRepository = ObservationImageRepositoryImpl()
-}
-
-extension InjectedValues {
-    var observationImageRepository: ObservationImageRepository {
-        get { Self[ObservationImageRepositoryProviderKey.self] }
-        set { Self[ObservationImageRepositoryProviderKey.self] = newValue }
-    }
-}
-
 protocol ObservationImageRepository {
     func clearCache()
     func imageName(
@@ -33,6 +22,9 @@ protocol ObservationImageRepository {
 }
 
 class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObject {
+    
+    static let shared = ObservationImageRepositoryImpl()
+    private init() {} // prevents accidental new instances
     
     let annotationScaleWidth = 35.0
     

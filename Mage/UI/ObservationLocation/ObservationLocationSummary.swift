@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct ObservationLocationSummary: View {
-    @Injected(\.observationImageRepository)
-    var imageRepository: ObservationImageRepository
+    @State private var uiImage: UIImage? = nil
     
     var timestamp: Date?
     var user: String?
@@ -71,11 +70,28 @@ struct ObservationLocationSummary: View {
                     Spacer()
                 }
                 Spacer()
-                if let iconPath = iconPath {
-                    Image(uiImage: imageRepository.imageAtPath(imagePath: iconPath))
-                        .frame(maxWidth: 48, maxHeight: 48)
+                Group {
+                    if let image = uiImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame(maxWidth: 48, maxHeight: 48)
+                    } else {
+                        // Placeholder while loading
+                        Image(systemName: "photo")
+                            .resizable()
+                            .frame(maxWidth: 48, maxHeight: 48)
+                    }
+                }
+                .task(id: iconPath) { // Runs when iconPath changes
+                    await loadImage()
                 }
             }
         }
+    }
+    
+    private func loadImage() async {
+        guard let path = iconPath else { return }
+        let image = await ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: path)
+        uiImage = image
     }
 }

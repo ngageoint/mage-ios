@@ -95,10 +95,7 @@ import DateTools
         
         if point {
             if let observation = observation {
-                @Injected(\.observationImageRepository)
-                var imageRepository: ObservationImageRepository
-                
-                let image = imageRepository.image(observation: observation);
+                let image = ObservationImageRepositoryImpl.shared.image(observation: observation);
                 annotationView?.image = image;
                 annotationView?.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
             }

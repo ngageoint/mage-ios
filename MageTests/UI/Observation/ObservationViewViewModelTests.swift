@@ -39,7 +39,6 @@ final class ObservationViewViewModelTests: MageInjectionTestCase {
         roleRepository = RoleRepositoryMock()
         InjectedValues[\.roleRepository] = roleRepository
         observationImageRepository = ObservationImageRepositoryMock()
-        InjectedValues[\.observationImageRepository] = observationImageRepository
     }
 
     func testInit() {

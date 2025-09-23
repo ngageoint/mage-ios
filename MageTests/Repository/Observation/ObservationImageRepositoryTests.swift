@@ -82,9 +82,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "testfield": "Hi"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(equal(iconPath))
         }
     }
@@ -113,9 +112,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(equal(iconPath))
         }
     }
@@ -142,9 +140,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "formId": 26
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(equal(iconPath))
         }
     }
@@ -173,9 +170,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(equal(iconPath))
         }
     }
@@ -221,9 +217,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(equal(iconPath))
         }
     }
@@ -253,9 +248,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(equal(iconPath))
         }
     }
@@ -277,9 +271,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(beNil())
         }
     }
@@ -307,9 +300,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let imageName = imageRepository.imageName(observation: observation);
+            let imageName = ObservationImageRepositoryImpl.shared.imageName(observation: observation);
             expect(imageName).to(beNil())
         }
     }
@@ -337,9 +329,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let image = imageRepository.image(observation: observation)
+            let image = ObservationImageRepositoryImpl.shared.image(observation: observation)
             expect(image).to(equal(UIImage(named:"defaultMarker")))
         }
     }
@@ -369,9 +360,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let image = imageRepository.image(observation: observation);
+            let image = ObservationImageRepositoryImpl.shared.image(observation: observation);
             expect(image).toNot(beNil());
             expect(image).toNot(equal(UIImage(named:"defaultMarker")));
         }
@@ -402,9 +392,8 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                     "secondary": "turtle"
                 ]
             ]
-            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
             
-            let image = imageRepository.image(observation: observation);
+            let image = ObservationImageRepositoryImpl.shared.image(observation: observation);
             expect(image).toNot(beNil());
             expect(image).toNot(equal(UIImage(named:"defaultMarker")));
             
@@ -416,7 +405,7 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
                 FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
             }
             
-            let image2 = imageRepository.image(observation: observation);
+            let image2 = ObservationImageRepositoryImpl.shared.image(observation: observation);
             expect(image2).toNot(beNil());
             expect(image2).to(equal(image))
         }

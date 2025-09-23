@@ -9,9 +9,6 @@
 import Foundation
 
 class FetchEventsUseCase {
-    @Injected(\.observationImageRepository)
-    var imageRepository: ObservationImageRepository
-    
     @Injected(\.eventRepository)
     var eventRepository: EventRepository
     
@@ -40,7 +37,9 @@ class FetchEventsUseCase {
             }
             let formTask = Form.operationToPullFormIcons(eventId: remoteId) {
                 NSLog("Pulled form for event")
-                self.imageRepository.clearCache()
+                Task {
+                    await ObservationImageRepositoryImpl.shared.clearCache()
+                }
                 NotificationCenter.default.post(name: .MAGEFormFetched, object: e)
             } failure: { error in
                 NSLog("Failed to pull form for event")

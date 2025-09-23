@@ -32,6 +32,7 @@ struct ObservationMapItem: Equatable, Hashable {
     var error: Bool = false
     var syncing: Bool = false
     var important: ObservationImportantModel?
+    var iconPath: String?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
@@ -76,18 +77,6 @@ struct ObservationMapItem: Equatable, Hashable {
             )
         )
     }
-    
-    var iconPath: String? {
-        @Injected(\.observationImageRepository)
-        var imageRepository: ObservationImageRepository
-        
-        return imageRepository.imageName(
-            eventId: eventId,
-            formId: formId,
-            primaryFieldText: primaryFieldText,
-            secondaryFieldText: secondaryFieldText
-        )
-    }
 }
 
 extension ObservationMapItem {
@@ -106,6 +95,12 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
+        self.iconPath = ObservationImageRepositoryImpl.shared.imageName(
+            eventId: eventId,
+            formId: formId,
+            primaryFieldText: primaryFieldText,
+            secondaryFieldText: secondaryFieldText
+        )
         // TODO: should we store the primary and secondary feed field text too?
         if let observation = observation.observation {
             let style = ObservationShapeStyleParser.style(

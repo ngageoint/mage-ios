@@ -29,9 +29,6 @@ class ObservationViewViewModel: NSObject, ObservableObject {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
-    @Injected(\.observationImageRepository)
-    var imageRepository: ObservationImageRepository
-    
     @Published
     var event: EventModel?
     
@@ -62,12 +59,7 @@ class ObservationViewViewModel: NSObject, ObservableObject {
     @Published
     var importantDescription: String = ""
     
-    var iconPath: String? {
-        if let eventRemoteId = event?.remoteId, let formid = primaryEventForm?.formId {
-            return imageRepository.imageName(eventId: Int64(truncating: eventRemoteId), formId: formid, primaryFieldText: primaryFieldText, secondaryFieldText: secondaryFieldText)
-        }
-        return nil
-    }
+    var iconPath: String?
     
     var isImportant: Bool {
         observationImportantModel?.important ?? false
@@ -112,6 +104,12 @@ class ObservationViewViewModel: NSObject, ObservableObject {
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .assign(to: &$observationModel)
+        
+        if let eventRemoteId = event?.remoteId, let formid = primaryEventForm?.formId {
+            Task {
+                self.iconPath = await ObservationImageRepositoryImpl.shared.imageName(eventId: Int64(truncating: eventRemoteId), formId: formid, primaryFieldText: primaryFieldText, secondaryFieldText: secondaryFieldText)
+            }
+        }
     }
     
     @MainActor
