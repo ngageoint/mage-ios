@@ -12,6 +12,7 @@ import DataSourceTileOverlay
 import DataSourceDefinition
 import Combine
 
+@MainActor
 class DataSourceMapViewModel {
     var dataSource: any DataSourceDefinition
     var key: String
@@ -45,6 +46,7 @@ class DataSourceMapViewModel {
     
     let requerySubject = PassthroughSubject<Void, Never>()
     
+    @MainActor
     init(
         dataSource: any DataSourceDefinition,
         key: String,

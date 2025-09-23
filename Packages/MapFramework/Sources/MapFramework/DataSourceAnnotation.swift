@@ -36,6 +36,7 @@ public class UnknownDefinition: DataSourceDefinition {
     private init() { }
 }
 
+//@MainActor
 open class DataSourceAnnotation: NSObject, MKAnnotation, Identifiable, DataSourceIdentifiable {
     static func == (lhs: DataSourceAnnotation, rhs: DataSourceAnnotation) -> Bool {
         lhs.id == rhs.id

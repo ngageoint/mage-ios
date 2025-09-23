@@ -13,8 +13,9 @@ extension DataSources {
     static let featureItem: FeatureItemDefinition = FeatureItemDefinition.definition
 }
 
-class FeatureItemDefinition: DataSourceDefinition {
-    var mappable: Bool = true
+final
+class FeatureItemDefinition: DataSourceDefinition, Sendable {
+    var mappable: Bool = true 
 
     var color: UIColor = .magenta
 

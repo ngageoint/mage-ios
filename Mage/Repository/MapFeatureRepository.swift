@@ -12,9 +12,9 @@ import GeoPackage
 import DataSourceDefinition
 import MapFramework
 
-struct AnnotationsAndOverlays {
-    let annotations: [DataSourceAnnotation]
-    let overlays: [MKOverlay]
+struct AnnotationsAndOverlays: Sendable {
+    let annotations: [DataSourceAnnotation] // Error: Stored property 'annotations' of 'Sendable'-conforming struct 'AnnotationsAndOverlays' has non-sendable type '[DataSourceAnnotation]'
+    let overlays: [MKOverlay] // Error: Stored property 'overlays' of 'Sendable'-conforming struct 'AnnotationsAndOverlays' has non-sendable type '[any MKOverlay]'
 }
 
 protocol MapFeatureRepository {

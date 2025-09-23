@@ -12,6 +12,7 @@ import CoreGraphics
 import DataSourceTileOverlay
 import SwiftUI
 
+@MainActor
 public protocol MapMixin {
     var uuid: UUID { get }
     func cleanupMixin()
@@ -26,7 +27,7 @@ public protocol MapMixin {
         touchPoint: CGPoint
     ) async -> [String: [String]]
 
-    func setupMixin(mapView: MKMapView, mapState: MapState)
+    func setupMixin(mapView: MKMapView, mapState: MapState) 
     func removeMixin(mapView: MKMapView, mapState: MapState)
     func updateMixin(mapView: MKMapView, mapState: MapState)
 }

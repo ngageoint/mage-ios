@@ -11,6 +11,7 @@ import SwiftUI
 import MapKit
 import MAGEStyle
 
+@MainActor
 public struct MapRepresentable: UIViewRepresentable, MapProtocol {
     var notificationOnTap: NSNotification.Name = .MapItemsTapped
     var notificationOnLongPress: NSNotification.Name = .MapLongPress

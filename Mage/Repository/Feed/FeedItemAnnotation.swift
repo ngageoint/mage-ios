@@ -20,7 +20,7 @@ public class FeedItemAnnotation: DataSourceAnnotation {
     
     public override var dataSource: any DataSourceDefinition {
         get {
-            DataSources.feedItem
+            DataSources.feedItem // ERROR: Main actor-isolated conformance of 'FeedItemDefinition' to 'DataSourceDefinition' cannot be used in nonisolated context; this is an error in the Swift 6 language mode
         }
         set { }
     }

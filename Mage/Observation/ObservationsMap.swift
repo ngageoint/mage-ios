@@ -27,6 +27,7 @@ class ObservationsMap: DataSourceMap {
     @Injected(\.observationImageRepository)
     var imageRepository: ObservationImageRepository
 
+    @MainActor
     init() {
         super.init(
             dataSource: DataSources.observation

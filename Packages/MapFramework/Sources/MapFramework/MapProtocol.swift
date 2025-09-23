@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol MapProtocol {
     var mixins: MapMixins { get set }
     var mapState: MapState { get }

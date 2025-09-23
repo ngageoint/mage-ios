@@ -12,6 +12,7 @@ import Kingfisher
 import UIKit
 import CoreLocation
 
+@MainActor
 class MageNavStack: UIViewController {
     @Injected(\.currentLocationRepository)
     var currentLocationRepository: CurrentLocationRepository

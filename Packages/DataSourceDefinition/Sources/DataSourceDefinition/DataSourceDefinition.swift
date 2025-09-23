@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 
+//@MainActor
 public protocol DataSourceDefinition: ObservableObject {
     var mappable: Bool { get }
     var color: UIColor { get }

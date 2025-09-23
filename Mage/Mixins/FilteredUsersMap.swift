@@ -10,6 +10,7 @@ import Foundation
 import MapKit
 import MapFramework
 
+@MainActor
 protocol FilteredUsersMap {
     var mapView: MKMapView? { get set }
     var filteredUsersMapMixin: FilteredUsersMapMixin? { get set }

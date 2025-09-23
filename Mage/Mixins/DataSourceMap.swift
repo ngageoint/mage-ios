@@ -53,7 +53,7 @@ class DataSourceMap: MapMixin {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] annotations in
                 Task { [weak self] in
-                    await self?.handleFeatureChanges(annotations: annotations)
+                    self?.handleFeatureChanges(annotations: annotations)
                 }
             }
             .store(in: &cancellable)
@@ -62,7 +62,7 @@ class DataSourceMap: MapMixin {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] featureOverlays in
                 Task { [weak self] in
-                    await self?.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
+                    self?.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
                 }
             }
             .store(in: &cancellable)
@@ -71,7 +71,7 @@ class DataSourceMap: MapMixin {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] tileOverlays in
                 Task { [weak self] in
-                    await self?.updateTileOverlays(tileOverlays: tileOverlays)
+                    self?.updateTileOverlays(tileOverlays: tileOverlays)
                 }
             }
             .store(in: &cancellable)
@@ -266,6 +266,7 @@ class DataSourceMap: MapMixin {
         return !inserts.isEmpty || !removals.isEmpty
     }
     
+    @MainActor
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
         mapView.removeAnnotations(viewModel?.annotations ?? [])
