@@ -16,9 +16,13 @@ final class LoginRootViewModel: ObservableObject {
     let server: MageServer?
     weak var delegate: AuthDelegates?
     let user: User?
+    private let defaults: DefaultsStore
+
+    // Optional override for previews/tests (does not persist)
+    public var previewBaseURLOverride: String?
     
+    // State
     @Published var loginFailure: Bool = false
-    
     @Published var contactMessage: NSAttributedString?
     @Published var contactTitle: String?
     @Published var contactDetail: String?
@@ -28,15 +32,24 @@ final class LoginRootViewModel: ObservableObject {
     init(server: MageServer?,
          user: User?,
          delegate: AuthDelegates?,
-         loginFailure: Bool = false) {
+         loginFailure: Bool = false,
+         defaults: DefaultsStore = SystemDefaults()  // Injectable defaults store to make testing & previews easier
+    ) {
         self.server = server
         self.user = user
         self.delegate = delegate
         self.loginFailure = loginFailure
+        self.defaults = defaults
     }
     
-    var statusViewHidden: Bool { server != nil }
+    var statusViewHidden: Bool { resolvedBaseURLString != nil }
     var serverURLButtonEnabled: Bool { true }
+    
+    private var resolvedBaseURLString: String? {
+        if let o = previewBaseURLOverride, !o.isEmpty { return o }
+        if let u = defaults.baseServerUrl, !u.isEmpty { return u }
+        return nil
+    }
     
     var isLocalOnly: Bool {
         let ids = strategies.compactMap { $0["identifier"] as? String }
@@ -47,15 +60,23 @@ final class LoginRootViewModel: ObservableObject {
         baseURLString ?? "Set Server URL"
     }
     
-    var baseURLString: String? {
-        guard let url = MageServer.baseURL() else { return nil }
-        return url.absoluteString
+    var baseURLString: String? { resolvedBaseURLString }
+
+    var serverVersionLabel: String? {
+        let major = defaults.serverMajorVersion
+        let minor = defaults.serverMinorVersion
+        let micro = defaults.serverMicroVersion
+        
+        guard major > 0 else { return nil }
+        
+        let version = (micro > 0) ? "v\(major).\(minor).\(micro)" : "v\(major).\(minor)"
+        let suffix = isLocalOnly ? StrategyKind.local.rawValue : nil
+        return [version, suffix].compactMap { $0 }.joined(separator: " - ")
     }
     
+    
     var versionAndStrategyText: String {
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
-        let firstStrategy = (server?.strategies.first as? [String: Any])?["identifier"] as? String ?? "unknown"
-        return "v\(version) - \(firstStrategy)"
+        serverVersionLabel ?? ""
     }
     
     func onServerURLTapped() { delegate?.changeServerURL() }
@@ -74,12 +95,28 @@ final class LoginRootViewModel: ObservableObject {
     }
     
     var strategies: [[String: Any]] {
-        (server?.strategies as? [[String: Any]]) ?? []
+        if let stored = defaults.serverAuthenticationStrategies ?? defaults.authenticationStrategies {
+            var nonLocal: [[String: Any]] = []
+            var local:    [[String: Any]] = []
+            for (key, payload) in stored {
+                let dict: [String: Any] = ["identifier": key, "strategy": payload]
+                
+                if key == StrategyKind.local.rawValue {
+                    local.append(dict)
+                } else {
+                    nonLocal.append(dict)
+                }
+            }
+            nonLocal.sort { ($0["identifier"] as? String ?? "")  < ($1["identifier"] as? String ?? "") }
+            return nonLocal + local
+        }
+        return (server?.strategies as? [[String: Any]]) ?? []
     }
     
     var hasLocal: Bool {
-        strategies.contains { ($0["identifier"] as? String) == "local" }
+        strategies.contains { ($0["identifier"] as? String) == StrategyKind.local.rawValue }
     }
+
 }
 
 // Tap-to-dismiss helper

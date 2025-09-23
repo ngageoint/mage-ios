@@ -13,6 +13,7 @@ import OSLog
     static let kServerCompatibilitiesKey          = "serverCompatibilities"
     static let kServerMajorVersionKey             = "serverMajorVersion"
     static let kServerMinorVersionKey             = "serverMinorVersion"
+    static let kServerMicroVersionKey             = "serverMicroVersion"
     static let kServerAuthenticationStrategiesKey = "serverAuthenticationStrategies"
     
     @objc public enum ServerConfigLoadPolicy: Int {
@@ -96,6 +97,8 @@ import OSLog
             let minor  = ver["minor"] as? Int
         else { return false }
         
+        let micro = ver["micro"] as? Int ?? 0
+        
         for c in ranges {
             if let cMajor = c[kServerMajorVersionKey],
                let cMinor = c[kServerMinorVersionKey],
@@ -103,6 +106,7 @@ import OSLog
                cMinor <= minor {
                 UserDefaults.standard.serverMajorVersion = major
                 UserDefaults.standard.serverMinorVersion = minor
+                UserDefaults.standard.serverMicroVersion = micro
                 return true
             }
         }

@@ -1996,6 +1996,13 @@
 			);
 			target = 842F62842E6B43DF0066497D /* Authentication */;
 		};
+		84CA34172E8339E0002BEA2D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DefaultStore.swift,
+			);
+			target = 842F62842E6B43DF0066497D /* Authentication */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -2006,6 +2013,7 @@
 		847429002E7F266000572BB4 /* Coordinators */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Coordinators; sourceTree = "<group>"; };
 		847429012E7F266A00572BB4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
 		847429022E7F267400572BB4 /* Factory */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Factory; sourceTree = "<group>"; };
+		84CA34112E8339C4002BEA2D /* Support */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (84CA34172E8339E0002BEA2D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Support; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -2270,6 +2278,7 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				84CA34112E8339C4002BEA2D /* Support */,
 				847429022E7F267400572BB4 /* Factory */,
 				847429012E7F266A00572BB4 /* Views */,
 				847429002E7F266000572BB4 /* Coordinators */,
@@ -4476,6 +4485,7 @@
 				847429002E7F266000572BB4 /* Coordinators */,
 				847429012E7F266A00572BB4 /* Views */,
 				847429022E7F267400572BB4 /* Factory */,
+				84CA34112E8339C4002BEA2D /* Support */,
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
 			);
 			name = MAGE;

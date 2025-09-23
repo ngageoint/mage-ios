@@ -217,6 +217,12 @@ extension UserDefaults {
         }
     }
     
+    @objc var serverMicroVersion: Int {
+        get { integer(forKey: MageServer.kServerMicroVersionKey) }
+        set { set(newValue, forKey: MageServer.kServerMicroVersionKey) }
+        
+    }
+    
     @objc public var locationServiceDisabled: Bool {
         get {
             return bool(forKey: #function)

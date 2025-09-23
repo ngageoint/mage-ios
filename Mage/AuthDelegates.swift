@@ -9,4 +9,4 @@
 import Foundation
 import Authentication
 
-public typealias AuthDelegates = NSObjectProtocol & LoginDelegate & IDPLoginDelegate
+public typealias AuthDelegates = LoginDelegate & IDPLoginDelegate
