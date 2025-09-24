@@ -30,6 +30,8 @@ class MapDirectionsMixin: NSObject, MapMixin {
     @Injected(\.feedItemRepository)
     var feedItemRepository: FeedItemRepository
     
+    var imageRepository: ObservationImageRepository
+    
     var directionsToItemObserver: Any?
     var startStraightLineNavigationObserver: Any?
     var mapView: MKMapView?
@@ -46,7 +48,8 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var feedItemFetchedResultsController: NSFetchedResultsController<FeedItem>?
     private var timer: Timer?
     
-    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, locationManager: CLLocationManager? = nil, sourceView: UIView? = nil) {
+    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, locationManager: CLLocationManager? = nil, sourceView: UIView? = nil, imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
+        self.imageRepository = imageRepository
         self.mapDirections = mapDirections
         self.mapView = mapDirections.mapView
         self.viewController = viewController
@@ -126,7 +129,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
             if let observationLocation = await observationLocationRepository.getObservationLocation(observationLocationUri: uri)
             {
                 title = observationLocation.primaryFieldText ?? "Observation"
-                if let imageName = ObservationImageRepositoryImpl.shared.imageName(
+                if let imageName = imageRepository.imageName(
                     eventId: observationLocation.eventId,
                     formId: observationLocation.formId,
                     primaryFieldText: observationLocation.primaryFieldText,

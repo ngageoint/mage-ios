@@ -12,6 +12,7 @@ import DataSourceTileOverlay
 import MapFramework
 
 class ObservationMap: DataSourceMap {
+    var imageRepository: ObservationImageRepository
     
     override var REFRESH_KEY: String {
         "ObservationMapDateUpdated"
@@ -20,8 +21,10 @@ class ObservationMap: DataSourceMap {
     
     init(
         repository: TileRepository? = nil,
-        mapFeatureRepository: MapFeatureRepository? = nil
+        mapFeatureRepository: MapFeatureRepository? = nil,
+        imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared
     ) {
+        self.imageRepository = imageRepository
         super.init(dataSource: DataSources.observation)
         viewModel = DataSourceMapViewModel(
             dataSource: dataSource,
@@ -29,7 +32,6 @@ class ObservationMap: DataSourceMap {
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
-//        , repository: repository, mapFeatureRepository: mapFeatureRepository)
     }
     
     override func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
@@ -55,7 +57,7 @@ class ObservationMap: DataSourceMap {
 
         Task {
             if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
-                let image = await ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: iconPath)
+                let image = await imageRepository.imageAtPath(imagePath: iconPath)
                 annotationView.image = image
                 annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
                 annotationView.accessibilityLabel = "Observation"

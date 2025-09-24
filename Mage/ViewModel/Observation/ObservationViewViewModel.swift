@@ -29,6 +29,8 @@ class ObservationViewViewModel: NSObject, ObservableObject {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    var imageRepository: ObservationImageRepository
+    
     @Published
     var event: EventModel?
     
@@ -61,7 +63,7 @@ class ObservationViewViewModel: NSObject, ObservableObject {
     
     var iconPath: String? {
         if let eventRemoteId = event?.remoteId, let formid = primaryEventForm?.formId {
-            return ObservationImageRepositoryImpl.shared.imageName(eventId: Int64(truncating: eventRemoteId), formId: formid, primaryFieldText: primaryFieldText, secondaryFieldText: secondaryFieldText)
+            return imageRepository.imageName(eventId: Int64(truncating: eventRemoteId), formId: formid, primaryFieldText: primaryFieldText, secondaryFieldText: secondaryFieldText)
         }
         return nil
     }
@@ -96,7 +98,8 @@ class ObservationViewViewModel: NSObject, ObservableObject {
         
     var cancellables = Set<AnyCancellable>()
     
-    init(uri: URL) {
+    init(uri: URL, imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
+        self.imageRepository = imageRepository
         super.init()
         
         $observationModel.sink { [weak self] observationModel in

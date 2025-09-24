@@ -15,6 +15,12 @@ class FetchEventsUseCase {
     @Injected(\.userRepository)
     var userRepository: UserRepository
     
+    var imageRepository: ObservationImageRepository
+    
+    init(imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
+        self.imageRepository = imageRepository
+    }
+    
     func execute() {
         Task {
             let userModel = await userRepository.fetchMyself()
@@ -38,7 +44,7 @@ class FetchEventsUseCase {
             let formTask = Form.operationToPullFormIcons(eventId: remoteId) {
                 NSLog("Pulled form for event")
                 Task {
-                    await ObservationImageRepositoryImpl.shared.clearCache()
+                    await self.imageRepository.clearCache()
                 }
                 NotificationCenter.default.post(name: .MAGEFormFetched, object: e)
             } failure: { error in

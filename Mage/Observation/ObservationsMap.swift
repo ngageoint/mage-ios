@@ -23,13 +23,13 @@ class ObservationsMap: DataSourceMap {
     
     @Injected(\.observationIconRepository)
     var iconRepository: ObservationIconRepository
+    
+    var imageRepository: ObservationImageRepository
 
-    init() {
+    init(imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
+        self.imageRepository = imageRepository
         super.init(
             dataSource: DataSources.observation
-//            ,
-//            repository: repository,
-//            mapFeatureRepository: mapFeatureRepository
         )
         viewModel = DataSourceMapViewModel(
             dataSource: dataSource,
@@ -207,7 +207,7 @@ class ObservationsMap: DataSourceMap {
            let annotationView = annotationView {
 
             Task {
-                let image = await ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: iconPath)
+                let image = await imageRepository.imageAtPath(imagePath: iconPath)
 
                 await MainActor.run {
                     // double-check the annotationView is still in use

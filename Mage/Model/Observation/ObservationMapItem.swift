@@ -80,7 +80,7 @@ struct ObservationMapItem: Equatable, Hashable {
 }
 
 extension ObservationMapItem {
-    init(observation: ObservationLocation) {
+    init(observation: ObservationLocation, imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
         self.observationId = observation.observation?.objectID.uriRepresentation()
         self.observationLocationId = observation.objectID.uriRepresentation()
         self.formId = Int(observation.formId)
@@ -95,7 +95,7 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
-        self.iconPath = ObservationImageRepositoryImpl.shared.imageName(
+        self.iconPath = imageRepository.imageName(
             eventId: eventId,
             formId: formId,
             primaryFieldText: primaryFieldText,
