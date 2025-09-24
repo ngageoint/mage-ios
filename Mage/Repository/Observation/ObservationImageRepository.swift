@@ -24,12 +24,13 @@ protocol ObservationImageRepository {
 class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObject {
     
     static let shared = ObservationImageRepositoryImpl()
-    private let cache = ImageCache()
+    private let cache: ImageCache
     private var documentsDirectory: String
     let annotationScaleWidth = 35.0
     
     // prevents accidental new instances
     private init() {
+        self.cache = ImageCache()
         self.documentsDirectory = {
             let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
             let documentsDirectory = paths[0]
@@ -157,6 +158,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         return await imageAtPath(imagePath: imageName(observation: observation))
     }
     
+    @MainActor
     func imageAtPath(imagePath: String?) async -> UIImage {
         // 0) Fallback
         let fallback = UIImage(named: "defaultMarker")!
@@ -201,7 +203,6 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
             let scale = image.size.width / annotationScaleWidth
             let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
             await cache.set(scaledImage, for: cacheKey)
-//            imageCache.setObject(scaledImage, forKey: cacheKey)
             scaledImage.accessibilityIdentifier = resolvedPath
             return scaledImage
         }
@@ -210,53 +211,4 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         fallback.accessibilityIdentifier = resolvedPath
         return fallback
     }
-
-    
-    func imageAtPath_ugh(imagePath: String?) async -> UIImage {
-        // Default if we can’t find anything
-        let fallback = UIImage(named: "defaultMarker")!
-
-        // 1) Validate input
-        guard let rawPath = imagePath, !rawPath.isEmpty else {
-            return fallback
-        }
-
-        // 2) Resolve to an actual file on disk
-        var resolvedPath = rawPath
-        let fm = FileManager.default
-
-        if !fm.fileExists(atPath: rawPath) {
-            // Treat rawPath as a prefix, search its directory for a file that starts with it
-            let candidate = URL(fileURLWithPath: rawPath)
-            let dirURL = candidate.deletingLastPathComponent()
-            let prefix = candidate.lastPathComponent
-
-            if let urls = try? fm.contentsOfDirectory(at: dirURL, includingPropertiesForKeys: nil) {
-                if let match = urls.first(where: { $0.lastPathComponent.hasPrefix(prefix) }) {
-                    resolvedPath = match.path
-                }
-            }
-        }
-
-        // 3) Use a cache key based on the resolved path
-        let cacheKey = resolvedPath as NSString
-        if let cached = await cache.get(for: cacheKey) {
-            cached.accessibilityIdentifier = resolvedPath
-            return cached
-        }
-
-        // 4) Load, scale, cache
-        if let image = UIImage(contentsOfFile: resolvedPath), let cgImage = image.cgImage {
-            let scale = image.size.width / annotationScaleWidth
-            let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
-            await cache.set(scaledImage, for: cacheKey)
-            scaledImage.accessibilityIdentifier = resolvedPath
-            return scaledImage
-        }
-
-        // 5) Fallback if the file still wasn’t found/readable
-        fallback.accessibilityIdentifier = resolvedPath
-        return fallback
-    }
-
 }

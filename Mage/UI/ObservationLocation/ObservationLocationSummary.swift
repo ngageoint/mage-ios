@@ -88,7 +88,8 @@ struct ObservationLocationSummary: View {
             }
         }
     }
-    
+
+    @MainActor
     private func loadImage() async {
         guard let path = iconPath else { return }
         let image = await ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: path)
