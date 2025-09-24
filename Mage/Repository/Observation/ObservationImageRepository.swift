@@ -9,39 +9,56 @@
 import Foundation
 
 protocol ObservationImageRepository {
-    func clearCache()
+    func clearCache() async
     func imageName(
         eventId: Int64?,
         formId: Int?,
         primaryFieldText: String?,
         secondaryFieldText: String?
     ) -> String?
-    func imageName(observation: Observation?) -> String?
-    func imageAtPath(imagePath: String?) -> UIImage
-    func image(observation: Observation) -> UIImage
+    func imageName(observation: Observation?) async -> String?
+    func imageAtPath(imagePath: String?) async -> UIImage
+    func image(observation: Observation) async -> UIImage
 }
 
 class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObject {
     
     static let shared = ObservationImageRepositoryImpl()
-    private init() {} // prevents accidental new instances
-    
+    private let cache = ImageCache()
+    private var documentsDirectory: String
     let annotationScaleWidth = 35.0
     
-    private var imageCache: NSCache<NSString, UIImage> = {
-        let cache = NSCache<NSString, UIImage>()
-        cache.countLimit = 100
-        return cache
-    }()
+    // prevents accidental new instances
+    private init() {
+        self.documentsDirectory = {
+            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            let documentsDirectory = paths[0]
+            return documentsDirectory as String
+        }()
+    }
     
-    private lazy var documentsDirectory: String = {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentsDirectory = paths[0]
-        return documentsDirectory as String
-    }()
+    actor ImageCache {
+        private var cache = NSCache<NSString, UIImage>()
+        
+        init(limit: Int = 100) {
+            cache.countLimit = limit
+        }
+        
+        func get(for key: NSString) -> UIImage? {
+            cache.object(forKey: key)
+        }
+        
+        func set(_ image: UIImage, for key: NSString) {
+            cache.setObject(image, forKey: key)
+        }
+        
+        func clear() {
+            cache.removeAllObjects()
+        }
+    }
     
-    func clearCache() {
-        imageCache.removeAllObjects()
+    func clearCache() async {
+        await cache.clear()
     }
     
     func imageName(
@@ -136,11 +153,11 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         )
     }
     
-    func image(observation: Observation) -> UIImage {
-        return imageAtPath(imagePath: imageName(observation: observation))
+    func image(observation: Observation) async -> UIImage {
+        return await imageAtPath(imagePath: imageName(observation: observation))
     }
     
-    func imageAtPath(imagePath: String?) -> UIImage {
+    func imageAtPath(imagePath: String?) async -> UIImage {
         // 0) Fallback
         let fallback = UIImage(named: "defaultMarker")!
 
@@ -174,7 +191,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
 
         // 4) Cache key based on the resolved path
         let cacheKey = resolvedPath as NSString
-        if let cached = imageCache.object(forKey: cacheKey) {
+        if let cached = await cache.get(for: cacheKey) {
             cached.accessibilityIdentifier = resolvedPath
             return cached
         }
@@ -183,7 +200,8 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         if let image = UIImage(contentsOfFile: resolvedPath), let cgImage = image.cgImage {
             let scale = image.size.width / annotationScaleWidth
             let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
-            imageCache.setObject(scaledImage, forKey: cacheKey)
+            await cache.set(scaledImage, for: cacheKey)
+//            imageCache.setObject(scaledImage, forKey: cacheKey)
             scaledImage.accessibilityIdentifier = resolvedPath
             return scaledImage
         }
@@ -194,7 +212,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
     }
 
     
-    func imageAtPath_ugh(imagePath: String?) -> UIImage {
+    func imageAtPath_ugh(imagePath: String?) async -> UIImage {
         // Default if we can’t find anything
         let fallback = UIImage(named: "defaultMarker")!
 
@@ -222,7 +240,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
 
         // 3) Use a cache key based on the resolved path
         let cacheKey = resolvedPath as NSString
-        if let cached = imageCache.object(forKey: cacheKey) {
+        if let cached = await cache.get(for: cacheKey) {
             cached.accessibilityIdentifier = resolvedPath
             return cached
         }
@@ -231,7 +249,7 @@ class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObje
         if let image = UIImage(contentsOfFile: resolvedPath), let cgImage = image.cgImage {
             let scale = image.size.width / annotationScaleWidth
             let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
-            imageCache.setObject(scaledImage, forKey: cacheKey)
+            await cache.set(scaledImage, for: cacheKey)
             scaledImage.accessibilityIdentifier = resolvedPath
             return scaledImage
         }

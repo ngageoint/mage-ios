@@ -53,14 +53,16 @@ class ObservationMap: DataSourceMap {
             annotationView?.isEnabled = true
         }
 
-        if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
-            let image = ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: iconPath)
-            annotationView.image = image
-            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
-            annotationView.accessibilityLabel = "Observation"
-            annotationView.accessibilityValue = "Observation"
-            annotationView.displayPriority = .required
-            annotationView.canShowCallout = true
+        Task {
+            if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
+                let image = await ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: iconPath)
+                annotationView.image = image
+                annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
+                annotationView.accessibilityLabel = "Observation"
+                annotationView.accessibilityValue = "Observation"
+                annotationView.displayPriority = .required
+                annotationView.canShowCallout = true
+            }
         }
         return annotationView
     }
