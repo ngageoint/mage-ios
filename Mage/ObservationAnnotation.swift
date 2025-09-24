@@ -83,39 +83,6 @@ import DateTools
         return viewForAnnotation(on: on, with: nil, scheme: scheme)
     }
     
-//    @objc public override func viewForAnnotation(on: MKMapView, with: AnnotationDragCallback?, scheme: MDCContainerScheming) -> MKAnnotationView {
-//        var annotationView = on.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID)
-//        
-//        if let annotationView = annotationView {
-//            annotationView.annotation = self
-//        } else {
-//            annotationView = ObservationAnnotationView(annotation: self, reuseIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID, mapView: on, dragCallback: with)
-//            annotationView?.isEnabled = true
-//        }
-//        
-//        if point {
-//            if let observation = observation {
-//                let image = ObservationImageRepositoryImpl.shared.image(observation: observation);
-//                annotationView?.image = image;
-//                annotationView?.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
-//            }
-//        } else {
-//            annotationView?.image = nil
-//            annotationView?.frame = .zero
-//            annotationView?.centerOffset = .zero
-//        }
-//        if let annotationView = annotationView {
-//            annotationView.accessibilityLabel = "Observation"
-//            annotationView.accessibilityValue = "Observation"
-//            annotationView.displayPriority = .required
-//            view = annotationView
-//            return annotationView
-//        } else {
-//            return MKAnnotationView(annotation: self, reuseIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID)
-//        }
-//    }
-    
-    // standard UIKit pattern: return something immediately, then update asynchronously when data arrives.
     @objc public override func viewForAnnotation(
         on: MKMapView,
         with: AnnotationDragCallback?,
@@ -135,11 +102,12 @@ import DateTools
             annotationView?.isEnabled = true
         }
 
-        // Default/placeholder
+        // --- Default placeholder immediately ---
         annotationView?.image = UIImage(named: "defaultMarker")
         annotationView?.centerOffset = .zero
 
         if point, let observation = observation, let annotationView {
+            // --- Kick off async image load ---
             Task {
                 let image = await ObservationImageRepositoryImpl.shared.image(observation: observation)
                 await MainActor.run {

@@ -175,46 +175,6 @@ class ObservationsMap: DataSourceMap {
             }
         }
     }
-
-//    override func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
-//        guard let mapItemAnnotation = annotation as? ObservationMapItemAnnotation else {
-//            return nil
-//        }
-//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
-//
-//        if let annotationView = annotationView {
-//            annotationView.annotation = annotation
-//        } else {
-//            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
-//            annotationView?.isEnabled = true
-//        }
-//
-//        let image = ObservationImageRepositoryImpl.shared.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
-//        if let annotationView = annotationView {
-//            annotationView.image = image
-//
-//            var size = CGSize(width: 40, height: 40)
-//            let max = max(image.size.height, image.size.width)
-//            size.width *= ((image.size.width) / max)
-//            size.height *= ((image.size.height) / max)
-//            annotationView.frame.size = size
-//            annotationView.canShowCallout = false
-//            annotationView.isEnabled = false
-//            annotationView.accessibilityLabel = "Enlarged"
-//            annotationView.zPriority = .max
-//            annotationView.selectedZPriority = .max
-//
-//
-//            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
-////            annotationView.accessibilityLabel = "Observation"
-////            annotationView.accessibilityValue = "Observation"
-//            annotationView.displayPriority = .required
-////            annotationView.canShowCallout = true
-//        }
-//        mapItemAnnotation.annotationView = annotationView
-//        currentAnnotationViews[mapItemAnnotation.id] = annotationView
-//        return annotationView
-//    }
     
     override func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
         guard let mapItemAnnotation = annotation as? ObservationMapItemAnnotation else {
