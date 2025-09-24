@@ -19,38 +19,38 @@ protocol DefaultsStore: AnyObject {
 
 // MARK: Production wrapper (UserDefaults.standard)
 final class SystemDefaults: DefaultsStore {
-    private let u: UserDefaults
+    private let systemDefaults: UserDefaults
     
-    init(_ u: UserDefaults = .standard) { self.u = u }
+    init(_ u: UserDefaults = .standard) { self.systemDefaults = u }
     
     var baseServerUrl: String? {
-        get { u.string(forKey: "baseServerUrl") }
-        set { u.set(newValue, forKey: "baseServerUrl") }
+        get { systemDefaults.string(forKey: "baseServerUrl") }
+        set { systemDefaults.set(newValue, forKey: "baseServerUrl") }
     }
 
     var serverMajorVersion: Int {
-        get { u.integer(forKey: "serverMajorVersion") }
-        set { u.set(newValue, forKey: "serverMajorVersion") }
+        get { systemDefaults.integer(forKey: "serverMajorVersion") }
+        set { systemDefaults.set(newValue, forKey: "serverMajorVersion") }
     }
 
     var serverMinorVersion: Int {
-        get { u.integer(forKey: "serverMinorVersion") }
-        set { u.set(newValue, forKey: "serverMinorVersion") }
+        get { systemDefaults.integer(forKey: "serverMinorVersion") }
+        set { systemDefaults.set(newValue, forKey: "serverMinorVersion") }
     }
 
     var serverMicroVersion: Int {
-        get { u.integer(forKey: "serverMicroVersion") }
-        set { u.set(newValue, forKey: "serverMicroVersion") }
+        get { systemDefaults.integer(forKey: "serverMicroVersion") }
+        set { systemDefaults.set(newValue, forKey: "serverMicroVersion") }
     }
 
     var authenticationStrategies: [String: [AnyHashable: Any]]? {
-        get { u.dictionary(forKey: "authenticationStrategies") as? [String: [AnyHashable: Any]] }
-        set { u.set(newValue, forKey: "authenticationStrategies") }
+        get { systemDefaults.dictionary(forKey: "authenticationStrategies") as? [String: [AnyHashable: Any]] }
+        set { systemDefaults.set(newValue, forKey: "authenticationStrategies") }
     }
     
     var serverAuthenticationStrategies: [String : [AnyHashable : Any]]? {
-        get { u.dictionary(forKey: "serverAuthenticationStrategies") as? [String : [AnyHashable : Any]] }
-        set { u.set(newValue, forKey: "serverAuthenticationStrategies") }
+        get { systemDefaults.dictionary(forKey: "serverAuthenticationStrategies") as? [String : [AnyHashable : Any]] }
+        set { systemDefaults.set(newValue, forKey: "serverAuthenticationStrategies") }
     }
 }
 

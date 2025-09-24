@@ -18,9 +18,9 @@ public final class ChangePasswordViewModel: ObservableObject {
     @Published public var errorMessage: String?
     @Published public var didSucceed = false
     
-    private let auth: AuthService
+    private let authService: AuthService
     
-    public init(auth: AuthService) { self.auth = auth }
+    public init(auth: AuthService) { self.authService = auth }
     
     public convenience init(deps: AuthDependencies) {
         precondition(deps.authService != nil, "AuthDependencies.authService must be injected")
@@ -48,7 +48,7 @@ public final class ChangePasswordViewModel: ObservableObject {
                                             newPassword: newPassword,
                                             confirmNewPassword: confirmNewPassword)
             
-            try await auth.changePassword(req)
+            try await authService.changePassword(req)
             didSucceed = true
         } catch let err as AuthError {
             errorMessage = err.uiMessage(flow: .changePassword)

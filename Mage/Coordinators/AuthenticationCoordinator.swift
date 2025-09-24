@@ -22,14 +22,14 @@ public final class AuthFlowCoordinator: NSObject {
     
     // MARK: - Stored state
     private weak var nav: UINavigationController?
-    private weak var appDelegate: AuthenticationDelegate?  // the *external* app-level delegate
+    private weak var authenticationDelegate: AuthenticationDelegate?  // the *external* app-level delegate
     private var scheme: AnyObject?
     private weak var context: NSManagedObjectContext?
     public var server: MageServer?
     private let log = Logger(subsystem: "MAGE.Auth", category: "AuthFlow")
     
-    private func isSuccess(_ s: AuthenticationStatus) -> Bool {
-        switch s {
+    private func isSuccess(_ status: AuthenticationStatus) -> Bool {
+        switch status {
         case .success: return true
         case .registrationSuccess: return true
         case .accountCreationSuccess: return true
@@ -44,7 +44,7 @@ public final class AuthFlowCoordinator: NSObject {
                 andScheme scheme: AnyObject? = nil,
                 context: NSManagedObjectContext? = nil) {
         self.nav = navigationController
-        self.appDelegate = delegate
+        self.authenticationDelegate = delegate
         self.scheme = scheme
         self.context = context
         super.init()
@@ -60,11 +60,11 @@ public final class AuthFlowCoordinator: NSObject {
         }
         
         MageServer.server(url: url,
-                          success: { [weak self] srv in
+                          success: { [weak self] mageServer in
             guard let self else { return }
             Task { @MainActor in
-                self.server = srv
-                self.showLoginView(for: srv)
+                self.server = mageServer
+                self.showLoginView(for: mageServer)
             }
         }, failure: { error in
             NSLog("[Auth] Failed to contact server: \(error.localizedDescription)")
@@ -105,7 +105,7 @@ public final class AuthFlowCoordinator: NSObject {
 extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     
     @objc public func changeServerURL() {
-        appDelegate?.changeServerUrl()
+        authenticationDelegate?.changeServerUrl()
     }
     
     // EXACT selector: loginWithParameters:withAuthenticationStrategy:complete:
@@ -135,7 +135,7 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
                 complete(status, error)
                 
                 if let self, self.isSuccess(status) {
-                    self.appDelegate?.authenticationSuccessful()
+                    self.authenticationDelegate?.authenticationSuccessful()
                 }
             }
         }
@@ -170,8 +170,8 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     /// Finish the login by calling the existing login path
     public func idpCoordinatorDidCompleteSignIn(parameters: [String: Any]) {
         // Derive the strategy key expected by the auth layer.
-        let sd = parameters["strategy"] as? [String: Any]
-        let strategy = (sd?["identifier"] as? String) ?? (sd?["type"] as? String) ?? "idp"
+        let strategyParameter = parameters["strategy"] as? [String: Any]
+        let strategy = (strategyParameter?["identifier"] as? String) ?? (strategyParameter?["type"] as? String) ?? "idp"
         
         // Reuse the same login path.
         self.login(withParameters: parameters as NSDictionary,

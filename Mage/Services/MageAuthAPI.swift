@@ -22,12 +22,12 @@ import Foundation
         }
         
         let allowed = CharacterSet.urlQueryAllowed
-        let u = username.addingPercentEncoding(withAllowedCharacters: allowed) ?? username
-        let b = background.addingPercentEncoding(withAllowedCharacters: allowed) ?? background
-        let url = "\(base)/api/users/signups/verifications?username=\(u)&background=\(b)"
+        let usernameString = username.addingPercentEncoding(withAllowedCharacters: allowed) ?? username
+        let backgroundString = background.addingPercentEncoding(withAllowedCharacters: allowed) ?? background
+        let url = "\(base)/api/users/signups/verifications?username=\(usernameString)&background=\(backgroundString)"
         
-        let mgr = MageSessionManager.shared()
-        let task = mgr?.get_TASK(url, parameters: nil, progress: nil, success: { task, response in
+        let sessionManager = MageSessionManager.shared()
+        let task = sessionManager?.get_TASK(url, parameters: nil, progress: nil, success: { task, response in
             // response may be JSON or Data; handle both
             if let dict = response as? [String: Any] {
                 let token = (dict["tokan"] as? String) ?? (dict["id"] as? String)
@@ -46,7 +46,7 @@ import Foundation
             completion(nil, nil, error as NSError)
         })
         
-        if let task { mgr?.addTask(task) }
+        if let task { sessionManager?.addTask(task) }
     }
     
     // POST /api/users/signups/verifications (token sent along with body)
@@ -64,13 +64,13 @@ import Foundation
         let url = "\(base)/api/users/signups/verifications"
         
         // If your server expects the token in headers, add it here. If it expects it in the body, you're already passing it.
-        let mgr = MageSessionManager.shared()
-        let task = mgr?.post_TASK(url, parameters: params, progress: nil, success: { task, response in
+        let sessionManager = MageSessionManager.shared()
+        let task = sessionManager?.post_TASK(url, parameters: params, progress: nil, success: { task, response in
             completion(task.response as? HTTPURLResponse, response as? Data, nil)
         }, failure: { task, error in
             completion(task?.response as? HTTPURLResponse, nil, error as NSError)
         })
-        if let task { mgr?.addTask(task) }
+        if let task { sessionManager?.addTask(task) }
     }
     
     // PUT/POST change password (path can be adjusted to match server)
@@ -92,18 +92,18 @@ import Foundation
             "passwordconfirm": confirmedPassword
         ]
         
-        let mgr = MageSessionManager.shared()
+        let sessionManager = MageSessionManager.shared()
         // If you don't have put_TASK, using post_TASK works too if server accepts POST.
-        let task = mgr?.put_TASK(url, parameters: body, success: { task, _ in
+        let task = sessionManager?.put_TASK(url, parameters: body, success: { task, _ in
             completion(task.response as? HTTPURLResponse, nil)
         }, failure: { task, error in
             completion(task?.response as? HTTPURLResponse, error as NSError)
-        }) ?? mgr?.post_TASK(url, parameters: body, progress: nil, success: { task, _ in
+        }) ?? sessionManager?.post_TASK(url, parameters: body, progress: nil, success: { task, _ in
             completion(task.response as? HTTPURLResponse, nil)
         }, failure: { task, error in
             completion(task?.response as? HTTPURLResponse, error as NSError)
         })
         
-        if let task { mgr?.addTask(task) }
+        if let task { sessionManager?.addTask(task) }
     }
 }

@@ -15,9 +15,9 @@ public enum AuthStrategy: Equatable {
     case offline
     
     public static func from(_ raw: String?) -> AuthStrategy {
-        let s = (raw ?? "").lowercased()
+        let strategy = (raw ?? "").lowercased()
         
-        switch s {
+        switch strategy {
         case "local", "userpass", "usernamepassword":
             return .local
         case "ldap":
@@ -25,10 +25,10 @@ public enum AuthStrategy: Equatable {
         case "offline":
             return .offline
         case "oidc", "sso", "idp", "saml", "geoaxis", "geoaxisconnect":
-            return .idp(provider: s)
+            return .idp(provider: strategy)
         default:
             // Treat unknown strategy names as IdP so the flow still works
-            return .idp(provider: s.isEmpty ? nil : s)
+            return .idp(provider: strategy.isEmpty ? nil : strategy)
         }
     }
 }

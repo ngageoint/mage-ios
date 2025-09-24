@@ -21,26 +21,26 @@ extension AuthDependencies {
     public static func resolvedForDebug(
         http: HTTPPerforming = HTTPLoginPerformer()
     ) -> AuthDependencies {
-        let d = AuthDependencies.shared
-        d.http = http
-        return d
+        let authDependencies = AuthDependencies.shared
+        authDependencies.http = http
+        return authDependencies
     }
 }
 #endif
 
 public extension AuthDependencies {
     var requireAuthStore: AuthStore {
-        guard let s = authStore else { fatalError("AuthDependencies.authStore is not configured") }
-        return s
+        guard let store = authStore else { fatalError("AuthDependencies.authStore is not configured") }
+        return store
     }
  
     var requireSessionStore: SessionStore {
-        guard let s = sessionStore else { fatalError("AuthDependencies.sessionStore is not configured") }
-        return s
+        guard let store = sessionStore else { fatalError("AuthDependencies.sessionStore is not configured") }
+        return store
     }
     
     var requireAuthService: AuthService {
-        guard let s = authService else { fatalError("AuthDependencies.authService is not configured") }
-        return s
+        guard let store = authService else { fatalError("AuthDependencies.authService is not configured") }
+        return store
     }
 }

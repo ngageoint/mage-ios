@@ -40,12 +40,12 @@ enum CredentialLogin {
     ) {
         Task {
             @inline(__always)
-            func finish(_ s: AuthenticationStatus, _ m: String?) async {
+            func finish(_ status: AuthenticationStatus, _ message: String?) async {
                 
                 if deliverOnMain {
-                    await MainActor.run { complete(s, m) }
+                    await MainActor.run { complete(status, message) }
                 } else {
-                    complete(s, m)
+                    complete(status, message)
                 }
             }
             

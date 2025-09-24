@@ -24,13 +24,13 @@ public extension AuthError {
             return (.unableToAuthenticate, "Account disabled.")
             
         case .rateLimited(let retryAfterSeconds):
-            let msg: String
-            if let s = retryAfterSeconds, s > 0 {
-                msg = "Too many attempts. Try again in \(s)s."
+            let message: String
+            if let seconds = retryAfterSeconds, seconds > 0 {
+                message = "Too many attempts. Try again in \(seconds)s."
             } else {
-                msg = "Too many attempts. Try again later."
+                message = "Too many attempts. Try again later."
             }
-            return (.error, msg)
+            return (.error, message)
             
         case .invalidInput(let message):
             return (.error, message ?? "Invalid input.")
@@ -38,8 +38,8 @@ public extension AuthError {
         case .server(let status, let message):
             return (.error, message ?? "Server error (\(status)).")
             
-        case .network(underlying: let underlying):
-            return (.error, _friendlyURLErrorMessage(from: underlying))
+        case .network(underlying: let underlyingError):
+            return (.error, _friendlyURLErrorMessage(from: underlyingError))
             
         case .malformedResponse:
             return (.error, "Malformed server response.")

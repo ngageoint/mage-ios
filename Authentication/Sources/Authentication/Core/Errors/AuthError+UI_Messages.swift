@@ -19,8 +19,8 @@ public extension AuthError {
     /// Converts an AuthError into a user-facing string appropriate for the current flow.
     func uiMessage(flow: AuthFlow) -> String {
         switch self {
-        case .invalidInput(let msg):
-            if let msg, !msg.isEmpty { return msg }
+        case .invalidInput(let message):
+            if let message, !message.isEmpty { return message }
             
             switch flow {
             case .signup:           return "Please fix the highlighted fields and try again."
@@ -35,14 +35,14 @@ public extension AuthError {
             }
             
         case .rateLimited(let seconds):
-            if let s = seconds, s > 0 { return "Too many requests. Try again in \(s)s." }
+            if let secs = seconds, secs > 0 { return "Too many requests. Try again in \(secs)s." }
             return "Too many requests. Please try again later."
             
         case .network:
             return "Network error. Check your connection and retry."
             
-        case .server(let status, let msg):
-            return msg ?? "Server error (\(status)). Please try again."
+        case .server(let status, let message):
+            return message ?? "Server error (\(status)). Please try again."
             
         case .malformedResponse:
             return "Unexpected server response. Please try again."

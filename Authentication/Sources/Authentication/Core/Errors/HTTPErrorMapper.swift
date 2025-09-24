@@ -12,31 +12,31 @@ public enum HTTPErrorMapper {
     static func bestMessage(from json: [String: Any]?) -> String? {
         guard let json else { return nil }
         
-        if let s = json["message"] as? String { return s }
-        if let s = json["error"]   as? String { return s }
+        if let messageString = json["message"] as? String { return messageString }
+        if let errorString = json["error"]   as? String { return errorString }
         
         if let errors = json["errors"] as? [String: Any] {
-            for v in errors.values {
-                if let s = v as? String { return s }
-                if let arr = v as? [String], let s = arr.first { return s }
+            for value in errors.values {
+                if let valueString = value as? String { return valueString }
+                if let valueArray = value as? [String], let valueString = valueArray.first { return valueString }
             }
         }
         return nil
     }
     
     static func bestMessage(from data: Data?) -> String? {
-        guard let d = data, !d.isEmpty else { return nil }
-        if let json = try? JSONSerialization.jsonObject(with: d) as? [String: Any] {
+        guard let messageData = data, !messageData.isEmpty else { return nil }
+        if let json = try? JSONSerialization.jsonObject(with: messageData) as? [String: Any] {
             return bestMessage(from: json)
         }
-        return String(data: d, encoding: .utf8)
+        return String(data: messageData, encoding: .utf8)
     }
     
     static func retryAfterSeconds(from headers: [AnyHashable: Any]) -> Int? {
-        for (k, v) in headers {
+        for (k, value) in headers {
             guard let key = k as? String, key.caseInsensitiveCompare("Retry-After") == .orderedSame else { continue }
-            if let s = v as? String, let i = Int(s.trimmingCharacters(in: .whitespaces)) { return i }
-            if let n = v as? NSNumber { return n.intValue }
+            if let stringValue = value as? String, let i = Int(stringValue.trimmingCharacters(in: .whitespaces)) { return i }
+            if let numberValue = value as? NSNumber { return numberValue.intValue }
         }
         return nil
     }
@@ -59,11 +59,11 @@ public enum HTTPErrorMapper {
             return .rateLimited(retryAfterSeconds: retryAfterSeconds(from: headers))
             
         case 400, 422:
-            let msgLower = bestMessage(from: bodyData)?.lowercased()
-            if let m = msgLower, (m.contains("credential") || m.contains("password")) {
+            let messageLowerCased = bestMessage(from: bodyData)?.lowercased()
+            if let message = messageLowerCased, (message.contains("credential") || message.contains("password")) {
                 return .invalidCredentials
             }
-            if let m = msgLower, (m.contains("disabled") || m.contains("locked") || m.contains("inactive")) {
+            if let message = messageLowerCased, (message.contains("disabled") || message.contains("locked") || m.contains("inactive")) {
                 return .accountDisabled
             }
             return .invalidInput(message: bestMessage(from: bodyData))

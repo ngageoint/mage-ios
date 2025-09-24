@@ -46,8 +46,8 @@ final class LoginRootViewModel: ObservableObject {
     var serverURLButtonEnabled: Bool { true }
     
     private var resolvedBaseURLString: String? {
-        if let o = previewBaseURLOverride, !o.isEmpty { return o }
-        if let u = defaults.baseServerUrl, !u.isEmpty { return u }
+        if let override = previewBaseURLOverride, !override.isEmpty { return override }
+        if let url = defaults.baseServerUrl, !url.isEmpty { return url }
         return nil
     }
     

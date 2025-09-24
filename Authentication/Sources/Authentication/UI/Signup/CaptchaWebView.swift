@@ -13,12 +13,12 @@ struct CaptchaWebView: UIViewRepresentable {
     let html: String
     
     func makeUIView(context: Context) -> WKWebView {
-        let wv = WKWebView(frame: .zero)
-        wv.isOpaque = false
-        wv.backgroundColor = .clear
-        wv.scrollView.isScrollEnabled = false
-        wv.scrollView.backgroundColor = .clear
-        return wv
+        let webView = WKWebView(frame: .zero)
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.scrollView.isScrollEnabled = false
+        webView.scrollView.backgroundColor = .clear
+        return webView
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {

@@ -66,10 +66,10 @@ public final class HTTPLoginPerformer: HTTPPerforming {
         let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
         
         // Build request
-        var req = URLRequest(url: url)
-        req.httpMethod = "POST"
-        req.httpBody = jsonData
-        req.timeoutInterval = timeout
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.timeoutInterval = timeout
         
         // Merge headers (defaults first, then caller overrides)
         var merged = [
@@ -77,7 +77,7 @@ public final class HTTPLoginPerformer: HTTPPerforming {
             "Accept": "application/json"
         ]
         headers.forEach { merged[$0.key] = $0.value }
-        merged.forEach { req.setValue($0.value, forHTTPHeaderField: $0.key) }
+        merged.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
         
         // Epmemeral session w/ explicit timeouts
         let cfg = URLSessionConfiguration.ephemeral
@@ -86,8 +86,8 @@ public final class HTTPLoginPerformer: HTTPPerforming {
         let session = URLSession(configuration: cfg)
         
         // Execute
-        let (data, resp) = try await session.data(for: req)
-        guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         
         // NOTE: Do not throw on non-2xx. Upstream mapping handles errors.
         return (http.statusCode, data, http.allHeaderFields)
@@ -133,7 +133,7 @@ public final class HTTPLoginPerformer: HTTPPerforming {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        for (k, v) in req.headers { request.setValue(v, forHTTPHeaderField: k) }
+        for (key, value) in req.headers { request.setValue(value, forHTTPHeaderField: key) }
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: req.jsonBody, options: [])
@@ -142,18 +142,18 @@ public final class HTTPLoginPerformer: HTTPPerforming {
             return
         }
         
-        let task = session.dataTask(with: request) { data, resp, err in
-            if let err = err as NSError? {
-                if err.domain == NSURLErrorDomain, err.code == NSURLErrorCancelled {
+        let task = session.dataTask(with: request) { data, response, error in
+            if let error = error as NSError? {
+                if error.domain == NSURLErrorDomain, error.code == NSURLErrorCancelled {
                     completion(.failure(.cancelled))
                     return
                 } else {
-                    completion(.failure(.network(underlying: err)))
+                    completion(.failure(.network(underlying: error)))
                     return
                 }
             }
             
-            guard let http = resp as? HTTPURLResponse else {
+            guard let http = response as? HTTPURLResponse else {
                 completion(.failure(.malformedResponse))
                 return
             }

@@ -16,8 +16,8 @@ public extension Dictionary where Key == AnyHashable, Value == Any {
     func bool(_ key: String) -> Bool? { self[key] as? Bool }
     
     func int(_ key: String) -> Int? {
-        if let n = self[key] as? Int { return n }
-        if let s = self[key] as? String, let i = Int(s) { return i }
+        if let number = self[key] as? Int { return number }
+        if let string = self[key] as? String, let i = Int(string) { return i }
         return nil
     }
 }
