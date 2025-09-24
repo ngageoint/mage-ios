@@ -8,6 +8,7 @@
 
 import Foundation
 import Authentication
+import OSLog
 
 @MainActor
 @objc public class LoginViewModel: NSObject, ObservableObject {
@@ -25,7 +26,7 @@ import Authentication
     
     let usernamePlaceholder = "Username"
     let passwordPlaceholder = "Password"
-
+    
     public var strategyName: String? {
         (strategy["strategy"] as? [String: Any])?["name"] as? String
     }
@@ -38,6 +39,7 @@ import Authentication
         (strategy["strategy"] as? [String: Any])?["type"] as? String
     }
     
+    private var loginTimeoutTask: Task<Void, Never>?
     
     // MARK: - Init
     @objc public init(strategy: [String: Any], delegate: LoginDelegate?, user: User? = nil) {
@@ -55,6 +57,28 @@ import Authentication
         }
     }
     
+    private func isSuccess(_ status: AuthenticationStatus) -> Bool {
+        switch status {
+        case .success, .registrationSuccess, .accountCreationSuccess:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    private func onceOnMain(_ original: @escaping (AuthenticationStatus, String?) -> Void) -> (AuthenticationStatus, String?) -> Void {
+        var called = false
+        
+        return { [weak self] status, message in
+            guard !called else { return }
+            called = true
+            Task { @MainActor in
+                self?.loginTimeoutTask?.cancel()
+                original(status, message)
+            }
+        }
+    }
+    
     @objc public func loginTapped() {
         guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Username and password are required."
@@ -64,37 +88,61 @@ import Authentication
         isLoading = true
         errorMessage = nil
         
-        let deviceUUID = DeviceUUID.retrieveDeviceUUID()
-        let uidString = deviceUUID?.uuidString
+        loginTimeoutTask?.cancel()
+        loginTimeoutTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 30_000_000_000)
+            guard let self, !Task.isCancelled, self.isLoading else { return }
+            self.isLoading = false
+            self.errorMessage = "Login timed out. Please try again."
+            Logger().error("Login timed out (no completion).")
+        }
+        
+        let deviceUUID = DeviceUUID.retrieveDeviceUUID()?.uuidString ?? ""
         let infoDict = Bundle.main.infoDictionary
         let appVersion = infoDict?["CFBundleShortVersionString"] as? String ?? ""
         let buildNumber = infoDict?["CFBundleVersion"] as? String ?? ""
         let appVersionFull = "\(appVersion)-\(buildNumber)"
         
-        let parameters: [String: Any] = [
+        var parameters: [String: Any] = [
             "username": username,
             "password": password,
-            "strategy": strategy,
-            "uid": uidString ?? "",
+            "uid": deviceUUID,
             "appVersion": appVersionFull
         ]
         
+        if let payload = strategy["strategy"] as? [String: Any],
+           let realm = payload["realm"] { parameters["realm"] = realm }
+        
+        let identifier = (strategy["identifier"] as? String) ?? "local"
         MageLogger.misc.debug("\n\nBBB Login Strategy Identifier: \(self.strategy["identifier"] as? String ?? "")\n\n")
         
         delegate?.login(
             withParameters: parameters as NSDictionary,
-            withAuthenticationStrategy: strategy["identifier"] as? String ?? ""
-        ) { [weak self] status, errorString in
-            guard let self else { return }
-            self.isLoading = false
-            
-            if status == .success {
-                self.username = ""
-                self.password = ""
-            } else {
-                self.errorMessage = errorString
+            withAuthenticationStrategy: identifier,
+            complete: onceOnMain { [weak self] status, errorString in
+                
+                guard let self else { return }
+                self.isLoading = false
+                
+                if self.isSuccess(status) {
+                    self.username = ""
+                    self.password = ""
+                    self.errorMessage = nil
+                    MageLogger.auth.debug("Login completed: SUCCESS")
+                    // The coordinator should advance the flow after success.
+                } else {
+                    switch status {
+                    case .unableToAuthenticate:
+                        self.errorMessage = errorString ?? "Invalid username or password."
+                    case .error:
+                        self.errorMessage = errorString ?? "Login failed."
+                    default:
+                        self.errorMessage = errorString ?? "Login failed."
+                    }
+                    MageLogger.auth.error("Login finished with status \(String(describing: status)) : \(self.errorMessage ?? "unknown")")
+                }
             }
-        }
+        )
     }
     
     @objc public func signupTapped() {

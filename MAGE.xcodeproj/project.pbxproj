@@ -2284,16 +2284,14 @@
 				847429002E7F266000572BB4 /* Coordinators */,
 				847428FF2E7F265600572BB4 /* Stores */,
 				847428FE2E7F264C00572BB4 /* Services */,
-				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
+				84CA34192E847884002BEA2D /* Delegates */,
 				842F63372E7DF8C70066497D /* Bridge */,
-				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
 				84E5BE662E81F19B00E653F6 /* Models */,
 				842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */,
 				842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */,
 				8448CA342E5D076F00EE689B /* LoginHostViewController.swift */,
 				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
-				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
 				842F633C2E7DFE0C0066497D /* UIKitGlue */,
 			);
 			name = Authentication;
@@ -2502,6 +2500,16 @@
 				8474FD9926FB8B890041891A /* LinkGenerator.m */,
 			);
 			name = Contact;
+			sourceTree = "<group>";
+		};
+		84CA34192E847884002BEA2D /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
+				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
+				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 		84E5BE662E81F19B00E653F6 /* Models */ = {

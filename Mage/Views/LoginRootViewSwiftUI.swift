@@ -75,22 +75,7 @@ private struct ServerFooter: View {
     }
 }
 
-// MARK: - “No strategies yet” placeholder (looks like the real page but no fields)
-private struct PreServerLoginPlaceholder: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Sign in")
-                .font(.title2.weight(.semibold))
-                .accessibilityIdentifier("sign_in_title")
-            
-            Text("Choose a server to continue.")
-                .font(.callout)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: 400, alignment: .leading)
-    }
-}
-
+// MARK: - Main View
 struct LoginRootViewSwiftUI: View {
     @ObservedObject var viewModel: LoginRootViewModel
     @State private var showCopiedToast = false

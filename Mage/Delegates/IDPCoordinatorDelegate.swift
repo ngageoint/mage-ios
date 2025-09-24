@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol IDPCoordinatorDelegate: AnyObject {
     func idpCoordinatorDidCompleteSignIn(parameters: [String: Any])
     func idpCoordinatorDidCompleteSignUp()

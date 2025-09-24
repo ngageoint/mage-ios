@@ -8,7 +8,8 @@
 
 import UIKit
 import CoreData
-@preconcurrency import Authentication // AuthenticationStatus + AuthenticationProtocol
+import Authentication // AuthenticationStatus + AuthenticationProtocol
+import OSLog
 
 private enum AuthKey {
     static let offline = "offline"
@@ -21,10 +22,20 @@ public final class AuthFlowCoordinator: NSObject {
     
     // MARK: - Stored state
     private weak var nav: UINavigationController?
-    private weak var appDelegate: AuthenticationDelegate?                 // the *external* app-level delegate
+    private weak var appDelegate: AuthenticationDelegate?  // the *external* app-level delegate
     private var scheme: AnyObject?
     private weak var context: NSManagedObjectContext?
     public var server: MageServer?
+    private let log = Logger(subsystem: "MAGE.Auth", category: "AuthFlow")
+    
+    private func isSuccess(_ s: AuthenticationStatus) -> Bool {
+        switch s {
+        case .success: return true
+        case .registrationSuccess: return true
+        case .accountCreationSuccess: return true
+        default: return false
+        }
+    }
     
     // MARK: - Obj-C compatible initializer (matches old selector exactly)
     @objc(initWithNavigationController:andDelegate:andScheme:context:)
@@ -68,13 +79,9 @@ public final class AuthFlowCoordinator: NSObject {
     }
     
     // Old: -createAccount
-    @objc public nonisolated(unsafe) func createAccount() {
-        // Protocol is nonisolated; hop to main for UI.
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            let signup = SignupHost()
-            self.nav?.pushViewController(signup, animated: false)
-        }
+    @objc public func createAccount() {
+        let signup = SignupHost()
+        nav?.pushViewController(signup, animated: false)
     }
     
     // MARK: - Helpers
@@ -94,84 +101,85 @@ public final class AuthFlowCoordinator: NSObject {
 
 
 // MARK: - LoginDelegate + IDPLoginDelegate
+@MainActor
 extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     
-    @objc public nonisolated(unsafe) func changeServerURL() {
-        Task { @MainActor [weak self] in
-            self?.appDelegate?.changeServerUrl()
-        }
+    @objc public func changeServerURL() {
+        appDelegate?.changeServerUrl()
     }
     
     // EXACT selector: loginWithParameters:withAuthenticationStrategy:complete:
     @objc(loginWithParameters:withAuthenticationStrategy:complete:)
-    public nonisolated(unsafe) func login(withParameters parameters: NSDictionary,
-                                          withAuthenticationStrategy authenticationStrategy: String,
-                                          complete: @escaping (AuthenticationStatus, String?) -> Void) {
-
-        Task { @MainActor [weak self] in
-            guard let self, let server = self.server else {
-                complete(.unableToAuthenticate, "Internal Error.")
-                return
-            }
-            
-            let params = (parameters as? [AnyHashable: Any]) ?? [:]
-            
-            let modules = server.authenticationModules
-            guard let auth = modules[authenticationStrategy] ?? modules[AuthKey.offline] else {
-                complete(.unableToAuthenticate, "No authentication module for \(authenticationStrategy).")
-                return
-            }
-            
-            auth.login(withParameters: params) { status, error in
+    public func login(withParameters parameters: NSDictionary,
+                      withAuthenticationStrategy authenticationStrategy: String,
+                      complete: @escaping (AuthenticationStatus, String?) -> Void) {
+        
+        guard let server = self.server else {
+            complete(.unableToAuthenticate, "Internal Error.")
+            return
+        }
+        
+        let params  = (parameters as? [AnyHashable: Any]) ?? [:]
+        let modules = server.authenticationModules
+        
+        guard let auth = modules[authenticationStrategy] ?? modules[AuthKey.offline] else {
+            complete(.unableToAuthenticate, "No authentication module for \(authenticationStrategy).")
+            return
+        }
+        
+        log.debug("Auth start (strategy=\(authenticationStrategy, privacy: .public))")
+        
+        auth.login(withParameters: params) { [weak self] status, error in
+            Task { @MainActor in
+                self?.log.debug("Auth finished (status=\(String(describing: status), privacy: .public))")
                 complete(status, error)
+                
+                if let self, self.isSuccess(status) {
+                    self.appDelegate?.authenticationSuccessful()
+                }
             }
         }
     }
     
     // EXACT selector: signinForStrategy:
     @objc(signinForStrategy:)
-    public nonisolated(unsafe) func signinForStrategy(_ strategy: NSDictionary) {
+    public func signinForStrategy(_ strategy: NSDictionary) {
         // Extract SENDABLE values first (don’t capture NSDictionary in a @Sendable closure)
         guard
             let identifier = strategy["identifier"] as? String,
             let base = MageServer.baseURL()?.absoluteString
         else { return }
-
+        
         let urlString = "\(base)/auth/\(identifier)/signin"
-        // Minimal payload; IDPCoordinatorSwiftUI expects [String: Any]
         let strategyPayload: [String: Any] = ["identifier": identifier]
         
         // Present UI on main actor
-        Task { @MainActor [weak self] in
-            guard let self, let nav = self.nav else { return }
-            let idp = IDPCoordinatorSwiftUI(
-                presenter: nav,
-                url: urlString,
-                strategy: strategyPayload,
-                delegate: self
-            )
-            
-            idp.start()
-        }
+        guard let nav = self.nav else { return }
+        let idp = IDPCoordinatorSwiftUI(
+            presenter: nav,
+            url: urlString,
+            strategy: strategyPayload,
+            delegate: self
+        )
+        
+        idp.start()
     }
     
-    
-
     // MARK: - IDPCoordinatorDelegate
-
+    
     /// Finish the login by calling the existing login path
-    public nonisolated(unsafe) func idpCoordinatorDidCompleteSignIn(parameters: [String: Any]) {
+    public func idpCoordinatorDidCompleteSignIn(parameters: [String: Any]) {
         // Derive the strategy key expected by the auth layer.
         let sd = parameters["strategy"] as? [String: Any]
         let strategy = (sd?["identifier"] as? String) ?? (sd?["type"] as? String) ?? "idp"
-
+        
         // Reuse the same login path.
         self.login(withParameters: parameters as NSDictionary,
                    withAuthenticationStrategy: strategy) { _, _ in }
     }
-
+    
     /// On IdP sign-up completion, just return the user to the login screen
-    public nonisolated(unsafe) func idpCoordinatorDidCompleteSignUp() {
+    public func idpCoordinatorDidCompleteSignUp() {
         DispatchQueue.main.async { [weak self] in
             guard let self, let server = self.server else { return }
             self.showLoginView(for: server)
