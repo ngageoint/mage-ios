@@ -71,8 +71,8 @@ class HasMapSearchMixin: NSObject, MapMixin {
     func setupMixin(mapView: MKMapView, mapState: MapState) {
         settingsRepository.observeSettings()
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { settingsModel in
-                self.updateView(settingsModel: settingsModel)
+            .sink(receiveValue: { [weak self] settingsModel in
+                self?.updateView(settingsModel: settingsModel)
             })
             .store(in: &cancellables)
     }
