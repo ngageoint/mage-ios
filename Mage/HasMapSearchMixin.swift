@@ -98,7 +98,15 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     @objc func mapSearchButtonTapped(_ sender: UIButton) {
-        showSearchBottomSheet()
+        toggleSearchBottomSheet()
+    }
+    
+    func toggleSearchBottomSheet() {
+        if navigationController?.presentedViewController != nil {
+            self.navigationController?.dismiss(animated: true)
+        } else {
+            showSearchBottomSheet()
+        }
     }
     
     func showSearchBottomSheet() {
@@ -108,6 +116,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
             sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
             sheet.delegate = self
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
         self.navigationController?.present(searchController, animated: true, completion: nil)
     }
@@ -168,7 +177,23 @@ extension HasMapSearchMixin: SearchControllerDelegate {
         let screenHeight = UIScreen.main.bounds.size.height
         mapView.layoutMargins.bottom = screenHeight / 2
         
+        dismissKeyboard()
+        lowerDetentToShowMapView()
         hasMapSearch.onSearchResultSelected(result: result)
+    }
+    
+    private func lowerDetentToShowMapView() {
+        guard let sheet = navigationController?.presentedViewController?.sheetPresentationController else { return }
+            
+        if sheet.selectedDetentIdentifier == .large {
+            sheet.animateChanges {
+                sheet.selectedDetentIdentifier = .medium
+            }
+        }
+    }
+    
+    private func dismissKeyboard() {
+        navigationController?.view.endEditing(true)
     }
     
     private func getRegion(searchType: SearchResponseType, location: CLLocationCoordinate2D, grid: String?) -> MKCoordinateRegion {
