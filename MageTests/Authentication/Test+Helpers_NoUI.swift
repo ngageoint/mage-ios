@@ -8,6 +8,7 @@
 
 import XCTest
 import UIKit
+import Authentication
 @testable import MAGE
 
 // Wait loop for URL-hit assertions (uses MockMageServerDelegate.urls)

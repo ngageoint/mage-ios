@@ -63,7 +63,7 @@ public enum HTTPErrorMapper {
             if let message = messageLowerCased, (message.contains("credential") || message.contains("password")) {
                 return .invalidCredentials
             }
-            if let message = messageLowerCased, (message.contains("disabled") || message.contains("locked") || m.contains("inactive")) {
+            if let message = messageLowerCased, (message.contains("disabled") || message.contains("locked") || message.contains("inactive")) {
                 return .accountDisabled
             }
             return .invalidInput(message: bestMessage(from: bodyData))

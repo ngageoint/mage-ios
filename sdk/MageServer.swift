@@ -53,7 +53,7 @@ import OSLog
         return mn >= minor
     }
     
-    /// Strategies that the client treats as "IdP" (oauth2/oidc/saml/geoaxisconnect/idp).
+    /// Strategies that the client treats as "IdP" (oauth/oidc/saml/geoaxisconnect).
     @objc public var oauthStrategies: [[String: Any]] {
         guard let strategies = UserDefaults.standard.serverAuthenticationStrategies else { return [] }
         

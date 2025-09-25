@@ -24,7 +24,7 @@ public enum AuthStrategy: Equatable {
             return .ldap
         case "offline":
             return .offline
-        case "oidc", "sso", "idp", "saml", "geoaxis", "geoaxisconnect":
+        case "saml", "google", "oauth", "geoaxis", "openidconnect":
             return .idp(provider: strategy)
         default:
             // Treat unknown strategy names as IdP so the flow still works

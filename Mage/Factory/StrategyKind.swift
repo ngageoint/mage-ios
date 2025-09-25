@@ -23,7 +23,7 @@ public enum StrategyKind: String {
             self = .ldap
         case "offline":
             self = .offline
-        case "idp", "oidc", "saml", "geoaxisconnect":
+        case "saml", "google", "oauth", "geoaxis", "openidconnect":
             self = .idp
         default:
             return nil
