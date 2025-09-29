@@ -11,5 +11,5 @@ import Foundation
 @objc public protocol AuthenticationDelegate: NSObjectProtocol {
     func authenticationSuccessful()
     func couldNotAuthenticate()
-    func changeServerUrl()
+    func changeServerURL()
 }

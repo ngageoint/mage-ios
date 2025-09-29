@@ -325,7 +325,7 @@
     self.childCoordinators = [[self.childCoordinators filteredArrayUsingPredicate:predicate] mutableCopy];
 }
 
-- (void)changeServerUrl {
+- (void)changeServerURL {
     
 }
 

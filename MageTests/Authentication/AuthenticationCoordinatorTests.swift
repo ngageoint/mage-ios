@@ -1013,7 +1013,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
 //        tester().tapView(withAccessibilityLabel: "Server URL")
 //
 //        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "API request not made")
-//        expect(self.delegate?.changeServerUrlCalled).to(beTrue());
+//        expect(self.delegate?.changeServerURLCalled).to(beTrue());
 //    }
 //    
 //    

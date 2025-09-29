@@ -16,11 +16,11 @@ import Authentication
 class AuthenticationTestDelegate: NSObject, AuthenticationDelegate {
     var authenticationSuccessfulCalled = false
     var couldNotAuthenticateCalled = false
-    var changeServerUrlCalled = false
+    var changeServerURLCalled = false
     
     func authenticationSuccessful() { authenticationSuccessfulCalled = true }
     func couldNotAuthenticate()     { couldNotAuthenticateCalled = true }
-    func changeServerUrl()          { changeServerUrlCalled = true }
+    func changeServerURL()          { changeServerURLCalled = true }
 }
 
 @MainActor

@@ -105,7 +105,7 @@ public final class AuthFlowCoordinator: NSObject {
 extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     
     @objc public func changeServerURL() {
-        authenticationDelegate?.changeServerUrl()
+        authenticationDelegate?.changeServerURL()
     }
     
     // EXACT selector: loginWithParameters:withAuthenticationStrategy:complete:

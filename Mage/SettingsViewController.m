@@ -329,7 +329,7 @@
     [self.settingsTableViewController.tableView reloadData];
 }
 
-- (void)changeServerUrl {
+- (void)changeServerURL {
     
 }
 

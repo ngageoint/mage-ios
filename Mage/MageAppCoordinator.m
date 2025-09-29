@@ -50,7 +50,7 @@
     if ([[UserUtility singleton] isTokenExpired]) {
         NSURL *url = [MageServer baseURL];
         if ([url absoluteString].length == 0) {
-            [self changeServerUrl];
+            [self changeServerURL];
             return;
         } else {
             __weak __typeof__(self) weakSelf = self;
@@ -91,7 +91,7 @@
     // TODO figure out what to do here
 }
 
-- (void) changeServerUrl {
+- (void) changeServerURL {
     [self.navigationController popToRootViewControllerAnimated:NO];
     self.urlController = [[ServerURLController alloc] initWithDelegate:self error:nil scheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
@@ -126,7 +126,7 @@
     [self.navigationController popViewControllerAnimated:NO];
     NSURL *url = [MageServer baseURL];
     if ([url absoluteString].length == 0) {
-        [self changeServerUrl];
+        [self changeServerURL];
         return;
     } else {
         __weak __typeof__(self) weakSelf = self;

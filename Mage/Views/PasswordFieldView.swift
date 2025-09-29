@@ -23,15 +23,13 @@ struct PasswordFieldView: View {
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    .accessibilityLabel(placeholder)
-                    .accessibilityIdentifier(placeholder)
+                    .accessibilityIdentifier(A11yID.loginPassword)
             } else {
                 SecureField(placeholder, text: $password)
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    .accessibilityLabel(placeholder)
-                    .accessibilityIdentifier(placeholder)
+                    .accessibilityIdentifier(A11yID.loginPassword)
             }
             
             Button(action: { showPassword.toggle() }) {

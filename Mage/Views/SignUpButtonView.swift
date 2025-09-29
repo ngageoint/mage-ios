@@ -19,6 +19,7 @@ struct SignUpButtonView: View {
                 Text("Sign Up Here")
                     .foregroundStyle(Color.blue)
             }
+            .accessibilityIdentifier("SignInButton")
         }
         .padding(.top, 8)
     }

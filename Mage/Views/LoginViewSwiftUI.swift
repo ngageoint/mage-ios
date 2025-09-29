@@ -13,6 +13,11 @@ struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
     @State var isIntroViewsShown: Bool = false
     
+//    init(viewModel: LoginViewModel, showLoginImmediately: Bool = true) {
+//        self._viewModel = ObservedObject(wrappedValue: viewModel)
+//        self._isIntroViewsShown = State(initialValue: showLoginImmediately)
+//    }
+    
     var body: some View {
         VStack(spacing: 16) {
             Text(viewModel.strategyTitle ?? "Unknown Strategy Title")
@@ -32,7 +37,6 @@ struct LoginViewSwiftUI: View {
                 showPassword: $viewModel.showPassword,
                 placeholder: viewModel.passwordPlaceholder
             )
-
             
             if let error = viewModel.errorMessage {
                 Text(error)
@@ -45,7 +49,6 @@ struct LoginViewSwiftUI: View {
 
                 viewModel.loginTapped()
             }
-            .accessibilityLabel("Sign In")
             .accessibilityIdentifier("Sign In")
             
             SignUpButtonView {

@@ -64,7 +64,7 @@ final class AuthFlowCoordinator_ParityTests: XCTestCase {
         }
         
         func couldNotAuthenticate() { didCouldNotAuthenticate = true }
-        func changeServerUrl() { }
+        func changeServerURL() { }
     }
 
     var server: MageServer!

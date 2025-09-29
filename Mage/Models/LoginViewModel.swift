@@ -10,6 +10,13 @@ import Foundation
 import Authentication
 import OSLog
 
+
+public enum A11yID {
+    public static let loginUsername = "login.usernameField"
+    public static let loginPassword = "login.passwordField"
+    public static let loginSignIn   = "login.signInButton"
+}
+
 @MainActor
 @objc public class LoginViewModel: NSObject, ObservableObject {
     @Published @objc public dynamic var username: String = ""
