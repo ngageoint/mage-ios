@@ -29,6 +29,7 @@
         "value" : "enable"
       },
       {
+        "enabled" : false,
         "key" : "VIEW_TESTING",
         "value" : "true"
       },

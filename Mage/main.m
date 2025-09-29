@@ -9,7 +9,6 @@
 
 static Class ResolveSwiftClass(NSString *name) {
     Class resolvedClass = NSClassFromString(name);
-    
     if (resolvedClass) return resolvedClass;
     
     NSString *module = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
@@ -24,23 +23,24 @@ static Class ResolveSwiftClass(NSString *name) {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        Class appDelegateClass = ResolveSwiftClass(@"TestingAppDelegate");
+        // Are we under XCTest?
+        BOOL runningTests = [[[NSProcessInfo processInfo] environment] objectForKey:@"XCTestConfigurationFilePath"] != nil;
+        
+        Class appDelegateClass = [AppDelegate class];
+        
+        if (runningTests) {
+            // Default test delegate
+            Class testing = ResolveSwiftClass(@"TestingAppDelegate");
+            if (testing) appDelegateClass = testing;
+            
+            // Simple host for "view testing"
+            NSString *viewTesting = [[[NSProcessInfo processInfo] environment] objectForKey:@"VIEW_TESTING"];
+            if ([viewTesting isEqualToString:@"true"]) {
+                Class viewLoader = ResolveSwiftClass(@"ViewLoaderAppDelegate");
+                if (viewLoader) appDelegateClass = viewLoader;
+            }
+        }
 
-        NSLog(@"View testing is %@",[[[NSProcessInfo processInfo] environment] objectForKey:@"VIEW_TESTING"]);
-        
-        NSString *viewTesting = [[[NSProcessInfo processInfo] environment] objectForKey: @"VIEW_TESTING"];
-        if([viewTesting isEqualToString:@"true"]) {
-            Class viewLoader = ResolveSwiftClass(@"ViewLoaderAppDelegate");
-            if (viewLoader) { appDelegateClass = viewLoader; }
-        }
-        
-        // Last resort; production AppDelegate
-        if (!appDelegateClass) {
-            appDelegateClass = [AppDelegate class];
-        }
-        
-        NSLog(@"AppDelegate class: %@", NSStringFromClass(appDelegateClass));
-        
         return UIApplicationMain(argc, argv, nil, NSStringFromClass(appDelegateClass));
     }
 }
