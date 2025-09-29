@@ -117,7 +117,7 @@ extension SettingsLocalDataSourceImpl: NSFetchedResultsControllerDelegate {
             case .move:
                 break
             case .update:
-                print("SEttings updated to \(settings)")
+                MageLogger.misc.debug("Settings updated to \(settings)")
                 settingsSubject.send(SettingsModel(settings: settings))
             @unknown default:
                 break
