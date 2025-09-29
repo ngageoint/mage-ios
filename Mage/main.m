@@ -5,23 +5,42 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import "AppDelegate.h"
 
-int main(int argc, char * argv[]) {    
+static Class ResolveSwiftClass(NSString *name) {
+    Class resolvedClass = NSClassFromString(name);
+    
+    if (resolvedClass) return resolvedClass;
+    
+    NSString *module = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+    
+    if (module.length > 0) {
+        NSString *scoped = [NSString stringWithFormat:@"%@.%@", module, name];
+        resolvedClass = NSClassFromString(scoped);
+    }
+    return resolvedClass;
+    
+}
+
+int main(int argc, char * argv[]) {
     @autoreleasepool {
-        Class appDelegateClass = NSClassFromString(@"TestingAppDelegate");
+        Class appDelegateClass = ResolveSwiftClass(@"TestingAppDelegate");
 
         NSLog(@"View testing is %@",[[[NSProcessInfo processInfo] environment] objectForKey:@"VIEW_TESTING"]);
-        if ([[[[NSProcessInfo processInfo] environment] objectForKey:@"VIEW_TESTING"] isEqualToString:@"true"]) {
-            appDelegateClass = NSClassFromString(@"ViewLoaderAppDelegate");
+        
+        NSString *viewTesting = [[[NSProcessInfo processInfo] environment] objectForKey: @"VIEW_TESTING"];
+        if([viewTesting isEqualToString:@"true"]) {
+            Class viewLoader = ResolveSwiftClass(@"ViewLoaderAppDelegate");
+            if (viewLoader) { appDelegateClass = viewLoader; }
         }
-        if (!appDelegateClass)
+        
+        // Last resort; production AppDelegate
+        if (!appDelegateClass) {
             appDelegateClass = [AppDelegate class];
+        }
+        
+        NSLog(@"AppDelegate class: %@", NSStringFromClass(appDelegateClass));
+        
         return UIApplicationMain(argc, argv, nil, NSStringFromClass(appDelegateClass));
     }
-    
-//    @autoreleasepool {
-//        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-//    }
 }

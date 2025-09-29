@@ -8,7 +8,7 @@
 
 import XCTest
 import UIKit
-import Authentication
+@testable import Authentication
 @testable import MAGE
 
 // Wait loop for URL-hit assertions (uses MockMageServerDelegate.urls)
@@ -54,12 +54,12 @@ func findLoginFailedText(in nav: UINavigationController) -> String? {
 
 // Toggle to simulate consent buttons
 @MainActor
-func agree(_ coordinator: AuthenticationCoordinator) {
+func agree(_ coordinator: AuthFlowCoordinator) {
     (coordinator as? DisclaimerDelegate)?.disclaimerAgree()
 }
 
 @MainActor
-func disagree(_ coordinator: AuthenticationCoordinator) {
+func disagree(_ coordinator: AuthFlowCoordinator) {
     (coordinator as? DisclaimerDelegate)?.disclaimerDisagree()
 }
 

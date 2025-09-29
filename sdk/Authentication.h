@@ -4,6 +4,14 @@
 //
 #import <Authentication/Authentication-Swift.h>
 
+//typedef NS_ENUM(NSInteger, AuthenticationStatus) {
+//    AUTHENTICATION_SUCCESS,
+//    AUTHENTICATION_ERROR,
+//    UNABLE_TO_AUTHENTICATE,
+//    REGISTRATION_SUCCESS,
+//    ACCOUNT_CREATION_SUCCESS
+//};
+
 @protocol AuthenticationProtocol <NSObject>
 
 @required

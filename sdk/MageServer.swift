@@ -23,7 +23,7 @@ import OSLog
         case forceRefresh
     }
     
-    public private(set) var authenticationModules: [String: AuthenticationModule] = [:]
+    public var authenticationModules: [String: AuthenticationModule] = [:]
     
     private typealias StrategyParams = [AnyHashable: Any]
     private typealias Strategies     = [String: StrategyParams]

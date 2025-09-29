@@ -8,56 +8,49 @@
 
 import XCTest
 import OHHTTPStubs
+import Authentication
+
 
 @testable import MAGE
 
-class AuthenticationTestDelegate: AuthenticationDelegate {
+class AuthenticationTestDelegate: NSObject, AuthenticationDelegate {
     var authenticationSuccessfulCalled = false
     var couldNotAuthenticateCalled = false
     var changeServerUrlCalled = false
     
-    func authenticationSuccessful() {
-        authenticationSuccessfulCalled = true
-    }
-    
-    func couldNotAuthenticate() {
-        couldNotAuthenticateCalled = true
-    }
-    
-    func changeServerUrl() {
-        changeServerUrlCalled = true
-    }
+    func authenticationSuccessful() { authenticationSuccessfulCalled = true }
+    func couldNotAuthenticate()     { couldNotAuthenticateCalled = true }
+    func changeServerUrl()          { changeServerUrlCalled = true }
 }
 
+@MainActor
 final class AuthenticationTests: AsyncMageCoreDataTestCase {
     
     var window: UIWindow!
     
-    @MainActor
     override func setUp() async throws {
         try await super.setUp()
         window = TestHelpers.getKeyWindowVisible();
     }
     
-    @MainActor
     override func tearDown() async throws {
         try await super.tearDown()
         window.rootViewController = nil;
     }
     
-    @MainActor
     func testLoginWithRegisteredDevice() async {
         TestHelpers.setupTestSession()
         
         let navigationController = TestHelpers.initializeTestNavigation()
         let delegate = MockAuthenticationCoordinatorDelegate()
         let server: MageServer = await TestHelpers.getTestServer()
-        let coordinator = AuthenticationCoordinator(
+        
+        let coordinator = AuthFlowCoordinator(
             navigationController: navigationController,
             andDelegate: delegate,
             andScheme: MAGEScheme.scheme(),
             context: context
-        )!
+        )
         
         coordinator.start(server)
         
@@ -69,21 +62,20 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         XCTAssertTrue(delegate.authenticationSuccessfulCalled, "Expected authenticationSuccessful to be called")
     }
     
-    @MainActor
     func testRegisterDevice() async {
         TestHelpers.setupTestSession()
-        MockMageServer.stubRegisterDeviceResponses() // ✅ Uses both general + custom stubs
+        MockMageServer.stubRegisterDeviceResponses()
         
         let navigationController = TestHelpers.initializeTestNavigation()
         let delegate = MockAuthenticationCoordinatorDelegate()
         let server: MageServer = await TestHelpers.getTestServer()
         
-        let coordinator = AuthenticationCoordinator(
+        let coordinator = AuthFlowCoordinator(
             navigationController: navigationController,
             andDelegate: delegate,
             andScheme: MAGEScheme.scheme(),
             context: context
-        )!
+        )
         
         coordinator.start(server)
         
@@ -97,8 +89,6 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "Registration Sent")
     }
     
-    // TODO: Is this even a smart way to do this?
-    @MainActor
     func testLoginWithUpdatedUser() async {
         // Step 1: Setup test session & pre-create user
         TestHelpers.setupTestSession()
@@ -109,18 +99,24 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         let server: MageServer = await TestHelpers.getTestServer()
         
         // Step 2: Verify user info BEFORE login
+        guard let context else {
+            XCTFail("Missing Core Data Context")
+            return
+        }
         context.performAndWait {
-            let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: "1a")!
+            let user = context.fetchFirst(User.self,
+                                          key: UserKey.remoteId.key,
+                                          value: "1a")!
             XCTAssertEqual(user.name, "User ABC", "User name should be 'User ABC' before login")
         }
         
         // Step 3: Start authentication
-        let coordinator = AuthenticationCoordinator(
+        let coordinator = AuthFlowCoordinator(
             navigationController: navigationController,
             andDelegate: delegate,
             andScheme: MAGEScheme.scheme(),
             context: context
-        )!
+        )
         
         coordinator.start(server)
         
@@ -139,7 +135,9 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         
         // Step 6: Verify user info AFTER login
         context.performAndWait {
-            let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: "1a")!
+            let user = context.fetchFirst(User.self,
+                                          key: UserKey.remoteId.key,
+                                          value: "1a")!
             XCTAssertEqual(user.name, "Firstname Lastname", "User name was not updated after login")
         }
     }

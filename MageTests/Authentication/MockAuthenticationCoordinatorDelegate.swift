@@ -6,6 +6,7 @@
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
 import Foundation
+import Authentication
 
 class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
     var authenticationSuccessfulCalled = false

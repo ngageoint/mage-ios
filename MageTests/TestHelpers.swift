@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import UIKit
 import MagicalRecord
 import Nimble
 import Kingfisher
 import OSLog
+import Authentication
 
 import XCTest
 @testable import MAGE
@@ -21,7 +23,8 @@ extension XCTestCase {
     ///   - condition: The condition to evaluate to be `true`.
     ///   - description: A string to display in the test log for this expectation, to help diagnose failures.
     /// - Returns: The expectation for matching the condition.
-    func expectation(for condition: @autoclosure @escaping () -> Bool, description: String = "") -> XCTestExpectation {
+    func expectation(for condition: @autoclosure @escaping () -> Bool,
+                     description: String = "") -> XCTestExpectation {
         let predicate = NSPredicate { _, _ in
             return condition()
         }
@@ -31,6 +34,8 @@ extension XCTestCase {
 }
 
 class TestHelpers {
+    // MARK: - Session / Navigation
+    
     @MainActor
     public static func setupAuthenticatedSession() {
         MageSessionManager.shared()?.setToken("TOKEN")
@@ -58,9 +63,12 @@ class TestHelpers {
         return setupNavigationController()
     }
 
+    // MARK: - Auth flow helpers
+    
+    /// Executes a happy-path local login via the coordinator
     @MainActor
-    public static func executeTestLogin(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation? = nil) {
-        let loginDelegate = coordinator as! LoginDelegate
+    public static func executeTestLogin(coordinator: AuthFlowCoordinator,
+                                        expectation: XCTestExpectation? = nil) {
         let parameters: [String: Any] = [
             "username": "test",
             "password": "test",
@@ -69,21 +77,22 @@ class TestHelpers {
             "appVersion": "6.0.0"
         ]
 
-        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "Authentication failed")
+        coordinator.login(withParameters: parameters as NSDictionary,
+                          withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            XCTAssertTrue(authenticationStatus == .success, "Authentication failed")
             expectation?.fulfill()
         }
     }
-
     
+    /// Waits for the Disclaimer VC to become visible and then accepts it
     @MainActor
-    public static func handleDisclaimerAcceptance(coordinator: AuthenticationCoordinator, navigationController: UINavigationController) async {
+    public static func handleDisclaimerAcceptance(coordinator: AuthFlowCoordinator,
+                                                  navigationController: UINavigationController) async {
         await waitForCondition({
             navigationController.topViewController is DisclaimerViewController
         }, timeout: 2, message: "Disclaimer screen never appeared")
 
-        let disclaimerDelegate = coordinator as! DisclaimerDelegate
-        disclaimerDelegate.disclaimerAgree()
+        coordinator.disclaimerAgree()
     }
 
     @MainActor
@@ -94,34 +103,57 @@ class TestHelpers {
     }
 
     
+    // MARK: - Window / UI utilities
+    
+    @MainActor
+    private static func activeWindowScene() -> UIWindowScene? {
+        // Prefer the foreground-active scene, otherwise take the first UIWindowScene
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        if let foreground = scenes.first(where: { $0.activationState == .foregroundActive }) {
+            return foreground
+        }
+        return scenes.first
+    }
+    
+    
     @MainActor
     public static func getKeyWindowVisibleMainActor() -> UIWindow {
-        var window: UIWindow;
-        if (UIApplication.shared.windows.count == 0) {
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimensions(to: UIScreen.main.bounds.size);
+        if let scene = activeWindowScene() {
+            // Try UIWindowScene.windows
+            if let key = scene.windows.first(where: { $0.isKeyWindow }) {
+                key.makeKeyAndVisible()
+                return key
+            }
+            
+            // No key window yet
+            let window = UIWindow(frame: UIScreen.main.bounds)
+            window.windowScene = scene
+            window.backgroundColor = .systemBackground
+            window.makeKeyAndVisible()
+            return window
         } else {
-            window = UIApplication.shared.windows[0];
+            let window = UIWindow(frame: UIScreen.main.bounds)
+            window.backgroundColor = .systemBackground
+            window.makeKeyAndVisible()
+            return window
         }
-        window.backgroundColor = .systemBackground;
-        window.makeKeyAndVisible();
-        return window;
     }
     
     public static func getKeyWindowVisible() -> UIWindow {
-        var window: UIWindow;
-        if (UIApplication.shared.windows.count == 0) {
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimensions(to: UIScreen.main.bounds.size);
-        } else {
-            window = UIApplication.shared.windows[0];
-        }
-        window.backgroundColor = .systemBackground;
-        window.makeKeyAndVisible();
-        return window;
+        MainActorGate.runSync { getKeyWindowVisibleMainActor() }
     }
     
-    public static func createGradientImage(startColor: UIColor, endColor: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+    public static func clearSubviews(of view: UIView?) {
+        guard let view = view else { return }
+        MainActorGate.runSync {
+            view.subviews.forEach { $0.removeFromSuperview() }
+        }
+    }
+    
+    // MARK: - Misc UI helers
+    public static func createGradientImage(startColor: UIColor,
+                                           endColor: UIColor,
+                                           size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
         let rect = CGRect(origin: .zero, size: size)
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = rect
@@ -138,10 +170,7 @@ class TestHelpers {
     public static func getAllAccessibilityLabels(_ viewRoot: UIView) -> [String]! {
         var array = [String]()
         for view in viewRoot.subviews {
-            if let lbl = view.accessibilityLabel {
-                array += [lbl]
-            }
-            
+            if let lbl = view.accessibilityLabel { array.append(lbl) }
             array += getAllAccessibilityLabels(view)
         }
         
@@ -149,21 +178,27 @@ class TestHelpers {
     }
 
     public static func getAllAccessibilityLabelsInWindows() -> [String]! {
+        let windows = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+        
         var labelArray = [String]()
-        for  window in UIApplication.shared.windowsWithKeyWindow() {
-            labelArray += getAllAccessibilityLabels(window as! UIWindow )
+        for  window in windows {
+            labelArray += getAllAccessibilityLabels(window)
         }
         
         return labelArray
     }
     
     public static func printAllAccessibilityLabelsInWindows() {
-        let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
+        _ = getAllAccessibilityLabelsInWindows()
     }
     
     public static func clearImageCache() {
         ImageCache.default.clearCache();
     }
+    
+    // MARK: - Preferences / Documents / CoreData
     
     public static func resetUserDefaults() {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
@@ -361,9 +396,13 @@ class TestHelpers {
     }
 }
 
+// MARK: - Async wait helpers
+
 extension TestHelpers {
     @MainActor
-    static func waitForCondition(_ condition: @escaping () -> Bool, timeout: TimeInterval, message: String) async {
+    static func waitForCondition(_ condition: @escaping () -> Bool,
+                                 timeout: TimeInterval,
+                                 message: String) async {
         let startTime = Date()
         while !condition() {
             if Date().timeIntervalSince(startTime) > timeout {
@@ -375,7 +414,8 @@ extension TestHelpers {
     }
 
     @MainActor
-    static func awaitBlockTrue(block: @escaping () -> Bool, timeout: TimeInterval) async {
+    static func awaitBlockTrue(block: @escaping () -> Bool,
+                               timeout: TimeInterval) async {
         let startTime = Date()
         
         while !block() {
@@ -388,7 +428,8 @@ extension TestHelpers {
     }
 
     @MainActor
-    static func waitForLoginScreen(navigationController: UINavigationController, timeout: TimeInterval = 2) async {
+    static func waitForLoginScreen(navigationController: UINavigationController,
+                                   timeout: TimeInterval = 2) async {
         await awaitBlockTrue(block: {
             navigationController.topViewController is LoginHostViewController
         }, timeout: timeout)
@@ -407,8 +448,9 @@ extension TestHelpers {
 }
 
 extension TestHelpers {
-    static func executeTestLoginForRegistration(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation) {
-        let loginDelegate = coordinator as! LoginDelegate
+    @MainActor
+    static func executeTestLoginForRegistration(coordinator: AuthFlowCoordinator,
+                                                expectation: XCTestExpectation) {
         let parameters: [String: Any] = [
             "username": "test",
             "password": "test",
@@ -417,16 +459,22 @@ extension TestHelpers {
             "appVersion": "6.0.0"
         ]
 
-        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
+        coordinator.login(withParameters: parameters as NSDictionary,
+                          withAuthenticationStrategy: "local") { authenticationStatus, _ in
+            XCTAssertEqual(authenticationStatus, .registrationSuccess)
+
             let token = StoredPassword.retrieveStoredToken()
             let mageSessionToken = MageSessionManager.shared().getToken()
+            
             XCTAssertEqual(token, "TOKEN")
             XCTAssertEqual(token, mageSessionToken)
+            
             expectation.fulfill()
         }
     }
 }
+
+// MARK: - Disclaimer helpers
 
 extension TestHelpers {
     @MainActor
@@ -443,20 +491,18 @@ extension TestHelpers {
     }
 
     private static func viewHasAccessibilityLabel(_ view: UIView, label: String) -> Bool {
-        if view.accessibilityLabel == label {
-            return true
-        }
+        if view.accessibilityLabel == label { return true }
+        
         for subview in view.subviews {
-            if viewHasAccessibilityLabel(subview, label: label) {
-                return true
-            }
+            if viewHasAccessibilityLabel(subview, label: label) { return true }
         }
         return false
     }
 }
 
 extension TestHelpers {
-    static func defaultLoginParameters(username: String = "test", password: String = "test") -> [String: Any] {
+    static func defaultLoginParameters(username: String = "test",
+                                       password: String = "test") -> [String: Any] {
         return [
             "username": username,
             "password": password,

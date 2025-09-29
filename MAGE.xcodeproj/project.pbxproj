@@ -194,6 +194,12 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84BFAA342E89B7E10011516A /* MainActorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA332E89B7E10011516A /* MainActorGate.swift */; };
+		84BFAA352E89BAAF0011516A /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
+		84BFAA362E89BAC80011516A /* MainActorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA332E89B7E10011516A /* MainActorGate.swift */; };
+		84BFAA382E89BD000011516A /* TestingAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA372E89BD000011516A /* TestingAppDelegate.swift */; };
+		84BFAA3A2E89FCF00011516A /* MageServer+Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA392E89FCF00011516A /* MageServer+Testing.swift */; };
+		84CA34A82E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */; };
 		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
 		84E9E1BE2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
@@ -890,10 +896,8 @@
 		F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
 		F7FC67FE2CD3C3D80022BAF1 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F7FC67FF2CD3C46C0022BAF1 /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
-		F7FC68002CD3C46C0022BAF1 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
 		F7FC68012CD3C4880022BAF1 /* MageCoreDataFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911627249154130043A529 /* MageCoreDataFixtures.swift */; };
 		F7FC68032CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = F7FC68022CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h */; };
-		F7FC68062CD3C6610022BAF1 /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC68052CD3C6610022BAF1 /* TestingAppDelegate.m */; };
 		F7FC68072CD3C9780022BAF1 /* MockCacheOverlayListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */; };
 		F7FC68082CD3CC560022BAF1 /* ObservationIconStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F789EB612BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift */; };
 		F7FC68092CD3CC560022BAF1 /* ObservationStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0974F2C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift */; };
@@ -1161,6 +1165,10 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84BFAA332E89B7E10011516A /* MainActorGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActorGate.swift; sourceTree = "<group>"; };
+		84BFAA372E89BD000011516A /* TestingAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingAppDelegate.swift; sourceTree = "<group>"; };
+		84BFAA392E89FCF00011516A /* MageServer+Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MageServer+Testing.swift"; sourceTree = "<group>"; };
+		84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlowCoordinator_ParityTests.swift; sourceTree = "<group>"; };
 		84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAccessTokenTests.swift; sourceTree = "<group>"; };
 		84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
@@ -2293,6 +2301,8 @@
 				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
 				842F633C2E7DFE0C0066497D /* UIKitGlue */,
+				84BFAA372E89BD000011516A /* TestingAppDelegate.swift */,
+				84BFAA392E89FCF00011516A /* MageServer+Testing.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -2510,6 +2520,15 @@
 				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
 			);
 			path = Delegates;
+			sourceTree = "<group>";
+		};
+		84CA34A62E859DCF002BEA2D /* NewTests */ = {
+			isa = PBXGroup;
+			children = (
+				84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */,
+				84BFAA332E89B7E10011516A /* MainActorGate.swift */,
+			);
+			path = NewTests;
 			sourceTree = "<group>";
 		};
 		84E5BE662E81F19B00E653F6 /* Models */ = {
@@ -2791,6 +2810,7 @@
 		F72C16AF25239B9B00682052 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				84CA34A62E859DCF002BEA2D /* NewTests */,
 				F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */,
 				842F627C2E6B41920066497D /* TestDoubles */,
 				8448CA3E2E60921700EE689B /* Test+Helpers_NoUI.swift */,
@@ -3755,6 +3775,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F72C16AF25239B9B00682052 /* Authentication */,
 				F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */,
 				F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */,
 				F7C097782C80C79F003FA115 /* Model */,
@@ -3769,7 +3790,6 @@
 				F710D8AC2549B34E00798D56 /* MaterialComponents */,
 				F77B7D7C24797B0400C51953 /* Form */,
 				F7BE036A2466093700D2F7C3 /* Observation */,
-				F72C16AF25239B9B00682052 /* Authentication */,
 				F7232329251CE90C00AD168A /* Settings */,
 				F795ED0A24B8FC680028FBFC /* People */,
 				F7098F2024928E6300313703 /* Feed */,
@@ -5171,6 +5191,7 @@
 				F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */,
 				F734C1E92BC8476600B2E8C8 /* Actions.swift in Sources */,
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
+				84BFAA3A2E89FCF00011516A /* MageServer+Testing.swift in Sources */,
 				F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.swift in Sources */,
 				F7DE98712C122D64005372F8 /* BottomSheetRepository.swift in Sources */,
@@ -5204,6 +5225,7 @@
 				84299DAD2E3C0F05007E51B1 /* IDPLoginViewModel.swift in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
+				84BFAA382E89BD000011516A /* TestingAppDelegate.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
 				F7C097752C80C73C003FA115 /* ObservationFormModel.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
@@ -5672,7 +5694,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7FC67F92CD3C39C0022BAF1 /* GeoPackageImporterTests.swift in Sources */,
-				F7FC68062CD3C6610022BAF1 /* TestingAppDelegate.m in Sources */,
+				84BFAA352E89BAAF0011516A /* TestHelpers.swift in Sources */,
 				F7FC67FA2CD3C3A50022BAF1 /* GeoPackageImporterUITests.swift in Sources */,
 				F7FC68072CD3C9780022BAF1 /* MockCacheOverlayListener.swift in Sources */,
 				F7FC67FB2CD3C3AA0022BAF1 /* GeoPackageTests.swift in Sources */,
@@ -5681,7 +5703,6 @@
 				842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */,
 				F7FC68182CD3D37B0022BAF1 /* GeoPackageLayerMapTests.swift in Sources */,
 				F7FC67FF2CD3C46C0022BAF1 /* KIF+Extensions.swift in Sources */,
-				F7FC68002CD3C46C0022BAF1 /* TestHelpers.swift in Sources */,
 				F73E17E12CD3C13C008F2216 /* MAGEGeoPackageTests.swift in Sources */,
 				F7FC68012CD3C4880022BAF1 /* MageCoreDataFixtures.swift in Sources */,
 				F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */,
@@ -5692,6 +5713,7 @@
 				F7FC680B2CD3CC560022BAF1 /* FeedItemStaticLocalDataSource.swift in Sources */,
 				F7FC680C2CD3CC560022BAF1 /* ObservationLocationStaticLocalDataSource.swift in Sources */,
 				F7FC680D2CD3CC560022BAF1 /* LocationStaticLocalDataSource.swift in Sources */,
+				84BFAA362E89BAC80011516A /* MainActorGate.swift in Sources */,
 				F7FC680E2CD3CC560022BAF1 /* UserStaticLocalDataSource.swift in Sources */,
 				F7FC67FE2CD3C3D80022BAF1 /* MageCoreDataTestCase.swift in Sources */,
 			);
@@ -5854,6 +5876,8 @@
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */,
+				84CA34A82E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift in Sources */,
+				84BFAA342E89B7E10011516A /* MainActorGate.swift in Sources */,
 				8423B1132E4A5D2B0069C1CD /* AttachmentImageLoadingTests.swift in Sources */,
 				F74020B92491904200B5A8BA /* TestHelpers.swift in Sources */,
 			);

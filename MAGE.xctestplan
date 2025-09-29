@@ -18,10 +18,19 @@
         }
       ]
     },
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "-UIApplicationDelegateClassName MAGE.TestingAppDelegate"
+      }
+    ],
     "environmentVariableEntries" : [
       {
         "key" : "OS_ACTIVITY_MODE",
         "value" : "enable"
+      },
+      {
+        "key" : "VIEW_TESTING",
+        "value" : "true"
       },
       {
         "enabled" : false,

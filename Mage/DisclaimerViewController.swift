@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 @objc public protocol DisclaimerDelegate {
     @objc func disclaimerAgree()
     @objc func disclaimerDisagree()

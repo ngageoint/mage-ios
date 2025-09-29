@@ -186,3 +186,17 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
         }
     }
 }
+
+extension AuthFlowCoordinator: DisclaimerDelegate {
+    @objc public func disclaimerAgree() {
+        UserUtility.singleton.acceptConsent()
+        nav?.popToRootViewController(animated: false)
+        authenticationDelegate?.authenticationSuccessful()
+    }
+    
+    @objc public func disclaimerDisagree() {
+        (UIApplication.shared.delegate as? AppDelegate)?.logout()
+    }
+    
+    
+}
