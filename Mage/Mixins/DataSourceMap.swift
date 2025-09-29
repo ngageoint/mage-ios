@@ -71,7 +71,7 @@ class DataSourceMap: MapMixin {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] tileOverlay in
                 Task { [weak self] in
-                    await self?.updateTileOverlays(tileOverlay: tileOverlay)
+                    await self?.updateTileOverlay(tileOverlay: tileOverlay)
                 }
             }
             .store(in: &cancellable)
@@ -86,7 +86,7 @@ class DataSourceMap: MapMixin {
     }
     
     @MainActor
-    private func updateTileOverlays(tileOverlay: DataSourceTileOverlay?) {
+    private func updateTileOverlay(tileOverlay: DataSourceTileOverlay?) {
         guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
