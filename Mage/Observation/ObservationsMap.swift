@@ -48,7 +48,9 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -58,7 +60,9 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -68,7 +72,9 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -78,7 +84,9 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -87,7 +95,9 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -101,7 +111,9 @@ class ObservationsMap: DataSourceMap {
                             self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
                             await self?.repository.clearCache()
                             await self?.redrawFeatures()
-                            self?.viewModel?.refresh()
+                            await MainActor.run {
+                                self?.viewModel?.refresh()
+                            }
                         }
                     }
                 }
