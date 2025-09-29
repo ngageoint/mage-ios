@@ -96,6 +96,13 @@ final class AuthFlowCoordinator_ParityTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: "showDisclaimer")
     }
     
+    override func tearDown() async throws {
+        try await super.tearDown()
+        (delegate as? SpyAuthDelegate)?.successExpectation = nil
+        UserDefaults.standard.removeObject(forKey: "loginType")
+        UserDefaults.standard.removeObject(forKey: "showDisclaimer")
+    }
+    
     func test_ModuleSelection_RequestedThenFallbackThenUnable() {
         let params: NSDictionary = ["username": "u", "password": "p", "serverUrl": "https://magetest"]
         
