@@ -55,6 +55,7 @@ class ObservationsMap: DataSourceMap {
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterUnitKey)
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
@@ -65,6 +66,7 @@ class ObservationsMap: DataSourceMap {
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterNumberKey)
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
@@ -75,6 +77,7 @@ class ObservationsMap: DataSourceMap {
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.importantFilterKey)
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
