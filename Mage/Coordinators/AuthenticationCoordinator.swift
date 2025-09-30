@@ -105,6 +105,7 @@ public final class AuthFlowCoordinator: NSObject {
 extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     
     @objc public func changeServerURL() {
+        print("AuthFlowCoordinator.authenticationDelegate?.changeServerURL()")
         authenticationDelegate?.changeServerURL()
     }
     

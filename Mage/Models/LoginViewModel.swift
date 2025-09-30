@@ -155,4 +155,8 @@ public enum A11yID {
     @objc public func signupTapped() {
         delegate?.createAccount()
     }
+    
+    @objc func changeServerURLTapped() {
+        delegate?.changeServerURL()
+    }
 }

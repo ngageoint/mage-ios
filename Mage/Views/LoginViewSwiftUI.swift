@@ -13,11 +13,6 @@ struct LoginViewSwiftUI: View {
     @ObservedObject var viewModel: LoginViewModel
     @State var isIntroViewsShown: Bool = false
     
-//    init(viewModel: LoginViewModel, showLoginImmediately: Bool = true) {
-//        self._viewModel = ObservedObject(wrappedValue: viewModel)
-//        self._isIntroViewsShown = State(initialValue: showLoginImmediately)
-//    }
-    
     var body: some View {
         VStack(spacing: 16) {
             Text(viewModel.strategyTitle ?? "Unknown Strategy Title")

@@ -5,7 +5,7 @@
 //  Created by Brent Michalski on 8/25/25.
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
-
+import Combine
 import Foundation
 import SwiftUI
 import UIKit
@@ -18,6 +18,8 @@ final class LoginRootViewModel: ObservableObject {
     let user: User?
     private let defaults: DefaultsStore
 
+    private var defaultsDidChange: NSObjectProtocol?
+    
     // Optional override for previews/tests (does not persist)
     public var previewBaseURLOverride: String?
     
@@ -29,17 +31,23 @@ final class LoginRootViewModel: ObservableObject {
     @Published var showContact: Bool = false
     @Published var showContactDetailButton: Bool = false
     
-    init(server: MageServer?,
-         user: User?,
-         delegate: AuthDelegates?,
-         loginFailure: Bool = false,
-         defaults: DefaultsStore = SystemDefaults()  // Injectable defaults store to make testing & previews easier
-    ) {
+    init(server: MageServer?, user: User?, delegate: AuthDelegates?, defaults: DefaultsStore = SystemDefaults(), loginFailure: Bool = false) {
         self.server = server
         self.user = user
         self.delegate = delegate
-        self.loginFailure = loginFailure
         self.defaults = defaults
+        self.loginFailure = loginFailure
+        
+        // When anything changes in UserDefaults changes, refresh the view
+        defaultsDidChange = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.objectWillChange.send()
+        }
+    }
+    
+    deinit {
+        if let token = defaultsDidChange {
+            NotificationCenter.default.removeObserver(token)
+        }
     }
     
     var statusViewHidden: Bool { resolvedBaseURLString != nil }
@@ -79,7 +87,9 @@ final class LoginRootViewModel: ObservableObject {
         serverVersionLabel ?? ""
     }
     
-    func onServerURLTapped() { delegate?.changeServerURL() }
+    func onServerURLTapped() {
+        delegate?.changeServerURL()
+    }
     
     func setContactInfo(_ contactInfo: ContactInfo) {
         contactMessage = contactInfo.messageWithContactInfo()
