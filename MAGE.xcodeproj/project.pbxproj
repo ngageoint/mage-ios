@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1947,6 +1947,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		3153355C2E8C6A1A00DAAC0C /* ObservationFilterViewSwiftUI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ObservationFilterViewSwiftUI; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -2089,6 +2090,7 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3153355C2E8C6A1A00DAAC0C /* ObservationFilterViewSwiftUI */,
 				F796E44B24193C9A005CA09C /* Attachment */,
 				F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */,
 				F7A292291FC3938F00DE5463 /* Authentication */,
@@ -4321,6 +4323,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				3153355C2E8C6A1A00DAAC0C /* ObservationFilterViewSwiftUI */,
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
 			);
 			name = MAGE;
