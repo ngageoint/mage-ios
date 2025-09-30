@@ -43,10 +43,11 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
+                    await self.repository.clearCache()
                     await MainActor.run {
-                        self?.viewModel?.refresh()
+                        self.viewModel?.refresh()
                     }
                 }
             }
@@ -55,10 +56,11 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
+                    await self.repository.clearCache()
                     await MainActor.run {
-                        self?.viewModel?.refresh()
+                        self.viewModel?.refresh()
                     }
                 }
             }
@@ -67,10 +69,11 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
+                    await self.repository.clearCache()
                     await MainActor.run {
-                        self?.viewModel?.refresh()
+                        self.viewModel?.refresh()
                     }
                 }
             }
@@ -79,10 +82,11 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
+                    await self.repository.clearCache()
                     await MainActor.run {
-                        self?.viewModel?.refresh()
+                        self.viewModel?.refresh()
                     }
                 }
             }
@@ -90,10 +94,11 @@ class ObservationsMap: DataSourceMap {
         UserDefaults.standard.publisher(for: \.favoritesFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
+                    await self.repository.clearCache()
                     await MainActor.run {
-                        self?.viewModel?.refresh()
+                        self.viewModel?.refresh()
                     }
                 }
             }
@@ -104,12 +109,13 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] notification in
                 if let event: EventModel = notification.object as? EventModel {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
+                        guard let self = self else { return }
                         Task { [self] in
-                            self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
-                            await self?.repository.clearCache()
-                            await self?.redrawFeatures()
+                            self.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
+                            await self.repository.clearCache()
+                            await self.redrawFeatures()
                             await MainActor.run {
-                                self?.viewModel?.refresh()
+                                self.viewModel?.refresh()
                             }
                         }
                     }
