@@ -17,96 +17,100 @@ public struct SignupViewSwiftUI: View {
     }
     
     public var body: some View {
-        VStack(spacing: 16) {
-            Text("Create Account (HEADER)")
-                .font(.title.bold())
-            
-            Group {
-                TextField("Display Name", text: $model.displayName)
-                    .noAutoCapsAndCorrection()
-                    .textContentType(.name)
-                    .submitLabel(.next)
+        ScrollView {
+            VStack(spacing: 16) {
+                Text("Create Account (HEADER!)")
+                    .font(.title.bold())
                 
-                TextField("Username", text: $model.username)
-                    .noAutoCapsAndCorrection()
-                    .textContentType(.username)
-                    .submitLabel(.next)
+                Group {
+                    TextField("Display Name", text: $model.displayName)
+                        .noAutoCapsAndCorrection()
+                        .textContentType(.name)
+                        .submitLabel(.next)
+                    
+                    TextField("Username", text: $model.username)
+                        .noAutoCapsAndCorrection()
+                        .textContentType(.username)
+                        .submitLabel(.next)
+                    
+                    TextField("Email", text: $model.email)
+                        .noAutoCapsAndCorrection()
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
+                        .submitLabel(.next)
+                    
+                    SecureField("Password (NEED Verification DATA)", text: $model.password)
+                        .textContentType(.newPassword)
+                        .submitLabel(.next)
+                    
+                    SecureField("Confirm Password", text: $model.confirmPassword)
+                        .textContentType(.newPassword)
+                        .submitLabel(.go)
+                        .onSubmit {
+                            Task {
+                                guard model.isFormValid else { return }
+                                await model.beginSignup()
+                            }
+                        }
+                }
+                .textFieldStyle(.roundedBorder)
+                .disabled(model.isSubmitting)
                 
-                TextField("Email", text: $model.email)
-                    .noAutoCapsAndCorrection()
-                    .keyboardType(.emailAddress)
-                    .textContentType(.emailAddress)
-                    .submitLabel(.next)
+                if let err = model.errorMessage {
+                    Text(err).foregroundColor(.red).font(.footnote)
+                }
                 
-                SecureField("Password (NEED Verification DATA)", text: $model.password)
-                    .textContentType(.newPassword)
-                    .submitLabel(.next)
-                
-                SecureField("Confirm Password", text: $model.confirmPassword)
-                    .textContentType(.newPassword)
-                    .submitLabel(.go)
-                    .onSubmit {
+                HStack(spacing: 12) {
+                    Button {
                         Task {
+                            // validate form first
                             guard model.isFormValid else { return }
                             await model.beginSignup()
                         }
+                    } label: {
+                        if model.isSubmitting { ProgressView() } else { Text("Sign Up").bold() }
                     }
-            }
-            .textFieldStyle(.roundedBorder)
-            
-            if let err = model.errorMessage {
-                Text(err).foregroundColor(.red).font(.footnote)
-            }
-            
-            Button {
-                Task {
-                    // validate form first
-                    guard model.isFormValid else { return }
-                    await model.beginSignup()
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!model.isFormValid || model.isSubmitting)
+                    
+                    Button("Cancel") { dismiss() }
+                        .buttonStyle(.borderless)
                 }
-            } label: {
-                if model.isSubmitting { ProgressView() } else { Text("Sign Up").bold() }
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(!model.isFormValid || model.isSubmitting)
-            
-            Button("Cancel") { dismiss() }
-                .buttonStyle(.borderless)
-        }
-        .padding()
-        .sheet(isPresented: $model.showCaptcha) {
-            captchaSheet
-                .presentationDetents([.medium, .large])
-        }
-    }
-    
-    private var captchaSheet: some View {
-        VStack(spacing: 12) {
-            Text("Verify you're human").font(.headline)
-            
-            CaptchaWebView(html: model.captchaHTML)
-                .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 220)
-            
-            TextField("Enter the characters", text: $model.captchaText)
-                .textFieldStyle(.roundedBorder)
-                .noAutoCapsAndCorrection()
-                .submitLabel(.done)
-                .onSubmit { Task { await model.completeSignup() }}
-            
-            HStack {
-                Button("Refresh") { Task { await model.refreshCaptcha() } }
-                Spacer()
-                Button("Cancel") { model.showCaptcha = false }
-                Button {
-                    Task { await model.completeSignup() }
-                } label: {
-                    if model.isSubmitting { ProgressView() } else { Text("Submit").bold() }
-                }
-                .disabled(model.captchaText.isEmpty || model.isSubmitting)
                 
+                if model.showCaptcha {
+                    GroupBox("Human Verification") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            CaptchaWebView(html: model.captchaHTML)
+                                .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 220)
+                                .accessibilityIdentifier("captchaTextField")
+                            
+                            HStack {
+                                Button {
+                                    Task { await model.refreshCaptcha() }
+                                } label: {
+                                    if model.isSubmitting { ProgressView() } else { Text("Refresh") }
+                                }
+                                
+                                Spacer()
+                                
+                                Button("Cancel") { model.showCaptcha = false }
+                                
+                                Button {
+                                    Task { await model.completeSignup() }
+                                } label: {
+                                    if model.isSubmitting { ProgressView() } else { Text("Submit").bold() }
+                                }
+                                .disabled(model.captchaText.isEmpty || model.isSubmitting)
+                                .accessibilityIdentifier("captchaSubmitButton")
+                            }
+                        }
+                        .padding(.top, 4)
+                    }
+                    .accessibilityIdentifier("captchaGroupBox")
+                }
             }
-        }
-        .padding()
+            .padding()
+        }  // Scrollview
     }
 }
 
