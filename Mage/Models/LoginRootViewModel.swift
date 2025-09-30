@@ -18,8 +18,6 @@ final class LoginRootViewModel: ObservableObject {
     let user: User?
     private let defaults: DefaultsStore
 
-    private var defaultsDidChange: NSObjectProtocol?
-    
     // Optional override for previews/tests (does not persist)
     public var previewBaseURLOverride: String?
     
@@ -31,6 +29,9 @@ final class LoginRootViewModel: ObservableObject {
     @Published var showContact: Bool = false
     @Published var showContactDetailButton: Bool = false
     
+    private var defaultsCancellable: AnyCancellable?
+    @Published private var defaultsVersionTick: Int = 0
+    
     init(server: MageServer?, user: User?, delegate: AuthDelegates?, defaults: DefaultsStore = SystemDefaults(), loginFailure: Bool = false) {
         self.server = server
         self.user = user
@@ -38,16 +39,18 @@ final class LoginRootViewModel: ObservableObject {
         self.defaults = defaults
         self.loginFailure = loginFailure
         
-        // When anything changes in UserDefaults changes, refresh the view
-        defaultsDidChange = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-            self?.objectWillChange.send()
-        }
+        // Any defaults change -> re-render on the next run loop
+        defaultsCancellable = NotificationCenter.default
+            .publisher(for: UserDefaults.didChangeNotification)
+            .sink { [weak self] _ in
+                DispatchQueue.main.async { [weak self] in
+                    self?.defaultsVersionTick &+= 1
+                }
+            }
     }
     
     deinit {
-        if let token = defaultsDidChange {
-            NotificationCenter.default.removeObserver(token)
-        }
+        defaultsCancellable?.cancel()
     }
     
     var statusViewHidden: Bool { resolvedBaseURLString != nil }
