@@ -35,6 +35,16 @@ public struct SignupRequest: Sendable, Equatable {
         self.password = password
         self.confirmPassword = confirmPassword
     }
+    
+    public var parameters: [String: Any] {
+        [
+            "displayName": displayName,
+            "username": username,
+            "email": email,
+            "password": password,
+            "confirmPassword": confirmPassword
+        ]
+    }
 }
 
 public struct ChangePasswordRequest: Sendable, Equatable {

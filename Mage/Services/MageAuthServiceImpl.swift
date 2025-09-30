@@ -10,45 +10,46 @@ import Foundation
 import Authentication
 
 final class MageAuthServiceImpl: AuthService {
+    
     func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
         try await withCheckedThrowingContinuation { cont in
-            MageAuthAPI.getSignupCaptcha(forUsername: username, background: backgroundHex) { token, captcha, error in
+            MageAuthAPI.getSignupCaptcha(forUsername: username, background: backgroundHex) { token, base64, error in
                 if let error {
-                    cont.resume(throwing: AuthError.server(status: 500, message: error.localizedDescription))
+                    cont.resume(throwing: error)
                     return
                 }
-                guard let token, let captcha else {
-                    cont.resume(throwing: AuthError.invalidInput(message: "Missing captcha or token"))
+                
+                guard let token, let base64 else {
+                    cont.resume(throwing: AuthError.server(status: 0, message: "Captcha not available"))
                     return
                 }
-                cont.resume(returning: SignupCaptcha(token: token, imageBase64: captcha))
+                cont.resume(returning: SignupCaptcha(token: token, imageBase64: base64))
             }
         }
     }
     
     func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession {
-        let params: [String: Any] = [
-            "username": req.username,
-            "displayName": req.displayName,
-            "email": req.email,
-            "password": req.password,
-            "confirmPasword": req.confirmPassword,  // TODO: BRENT - double check the proper term (had passwordconfirm)
-            "captcha": captchaText
-        ]
-        
-        return try await withCheckedThrowingContinuation { cont in
-            MageAuthAPI.completeSignup(withParameters: params, token: token) { http, body, error in
+        try await withCheckedThrowingContinuation { cont in
+            MageAuthAPI.signup(withParameters: req.parameters, captchaText: captchaText, token: token) { http, error in
                 if let error {
-                    cont.resume(throwing: AuthError.server(status: http?.statusCode ?? 500, message: error.localizedDescription))
+                    // TODO: Possibly use error mapper
+                    let status = http?.statusCode ?? 0
+                    
+                    if let mapped = HTTPErrorMapper.map(status: status, headers: http?.allHeaderFields ?? [:], bodyData: nil) {
+                        cont.resume(throwing: mapped)
+                    } else {
+                        cont.resume(throwing: error)
+                    }
                     return
                 }
                 
-                let status = http?.statusCode ?? 0
+                // Build a session from headers if present; otherwise create a nominal session.
+                let headers = http?.allHeaderFields ?? [:]
+                let token = (headers["X-Auth-Token"] as? String)
+                ?? (headers["Authorization"] as? String)
+                ?? "signed-up"
                 
-                if let mapped = HTTPErrorMapper.map(status: status, headers: http?.allHeaderFields ?? [:], bodyData: body) {
-                    cont.resume(throwing: mapped)
-                    return
-                }
+                cont.resume(returning: AuthSession(token: token))
             }
         }
     }

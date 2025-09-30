@@ -44,3 +44,26 @@ public extension AuthDependencies {
         return store
     }
 }
+
+// #if DEBUG
+public extension AuthDependencies {
+    convenience init(
+        auth: AuthService,
+        sessionStore: SessionStore,
+        http: HTTPPerforming = HTTPLoginPerformer(),
+        authStore: AuthStore? = nil
+    ) {
+        self.init()
+        self.authService = auth
+        self.sessionStore = sessionStore
+        self.http = http
+        
+        if let authStore { self.authStore = authStore }
+    }
+    
+    
+    static func preview(auth: AuthService, sessionStore: SessionStore) -> Self {
+        Self(auth: auth, sessionStore: sessionStore)
+    }
+}
+// #endif

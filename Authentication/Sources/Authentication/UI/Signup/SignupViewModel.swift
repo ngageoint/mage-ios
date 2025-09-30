@@ -11,79 +11,108 @@ import Combine
 
 @MainActor
 public final class SignupViewModel: ObservableObject {
+    
+    // MARK: - Form state
     @Published public var displayName: String = ""
     @Published public var username: String = ""
     @Published public var email: String = ""
     @Published public var password: String = ""
     @Published public var confirmPassword: String = ""
     
+    // MARK: - UI state
     @Published public var isSubmitting = false
     @Published public var errorMessage: String?
     @Published public var didSucceed = false
     
-    @Published public var captchaImageBase64: String?
-    @Published public var captchaToken: String?
-    @Published public var captchaText: String = ""
+    // MARK: - CAPTCHA state
     @Published public var showCaptcha: Bool = false
+    @Published public var captchaHTML: String = ""
+    @Published public var captchaText: String = ""
     
-    private let auth: AuthService
-    private let sessionStore: SessionStore
+    private var captchaToken: String?
     
-    public init(auth: AuthService, sessionStore: SessionStore) {
-        self.auth = auth
-        self.sessionStore = sessionStore
+    // MARK: - Dependencies
+    private let deps: AuthDependencies
+    
+    public init(deps: AuthDependencies) {
+        self.deps = deps
     }
     
-    public convenience init(deps: AuthDependencies) {
-        precondition(deps.authService != nil, "AuthDependencies.authService must be injected")
-        precondition(deps.sessionStore != nil, "AuthDependencies.sessionStore must be injected")
-        self.init(auth: deps.authService!, sessionStore: deps.sessionStore!)
+    // MARK: - Validation
+    public var isFormValid: Bool {
+        guard !displayName.isBlank,
+              !username.isBlank,
+              email.isPlausibleEmail,
+              password.count >= 8,
+              password == confirmPassword
+        else { return false }
+        return true
     }
     
+    // MARK: - Actions
+    
+    // Step 1: Validate form and fetch a CAPTCHA
     public func beginSignup() async {
+        guard isFormValid else { return }
+        errorMessage = nil
         isSubmitting = true
-        defer { isSubmitting = false }
+        captchaText = ""
+        captchaToken = nil
         
-        // fetch captcha, then show sheet
         do {
-            let res = try await auth.fetchSignupCaptcha(username: username, backgroundHex: "#FFFFFF")
-            captchaImageBase64 = res.imageBase64
-            captchaToken = res.token
+            let bgHex = "FFFFFF"
+            let captcha = try await deps.requireAuthService.fetchSignupCaptcha(username: username, backgroundHex: bgHex)
+            captchaToken = captcha.token
+            captchaHTML = CaptchaWebView.html(fromBase64Image: captcha.imageBase64)
             showCaptcha = true
         } catch {
-            errorMessage = "Could not fetch CAPTCHA. \(error.localizedDescription)"
-            showCaptcha = false
+            errorMessage = error.userFacingMessage
         }
+        
+        isSubmitting = false
     }
     
-    public func completeSignup() async {
-        guard let token = captchaToken else { errorMessage = "Missing CAPTCHA token"; return }
+    public func refreshCaptcha() async {
+        guard !username.isBlank else { return }
+        errorMessage = nil
         isSubmitting = true
-        
-        defer {
-            isSubmitting = false
-            showCaptcha = false
-        }
+        captchaText = ""
         
         do {
-            let req = SignupRequest(displayName: displayName, username: username, email: email, password: password, confirmPassword: confirmPassword)
-            _ = try await auth.submitSignup(req, captchaText: captchaText, token: token)
-            didSucceed = true
-    } catch let err as AuthError {
-        errorMessage = err.uiMessage(flow: .signup)
-    } catch {
-        errorMessage = "Unexpected error. Please try again."
+            let captcha = try await deps.requireAuthService.fetchSignupCaptcha(username: username, backgroundHex: "FFFFFF")
+            captchaToken = captcha.token
+            captchaHTML = CaptchaWebView.html(fromBase64Image: captcha.imageBase64)
+        } catch {
+            errorMessage = error.userFacingMessage
+        }
+        
+        isSubmitting = false
     }
-}
-
-    // TODO: Brent - need to change to use the rules set by the server
-    public var isFormValid: Bool {
-        guard !displayName.isBlank else { return false }
-        guard !username.isBlank else { return false }
-        guard email.isPlausibleEmail else { return false }
-        guard password.count >= 8 else { return false }
-        guard password == confirmPassword else { return false }
-        return true
+    
+    
+    // Step 2: Submit the form with the captcha text + token
+    public func completeSignup() async {
+        guard let token = captchaToken, !captchaText.isBlank else { return }
+        errorMessage = nil
+        isSubmitting = true
+        
+        do {
+            let req = SignupRequest(
+                displayName: displayName,
+                username: username,
+                email: email,
+                password: password,
+                confirmPassword: confirmPassword)
+            
+            let session = try await deps.requireAuthService.submitSignup(req, captchaText: captchaText, token: token)
+            await deps.requireSessionStore.set(session)
+            didSucceed = true
+            showCaptcha = false
+        } catch {
+            errorMessage = error.userFacingMessage
+        }
+        
+        isSubmitting = false
     }
 }
 
@@ -93,5 +122,11 @@ private extension String {
     
     var isPlausibleEmail: Bool {
         contains("@") && contains(".")
+    }
+}
+
+private extension Error {
+    var userFacingMessage: String {
+        return (self as NSError).localizedDescription
     }
 }
