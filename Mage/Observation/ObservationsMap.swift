@@ -30,9 +30,6 @@ class ObservationsMap: DataSourceMap {
     init() {
         super.init(
             dataSource: DataSources.observation
-//            ,
-//            repository: repository,
-//            mapFeatureRepository: mapFeatureRepository
         )
         viewModel = DataSourceMapViewModel(
             dataSource: dataSource,
@@ -44,55 +41,60 @@ class ObservationsMap: DataSourceMap {
 
         UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterUnitKey)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterNumberKey)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.importantFilterKey)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.favoritesFilterKey)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] order in
                 Task { [self] in
                     await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await MainActor.run {
+                        self?.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -106,7 +108,9 @@ class ObservationsMap: DataSourceMap {
                             self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
                             await self?.repository.clearCache()
                             await self?.redrawFeatures()
-                            self?.viewModel?.refresh()
+                            await MainActor.run {
+                                self?.viewModel?.refresh()
+                            }
                         }
                     }
                 }
