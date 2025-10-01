@@ -96,6 +96,7 @@
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		313FA0702E130399008DA52E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FA06F2E130399008DA52E /* Date.swift */; };
+		315335842E8D730200DAAC0C /* ObservationFilterViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315335832E8D730200DAAC0C /* ObservationFilterViewSwiftUI.swift */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.swift */; };
@@ -1096,6 +1097,7 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		313FA06F2E130399008DA52E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		315335832E8D730200DAAC0C /* ObservationFilterViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFilterViewSwiftUI.swift; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
@@ -1947,7 +1949,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		3153355C2E8C6A1A00DAAC0C /* ObservationFilterViewSwiftUI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ObservationFilterViewSwiftUI; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -2090,7 +2091,6 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3153355C2E8C6A1A00DAAC0C /* ObservationFilterViewSwiftUI */,
 				F796E44B24193C9A005CA09C /* Attachment */,
 				F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */,
 				F7A292291FC3938F00DE5463 /* Authentication */,
@@ -2171,6 +2171,7 @@
 				2F99EC201E2982E700E0CBB6 /* MageFilter.m */,
 				2FB41CE21DC79C8F005C18F9 /* ObservationFilterTableViewController.h */,
 				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
+				315335832E8D730200DAAC0C /* ObservationFilterViewSwiftUI.swift */,
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
 			);
@@ -4323,7 +4324,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				3153355C2E8C6A1A00DAAC0C /* ObservationFilterViewSwiftUI */,
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
 			);
 			name = MAGE;
@@ -5193,6 +5193,7 @@
 				F73564D22C61430900466813 /* ObservationImportantService.swift in Sources */,
 				F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */,
 				F72D432A2694B60300F9AC3B /* Observation.swift in Sources */,
+				315335842E8D730200DAAC0C /* ObservationFilterViewSwiftUI.swift in Sources */,
 				F70C34372C73D753007616FA /* DownloadingFileViewModel.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */,

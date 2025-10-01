@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-@objc class ObservationFilterViewSwiftUI: NSObject {
+@objc class ObservationFilterViewUIHostingFactory: NSObject {
     @objc static func makeViewController() -> UIViewController {
         return UIHostingController(rootView: ObservationFilterView())
     }
