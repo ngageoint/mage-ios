@@ -53,6 +53,7 @@ class SearchSheetController: UIViewController {
         refreshingView.addSubview(progressView)
         refreshingView.addSubview(refreshingStatus)
         refreshingView.alpha = 0.0
+        refreshingView.backgroundColor = .clear
         return refreshingView
     }()
     
@@ -71,6 +72,7 @@ class SearchSheetController: UIViewController {
         tableView.dataSource = self
         tableView.isScrollEnabled = true;
         tableView.register(FeedItemPropertyCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.keyboardDismissMode = .interactive
         return tableView;
     }()
     
@@ -102,15 +104,21 @@ class SearchSheetController: UIViewController {
         searchBar.becomeFirstResponder()
         
         tableView.autoPinEdge(.top, to: .bottom, of: searchBar, withOffset: 16)
-        tableView.autoPinEdge(.right, to: .right, of: view)
-        tableView.autoPinEdge(.left, to: .left, of: view)
+        tableView.autoPinEdge(.leading, to: .leading, of: view)
+        tableView.autoPinEdge(.trailing, to: .trailing, of: view)
         tableView.autoPinEdge(.bottom, to: .bottom, of: view)
         tableView.allowsSelection = true
         tableView.layoutMargins = UIEdgeInsets.zero;
 
-        refreshingView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0))
-        
-        refreshingStatus.autoCenterInSuperview()
+        // Pin refresh UI to top for visibility when keyboard is open (on a real device)
+        refreshingView.autoPinEdge(.top, to: .bottom, of: searchBar, withOffset: 16)
+        refreshingView.autoPinEdge(.leading, to: .leading, of: view)
+        refreshingView.autoPinEdge(.trailing, to: .trailing, of: view)
+        refreshingView.autoPinEdge(.bottom, to: .bottom, of: view)
+
+        refreshingStatus.autoPinEdge(.top, to: .top, of: refreshingView, withOffset: 56)
+        refreshingStatus.autoPinEdge(.leading, to: .leading, of: view)
+        refreshingStatus.autoPinEdge(.trailing, to: .trailing, of: view)
         
         progressView.autoPinEdge(.bottom, to: .top, of: refreshingStatus, withOffset: -8)
         progressView.autoAlignAxis(toSuperviewAxis: .vertical)
@@ -123,11 +131,11 @@ class SearchSheetController: UIViewController {
 
         scheme = containerScheme;
         
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.systemBackground
         
         dragIcon.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         
-        refreshingView.backgroundColor = scheme?.colorScheme.surfaceColor
+        refreshingView.backgroundColor = UIColor.systemBackground
         
         refreshingStatus.font = scheme?.typographyScheme.headline6
         refreshingStatus.textColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
@@ -145,7 +153,7 @@ extension SearchSheetController : UISearchBarDelegate {
         UIView.animate(withDuration: 0.3) {
             self.refreshingView.alpha = 1.0
         }
-                
+        scrollToTop()
         geocoder.search(text: text, region: mapView?.region) { searchResponse in
             switch searchResponse {
                 case let .success(type, results):
@@ -160,6 +168,12 @@ extension SearchSheetController : UISearchBarDelegate {
                 self.refreshingView.alpha = 0.0
             }
         }
+    }
+    
+    func scrollToTop() {
+        guard tableView.numberOfRows(inSection: 0) > 0 else { return }
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
     }
 }
 
@@ -185,6 +199,7 @@ extension SearchSheetController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let result = searchResults[indexPath.row]
+        searchBar.resignFirstResponder()
         self.delegate?.onSearchResultSelected(type: self.searchType ?? SearchResponseType.geocoder, result: result)
     }
 }
@@ -257,17 +272,12 @@ class SearchResultContentView: UIView, UIContentView {
         stackView.isLayoutMarginsRelativeArrangement = false;
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         stackView.clipsToBounds = true;
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
+        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
         
         stackView.setCustomSpacing(4, after: nameLabel)
         nameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        nameLabel.autoPinEdge(.left, to: .left, of: stackView, withOffset: 16)
-        nameLabel.autoPinEdge(.right, to: .right, of: stackView, withOffset: 16)
 
         stackView.setCustomSpacing(0, after: addressLabel)
-        addressLabel.autoPinEdge(.top, to: .bottom, of: nameLabel, withOffset: 16)
-        addressLabel.autoPinEdge(.left, to: .left, of: stackView, withOffset: 16)
-        addressLabel.autoPinEdge(.right, to: .right, of: stackView, withOffset: 16)
         addressLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.60);
         addressLabel.numberOfLines = 0;
         addressLabel.lineBreakMode = .byWordWrapping;

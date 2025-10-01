@@ -197,6 +197,12 @@
 		BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */; };
 		BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
+		D258D7802E253A4900A44AC4 /* SettingsLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */; };
+		D258D7852E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D7842E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift */; };
+		D258D7872E253D2700A44AC4 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D7862E253D2700A44AC4 /* SettingsModel.swift */; };
+		D258D7892E2549B400A44AC4 /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D7882E2549B400A44AC4 /* SettingsRepository.swift */; };
+		D258D78B2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D78A2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift */; };
+		D258D78E2E256F1E00A44AC4 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D78D2E256F1E00A44AC4 /* SettingsService.swift */; };
 		D2A46FF92E0DD73700CE0D72 /* ObservationChangeRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1144,6 +1150,12 @@
 		B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGEGeoPackageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E70D96990B16652014926 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD66678D2D82152100D9BBA0 /* MAGE.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MAGE.xctestplan; sourceTree = "<group>"; };
+		D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalDataSource.swift; sourceTree = "<group>"; };
+		D258D7842E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalDataSourceTests.swift; sourceTree = "<group>"; };
+		D258D7862E253D2700A44AC4 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		D258D7882E2549B400A44AC4 /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
+		D258D78A2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRemoteDataSource.swift; sourceTree = "<group>"; };
+		D258D78D2E256F1E00A44AC4 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationChangeRegions.swift; sourceTree = "<group>"; };
 		E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
@@ -2417,9 +2429,37 @@
 			name = Contact;
 			sourceTree = "<group>";
 		};
+		D258D77E2E25399000A44AC4 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */,
+				D258D7862E253D2700A44AC4 /* SettingsModel.swift */,
+				D258D7882E2549B400A44AC4 /* SettingsRepository.swift */,
+				D258D78A2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		D258D7812E253AE700A44AC4 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D258D7842E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		D258D78C2E256F0E00A44AC4 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D258D78D2E256F1E00A44AC4 /* SettingsService.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				D258D7812E253AE700A44AC4 /* Settings */,
 				F7C097B72C878259003FA115 /* Event */,
 				F7C097682C7FBE43003FA115 /* Role */,
 				F763FF332C7BAB6500403A00 /* Location */,
@@ -2447,6 +2487,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				D258D77E2E25399000A44AC4 /* Settings */,
 				F7D31F902CB887A000126468 /* Layer */,
 				F7C097A72C824B93003FA115 /* Team */,
 				F7C0975F2C7FA813003FA115 /* Role */,
@@ -3283,6 +3324,7 @@
 		F776AC912BCD9CB5000FAFB4 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				D258D78C2E256F0E00A44AC4 /* Settings */,
 				F7FB045E2CDEB8BE009C1041 /* Attachment */,
 				F7C097B32C877738003FA115 /* Event */,
 				F763FF0C2C76634400403A00 /* User */,
@@ -4958,6 +5000,7 @@
 				F7C097C22C889A3A003FA115 /* Persistence.swift in Sources */,
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
+				D258D78B2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift in Sources */,
 				846224CB2E313A8D0029FE98 /* LocalLoginViewModel.swift in Sources */,
 				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,
 				F7225F4A2C5944F700B7D935 /* ImportantButton.swift in Sources */,
@@ -4984,6 +5027,7 @@
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
+				D258D7872E253D2700A44AC4 /* SettingsModel.swift in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.swift in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
 				F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */,
@@ -5047,6 +5091,7 @@
 				F7DE987E2C133B21005372F8 /* ObservationsTileRepository.swift in Sources */,
 				F73564E02C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
+				D258D78E2E256F1E00A44AC4 /* SettingsService.swift in Sources */,
 				F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
@@ -5080,6 +5125,7 @@
 				F73607DC26F90C79008CF824 /* MageBottomSheet.swift in Sources */,
 				F76F3EAC2C937BF2009E9555 /* TestPersistence.swift in Sources */,
 				F7C0978A2C81114E003FA115 /* ObservationListViewModel.swift in Sources */,
+				D258D7892E2549B400A44AC4 /* SettingsRepository.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F7FD5AA42809F3800032384B /* EmptyState.swift in Sources */,
 				2FAE23FF2B5599A100629721 /* NativeService.swift in Sources */,
@@ -5280,6 +5326,7 @@
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
 				F7DE98882C1A43F3005372F8 /* UserRepository.swift in Sources */,
+				D258D7802E253A4900A44AC4 /* SettingsLocalDataSource.swift in Sources */,
 				F776AC972BCD9E6A000FAFB4 /* ObservationService.swift in Sources */,
 				F734C1DA2BC03EB400B2E8C8 /* MapFeatureRepository.swift in Sources */,
 				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
@@ -5621,6 +5668,7 @@
 				F7C0974C2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift in Sources */,
 				F7BEF68427D7C561000E8CDE /* FilteredObservationsMapTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.swift in Sources */,
+				D258D7852E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift in Sources */,
 				F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */,
 				F763FF182C78EF9300403A00 /* FeedItemStaticLocalDataSource.swift in Sources */,
 				F79B5DE32821D94C001A5844 /* EventChooserCoordinatorTests.swift in Sources */,
