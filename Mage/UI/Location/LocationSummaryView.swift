@@ -10,6 +10,9 @@ import Foundation
 import SwiftUI
 import Kingfisher
 
+/**
+ This represents a single cell in the People Tab Table
+ */
 struct LocationSummaryView: View {
     
     @StateObject
