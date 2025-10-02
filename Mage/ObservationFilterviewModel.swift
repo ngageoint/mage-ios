@@ -9,31 +9,22 @@
 import Combine
 
 class ObservationFilterviewModel: ObservableObject {
-    @Injected(\.userRepository)
-    var userRepository: UserRepository
-    var cancellable: Set<AnyCancellable> = Set()
     
-    @Published var users: [URIItem] = []
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    var users: Set<User> = []
     
-    //TODO Filter Users Logic
-    
-    init(users: [URIItem] = []) {
-        self.users = users
-        self.userRepository.users(paginatedBy: nil)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        print("Error fetching users: \(error)")
-                    }
-                },
-                receiveValue: { [weak self] users in
-                    self?.users = users
+    init() {
+        guard let context = context else { return }
+        guard let event = Event.getCurrentEvent(context: context) else {
+            return
+        }
+        if let teams = event.teams {
+            for team in teams {
+                if let users = team.users {
+                    self.users.formUnion(users)
                 }
-            )
-            .store(in: &cancellable)
+            }
+        }
     }
 }

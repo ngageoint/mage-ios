@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import Kingfisher
 
 @objc class ObservationFilterViewUIHostingFactory: NSObject {
     @objc static func makeViewController() -> UIViewController {
@@ -20,8 +21,8 @@ struct ObservationFilterView: View {
     @ObservedObject
     var viewModel: ObservationFilterviewModel
     
-    @State var isSelected: Bool = false
-    @State var searchText: String = ""
+    @State private var selectedItems: Set<User> = []
+    @State var searchText: String = "" // TODO: not working
     
     init(viewModel: ObservationFilterviewModel = .init()) {
         self.viewModel = viewModel
@@ -35,9 +36,11 @@ struct ObservationFilterView: View {
         } else {
             NavigationStack {
                 ScrollView {
-                    ForEach(0...10, id: \.self) { user in
-                        UserObservationCellView(isSelected: $isSelected)
-                            .padding(.vertical, 8)
+                    LazyVStack(alignment:.leading) {
+                        ForEach(Array(viewModel.users), id: \.self) { user in
+                            UserObservationCellView(selectedItems: $selectedItems, user: user)
+                                .padding(.vertical, 8)
+                        }
                     }
                 }
                 .searchable(text: $searchText, prompt: "Search")
@@ -51,26 +54,41 @@ struct ObservationFilterView: View {
 }
 
 struct UserObservationCellView: View {
-    @Binding var isSelected: Bool
+    @Binding var selectedItems: Set<User>
+    var user: User
     var body: some View {
         HStack {
-            Image(.iconWBackground)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 50, height: 50)
-                .clipShape(Circle())
-            
+            if let url = URL(string: user.avatarUrl ?? "") {
+                KFImage(url)
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
+                    .forceRefresh()
+                    .cacheOriginalImage()
+                    .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
+                    .placeholder {
+                        Image(systemName: "person.crop.square")
+                            .symbolRenderingMode(.monochrome)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                    }
+                
+                    .fade(duration: 0.3)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(idealWidth: 48, maxWidth: 48, idealHeight: 48, maxHeight: 48)
+                    .clipShape(.circle)
+            }
             VStack(alignment: .leading) {
-                Text("James McDougall")
+                Text(user.name ?? "unknown")
                     .font(.title3)
                     .fontWeight(.semibold)
-                Text("@jmcdougall")
+                Text(user.remoteId ?? "unknown")
                     .foregroundStyle(.secondary)
             }
             
             Spacer()
             
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "checkmark.circle")
+            Image(systemName: selectedItems.contains(user) ? "checkmark" : "")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
@@ -78,16 +96,24 @@ struct UserObservationCellView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 8)
         .onTapGesture {
-            isSelected.toggle()
+            if selectedItems.contains(user) {
+                selectedItems.remove(user)
+            } else {
+                selectedItems.insert(user)
+            }
         }
     }
 }
 
 #Preview {
-    let userOne = UserModel(userId: nil, remoteId: nil, name: "Dan Benner", coordinate: nil, email: nil, phone: nil, lastUpdated: nil, avatarUrl: nil, username: "dbenner", timestamp: nil, hasEditPermissions: true, cllocation: nil)
-    let userTwo = UserModel(userId: nil, remoteId: nil, name: "James McDougall", coordinate: nil, email: nil, phone: nil, lastUpdated: nil, avatarUrl: nil, username: "jmcdougall", timestamp: nil, hasEditPermissions: true, cllocation: nil)
-    
-    var previewModel = ObservationFilterviewModel(
-        users: [])
-    ObservationFilterView()
+//    let one = User()
+//    one.name = "dbenner"
+//    one.remoteId = "1"
+//    let two = User()
+//    two.name = "jmcdougall"
+//    two.remoteId = "2"
+//    
+//    let users: [User] = [one, two]
+//    
+//    ObservationFilterView(viewModel: ObservationFilterviewModel(users: users))
 }

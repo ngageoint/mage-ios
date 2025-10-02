@@ -77,6 +77,7 @@ class LocationRepositoryImpl: ObservableObject, LocationRepository {
         localDataSource.observeLatestFiltered()
     }
     
+    // userIds always nil
     func locations(
         userIds: [String]? = nil,
         paginatedBy paginator: Trigger.Signal? = nil
