@@ -108,7 +108,7 @@ class ObservationsViewModel: ObservableObject {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, repository] in
-            repository.observations(
+            repository.observations( // NOTE: This gets triggered every time we go to the Observations Tab
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([URIItem]()) { existing, new in

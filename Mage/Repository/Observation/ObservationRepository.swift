@@ -131,12 +131,14 @@ class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
         localDataSource.observeFilteredCount()
     }
     
+    // this is called when you switch to the Observations Tab
     func observations(
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[URIItem], Error> {
         localDataSource.observations(paginatedBy: paginator)
     }
     
+    // this is called when you switch to the User Tab
     func userObservations(
         userUri: URL,
         paginatedBy paginator: Trigger.Signal? = nil

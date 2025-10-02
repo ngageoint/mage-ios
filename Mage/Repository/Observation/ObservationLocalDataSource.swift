@@ -236,6 +236,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         }
     }
     
+    // dead code
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
         guard let context = context else { return nil }
         var itemChanges: AnyPublisher<Int, Never> {

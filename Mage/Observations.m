@@ -56,6 +56,11 @@
         [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", [NSNumber numberWithBool:YES], currentUser.remoteId]];
     }
     
+//    if ([Observations getUsersFilter]) {
+//        // if any users are selected, the userfilter flag is set to true
+//        // if true, check against array of userIds
+//        [predicates addObject:[NSPredicate predicateWithFormat:@"users CONTAINS any %@", [NSString]]];
+//    }
     return predicates;
 }
 
