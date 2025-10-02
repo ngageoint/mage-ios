@@ -1,3 +1,13 @@
+//
+//  ObservationFilterviewModel.swift
+//  MAGE
+//
+//  Created by James McDougall on 10/2/25.
+//  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
+//
+
+import Combine
+
 class ObservationFilterviewModel: ObservableObject {
     @Injected(\.userRepository)
     var userRepository: UserRepository

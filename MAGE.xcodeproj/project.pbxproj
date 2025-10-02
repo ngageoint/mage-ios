@@ -185,6 +185,7 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
 		A811F2B22E3BFB9C0016C5AB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */; };
+		A86B3E1E2E8ED19F000620C7 /* ObservationFilterviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B3E1D2E8ED19F000620C7 /* ObservationFilterviewModel.swift */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
@@ -1139,6 +1140,7 @@
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A86B3E1D2E8ED19F000620C7 /* ObservationFilterviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFilterviewModel.swift; sourceTree = "<group>"; };
 		A89A21CE2E3959A00080A11C /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
@@ -2172,6 +2174,7 @@
 				2FB41CE21DC79C8F005C18F9 /* ObservationFilterTableViewController.h */,
 				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
 				315335832E8D730200DAAC0C /* ObservationFilterViewSwiftUI.swift */,
+				A86B3E1D2E8ED19F000620C7 /* ObservationFilterviewModel.swift */,
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
 			);
@@ -5045,6 +5048,7 @@
 				F763FF2F2C7917F100403A00 /* UserModel.swift in Sources */,
 				F7225F442C5448D400B7D935 /* EventRepository.swift in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
+				A86B3E1E2E8ED19F000620C7 /* ObservationFilterviewModel.swift in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
 				04E2C89B28D34C29001F0812 /* GridTypeTableViewCell.m in Sources */,
 				F7DE987E2C133B21005372F8 /* ObservationsTileRepository.swift in Sources */,

@@ -6,7 +6,6 @@
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
 import Combine
 
@@ -17,51 +16,67 @@ import Combine
 }
 
 struct ObservationFilterView: View {
+    @Environment(\.colorScheme) var colorScheme
     @StateObject
     var viewModel = ObservationFilterviewModel()
     
+    @State var isSelected: Bool = false
+    
     var body: some View {
-        if viewModel.users.isEmpty {
+        if !viewModel.users.isEmpty {
             VStack {
                 Text("Users not found in CoreData")
             }
         } else {
-            LazyVStack {
-                ForEach(viewModel.users, id: \.self) { user in
-                    Text(user.id)
+            NavigationStack {
+                ScrollView {
+                    ForEach(0...10, id: \.self) { user in
+                        UserObservationCellView(isSelected: $isSelected)
+                            .padding(.vertical, 8)
+                    }
                 }
+                .navigationTitle("Search Users")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarColorScheme(colorScheme, for: .navigationBar)
+                .scrollIndicators(.hidden)
             }
         }
     }
 }
 
-class ObservationFilterviewModel: ObservableObject {
-    @Injected(\.userRepository)
-    var userRepository: UserRepository
-    var cancellable: Set<AnyCancellable> = Set()
-    
-    @Published var users: [URIItem] = []
-    
-    //TODO Filter Users Logic
-    
-    init() {
-        self.userRepository.users(paginatedBy: nil)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        print("Error fetching users: \(error)")
-                    }
-                },
-                receiveValue: { [weak self] users in
-                    self?.users = users
-                }
-            )
-            .store(in: &cancellable)
+struct UserObservationCellView: View {
+    @Binding var isSelected: Bool
+    var body: some View {
+        HStack {
+            Image(.iconWBackground)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 50, height: 50)
+                .clipShape(Circle())
+            
+            VStack(alignment: .leading) {
+                Text("James McDougall")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                Text("@jmcdougall")
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+            
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "checkmark.circle")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 8)
+        .onTapGesture {
+            isSelected.toggle()
+        }
     }
 }
 
-
+#Preview {
+    ObservationFilterView()
+}
