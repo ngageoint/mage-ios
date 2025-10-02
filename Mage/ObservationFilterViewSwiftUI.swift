@@ -17,13 +17,18 @@ import Combine
 
 struct ObservationFilterView: View {
     @Environment(\.colorScheme) var colorScheme
-    @StateObject
-    var viewModel = ObservationFilterviewModel()
+    @ObservedObject
+    var viewModel: ObservationFilterviewModel
     
     @State var isSelected: Bool = false
+    @State var searchText: String = ""
+    
+    init(viewModel: ObservationFilterviewModel = .init()) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
-        if !viewModel.users.isEmpty {
+        if viewModel.users.isEmpty {
             VStack {
                 Text("Users not found in CoreData")
             }
@@ -35,6 +40,7 @@ struct ObservationFilterView: View {
                             .padding(.vertical, 8)
                     }
                 }
+                .searchable(text: $searchText, prompt: "Search")
                 .navigationTitle("Search Users")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarColorScheme(colorScheme, for: .navigationBar)
@@ -78,5 +84,10 @@ struct UserObservationCellView: View {
 }
 
 #Preview {
+    let userOne = UserModel(userId: nil, remoteId: nil, name: "Dan Benner", coordinate: nil, email: nil, phone: nil, lastUpdated: nil, avatarUrl: nil, username: "dbenner", timestamp: nil, hasEditPermissions: true, cllocation: nil)
+    let userTwo = UserModel(userId: nil, remoteId: nil, name: "James McDougall", coordinate: nil, email: nil, phone: nil, lastUpdated: nil, avatarUrl: nil, username: "jmcdougall", timestamp: nil, hasEditPermissions: true, cllocation: nil)
+    
+    var previewModel = ObservationFilterviewModel(
+        users: [])
     ObservationFilterView()
 }

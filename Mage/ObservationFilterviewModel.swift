@@ -17,7 +17,8 @@ class ObservationFilterviewModel: ObservableObject {
     
     //TODO Filter Users Logic
     
-    init() {
+    init(users: [URIItem] = []) {
+        self.users = users
         self.userRepository.users(paginatedBy: nil)
             .receive(on: DispatchQueue.main)
             .sink(
