@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import Kingfisher
 
+// allows the crossover from objc to swift
 @objc class ObservationFilterViewUIHostingFactory: NSObject {
     @objc static func makeViewController() -> UIViewController {
         return UIHostingController(rootView: ObservationFilterView())
@@ -18,32 +19,28 @@ import Kingfisher
 
 struct ObservationFilterView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject
-    var viewModel: ObservationFilterviewModel
-    
-    @State private var selectedItems: Set<User> = []
-    @State var searchText: String = "" // TODO: not working
+    @ObservedObject var viewModel: ObservationFilterviewModel
     
     init(viewModel: ObservationFilterviewModel = .init()) {
         self.viewModel = viewModel
     }
     
     var body: some View {
-        if viewModel.users.isEmpty {
+        if (viewModel.users.isEmpty) {
             VStack {
-                Text("Users not found in CoreData")
+                Text("Event has no Users")
             }
         } else {
             NavigationStack {
                 ScrollView {
                     LazyVStack(alignment:.leading) {
-                        ForEach(Array(viewModel.users), id: \.self) { user in
-                            UserObservationCellView(selectedItems: $selectedItems, user: user)
+                        ForEach(Array(viewModel.filteredUsers), id: \.self) { user in
+                            UserObservationCellView(viewModel: viewModel, user: user)
                                 .padding(.vertical, 8)
                         }
                     }
                 }
-                .searchable(text: $searchText, prompt: "Search")
+                .searchable(text: $viewModel.searchText, prompt: "Search")
                 .navigationTitle("Search Users")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarColorScheme(colorScheme, for: .navigationBar)
@@ -54,7 +51,7 @@ struct ObservationFilterView: View {
 }
 
 struct UserObservationCellView: View {
-    @Binding var selectedItems: Set<User>
+    @ObservedObject var viewModel: ObservationFilterviewModel
     var user: User
     var body: some View {
         HStack {
@@ -88,7 +85,7 @@ struct UserObservationCellView: View {
             
             Spacer()
             
-            Image(systemName: selectedItems.contains(user) ? "checkmark" : "")
+            Image(systemName: viewModel.selectedUsers.contains(user.remoteId ?? "") ? "checkmark" : "")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
@@ -96,10 +93,8 @@ struct UserObservationCellView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 8)
         .onTapGesture {
-            if selectedItems.contains(user) {
-                selectedItems.remove(user)
-            } else {
-                selectedItems.insert(user)
+            if let remoteId = user.remoteId {
+                viewModel.updateSelectedUsers(remoteId: remoteId)
             }
         }
     }
