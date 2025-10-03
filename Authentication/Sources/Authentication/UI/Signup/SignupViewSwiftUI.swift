@@ -12,6 +12,8 @@ public struct SignupViewSwiftUI: View {
     @StateObject private var model: SignupViewModel
     @Environment(\.dismiss) private var dismiss
     
+    @State private var attemtedAutoCaptchaLoad = false
+    
     public init(model: SignupViewModel) {
         _model = StateObject(wrappedValue: model)
     }
@@ -32,6 +34,12 @@ public struct SignupViewSwiftUI: View {
                         .noAutoCapsAndCorrection()
                         .textContentType(.username)
                         .submitLabel(.next)
+                        .onChange(of: model.username) { newValue in
+                            guard !newValue.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                            if model.captchaHTML.isEmpty {
+                                Task { await model.refreshCaptcha() }
+                            }
+                        }
                     
                     TextField("Email", text: $model.email)
                         .noAutoCapsAndCorrection()
@@ -45,13 +53,7 @@ public struct SignupViewSwiftUI: View {
                     
                     SecureField("Confirm Password", text: $model.confirmPassword)
                         .textContentType(.newPassword)
-                        .submitLabel(.go)
-                        .onSubmit {
-                            Task {
-                                guard model.isFormValid else { return }
-                                await model.beginSignup()
-                            }
-                        }
+                        .submitLabel(.done)
                 }
                 .textFieldStyle(.roundedBorder)
                 .disabled(model.isSubmitting)
@@ -60,57 +62,99 @@ public struct SignupViewSwiftUI: View {
                     Text(err).foregroundColor(.red).font(.footnote)
                 }
                 
+                GroupBox("Human Verification") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        
+                        if !model.captchaHTML.isEmpty {
+                            CaptchaWebView(html: model.captchaHTML)
+                                .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 220)
+                                .accessibilityIdentifier("captchaTextField")
+                        } else {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Enter a username, then tap 'Load code'.")
+                                    .font(.footnote)
+                                    .foregroundStyle(Color(.secondaryLabel))
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color(UIColor.secondarySystemFill))
+                                        .frame(height: 140)
+                                    if model.isSubmitting {
+                                        ProgressView()
+                                    } else {
+                                        Text("CAPTCHA will appear here")
+                                            .font(.footnote)
+                                            .foregroundStyle(Color(.secondaryLabel))
+                                    }
+                                }
+                            }
+                        }
+                        
+                        TextField("Enter the characters", text: $model.captchaText)
+                            .textFieldStyle(.roundedBorder)
+                            .noAutoCapsAndCorrection()
+                            .disabled(model.captchaHTML.isEmpty || model.isSubmitting)
+                            .submitLabel(.done)
+                            .onSubmit { Task { await model.completeSignup() } }
+                            .accessibilityIdentifier("captchaTextField")
+                        
+                        HStack {
+                            Button(model.captchaHTML.isEmpty ? "Load code" : "Refresh") {
+                                Task { await model.refreshCaptcha() }
+                            }
+                            .disabled(model.username.trimmingCharacters(in: .whitespaces).isEmpty || model.isSubmitting)
+                            
+                            Spacer()
+                            
+                            Button("Clear") {
+                                model.captchaHTML = ""
+                                model.captchaText = ""
+                            }
+                            .disabled(model.captchaHTML.isEmpty || model.isSubmitting)
+                        }
+                    }
+                    .padding(.top, 4)
+                }
+                .accessibilityIdentifier("captchaGroupBox")
+                
+                // --------------------------------------------
+                // SUBMIT ROW
+                // --------------------------------------------
                 HStack(spacing: 12) {
                     Button {
                         Task {
-                            // validate form first
-                            guard model.isFormValid else { return }
-                            await model.beginSignup()
+                            guard canSubmit else { return }
+                            await model.completeSignup()
                         }
                     } label: {
-                        if model.isSubmitting { ProgressView() } else { Text("Sign Up").bold() }
+                        if model.isSubmitting {
+                            ProgressView()
+                        } else {
+                            Text("Sign Up").bold()
+                        }
                     }
                     .buttonStyle(.borderedProminent)
-                    .disabled(!model.isFormValid || model.isSubmitting)
+                    .disabled(!canSubmit || model.isSubmitting)
                     
                     Button("Cancel") { dismiss() }
                         .buttonStyle(.borderless)
                 }
-                
-                if model.showCaptcha {
-                    GroupBox("Human Verification") {
-                        VStack(alignment: .leading, spacing: 12) {
-                            CaptchaWebView(html: model.captchaHTML)
-                                .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 220)
-                                .accessibilityIdentifier("captchaTextField")
-                            
-                            HStack {
-                                Button {
-                                    Task { await model.refreshCaptcha() }
-                                } label: {
-                                    if model.isSubmitting { ProgressView() } else { Text("Refresh") }
-                                }
-                                
-                                Spacer()
-                                
-                                Button("Cancel") { model.showCaptcha = false }
-                                
-                                Button {
-                                    Task { await model.completeSignup() }
-                                } label: {
-                                    if model.isSubmitting { ProgressView() } else { Text("Submit").bold() }
-                                }
-                                .disabled(model.captchaText.isEmpty || model.isSubmitting)
-                                .accessibilityIdentifier("captchaSubmitButton")
-                            }
-                        }
-                        .padding(.top, 4)
-                    }
-                    .accessibilityIdentifier("captchaGroupBox")
-                }
             }
             .padding()
-        }  // Scrollview
+            .onAppear {
+                guard !attemtedAutoCaptchaLoad else { return }
+                attemtedAutoCaptchaLoad = true
+                if !model.username.trimmingCharacters(in: .whitespaces).isEmpty && model.captchaHTML.isEmpty {
+                    Task { await model.refreshCaptcha() }
+                }
+            }
+        }
+    }
+    
+    private var canSubmit: Bool {
+        model.isFormValid
+        && !model.captchaHTML.isEmpty
+        && !model.captchaText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        && !model.isSubmitting
     }
 }
 
