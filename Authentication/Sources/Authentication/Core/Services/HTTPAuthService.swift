@@ -11,29 +11,27 @@ import UIKit
 
 public final class HTTPAuthService: AuthService {
     private let baseURL: URL
-    private let sesssion: URLSession
+    public let session: URLSession
     
     public init(baseURL: URL, session: URLSession = .shared) {
         self.baseURL = baseURL
-        self.sesssion = session
+        self.session = session
+        print("HTTPAuthService init baseURL =", baseURL.absoluteString)
     }
     
     // MARK: - CAPTCHA
     
     public func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
         var comps = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
-        comps.path = (comps.path.isEmpty ? "" : comps.path) + "/api/signup/captcha"        // TODO: Validate correct path
-        comps.queryItems = [
-            .init(name: "username", value: username.trimmingCharacters(in: .whitespacesAndNewlines)),
-            .init(name: "bg", value: backgroundHex)
-            ]
+        comps.path = (comps.path.isEmpty ? "" : comps.path) + "/api/users/signups"        // TODO: Validate correct path
         guard let url = comps.url else { throw URLError(.badURL) }
         
-        // TODO: REMOVE BEFORE RELEASE
-        print("CAPTCHA URL -> ", url.absoluteString)
-
-        let (status, data, _) = try await getJSON(url: url)
+        let body: [String: Any] = [
+            "username": username.trimmingCharacters(in: .whitespacesAndNewlines),
+            "background": backgroundHex
+        ]
         
+        let (status, data, _) = try await postJSON(url: url, body: body)
         guard (200...299).contains(status) else {
             throw URLError(.badServerResponse)
         }
@@ -41,14 +39,10 @@ public final class HTTPAuthService: AuthService {
         let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] ?? [:]
         
         let token = (json["token"] as? String)
-            ?? (json["captchaToken"] as? String)
-            ?? ((json["data"] as? [String: Any])?["token"] as? String)
+        let image = (json["captcha"] as? String)
+            ?? (json["imageBase64"] as? String)
         
-        let imageBase64 = (json["imageBase64"] as? String)
-            ?? (json["image"] as? String)
-            ?? ((json["data"] as? [String: Any])?["image"] as? String)
-        
-        guard let t = token, let b64 = imageBase64, !t.isEmpty, !b64.isEmpty else {
+        guard let t = token, let b64 = image, !t.isEmpty, !b64.isEmpty else {
             throw URLError(.cannotParseResponse)
         }
         
@@ -59,15 +53,13 @@ public final class HTTPAuthService: AuthService {
     
     public func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession {
         var comps = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
-        comps.path = (comps.path.isEmpty ? "" : comps.path) + "/api/signup"  // TODO: VERIFY PATH
+        comps.path = (comps.path.isEmpty ? "" : comps.path) + "/api/users/signups/verifications"  // TODO: VERIFY PATH
         guard let url = comps.url else { throw URLError(.badURL) }
         
         var body = req.parameters
         body["captchaText"] = captchaText
-        body["captchaToken"] = token
         
-        let (status, data, _) = try await postJSON(url: url, body: body)
-        
+        let (status, data, _) = try await postJSON(url: url, body: body, headers: ["Authorization": "Bearer \(token)"])
         guard (200...299).contains(status) else {
             throw URLError(.badServerResponse)
         }
@@ -123,6 +115,7 @@ private extension HTTPAuthService {
         req.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
         
         let (data, resp) = try await session.data(for: req)
+        
         guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         return (http.statusCode, data, http)
     }

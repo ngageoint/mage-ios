@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 @MainActor
 public final class SignupViewModel: ObservableObject {
@@ -29,12 +30,14 @@ public final class SignupViewModel: ObservableObject {
     @Published public var captchaHTML: String = ""
     @Published public var captchaText: String = ""
     
+    @Published var captchaImage: UIImage?
+    
     private var captchaToken: String?
     
     // MARK: - Dependencies
     private let deps: AuthDependencies
     
-    public init(deps: AuthDependencies) {
+    public init(deps: AuthDependencies = .shared) {
         self.deps = deps
     }
     
@@ -72,16 +75,46 @@ public final class SignupViewModel: ObservableObject {
         isSubmitting = false
     }
     
+    private func normalizeBase64(_ str: String) -> String {
+        var raw = str
+        
+        if let range = raw.range(of: "base64,") {
+            raw = String(raw[range.upperBound...])
+        }
+        
+        raw = raw.removingPercentEncoding ?? raw
+        raw = raw.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+        raw = raw.replacingOccurrences(of: "-", with: "+")
+        raw = raw.replacingOccurrences(of: "_", with: "/")
+        
+        let rem = raw.count % 4
+        if rem > 0 { raw += String(repeating: "=", count: 4 - rem) }
+        return raw
+        
+    }
+    
     public func refreshCaptcha() async {
         guard !username.isBlank else { return }
         errorMessage = nil
         isSubmitting = true
         captchaText = ""
+        captchaImage = nil
         
         do {
             let captcha = try await deps.requireAuthService.fetchSignupCaptcha(username: username, backgroundHex: "FFFFFF")
+            
             captchaToken = captcha.token
             captchaHTML = CaptchaWebView.html(fromBase64Image: captcha.imageBase64)
+            
+            let b64 = normalizeBase64(captcha.imageBase64)
+            if let data = Data(base64Encoded: b64, options: .ignoreUnknownCharacters),
+               let img = UIImage(data: data, scale: UIScreen.main.scale) {
+                captchaImage = img
+                errorMessage = nil
+            } else {
+                captchaImage = nil
+                errorMessage = nil
+            }
         } catch {
             errorMessage = error.userFacingMessage
         }

@@ -33,7 +33,41 @@ struct CaptchaWebView: UIViewRepresentable {
 
 extension CaptchaWebView {
     
-    static func html(fromBase64Image base64OrDataURI: String) -> String {
+    static func html(fromBase64Image b64: String) -> String {
+        """
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+          <style>
+            html, body { margin:0; padding:0; background:transparent; }
+            .wrap {
+              display:flex; align-items:center; justify-content:center;
+              width:100%; padding:0; margin:0;
+            }
+            img {
+              display:block;
+              width:100%;          /* SCALE to container width */
+              max-width:320px;     /* sane upper bound on big screens */
+              height:auto;         /* keep aspect ratio */
+              border-radius:8px;
+              image-rendering:-webkit-optimize-contrast;
+              image-rendering:crisp-edges;
+              image-rendering:pixelated;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="wrap">
+            <img alt="captcha" src="\(b64.hasPrefix("data:") ? b64 : "data:image/png;base64," + b64)">
+          </div>
+        </body>
+        </html>
+        """
+    }
+    
+    static func htmlOLD(fromBase64Image base64OrDataURI: String) -> String {
         let trimmed = base64OrDataURI.trimmingCharacters(in: .whitespacesAndNewlines)
         let dataURI: String = {
             if trimmed.hasPrefix("data:image/") {

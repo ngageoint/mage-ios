@@ -9,10 +9,21 @@ import Foundation
 
 public final class AuthDependencies {
     public static let shared = AuthDependencies()
-    public var authService: AuthService?
+    
     public var sessionStore: SessionStore?
     public var http: HTTPPerforming = HTTPLoginPerformer()
     public var authStore: AuthStore!
+
+    public var authService: AuthService? {
+        didSet {
+            let oldType = oldValue.map { String(describing: type(of: $0)) } ?? "nil"
+            let newType = authService.map { String(describing: type(of: $0)) } ?? "nil"
+            print("AuthDependencies.authService: \(oldType) -> \(newType)")
+        }
+    }
+    
+    public var makeAuthService: ((URL) -> AuthService)?
+    
     private init() {}
 }
 
@@ -67,3 +78,23 @@ public extension AuthDependencies {
     }
 }
 // #endif
+
+public extension AuthDependencies {
+    func configure(baseURL: URL, session: URLSession = .shared) {
+        self.authService = HTTPAuthService(baseURL: baseURL, session: session)
+    }
+}
+
+public extension AuthDependencies {
+    func ensureAuthService(with baseURL: URL) {
+        if authService == nil {
+            if let make = makeAuthService {
+                authService = make(baseURL)
+            } else {
+                authService = HTTPAuthService(baseURL: baseURL)
+            }
+            
+            print("AuthService configured with:", baseURL.absoluteString, "→", String(describing: type(of: authService!)))
+        }
+    }
+}

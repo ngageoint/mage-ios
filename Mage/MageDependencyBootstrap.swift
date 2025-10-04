@@ -13,8 +13,11 @@ import Authentication
         print("\n---------------------------------------------")
         print("ZZZ - MageDependencyBootstrap.configure() called.")
         print("---------------------------------------------\n")
-        // the real concrete implementation that calls MageAuthAPI / AFNetworking
-        AuthDependencies.shared.authService = MageAuthServiceImpl()
+
+        AuthDependencies.shared.makeAuthService = { baseURL in
+            HTTPAuthService(baseURL: baseURL)
+        }
+        
         AuthDependencies.shared.sessionStore = MageSessionStore.shared
     }
 }

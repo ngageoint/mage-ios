@@ -34,12 +34,6 @@ public struct SignupViewSwiftUI: View {
                         .noAutoCapsAndCorrection()
                         .textContentType(.username)
                         .submitLabel(.next)
-                        .onChange(of: model.username) { newValue in
-                            guard !newValue.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                            if model.captchaHTML.isEmpty {
-                                Task { await model.refreshCaptcha() }
-                            }
-                        }
                     
                     TextField("Email", text: $model.email)
                         .noAutoCapsAndCorrection()
@@ -65,26 +59,34 @@ public struct SignupViewSwiftUI: View {
                 GroupBox("Human Verification") {
                     VStack(alignment: .leading, spacing: 12) {
                         
-                        if !model.captchaHTML.isEmpty {
+                        if let img = model.captchaImage {
+                            Image(uiImage: img)
+                                .resizable()
+                                .interpolation(.none)
+                                .scaledToFit()
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 120)
+                                .background(Color(.secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .accessibilityIdentifier("captchaImageNative")
+                        } else if !model.captchaHTML.isEmpty {
                             CaptchaWebView(html: model.captchaHTML)
-                                .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 220)
-                                .accessibilityIdentifier("captchaTextField")
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 120)
+                                .background(Color(.secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .accessibilityIdentifier("captchaImageWeb")
                         } else {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Enter a username, then tap 'Load code'.")
-                                    .font(.footnote)
-                                    .foregroundStyle(Color(.secondaryLabel))
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color(UIColor.secondarySystemFill))
-                                        .frame(height: 140)
-                                    if model.isSubmitting {
-                                        ProgressView()
-                                    } else {
-                                        Text("CAPTCHA will appear here")
-                                            .font(.footnote)
-                                            .foregroundStyle(Color(.secondaryLabel))
-                                    }
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(UIColor.secondarySystemFill))
+                                    .frame(height: 120)
+                                if model.isSubmitting {
+                                    ProgressView()
+                                } else {
+                                    Text("CAPTCHA will appear here")
+                                        .font(.footnote)
+                                        .foregroundStyle(Color(.secondaryLabel))
                                 }
                             }
                         }
@@ -92,7 +94,7 @@ public struct SignupViewSwiftUI: View {
                         TextField("Enter the characters", text: $model.captchaText)
                             .textFieldStyle(.roundedBorder)
                             .noAutoCapsAndCorrection()
-                            .disabled(model.captchaHTML.isEmpty || model.isSubmitting)
+                            .disabled((model.captchaImage == nil && model.captchaHTML.isEmpty) || model.isSubmitting)
                             .submitLabel(.done)
                             .onSubmit { Task { await model.completeSignup() } }
                             .accessibilityIdentifier("captchaTextField")
@@ -108,8 +110,9 @@ public struct SignupViewSwiftUI: View {
                             Button("Clear") {
                                 model.captchaHTML = ""
                                 model.captchaText = ""
+                                model.captchaImage = nil
                             }
-                            .disabled(model.captchaHTML.isEmpty || model.isSubmitting)
+                            .disabled((model.captchaImage == nil && model.captchaHTML.isEmpty) || model.isSubmitting)
                         }
                     }
                     .padding(.top, 4)

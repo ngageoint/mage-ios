@@ -38,12 +38,12 @@ enum AuthFactory {
     }
     
     static func makeDeps() -> AuthDependencies {
-        let authService: AuthService = MageAuthServiceImpl()
-        let sessionStore: SessionStore = MageSessionStore.shared
-        
         let deps = AuthDependencies.shared
-        deps.authService = authService
-        deps.sessionStore = sessionStore
+        
+        if deps.sessionStore == nil {
+            deps.sessionStore = MageSessionStore.shared
+        }
+        
         return deps
     }
 }

@@ -59,11 +59,11 @@ public final class AuthFlowCoordinator: NSObject {
             return
         }
         
-        MageServer.server(url: url,
-                          success: { [weak self] mageServer in
+        MageServer.server(url: url, success: { [weak self] mageServer in
             guard let self else { return }
             Task { @MainActor in
                 self.server = mageServer
+                self.configureAuthServiceIfNeeded()
                 self.showLoginView(for: mageServer)
             }
         }, failure: { error in
@@ -75,12 +75,15 @@ public final class AuthFlowCoordinator: NSObject {
     @objc(start:)
     public func start(_ server: MageServer) {
         self.server = server
+        configureAuthServiceIfNeeded()
         showLoginView(for: server)
     }
     
     // Old: -createAccount
     @objc public func createAccount() {
-        let signup = SignupHost()
+        configureAuthServiceIfNeeded()
+        
+        let signup = SignupHost(swiftDeps: AuthDependencies.shared)
         nav?.pushViewController(signup, animated: false)
     }
     
@@ -96,6 +99,19 @@ public final class AuthFlowCoordinator: NSObject {
             andScheme: scheme
         )
         nav.pushViewController(vc, animated: false)
+    }
+    
+    private func configureAuthServiceIfNeeded() {
+        guard let base = MageServer.baseURL() else {
+            NSLog("[Auth] Missing MageServer.baseURL(); cannot configure AuthService.")
+            return
+        }
+
+        if AuthDependencies.shared.authService == nil {
+            AuthDependencies.shared.authService = HTTPAuthService(baseURL: base)
+            print("Configured AuthService with", base.absoluteString)
+        }
+        print("Configured AuthService with", base.absoluteString)
     }
 }
 
@@ -198,6 +214,4 @@ extension AuthFlowCoordinator: DisclaimerDelegate {
     @objc public func disclaimerDisagree() {
         (UIApplication.shared.delegate as? AppDelegate)?.logout()
     }
-    
-    
 }
