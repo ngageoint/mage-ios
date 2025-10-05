@@ -21,7 +21,7 @@ public struct SignupViewSwiftUI: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                Text("Create Account (HEADER!)")
+                Text("HEADER Create Account HEADER")
                     .font(.title.bold())
                 
                 Group {
@@ -56,9 +56,11 @@ public struct SignupViewSwiftUI: View {
                     Text(err).foregroundColor(.red).font(.footnote)
                 }
                 
+                // CAPTCHA
                 GroupBox("Human Verification") {
                     VStack(alignment: .leading, spacing: 12) {
                         
+                        // Prefer native image (crisp + no WebKit). Fallback to webview if decode fails.
                         if let img = model.captchaImage {
                             Image(uiImage: img)
                                 .resizable()
@@ -94,13 +96,13 @@ public struct SignupViewSwiftUI: View {
                         TextField("Enter the characters", text: $model.captchaText)
                             .textFieldStyle(.roundedBorder)
                             .noAutoCapsAndCorrection()
-                            .disabled((model.captchaImage == nil && model.captchaHTML.isEmpty) || model.isSubmitting)
+                            .disabled(!captchaAvailable || model.isSubmitting)
                             .submitLabel(.done)
                             .onSubmit { Task { await model.completeSignup() } }
                             .accessibilityIdentifier("captchaTextField")
                         
                         HStack {
-                            Button(model.captchaHTML.isEmpty ? "Load code" : "Refresh") {
+                            Button(captchaAvailable ? "Refresh" : "Load code") {
                                 Task { await model.refreshCaptcha() }
                             }
                             .disabled(model.username.trimmingCharacters(in: .whitespaces).isEmpty || model.isSubmitting)
@@ -112,7 +114,7 @@ public struct SignupViewSwiftUI: View {
                                 model.captchaText = ""
                                 model.captchaImage = nil
                             }
-                            .disabled((model.captchaImage == nil && model.captchaHTML.isEmpty) || model.isSubmitting)
+                            .disabled(!captchaAvailable || model.isSubmitting)
                         }
                     }
                     .padding(.top, 4)
@@ -146,20 +148,27 @@ public struct SignupViewSwiftUI: View {
             .onAppear {
                 guard !attemtedAutoCaptchaLoad else { return }
                 attemtedAutoCaptchaLoad = true
-                if !model.username.trimmingCharacters(in: .whitespaces).isEmpty && model.captchaHTML.isEmpty {
+                if !model.username.trimmingCharacters(in: .whitespaces).isEmpty, !captchaAvailable {
                     Task { await model.refreshCaptcha() }
                 }
             }
         }
     }
     
+    // MARK: - Derived flags
+    private var captchaAvailable: Bool {
+        model.captchaImage != nil || !model.captchaHTML.isEmpty
+    }
+    
     private var canSubmit: Bool {
         model.isFormValid
-        && !model.captchaHTML.isEmpty
+        && captchaAvailable
         && !model.captchaText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         && !model.isSubmitting
     }
 }
+
+// MARK: - Utilities
 
 private struct NoAutoCapsAndCorrection: ViewModifier {
     func body(content: Content) -> some View {
