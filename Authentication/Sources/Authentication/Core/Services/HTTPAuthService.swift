@@ -22,31 +22,52 @@ public final class HTTPAuthService: AuthService {
     // MARK: - CAPTCHA
     
     public func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
-        var comps = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
-        comps.path = (comps.path.isEmpty ? "" : comps.path) + "/api/users/signups"        // TODO: Validate correct path
-        guard let url = comps.url else { throw URLError(.badURL) }
+        // POST {base}/api/users/signups
+        let url = try apiURL("api/users/signups")
         
-        let body: [String: Any] = [
+        let payload: [String: Any] = [
             "username": username.trimmingCharacters(in: .whitespacesAndNewlines),
             "background": backgroundHex
         ]
         
-        let (status, data, _) = try await postJSON(url: url, body: body)
+        let (status, data, http) = try await postJSON(url: url, body: payload)
+        
         guard (200...299).contains(status) else {
-            throw URLError(.badServerResponse)
+            // bubble up server details so you can see why it failed
+            let body = String(data: data, encoding: .utf8) ?? "<binary>"
+            
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse,
+                          userInfo: [NSLocalizedDescriptionKey: "CAPTCHA request feiled (\(status)) \(http.url?.absoluteString ?? "")\n\(body)"])
         }
         
-        let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] ?? [:]
-        
-        let token = (json["token"] as? String)
-        let image = (json["captcha"] as? String)
-            ?? (json["imageBase64"] as? String)
-        
-        guard let t = token, let b64 = image, !t.isEmpty, !b64.isEmpty else {
+        guard
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let token = json["token"] as? String,
+            let raw = json["captcha"] as? String
+        else {
             throw URLError(.cannotParseResponse)
         }
         
-        return SignupCaptcha(token: t, imageBase64: b64)
+        // Accept either raw base64 of full data URL; normalize to base64-only
+        let base64: String
+        if raw.hasPrefix("data:") {
+            base64 = raw.split(separator: ",", maxSplits: 1).last.map(String.init) ?? ""
+        } else {
+            base64 = raw
+        }
+        
+        return SignupCaptcha(token: token, imageBase64: base64)
+    }
+    
+    func verifySignup(_ payload: [String: Any], bearerToken: String) async throws {
+        // POST {base}/api/users/signups/verifications  with Authorization: Bearer <token>
+        let url = try apiURL("api/users/signups/verifications")
+        let (status, data, http) = try await postJSON(url: url, body: payload, headers: ["Authorization": "Bearer \(bearerToken)"])
+        
+        guard (200...299).contains(status) else {
+            let body = String(data: data, encoding: .utf8) ?? "<binary>"
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: [NSLocalizedDescriptionKey: "Signup verification failed (\(status)) \(http.url?.absoluteString ?? "")\n\(body)"])
+        }
     }
     
     // MARK: Signup
@@ -102,6 +123,18 @@ private extension HTTPAuthService {
 
         guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         return(http.statusCode, data, http)
+    }
+    
+    func apiURL(_ path: String) throws -> URL {
+        guard var comps = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
+            throw URLError(.badURL)
+        }
+        var path = comps.path
+        if !path.hasSuffix("/") { path += "/" }
+        let trimmed = path.hasPrefix("/") ? String(path.dropFirst()) : path
+        comps.path = path + trimmed
+        guard let url = comps.url else { throw URLError(.badURL) }
+        return url
     }
     
     func postJSON(url: URL, body: [String: Any], headers: [String: String] = [:], timeout: TimeInterval = 30) async throws -> (status: Int, data: Data, response: HTTPURLResponse) {

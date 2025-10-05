@@ -1986,6 +1986,13 @@
 			);
 			target = 842F62972E6B47DE0066497D /* AuthenticationTests */;
 		};
+		845117C92E92D1CE00E4B70B /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MageAuthServiceImpl.swift,
+			);
+			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
+		};
 		847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -2016,7 +2023,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		842F62A42E6B48FB0066497D /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
 		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UIKitGlue; sourceTree = "<group>"; };
-		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (845117C92E92D1CE00E4B70B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
 		847428FF2E7F265600572BB4 /* Stores */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Stores; sourceTree = "<group>"; };
 		847429002E7F266000572BB4 /* Coordinators */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Coordinators; sourceTree = "<group>"; };
 		847429012E7F266A00572BB4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };

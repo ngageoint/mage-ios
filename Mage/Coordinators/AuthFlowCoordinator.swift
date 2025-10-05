@@ -63,7 +63,9 @@ public final class AuthFlowCoordinator: NSObject {
             guard let self else { return }
             Task { @MainActor in
                 self.server = mageServer
-                self.configureAuthServiceIfNeeded()
+                if let base = MageServer.baseURL() {
+                    _ = AuthDependencies.shared.resetAuthService(forNewBaseURL: base)
+                }
                 self.showLoginView(for: mageServer)
             }
         }, failure: { error in
@@ -75,7 +77,9 @@ public final class AuthFlowCoordinator: NSObject {
     @objc(start:)
     public func start(_ server: MageServer) {
         self.server = server
-        configureAuthServiceIfNeeded()
+        if let base = MageServer.baseURL() {
+            _ = AuthDependencies.shared.resetAuthService(forNewBaseURL: base)
+        }
         showLoginView(for: server)
     }
     

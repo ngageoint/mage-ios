@@ -76,35 +76,42 @@ public final class SignupViewModel: ObservableObject {
     }
     
     private func normalizeBase64(_ str: String) -> String {
-        var raw = str
-        
-        if let range = raw.range(of: "base64,") {
-            raw = String(raw[range.upperBound...])
+        // Accept either raw base64 or a full data URL and return raw base64.
+        if let comma = str.firstIndex(of: ","), str.hasPrefix("data:") {
+            let next = str.index(after: comma)
+            return String(str[next...]).trimmingCharacters(in: .whitespacesAndNewlines)
         }
-        
-        raw = raw.removingPercentEncoding ?? raw
-        raw = raw.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
-        raw = raw.replacingOccurrences(of: "-", with: "+")
-        raw = raw.replacingOccurrences(of: "_", with: "/")
-        
-        let rem = raw.count % 4
-        if rem > 0 { raw += String(repeating: "=", count: 4 - rem) }
-        return raw
-        
+
+        return str.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     public func refreshCaptcha() async {
-        guard !username.isBlank else { return }
-        errorMessage = nil
-        isSubmitting = true
-        captchaText = ""
-        captchaImage = nil
+        let name = username.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return }
+        
+        await MainActor.run {
+            errorMessage = nil
+            isSubmitting = true
+            captchaText = ""
+            captchaImage = nil
+            captchaHTML = ""
+        }
         
         do {
+            // 1) Fetch from the single, DI-provided AuthService (HTTPAuthService under the hood)
             let captcha = try await deps.requireAuthService.fetchSignupCaptcha(username: username, backgroundHex: "FFFFFF")
             
-            captchaToken = captcha.token
-            captchaHTML = CaptchaWebView.html(fromBase64Image: captcha.imageBase64)
+            // 2) Build a data URL for the web view so it scales correctly via CSS
+            let dataURL = "data:image/png;base64,\(captcha.imageBase64)"
+            
+            // 3) Update UI
+            await MainActor.run {
+                captchaToken = captcha.token
+                // Use the "fromDataURL:" variant so the image renders at natural size and fills the container.
+                captchaHTML = CaptchaWebView.html(fromDataURL: dataURL)
+                
+            }
+            
             
             let b64 = normalizeBase64(captcha.imageBase64)
             if let data = Data(base64Encoded: b64, options: .ignoreUnknownCharacters),
