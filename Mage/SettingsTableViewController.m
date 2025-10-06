@@ -252,11 +252,9 @@
     } else {
         NSLog(@"Cannot open mail client for: %@, It looks like you don't have a mail app configured on this device.", mailtoURL);
 
-        NSString *supportEmail = @"xyz@example.com"; // TODO: extract this from server or add permenantly in UserDefaults?
-
         // This is the popup
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Could not open mail"
-                                                                       message:[NSString stringWithFormat:@"Please contact support at: %@", supportEmail]
+                                                                       message:[NSString stringWithFormat:@"Please contact support at: %@", recipient]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
         // This is the "Copy Address" action that copies our *supportEmail* to the iPhone's clipboard
@@ -264,7 +262,7 @@
                                                              style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * _Nonnull action) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            pasteboard.string = supportEmail;
+            pasteboard.string = recipient;
         }];
 
         // Both buttons close the popup, but this one is just a backup for if the user doesn't want to copy the address
