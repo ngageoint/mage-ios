@@ -19,44 +19,47 @@ public final class HTTPAuthService: AuthService {
         print("HTTPAuthService init baseURL =", baseURL.absoluteString)
     }
     
+    private func absURL(_ path: String) -> URL {
+        return URL(string: path, relativeTo: baseURL)!
+    }
+    
     // MARK: - CAPTCHA
     
     public func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha {
         // POST {base}/api/users/signups
         let url = try apiURL("api/users/signups")
         
-        let payload: [String: Any] = [
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let body: [String: String] = [
             "username": username.trimmingCharacters(in: .whitespacesAndNewlines),
             "background": backgroundHex
         ]
         
-        let (status, data, http) = try await postJSON(url: url, body: payload)
+        req.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
         
-        guard (200...299).contains(status) else {
-            // bubble up server details so you can see why it failed
-            let body = String(data: data, encoding: .utf8) ?? "<binary>"
+        let (data, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
+        
+        guard (200...299).contains(http.statusCode) else {
+            let snippet = String(data: data, encoding: .utf8) ?? ""
             
-            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse,
-                          userInfo: [NSLocalizedDescriptionKey: "CAPTCHA request feiled (\(status)) \(http.url?.absoluteString ?? "")\n\(body)"])
+            throw NSError(
+                domain: NSURLErrorDomain,
+                code: http.statusCode,
+                userInfo: [NSLocalizedDescriptionKey:
+                            "CAPTCHA request failed (\(http.statusCode)) \(url.absoluteString)\n\(snippet)"]
+            )
         }
         
-        guard
-            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let token = json["token"] as? String,
-            let raw = json["captcha"] as? String
-        else {
-            throw URLError(.cannotParseResponse)
-        }
+        let obj = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ?? [:]
+        let token = (obj["token"] as? String) ?? (obj["captchaToken"] as? String) ?? ""
+        let b64 = (obj["captcha"] as? String) ?? ""
         
-        // Accept either raw base64 of full data URL; normalize to base64-only
-        let base64: String
-        if raw.hasPrefix("data:") {
-            base64 = raw.split(separator: ",", maxSplits: 1).last.map(String.init) ?? ""
-        } else {
-            base64 = raw
-        }
-        
-        return SignupCaptcha(token: token, imageBase64: base64)
+        return SignupCaptcha(token: token, imageBase64: b64)
     }
     
     func verifySignup(_ payload: [String: Any], bearerToken: String) async throws {
@@ -72,22 +75,44 @@ public final class HTTPAuthService: AuthService {
     
     // MARK: Signup
     
-    public func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession {
-        var comps = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
-        comps.path = (comps.path.isEmpty ? "" : comps.path) + "/api/users/signups/verifications"  // TODO: VERIFY PATH
-        guard let url = comps.url else { throw URLError(.badURL) }
+    public func submitSignup(_ request: SignupRequest, captchaText: String, token: String) async throws -> SignupVerificationResponse {
+        // /api/users/signups/verifications  (POST with Bearer <token>)
+        let url = absURL("/api/users/signups/verifications")
         
-        var body = req.parameters
-        body["captchaText"] = captchaText
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let payload = SignupVerifyPayload(
+            displayName: request.displayName,
+            username: request.username,
+            email: request.email,
+            password: request.password,
+            confirmPassword: request.confirmPassword,
+            captcha: captchaText
+        )
         
-        let (status, data, _) = try await postJSON(url: url, body: body, headers: ["Authorization": "Bearer \(token)"])
-        guard (200...299).contains(status) else {
-            throw URLError(.badServerResponse)
+        let encoder = JSONEncoder()
+        req.httpBody = try encoder.encode(payload)
+        
+        let (data, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
+        
+        guard (200...299).contains(http.statusCode) else {
+            let snippet = String(data: data, encoding: .utf8) ?? ""
+            
+            throw NSError(
+                domain: NSURLErrorDomain,
+                code: http.statusCode,
+                userInfo: [NSLocalizedDescriptionKey:
+                           "Signup verification failed (\(http.statusCode)) \(url.absoluteString)\n\(snippet)"]
+            )
         }
-        
-        let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] ?? [:]
-        guard let jwt = json["token"] as? String else { throw URLError(.cannotParseResponse) }
-        return AuthSession(token: jwt)
+
+        let decoder = JSONDecoder()
+        return try decoder.decode(SignupVerificationResponse.self, from: data)
     }
     
     // MARK: - Change Password
@@ -151,5 +176,37 @@ private extension HTTPAuthService {
         
         guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         return (http.statusCode, data, http)
+    }
+}
+
+
+
+private struct SignupVerifyPayload: Encodable {
+    let displayName: String
+    let username: String
+    let email: String
+    let password: String
+    let confirmPassword: String
+    let captcha: String
+    
+    enum CodingKeys: String, CodingKey {
+        case displayName
+        case username
+        case email
+        case password
+        case confirmPassword
+        case captcha
+        case passwordConfirm
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(displayName, forKey: .displayName)
+        try container.encode(username, forKey: .username)
+        try container.encode(email, forKey: .email)
+        try container.encode(password, forKey: .password)
+        try container.encode(confirmPassword, forKey: .confirmPassword)
+        try container.encode(confirmPassword, forKey: .passwordConfirm)
+        try container.encode(captcha, forKey: .captcha)
     }
 }

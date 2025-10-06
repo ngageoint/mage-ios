@@ -36,18 +36,35 @@ public final class SignupViewModel: ObservableObject {
     
     // MARK: - Dependencies
     private let deps: AuthDependencies
+    private let policy: PasswordPolicy?
     
-    public init(deps: AuthDependencies = .shared) {
+    public init(deps: AuthDependencies = .shared, policy: PasswordPolicy? = nil) {
         self.deps = deps
+        self.policy = policy
     }
     
     // MARK: - Validation
+    
+    public var passwordViolations: [String] {
+        guard let policy else { return [] }
+        return policy.validate(password).violations
+    }
+    
+    public var isPasswordPolicySatisfied: Bool {
+        if let policy { return policy.validate(password).isValid }
+        return password.count >= 8
+    }
+    
+    public var isPasswordConfirmed: Bool {
+        confirmPassword == password && !password.isEmpty
+    }
+    
     public var isFormValid: Bool {
         guard !displayName.isBlank,
               !username.isBlank,
               email.isPlausibleEmail,
-              password.count >= 8,
-              password == confirmPassword
+              isPasswordPolicySatisfied,
+              isPasswordConfirmed
         else { return false }
         return true
     }
@@ -112,7 +129,6 @@ public final class SignupViewModel: ObservableObject {
                 
             }
             
-            
             let b64 = normalizeBase64(captcha.imageBase64)
             if let data = Data(base64Encoded: b64, options: .ignoreUnknownCharacters),
                let img = UIImage(data: data, scale: UIScreen.main.scale) {
@@ -144,8 +160,8 @@ public final class SignupViewModel: ObservableObject {
                 password: password,
                 confirmPassword: confirmPassword)
             
-            let session = try await deps.requireAuthService.submitSignup(req, captchaText: captchaText, token: token)
-            await deps.requireSessionStore.set(session)
+            let result = try await deps.requireAuthService.submitSignup(req, captchaText: captchaText, token: token)
+
             didSucceed = true
             showCaptcha = false
         } catch {

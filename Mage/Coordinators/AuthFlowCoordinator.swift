@@ -87,7 +87,9 @@ public final class AuthFlowCoordinator: NSObject {
     @objc public func createAccount() {
         configureAuthServiceIfNeeded()
         
-        let signup = SignupHost(swiftDeps: AuthDependencies.shared)
+        let policy = MageServer.localPasswordPolicy
+        
+        let signup = SignupHost(policy: policy, swiftDeps: AuthDependencies.shared)
         nav?.pushViewController(signup, animated: false)
     }
     
@@ -110,12 +112,8 @@ public final class AuthFlowCoordinator: NSObject {
             NSLog("[Auth] Missing MageServer.baseURL(); cannot configure AuthService.")
             return
         }
-
-        if AuthDependencies.shared.authService == nil {
-            AuthDependencies.shared.authService = HTTPAuthService(baseURL: base)
-            print("Configured AuthService with", base.absoluteString)
-        }
-        print("Configured AuthService with", base.absoluteString)
+        
+        AuthDependencies.shared.ensureAuthService(with: base)
     }
 }
 

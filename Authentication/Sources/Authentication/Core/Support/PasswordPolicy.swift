@@ -33,7 +33,7 @@ public struct PasswordPolicy {
         }
     }
     
-    public let customHelpText: Bool
+    public let customizeHelpText: Bool
     public let helpText: String?
     public let helpTextTemplate: Template
     
@@ -66,7 +66,7 @@ public struct PasswordPolicy {
     
     public init?(dict: [String: Any]) {
         // The required keys with sensible defaults
-        customHelpText = dict["customHelpText"] as? Bool ?? false
+        customizeHelpText = dict["customizeHelpText"] as? Bool ?? false
         helpText = dict["helpText"] as? String
         
         helpTextTemplate = Template(dict: dict["helpTextTemplate"] as? [String: Any] ?? [:])
@@ -196,7 +196,7 @@ public extension PasswordPolicy {
         var run = 0
         
         for char in s {
-            if c == last { run += 1 } else { run = 1; last = c }
+            if char == last { run += 1 } else { run = 1; last = char }
             if run > limit { return true }
         }
         return false

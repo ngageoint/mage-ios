@@ -13,7 +13,7 @@ import Authentication
 @objc(AuthSignupHost)
 final class SignupHost: AuthHostingController {
 
-    init(swiftDeps deps: AuthDependencies) {
+    init(policy: PasswordPolicy?, swiftDeps deps: AuthDependencies) {
         #if DEBUG
         let resolved = deps.resolvedForDebug()
         #else
@@ -22,11 +22,16 @@ final class SignupHost: AuthHostingController {
         let resolved = deps
         #endif
         
-        let vm = SignupViewModel(deps: resolved)
+        let vm = SignupViewModel(deps: resolved, policy: policy)
         let view = SignupViewSwiftUI(model: vm)
         super.init(root: AnyView(view), title: "Create Account")
     }
 
+    convenience init(swiftDeps deps: AuthDependencies) {
+        let policy = MageServer.localPasswordPolicy
+        self.init(policy: policy, swiftDeps: deps)
+    }
+    
     @objc convenience init() {
         let deps = AuthFactory.makeDeps()
         self.init(swiftDeps: deps)
