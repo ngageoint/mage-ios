@@ -152,6 +152,17 @@ public struct SignupViewSwiftUI: View {
                     Task { await model.refreshCaptcha() }
                 }
             }
+            .alert("Account Created",
+                   isPresented: successAlertBinding,
+                   actions: {
+                Button("OK") {
+                    model.successMessage = nil
+                    dismiss()
+                }
+            },
+                   message: {
+                Text(model.successMessage ?? "")
+            })
         }
     }
     
@@ -165,6 +176,13 @@ public struct SignupViewSwiftUI: View {
         && captchaAvailable
         && !model.captchaText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         && !model.isSubmitting
+    }
+    
+    private var successAlertBinding: Binding<Bool> {
+        Binding(
+            get: { model.successMessage != nil },
+            set: { show in if !show { model.successMessage = nil } }
+        )
     }
 }
 

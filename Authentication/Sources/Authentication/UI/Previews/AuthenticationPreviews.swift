@@ -8,13 +8,13 @@
 
 import SwiftUI
 import Foundation
-import Authentication
 
 #if DEBUG
 
 // MARK: - Preview Doubles
 
 final class PreviewAuthService: AuthService {
+
     // Control preview outcomes
     var captchaMode: Mode = .success
     var signupMode: Mode = .success
@@ -55,10 +55,12 @@ final class PreviewAuthService: AuthService {
         }
     }
     
-    func submitSignup(_ req: SignupRequest, captchaText: String, token: String) async throws -> AuthSession {
+    func submitSignup(_ request: SignupRequest, captchaText: String, token: String) async throws -> SignupVerificationResponse {
+        let activeImmediately = false
+        
         switch signupMode {
         case .success:
-            return AuthSession(token: "preview-auth-token")
+            return SignupVerificationResponse(username: request.username, displayName: request.displayName, active: activeImmediately)
             
         case .unauthorized:
             throw AuthError.unauthorized
@@ -80,32 +82,7 @@ final class PreviewAuthService: AuthService {
         }
     }
 
-//    func signup(_ req: SignupRequest) async throws -> AuthSession {
-//        switch signupMode {
-//        case .success:
-//            return AuthSession(token: "preview-token")
-//            
-//        case .unauthorized:
-//            throw AuthError.unauthorized
-//            
-//        case .invalidInput(let msg):
-//            throw AuthError.invalidInput(message: msg)
-//            
-//        case .rateLimited(let seconds):
-//            throw AuthError.rateLimited(retryAfterSeconds: seconds)
-//            
-//        case .network:
-//            throw AuthError.network(underlying: URLError(.notConnectedToInternet))
-//            
-//        case .server(let status, let msg):
-//            throw AuthError.server(status: status, message: msg)
-//            
-//        case .accountDisabled:
-//            throw AuthError.accountDisabled
-//        }
-//    }
-    
-    func changePassword(_ req: ChangePasswordRequest) async throws {
+    func changePassword(_ request: ChangePasswordRequest) async throws {
         switch changePasswordMode {
         case .success:
             return

@@ -35,48 +35,72 @@ struct CaptchaWebView: UIViewRepresentable {
 
 extension CaptchaWebView {
     
-    static func htmlTemplate(imageSrc: String) -> String {
+    /// Wrap provided BODY markup inside a minimal HTML doc with safe styling.
+    private static func wrapHTML(body: String) -> String {
         """
         <!doctype html>
         <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-          <style>
-            html, body { margin:0; padding:0; background:transparent; }
-            body { -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; }
-            .wrap {
-              display:flex; align-items:center; justify-content:center;
-              width:100%; padding:0; margin:0;
-            }
-            img {
-              display:block;
-              width:100%;          /* fill the web view width */
-              max-width: 420px;    /* avoid growing too large on iPad */
-              height:auto;         /* preserve aspect ratio */
-              border-radius:8px;
-              image-rendering:-webkit-optimize-contrast;
-              image-rendering:pixelated; /* keeps thin lines reasonably crisp */
-            }
-          </style>
-        </head>
-        <body>
-          <div class="wrap">
-            <img alt="captcha" src="\(imageSrc)">
-          </div>
-        </body>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+            <style>
+              html,body{margin:0;padding:0;background:transparent;}
+              .wrap{display:flex;align-items:center;justify-content:center;width:100%;padding:0;margin:0;}
+              img,svg,object{display:block;width:100%;max-width:320px;height:auto;border-radius:8px;}
+            </style>
+          </head>
+          <body>
+            <div class="wrap">
+              \(body)
+            </div>
+          </body>
         </html>
         """
     }
-}
-
-extension CaptchaWebView {
-    static func html(fromBase64Image b64: String) -> String {
-        let src = b64.hasPrefix("data:") ? b64 : "data:image/png;base64," + b64
-        return htmlTemplate(imageSrc: src)
+    
+//    static func htmlTemplate(imageSrc: String) -> String {
+//        """
+//        <!doctype html>
+//        <html>
+//        <head>
+//          <meta charset="utf-8">
+//          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+//          <style>
+//            html, body { margin:0; padding:0; background:transparent; }
+//            body { -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; }
+//            .wrap {
+//              display:flex; align-items:center; justify-content:center;
+//              width:100%; padding:0; margin:0;
+//            }
+//            img {
+//              display:block;
+//              width:100%;          /* fill the web view width */
+//              max-width: 420px;    /* avoid growing too large on iPad */
+//              height:auto;         /* preserve aspect ratio */
+//              border-radius:8px;
+//              image-rendering:-webkit-optimize-contrast;
+//              image-rendering:pixelated; /* keeps thin lines reasonably crisp */
+//            }
+//          </style>
+//        </head>
+//        <body>
+//          <div class="wrap">
+//            <img alt="captcha" src="\(imageSrc)">
+//          </div>
+//        </body>
+//        </html>
+//        """
+//    }
+//}
+//
+//extension CaptchaWebView {
+  
+    /// HTML document that displays a data-URL image (PNG/JPEG/SVG).
+    static func html(fromDataURL dataURL: String) -> String {
+        wrapHTML(body: #"<img alt="captcha" src="\#(dataURL)"/>"#)
     }
     
-    static func html(fromDataURL dataURL: String) -> String {
-        return htmlTemplate(imageSrc: dataURL)
+    static func html(fromInlineSVG svgXML: String) -> String {
+        wrapHTML(body: svgXML)
     }
 }

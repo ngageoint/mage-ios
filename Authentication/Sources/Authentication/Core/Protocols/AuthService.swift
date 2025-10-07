@@ -11,7 +11,7 @@ import Foundation
 public protocol AuthService {
     func fetchSignupCaptcha(username: String, backgroundHex: String) async throws -> SignupCaptcha
     func submitSignup(_ request: SignupRequest, captchaText: String, token: String) async throws -> SignupVerificationResponse
-    func changePassword(_ req: ChangePasswordRequest) async throws
+    func changePassword(_ request: ChangePasswordRequest) async throws
 }
 
 public struct ServerConfig: Sendable, Equatable { public init() {} }
@@ -23,7 +23,8 @@ public struct AuthSession: Sendable, Equatable {
 
 public struct SignupVerificationResponse: Decodable {
     public let username: String
-    public let displayNeme: String
+    public let displayName: String?
+    /// true if the account is immediately active; false if admin approval is required
     public let active: Bool?
 }
 
