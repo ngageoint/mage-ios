@@ -9,10 +9,17 @@
 import SwiftUI
 
 public struct SignupViewSwiftUI: View {
+    private enum Field: Hashable {
+        case displayName, username, password, captcha
+    }
+    
+    @FocusState private var focusedField: Field?
+    
     @StateObject private var model: SignupViewModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var attemtedAutoCaptchaLoad = false
+    @State private var lastWasUsername = false
     
     public init(model: SignupViewModel) {
         _model = StateObject(wrappedValue: model)
@@ -21,19 +28,20 @@ public struct SignupViewSwiftUI: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                Text("HEADER Create Account HEADER")
-                    .font(.title.bold())
+                MageHeaderView(title: "Create Account")
                 
                 Group {
                     TextField("Display Name", text: $model.displayName)
                         .noAutoCapsAndCorrection()
                         .textContentType(.name)
                         .submitLabel(.next)
+                        .focused($focusedField, equals: .displayName)
                     
                     TextField("Username", text: $model.username)
                         .noAutoCapsAndCorrection()
                         .textContentType(.username)
                         .submitLabel(.next)
+                        .focused($focusedField, equals: .username)
                     
                     TextField("Email", text: $model.email)
                         .noAutoCapsAndCorrection()
@@ -41,9 +49,10 @@ public struct SignupViewSwiftUI: View {
                         .textContentType(.emailAddress)
                         .submitLabel(.next)
                     
-                    SecureField("Password (NEED Verification DATA)", text: $model.password)
+                    SecureField("Password", text: $model.password)
                         .textContentType(.newPassword)
                         .submitLabel(.next)
+                        .focused($focusedField, equals: .password)
                     
                     SecureField("Confirm Password", text: $model.confirmPassword)
                         .textContentType(.newPassword)
@@ -51,6 +60,12 @@ public struct SignupViewSwiftUI: View {
                 }
                 .textFieldStyle(.roundedBorder)
                 .disabled(model.isSubmitting)
+                // TODO: this onChange is not working
+                .onChange(of: focusedField) { newValue in
+                    if lastWasUsername, newValue != .username {
+                        Task { await prefetchCaptchaIfNeeded() }
+                    }
+                }
                 
                 if let err = model.errorMessage {
                     Text(err).foregroundColor(.red).font(.footnote)
@@ -100,6 +115,7 @@ public struct SignupViewSwiftUI: View {
                             .submitLabel(.done)
                             .onSubmit { Task { await model.completeSignup() } }
                             .accessibilityIdentifier("captchaTextField")
+                            .focused($focusedField, equals: .captcha)
                         
                         HStack {
                             Button(captchaAvailable ? "Refresh" : "Load code") {
@@ -183,6 +199,14 @@ public struct SignupViewSwiftUI: View {
             get: { model.successMessage != nil },
             set: { show in if !show { model.successMessage = nil } }
         )
+    }
+    
+    // Local helper to avoid double-loading if you already have a fresh code.
+    private func prefetchCaptchaIfNeeded() async {
+        // If you have flags like `model.isCaptchaLoading` or `model.captchaImage`, use them:
+        // guard !model.isCaptchaLoading else { return }
+        // guard model.captchaImage == nil else { return }
+        await model.refreshCaptcha()
     }
 }
 
