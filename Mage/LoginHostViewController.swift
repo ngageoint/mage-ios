@@ -45,14 +45,14 @@ final class LoginHostViewController: UIViewController {
     }
     
     private var viewModel: LoginRootViewModel
-    private var host: UIHostingController<LoginRootViewSwiftUI>
+    private var host: UIHostingController<LoginRootView>
     private var composedDelegate: AuthDelegates?
     
     // MARK: - Designated Swift init
     private init(server: MageServer, user: User?, composedDelegate: AuthDelegates?, scheme: AnyObject?) {
         self.composedDelegate = composedDelegate
         self.viewModel = LoginRootViewModel(server: server, user: user, delegate: composedDelegate)
-        let root = LoginRootViewSwiftUI(viewModel: self.viewModel)
+        let root = LoginRootView(viewModel: self.viewModel)
         self.host = UIHostingController(rootView: root)
         super.init(nibName: nil, bundle: nil)
     }
@@ -111,7 +111,7 @@ final class LoginHostViewController: UIViewController {
         self.viewModel = LoginRootViewModel(server: mageServer,
                                             user: viewModel.user,
                                             delegate: composedDelegate)
-        self.host.rootView = LoginRootViewSwiftUI(viewModel: self.viewModel)
+        self.host.rootView = LoginRootView(viewModel: self.viewModel)
     }
     
     @objc(setContactInfo:)

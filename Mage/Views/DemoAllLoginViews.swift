@@ -21,12 +21,12 @@ struct DemoAllLoginViews: View {
             ForEach(Array(demoStrategies.enumerated()), id: \.offset) { _, strategy in
                 if let identifier = strategy["identifier"] as? String {
                     if identifier == "local" || identifier == "ldap" {
-                        LoginViewSwiftUI(viewModel: LoginViewModel(strategy: strategy, delegate: nil))
+                        LoginView(viewModel: LoginViewModel(strategy: strategy, delegate: nil))
                             .background(Color(UIColor.secondarySystemBackground))
                             .cornerRadius(12)
                             .padding()
                     } else if identifier == "idp" {
-                        IDPLoginViewSwiftUI(viewModel: IDPLoginViewModel(strategy: strategy, delegate: nil))
+                        IDPLoginView(viewModel: IDPLoginViewModel(strategy: strategy, delegate: nil))
                             .padding()
                     }
                 }

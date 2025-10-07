@@ -1,5 +1,5 @@
 //
-//  IDPCoordinatorSwiftUI.swift
+//  IDPCoordinator.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 8/5/25.
@@ -10,7 +10,7 @@ import Foundation
 import SafariServices
 import UIKit
 
-final class IDPCoordinatorSwiftUI: NSObject, SFSafariViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+final class IDPCoordinator: NSObject, SFSafariViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     private weak var presenter: UIViewController?
     private let url: String
     private let strategy: [String: Any]

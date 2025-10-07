@@ -82,7 +82,7 @@
 //            viewModel.username = user.username ?? ""
 //        }
 //        
-//        let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)
+//        let swiftUIView = LoginView(viewModel: viewModel)
 //        let hostingController = UIHostingController(rootView: swiftUIView)
 //        
 //        controller?.addChild(hostingController)
@@ -104,7 +104,7 @@
 //    func testShouldLoadTheLocalLoginView() {
 //        let delegate = MockLoginDelegate()
 //        let viewModel = LoginViewModel(strategy: defaultLoginStrategy(), delegate: delegate)
-//        let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)
+//        let swiftUIView = LoginView(viewModel: viewModel)
 //        let hostingController = UIHostingController(rootView: swiftUIView)
 //        
 //        controller?.addChild(hostingController)

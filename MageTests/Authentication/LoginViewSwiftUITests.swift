@@ -29,7 +29,7 @@ final class LoginViewSwiftUITests: XCTestCase {
         let vm = SpyVM(strategy: ["identifier": "local"], delegate: nil)
         vm.showPassword = true  // easier when testing
         
-        let sut = LoginViewSwiftUI(viewModel: vm)
+        let sut = LoginView(viewModel: vm)
         ViewHosting.host(view: sut)
         defer { ViewHosting.expel() }
 
@@ -64,7 +64,7 @@ final class LoginViewSwiftUITests: XCTestCase {
         // given a local strategy and a delegate spy
         let delegate = MockLoginDelegateSwiftUI()
         let vm = LoginViewModel(strategy: ["identifier": "local"], delegate: delegate)
-        let sut = LoginViewSwiftUI(viewModel: vm)
+        let sut = LoginView(viewModel: vm)
         
         // when: enter username/password via ViewInspector
         let view = try sut.inspect()
@@ -98,7 +98,7 @@ final class LoginViewSwiftUITests: XCTestCase {
 //                                                 "name": "SSO",
 //                                                 "url":"https://example.com"] as [String: Any],
 //                                      delegate: delegate)
-//        let sut = IDPLoginViewSwiftUI(viewModel: idpVM)
+//        let sut = IDPLoginView(viewModel: idpVM)
 //        let view = try sut.inspect()
 //        let button = try view.find(ViewType.Button.self)
 //        try button.tap()
@@ -109,7 +109,7 @@ final class LoginViewSwiftUITests: XCTestCase {
     func testErrorMessageShown() throws {
         let vm = LoginViewModel(strategy: ["identifier": "local", "strategy": ["title": "Email"]], delegate: nil)
         vm.errorMessage = "Invalid!"
-        let view = LoginViewSwiftUI(viewModel: vm)
+        let view = LoginView(viewModel: vm)
         let errorText1 = try view.inspect().find(text: "Invalid!")  // If you want to be less specific
         let errorText2 = try view.inspect().find(ViewType.Text.self, where: { try $0.string() == "Invalid!" })
         
@@ -143,21 +143,21 @@ final class LoginViewSwiftUITests: XCTestCase {
     
     func testStrategyTitleDisplayed() throws {
         let vm = LoginViewModel(strategy: ["identifier": "local", "strategy": ["title": "Email"]], delegate: nil)
-        let view = LoginViewSwiftUI(viewModel: vm)
+        let view = LoginView(viewModel: vm)
         let title = try view.inspect().find(ViewType.Text.self, where: { try $0.string() == "Email" })
         XCTAssertNotNil(title)
     }
     
     func testMultipleStrategiesShowAllViews() throws {
         // This assumes you have a wrapper like `AuthenticationStrategiesView`
-        // that shows multiple LoginViewSwiftUI and/or IDPLoginViewSwiftUI in a VStack or similar.
+        // that shows multiple LoginView and/or IDPLoginView in a VStack or similar.
 
         let strategies = [
             ["identifier": "local", "strategy": ["title": "Local"]],
             ["identifier": "idp",   "strategy": ["title": "OIDC"]]
         ]
         let viewModels = strategies.map { LoginViewModel(strategy: $0, delegate: nil) }
-        let views = viewModels.map { LoginViewSwiftUI(viewModel: $0) }
+        let views = viewModels.map { LoginView(viewModel: $0) }
 
         // Example composite view for test, replace as needed:
         let wrapper = VStack { ForEach(views.indices, id: \.self) { i in views[i] } }

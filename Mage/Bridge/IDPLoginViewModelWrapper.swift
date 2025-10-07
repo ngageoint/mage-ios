@@ -27,7 +27,7 @@ import SwiftUI
 @MainActor
 @objc public class IDPLoginViewHoster: NSObject {
     @objc public static func hostingController(withViewModel viewModel: IDPLoginViewModel) -> UIViewController {
-        let swiftUIView = IDPLoginViewSwiftUI(viewModel: viewModel)
+        let swiftUIView = IDPLoginView(viewModel: viewModel)
         return UIHostingController(rootView: swiftUIView)
     }
 }

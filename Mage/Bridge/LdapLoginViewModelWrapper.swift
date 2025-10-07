@@ -24,7 +24,7 @@ import Authentication
 @MainActor
 @objc public class LdapLoginViewHoster: NSObject {
     @objc public static func hostingController(withViewModel viewModel: LoginViewModel) -> UIViewController {
-        let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)
+        let swiftUIView = LoginView(viewModel: viewModel)
         return UIHostingController(rootView: swiftUIView)
     }
 }

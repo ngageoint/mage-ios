@@ -1,5 +1,5 @@
 //
-//  LoginRootViewSwiftUI.swift
+//  LoginRootView.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 8/4/25.
@@ -76,7 +76,7 @@ private struct ServerFooter: View {
 }
 
 // MARK: - Main View
-struct LoginRootViewSwiftUI: View {
+struct LoginRootView: View {
     @ObservedObject var viewModel: LoginRootViewModel
     @State private var showCopiedToast = false
     
@@ -198,13 +198,13 @@ private struct StrategyRow: View {
                 }
             }()
             
-            LoginViewSwiftUI(viewModel: wrapper)
+            LoginView(viewModel: wrapper)
                 .frame(maxWidth: .infinity, alignment: .leading)
         } else {
             let idpViewModel = IDPLoginViewModelWrapper(strategy: strategy as NSDictionary,
                                                         delegate: delegate).viewModel
             
-            IDPLoginViewSwiftUI(viewModel: idpViewModel)
+            IDPLoginView(viewModel: idpViewModel)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -415,7 +415,7 @@ private struct LoginPreviewConfigurator: View {
             
             // Screen under test
             let vm = makeVM(strategies: currentStrategies())
-            LoginRootViewSwiftUI(viewModel: vm)
+            LoginRootView(viewModel: vm)
                 .environment(\.horizontalSizeClass, .compact)
                 .padding(.top, 8)
                 .onAppear {
@@ -432,7 +432,7 @@ private struct LoginPreviewConfigurator: View {
 
 #Preview("Login • Pre-Server (no strategies)") {
     let vm = makeVM(strategies: PreviewStrategies.none(), serverURL: nil, version: nil)
-    return LoginRootViewSwiftUI(viewModel: vm)
+    return LoginRootView(viewModel: vm)
         .frame(width: 390)
         .environment(\.horizontalSizeClass, .compact)
 }
@@ -441,7 +441,7 @@ private struct LoginPreviewConfigurator: View {
     let vm = makeVM(strategies: PreviewStrategies.localOnly(),
                     serverURL: "https://test.mage.geointapps.com",
                     version: (4,3,0))
-    return LoginRootViewSwiftUI(viewModel: vm)
+    return LoginRootView(viewModel: vm)
         .frame(width: 390)
         .environment(\.horizontalSizeClass, .compact)
 }
@@ -450,7 +450,7 @@ private struct LoginPreviewConfigurator: View {
     let vm = makeVM(strategies: PreviewStrategies.localOnly(),
                     serverURL: "https://test.mage.geointapps.com",
                     version: (4,3,0))
-    return LoginRootViewSwiftUI(viewModel: vm)
+    return LoginRootView(viewModel: vm)
         .frame(width: 390)
         .environment(\.horizontalSizeClass, .regular)
 }
@@ -458,21 +458,21 @@ private struct LoginPreviewConfigurator: View {
 
 //#Preview("Login • Local + LDAP") {
 //    let vm = makeVM(strategies: PreviewStrategies.localAndLDAP())
-//    return LoginRootViewSwiftUI(viewModel: vm)
+//    return LoginRootView(viewModel: vm)
 //        .frame(width: 390)
 //        .environment(\.horizontalSizeClass, .compact)
 //}
 
 #Preview("Login • Local + IDP") {
     let vm = makeVM(strategies: PreviewStrategies.localAndIDP())
-    return LoginRootViewSwiftUI(viewModel: vm)
+    return LoginRootView(viewModel: vm)
         .frame(width: 390)
         .environment(\.horizontalSizeClass, .compact)
 }
 
 #Preview("Login • IDP Only") {
     let vm = makeVM(strategies: PreviewStrategies.idpOnly())
-    return LoginRootViewSwiftUI(viewModel: vm)
+    return LoginRootView(viewModel: vm)
         .frame(width: 390)
         .environment(\.horizontalSizeClass, .compact)
 }
@@ -480,7 +480,7 @@ private struct LoginPreviewConfigurator: View {
 
 //#Preview("Login • All Strategies • iPad") {
 //    let vm = makeVM(strategies: PreviewStrategies.all())
-//    return LoginRootViewSwiftUI(viewModel: vm)
+//    return LoginRootView(viewModel: vm)
 //        .frame(width: 834) // iPad Air portrait
 //        .environment(\.horizontalSizeClass, .regular)
 //}

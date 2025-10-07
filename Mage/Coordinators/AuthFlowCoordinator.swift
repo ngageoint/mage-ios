@@ -174,7 +174,7 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
         
         // Present UI on main actor
         guard let nav = self.nav else { return }
-        let idp = IDPCoordinatorSwiftUI(
+        let idp = IDPCoordinator(
             presenter: nav,
             url: urlString,
             strategy: strategyPayload,

@@ -1,5 +1,5 @@
 //
-//  IDPLoginViewSwiftUI.swift
+//  IDPLoginView.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 7/31/25.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct IDPLoginViewSwiftUI: View {
+struct IDPLoginView: View {
     @ObservedObject var viewModel: IDPLoginViewModel
     
     var body: some View {
@@ -41,7 +41,7 @@ class MockIDPLoginDelegate: NSObject, IDPLoginDelegate {
 
 
 // MARK: - Preview
-struct IDPLoginViewSwiftUI_Previews: PreviewProvider {
+struct IDPLoginView_Previews: PreviewProvider {
     static var previews: some View {
         let mockStrategy: [String: Any] = [
             "identifier": "idp",
@@ -50,7 +50,7 @@ struct IDPLoginViewSwiftUI_Previews: PreviewProvider {
         ]
         let mockDelegate = MockIDPLoginDelegate()
         let viewModel = IDPLoginViewModel(strategy: mockStrategy, delegate: mockDelegate)
-        return IDPLoginViewSwiftUI(viewModel: viewModel)
+        return IDPLoginView(viewModel: viewModel)
             .padding()
             .previewLayout(.sizeThatFits)
     }

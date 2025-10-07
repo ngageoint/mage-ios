@@ -34,7 +34,7 @@ import Authentication
 @objc public final class LocalLoginViewHoster: NSObject {
     /// Returns a ready-to-use UIHostingController containing the SwiftUI login view.
     @objc public static func hostingController(withViewModel viewModel: LoginViewModel) -> UIViewController {
-        let swiftUIView = LoginViewSwiftUI(viewModel: viewModel)
+        let swiftUIView = LoginView(viewModel: viewModel)
         let host = UIHostingController(rootView: swiftUIView)
         host.view.backgroundColor = .clear
         return host

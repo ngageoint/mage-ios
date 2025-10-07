@@ -1,5 +1,5 @@
 //
-//  LoginViewSwiftUI.swift
+//  LoginView.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 7/23/25.
@@ -9,7 +9,7 @@
 import SwiftUI
 import Authentication
 
-struct LoginViewSwiftUI: View {
+struct LoginView: View {
     @ObservedObject var viewModel: LoginViewModel
     @State var isIntroViewsShown: Bool = false
     
@@ -62,15 +62,15 @@ struct LoginViewSwiftUI: View {
 struct LoginViewSwiftUI_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LoginViewSwiftUI(viewModel: PreviewLoginViewModel())
+            LoginView(viewModel: PreviewLoginViewModel())
                 .previewDisplayName("Default")
-            LoginViewSwiftUI(viewModel: {
+            LoginView(viewModel: {
                 let vm = PreviewLoginViewModel()
                 vm.errorMessage = "Bad username or password!"
                 return vm
             }())
             .previewDisplayName("With Error")
-            LoginViewSwiftUI(viewModel: {
+            LoginView(viewModel: {
                 let vm = PreviewLoginViewModel()
                 vm.isLoading = true
                 return vm
