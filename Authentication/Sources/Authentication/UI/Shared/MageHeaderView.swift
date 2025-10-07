@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct MageHeaderView: View {
+public struct MageHeaderView: View {
     public let logoName: String
     public let title: String?
     public let subtitle: String?
@@ -19,7 +19,7 @@ struct MageHeaderView: View {
         self.subtitle = subtitle
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 8) {
             Image(logoName)
                 .resizable()

@@ -10,70 +10,6 @@ import SwiftUI
 import UIKit
 import Authentication
 
-private struct CenteredHeader: View {
-    let text: String
-    
-    var body: some View {
-        Text(text)
-            .font(.title2.weight(.semibold))
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .accessibilityIdentifier("sign_in_title")
-    }
-}
-
-private struct MageHeaderView: View {
-    @Environment(\.horizontalSizeClass) private var hSizeClass
-    
-    var targetHeight: CGFloat? = nil
-    
-    var body: some View {
-        let base: CGFloat = (hSizeClass == .regular) ? 96 : 72
-        let desired: CGFloat = targetHeight ?? base
-        let height: CGFloat = max(desired, 72)
-        
-        Image("LogoClearTrimmed")
-            .renderingMode(.original) // to keep it's colors
-            .resizable()
-            .scaledToFit()
-            .frame(height: height)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .accessibilityLabel("MAGE")
-            .accessibilityAddTraits(.isHeader)
-            .padding(.top, 8)
-            .padding(.bottom, 8)
-    }
-}
-
-// MARK: - Footer pinned at the bottom
-private struct ServerFooter: View {
-    @ObservedObject var viewModel: LoginRootViewModel
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Button(action: {
-                viewModel.onServerURLTapped()
-            }) {
-                Text(viewModel.serverURLLabel)
-                    .underline(true)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            
-            if let v = viewModel.serverVersionLabel, !v.isEmpty {
-                Text(v)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 20)
-        .padding(.vertical, 10)
-        .background(Color(.systemBackground).opacity(0.001))
-    }
-}
 
 // MARK: - Main View
 struct LoginRootView: View {
@@ -157,123 +93,6 @@ struct LoginRootView: View {
     }
 }
 
-
-// MARK: - Strategy Stack
-private struct StrategyStackView: View {
-    @ObservedObject var viewModel: LoginRootViewModel
-    
-    var body: some View {
-        VStack(spacing: 12) {
-            ForEach(Array(viewModel.strategies.enumerated()), id: \.offset) { _, strategy in
-                StrategyRow(strategy: strategy, user: viewModel.user, delegate: viewModel.delegate)
-            }
-            if viewModel.strategies.count > 1, viewModel.hasLocal {
-                OrDividerView().padding(.vertical, 4)
-            }
-        }
-    }
-}
-
-
-private struct StrategyRow: View {
-    let strategy: [String: Any]
-    let user: User?
-    let delegate: AuthDelegates?
-    
-    var body: some View {
-        let _ = print("QQQ: Identifier: \(strategy["identifier"] as? String ?? "N/A" )")
-        
-        // Render SwiftUI directly for Local/LDAP; use provided SwiftUI for IDP
-        if (strategy["identifier"] as? String) == "local" ||
-            (strategy["identifier"] as? String) == "ldap" {
-            let wrapper: LoginViewModel = {
-                if (strategy["identifier"] as? String) == "local" {
-                    return LocalLoginViewModelWrapper(strategy: strategy as NSDictionary,
-                                                      delegate: delegate,
-                                                      user: user).viewModel
-                } else {
-                    return LdapLoginViewModelWrapper(strategy: strategy as NSDictionary,
-                                                     delegate: delegate,
-                                                     user: user).viewModel
-                }
-            }()
-            
-            LoginView(viewModel: wrapper)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            let idpViewModel = IDPLoginViewModelWrapper(strategy: strategy as NSDictionary,
-                                                        delegate: delegate).viewModel
-            
-            IDPLoginView(viewModel: idpViewModel)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-}
-
-
-private struct AttributedMessageView: UIViewRepresentable {
-    let attributed: NSAttributedString
-    let accessibilityLabel: String?
-    
-    func makeUIView(context: Context) -> UITextView {
-        let textView = UITextView()
-        textView.isEditable = false
-        textView.isScrollEnabled = false
-        textView.backgroundColor = .clear
-        textView.textAlignment = .center
-        textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        textView.isAccessibilityElement = true
-        return textView
-    }
-    
-    func updateUIView(_ uiView: UITextView, context: Context) {
-        uiView.attributedText = attributed
-        uiView.accessibilityLabel = accessibilityLabel ?? "Message"
-        uiView.textAlignment = .center
-    }
-}
-
-// MARK: - Local-only layout
-private struct LocalOnlyLoginSection: View {
-    @ObservedObject var viewModel: LoginRootViewModel
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if let local = viewModel.strategies.first {
-                StrategyRow(strategy: local, user: viewModel.user, delegate: viewModel.delegate)
-            }
-        }
-        .frame(maxWidth: 400)
-    }
-}
-
-
-// MARK: - Previews
-// NEW: MageHeaderView previews (compact, regular, dark)
-//#if DEBUG
-//
-//#Preview("MageHeaderView • iPhone (compact)") {
-//    MageHeaderView()
-//        .padding(.horizontal, 20)
-//        .frame(width: 390) // iPhone 15-ish width
-//        .environment(\.horizontalSizeClass, .compact)
-//}
-//
-//#Preview("MageHeaderView • iPad (regular)") {
-//    MageHeaderView()
-//        .padding(.horizontal, 24)
-//        .frame(width: 834) // iPad Air portrait width
-//        .environment(\.horizontalSizeClass, .regular)
-//}
-//
-//#Preview("MageHeaderView • Dark Mode") {
-//    MageHeaderView()
-//        .padding(.horizontal, 20)
-//        .frame(width: 390)
-//        .environment(\.horizontalSizeClass, .compact)
-//        .preferredColorScheme(.dark)
-//}
-//#endif
 
 // MARK: - Previews
 //#if DEBUG
@@ -455,14 +274,6 @@ private struct LoginPreviewConfigurator: View {
         .environment(\.horizontalSizeClass, .regular)
 }
 
-
-//#Preview("Login • Local + LDAP") {
-//    let vm = makeVM(strategies: PreviewStrategies.localAndLDAP())
-//    return LoginRootView(viewModel: vm)
-//        .frame(width: 390)
-//        .environment(\.horizontalSizeClass, .compact)
-//}
-
 #Preview("Login • Local + IDP") {
     let vm = makeVM(strategies: PreviewStrategies.localAndIDP())
     return LoginRootView(viewModel: vm)
@@ -476,14 +287,6 @@ private struct LoginPreviewConfigurator: View {
         .frame(width: 390)
         .environment(\.horizontalSizeClass, .compact)
 }
-
-
-//#Preview("Login • All Strategies • iPad") {
-//    let vm = makeVM(strategies: PreviewStrategies.all())
-//    return LoginRootView(viewModel: vm)
-//        .frame(width: 834) // iPad Air portrait
-//        .environment(\.horizontalSizeClass, .regular)
-//}
 
 #Preview("Login • Interactive Configurator") {
     LoginPreviewConfigurator()
