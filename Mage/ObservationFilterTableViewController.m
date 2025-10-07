@@ -25,6 +25,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *importantLabel;
 @property (weak, nonatomic) IBOutlet UILabel *importantDescription;
 @property (weak, nonatomic) IBOutlet UISwitch *importantSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *userLabel;
+@property (weak, nonatomic) IBOutlet UILabel *userDescription;
+@property (weak, nonatomic) IBOutlet UITableViewCell *userTableViewCell;
 @property (weak, nonatomic) IBOutlet UILabel *customLabel;
 @property (weak, nonatomic) IBOutlet UILabel *customDescription;
 @property (weak, nonatomic) IBOutlet UILabel *lastLabel;

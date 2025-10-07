@@ -745,4 +745,14 @@ extension UserDefaults {
             set(newValue, forKey: #function)
         }
     }
+    
+    // store selected user.remoteIds for Observation Filter View
+    @objc public var userFilterRemoteIds: [String]? {
+        get {
+            return array(forKey: #function) as? [String];
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
 }
