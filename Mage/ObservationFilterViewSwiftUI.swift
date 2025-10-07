@@ -19,32 +19,55 @@ import Kingfisher
 
 struct ObservationFilterView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var viewModel: ObservationFilterviewModel
+    @StateObject var viewModel = ObservationFilterviewModel()
     
-    init(viewModel: ObservationFilterviewModel = .init()) {
-        self.viewModel = viewModel
-    }
+    //    init(viewModel: ObservationFilterviewModel = .init()) {
+    //        self.viewModel = viewModel
+    //    }
     
     var body: some View {
         if (viewModel.users.isEmpty) {
             VStack {
-                Text("Event has no Users")
+                VStack(spacing: 8) {
+                    Image(systemName: "person.3")
+                        .font(.system(size: 36, weight: .medium))
+                        .padding(.bottom, 4)
+                    Text("No users have created observations for this event. Please have a user create an observation to find observations by user here.")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
             }
         } else {
             NavigationStack {
                 ScrollView {
-                    LazyVStack(alignment:.leading) {
-                        ForEach(Array(viewModel.filteredUsers), id: \.self) { user in
-                            UserObservationCellView(viewModel: viewModel, user: user)
-                                .padding(.vertical, 8)
+                    if viewModel.filteredUsers.isEmpty && !viewModel.searchText.isEmpty {
+                        VStack(spacing: 8) {
+                            Image(systemName: "magnifyingglass")
+                                .font(.system(size: 36, weight: .medium))
+                                .padding(.bottom, 4)
+                            Text("No matches for “\(viewModel.searchText)”")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 240)
+                    } else {
+                        LazyVStack(alignment:.leading) {
+                            ForEach(Array(viewModel.filteredUsers), id: \.self) { user in
+                                UserObservationCellView(viewModel: viewModel, user: user)
+                                    .padding(.vertical, 8)
+                            }
                         }
                     }
                 }
                 .searchable(text: $viewModel.searchText, prompt: "Search")
-                .navigationTitle("Search Users")
+                .navigationTitle("User Filter")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarColorScheme(colorScheme, for: .navigationBar)
                 .scrollIndicators(.hidden)
+                .listRowSeparator(.visible)
             }
         }
     }
@@ -76,10 +99,10 @@ struct UserObservationCellView: View {
                     .clipShape(.circle)
             }
             VStack(alignment: .leading) {
-                Text(user.name ?? "unknown")
+                Text(user.name ?? "")
                     .font(.title3)
                     .fontWeight(.semibold)
-                Text(user.remoteId ?? "unknown")
+                Text(user.username ?? "")
                     .foregroundStyle(.secondary)
             }
             
@@ -101,14 +124,14 @@ struct UserObservationCellView: View {
 }
 
 #Preview {
-//    let one = User()
-//    one.name = "dbenner"
-//    one.remoteId = "1"
-//    let two = User()
-//    two.name = "jmcdougall"
-//    two.remoteId = "2"
-//    
-//    let users: [User] = [one, two]
-//    
-//    ObservationFilterView(viewModel: ObservationFilterviewModel(users: users))
+    //    let one = User()
+    //    one.name = "dbenner"
+    //    one.remoteId = "1"
+    //    let two = User()
+    //    two.name = "jmcdougall"
+    //    two.remoteId = "2"
+    //
+    //    let users: [User] = [one, two]
+    
+    ObservationFilterView(viewModel: ObservationFilterviewModel())
 }

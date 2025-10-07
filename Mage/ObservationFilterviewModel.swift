@@ -8,41 +8,60 @@
 
 import Combine
 import SwiftUI
+import CoreData
 
 class ObservationFilterviewModel: ObservableObject {
-    
+
     @Injected(\.nsManagedObjectContext)
-    var context: NSManagedObjectContext? // we only need this so we can fetch the current Event
-    var users: [User] = [] // the unique [User] we get from the Event.Teams array
-    @Published var selectedUsers: Set<String> = [] // [User.remoteId]
-    @Published var searchText: String = "" // this is used with the .searchable()
-    
-    // Computed property that filters users based on searchText
-    // TODO: maybe include the ability to search for characters in any order? `query.allSatisfy`
-    var filteredUsers: [User] {
-        if searchText.isEmpty {
-            return users
-        } else {
-            return users.filter {
-                if let username = $0.username, let name = $0.name {
-                    return username.localizedCaseInsensitiveContains(searchText) || name.localizedCaseInsensitiveContains(searchText)
-                } else { return false }
-            }
-        }
-    }
-    
+    var context: NSManagedObjectContext?
+
+    @Published var users: [User] = []
+    @Published var selectedUsers: Set<String> = []
+    @Published var searchText: String = ""
+
+    // Output
+    @Published private(set) var filteredUsers: [User] = []
+
+    private var bag = Set<AnyCancellable>()
+
     init() {
+        bindFiltering()
         setupUsers()
         setupSelectedUsers()
     }
-    
-    // Get Event -> Teams -> foreach Team -> get Users
+
+    private func bindFiltering() {
+        // Recompute filteredUsers whenever searchText or users changes.
+        // Debounce keystrokes to avoid thrashing the UI.
+        $searchText
+            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .combineLatest($users)
+            .map { query, users in
+                let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !trimmed.isEmpty else { return users }
+
+                // Case/diacritic-insensitive search on username, name, or remoteId.
+                let needle = trimmed.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+
+                return users.filter { user in
+                    let username = (user.username ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+                    let name     = (user.name ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+                    let rid      = (user.remoteId ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+
+                    return username.contains(needle) || name.contains(needle) || rid.contains(needle)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$filteredUsers)
+    }
+
+    // Get Event -> Teams -> Users (unique), sorted by username
     func setupUsers() {
-        guard let context = context else { return }
-        guard let event = Event.getCurrentEvent(context: context) else {
-            return
-        }
-        // remove duplicates by using a Set
+        guard let context = context,
+              let event = Event.getCurrentEvent(context: context)
+        else { return }
+
         var tempUsers: Set<User> = []
         if let teams = event.teams {
             for team in teams {
@@ -51,29 +70,26 @@ class ObservationFilterviewModel: ObservableObject {
                 }
             }
         }
-        // Set's are in random order, so convert to Array, then sort by User.username
-        self.users = Array(tempUsers).sorted {
-            ($0.username ?? "") < ($1.username ?? "")
-        }
+
+        // Convert Set -> Array and sort by username (nil-safe)
+        self.users = Array(tempUsers).sorted { ($0.username ?? "") < ($1.username ?? "") }
     }
-    
-    // we get their IDs from UserDefaults.userFilterRemoteIds, then add each ID to selectedUsers
+
+    // Load selected ids from defaults and intersect with current users
     func setupSelectedUsers() {
-        guard let IDs = UserDefaults.standard.userFilterRemoteIds else {
+        guard let ids = UserDefaults.standard.userFilterRemoteIds else {
             MageLogger.misc.debug("ObservationFilterviewModel.setupSelectedUsers: no IDs to load")
             return
         }
-        self.selectedUsers = Set(users
-            .filter { user in
-                if let id = user.remoteId {
-                    return IDs.contains(id)
-                }
-                return false
-            }
-            .compactMap { $0.remoteId })
+
+        self.selectedUsers = Set(
+            users
+                .compactMap { $0.remoteId }
+                .filter { ids.contains($0) }
+        )
     }
-    
-    // called when a UserObservationCellView is tapped
+
+    // Toggle selection and persist
     @MainActor
     func updateSelectedUsers(remoteId: String) {
         if selectedUsers.contains(remoteId) {
