@@ -20,6 +20,24 @@ If you'd like to contribute to this project, please make a pull request. We'll r
 
 Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC § 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
+## Install
+
+* Mage iOS uses both Cocoapods and Swift Package Manager (SPM) to build. Cocoapods is being phased out, but is still required. 
+* You can run Mage on an iOS Simulator without Apple developer credentials.
+* You need an Apple developer account to run Mage on an iPhone.
+
+```
+brew install cocoapods
+git clone https://github.com/ngageoint/mage-ios.git
+
+## Setup Cocopods dependencies
+cd mage-ios
+pod install
+
+## Open the Xcode Workspace (Used with Cocoapods)
+open MAGE.xcworkspace
+```
+
 ## License
 
 Copyright 2015 BIT Systems
