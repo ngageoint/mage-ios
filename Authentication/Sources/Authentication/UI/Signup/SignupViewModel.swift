@@ -122,16 +122,6 @@ public final class SignupViewModel: ObservableObject {
         isSubmitting = false
     }
     
-    private func normalizeBase64(_ str: String) -> String {
-        // Accept either raw base64 or a full data URL and return raw base64.
-        if let comma = str.firstIndex(of: ","), str.hasPrefix("data:") {
-            let next = str.index(after: comma)
-            return String(str[next...]).trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-
-        return str.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
     public func refreshCaptcha() async {
         let name = username.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else { return }

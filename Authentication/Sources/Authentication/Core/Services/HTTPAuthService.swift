@@ -16,7 +16,6 @@ public final class HTTPAuthService: AuthService {
     public init(baseURL: URL, session: URLSession = .shared) {
         self.baseURL = baseURL
         self.session = session
-        print("HTTPAuthService init baseURL =", baseURL.absoluteString)
     }
     
     // MARK: - URL helpers
@@ -100,8 +99,7 @@ public final class HTTPAuthService: AuthService {
             throw NSError(
                 domain: NSURLErrorDomain,
                 code: http.statusCode,
-                userInfo: [NSLocalizedDescriptionKey:
-                           "Signup verification failed (\(http.statusCode)) \(url.absoluteString)\n\(snippet)"]
+                userInfo: [NSLocalizedDescriptionKey: "Signup verification failed (\(http.statusCode)) \(url.absoluteString)\n\(snippet)"]
             )
         }
 
@@ -156,15 +154,6 @@ private extension HTTPAuthService {
         
         guard let http = resp as? HTTPURLResponse else { throw URLError(.badServerResponse) }
         return (http.statusCode, data, http)
-    }
-    
-    /// `application/x-www-form-urlencoded` body (spaces -> '+', RFC 3986 style)
-    func formURLEncodedBody(_ params: [String: String]) -> Data {
-        var comps = URLComponents()
-
-        comps.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
-        
-        return Data((comps.percentEncodedQuery ?? "").utf8)
     }
 }
 

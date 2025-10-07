@@ -1,5 +1,5 @@
 //
-//  ChangePasswordViewSwiftUI.swift
+//  ChangePasswordView.swift
 //  MAGE
 //
 //  Created by Brent Michalski on 9/4/25.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct ChangePasswordViewSwiftUI: View {
+public struct ChangePasswordView: View {
     @StateObject private var model: ChangePasswordViewModel
     @Environment(\.dismiss) private var dismiss
     
@@ -23,6 +23,7 @@ public struct ChangePasswordViewSwiftUI: View {
             SecureField("Current Password", text: $model.currentPassword)
                 .textContentType(.password)
                 .submitLabel(.next)
+            // TODO: FIX HELPER TEXT
             SecureField("New Password (helper text)", text: $model.newPassword)
                 .textContentType(.newPassword)
                 .submitLabel(.next)

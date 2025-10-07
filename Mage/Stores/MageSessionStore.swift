@@ -8,6 +8,7 @@
 
 import Authentication
 
+// TODO: BRENT - Need to store username/password for offline use
 public final class MageSessionStore: SessionStore {
     public static let shared = MageSessionStore()
     private init() {}

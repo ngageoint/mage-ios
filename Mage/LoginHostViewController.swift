@@ -19,7 +19,6 @@ final class LoginHostViewController: UIViewController {
         init(_ base: LoginDelegate?) { self.base = base }
         
         func changeServerURL() {
-            print("LoginHostViewController.DelegateAdapter.changeServerURL")
             base?.changeServerURL()
         }
         

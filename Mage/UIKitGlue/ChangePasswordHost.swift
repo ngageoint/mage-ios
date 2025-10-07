@@ -22,7 +22,7 @@ final class ChangePasswordHost: AuthHostingController {
         
         let vm = ChangePasswordViewModel(deps: resolved)
         
-        let view = ChangePasswordViewSwiftUI(model: vm)
+        let view = ChangePasswordView(model: vm)
         
         super.init(root: AnyView(view), title: "Change Password")
     }

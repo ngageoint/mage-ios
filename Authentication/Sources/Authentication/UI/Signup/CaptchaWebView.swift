@@ -57,43 +57,6 @@ extension CaptchaWebView {
         </html>
         """
     }
-    
-//    static func htmlTemplate(imageSrc: String) -> String {
-//        """
-//        <!doctype html>
-//        <html>
-//        <head>
-//          <meta charset="utf-8">
-//          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-//          <style>
-//            html, body { margin:0; padding:0; background:transparent; }
-//            body { -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; }
-//            .wrap {
-//              display:flex; align-items:center; justify-content:center;
-//              width:100%; padding:0; margin:0;
-//            }
-//            img {
-//              display:block;
-//              width:100%;          /* fill the web view width */
-//              max-width: 420px;    /* avoid growing too large on iPad */
-//              height:auto;         /* preserve aspect ratio */
-//              border-radius:8px;
-//              image-rendering:-webkit-optimize-contrast;
-//              image-rendering:pixelated; /* keeps thin lines reasonably crisp */
-//            }
-//          </style>
-//        </head>
-//        <body>
-//          <div class="wrap">
-//            <img alt="captcha" src="\(imageSrc)">
-//          </div>
-//        </body>
-//        </html>
-//        """
-//    }
-//}
-//
-//extension CaptchaWebView {
   
     /// HTML document that displays a data-URL image (PNG/JPEG/SVG).
     static func html(fromDataURL dataURL: String) -> String {

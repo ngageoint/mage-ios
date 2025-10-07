@@ -55,7 +55,6 @@ public final class AuthFlowCoordinator: NSObject {
     // Old: -startLoginOnly
     @objc public func startLoginOnly() {
         guard let url = MageServer.baseURL() else {
-            NSLog("[Auth] No base URL; cannot start login.")
             return
         }
         
@@ -123,7 +122,6 @@ public final class AuthFlowCoordinator: NSObject {
 extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     
     @objc public func changeServerURL() {
-        print("AuthFlowCoordinator.authenticationDelegate?.changeServerURL()")
         authenticationDelegate?.changeServerURL()
     }
     
@@ -146,11 +144,11 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
             return
         }
         
-        log.debug("Auth start (strategy=\(authenticationStrategy, privacy: .public))")
-        
         auth.login(withParameters: params) { [weak self] status, error in
             Task { @MainActor in
+                self?.log.debug("---------------------------------------------")
                 self?.log.debug("Auth finished (status=\(String(describing: status), privacy: .public))")
+                self?.log.debug("---------------------------------------------")
                 complete(status, error)
                 
                 if let self, self.isSuccess(status) {

@@ -120,7 +120,6 @@
 		842F628E2E6B43DF0066497D /* Authentication.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		842F629C2E6B47DE0066497D /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; };
 		842F62E12E6F38CB0066497D /* MageDependencyBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */; };
-		842F62E52E6F708A0066497D /* LegacyAuthBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */; };
 		842F62FB2E7A0F1F0066497D /* SignupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
@@ -1141,7 +1140,6 @@
 		842F62852E6B43DF0066497D /* Authentication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Authentication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62982E6B47DE0066497D /* AuthenticationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuthenticationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageDependencyBootstrap.swift; sourceTree = "<group>"; };
-		842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyAuthBridge.swift; sourceTree = "<group>"; };
 		842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupDelegate.swift; sourceTree = "<group>"; };
 		8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerContactUsTests.swift; sourceTree = "<group>"; };
 		8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRootViewModel.swift; sourceTree = "<group>"; };
@@ -1986,13 +1984,6 @@
 			);
 			target = 842F62972E6B47DE0066497D /* AuthenticationTests */;
 		};
-		845117C92E92D1CE00E4B70B /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MageAuthServiceImpl.swift,
-			);
-			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
-		};
 		847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -2023,7 +2014,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		842F62A42E6B48FB0066497D /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
 		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UIKitGlue; sourceTree = "<group>"; };
-		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (845117C92E92D1CE00E4B70B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
 		847428FF2E7F265600572BB4 /* Stores */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Stores; sourceTree = "<group>"; };
 		847429002E7F266000572BB4 /* Coordinators */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Coordinators; sourceTree = "<group>"; };
 		847429012E7F266A00572BB4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
@@ -2302,7 +2293,6 @@
 				84CA34192E847884002BEA2D /* Delegates */,
 				842F63372E7DF8C70066497D /* Bridge */,
 				84E5BE662E81F19B00E653F6 /* Models */,
-				842F62E42E6F708A0066497D /* LegacyAuthBridge.swift */,
 				842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */,
 				8448CA342E5D076F00EE689B /* LoginHostViewController.swift */,
 				8448CA362E5DEF9000EE689B /* OrDividerView.swift */,
@@ -5616,7 +5606,6 @@
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
 				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
-				842F62E52E6F708A0066497D /* LegacyAuthBridge.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.swift in Sources */,
 				F763FF0E2C7663A600403A00 /* UserService.swift in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,

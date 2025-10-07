@@ -20,7 +20,6 @@ public final class AuthDependencies {
         didSet {
             let oldType = oldValue.map { String(describing: type(of: $0)) } ?? "nil"
             let newType = authService.map { String(describing: type(of: $0)) } ?? "nil"
-            print("AuthDependencies.authService: \(oldType) -> \(newType)")
         }
     }
     
@@ -73,7 +72,6 @@ public extension AuthDependencies {
         } else {
             self.authService = HTTPAuthService(baseURL: baseURL, session: session)
         }
-        print("Configured AuthService with \(baseURL.absoluteString)")
         return self.authService!
     }
     
@@ -119,7 +117,6 @@ public extension AuthDependencies {
         
         if let authStore { self.authStore = authStore }
     }
-    
     
     static func preview(auth: AuthService, sessionStore: SessionStore) -> Self {
         Self(auth: auth, sessionStore: sessionStore)

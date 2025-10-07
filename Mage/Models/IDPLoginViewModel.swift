@@ -20,7 +20,6 @@ public class IDPLoginViewModel: NSObject, ObservableObject {
     }
     
     func signin() {
-        print("ZZZ IDPLoginViewModel: Sign in tapped for strategy: \(strategy)")
         delegate?.signinForStrategy(strategy as NSDictionary)
     }
     

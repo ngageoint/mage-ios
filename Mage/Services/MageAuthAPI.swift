@@ -139,28 +139,3 @@ import Foundation
         NSError(domain: "MAGE.Auth", code: code, userInfo: [NSLocalizedDescriptionKey: message])
     }
 }
-
-
-/// OLD: - delete before release
-//@objc public class func completeSignup(
-//    withParameters params: [String: Any],
-//    token: String,
-//    completion: @escaping (_ http: HTTPURLResponse?, _ body: Data?, _ error: NSError?) -> Void
-//) {
-//    guard let base = MageServer.baseURL()?.absoluteString else {
-//        completion(nil, nil, NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL,
-//                                     userInfo: [NSLocalizedDescriptionKey: "Missing base URL"]))
-//        return
-//    }
-//    
-//    let url = "\(base)/api/users/signups/verifications"
-//    
-//    // If your server expects the token in headers, add it here. If it expects it in the body, you're already passing it.
-//    let sessionManager = MageSessionManager.shared()
-//    let task = sessionManager?.post_TASK(url, parameters: params, progress: nil, success: { task, response in
-//        completion(task.response as? HTTPURLResponse, response as? Data, nil)
-//    }, failure: { task, error in
-//        completion(task?.response as? HTTPURLResponse, nil, error as NSError)
-//    })
-//    if let task { sessionManager?.addTask(task) }
-//}

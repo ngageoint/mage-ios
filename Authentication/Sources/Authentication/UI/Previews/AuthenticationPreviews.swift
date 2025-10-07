@@ -133,7 +133,6 @@ enum SignupPreviewState {
     case errorServer(String)
     case passwordMismatch
     case invalidEmail
-//    case captcha
 }
 
 @MainActor
@@ -253,7 +252,7 @@ struct SignupViewSwiftUI_Previews: PreviewProvider {
     SignupViewSwiftUI(model: makeSignupModel(.valid)).preferredColorScheme(.dark)
 }
 
-// MARK: - ChangePasswordViewSwiftUI Previews
+// MARK: - ChangePasswordView Previews
 
 enum ChangePasswordPreviewState {
     case empty
@@ -312,25 +311,25 @@ auth: PreviewAuthService = .init()) -> ChangePasswordViewModel {
   struct ChangePasswordViewSwiftUI_Previews: PreviewProvider {
     @MainActor static var previews: some View {
       Group {
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.empty))
+        ChangePasswordView(model: makeChangePwModel(.empty))
           .previewDisplayName("Change Pw • Empty")
 
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.valid))
+        ChangePasswordView(model: makeChangePwModel(.valid))
           .previewDisplayName("Change Pw • Valid")
 
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.submitting))
+        ChangePasswordView(model: makeChangePwModel(.submitting))
           .previewDisplayName("Change Pw • Submitting")
 
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.wrongCurrent))
+        ChangePasswordView(model: makeChangePwModel(.wrongCurrent))
           .previewDisplayName("Change Pw • Wrong Current")
 
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.tooWeak))
+        ChangePasswordView(model: makeChangePwModel(.tooWeak))
           .previewDisplayName("Change Pw • Too Weak")
 
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.server("Server exploded (500)")))
+        ChangePasswordView(model: makeChangePwModel(.server("Server exploded (500)")))
           .previewDisplayName("Change Pw • Server Error")
 
-        ChangePasswordViewSwiftUI(model: makeChangePwModel(.valid))
+        ChangePasswordView(model: makeChangePwModel(.valid))
           .preferredColorScheme(.dark)
           .previewDisplayName("Change Pw • Dark Mode")
       }
@@ -341,20 +340,20 @@ auth: PreviewAuthService = .init()) -> ChangePasswordViewModel {
 
   // iOS 17+ nice-to-have
   @available(iOS 17, *)
-  #Preview("Change Pw • Empty") { ChangePasswordViewSwiftUI(model: makeChangePwModel(.empty)) }
+  #Preview("Change Pw • Empty") { ChangePasswordView(model: makeChangePwModel(.empty)) }
   @available(iOS 17, *)
-  #Preview("Change Pw • Valid") { ChangePasswordViewSwiftUI(model: makeChangePwModel(.valid)) }
+  #Preview("Change Pw • Valid") { ChangePasswordView(model: makeChangePwModel(.valid)) }
   @available(iOS 17, *)
-  #Preview("Change Pw • Submitting") { ChangePasswordViewSwiftUI(model: makeChangePwModel(.submitting)) }
+  #Preview("Change Pw • Submitting") { ChangePasswordView(model: makeChangePwModel(.submitting)) }
   @available(iOS 17, *)
-  #Preview("Change Pw • Wrong Current") { ChangePasswordViewSwiftUI(model: makeChangePwModel(.wrongCurrent)) }
+  #Preview("Change Pw • Wrong Current") { ChangePasswordView(model: makeChangePwModel(.wrongCurrent)) }
   @available(iOS 17, *)
-  #Preview("Change Pw • Too Weak") { ChangePasswordViewSwiftUI(model: makeChangePwModel(.tooWeak)) }
+  #Preview("Change Pw • Too Weak") { ChangePasswordView(model: makeChangePwModel(.tooWeak)) }
   @available(iOS 17, *)
-  #Preview("Change Pw • Server Error") { ChangePasswordViewSwiftUI(model: makeChangePwModel(.server("Server exploded (500)"))) }
+  #Preview("Change Pw • Server Error") { ChangePasswordView(model: makeChangePwModel(.server("Server exploded (500)"))) }
   @available(iOS 17, *)
   #Preview("Change Pw • Dark Mode") {
-    ChangePasswordViewSwiftUI(model: makeChangePwModel(.valid)).preferredColorScheme(.dark)
+    ChangePasswordView(model: makeChangePwModel(.valid)).preferredColorScheme(.dark)
   }
 
 #endif // DEBUG

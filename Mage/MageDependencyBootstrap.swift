@@ -12,10 +12,6 @@ import Authentication
 @objc public final class MageDependencyBootstrap: NSObject {
     /// Call from AppDelegate early in launch
     @objc public static func configure() {
-        print("\n---------------------------------------------")
-        print("ZZZ - MageDependencyBootstrap.configure() called.")
-        print("---------------------------------------------\n")
-
         // Session / stores that other auth pieces rely on
         AuthDependencies.shared.sessionStore = MageSessionStore.shared
         

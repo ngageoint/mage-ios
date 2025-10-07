@@ -11,8 +11,7 @@ import Foundation
 public extension AuthError {
     /// Convert an AuthError into user-facing auth status + message.
     /// `fallbackInvalidCredsMessage` lets each module keep its own wording.
-    func toAuthStatusAndMessage(fallbackInvalidCredsMessage: String? = nil)
-    -> (AuthenticationStatus, String?) {
+    func toAuthStatusAndMessage(fallbackInvalidCredsMessage: String? = nil) -> (AuthenticationStatus, String?) {
         switch self {
         case .unauthorized:
             return (.unableToAuthenticate, fallbackInvalidCredsMessage ?? "Invalid credentials.")

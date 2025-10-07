@@ -13,8 +13,6 @@ struct StrategyRow: View {
     let delegate: AuthDelegates?
     
     var body: some View {
-        let _ = print("QQQ: Identifier: \(strategy["identifier"] as? String ?? "N/A" )")
-        
         // Render SwiftUI directly for Local/LDAP; use provided SwiftUI for IDP
         if (strategy["identifier"] as? String) == "local" ||
             (strategy["identifier"] as? String) == "ldap" {

@@ -121,7 +121,6 @@ public enum A11yID {
            let realm = payload["realm"] { parameters["realm"] = realm }
         
         let identifier = (strategy["identifier"] as? String) ?? "local"
-        MageLogger.misc.debug("\n\nBBB Login Strategy Identifier: \(self.strategy["identifier"] as? String ?? "")\n\n")
         
         delegate?.login(
             withParameters: parameters as NSDictionary,
@@ -135,7 +134,6 @@ public enum A11yID {
                     self.username = ""
                     self.password = ""
                     self.errorMessage = nil
-                    MageLogger.auth.debug("Login completed: SUCCESS")
                     // The coordinator should advance the flow after success.
                 } else {
                     switch status {
@@ -146,7 +144,6 @@ public enum A11yID {
                     default:
                         self.errorMessage = errorString ?? "Login failed."
                     }
-                    MageLogger.auth.error("Login finished with status \(String(describing: status)) : \(self.errorMessage ?? "unknown")")
                 }
             }
         )
