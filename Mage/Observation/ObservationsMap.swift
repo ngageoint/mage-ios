@@ -30,9 +30,6 @@ class ObservationsMap: DataSourceMap {
     init() {
         super.init(
             dataSource: DataSources.observation
-//            ,
-//            repository: repository,
-//            mapFeatureRepository: mapFeatureRepository
         )
         viewModel = DataSourceMapViewModel(
             dataSource: dataSource,
@@ -46,9 +43,12 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await self.repository.clearCache()
+                    await MainActor.run {
+                        self.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -56,9 +56,12 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await self.repository.clearCache()
+                    await MainActor.run {
+                        self.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -66,9 +69,12 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await self.repository.clearCache()
+                    await MainActor.run {
+                        self.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -76,18 +82,24 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await self.repository.clearCache()
+                    await MainActor.run {
+                        self.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.favoritesFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
+                guard let self = self else { return }
                 Task { [self] in
-                    await self?.repository.clearCache()
-                    self?.viewModel?.refresh()
+                    await self.repository.clearCache()
+                    await MainActor.run {
+                        self.viewModel?.refresh()
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -97,11 +109,14 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] notification in
                 if let event: EventModel = notification.object as? EventModel {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
+                        guard let self = self else { return }
                         Task { [self] in
-                            self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
-                            await self?.repository.clearCache()
-                            await self?.redrawFeatures()
-                            self?.viewModel?.refresh()
+                            self.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
+                            await self.repository.clearCache()
+                            await self.redrawFeatures()
+                            await MainActor.run {
+                                self.viewModel?.refresh()
+                            }
                         }
                     }
                 }
