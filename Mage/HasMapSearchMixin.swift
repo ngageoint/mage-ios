@@ -10,6 +10,7 @@ import Foundation
 import MapKit
 import MapFramework
 
+import Combine
 import MGRS
 import GARS
 
@@ -22,6 +23,9 @@ protocol HasMapSearch {
 }
 
 class HasMapSearchMixin: NSObject, MapMixin {
+    @Injected(\.settingsRepository)
+    var settingsRepository: SettingsRepository
+    
     var hasMapSearch: HasMapSearch
     var rootView: UIStackView
     var indexInView: Int = 0
@@ -30,6 +34,8 @@ class HasMapSearchMixin: NSObject, MapMixin {
     var navigationController: UINavigationController?
     var annotation: MKPointAnnotation?
     var searchController: SearchSheetController
+    
+    var cancellables: Set<AnyCancellable> = Set()
 
     private lazy var mapSearchButton: MDCFloatingButton = {
         let mapSearchButton = MDCFloatingButton(shape: .mini)
@@ -63,14 +69,27 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
-        if UserDefaults.standard.showMapSearch {
+        settingsRepository.observeSettings()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] settingsModel in
+                self?.updateView(settingsModel: settingsModel)
+            })
+            .store(in: &cancellables)
+    }
+    
+    func updateView(settingsModel: SettingsModel?) {
+        if let settings = settingsModel,
+           settings.mapSearchType != .none
+        {
+            mapSearchButton.isHidden = false
             if rootView.arrangedSubviews.count < indexInView {
                 rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
             } else {
                 rootView.insertArrangedSubview(mapSearchButton, at: indexInView)
             }
-            
             applyTheme(scheme: hasMapSearch.scheme)
+        } else {
+            mapSearchButton.isHidden = true
         }
     }
     
@@ -79,7 +98,15 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     @objc func mapSearchButtonTapped(_ sender: UIButton) {
-        showSearchBottomSheet()
+        toggleSearchBottomSheet()
+    }
+    
+    func toggleSearchBottomSheet() {
+        if navigationController?.presentedViewController != nil {
+            self.navigationController?.dismiss(animated: true)
+        } else {
+            showSearchBottomSheet()
+        }
     }
     
     func showSearchBottomSheet() {
@@ -89,6 +116,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
             sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
             sheet.delegate = self
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
         self.navigationController?.present(searchController, animated: true, completion: nil)
     }
@@ -149,7 +177,23 @@ extension HasMapSearchMixin: SearchControllerDelegate {
         let screenHeight = UIScreen.main.bounds.size.height
         mapView.layoutMargins.bottom = screenHeight / 2
         
+        dismissKeyboard()
+        lowerDetentToShowMapView()
         hasMapSearch.onSearchResultSelected(result: result)
+    }
+    
+    private func lowerDetentToShowMapView() {
+        guard let sheet = navigationController?.presentedViewController?.sheetPresentationController else { return }
+            
+        if sheet.selectedDetentIdentifier == .large {
+            sheet.animateChanges {
+                sheet.selectedDetentIdentifier = .medium
+            }
+        }
+    }
+    
+    private func dismissKeyboard() {
+        navigationController?.view.endEditing(true)
     }
     
     private func getRegion(searchType: SearchResponseType, location: CLLocationCoordinate2D, grid: String?) -> MKCoordinateRegion {

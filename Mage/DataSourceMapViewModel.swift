@@ -41,7 +41,7 @@ class DataSourceMapViewModel {
     
     @Published var annotations: [DataSourceAnnotation] = []
     @Published var featureOverlays: [MKOverlay] = []
-    @Published var tileOverlays: [DataSourceTileOverlay] = []
+    @Published var tileOverlay: DataSourceTileOverlay?
     
     let requerySubject = PassthroughSubject<Void, Never>()
     
@@ -112,17 +112,13 @@ class DataSourceMapViewModel {
         featureOverlays = features?.overlays ?? []
     }
     
-    @discardableResult
-    private func createTileOverlays() -> [MKTileOverlay] {
-        guard let repository = repository else {
-            return []
-        }
+    private func createTileOverlays() {
+        guard let repository = repository else { return }
         let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: key)
         newOverlay.minimumZ = minZoom
         newOverlay.maximumZ = maximumTileZoom
         
-        tileOverlays = [newOverlay]
-        return tileOverlays
+        tileOverlay = newOverlay
     }
     
     func itemKeys(
