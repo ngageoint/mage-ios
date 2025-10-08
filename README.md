@@ -30,13 +30,25 @@ Software source code previously released under an open source license and then m
 brew install cocoapods
 git clone https://github.com/ngageoint/mage-ios.git
 
-## Setup Cocopods dependencies
+# Setup Cocopods dependencies
 cd mage-ios
 pod install
 
-## Open the Xcode Workspace (Used with Cocoapods)
+# Open the Xcode Workspace (Used with Cocoapods)
 open MAGE.xcworkspace
 ```
+
+## Build Issues
+
+When you switch branches and dependencies change, it can break the build (either Cocoapods or Swift Package Manager (SPM). Try these workarounds to fix any build issues:
+
+* If you get a PIF build error (Related to SPM). Try one of these steps:
+    * Close/reopen Xcode
+    * Use the Menu: File > Packages > Reset Package Caches
+* If switching branches has altered the cocoapods dependencies, you may need to close the project, run `pod install`, and reopen the Xcode project.
+    * The benefit of this fix is that you usually do not need to rebuild everything (fast).
+* Sometimes you need to Clean the Build Folder: `Command + Shift + K`. This will make your next build rebuild everything from scratch (slow).
+* Rarely do you need to delete the DerivedData folder (or delete a build/ folder if using SPM)
 
 ## License
 
