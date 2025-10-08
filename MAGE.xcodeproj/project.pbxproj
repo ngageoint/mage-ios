@@ -185,6 +185,8 @@
 		8448CA412E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA402E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift */; };
 		8448CA432E609D4B00EE689B /* AuthTestKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA422E609D4B00EE689B /* AuthTestKit.swift */; };
 		8448CA482E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */; };
+		845117EB2E96F85600E4B70B /* EventsListShimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845117EA2E96F85600E4B70B /* EventsListShimView.swift */; };
+		845117ED2E96FCC400E4B70B /* EventSelectionHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845117EC2E96FCC400E4B70B /* EventSelectionHost.swift */; };
 		8454447D2E3805960068E6AC /* LdapLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */; };
 		846224CB2E313A8D0029FE98 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224CA2E313A8D0029FE98 /* LoginViewModel.swift */; };
 		846224D12E3148100029FE98 /* LocalLoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */; };
@@ -1152,6 +1154,8 @@
 		8448CA402E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator_NoUITests.swift; sourceTree = "<group>"; };
 		8448CA422E609D4B00EE689B /* AuthTestKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTestKit.swift; sourceTree = "<group>"; };
 		8448CA472E60E0A000EE689B /* AuthenticationCoordinator_FlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator_FlowTests.swift; sourceTree = "<group>"; };
+		845117EA2E96F85600E4B70B /* EventsListShimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListShimView.swift; sourceTree = "<group>"; };
+		845117EC2E96FCC400E4B70B /* EventSelectionHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSelectionHost.swift; sourceTree = "<group>"; };
 		8454447C2E3805960068E6AC /* LdapLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LdapLoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		846224CA2E313A8D0029FE98 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		846224D02E3148100029FE98 /* LocalLoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewModelWrapper.swift; sourceTree = "<group>"; };
@@ -3368,6 +3372,8 @@
 				2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */,
 				F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */,
 				F79D293F282AC907008FD45E /* EventContentView.swift */,
+				845117EA2E96F85600E4B70B /* EventsListShimView.swift */,
+				845117EC2E96FCC400E4B70B /* EventSelectionHost.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -5182,6 +5188,7 @@
 				F7225F4A2C5944F700B7D935 /* ImportantButton.swift in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
+				845117ED2E96FCC400E4B70B /* EventSelectionHost.swift in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */,
 				F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */,
@@ -5225,6 +5232,7 @@
 				84BFAA382E89BD000011516A /* TestingAppDelegate.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
 				F7C097752C80C73C003FA115 /* ObservationFormModel.swift in Sources */,
+				845117EB2E96F85600E4B70B /* EventsListShimView.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F776AC9D2BCDB271000FAFB4 /* DataFetchOperation.swift in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
