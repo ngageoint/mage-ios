@@ -18,3 +18,23 @@ struct CenteredHeader: View {
             .accessibilityIdentifier("sign_in_title")
     }
 }
+
+struct CenteredHeader_Previews: PreviewProvider {
+    static var previews: some View {
+        SwiftUI.Group {
+            CenteredHeader(text: "Sign In")
+                .padding()
+                .previewDisplayName("Short")
+
+            CenteredHeader(text: "Welcome to MAGE\nPlease sign in to continue")
+                .padding()
+                .previewDisplayName("Multiline")
+
+            CenteredHeader(text: "Sign In – Large Type")
+                .padding()
+                .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+                .previewDisplayName("AX Large Type")
+        }
+        .previewLayout(.sizeThatFits)
+    }
+}

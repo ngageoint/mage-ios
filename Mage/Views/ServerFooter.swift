@@ -37,3 +37,4 @@ struct ServerFooter: View {
         .background(Color(.systemBackground).opacity(0.001))
     }
 }
+

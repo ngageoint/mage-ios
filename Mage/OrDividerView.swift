@@ -21,3 +21,23 @@ public struct OrDividerView: View {
         }
     }
 }
+
+// MARK: - Previews
+//#if DEBUG
+import SwiftUI
+
+struct OrDividerView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            OrDividerView()
+                .padding()
+                .previewDisplayName("Default")
+                .previewLayout(.sizeThatFits)
+
+            SwiftUI.Form { OrDividerView() }
+                .previewDisplayName("In Form")
+                .previewLayout(.sizeThatFits)
+        }
+    }
+}
+//#endif

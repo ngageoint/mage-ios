@@ -17,8 +17,6 @@ struct IDPLoginView: View {
         }) {
             HStack {
                 Image(systemName: "person.crop.circle.badge.checkmark")
-//                Text(viewModel.displayName)
-                // TODO: BRENT - Fix me
                 Text("Sign in with SSO")
                     .font(.headline)
             }
