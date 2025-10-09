@@ -83,6 +83,7 @@
 }
 
 - (void) authenticationSuccessful {
+    [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
     [_childCoordinators removeLastObject];
     [self startEventChooser];
 }
@@ -140,6 +141,8 @@
 
 
 - (void) startEventChooser {
+    [EventBridge fetchEvents];
+    
     EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController delegate:self scheme:_scheme];
     [_childCoordinators addObject:eventChooser];
     [eventChooser start];

@@ -149,3 +149,22 @@ extension View {
         modifier(KeyboardDismisser())
     }
 }
+
+
+@objc public final class EventBridge: NSObject {
+    @objc public static func fetchEvents() {
+        // Fire and forget; the Events module posts notifications and saves to Core Data
+        _ = Event.operationToFetchEvents(
+            success: { _, _ in
+                print("\n---------------------------------------------")
+                print("Success")
+                print("---------------------------------------------\n")
+            },
+            failure: { _, _ in
+                print("\n---------------------------------------------")
+                print("Failure")
+                print("---------------------------------------------\n")
+            }
+        )
+    }
+}
