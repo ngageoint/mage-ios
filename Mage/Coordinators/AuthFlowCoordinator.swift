@@ -48,6 +48,11 @@ public final class AuthFlowCoordinator: NSObject {
         self.scheme = scheme
         self.context = context
         super.init()
+        
+        // Make sure the context is visible to Event.operationToFetchEvents
+        if let ctx = context {
+            InjectedValues[\.nsManagedObjectContext] = ctx
+        }
     }
     
     // MARK: - Entry points that legacy code calls
@@ -125,7 +130,6 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
         authenticationDelegate?.changeServerURL()
     }
     
-    // EXACT selector: loginWithParameters:withAuthenticationStrategy:complete:
     @objc(loginWithParameters:withAuthenticationStrategy:complete:)
     public func login(withParameters parameters: NSDictionary,
                       withAuthenticationStrategy authenticationStrategy: String,
@@ -146,19 +150,34 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
         
         auth.login(withParameters: params) { [weak self] status, error in
             Task { @MainActor in
-                self?.log.debug("---------------------------------------------")
-                self?.log.debug("Auth finished (status=\(String(describing: status), privacy: .public))")
-                self?.log.debug("---------------------------------------------")
                 complete(status, error)
                 
-                if let self, self.isSuccess(status) {
-                    self.authenticationDelegate?.authenticationSuccessful()
+                guard let self, self.isSuccess(status) else { return }
+                
+                // 1) Read the sign-in token saved by CredentialLogin.signin(...)
+                let signinToken = (AuthDependencies.shared.sessionStore as? MageSessionStore)?.current?.token
+                
+                // 2) Exchange it for the real API token @ /auth/token using the same strategy
+                do {
+                    guard let t = signinToken, !t.isEmpty else {
+                        throw TokenExchanger.ExchangeError(description: "Missing signin token")
+                    }
+                    
+                    let apiToken = try await TokenExchanger.exchange(signinToken: t, strategy: authenticationStrategy)
+                    print("[AuthFlowCoordinator] Exchanged token OK (len=\(apiToken.count))")
+                } catch {
+                    print("[AuthFlowCoordinator] Token exchange FAILED → \(error)")
+                    // If exchange fails, abort handoff so we don't land on an empty Events screen
+                    complete(.unableToAuthenticate, "Failed to authorize device")
+                    return
                 }
+                
+                // 3) Proceed into the app (now carrying the real API token)
+                self.authenticationDelegate?.authenticationSuccessful()
             }
         }
     }
     
-    // EXACT selector: signinForStrategy:
     @objc(signinForStrategy:)
     public func signinForStrategy(_ strategy: NSDictionary) {
         // Extract SENDABLE values first (don’t capture NSDictionary in a @Sendable closure)

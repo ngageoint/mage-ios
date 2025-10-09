@@ -67,6 +67,23 @@ enum CredentialLogin {
                     )
                     complete(mappedStatus, message)
                 } else {
+                    let token: String? = {
+                        guard let obj = try? JSONSerialization.jsonObject(with: data, options: []),
+                              let json = obj as? [String: Any] else { return nil }
+                        
+                        if let t = (json["token"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),!t.isEmpty { return t }
+
+                        return nil
+                    }()
+                    
+                    if let t = token {
+                        // Save to the NEW store only (Authentication layer responsibility)
+                        await AuthDependencies.shared.sessionStore?.set(AuthSession(token: t))
+                        print("[CredentialLogin] saved token to SessionStore (len=\(t.count))")
+                    } else {
+                        print("[CredentialLogin] WARNING: no 'token' in response JSON")
+                    }
+                    
                     complete(.success, nil)
                 }
             } catch {

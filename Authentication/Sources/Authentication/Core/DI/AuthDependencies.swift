@@ -18,7 +18,7 @@ public final class AuthDependencies {
     // MARK: Auth service
     public var authService: AuthService? {
         didSet {
-            let oldType = oldValue.map { String(describing: type(of: $0)) } ?? "nil"
+            let oldType = oldValue.map    { String(describing: type(of: $0)) } ?? "nil"
             let newType = authService.map { String(describing: type(of: $0)) } ?? "nil"
         }
     }
@@ -29,18 +29,6 @@ public final class AuthDependencies {
     
     private init() {}
 }
-
-#if DEBUG
-extension AuthDependencies {
-    public static func resolvedForDebug(
-        http: HTTPPerforming = HTTPLoginPerformer()
-    ) -> AuthDependencies {
-        let authDependencies = AuthDependencies.shared
-        authDependencies.http = http
-        return authDependencies
-    }
-}
-#endif
 
 // MARK: - require (and fail fast)
 public extension AuthDependencies {
@@ -123,8 +111,14 @@ public extension AuthDependencies {
     }
 }
 
-public extension AuthDependencies {
-    func configure(baseURL: URL, session: URLSession = .shared) {
-        self.authService = HTTPAuthService(baseURL: baseURL, session: session)
+#if DEBUG
+extension AuthDependencies {
+    public static func resolvedForDebug(
+        http: HTTPPerforming = HTTPLoginPerformer()
+    ) -> AuthDependencies {
+        let authDependencies = AuthDependencies.shared
+        authDependencies.http = http
+        return authDependencies
     }
 }
+#endif

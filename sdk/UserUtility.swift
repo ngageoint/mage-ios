@@ -86,3 +86,12 @@ import Foundation
         manager?.addTask(task);
     }
 }
+
+extension UserUtility {
+    @objc class func appVersionString() -> String {
+        let info = Bundle.main.infoDictionary
+        let ver = info?["CFBundleShortVersionString"] as? String ?? "0"
+        let build = info?["CFBundleVersion"] as? String ?? "0"
+        return "\(ver) (\(build))"
+    }
+}

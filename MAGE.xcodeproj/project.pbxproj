@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -195,6 +195,8 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		847EAE862E98381A0034D8BF /* EventBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847EAE852E98381A0034D8BF /* EventBridge.swift */; };
+		847EAE8F2E9853A70034D8BF /* TokenExchanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847EAE8E2E9853A70034D8BF /* TokenExchanger.swift */; };
 		84BFAA342E89B7E10011516A /* MainActorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA332E89B7E10011516A /* MainActorGate.swift */; };
 		84BFAA352E89BAAF0011516A /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
 		84BFAA362E89BAC80011516A /* MainActorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA332E89B7E10011516A /* MainActorGate.swift */; };
@@ -1173,6 +1175,8 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		847EAE852E98381A0034D8BF /* EventBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBridge.swift; sourceTree = "<group>"; };
+		847EAE8E2E9853A70034D8BF /* TokenExchanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenExchanger.swift; sourceTree = "<group>"; };
 		84BFAA332E89B7E10011516A /* MainActorGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActorGate.swift; sourceTree = "<group>"; };
 		84BFAA372E89BD000011516A /* TestingAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingAppDelegate.swift; sourceTree = "<group>"; };
 		84BFAA392E89FCF00011516A /* MageServer+Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MageServer+Testing.swift"; sourceTree = "<group>"; };
@@ -2316,6 +2320,7 @@
 				842F633C2E7DFE0C0066497D /* UIKitGlue */,
 				84BFAA372E89BD000011516A /* TestingAppDelegate.swift */,
 				84BFAA392E89FCF00011516A /* MageServer+Testing.swift */,
+				847EAE8E2E9853A70034D8BF /* TokenExchanger.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -2525,6 +2530,36 @@
 			name = Contact;
 			sourceTree = "<group>";
 		};
+		84CA34192E847884002BEA2D /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
+				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
+				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		84CA34A62E859DCF002BEA2D /* NewTests */ = {
+			isa = PBXGroup;
+			children = (
+				84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */,
+				84BFAA332E89B7E10011516A /* MainActorGate.swift */,
+			);
+			path = NewTests;
+			sourceTree = "<group>";
+		};
+		84E5BE662E81F19B00E653F6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */,
+				8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */,
+				847EAE852E98381A0034D8BF /* EventBridge.swift */,
+				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		D258D77E2E25399000A44AC4 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -2550,35 +2585,6 @@
 				D258D78D2E256F1E00A44AC4 /* SettingsService.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		84CA34192E847884002BEA2D /* Delegates */ = {
-			isa = PBXGroup;
-			children = (
-				8448CA382E5E3B9500EE689B /* AuthDelegates.swift */,
-				84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */,
-				842F62FA2E7A0F1F0066497D /* SignupDelegate.swift */,
-			);
-			path = Delegates;
-			sourceTree = "<group>";
-		};
-		84CA34A62E859DCF002BEA2D /* NewTests */ = {
-			isa = PBXGroup;
-			children = (
-				84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */,
-				84BFAA332E89B7E10011516A /* MainActorGate.swift */,
-			);
-			path = NewTests;
-			sourceTree = "<group>";
-		};
-		84E5BE662E81F19B00E653F6 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				84299DAC2E3C0F05007E51B1 /* IDPLoginViewModel.swift */,
-				8448CA322E5CFBFF00EE689B /* LoginRootViewModel.swift */,
-				846224CA2E313A8D0029FE98 /* LoginViewModel.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
@@ -2959,13 +2965,13 @@
 			isa = PBXGroup;
 			children = (
 				F72D426B2694B60300F9AC3B /* MageSessionManager.h */,
+				F72D42702694B60300F9AC3B /* MageSessionManager.m */,
 				F72D426C2694B60300F9AC3B /* DataConnectionUtilities.swift */,
 				F72D426D2694B60300F9AC3B /* TaskSessionManager.h */,
-				F72D426E2694B60300F9AC3B /* SessionTask.h */,
-				F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */,
-				F72D42702694B60300F9AC3B /* MageSessionManager.m */,
-				F72D42722694B60300F9AC3B /* SessionTask.m */,
 				F72D42732694B60300F9AC3B /* TaskSessionManager.m */,
+				F72D426E2694B60300F9AC3B /* SessionTask.h */,
+				F72D42722694B60300F9AC3B /* SessionTask.m */,
+				F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */,
 				F72D42742694B60300F9AC3B /* SessionTaskQueue.h */,
 			);
 			path = Networking;
@@ -5226,7 +5232,7 @@
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				D258D78B2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift in Sources */,
-				846224CB2E313A8D0029FE98 /* LocalLoginViewModel.swift in Sources */,
+				846224CB2E313A8D0029FE98 /* LoginViewModel.swift in Sources */,
 				846224CB2E313A8D0029FE98 /* LoginViewModel.swift in Sources */,
 				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,
 				F7225F4A2C5944F700B7D935 /* ImportantButton.swift in Sources */,
@@ -5317,7 +5323,6 @@
 				04E2C89B28D34C29001F0812 /* GridTypeTableViewCell.m in Sources */,
 				F7DE987E2C133B21005372F8 /* ObservationsTileRepository.swift in Sources */,
 				F73564E02C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift in Sources */,
-				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				D258D78E2E256F1E00A44AC4 /* SettingsService.swift in Sources */,
 				F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
@@ -5521,6 +5526,7 @@
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
 				F763FF102C77CAF300403A00 /* ObservationSyncStatus.swift in Sources */,
 				F752B5F42760DD7600BFA6EC /* MageMapView.swift in Sources */,
+				847EAE862E98381A0034D8BF /* EventBridge.swift in Sources */,
 				F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */,
 				F734C1E52BC845BE00B2E8C8 /* CoordinateDisplayType.swift in Sources */,
 				F763FF092C765D9200403A00 /* UserAvatarChooserDelegate.swift in Sources */,
@@ -5678,6 +5684,7 @@
 				F754C65B2C48689900E408E9 /* ObservationLocationBottomSheetActionBar.swift in Sources */,
 				F7E0794E2C29F4560029C88D /* StaticLayerRepository.swift in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
+				847EAE8F2E9853A70034D8BF /* TokenExchanger.swift in Sources */,
 				F7C097AB2C85129A003FA115 /* EventRemoteDataSource.swift in Sources */,
 				F7DE98802C133B49005372F8 /* ObservationMapImage.swift in Sources */,
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,

@@ -20,6 +20,22 @@ public final class HTTPAuthService: AuthService {
     
     // MARK: - URL helpers
     
+    private func saveSessionAndUser(_ token: String, userId: String?) async {
+        // 1) Save to the NEW store so that app can read it
+        let session = AuthSession(token: token)
+        await AuthDependencies.shared.sessionStore?.set(session)
+        
+        let saved = AuthDependencies.shared.sessionStore?.current
+        
+        print("""
+        ---------------------------------------------
+        [AuthService] Saved session:
+          token.len=\(token.count)
+          sessionStore.current.token.len=\(saved?.token.count ?? -1)
+        ---------------------------------------------
+        """)
+    }
+    
     /// Build a URL by appending path segments to the baseURL, safely handling slashes
     private func makeURL(segments: [String]) -> URL {
         segments.reduce(baseURL) { $0.appendingPathComponent($1) }

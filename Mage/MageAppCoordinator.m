@@ -141,6 +141,8 @@
 
 
 - (void) startEventChooser {
+    [[MageSessionManager sharedManager] setToken: [StoredPassword retrieveStoredToken]];
+    
     [EventBridge fetchEvents];
     
     EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController delegate:self scheme:_scheme];
