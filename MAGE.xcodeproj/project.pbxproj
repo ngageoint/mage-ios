@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -34,6 +34,7 @@
 		04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96561EBB60AC00B6AD8D /* MapUtils.m */; };
 		04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FC1ED4872A00B5FE1E /* MapShapePointsObservation.m */; };
 		04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F833FF1ED5C3B200B5FE1E /* MapShapePointAnnotationView.m */; };
+		0E8C781D8AE422E8229EC995 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 446D093F294370A7B2F5B8DF /* libPods-MAGETests.a */; };
 		2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323A62463666600D2866B /* ObservationAccuracyRenderer.m */; };
 		2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323A72463666700D2866B /* ObservationAccuracy.m */; };
 		2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323AD246366B800D2866B /* LocationAccuracy.m */; };
@@ -90,8 +91,7 @@
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.swift */; };
-		6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */; };
-		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
+		7696CC06DAFBF8A73957622D /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FE17C896ED5E3789A66C62 /* libPods-MAGEGeoPackageTests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
 		840D60752E4A8CC4005B0353 /* AttachmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60742E4A8CC4005B0353 /* AttachmentPath.swift */; };
 		840D60772E4B9501005B0353 /* KingfisherHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D60762E4B9501005B0353 /* KingfisherHelpers.swift */; };
@@ -114,8 +114,6 @@
 		8429C8F62E42621300F5B3AF /* IDPLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */; };
 		8429C8F82E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */; };
 		8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */; };
-		842F627E2E6B41AA0066497D /* FakeAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F627D2E6B41AA0066497D /* FakeAuthService.swift */; };
-		842F627F2E6B41AA0066497D /* FakeAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F627D2E6B41AA0066497D /* FakeAuthService.swift */; };
 		842F628D2E6B43DF0066497D /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; };
 		842F628E2E6B43DF0066497D /* Authentication.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		842F629C2E6B47DE0066497D /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F62852E6B43DF0066497D /* Authentication.framework */; };
@@ -197,6 +195,7 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		847EAE862E98381A0034D8BF /* EventBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847EAE852E98381A0034D8BF /* EventBridge.swift */; };
 		847EAE8F2E9853A70034D8BF /* TokenExchanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847EAE8E2E9853A70034D8BF /* TokenExchanger.swift */; };
+		847EAE912E9862810034D8BF /* AuthFlowCoordinator_NewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847EAE902E9862810034D8BF /* AuthFlowCoordinator_NewTests.swift */; };
 		84BFAA342E89B7E10011516A /* MainActorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA332E89B7E10011516A /* MainActorGate.swift */; };
 		84BFAA352E89BAAF0011516A /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
 		84BFAA362E89BAC80011516A /* MainActorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA332E89B7E10011516A /* MainActorGate.swift */; };
@@ -1121,7 +1120,9 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		313FA06F2E130399008DA52E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		37FE17C896ED5E3789A66C62 /* libPods-MAGEGeoPackageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGEGeoPackageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
+		446D093F294370A7B2F5B8DF /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
 		4C546FEB195A27F4000CF230 /* LocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationAnnotation.m; sourceTree = "<group>"; };
@@ -1146,7 +1147,6 @@
 		8429C8F52E42621300F5B3AF /* IDPLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewModelTests.swift; sourceTree = "<group>"; };
 		8429C8F72E4262EB00F5B3AF /* IDPLoginViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPLoginViewSwiftUITests.swift; sourceTree = "<group>"; };
 		8429C8FC2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginDelegateSwiftUI.swift; sourceTree = "<group>"; };
-		842F627D2E6B41AA0066497D /* FakeAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeAuthService.swift; sourceTree = "<group>"; };
 		842F62852E6B43DF0066497D /* Authentication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Authentication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62982E6B47DE0066497D /* AuthenticationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuthenticationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		842F62E02E6F38CB0066497D /* MageDependencyBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageDependencyBootstrap.swift; sourceTree = "<group>"; };
@@ -1177,6 +1177,7 @@
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
 		847EAE852E98381A0034D8BF /* EventBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBridge.swift; sourceTree = "<group>"; };
 		847EAE8E2E9853A70034D8BF /* TokenExchanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenExchanger.swift; sourceTree = "<group>"; };
+		847EAE902E9862810034D8BF /* AuthFlowCoordinator_NewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlowCoordinator_NewTests.swift; sourceTree = "<group>"; };
 		84BFAA332E89B7E10011516A /* MainActorGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActorGate.swift; sourceTree = "<group>"; };
 		84BFAA372E89BD000011516A /* TestingAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingAppDelegate.swift; sourceTree = "<group>"; };
 		84BFAA392E89FCF00011516A /* MageServer+Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MageServer+Testing.swift"; sourceTree = "<group>"; };
@@ -1191,7 +1192,6 @@
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B29DE4B6C2FE6308F8758572 /* Pods-MAGEGeoPackageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGEGeoPackageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E70D96990B16652014926 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD66678D2D82152100D9BBA0 /* MAGE.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MAGE.xctestplan; sourceTree = "<group>"; };
 		D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalDataSource.swift; sourceTree = "<group>"; };
@@ -1201,7 +1201,6 @@
 		D258D78A2E256E9D00A44AC4 /* SettingsRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRemoteDataSource.swift; sourceTree = "<group>"; };
 		D258D78D2E256F1E00A44AC4 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		D2A46FF82E0DD73700CE0D72 /* ObservationChangeRegions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationChangeRegions.swift; sourceTree = "<group>"; };
-		E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
@@ -1988,7 +1987,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		842F62B02E6B4AAC0066497D /* Exceptions for "Authentication" folder in "Authentication" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/AuthenticationTests/AuthenticationTests.swift,
@@ -1996,7 +1995,7 @@
 			);
 			target = 842F62842E6B43DF0066497D /* Authentication */;
 		};
-		842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		842F62B12E6B4AAC0066497D /* Exceptions for "Authentication" folder in "AuthenticationTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/AuthenticationTests/AuthenticationTests.swift,
@@ -2004,7 +2003,7 @@
 			);
 			target = 842F62972E6B47DE0066497D /* AuthenticationTests */;
 		};
-		847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		847428F22E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "MAGE" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AuthHostingController.swift,
@@ -2013,7 +2012,7 @@
 			);
 			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
 		};
-		847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		847428F32E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "Authentication" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AuthHostingController.swift,
@@ -2022,7 +2021,7 @@
 			);
 			target = 842F62842E6B43DF0066497D /* Authentication */;
 		};
-		84CA34172E8339E0002BEA2D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		84CA34172E8339E0002BEA2D /* Exceptions for "Support" folder in "Authentication" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				DefaultStore.swift,
@@ -2032,15 +2031,110 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		842F62A42E6B48FB0066497D /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
-		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UIKitGlue; sourceTree = "<group>"; };
-		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
-		847428FF2E7F265600572BB4 /* Stores */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Stores; sourceTree = "<group>"; };
-		847429002E7F266000572BB4 /* Coordinators */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Coordinators; sourceTree = "<group>"; };
-		847429012E7F266A00572BB4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
-		847429022E7F267400572BB4 /* Factory */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Factory; sourceTree = "<group>"; };
-		84CA34112E8339C4002BEA2D /* Support */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (84CA34172E8339E0002BEA2D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Support; sourceTree = "<group>"; };
-		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
+		842F62A42E6B48FB0066497D /* Authentication */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				842F62B02E6B4AAC0066497D /* Exceptions for "Authentication" folder in "Authentication" target */,
+				842F62B12E6B4AAC0066497D /* Exceptions for "Authentication" folder in "AuthenticationTests" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				847428F22E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "MAGE" target */,
+				847428F32E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "Authentication" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = UIKitGlue;
+			sourceTree = "<group>";
+		};
+		847428FE2E7F264C00572BB4 /* Services */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		847428FF2E7F265600572BB4 /* Stores */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		847429002E7F266000572BB4 /* Coordinators */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		847429012E7F266A00572BB4 /* Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		847429022E7F267400572BB4 /* Factory */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Factory;
+			sourceTree = "<group>";
+		};
+		84CA34112E8339C4002BEA2D /* Support */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				84CA34172E8339E0002BEA2D /* Exceptions for "Support" folder in "Authentication" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		A811F2832E3BEAF80016C5AB /* IntroViews */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = IntroViews;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2109,7 +2203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */,
+				7696CC06DAFBF8A73957622D /* libPods-MAGEGeoPackageTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2117,9 +2211,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */,
 				84299DB62E423D39007E51B1 /* ViewInspector in Frameworks */,
 				8429C8F22E425C5200F5B3AF /* ViewInspector in Frameworks */,
+				0E8C781D8AE422E8229EC995 /* libPods-MAGETests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2499,14 +2593,6 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		842F627C2E6B41920066497D /* TestDoubles */ = {
-			isa = PBXGroup;
-			children = (
-				842F627D2E6B41AA0066497D /* FakeAuthService.swift */,
-			);
-			path = TestDoubles;
-			sourceTree = "<group>";
-		};
 		842F63372E7DF8C70066497D /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
@@ -2545,6 +2631,7 @@
 			children = (
 				84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */,
 				84BFAA332E89B7E10011516A /* MainActorGate.swift */,
+				847EAE902E9862810034D8BF /* AuthFlowCoordinator_NewTests.swift */,
 			);
 			path = NewTests;
 			sourceTree = "<group>";
@@ -2860,7 +2947,6 @@
 			children = (
 				84CA34A62E859DCF002BEA2D /* NewTests */,
 				F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */,
-				842F627C2E6B41920066497D /* TestDoubles */,
 				8448CA3E2E60921700EE689B /* Test+Helpers_NoUI.swift */,
 				8448CA402E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift */,
 				8448CA422E609D4B00EE689B /* AuthTestKit.swift */,
@@ -3736,8 +3822,8 @@
 				0BD6F42A705BBE383C185A99 /* Pods_MAGE.framework */,
 				9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */,
 				B61E70D96990B16652014926 /* libPods-MAGE.a */,
-				E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */,
-				B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */,
+				37FE17C896ED5E3789A66C62 /* libPods-MAGEGeoPackageTests.a */,
+				446D093F294370A7B2F5B8DF /* libPods-MAGETests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -4515,8 +4601,6 @@
 				842F633C2E7DFE0C0066497D /* UIKitGlue */,
 			);
 			name = Authentication;
-			packageProductDependencies = (
-			);
 			productName = Authentication;
 			productReference = 842F62852E6B43DF0066497D /* Authentication.framework */;
 			productType = "com.apple.product-type.framework";
@@ -4535,8 +4619,6 @@
 				842F629E2E6B47DE0066497D /* PBXTargetDependency */,
 			);
 			name = AuthenticationTests;
-			packageProductDependencies = (
-			);
 			productName = AuthenticationTests;
 			productReference = 842F62982E6B47DE0066497D /* AuthenticationTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -5556,7 +5638,6 @@
 				F73564D02C61401300466813 /* ObservationImportantRemoteDataSource.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
-				842F627F2E6B41AA0066497D /* FakeAuthService.swift in Sources */,
 				F7DE98882C1A43F3005372F8 /* UserRepository.swift in Sources */,
 				D258D7802E253A4900A44AC4 /* SettingsLocalDataSource.swift in Sources */,
 				F776AC972BCD9E6A000FAFB4 /* ObservationService.swift in Sources */,
@@ -5836,6 +5917,7 @@
 				84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
+				847EAE912E9862810034D8BF /* AuthFlowCoordinator_NewTests.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
 				8429C8FD2E4270EA00F5B3AF /* MockLoginDelegateSwiftUI.swift in Sources */,
 				8448CA432E609D4B00EE689B /* AuthTestKit.swift in Sources */,
@@ -5885,7 +5967,6 @@
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F7C0975E2C7F73B0003FA115 /* FormRepositoryMock.swift in Sources */,
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
-				842F627E2E6B41AA0066497D /* FakeAuthService.swift in Sources */,
 				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
 				F7F08E9827E8F4B700640D89 /* FollowUserTests.swift in Sources */,
