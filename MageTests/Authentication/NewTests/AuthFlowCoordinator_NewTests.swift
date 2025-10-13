@@ -31,6 +31,7 @@ final class AuthFlowCoordinator_NewTests: XCTestCase {
     
     private var serverStubDelegate: MockMageServerDelegate!
     
+    private var calledURLs: [URL] = []
     
     override func setUp() async throws {
         try await super.setUp()
@@ -42,51 +43,64 @@ final class AuthFlowCoordinator_NewTests: XCTestCase {
         window.rootViewController = nav
         window.makeKeyAndVisible()
         
-        // Clear legacy auth state
+        // Clean legacy auth state
         MageSessionManager.shared()?.clearToken()
         StoredPassword.clearToken()
         clearAllUserDefaults()
         
-        // Bootstrap the new auth dependencies (should mirror MageDependencyBootstrap.configure())
+        // Bootstrap the new auth deps (mirrors MageDependencyBootstrap.configure())
         AuthDependencies.shared.sessionStore = MageSessionStore.shared
         let base = URL(string: "https://magetest")!
         UserDefaults.standard.baseServerUrl = base.absoluteString
         AuthDependencies.shared.configureAuthServiceIfNeeded(baseURL: base, session: .shared)
         
-        // Coordinator under test
+        // System under test
         delegate = MockAuthDelegate()
-        let scheme = MAGEScheme.scheme()
         coordinator = AuthFlowCoordinator(
             navigationController: nav,
             andDelegate: delegate,
-            andScheme: scheme,
-            context: nil)
+            andScheme: MAGEScheme.scheme(),
+            context: nil
+        )
         
-        // ---- Stubs (re-use legacy helper + fixtures) ----
+        // ---- Stubs ----
         HTTPStubs.removeAllStubs()
-        serverStubDelegate = MockMageServerDelegate()
+        HTTPStubs.setEnabled(true, for: URLSessionConfiguration.default)
+        HTTPStubs.setEnabled(true, for: URLSessionConfiguration.ephemeral)
         
-        // Some builds hit /api, others /api/server — stub both to be safe,
-        // using the same fixture the legacy tests use.
-        MockMageServer.stubJSONSuccessRequest(
-            url: "https://magetest/api",
-            filePath: "apiSuccess6.json",
-            delegate: serverStubDelegate
-        )
-
-        MockMageServer.stubJSONSuccessRequest(
-            url: "https://magetest/api/server",
-            filePath: "apiSuccess6.json",
-            delegate: serverStubDelegate
-        )
+        // Record any stub activation
+        calledURLs.removeAll()
+        HTTPStubs.onStubActivation { [weak self] request, _, _ in
+            if let u = request.url { self?.calledURLs.append(u) }
+        }
+        
+        // Safety-net stub: any request to https://magetest that starts with /api
+        // This covers both /api and /api/server which older code alternates between.
+        let apiBody = """
+        {
+          "version": 6,
+          "authenticationStrategies":[{"identifier":"local","type":"local","title":"Username/Password"}],
+          "disclaimer": null
+        }
+        """
+        HTTPStubs.stubRequests(passingTest: { req in
+            guard let u = req.url else { return false }
+            return u.host == "magetest" && u.path.hasPrefix("/api")
+        }, withStubResponse: { _ in
+            HTTPStubsResponse(
+                data: Data(apiBody.utf8),
+                statusCode: 200,
+                headers: ["Content-Type": "application/json"]
+            )
+        }).name = "fallback-/api"
     }
+    
     
     override func tearDown() async throws {
         HTTPStubs.removeAllStubs()
         
         coordinator = nil
         delegate = nil
-        serverStubDelegate = nil
         
         window.isHidden = true
         window.rootViewController = nil
@@ -130,33 +144,30 @@ final class AuthFlowCoordinator_NewTests: XCTestCase {
         await fulfillment(of: [exp], timeout: 1.0)
     }
     
-    /// Mirrors “testStartLoginOnly” from the old suite: with a base URL present,
-    /// startLoginOnly() should fetch server.json and push LoginHostViewController.
+    /// Mirrors old “testStartLoginOnly”:
+    /// with a base URL present, startLoginOnly() should fetch server.json and push LoginHostViewController.
     func test_startLoginOnly_fetchesServerAndShowsLogin() async {
-        // Ensure base URL is set the same way production boot does
+        // Ensure base URL is set as production does
         UserDefaults.standard.baseServerUrl = "https://magetest"
         
         // When
         coordinator.startLoginOnly()
-
-        // 1) Wait until our legacy stub recorded either /api or /api/server
-        let apiHit = expectation(for: NSPredicate { _,_ in
-            let urls = self.serverStubDelegate.urls
-            return  urls.contains(URL(string: "https://,agetest/api")!) ||
-                    urls.contains(URL(string: "https://,agetest/api/server")!)
+        
+        // 1) Wait until any /api* request to magetest actually fired
+        let apiHit = expectation(for: NSPredicate { _, _ in
+            self.calledURLs.contains { $0.host == "magetest" && $0.path.hasPrefix("/api") }
         }, evaluatedWith: nil)
         
         // 2) Wait until the coordinator captured the MageServer
-        let serverSet = expectation(for: NSPredicate { _,_ in
+        let serverSet = expectation(for: NSPredicate { _, _ in
             self.coordinator.server != nil
         }, evaluatedWith: nil)
         
         // 3) Wait until the login host is pushed
-        let showsLoginHost = expectation(for: NSPredicate { _,_ in
+        let showsLoginHost = expectation(for: NSPredicate { _, _ in
             self.nav.topViewController is LoginHostViewController
         }, evaluatedWith: nil)
         
         await fulfillment(of: [apiHit, serverSet, showsLoginHost], timeout: 4.0)
-
     }
 }
