@@ -20,7 +20,10 @@ private enum AuthKey {
 @MainActor
 public final class AuthFlowCoordinator: NSObject {
     
-    private let serverInfoService: ServerInfoService
+    /// If non-nil, tests (or production) can inject a specific service.
+    /// `startLoginOnly()` will use this first; otherwise it builds one
+    /// from the *current* MageServer.baseURL().
+    private let injectedServerInfoService: ServerInfoService?
     
     // MARK: - Stored state
     private weak var nav: UINavigationController?
@@ -35,7 +38,8 @@ public final class AuthFlowCoordinator: NSObject {
         case .success: return true
         case .registrationSuccess: return true
         case .accountCreationSuccess: return true
-        default: return false
+        default:
+            return false
         }
     }
     
@@ -45,7 +49,7 @@ public final class AuthFlowCoordinator: NSObject {
                 andDelegate delegate: AuthenticationDelegate?,
                 andScheme scheme: AnyObject? = nil,
                 context: NSManagedObjectContext? = nil) {
-        self.serverInfoService = ServerInfoService(baseURL: MageServer.baseURL() ?? URL(string: "https://invalid.localhost")!)
+        self.injectedServerInfoService = nil
         self.nav = navigationController
         self.authenticationDelegate = delegate
         self.scheme = scheme
@@ -59,7 +63,7 @@ public final class AuthFlowCoordinator: NSObject {
                 andScheme scheme: AnyObject?,
                 context: NSManagedObjectContext?,
                 serverInfoService: ServerInfoService) {
-        self.serverInfoService = serverInfoService
+        self.injectedServerInfoService = serverInfoService
         self.nav = navigationController
         self.authenticationDelegate = delegate
         self.scheme = scheme
@@ -73,17 +77,22 @@ public final class AuthFlowCoordinator: NSObject {
     @objc public func startLoginOnly() {
         guard let url = MageServer.baseURL() else { return }
         
-        Task { @MainActor in
+        // Always resolve server info against the *current* base URL.
+        // Prefer injected service (tests); otherwise create a fresh one.
+        let svc = injectedServerInfoService ?? ServerInfoService(baseURL: url)
+        
+        Task {
             do {
-                _ = try await serverInfoService.fetchServerModules()
+                _ = try await svc.fetchServerModules()
                 
-                // minimal: set server and proceed
-                self.server = MageServer(url: url)
-                if let base = MageServer.baseURL() {
-                    _ = AuthDependencies.shared.resetAuthService(forNewBaseURL: base)
+                await MainActor.run {
+                    // minimal: set server and proceed
+                    self.server = MageServer(url: url)
+                    if let base = MageServer.baseURL() {
+                        _ = AuthDependencies.shared.resetAuthService(forNewBaseURL: base)
+                    }
+                    self.showLoginView(for: self.server!)
                 }
-                
-                self.showLoginView(for: self.server!)
             } catch {
                 NSLog("[Auth] Server info fetch failed: \(error.localizedDescription)")
             }
