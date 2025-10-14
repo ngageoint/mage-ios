@@ -20,6 +20,8 @@ private enum AuthKey {
 @MainActor
 public final class AuthFlowCoordinator: NSObject {
     
+    private let serverInfoService: ServerInfoService
+    
     // MARK: - Stored state
     private weak var nav: UINavigationController?
     private weak var authenticationDelegate: AuthenticationDelegate?  // the *external* app-level delegate
@@ -43,38 +45,49 @@ public final class AuthFlowCoordinator: NSObject {
                 andDelegate delegate: AuthenticationDelegate?,
                 andScheme scheme: AnyObject? = nil,
                 context: NSManagedObjectContext? = nil) {
+        self.serverInfoService = ServerInfoService(baseURL: MageServer.baseURL() ?? URL(string: "https://invalid.localhost")!)
         self.nav = navigationController
         self.authenticationDelegate = delegate
         self.scheme = scheme
         self.context = context
         super.init()
-        
-        // Make sure the context is visible to Event.operationToFetchEvents
-        if let ctx = context {
-            InjectedValues[\.nsManagedObjectContext] = ctx
-        }
+    }
+    
+    // Test-friendly initializer
+    public init(navigationController: UINavigationController,
+                andDelegate delegate: AuthenticationDelegate?,
+                andScheme scheme: AnyObject?,
+                context: NSManagedObjectContext?,
+                serverInfoService: ServerInfoService) {
+        self.serverInfoService = serverInfoService
+        self.nav = navigationController
+        self.authenticationDelegate = delegate
+        self.scheme = scheme
+        self.context = context
+        super.init()
     }
     
     // MARK: - Entry points that legacy code calls
     
     // Old: -startLoginOnly
     @objc public func startLoginOnly() {
-        guard let url = MageServer.baseURL() else {
-            return
-        }
+        guard let url = MageServer.baseURL() else { return }
         
-        MageServer.server(url: url, success: { [weak self] mageServer in
-            guard let self else { return }
-            Task { @MainActor in
-                self.server = mageServer
+        Task { @MainActor in
+            do {
+                _ = try await serverInfoService.fetchServerModules()
+                
+                // minimal: set server and proceed
+                self.server = MageServer(url: url)
                 if let base = MageServer.baseURL() {
                     _ = AuthDependencies.shared.resetAuthService(forNewBaseURL: base)
                 }
-                self.showLoginView(for: mageServer)
+                
+                self.showLoginView(for: self.server!)
+            } catch {
+                NSLog("[Auth] Server info fetch failed: \(error.localizedDescription)")
             }
-        }, failure: { error in
-            NSLog("[Auth] Failed to contact server: \(error.localizedDescription)")
-        })
+        }
     }
     
     // Old: -start:
@@ -150,30 +163,14 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
         
         auth.login(withParameters: params) { [weak self] status, error in
             Task { @MainActor in
+                self?.log.debug("-------------------------------------------------------------")
+                self?.log.debug("Auth finished (status=\(String(describing: status), privacy: .public))")
+                self?.log.debug("-------------------------------------------------------------")
                 complete(status, error)
                 
-                guard let self, self.isSuccess(status) else { return }
-                
-                // 1) Read the sign-in token saved by CredentialLogin.signin(...)
-                let signinToken = (AuthDependencies.shared.sessionStore as? MageSessionStore)?.current?.token
-                
-                // 2) Exchange it for the real API token @ /auth/token using the same strategy
-                do {
-                    guard let t = signinToken, !t.isEmpty else {
-                        throw TokenExchanger.ExchangeError(description: "Missing signin token")
-                    }
-                    
-                    let apiToken = try await TokenExchanger.exchange(signinToken: t, strategy: authenticationStrategy)
-                    print("[AuthFlowCoordinator] Exchanged token OK (len=\(apiToken.count))")
-                } catch {
-                    print("[AuthFlowCoordinator] Token exchange FAILED → \(error)")
-                    // If exchange fails, abort handoff so we don't land on an empty Events screen
-                    complete(.unableToAuthenticate, "Failed to authorize device")
-                    return
+                if let self, self.isSuccess(status) {
+                    self.authenticationDelegate?.authenticationSuccessful()
                 }
-                
-                // 3) Proceed into the app (now carrying the real API token)
-                self.authenticationDelegate?.authenticationSuccessful()
             }
         }
     }
@@ -207,7 +204,8 @@ extension AuthFlowCoordinator: LoginDelegate, IDPCoordinatorDelegate {
     public func idpCoordinatorDidCompleteSignIn(parameters: [String: Any]) {
         // Derive the strategy key expected by the auth layer.
         let strategyParameter = parameters["strategy"] as? [String: Any]
-        let strategy = (strategyParameter?["identifier"] as? String) ?? (strategyParameter?["type"] as? String) ?? "idp"
+        let strategy = (strategyParameter?["identifier"] as? String) 
+            ?? (strategyParameter?["type"] as? String) ?? "idp"
         
         // Reuse the same login path.
         self.login(withParameters: parameters as NSDictionary,

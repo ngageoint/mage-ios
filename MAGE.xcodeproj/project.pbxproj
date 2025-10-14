@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -203,6 +203,12 @@
 		84BFAA3A2E89FCF00011516A /* MageServer+Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFAA392E89FCF00011516A /* MageServer+Testing.swift */; };
 		84CA34A82E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */; };
 		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
+		84D55CD22E9D68C200CCF56D /* AuthHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D55CD12E9D68C200CCF56D /* AuthHTTPClient.swift */; };
+		84D55CD42E9D6AC800CCF56D /* ServerInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D55CD32E9D6AC800CCF56D /* ServerInfoService.swift */; };
+		84D55CD62E9D6CF600CCF56D /* MageServer+AuthModules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D55CD52E9D6CF600CCF56D /* MageServer+AuthModules.swift */; };
+		84D55CD82E9D9FFC00CCF56D /* LogoutService {.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D55CD72E9D9FFC00CCF56D /* LogoutService {.swift */; };
+		84D55CDC2E9EEC7D00CCF56D /* TestFakeNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D55CDB2E9EEC7D00CCF56D /* TestFakeNetwork.swift */; };
+		84D55CDE2E9EEE0100CCF56D /* ServerInfoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D55CDD2E9EEE0100CCF56D /* ServerInfoServiceTests.swift */; };
 		84E9E1BE2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
@@ -1183,6 +1189,12 @@
 		84BFAA392E89FCF00011516A /* MageServer+Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MageServer+Testing.swift"; sourceTree = "<group>"; };
 		84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlowCoordinator_ParityTests.swift; sourceTree = "<group>"; };
 		84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAccessTokenTests.swift; sourceTree = "<group>"; };
+		84D55CD12E9D68C200CCF56D /* AuthHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHTTPClient.swift; sourceTree = "<group>"; };
+		84D55CD32E9D6AC800CCF56D /* ServerInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerInfoService.swift; sourceTree = "<group>"; };
+		84D55CD52E9D6CF600CCF56D /* MageServer+AuthModules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MageServer+AuthModules.swift"; sourceTree = "<group>"; };
+		84D55CD72E9D9FFC00CCF56D /* LogoutService {.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogoutService {.swift"; sourceTree = "<group>"; };
+		84D55CDB2E9EEC7D00CCF56D /* TestFakeNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFakeNetwork.swift; sourceTree = "<group>"; };
+		84D55CDD2E9EEE0100CCF56D /* ServerInfoServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerInfoServiceTests.swift; sourceTree = "<group>"; };
 		84E9E1BD2E429A6C0010A2D6 /* IDPCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDPCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1987,7 +1999,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		842F62B02E6B4AAC0066497D /* Exceptions for "Authentication" folder in "Authentication" target */ = {
+		842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/AuthenticationTests/AuthenticationTests.swift,
@@ -1995,7 +2007,7 @@
 			);
 			target = 842F62842E6B43DF0066497D /* Authentication */;
 		};
-		842F62B12E6B4AAC0066497D /* Exceptions for "Authentication" folder in "AuthenticationTests" target */ = {
+		842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/AuthenticationTests/AuthenticationTests.swift,
@@ -2003,7 +2015,7 @@
 			);
 			target = 842F62972E6B47DE0066497D /* AuthenticationTests */;
 		};
-		847428F22E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "MAGE" target */ = {
+		847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AuthHostingController.swift,
@@ -2012,7 +2024,7 @@
 			);
 			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
 		};
-		847428F32E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "Authentication" target */ = {
+		847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AuthHostingController.swift,
@@ -2021,7 +2033,7 @@
 			);
 			target = 842F62842E6B43DF0066497D /* Authentication */;
 		};
-		84CA34172E8339E0002BEA2D /* Exceptions for "Support" folder in "Authentication" target */ = {
+		84CA34172E8339E0002BEA2D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				DefaultStore.swift,
@@ -2031,110 +2043,15 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		842F62A42E6B48FB0066497D /* Authentication */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				842F62B02E6B4AAC0066497D /* Exceptions for "Authentication" folder in "Authentication" target */,
-				842F62B12E6B4AAC0066497D /* Exceptions for "Authentication" folder in "AuthenticationTests" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Authentication;
-			sourceTree = "<group>";
-		};
-		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				847428F22E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "MAGE" target */,
-				847428F32E7DFF9800572BB4 /* Exceptions for "UIKitGlue" folder in "Authentication" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = UIKitGlue;
-			sourceTree = "<group>";
-		};
-		847428FE2E7F264C00572BB4 /* Services */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		847428FF2E7F265600572BB4 /* Stores */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Stores;
-			sourceTree = "<group>";
-		};
-		847429002E7F266000572BB4 /* Coordinators */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Coordinators;
-			sourceTree = "<group>";
-		};
-		847429012E7F266A00572BB4 /* Views */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		847429022E7F267400572BB4 /* Factory */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Factory;
-			sourceTree = "<group>";
-		};
-		84CA34112E8339C4002BEA2D /* Support */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				84CA34172E8339E0002BEA2D /* Exceptions for "Support" folder in "Authentication" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Support;
-			sourceTree = "<group>";
-		};
-		A811F2832E3BEAF80016C5AB /* IntroViews */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = IntroViews;
-			sourceTree = "<group>";
-		};
+		842F62A42E6B48FB0066497D /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (842F62B02E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 842F62B12E6B4AAC0066497D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
+		842F633C2E7DFE0C0066497D /* UIKitGlue */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847428F22E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847428F32E7DFF9800572BB4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UIKitGlue; sourceTree = "<group>"; };
+		847428FE2E7F264C00572BB4 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		847428FF2E7F265600572BB4 /* Stores */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Stores; sourceTree = "<group>"; };
+		847429002E7F266000572BB4 /* Coordinators */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Coordinators; sourceTree = "<group>"; };
+		847429012E7F266A00572BB4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
+		847429022E7F267400572BB4 /* Factory */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Factory; sourceTree = "<group>"; };
+		84CA34112E8339C4002BEA2D /* Support */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (84CA34172E8339E0002BEA2D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Support; sourceTree = "<group>"; };
+		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2415,6 +2332,10 @@
 				84BFAA372E89BD000011516A /* TestingAppDelegate.swift */,
 				84BFAA392E89FCF00011516A /* MageServer+Testing.swift */,
 				847EAE8E2E9853A70034D8BF /* TokenExchanger.swift */,
+				84D55CD12E9D68C200CCF56D /* AuthHTTPClient.swift */,
+				84D55CD32E9D6AC800CCF56D /* ServerInfoService.swift */,
+				84D55CD52E9D6CF600CCF56D /* MageServer+AuthModules.swift */,
+				84D55CD72E9D9FFC00CCF56D /* LogoutService {.swift */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -2630,6 +2551,8 @@
 			isa = PBXGroup;
 			children = (
 				84CA34A72E859E2D002BEA2D /* AuthFlowCoordinator_ParityTests.swift */,
+				84D55CDB2E9EEC7D00CCF56D /* TestFakeNetwork.swift */,
+				84D55CDD2E9EEE0100CCF56D /* ServerInfoServiceTests.swift */,
 				84BFAA332E89B7E10011516A /* MainActorGate.swift */,
 				847EAE902E9862810034D8BF /* AuthFlowCoordinator_NewTests.swift */,
 			);
@@ -5383,6 +5306,7 @@
 				F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */,
 				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				F7C097A12C812630003FA115 /* GeoPackageProperty.swift in Sources */,
+				84D55CD62E9D6CF600CCF56D /* MageServer+AuthModules.swift in Sources */,
 				F7ECDC9E27A83C8600D0AF92 /* GeoPackage.swift in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.swift in Sources */,
 				F776ACA52BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift in Sources */,
@@ -5591,6 +5515,7 @@
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
 				F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */,
+				84D55CD82E9D9FFC00CCF56D /* LogoutService {.swift in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
 				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
@@ -5599,6 +5524,7 @@
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
 				F78D578B27B46F49003594D3 /* FeedsMap.swift in Sources */,
+				84D55CD22E9D68C200CCF56D /* AuthHTTPClient.swift in Sources */,
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
 				8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */,
@@ -5773,6 +5699,7 @@
 				F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */,
 				F7225F5C2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
+				84D55CD42E9D6AC800CCF56D /* ServerInfoService.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
 				F73565052C668DB200466813 /* UserObservationList.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
@@ -5938,6 +5865,7 @@
 				F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
 				F7E5749627DBF2A1009A6E0D /* UserHeadingDisplayTests.swift in Sources */,
+				84D55CDE2E9EEE0100CCF56D /* ServerInfoServiceTests.swift in Sources */,
 				F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */,
 				F7081DB02626348F004B89D4 /* MockCLLocationManager.swift in Sources */,
 				846D0C022D834519009C68CB /* UserDefaults+Extensions.swift in Sources */,
@@ -5974,6 +5902,7 @@
 				F7E5749827DF8700009A6E0D /* StaticLayerMapTests.swift in Sources */,
 				84299DAB2E3BFBD2007E51B1 /* LoginViewModelTests.swift in Sources */,
 				8448CA412E60950700EE689B /* AuthenticationCoordinator_NoUITests.swift in Sources */,
+				84D55CDC2E9EEC7D00CCF56D /* TestFakeNetwork.swift in Sources */,
 				F70A708C27D932FE000881F5 /* FilteredUsersMapTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F789EB622BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift in Sources */,

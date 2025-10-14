@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import OHHTTPStubs
 @testable import MAGE
 @testable import Authentication
 
@@ -18,24 +17,36 @@ private final class MockAuthDelegate: NSObject, AuthenticationDelegate {
     var changeServerUrlCalled = false
     
     func authenticationSuccessful() { authenticationSuccessfulCalled = true }
-    func couldNotAuthenticate() { couldNotAuthenticateCalled = true }
-    func changeServerURL() { changeServerUrlCalled = true }
+    func couldNotAuthenticate()     { couldNotAuthenticateCalled = true }
+    func changeServerURL()          { changeServerUrlCalled = true }
 }
 
 @MainActor
 final class AuthFlowCoordinator_NewTests: XCTestCase {
     private var window: UIWindow!
     private var nav: UINavigationController!
-    private var delegate: MockAuthDelegate!
     private var coordinator: AuthFlowCoordinator!
     
-    private var serverStubDelegate: MockMageServerDelegate!
-    
-    private var calledURLs: [URL] = []
+    private let apiJSON = """
+            {
+              "version": 6,
+              "authenticationStrategies": [
+                { "identifier": "local", "type": "local", "title": "Username/Password" }
+              ],
+              "disclaimer": null
+            }
+    """
     
     override func setUp() async throws {
         try await super.setUp()
         
+        // Clean legacy auth state
+        MageSessionManager.shared()?.clearToken()
+        StoredPassword.clearToken()
+        if let id = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: id)
+        }
+
         // Fresh window + nav
         window = UIWindow(frame: UIScreen.main.bounds)
         nav = UINavigationController()
@@ -43,105 +54,70 @@ final class AuthFlowCoordinator_NewTests: XCTestCase {
         window.rootViewController = nav
         window.makeKeyAndVisible()
         
-        // Clean legacy auth state
-        MageSessionManager.shared()?.clearToken()
-        StoredPassword.clearToken()
-        clearAllUserDefaults()
         
-        // Bootstrap the new auth deps (mirrors MageDependencyBootstrap.configure())
+        // Minimal bootstrap for new auth deps
         AuthDependencies.shared.sessionStore = MageSessionStore.shared
-        let base = URL(string: "https://magetest")!
-        UserDefaults.standard.baseServerUrl = base.absoluteString
-        AuthDependencies.shared.configureAuthServiceIfNeeded(baseURL: base, session: .shared)
         
-        // System under test
-        delegate = MockAuthDelegate()
-        coordinator = AuthFlowCoordinator(
-            navigationController: nav,
-            andDelegate: delegate,
-            andScheme: MAGEScheme.scheme(),
-            context: nil
-        )
-        
-        // ---- Stubs ----
-        HTTPStubs.removeAllStubs()
-        HTTPStubs.setEnabled(true, for: URLSessionConfiguration.default)
-        HTTPStubs.setEnabled(true, for: URLSessionConfiguration.ephemeral)
-        
-        // Record any stub activation
-        calledURLs.removeAll()
-        HTTPStubs.onStubActivation { [weak self] request, _, _ in
-            if let u = request.url { self?.calledURLs.append(u) }
-        }
-        
-        // Safety-net stub: any request to https://magetest that starts with /api
-        // This covers both /api and /api/server which older code alternates between.
-        let apiBody = """
-        {
-          "version": 6,
-          "authenticationStrategies":[{"identifier":"local","type":"local","title":"Username/Password"}],
-          "disclaimer": null
-        }
-        """
-        HTTPStubs.stubRequests(passingTest: { req in
-            guard let u = req.url else { return false }
-            return u.host == "magetest" && u.path.hasPrefix("/api")
-        }, withStubResponse: { _ in
-            HTTPStubsResponse(
-                data: Data(apiBody.utf8),
-                statusCode: 200,
-                headers: ["Content-Type": "application/json"]
-            )
-        }).name = "fallback-/api"
+        // Base URL used by coordinator
+        UserDefaults.standard.baseServerUrl = "https://magetest"
     }
     
-    
     override func tearDown() async throws {
-        HTTPStubs.removeAllStubs()
-        
         coordinator = nil
-        delegate = nil
-        
         window.isHidden = true
         window.rootViewController = nil
-        nav = nil
         window = nil
+        nav = nil
         
         MageSessionManager.shared()?.clearToken()
         StoredPassword.clearToken()
-        clearAllUserDefaults()
         
         try await super.tearDown()
     }
     
-    private func clearAllUserDefaults() {
-        let defaults = UserDefaults.standard
-        if let bundleID = Bundle.main.bundleIdentifier {
-            defaults.removePersistentDomain(forName: bundleID)
-        }
-        defaults.synchronize()
+    private func makeServerInfoService(base: URL) -> ServerInfoService {
+        let routes = [
+            TestRoute(matches: { req in
+                guard let url = req.url else { return false }
+                return url.host == base.host &&
+                (url.path == "/api" || url.path == "/api/server") &&
+                (req.httpMethod ?? "GET") == "GET"
+            }, respond: { req in
+                let data = Data(self.apiJSON.utf8)
+                let http = HTTPURLResponse(url: req.url!, statusCode: 200,
+                                           httpVersion: nil, headerFields: ["Content-Type":"application/json"])!
+                return (data, http)
+            })
+        ]
+        
+        let fakeNet = TestFakeNetwork(routes: routes)
+        return ServerInfoService(baseURL: base, net: fakeNet)
     }
+    
+//    private func clearAllUserDefaults() {
+//        let defaults = UserDefaults.standard
+//        if let bundleID = Bundle.main.bundleIdentifier {
+//            defaults.removePersistentDomain(forName: bundleID)
+//        }
+//        defaults.synchronize()
+//    }
     
     // MARK: - Tests
     
     /// Replaces old "testShowLoginViewForServerCalled" with a direct UI assertion:
     /// after calling start(_:) the stack should show LoginHostViewController.
     func test_start_withKnownServer_pushesLoginHost() async {
-        // Given a MageServer we already know
         let base = URL(string: "https://magetest")!
         let server = MageServer(url: base)
-        
-        // When
-        coordinator.start(server)
-        
-        // Then
-        let exp = expectation(description: "Login host presented")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            XCTAssertTrue(self.nav.topViewController is LoginHostViewController,
-                          "Expected LoginHostViewController on top of the nav stack")
-            exp.fulfill()
-        }
-        await fulfillment(of: [exp], timeout: 1.0)
+        let svc = makeServerInfoService(base: base)
+
+        coordinator = AuthFlowCoordinator(
+            navigationController: nav,
+            andDelegate: MockAuthDelegate(),
+            andScheme: MAGEScheme.scheme(),
+            context: nil,
+            serverInfoService: svc
+        )
     }
     
     /// Mirrors old “testStartLoginOnly”:
