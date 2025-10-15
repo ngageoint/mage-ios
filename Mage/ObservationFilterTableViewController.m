@@ -11,6 +11,7 @@
 #import "Observations.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
+//#import "ObservationFilterViewModel-Swift.h"
 
 @interface ObservationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
@@ -48,6 +49,8 @@
     self.importantLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.favoritesDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.importantDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.userLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.userDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.customLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.customDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.lastLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
@@ -130,6 +133,9 @@
         [self applyFilter];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
+    } else if ([indexPath section] == 0 && [indexPath row] == 2) {
+        UIViewController *swiftUIUserFilter = [UserObservationFilterViewUIHostingFactory makeViewController];
+        [self.navigationController pushViewController:swiftUIUserFilter animated:YES];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:true];
 }

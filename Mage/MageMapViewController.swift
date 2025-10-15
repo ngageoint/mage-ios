@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class MageMapViewController: MageNavStack {
     var mapView: MainMageMapView?
@@ -60,16 +61,19 @@ class MageMapViewController: MageNavStack {
     }
     
     @objc func filterTapped(_ sender: UIBarButtonItem) {
-        let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
-        guard let vc = filterStoryboard.instantiateInitialViewController() as? UINavigationController else {
-            return
-        }
-        if let fvc: FilterTableViewController = vc.topViewController as? FilterTableViewController {
-            fvc.applyTheme(withContainerScheme: scheme)
-        }
-        vc.modalPresentationStyle = .popover
-        vc.popoverPresentationController?.barButtonItem = sender
-        self.present(vc, animated: true, completion: nil)
+        // Create the SwiftUI view
+        let filterView = MainFilterView()
+
+        // Wrap it in a hosting controller
+        let hostingController = UIHostingController(rootView: filterView)
+
+        // Optional: make it look similar to your existing popover
+        hostingController.modalPresentationStyle = .popover
+        hostingController.popoverPresentationController?.barButtonItem = sender
+
+        // Present it
+        self.present(hostingController, animated: true)
     }
+
     
 }
