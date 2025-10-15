@@ -66,7 +66,7 @@ class SFGeometryMapTests: KIFSpec {
                         subview.removeFromSuperview();
                     }
                 }
-                window = TestHelpers.getKeyWindowVisible();
+//                window = TestHelpers.getKeyWindowVisible();
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.mapRegion = MKCoordinateRegion(center: kCLLocationCoordinate2DInvalid, span: MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0));
                 

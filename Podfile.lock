@@ -705,7 +705,7 @@ DEPENDENCIES:
   - Nimble (~> 9)
   - OCMock
   - OHHTTPStubs
-  - OHHTTPStubs/Swift
+  - OHHTTPStubs/Swift (~> 9.0)
   - PureLayout
   - Quick (~> 6)
   - SSZipArchive (~> 2.2.2)
@@ -752,6 +752,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: f367e23955eec9e6421c66f4709be782d870471f
+PODFILE CHECKSUM: 1f64d534de418198e9db3d4b1cf628551037fa92
 
 COCOAPODS: 1.16.2

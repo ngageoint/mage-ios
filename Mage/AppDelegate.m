@@ -8,7 +8,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <UserNotifications/UserNotifications.h>
 #import "UIImage+Thumbnail.h"
-#import "LoginViewController.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import "MageSessionManager.h"
 #import "MagicalRecord+MAGE.h"
@@ -51,6 +50,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
 
+    [MageDependencyBootstrap configure];
+    
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];

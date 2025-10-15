@@ -234,15 +234,11 @@ enum ObservationState: Int, CustomStringConvertible {
         guard let context = observation.managedObjectContext, let event = Event.getCurrentEvent(context:context) else {
             return nil;
         }
-        if (MageServer.isServerVersion5) {
-            if let observationUrl = observation.url {
-                return manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
-            }
-        } else { //} if MageServer.isServerVersion6_0() {
-            if let observationUrl = observation.url {
-                return manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
-            }
+        
+        if let observationUrl = observation.url {
+            return manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
         }
+        
         return nil;
     }
     
@@ -319,7 +315,7 @@ enum ObservationState: Int, CustomStringConvertible {
         var jsonProperties : [AnyHashable : Any] = self.properties ?? [:]
         
         var attachmentsToDelete : [String: [String : [Attachment]]] = [:]
-        if (!MageServer.isServerVersion5) {
+        if (MageServer.isServer(major: 6)) {
             // check for attachments marked for deletion and be sure to add them to the form properties
             if let attachments = attachments {
                 for case let attachment in attachments where attachment.markedForDeletion {

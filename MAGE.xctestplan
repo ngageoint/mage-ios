@@ -18,10 +18,20 @@
         }
       ]
     },
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "-UIApplicationDelegateClassName MAGE.TestingAppDelegate"
+      }
+    ],
     "environmentVariableEntries" : [
       {
         "key" : "OS_ACTIVITY_MODE",
         "value" : "enable"
+      },
+      {
+        "enabled" : false,
+        "key" : "VIEW_TESTING",
+        "value" : "true"
       },
       {
         "enabled" : false,
@@ -47,7 +57,6 @@
         "AttachmentFieldViewTests\/testSetOneAttachmentWithObservationAndTwoLaterThenRemoveSecond()",
         "AttachmentFieldViewTests\/testShouldCallTheAttachmentSelectionDelegateOnTap()",
         "AttachmentPushServiceTests",
-        "AuthenticationCoordinatorTests",
         "CanCreateObservationTests\/testInitializeTheCanCreateObservationAndLongPressTheMap()",
         "EventChooserControllerTests",
         "EventChooserCoordinatorTests",
@@ -55,6 +64,7 @@
         "FeedItemsViewControllerNoTimestampTests\/testOneFeedItemNoContent()",
         "FeedItemsViewControllerWithTimestampTests",
         "FeedItemsViewControllerWithTimestampTests\/testOneFeedItemWithPrimaryAndSecondaryValueAndIconWithoutTimestamp()",
+        "LocalLoginViewTests",
         "MageServerTestsSwift\/testShouldFailWhenAnImageIsrReturned()",
         "MageServiceTests",
         "MageTests",

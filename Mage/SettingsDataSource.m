@@ -7,8 +7,6 @@
 //
 
 #import "SettingsDataSource.h"
-#import "Authentication.h"
-#import "AuthenticationCoordinator.h"
 #import <CoreLocation/CoreLocation.h>
 #import "LocationService.h"
 #import "ObservationTableHeaderView.h"

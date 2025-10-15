@@ -6,40 +6,40 @@
 //  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import Foundation
-import Quick
-import Nimble
-import OHHTTPStubs
-import Kingfisher
+//import Foundation
+//import Quick
+//import Nimble
+//import OHHTTPStubs
+//import Kingfisher
+//
+//@testable import MAGE
+//
+//@available(iOS 13.0, *)
 
-@testable import MAGE
-
-@available(iOS 13.0, *)
-
-class MockSignUpDelegate: NSObject, SignupDelegate {
-
-    
-    var signupParameters: [AnyHashable : Any]?;
-    var url: URL?;
-    var signUpCalled = false;
-    var signupCanceledCalled = false;
-    var getCaptchaCalled = false;
-    var captchaUsername: String?;
-    
-    func getCaptcha(_ username: String, completion: @escaping (String) -> Void) {
-        getCaptchaCalled = true;
-        captchaUsername = username;
-    }
-    
-    func signup(withParameters parameters: [AnyHashable : Any], completion: @escaping (HTTPURLResponse) -> Void) {
-        signUpCalled = true;
-        signupParameters = parameters;
-    }
-    
-    func signupCanceled() {
-        signupCanceledCalled = true;
-    }
-}
+//class MockSignUpDelegate: NSObject, SignupDelegate {
+//
+//    
+//    var signupParameters: [AnyHashable : Any]?;
+//    var url: URL?;
+//    var signUpCalled = false;
+//    var signupCanceledCalled = false;
+//    var getCaptchaCalled = false;
+//    var captchaUsername: String?;
+//    
+//    func getCaptcha(_ username: String, completion: @escaping (String) -> Void) {
+//        getCaptchaCalled = true;
+//        captchaUsername = username;
+//    }
+//    
+//    func signup(withParameters parameters: [AnyHashable : Any], completion: @escaping (HTTPURLResponse) -> Void) {
+//        signUpCalled = true;
+//        signupParameters = parameters;
+//    }
+//    
+//    func signupCanceled() {
+//        signupCanceledCalled = true;
+//    }
+//}
 
 //class SignUpViewControllerTests: KIFSpec {
 //    

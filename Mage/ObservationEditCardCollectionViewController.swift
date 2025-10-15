@@ -219,7 +219,7 @@ import MaterialComponents.MDCCard
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
-        if ((MageServer.isServerVersion5 && realFormCount == 1) || eventForms?.filter({ form in
+        if ((MageServer.isServer(major:5) && realFormCount == 1) || eventForms?.filter({ form in
             return !form.archived
         }).count == 0) {
             addFormFAB.isHidden = true;
@@ -246,7 +246,6 @@ import MaterialComponents.MDCCard
     
     func setupStackView(stackView: UIStackView) {
         addCommonFields(stackView: stackView);
-        addLegacyAttachmentCard(stackView: stackView);
         addFormsHeader(stackView: stackView);
         addFormViews(stackView: stackView);
     }
@@ -263,20 +262,6 @@ import MaterialComponents.MDCCard
         stackView.addArrangedSubview(formsHeader);
         formsHeader.reorderButton.isHidden = self.observationForms.count <= 1;
         formsHeader.reorderButton.addTarget(self, action: #selector(reorderForms), for: .touchUpInside);
-    }
-    
-    // for legacy servers add the attachment field to common
-    func addLegacyAttachmentCard(stackView: UIStackView) {
-        if (MageServer.isServerVersion5) {
-            if let observation = observation {
-                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: observation, attachmentSelectionDelegate: self, viewController: self);
-                let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
-                attachmentCard.applyTheme(withScheme: scheme);
-                attachmentHeader.applyTheme(withScheme: scheme);
-                stackView.addArrangedSubview(attachmentHeader);
-                stackView.addArrangedSubview(attachmentCard);
-            }
-        }
     }
     
     func addFormViews(stackView: UIStackView) {
@@ -464,28 +449,6 @@ import MaterialComponents.MDCCard
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
-        
-        // if this is a legacy server and the event has forms, there needs to be 1
-        if (MageServer.isServerVersion5) {
-            if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
-            }
-            // this case should have already been prevented, but just in case
-            if (realFormCount > 1) {
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Only one form can be added to this observation");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
-            }
-        }
-        // end legacy check
         
         if (realFormCount > (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // too many forms

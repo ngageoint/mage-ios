@@ -14,6 +14,7 @@ enum MageLogger {
     static let ui = Logger(subsystem: "mil.nga.mage", category: "ui")
     static let db = Logger(subsystem: "mil.nga.mage", category: "database")
     static let misc = Logger(subsystem: "mil.nga.mage", category: "misc")
+    static let auth = Logger(subsystem: "mil.nga.mage", category: "authentication")
 }
 
 @objc class MageInitializer: NSObject {

@@ -1,11 +1,11 @@
+////
+////  LocalAuthentication.h
+////  mage-ios-sdk
+////
+////
 //
-//  LocalAuthentication.h
-//  mage-ios-sdk
+//@import Authentication;
 //
+//@interface LocalAuthentication : NSObject<AuthenticationProtocol>
 //
-
-#import "Authentication.h"
-
-@interface LocalAuthentication : NSObject<AuthenticationProtocol>
-
-@end
+//@end

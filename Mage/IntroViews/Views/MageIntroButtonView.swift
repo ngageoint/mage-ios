@@ -35,16 +35,16 @@ struct MageIntroButtonView: View {
 struct MageIntroButtonView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LocalLoginViewSwiftUI(viewModel: PreviewLocalLoginViewModel())
+            LoginView(viewModel: PreviewLoginViewModel())
                 .previewDisplayName("Default")
-            LocalLoginViewSwiftUI(viewModel: {
-                let vm = PreviewLocalLoginViewModel()
+            LoginView(viewModel: {
+                let vm = PreviewLoginViewModel()
                 vm.errorMessage = "Bad username or password!"
                 return vm
             }())
             .previewDisplayName("With Error")
-            LocalLoginViewSwiftUI(viewModel: {
-                let vm = PreviewLocalLoginViewModel()
+            LoginView(viewModel: {
+                let vm = PreviewLoginViewModel()
                 vm.isLoading = true
                 return vm
             }())

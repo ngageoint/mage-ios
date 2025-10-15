@@ -9,12 +9,9 @@
 #import "LocationService.h"
 #import "NSDate+display.h"
 #import "AppDelegate.h"
-#import "ChangePasswordViewController.h"
-#import "AuthenticationCoordinator.h"
+#import <Authentication/Authentication-Swift.h>
 #import "ObservationTableHeaderView.h"
-
 #import "SettingsDataSource.h"
-#import "AuthenticationCoordinator.h"
 #import "EventInformationCoordinator.h"
 #import "AttributionsViewController.h"
 #import "LocationDisplayTableViewController.h"
@@ -22,6 +19,9 @@
 #import "DataSynchronizationSettingsTableViewController.h"
 #import "LocationServicesSettingsTableViewController.h"
 #import "ObservationServicesSettingsTableViewController.h"
+
+@import Authentication;
+#import <Authentication/Authentication-Swift.h>
 
 @interface SettingsTableViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -186,7 +186,7 @@
             break;
         }
         case kChangePassword: {
-            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme context: self.context];
+            UIViewController *viewController = [[AuthChangePasswordHost alloc] init];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }
@@ -349,7 +349,7 @@
     self.childCoordinators = [[self.childCoordinators filteredArrayUsingPredicate:predicate] mutableCopy];
 }
 
-- (void)changeServerUrl {
+- (void)changeServerURL {
     
 }
 

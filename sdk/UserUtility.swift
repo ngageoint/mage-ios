@@ -8,18 +8,18 @@ import Foundation
 
 @objc public class UserUtility: NSObject {
     
-    var expired: Bool = false;
+    var expired: Bool = false
     
     @objc public static let singleton = UserUtility()
     
     private override init() {
-        expired = false;
+        expired = false
     }
     
     @objc public var isTokenExpired: Bool {
         get {
             if expired {
-                return true;
+                return true
             }
             let loginParameters = UserDefaults.standard.loginParameters
             
@@ -27,16 +27,16 @@ import Foundation
                let acceptedConsent = loginParameters[LoginParametersKey.acceptedConsent.key] as? String,
                let tokenExpirationDate = loginParameters[LoginParametersKey.tokenExpirationDate.key] as? Date,
                acceptedConsent == "agree" {
-                let currentDate = Date();
+                let currentDate = Date()
                 NSLog("current date \(currentDate) token expiration \(tokenExpirationDate)")
-                expired = currentDate > tokenExpirationDate;
+                expired = currentDate > tokenExpirationDate
                 if expired {
                     self.expireToken()
-                    NotificationCenter.default.post(name: .MAGETokenExpiredNotification, object: nil);
+                    NotificationCenter.default.post(name: .MAGETokenExpiredNotification, object: nil)
                 }
-                return expired;
+                return expired
             }
-            expired = true;
+            expired = true
             return expired
         }
     }
@@ -47,42 +47,42 @@ import Foundation
         loginParameters.removeValue(forKey: LoginParametersKey.tokenExpirationDate.key)
         loginParameters.removeValue(forKey: LoginParametersKey.acceptedConsent.key)
         
-        MageSessionManager.shared().clearToken();
+        MageSessionManager.shared().clearToken()
         
-        UserDefaults.standard.loginParameters = loginParameters;
-        UserDefaults.standard.loginType = nil;
+        UserDefaults.standard.loginParameters = loginParameters
+        UserDefaults.standard.loginType = nil
         
-        self.expired = true;
+        self.expired = true
     }
     
     @objc public func resetExpiration() {
-        self.expired = false;
+        self.expired = false
     }
     
     @objc public func acceptConsent() {
-        var loginParameters = UserDefaults.standard.loginParameters ?? [:];
+        var loginParameters = UserDefaults.standard.loginParameters ?? [:]
         loginParameters[LoginParametersKey.acceptedConsent.key] = LoginParametersKey.agree.key
-        UserDefaults.standard.loginParameters = loginParameters;
+        UserDefaults.standard.loginParameters = loginParameters
     }
     
     @objc public func logout(completion: @escaping () -> Void) {
         guard let baseUrl = MageServer.baseURL() else {
             completion()
-            return;
+            return
         }
-        let url = "\(baseUrl)/api/logout"
-        
-        let manager = MageSessionManager.shared();
-        
-        let task = manager?.post_TASK(url, parameters: nil, progress: nil, success: { task, response in
-            NSLog("Logged out");
-            self.expireToken()
-            completion();
-        }, failure: { task, error in
-            NSLog("Error \(error)")
+        Task { @MainActor in
+            await LogoutService.logout(baseURL: baseUrl)
             self.expireToken()
             completion()
-        })
-        manager?.addTask(task);
+        }
+    } 
+}
+
+extension UserUtility {
+    @objc class func appVersionString() -> String {
+        let info = Bundle.main.infoDictionary
+        let ver = info?["CFBundleShortVersionString"] as? String ?? "0"
+        let build = info?["CFBundleVersion"] as? String ?? "0"
+        return "\(ver) (\(build))"
     }
 }

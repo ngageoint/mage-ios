@@ -25,8 +25,8 @@ static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notificat
 
 @interface MageSessionManager()
 
-@property (nonatomic, strong)  NSString *token;
-@property (nonatomic, strong)  SessionTaskQueue *taskQueue;
+@property (nonatomic, strong) NSString *token;
+@property (nonatomic, strong) SessionTaskQueue *taskQueue;
 
 @end
 

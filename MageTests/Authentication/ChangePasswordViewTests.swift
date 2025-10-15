@@ -6,13 +6,13 @@
 //  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import Foundation
-import Quick
-import Nimble
-import Kingfisher
-import OHHTTPStubs
-
-@testable import MAGE
+//import Foundation
+//import Quick
+//import Nimble
+//import Kingfisher
+//import OHHTTPStubs
+//
+//@testable import MAGE
 
 //class ChangePasswordViewControllerTests: KIFMageCoreDataTestCase {
 //    

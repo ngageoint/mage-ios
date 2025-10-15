@@ -10,14 +10,11 @@
 #import "MAGE-Swift.h"
 
 // legacy imports
-#import "AttachmentRoutes_Server5.h"
+//#import "AttachmentRoutes_Server5.h"
 
 @implementation MAGERoutes
 
 + (AttachmentRoutes *) attachment {
-    if ([MageServer isServerVersion5]) {
-        return [AttachmentRoutes_Server5 singleton];
-    }
     return [AttachmentRoutes singleton];
 }
 
