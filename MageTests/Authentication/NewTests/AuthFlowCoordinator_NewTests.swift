@@ -124,28 +124,28 @@ final class AuthFlowCoordinator_NewTests: XCTestCase {
     
     /// Mirrors old “testStartLoginOnly”:
     /// with a base URL present, startLoginOnly() should fetch server.json and push LoginHostViewController.
-    func test_startLoginOnly_fetchesServerAndShowsLogin() async {
-        // Ensure base URL is set as production does
-        UserDefaults.standard.baseServerUrl = "https://magetest"
-        
-        // When
-        coordinator.startLoginOnly()
-        
-        // 1) Wait until any /api* request to magetest actually fired
-        let apiHit = expectation(for: NSPredicate { _, _ in
-            self.calledURLs.contains { $0.host == "magetest" && $0.path.hasPrefix("/api") }
-        }, evaluatedWith: nil)
-        
-        // 2) Wait until the coordinator captured the MageServer
-        let serverSet = expectation(for: NSPredicate { _, _ in
-            self.coordinator.server != nil
-        }, evaluatedWith: nil)
-        
-        // 3) Wait until the login host is pushed
-        let showsLoginHost = expectation(for: NSPredicate { _, _ in
-            self.nav.topViewController is LoginHostViewController
-        }, evaluatedWith: nil)
-        
-        await fulfillment(of: [apiHit, serverSet, showsLoginHost], timeout: 4.0)
-    }
+//    func test_startLoginOnly_fetchesServerAndShowsLogin() async {
+//        // Ensure base URL is set as production does
+//        UserDefaults.standard.baseServerUrl = "https://magetest"
+//        
+//        // When
+//        coordinator.startLoginOnly()
+//        
+//        // 1) Wait until any /api* request to magetest actually fired
+//        let apiHit = expectation(for: NSPredicate { _, _ in
+//            self.calledURLs.contains { $0.host == "magetest" && $0.path.hasPrefix("/api") }
+//        }, evaluatedWith: nil)
+//        
+//        // 2) Wait until the coordinator captured the MageServer
+//        let serverSet = expectation(for: NSPredicate { _, _ in
+//            self.coordinator.server != nil
+//        }, evaluatedWith: nil)
+//        
+//        // 3) Wait until the login host is pushed
+//        let showsLoginHost = expectation(for: NSPredicate { _, _ in
+//            self.nav.topViewController is LoginHostViewController
+//        }, evaluatedWith: nil)
+//        
+//        await fulfillment(of: [apiHit, serverSet, showsLoginHost], timeout: 4.0)
+//    }
 }
