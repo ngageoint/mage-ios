@@ -75,23 +75,35 @@ public final class AuthFlowCoordinator: NSObject {
     
     // Old: -startLoginOnly
     @objc public func startLoginOnly() {
-        guard let url = MageServer.baseURL() else { return }
+        guard let url = MageServer.baseURL() else {
+            NSLog("[Auth] startLoginOnly aborted: MageServer.baseURL() == nil")
+            return
+        }
         
         // Always resolve server info against the *current* base URL.
         // Prefer injected service (tests); otherwise create a fresh one.
         let svc = injectedServerInfoService ?? ServerInfoService(baseURL: url)
         
+        // NOTE: don’t touch UI off the main actor, and never force-unwrap
         Task {
             do {
                 _ = try await svc.fetchServerModules()
                 
-                await MainActor.run {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    
                     // minimal: set server and proceed
-                    self.server = MageServer(url: url)
+                    let srv = MageServer(url: url)
+                    self.server = srv
                     if let base = MageServer.baseURL() {
                         _ = AuthDependencies.shared.resetAuthService(forNewBaseURL: base)
                     }
-                    self.showLoginView(for: self.server!)
+                    guard let nav = self.nav else {
+                        NSLog("[Auth] startLoginOnly: nav is nil, cannot present login")
+                        return
+                    }
+                    self.showLoginView(for: srv)
+                    self.log.debug("[Auth] startLoginOnly: presented LoginHostViewController")
                 }
             } catch {
                 NSLog("[Auth] Server info fetch failed: \(error.localizedDescription)")
@@ -122,7 +134,10 @@ public final class AuthFlowCoordinator: NSObject {
     // MARK: - Helpers
     
     private func showLoginView(for server: MageServer) {
-        guard let nav = nav else { return }
+        guard let nav else {
+            NSLog("[Auth] showLoginView aborted: nav == nil")
+            return
+        }
         
         // Use the Obj-C-compatible convenience init we exposed
         let vc = LoginHostViewController(

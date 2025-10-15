@@ -27,6 +27,8 @@ final class AuthFlowCoordinator_NewTests: XCTestCase {
     private var nav: UINavigationController!
     private var coordinator: AuthFlowCoordinator!
     
+    private var calledURLs: [URL] = []
+    
     private let apiJSON = """
             {
               "version": 6,
