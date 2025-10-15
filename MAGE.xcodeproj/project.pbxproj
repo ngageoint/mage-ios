@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1959,6 +1959,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		84A2A3292EA02D3C0013DD4F /* Support */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Support; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -3605,6 +3606,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				84A2A3292EA02D3C0013DD4F /* Support */,
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
 				F7C097C02C889A07003FA115 /* Persistence */,
 				F7C097AC2C8514B9003FA115 /* UseCase */,
@@ -4363,6 +4365,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				84A2A3292EA02D3C0013DD4F /* Support */,
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
 			);
 			name = MAGE;
