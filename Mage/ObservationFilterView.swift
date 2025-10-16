@@ -72,10 +72,9 @@ struct ObservationFilterView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
         .task { loadFromObjC() }
-
-        .onChange(of: isFavoriteOn)  { saveFavorites($0); notifyObservationFiltersChanged() }
-        .onChange(of: isImportantOn) { saveImportant($0); notifyObservationFiltersChanged() }
-        .onChange(of: selectedTime)  { saveTimeFilter($0); notifyObservationFiltersChanged() }
+        .onChange(of: isFavoriteOn)  { saveFavorites($0) }
+        .onChange(of: isImportantOn) { saveImportant($0) }
+        .onChange(of: selectedTime)  { saveTimeFilter($0) }
     }
 
     private func loadFromObjC() {
@@ -102,6 +101,7 @@ struct ObservationFilterView: View {
         }
     }
 
+    // This is for a future method this
     private func notifyObservationFiltersChanged() {
         NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
     }
@@ -116,5 +116,5 @@ struct ObservationFilterView: View {
 }
 
 #Preview {
-    MainFilterView()
+    ObservationFilterView()
 }

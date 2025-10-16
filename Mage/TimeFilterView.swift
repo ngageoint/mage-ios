@@ -9,7 +9,7 @@
 import SwiftUI
 
 enum TimeFilterEnum: String, CaseIterable, Identifiable {
-    case all, today, last24Hours, lastWeek, lastMonth
+    case all, today, last24Hours, lastWeek, lastMonth, custom
     var id: Self { self }
     
     var title: String {
@@ -19,6 +19,7 @@ enum TimeFilterEnum: String, CaseIterable, Identifiable {
         case .last24Hours: return "24 Hours"
         case .lastWeek: return "Last Week"
         case .lastMonth: return "Last Month"
+        case .custom: return "Custom"
         }
     }
     
@@ -29,6 +30,7 @@ enum TimeFilterEnum: String, CaseIterable, Identifiable {
         case .last24Hours: return "Show observations for the last 24 hours"
         case .lastWeek: return "Show observations for last week"
         case .lastMonth: return "Show observations for the last month"
+        case .custom: return "Define a custom rolling window"
         }
     }
 }
@@ -41,7 +43,7 @@ extension TimeFilterEnum {
         case .last24Hours:self = .last24Hours
         case .lastWeek:   self = .lastWeek
         case .lastMonth:  self = .lastMonth
-        case .custom:     self = .all
+        case .custom:     self = .custom
         @unknown default: self = .all
         }
     }
@@ -53,6 +55,7 @@ extension TimeFilterEnum {
         case .last24Hours: return .last24Hours
         case .lastWeek:    return .lastWeek
         case .lastMonth:   return .lastMonth
+        case .custom:      return .custom
         }
     }
 }
@@ -63,19 +66,24 @@ struct TimeFilterView: View {
     let subTitle: String
     @Binding var isSelected: Bool
     
+    
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(title)
-                Text(subTitle)
-                    .font(.body2)
-                    .foregroundStyle(.gray)
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(title)
+                    Text(subTitle)
+                        .font(.body2)
+                        .foregroundStyle(.gray)
+                }
+                Spacer()
+                if isSelected { Image(systemName: "checkmark") }
             }
-            Spacer()
-            if isSelected { Image(systemName: "checkmark") }
+            .contentShape(Rectangle())
+            .onTapGesture { isSelected = true }
+            
+            
         }
-        .contentShape(Rectangle())
-        .onTapGesture { isSelected = true }
     }
 }
 

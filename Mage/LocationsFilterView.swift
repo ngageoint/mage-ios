@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LocationsFilterView: View {
     
+    @Environment(\.dismiss) var dismiss
     @State private var selectedTime: TimeFilterEnum = .all
     
     var body: some View {
@@ -30,6 +31,28 @@ struct LocationsFilterView: View {
         .navigationTitle("Locations Filter")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
+        .task { loadFromObjC() }
+        .onChange(of: selectedTime)  { saveTimeFilter($0); notifyObservationFiltersChanged() }
+    }
+    
+    private func notifyObservationFiltersChanged() {
+        NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
+    }
+    
+    private func loadFromObjC() {
+        selectedTime  = TimeFilterEnum(objc: TimeFilter.getObservationTimeFilter())
+    }
+    
+    private func saveTimeFilter(_ newValue: TimeFilterEnum) {
+        if TimeFilter.getObservationTimeFilter() != newValue.objc {
+            TimeFilter.setObservation(newValue.objc)
+        }
+    }
+    
+    private func applyFilterAndDismiss() {
+        saveTimeFilter(selectedTime)
+        notifyObservationFiltersChanged()
+        dismiss()
     }
 }
 

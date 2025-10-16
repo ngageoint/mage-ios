@@ -152,6 +152,11 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         {
             predicates.append(NSPredicate(format: "observation.favorites.favorite CONTAINS %@ AND observation.favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
         }
+
+        if let userIds = UserDefaults.standard.userFilterRemoteIds, !userIds.isEmpty {
+            predicates.append(NSPredicate(format: "observation.userId IN %@", userIds))
+        }
+        
         return predicates
     }
     
