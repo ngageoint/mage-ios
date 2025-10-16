@@ -182,6 +182,10 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		84A0B5282EA05976005EB09F /* UserDefaultsFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A0B5272EA05976005EB09F /* UserDefaultsFlagsTests.swift */; };
+		84A2A33E2EA0383A0013DD4F /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A2A3332EA0383A0013DD4F /* Authentication.framework */; };
+		84A2A3482EA0383A0013DD4F /* Authentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A2A3332EA0383A0013DD4F /* Authentication.framework */; };
+		84A2A3492EA0383A0013DD4F /* Authentication.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 84A2A3332EA0383A0013DD4F /* Authentication.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
 		A811F2B22E3BFB9C0016C5AB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
@@ -892,8 +896,6 @@
 		F7FC67F92CD3C39C0022BAF1 /* GeoPackageImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F872CB8871B00126468 /* GeoPackageImporterTests.swift */; };
 		F7FC67FA2CD3C3A50022BAF1 /* GeoPackageImporterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F882CB8871B00126468 /* GeoPackageImporterUITests.swift */; };
 		F7FC67FB2CD3C3AA0022BAF1 /* GeoPackageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F892CB8871B00126468 /* GeoPackageTests.swift */; };
-		F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
-		F7FC67FE2CD3C3D80022BAF1 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F7FC67FF2CD3C46C0022BAF1 /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
 		F7FC68002CD3C46C0022BAF1 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
 		F7FC68012CD3C4880022BAF1 /* MageCoreDataFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911627249154130043A529 /* MageCoreDataFixtures.swift */; };
@@ -928,6 +930,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		84A2A33F2EA0383A0013DD4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84A2A3322EA0383A0013DD4F;
+			remoteInfo = Authentication;
+		};
+		84A2A3412EA0383A0013DD4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F7A94D6518AD9CB000CB9EE0;
+			remoteInfo = MAGE;
+		};
+		84A2A3462EA0383A0013DD4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84A2A3322EA0383A0013DD4F;
+			remoteInfo = Authentication;
+		};
 		F763326B2059CD4F00C5529C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
@@ -943,6 +966,20 @@
 			remoteInfo = MAGE;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		84A2A34D2EA0383A0013DD4F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				84A2A3492EA0383A0013DD4F /* Authentication.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		043FF11E1C22F643000CA07F /* CacheOverlays.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlays.h; sourceTree = "<group>"; };
@@ -1138,6 +1175,9 @@
 		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
 		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
+		84A0B5272EA05976005EB09F /* UserDefaultsFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsFlagsTests.swift; sourceTree = "<group>"; };
+		84A2A3332EA0383A0013DD4F /* Authentication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Authentication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		84A2A33D2EA0383A0013DD4F /* AuthenticationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuthenticationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAccessTokenTests.swift; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1960,14 +2000,32 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		84A2A3292EA02D3C0013DD4F /* Support */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Support; sourceTree = "<group>"; };
+		84A2A3342EA0383A0013DD4F /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
+		84A2A3432EA0383A0013DD4F /* AuthenticationTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AuthenticationTests; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		84A2A3302EA0383A0013DD4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84A2A33A2EA0383A0013DD4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84A2A33E2EA0383A0013DD4F /* Authentication.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7A94D6318AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84A2A3482EA0383A0013DD4F /* Authentication.framework in Frameworks */,
 				F734C1F42BC84C8300B2E8C8 /* MaterialViews in Frameworks */,
 				F70688832BA37ECE00D8E2EA /* Kingfisher in Frameworks */,
 				BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */,
@@ -3555,6 +3613,8 @@
 				F70688852BA388F000D8E2EA /* UIImageExtensions */,
 				F70688842BA37F7000D8E2EA /* CLLocationCoordinate2DExtensions */,
 				F76B4A6F28E61E710012BF4F /* CHANGELOG.md */,
+				84A2A3342EA0383A0013DD4F /* Authentication */,
+				84A2A3432EA0383A0013DD4F /* AuthenticationTests */,
 				F72D422B2694B60300F9AC3B /* sdk */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				2FD853771BE1564F00602CEA /* Resources */,
@@ -3574,6 +3634,8 @@
 				F7A94D6618AD9CB000CB9EE0 /* MAGE.app */,
 				F7ED5D2420052161007BD768 /* MAGETests.xctest */,
 				F7C183A82CD2E13400BA7DCD /* MAGEGeoPackageTests.xctest */,
+				84A2A3332EA0383A0013DD4F /* Authentication.framework */,
+				84A2A33D2EA0383A0013DD4F /* AuthenticationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3726,6 +3788,7 @@
 				F7613D5027EE03B300570145 /* ReleaseTestPlan.md */,
 				F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */,
 				8440ACE52E4E6B6400CCF192 /* SettingsTableViewControllerContactUsTests.swift */,
+				84A0B5272EA05976005EB09F /* UserDefaultsFlagsTests.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -4348,7 +4411,64 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		84A2A32E2EA0383A0013DD4F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		84A2A3322EA0383A0013DD4F /* Authentication */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84A2A34A2EA0383A0013DD4F /* Build configuration list for PBXNativeTarget "Authentication" */;
+			buildPhases = (
+				84A2A32E2EA0383A0013DD4F /* Headers */,
+				84A2A32F2EA0383A0013DD4F /* Sources */,
+				84A2A3302EA0383A0013DD4F /* Frameworks */,
+				84A2A3312EA0383A0013DD4F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				84A2A3342EA0383A0013DD4F /* Authentication */,
+			);
+			name = Authentication;
+			packageProductDependencies = (
+			);
+			productName = Authentication;
+			productReference = 84A2A3332EA0383A0013DD4F /* Authentication.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		84A2A33C2EA0383A0013DD4F /* AuthenticationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84A2A34E2EA0383A0013DD4F /* Build configuration list for PBXNativeTarget "AuthenticationTests" */;
+			buildPhases = (
+				84A2A3392EA0383A0013DD4F /* Sources */,
+				84A2A33A2EA0383A0013DD4F /* Frameworks */,
+				84A2A33B2EA0383A0013DD4F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84A2A3402EA0383A0013DD4F /* PBXTargetDependency */,
+				84A2A3422EA0383A0013DD4F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				84A2A3432EA0383A0013DD4F /* AuthenticationTests */,
+			);
+			name = AuthenticationTests;
+			packageProductDependencies = (
+			);
+			productName = AuthenticationTests;
+			productReference = 84A2A33D2EA0383A0013DD4F /* AuthenticationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F7A94D6518AD9CB000CB9EE0 /* MAGE */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F7A94D9818AD9CB000CB9EE0 /* Build configuration list for PBXNativeTarget "MAGE" */;
@@ -4359,10 +4479,12 @@
 				F7A94D6418AD9CB000CB9EE0 /* Resources */,
 				2F7AB0BF1D12EEF7006F99FC /* Set Build Number */,
 				9CF7EBC76E4C31BF783CE73D /* [CP] Copy Pods Resources */,
+				84A2A34D2EA0383A0013DD4F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				84A2A3472EA0383A0013DD4F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				84A2A3292EA02D3C0013DD4F /* Support */,
@@ -4448,10 +4570,17 @@
 		F7A94D5E18AD9CAF00CB9EE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
+					84A2A3322EA0383A0013DD4F = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					84A2A33C2EA0383A0013DD4F = {
+						CreatedOnToolsVersion = 26.0.1;
+						LastSwiftMigration = 2600;
+					};
 					F7A94D6518AD9CB000CB9EE0 = {
 						LastSwiftMigration = 1130;
 						SystemCapabilities = {
@@ -4514,11 +4643,27 @@
 				F7A94D6518AD9CB000CB9EE0 /* MAGE */,
 				F7ED5D2320052161007BD768 /* MAGETests */,
 				F7C183A72CD2E13400BA7DCD /* MAGEGeoPackageTests */,
+				84A2A3322EA0383A0013DD4F /* Authentication */,
+				84A2A33C2EA0383A0013DD4F /* AuthenticationTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		84A2A3312EA0383A0013DD4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84A2A33B2EA0383A0013DD4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7A94D6418AD9CB000CB9EE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4961,6 +5106,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		84A2A32F2EA0383A0013DD4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84A2A3392EA0383A0013DD4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7A94D6218AD9CB000CB9EE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5538,7 +5697,6 @@
 				F7FC68002CD3C46C0022BAF1 /* TestHelpers.swift in Sources */,
 				F73E17E12CD3C13C008F2216 /* MAGEGeoPackageTests.swift in Sources */,
 				F7FC68012CD3C4880022BAF1 /* MageCoreDataFixtures.swift in Sources */,
-				F7FC67FC2CD3C3D80022BAF1 /* MageInjectionTestCase.swift in Sources */,
 				F7FC68032CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h in Sources */,
 				F7FC68082CD3CC560022BAF1 /* ObservationIconStaticLocalDataSource.swift in Sources */,
 				F7FC68092CD3CC560022BAF1 /* ObservationStaticLocalDataSource.swift in Sources */,
@@ -5547,7 +5705,6 @@
 				F7FC680C2CD3CC560022BAF1 /* ObservationLocationStaticLocalDataSource.swift in Sources */,
 				F7FC680D2CD3CC560022BAF1 /* LocationStaticLocalDataSource.swift in Sources */,
 				F7FC680E2CD3CC560022BAF1 /* UserStaticLocalDataSource.swift in Sources */,
-				F7FC67FE2CD3C3D80022BAF1 /* MageCoreDataTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5689,6 +5846,7 @@
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */,
 				F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */,
+				84A0B5282EA05976005EB09F /* UserDefaultsFlagsTests.swift in Sources */,
 				F7E5749227DB91D3009A6E0D /* CanReportLocationTests.swift in Sources */,
 				F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */,
 				846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */,
@@ -5706,6 +5864,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		84A2A3402EA0383A0013DD4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84A2A3322EA0383A0013DD4F /* Authentication */;
+			targetProxy = 84A2A33F2EA0383A0013DD4F /* PBXContainerItemProxy */;
+		};
+		84A2A3422EA0383A0013DD4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
+			targetProxy = 84A2A3412EA0383A0013DD4F /* PBXContainerItemProxy */;
+		};
+		84A2A3472EA0383A0013DD4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84A2A3322EA0383A0013DD4F /* Authentication */;
+			targetProxy = 84A2A3462EA0383A0013DD4F /* PBXContainerItemProxy */;
+		};
 		F763326C2059CD4F00C5529C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
@@ -5730,6 +5903,195 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		84A2A34B2EA0383A0013DD4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.Authentication;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		84A2A34C2EA0383A0013DD4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.Authentication;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		84A2A34F2EA0383A0013DD4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.AuthenticationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "AuthenticationTests/AuthenticationTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		84A2A3502EA0383A0013DD4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZL8G5D9G2H;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.AuthenticationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "AuthenticationTests/AuthenticationTests-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		F7A94D9618AD9CB000CB9EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5859,7 +6221,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
@@ -5893,7 +6255,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
@@ -6078,7 +6440,7 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zxcvbn-ios/zxcvbn_ios.framework/Headers\"",
 				);
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6130,7 +6492,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6158,6 +6520,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		84A2A34A2EA0383A0013DD4F /* Build configuration list for PBXNativeTarget "Authentication" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84A2A34B2EA0383A0013DD4F /* Debug */,
+				84A2A34C2EA0383A0013DD4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84A2A34E2EA0383A0013DD4F /* Build configuration list for PBXNativeTarget "AuthenticationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84A2A34F2EA0383A0013DD4F /* Debug */,
+				84A2A3502EA0383A0013DD4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F7A94D6118AD9CAF00CB9EE0 /* Build configuration list for PBXProject "MAGE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

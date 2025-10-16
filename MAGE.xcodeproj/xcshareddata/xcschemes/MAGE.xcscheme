@@ -75,6 +75,17 @@
                ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "84A2A33C2EA0383A0013DD4F"
+               BuildableName = "AuthenticationTests.xctest"
+               BlueprintName = "AuthenticationTests"
+               ReferencedContainer = "container:MAGE.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
