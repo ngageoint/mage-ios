@@ -13,7 +13,7 @@ final class StubPerformer: LegacyAuthPerformer, NewAuthPerformer {
     enum Fixture: String {
         case login_ok = "login_ok.json"
         case login_invalid = "login_invalid.json"
-        case signup_confilct = "signup_conflict.json"
+        case signup_conflict = "signup_conflict.json"
         case captcha_401 = "captcha_401.json"
         case change_ok = "change_ok.json"
         case change_401 = "change_401.json"

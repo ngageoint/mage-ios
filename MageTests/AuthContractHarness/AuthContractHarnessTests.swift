@@ -13,7 +13,7 @@ final class AuthContractHarnessTests: XCTestCase {
     func testHarness_ComparesStatusAndBody() async {
         let map: [String:(Int, StubPerformer.Fixture)] = [
             "POST /api/login": (200, .login_ok),
-            "POST /api/users": (409, .signup_confilct),
+            "POST /api/users": (409, .signup_conflict),
             "GET /api/captcha?u=": (401, .captcha_401),
             "PUT /api/users/myself/password": (200, .change_ok),
         ]
