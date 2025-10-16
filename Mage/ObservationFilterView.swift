@@ -15,8 +15,8 @@ struct ObservationFilterView: View {
     @State private var isImportantOn = false
     @State private var selectedTime: TimeFilterEnum = .all
     
-    @State var customTimeFieldValue: Int = 0
-    @State var customTimePickerEnum: CustomTimePickerEnum = .days
+    @State var customTimeFieldValue: Int = UserDefaults.standard.observationTimeFilterNumberKey
+    @State var customTimePickerEnum: TimeUnit = UserDefaults.standard.observationTimeFilterUnitKey
 
     var body: some View {
         List {
@@ -79,6 +79,8 @@ struct ObservationFilterView: View {
         .onChange(of: isFavoriteOn)  { saveFavorites($0) }
         .onChange(of: isImportantOn) { saveImportant($0) }
         .onChange(of: selectedTime)  { saveTimeFilter($0) }
+        .onChange(of: customTimeFieldValue) { saveCustomTimeFieldValueFilter($0)}
+        .onChange(of: customTimePickerEnum) { saveCustomTimeEnumFilter($0)}
     }
 
     private func loadFromObjC() {
@@ -102,6 +104,18 @@ struct ObservationFilterView: View {
     private func saveTimeFilter(_ newValue: TimeFilterEnum) {
         if TimeFilter.getObservationTimeFilter() != newValue.objc {
             TimeFilter.setObservation(newValue.objc)
+        }
+    }
+    
+    private func saveCustomTimeFieldValueFilter(_ newValue: Int) {
+        if TimeFilter.getObservationCustomTimeFilterNumber() != newValue {
+            TimeFilter.setObservationCustomTimeFilterNumber(newValue)
+        }
+    }
+    
+    private func saveCustomTimeEnumFilter(_ newValue: TimeUnit) {
+        if TimeFilter.getObservationCustomTimeFilterUnit() != newValue {
+            TimeFilter.setObservationCustomTimeFilterUnit(newValue)
         }
     }
 

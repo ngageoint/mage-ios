@@ -78,7 +78,7 @@ struct TimeFilterView: View {
     let subTitle: String
     let timeFilter: TimeFilterEnum
     @Binding var customTimeFieldValue: Int
-    @Binding var customTimePickerEnum: CustomTimePickerEnum
+    @Binding var customTimePickerEnum: TimeUnit
     @Binding var isSelected: Bool
     
     var body: some View {
@@ -96,7 +96,7 @@ struct TimeFilterView: View {
             .contentShape(Rectangle())
             .onTapGesture { isSelected = true }
             
-            if timeFilter == .custom {
+            if timeFilter == .custom && isSelected {
                 CustomTimeView(customTimeFieldValue: $customTimeFieldValue, customTimePickerValue: $customTimePickerEnum)
             }
         }
@@ -105,23 +105,23 @@ struct TimeFilterView: View {
 
 struct CustomTimeView: View {
     @Binding var customTimeFieldValue: Int
-    @Binding var customTimePickerValue: CustomTimePickerEnum
+    @Binding var customTimePickerValue: TimeUnit
     var body: some View {
         HStack {
-            Spacer()
             Text("Last")
             TextField("", value: $customTimeFieldValue, format: .number)
             Picker("", selection: $customTimePickerValue) {
                 ForEach(CustomTimePickerEnum.allCases) {
                     Text($0.rawValue.capitalized)
+                        .minimumScaleFactor(0.5)
                 }
-            }.pickerStyle(.segmented)
-            Spacer()
+            }
+            .pickerStyle(.segmented)
         }
     }
 }
 
 #Preview {
-    TimeFilterView(title: "All", subTitle: "Do not filter based on time", timeFilter: .custom, customTimeFieldValue: .constant(0), customTimePickerEnum: .constant(.days), isSelected: .constant(false))
+    TimeFilterView(title: "All", subTitle: "Do not filter based on time", timeFilter: .custom, customTimeFieldValue: .constant(0), customTimePickerEnum: .constant(.Days), isSelected: .constant(false))
 }
 
