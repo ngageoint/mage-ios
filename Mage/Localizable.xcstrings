@@ -276,6 +276,9 @@
         }
       }
     },
+    "Delete" : {
+      "comment" : "Alert delete button"
+    },
     "Downloaded %@ of %@" : {
       "localizations" : {
         "en" : {
