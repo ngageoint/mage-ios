@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1958,7 +1958,36 @@
 		F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoAuthStrategies.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		847D5D8F2EA083CE005DF580 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Docs/AuthObsolescence.md,
+				Docs/AuthParity.md,
+				Impl/AuthServiceFactory.swift,
+				Impl/NoopAuthService.swift,
+				Public/AuthErrors.swift,
+				Public/AuthModels.swift,
+				Public/AuthService.swift,
+			);
+			target = F7ED5D2320052161007BD768 /* MAGETests */;
+		};
+		847D5D912EA08558005DF580 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Impl/AuthServiceFactory.swift,
+				Impl/NoopAuthService.swift,
+				Public/AuthErrors.swift,
+				Public/AuthModels.swift,
+				Public/AuthService.swift,
+			);
+			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		847D5D822EA083BD005DF580 /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (847D5D912EA08558005DF580 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 847D5D8F2EA083CE005DF580 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
+		847D5D852EA083BD005DF580 /* AuthenticationTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AuthenticationTests; sourceTree = "<group>"; };
 		A811F2832E3BEAF80016C5AB /* IntroViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = IntroViews; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -3540,6 +3569,8 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				847D5D822EA083BD005DF580 /* Authentication */,
+				847D5D852EA083BD005DF580 /* AuthenticationTests */,
 				BD66678D2D82152100D9BBA0 /* MAGE.xctestplan */,
 				F7DE98912C1B355D005372F8 /* DebugUtilities */,
 				F776AC8E2BC9DADE000FAFB4 /* MapFramework */,
@@ -4433,6 +4464,10 @@
 			);
 			dependencies = (
 				F763326C2059CD4F00C5529C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				847D5D822EA083BD005DF580 /* Authentication */,
+				847D5D852EA083BD005DF580 /* AuthenticationTests */,
 			);
 			name = MAGETests;
 			productName = MAGETests;
