@@ -15,7 +15,8 @@ struct ObservationFilterView: View {
     @State private var isImportantOn = false
     @State private var selectedTime: TimeFilterEnum = .all
     
-    
+    @State var customTimeFieldValue: Int = 0
+    @State var customTimePickerEnum: CustomTimePickerEnum = .days
 
     var body: some View {
         List {
@@ -60,6 +61,9 @@ struct ObservationFilterView: View {
                     TimeFilterView(
                         title: option.title,
                         subTitle: option.subtitle,
+                        timeFilter: option,
+                        customTimeFieldValue: $customTimeFieldValue,
+                        customTimePickerEnum: $customTimePickerEnum,
                         isSelected: Binding(
                             get: { selectedTime == option },
                             set: { if $0 { selectedTime = option } }

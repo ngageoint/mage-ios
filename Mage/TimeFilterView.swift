@@ -60,12 +60,26 @@ extension TimeFilterEnum {
     }
 }
 
+enum CustomTimePickerEnum: String, CaseIterable, Identifiable {
+    case hours, days, weeks
+    var id: Self { self }
+    
+    var title: String {
+        switch self {
+        case .hours: return "Hours"
+        case .days:  return "Days"
+        case .weeks: return "Weeks"
+        }
+    }
+}
 
 struct TimeFilterView: View {
     let title: String
     let subTitle: String
+    let timeFilter: TimeFilterEnum
+    @Binding var customTimeFieldValue: Int
+    @Binding var customTimePickerEnum: CustomTimePickerEnum
     @Binding var isSelected: Bool
-    
     
     var body: some View {
         VStack {
@@ -82,11 +96,32 @@ struct TimeFilterView: View {
             .contentShape(Rectangle())
             .onTapGesture { isSelected = true }
             
-            
+            if timeFilter == .custom {
+                CustomTimeView(customTimeFieldValue: $customTimeFieldValue, customTimePickerValue: $customTimePickerEnum)
+            }
+        }
+    }
+}
+
+struct CustomTimeView: View {
+    @Binding var customTimeFieldValue: Int
+    @Binding var customTimePickerValue: CustomTimePickerEnum
+    var body: some View {
+        HStack {
+            Spacer()
+            Text("Last")
+            TextField("", value: $customTimeFieldValue, format: .number)
+            Picker("", selection: $customTimePickerValue) {
+                ForEach(CustomTimePickerEnum.allCases) {
+                    Text($0.rawValue.capitalized)
+                }
+            }.pickerStyle(.segmented)
+            Spacer()
         }
     }
 }
 
 #Preview {
-    TimeFilterView(title: "All", subTitle: "Do not filter based on time", isSelected: .constant(false))
+    TimeFilterView(title: "All", subTitle: "Do not filter based on time", timeFilter: .custom, customTimeFieldValue: .constant(0), customTimePickerEnum: .constant(.days), isSelected: .constant(false))
 }
+
