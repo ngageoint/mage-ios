@@ -10,8 +10,7 @@ import XCTest
 @testable import MAGE
 
 final class AuthContractHarnessTests: XCTestCase {
-    func testHarness_WiresAndCompares_StatusCodesOnly() async {
-        // Both sides use the same fixtures in PR2 (proves harness works)
+    func testHarness_ComparesStatusAndBody() async {
         let map: [String:(Int, StubPerformer.Fixture)] = [
             "POST /api/login": (200, .login_ok),
             "POST /api/users": (409, .signup_confilct),
@@ -22,14 +21,14 @@ final class AuthContractHarnessTests: XCTestCase {
         let modern = StubPerformer(mapping: map)
         
         // Sample endpoints
-        let cases: [AuthEndpoint] = [
+        let endpoints: [AuthEndpoint] = [
             .loginLocal(username: "a", password: "b"),
             .signup(displayName: "d", username: "u", password: "p", email: nil, captcha: nil),
             .captcha(username: nil),
             .changePassword(current: "x", new: "y", confirm: "y"),
         ]
         
-        for ep in cases {
+        for ep in endpoints {
             let l = await legacy.perform(ep)
             let r = await modern.perform(ep)
             AssertEqualContract(l, r)

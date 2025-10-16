@@ -8,10 +8,10 @@
 
 import XCTest
 
-func AssertEqualContract(_ lhs: HTTPResponse,
-                         _ rhs: HTTPResponse,
-                         file: StaticString = #file,
-                         line: UInt = #line) {
+func AssertEqualContract(_ lhs: HTTPResponse, _ rhs: HTTPResponse,
+                         file: StaticString = #filePath, line: UInt = #line) {
     XCTAssertEqual(lhs.status, rhs.status, file: file, line: line)
-    
+    let l = JSONNormalize.canonicalizeString(lhs.body)
+    let r = JSONNormalize.canonicalizeString(rhs.body)
+    XCTAssertEqual(l, r, file: file, line: line)
 }
