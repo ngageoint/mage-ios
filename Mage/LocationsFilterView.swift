@@ -14,7 +14,7 @@ struct LocationsFilterView: View {
     @State private var selectedTime: TimeFilterEnum = .all
     
     @State var customTimeFieldValue: Int = UserDefaults.standard.observationTimeFilterNumberKey
-    @State var customTimePickerEnum: TimeUnit = UserDefaults.standard.observationTimeFilterUnitKey
+    @State var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     
     var body: some View {
         List {
@@ -63,9 +63,9 @@ struct LocationsFilterView: View {
         }
     }
     
-    private func saveCustomTimeEnumFilter(_ newValue: TimeUnit) {
-        if TimeFilter.getObservationCustomTimeFilterUnit() != newValue {
-            TimeFilter.setObservationCustomTimeFilterUnit(newValue)
+    private func saveCustomTimeEnumFilter(_ newValue: TimeUnitWrapper) {
+        if TimeFilter.getObservationCustomTimeFilterUnit() != newValue.objcValue {
+            TimeFilter.setObservationCustomTimeFilterUnit(newValue.objcValue)
         }
     }
     
