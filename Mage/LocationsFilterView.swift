@@ -11,8 +11,8 @@ import SwiftUI
 struct LocationsFilterView: View {
     
     @Environment(\.dismiss) var dismiss
+    @StateObject private var locationsFilterViewModel = LocationsFilterViewModel()
     @State private var selectedTime: TimeFilterEnum = .all
-
     @State var customTimeFieldValue: Int = UserDefaults.standard.observationTimeFilterNumberKey
     @State var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     
@@ -24,11 +24,11 @@ struct LocationsFilterView: View {
                         title: option.title,
                         subTitle: option.subtitle,
                         timeFilter: option,
-                        customTimeFieldValue: $customTimeFieldValue,
-                        customTimePickerEnum: $customTimePickerEnum,
+                        customTimeFieldValue: $locationsFilterViewModel.customTimeFieldValue,
+                        customTimePickerEnum: $locationsFilterViewModel.customTimePickerEnum,
                         isSelected: Binding(
-                            get: { selectedTime == option },
-                            set: { newValue in if newValue { selectedTime = option } }
+                            get: { locationsFilterViewModel.selectedTime == option },
+                            set: { newValue in if newValue { locationsFilterViewModel.selectedTime = option } }
                         )
                     )
                 }
@@ -37,42 +37,10 @@ struct LocationsFilterView: View {
         .navigationTitle("Locations Filter")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
-        .task { loadFromObjC() }
-        .onChange(of: selectedTime)  { saveTimeFilter($0); notifyObservationFiltersChanged() }
-        .onChange(of: customTimeFieldValue) { saveCustomTimeFieldValueFilter($0)}
-        .onChange(of: customTimePickerEnum) { saveCustomTimeEnumFilter($0)}
-    }
-    
-    private func notifyObservationFiltersChanged() {
-        NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
-    }
-    
-    private func loadFromObjC() {
-        selectedTime  = TimeFilterEnum(objc: TimeFilter.getObservationTimeFilter())
-    }
-    
-    private func saveTimeFilter(_ newValue: TimeFilterEnum) {
-        if TimeFilter.getObservationTimeFilter() != newValue.objc {
-            TimeFilter.setObservation(newValue.objc)
-        }
-    }
-    
-    private func saveCustomTimeFieldValueFilter(_ newValue: Int) {
-        if TimeFilter.getObservationCustomTimeFilterNumber() != newValue {
-            TimeFilter.setObservationCustomTimeFilterNumber(newValue)
-        }
-    }
-    
-    private func saveCustomTimeEnumFilter(_ newValue: TimeUnitWrapper) {
-        if TimeFilter.getObservationCustomTimeFilterUnit() != newValue.objcValue {
-            TimeFilter.setObservationCustomTimeFilterUnit(newValue.objcValue)
-        }
-    }
-    
-    private func applyFilterAndDismiss() {
-        saveTimeFilter(selectedTime)
-        notifyObservationFiltersChanged()
-        dismiss()
+        .task { locationsFilterViewModel.loadFromObjC() }
+        .onChange(of: locationsFilterViewModel.selectedTime)  { locationsFilterViewModel.saveTimeFilter($0) }
+        .onChange(of: locationsFilterViewModel.customTimeFieldValue) { locationsFilterViewModel.saveCustomTimeFieldValueFilter($0)}
+        .onChange(of: locationsFilterViewModel.customTimePickerEnum) { locationsFilterViewModel.saveCustomTimeEnumFilter($0)}
     }
 }
 

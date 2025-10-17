@@ -192,6 +192,7 @@
 		A8B2B7ED2E9F44E300A6E199 /* LocationsFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */; };
 		A8B2B7EF2E9F48CB00A6E199 /* TimeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */; };
 		A8C1DE9C2EA2863200DA687F /* ObservationFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C1DE9B2EA2863200DA687F /* ObservationFilterViewModel.swift */; };
+		A8C1DE9E2EA29E0E00DA687F /* LocationsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C1DE9D2EA29E0E00DA687F /* LocationsFilterViewModel.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
 		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
@@ -1152,6 +1153,7 @@
 		A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsFilterView.swift; sourceTree = "<group>"; };
 		A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFilterView.swift; sourceTree = "<group>"; };
 		A8C1DE9B2EA2863200DA687F /* ObservationFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFilterViewModel.swift; sourceTree = "<group>"; };
+		A8C1DE9D2EA29E0E00DA687F /* LocationsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsFilterViewModel.swift; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B29DE4B6C2FE6308F8758572 /* Pods-MAGEGeoPackageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2185,13 +2187,14 @@
 				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
+				A8B2B7E62E9F356A00A6E199 /* MainFilterView.swift */,
 				A84D63EF2E95646E00577E19 /* UserObservationFilterView.swift */,
 				A84D63F12E9564C400577E19 /* UserObservationFilterViewModel.swift */,
 				A8B2B7EA2E9F425400A6E199 /* ObservationFilterView.swift */,
-				A8B2B7E62E9F356A00A6E199 /* MainFilterView.swift */,
-				A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */,
-				A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */,
 				A8C1DE9B2EA2863200DA687F /* ObservationFilterViewModel.swift */,
+				A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */,
+				A8C1DE9D2EA29E0E00DA687F /* LocationsFilterViewModel.swift */,
+				A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */,
 			);
 			name = Filter;
 			sourceTree = "<group>";
@@ -5010,6 +5013,7 @@
 				F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				A8C1DE9C2EA2863200DA687F /* ObservationFilterViewModel.swift in Sources */,
+				A8C1DE9E2EA29E0E00DA687F /* LocationsFilterViewModel.swift in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
