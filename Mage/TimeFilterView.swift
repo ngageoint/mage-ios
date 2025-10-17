@@ -114,8 +114,7 @@ struct TimeFilterView: View {
             }
             
             if timeFilter == .custom && isSelected {
-                CustomTimeView(customTimeFieldValue: $customTimeFieldValue, customTimePickerValue: $customTimePickerEnum
-                )
+                CustomTimeView(customTimeFieldValue: $customTimeFieldValue, customTimePickerValue: $customTimePickerEnum)
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
@@ -127,19 +126,27 @@ struct CustomTimeView: View {
     @Binding var customTimeFieldValue: Int
     @Binding var customTimePickerValue: TimeUnitWrapper
     var body: some View {
-        HStack {
-            Text("Last")
-            TextField("", value: $customTimeFieldValue, format: .number)
-            Picker("", selection: $customTimePickerValue) {
-                ForEach(TimeUnitWrapper.allCases, id: \.self) {
-                    Text($0.rawValue)
-                        .minimumScaleFactor(0.5)
+        GeometryReader { geometry in
+            HStack(alignment: .center) {
+                Text("Last")
+                TextField("", value: $customTimeFieldValue, format: .number)
+                    .frame(maxWidth: geometry.size.width * 0.2)
+                    .multilineTextAlignment(.center)
+                    .padding(3)
+                    .background(.gray.opacity(0.25))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                Picker("", selection: $customTimePickerValue) {
+                    ForEach(TimeUnitWrapper.allCases, id: \.self) {
+                        Text($0.rawValue)
+                            
+                    }
                 }
+                .pickerStyle(.segmented)
             }
-            .pickerStyle(.segmented)
+            .padding(.top, 4)
+            .contentTransition(.opacity)
         }
-        .padding(.top, 4)
-        .contentTransition(.opacity)
+        .padding(.bottom, 20)
     }
 }
 

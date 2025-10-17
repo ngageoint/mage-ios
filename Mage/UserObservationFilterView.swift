@@ -18,7 +18,7 @@ import Kingfisher
 
 struct UserObservationFilterView: View {
     @Environment(\.colorScheme) var colorScheme
-    @StateObject var viewModel = ObservationFilterViewModel()
+    @StateObject var viewModel = UserObservationFilterViewModel()
     
     @State var isSelected: Bool = false
     
@@ -82,7 +82,7 @@ struct UserObservationFilterView: View {
 }
 
 struct UserObservationCellView: View {
-    @ObservedObject var viewModel: ObservationFilterViewModel
+    @ObservedObject var viewModel: UserObservationFilterViewModel
     var user: User
     @Binding var isSelected: Bool
     var body: some View {
