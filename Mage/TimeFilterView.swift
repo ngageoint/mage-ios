@@ -138,7 +138,6 @@ struct CustomTimeView: View {
                 Picker("", selection: $customTimePickerValue) {
                     ForEach(TimeUnitWrapper.allCases, id: \.self) {
                         Text($0.rawValue)
-                            
                     }
                 }
                 .pickerStyle(.segmented)

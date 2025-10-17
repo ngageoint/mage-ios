@@ -76,7 +76,3 @@ struct ObservationFilterView: View {
         .onChange(of: observationFilterViewModel.customTimePickerEnum) { observationFilterViewModel.saveCustomTimeEnumFilter($0)}
     }
 }
-
-//#Preview {
-//    ObservationFilterView()
-//}

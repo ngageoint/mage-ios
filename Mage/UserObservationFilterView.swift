@@ -19,7 +19,6 @@ import Kingfisher
 struct UserObservationFilterView: View {
     @Environment(\.colorScheme) var colorScheme
     @StateObject var viewModel = UserObservationFilterViewModel()
-    
     @State var isSelected: Bool = false
     
     init() {
@@ -34,7 +33,7 @@ struct UserObservationFilterView: View {
                     Image(systemName: "person.3")
                         .font(.system(size: 36, weight: .medium))
                         .padding(.bottom, 4)
-                    Text("No users have created observations for this event. Please have a user create an observation to find observations by user here.")
+                    Text("No users have created observations for this event.")
                         .font(.headline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -57,7 +56,7 @@ struct UserObservationFilterView: View {
                 } else {
                     LazyVStack(alignment:.leading) {
                         ForEach(Array(viewModel.filteredUsers), id: \.remoteId) { user in
-                            UserObservationCellView(viewModel: viewModel, user: user, isSelected: $isSelected)
+                            UserObservationCellView(viewModel: viewModel, isSelected: $isSelected, user: user)
                                 .padding(.vertical, 4)
                         }
                     }
@@ -82,9 +81,11 @@ struct UserObservationFilterView: View {
 }
 
 struct UserObservationCellView: View {
+    
     @ObservedObject var viewModel: UserObservationFilterViewModel
-    var user: User
     @Binding var isSelected: Bool
+    var user: User
+    
     var body: some View {
         VStack {
             HStack(spacing: 8) {
@@ -124,8 +125,7 @@ struct UserObservationCellView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 30, height: 30)
-                    .foregroundStyle(isSelected ? .green : .gradientDarkBlue)
-                
+                    .foregroundStyle(Color.gradientDarkBlue)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)

@@ -12,7 +12,7 @@ struct LocationsFilterView: View {
     
     @Environment(\.dismiss) var dismiss
     @State private var selectedTime: TimeFilterEnum = .all
-    
+
     @State var customTimeFieldValue: Int = UserDefaults.standard.observationTimeFilterNumberKey
     @State var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     

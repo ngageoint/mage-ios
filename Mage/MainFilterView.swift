@@ -45,7 +45,6 @@ struct MainFilterView: View {
                     } label: {
                         Text("Done")
                     }
-
                 }
             }
             .toolbarBackground(.visible, for: .navigationBar)

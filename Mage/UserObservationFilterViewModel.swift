@@ -19,40 +19,23 @@ class UserObservationFilterViewModel: ObservableObject {
     @Published var selectedUsers: Set<String> = []
     @Published var searchText: String = ""
     
-    @Published private(set) var filteredUsers: [User] = []
-    
-    private var bag = Set<AnyCancellable>()
+    var filteredUsers: [User] {
+        if searchText.isEmpty {
+            return users
+        } else {
+            return users.filter {
+                if let username = $0.username, let name = $0.name {
+                    return username.localizedCaseInsensitiveContains(searchText) || name.localizedCaseInsensitiveContains(searchText)
+                } else { return false }
+            }
+        }
+    }
     
     init() {
-        bindFiltering()
         setupUsers()
         setupSelectedUsers()
     }
     
-    private func bindFiltering() {
-        $searchText
-            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
-            .removeDuplicates()
-            .combineLatest($users)
-            .map { query, users in
-                let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard !trimmed.isEmpty else { return users }
-                
-                let needle = trimmed.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-                
-                return users.filter { user in
-                    let username = (user.username ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-                    let name     = (user.name ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-                    let rid      = (user.remoteId ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-                    
-                    return username.contains(needle) || name.contains(needle) || rid.contains(needle)
-                }
-            }
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$filteredUsers)
-    }
-    
-    // Get Event -> Teams -> Users (unique), sorted by username
     func setupUsers() {
         guard let context = context,
               let event = Event.getCurrentEvent(context: context)

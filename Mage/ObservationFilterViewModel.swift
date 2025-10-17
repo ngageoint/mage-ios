@@ -52,15 +52,9 @@ class ObservationFilterViewModel: ObservableObject {
         }
     }
 
-    // This is for a future method this
-    func notifyObservationFiltersChanged() {
-        NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
-    }
-
     func applyFilter() {
         saveTimeFilter(selectedTime)
         saveImportant(isImportantOn)
         saveFavorites(isFavoriteOn)
-        notifyObservationFiltersChanged()
     }
 }
