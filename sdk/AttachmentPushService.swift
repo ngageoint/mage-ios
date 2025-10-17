@@ -349,9 +349,6 @@ extension InjectedValues {
             return
         }
         
-        let data = response.data
-        let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-        
         if let error {
             MageLogger.misc.error("ATTACHMENT - upload complete with error \(error)")
             // try again
@@ -360,16 +357,20 @@ extension InjectedValues {
         }
         
         if let httpResponse = task?.response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            MageLogger.misc.error("ATTACHMENT - response code error: \(httpResponse.statusCode)")
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
         }
         
-        if data == nil {
+        guard let data = response.data else {
+            MageLogger.misc.error("ATTACHMENT - response data is nil")
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
         }
+        
+        let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
         
         guard let context else {
             return

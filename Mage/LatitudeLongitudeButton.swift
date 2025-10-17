@@ -40,7 +40,9 @@ class LatitudeLongitudeButton : MDCButton {
     override func willMove(toSuperview newSuperview: UIView?) {
         accessibilityLabel = "location";
         setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
-        setInsets(forContentPadding: defaultContentEdgeInsets, imageTitlePadding: 5);
+        var contentInsets = defaultContentEdgeInsets
+        contentInsets.left = 0
+        setInsets(forContentPadding: contentInsets, imageTitlePadding: 5);
         addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
         accessibilityLabel = "location button"
         titleLabel?.adjustsFontSizeToFitWidth = true
