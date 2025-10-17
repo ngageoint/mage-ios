@@ -11,7 +11,6 @@
 #import "Observations.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
-//#import "ObservationFilterViewModel-Swift.h"
 
 @interface ObservationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
