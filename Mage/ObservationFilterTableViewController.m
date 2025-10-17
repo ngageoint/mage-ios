@@ -25,6 +25,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *importantLabel;
 @property (weak, nonatomic) IBOutlet UILabel *importantDescription;
 @property (weak, nonatomic) IBOutlet UISwitch *importantSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *userLabel;
+@property (weak, nonatomic) IBOutlet UILabel *userDescription;
+@property (weak, nonatomic) IBOutlet UITableViewCell *userTableViewCell;
 @property (weak, nonatomic) IBOutlet UILabel *customLabel;
 @property (weak, nonatomic) IBOutlet UILabel *customDescription;
 @property (weak, nonatomic) IBOutlet UILabel *lastLabel;
@@ -45,6 +48,8 @@
     self.importantLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.favoritesDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.importantDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.userLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.userDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.customLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.customDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.lastLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
@@ -127,6 +132,9 @@
         [self applyFilter];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
+    } else if ([indexPath section] == 0 && [indexPath row] == 2) {
+        UIViewController *swiftUIUserFilter = [UserObservationFilterViewUIHostingFactory makeViewController];
+        [self.navigationController pushViewController:swiftUIUserFilter animated:YES];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:true];
 }
