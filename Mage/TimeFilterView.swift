@@ -47,7 +47,7 @@ extension TimeFilterEnum {
         @unknown default: self = .all
         }
     }
-
+    
     var objc: TimeFilterType {
         switch self {
         case .all:         return .all
@@ -94,12 +94,19 @@ struct TimeFilterView: View {
                 if isSelected { Image(systemName: "checkmark") }
             }
             .contentShape(Rectangle())
-            .onTapGesture { isSelected = true }
+            .onTapGesture {
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
+                    isSelected = true
+                }
+            }
             
             if timeFilter == .custom && isSelected {
-                CustomTimeView(customTimeFieldValue: $customTimeFieldValue, customTimePickerValue: $customTimePickerEnum)
+                CustomTimeView(customTimeFieldValue: $customTimeFieldValue, customTimePickerValue: $customTimePickerEnum
+                )
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
+        .animation(.spring(response: 0.25, dampingFraction: 0.9), value: isSelected)
     }
 }
 
@@ -118,6 +125,8 @@ struct CustomTimeView: View {
             }
             .pickerStyle(.segmented)
         }
+        .padding(.top, 4)
+        .contentTransition(.opacity)
     }
 }
 
