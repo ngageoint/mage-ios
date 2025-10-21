@@ -17,6 +17,10 @@ struct LocalLoginViewSwiftUI: View {
             UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
             PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
             
+            Text(viewModel.errorMessage ?? "")
+                .foregroundColor(.red)
+                .fixedSize(horizontal: false, vertical: true)
+                .opacity((viewModel.errorMessage != nil) ? 1 : 0)
             
             SignInButtonView(isLoading: viewModel.isLoading) {
                 viewModel.loginTapped()
@@ -28,14 +32,6 @@ struct LocalLoginViewSwiftUI: View {
             }
             
             MageIntroButtonView(isIntroViewsShown: $isIntroViewsShown)
-            
-            if viewModel.errorMessage != nil {
-                Text("")
-            }
-            Text(viewModel.errorMessage ?? "")
-                .foregroundColor(.red)
-                .fixedSize(horizontal: false, vertical: true)
-                .opacity((viewModel.errorMessage != nil) ? 1 : 0)
         }
         .accessibilityIdentifier("Local Login View")
         .padding()

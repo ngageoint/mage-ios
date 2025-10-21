@@ -260,7 +260,7 @@ import OSLog
             UserDefaults.standard.disclaimerTitle = disclaimer[DisclaimerKey.title.key] as? String
         }
         
-        if let contactInfo = api[ApiKey.contactinfo.key] as? [String: Any] {
+        if let contactInfo = api[ApiKey.contactInfo.key] as? [String: Any] {
             let newEmail = contactInfo[ContactInfoKey.email.key] as? String
             let newPhone = contactInfo[ContactInfoKey.phone.key] as? String
             let oldEmail = UserDefaults.standard.contactInfoEmail
@@ -269,7 +269,6 @@ import OSLog
             if oldEmail != newEmail || oldPhone != newPhone {
                 UserDefaults.standard.contactInfoEmail = newEmail
                 UserDefaults.standard.contactInfoPhone = newPhone
-//                NotificationCenter.default.post(name: .ContactInfoDidChange, object: nil)  // If we want UI to listen this way
             }
         }
         
