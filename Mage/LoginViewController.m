@@ -177,11 +177,6 @@
         [self.loginsStackView insertArrangedSubview:self.orView atIndex:self.loginsStackView.arrangedSubviews.count-1];
     }
     
-    self.messageView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginsStackView.bounds.size.width, self.loginsStackView.bounds.size.height)];
-    self.messageView.hidden = YES;
-    self.messageView.editable = NO;
-    [self.loginsStackView addArrangedSubview:self.messageView];
-    
     UIView *messageDetailButtonContainer = [UIView newAutoLayoutView];
     self.messageDetailButton = [[MDCButton alloc] init];
     [self.messageDetailButton applyTextThemeWithScheme:_scheme];
