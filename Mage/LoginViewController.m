@@ -65,7 +65,7 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
-    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.view.backgroundColor = UIColor.systemBackgroundColor;
     self.loginStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     if (self.user) {
         [self.serverURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];

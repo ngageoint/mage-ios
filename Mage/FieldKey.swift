@@ -402,8 +402,7 @@ public enum ApiKey: String {
     
     case disclaimer
     case locationServiceDisabled
-    // do not change this, lowercase i is correct
-    case contactinfo
+    case contactInfo // do not change this, upperCase I is correct
     case authenticationStrategies
     
     var key: String {
