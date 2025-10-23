@@ -20,6 +20,7 @@ struct LocalLoginViewSwiftUI: View {
             Text(viewModel.errorMessage ?? "")
                 .foregroundColor(.red)
                 .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
                 .opacity((viewModel.errorMessage != nil) ? 1 : 0)
             
             SignInButtonView(isLoading: viewModel.isLoading) {
