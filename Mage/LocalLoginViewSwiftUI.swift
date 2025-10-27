@@ -17,11 +17,11 @@ struct LocalLoginViewSwiftUI: View {
             UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
             PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
             
-            if let error = viewModel.errorMessage {
-                Text(error)
-                    .lineLimit(nil)
-                    .foregroundColor(.red)
-            }
+            Text(viewModel.errorMessage ?? "")
+                .foregroundColor(.red)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
+                .opacity((viewModel.errorMessage != nil) ? 1 : 0)
             
             SignInButtonView(isLoading: viewModel.isLoading) {
                 viewModel.loginTapped()
