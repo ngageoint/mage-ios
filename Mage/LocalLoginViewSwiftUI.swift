@@ -32,18 +32,18 @@ struct LocalLoginViewSwiftUI: View {
                 .onSubmit {
                     viewModel.loginTapped()
                 }
+                        
+            SignInButtonView(isLoading: viewModel.isLoading) {
+                viewModel.loginTapped()
+            }
+            .accessibilityLabel("Sign In")
             
             Text(viewModel.errorMessage ?? "")
                 .foregroundColor(.red)
                 .fixedSize(horizontal: false, vertical: true)
                 .multilineTextAlignment(.center)
                 .opacity((viewModel.errorMessage != nil) ? 1 : 0)
-            
-            SignInButtonView(isLoading: viewModel.isLoading) {
-                viewModel.loginTapped()
-            }
-            .accessibilityLabel("Sign In")
-            
+
             SignUpButtonView {
                 viewModel.signupTapped()
             }
