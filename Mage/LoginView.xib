@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -40,7 +40,7 @@
                     <color key="textColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jM-R6-Uqf">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jM-R6-Uqf">
                     <rect key="frame" x="0.0" y="188" width="375" height="421"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zEg-A8-aMM">
@@ -48,6 +48,11 @@
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="V0W-aJ-EIZ"/>
                             </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="V0W-aJ-EIZ"/>
+                                </mask>
+                            </variation>
                         </stackView>
                     </subviews>
                     <constraints>
@@ -68,8 +73,8 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="7jM-R6-Uqf" firstAttribute="top" secondItem="lxW-zn-M9W" secondAttribute="bottom" constant="8" id="2zb-l4-GLC"/>
                 <constraint firstItem="lxW-zn-M9W" firstAttribute="leading" secondItem="HSM-eT-VRH" secondAttribute="leading" constant="40" id="4mM-IU-Gpn"/>
-                <constraint firstItem="zEg-A8-aMM" firstAttribute="top" secondItem="lxW-zn-M9W" secondAttribute="bottom" constant="8" id="5f9-eG-n7s"/>
                 <constraint firstItem="McJ-Ia-VcZ" firstAttribute="centerX" secondItem="HSM-eT-VRH" secondAttribute="centerX" id="9gb-KC-mrg"/>
                 <constraint firstAttribute="bottomMargin" secondItem="McJ-Ia-VcZ" secondAttribute="bottom" id="ImJ-88-WGh"/>
                 <constraint firstItem="7jM-R6-Uqf" firstAttribute="leading" secondItem="HSM-eT-VRH" secondAttribute="leadingMargin" constant="-16" id="O7e-Gm-QEY"/>
@@ -81,7 +86,7 @@
                 <constraint firstAttribute="trailing" secondItem="lxW-zn-M9W" secondAttribute="trailing" constant="40" id="uJZ-m5-PCr"/>
                 <constraint firstItem="McJ-Ia-VcZ" firstAttribute="top" secondItem="6wE-Es-XY5" secondAttribute="bottom" constant="-1" id="uKe-zz-eXb"/>
             </constraints>
-            <point key="canvasLocation" x="35.5" y="53.5"/>
+            <point key="canvasLocation" x="34.399999999999999" y="52.623688155922046"/>
         </view>
     </objects>
     <resources>
