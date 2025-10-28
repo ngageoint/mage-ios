@@ -9,13 +9,29 @@
 import SwiftUI
 
 struct LocalLoginViewSwiftUI: View {
+    enum Field: Int, CaseIterable {
+        case username
+        case password
+     }
+    
     @ObservedObject var viewModel: LocalLoginViewModel
     @State var isIntroViewsShown: Bool = false
+    @FocusState var focusedField: Field?
     
     var body: some View {
         VStack(spacing: 16) {
             UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
+                .focused($focusedField, equals: .username)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .password
+                }
             PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
+                .focused($focusedField, equals: .password)
+                .submitLabel(.go)
+                .onSubmit {
+                    viewModel.loginTapped()
+                }
             
             Text(viewModel.errorMessage ?? "")
                 .foregroundColor(.red)
