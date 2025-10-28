@@ -10,6 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
                 <outlet property="loginsStackView" destination="zEg-A8-aMM" id="ca4-6i-hda"/>
+                <outlet property="scrollView" destination="7jM-R6-Uqf" id="t9b-NU-adP"/>
                 <outlet property="serverURL" destination="6wE-Es-XY5" id="V2h-fy-Dgp"/>
                 <outlet property="versionLabel" destination="McJ-Ia-VcZ" id="xY3-Vu-rKe"/>
                 <outlet property="view" destination="HSM-eT-VRH" id="Xgh-Ms-s2S"/>
@@ -41,10 +42,18 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jM-R6-Uqf">
-                    <rect key="frame" x="0.0" y="188" width="375" height="421"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="609"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zEg-A8-aMM">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="421"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoClear" translatesAutoresizingMaskIntoConstraints="NO" id="lxW-zn-M9W">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="100" id="Txb-3v-x55"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="V0W-aJ-EIZ"/>
                             </constraints>
@@ -63,33 +72,29 @@
                         <constraint firstItem="zEg-A8-aMM" firstAttribute="height" secondItem="7jM-R6-Uqf" secondAttribute="height" priority="1" id="ntC-tL-X48"/>
                         <constraint firstItem="zEg-A8-aMM" firstAttribute="top" secondItem="7jM-R6-Uqf" secondAttribute="top" id="vin-hy-8MB"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="ntC-tL-X48"/>
+                        </mask>
+                    </variation>
                 </scrollView>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoClear" translatesAutoresizingMaskIntoConstraints="NO" id="lxW-zn-M9W">
-                    <rect key="frame" x="40" y="52" width="295" height="128"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="128" id="Txb-3v-x55"/>
-                    </constraints>
-                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="7jM-R6-Uqf" firstAttribute="top" secondItem="lxW-zn-M9W" secondAttribute="bottom" constant="8" id="2zb-l4-GLC"/>
-                <constraint firstItem="lxW-zn-M9W" firstAttribute="leading" secondItem="HSM-eT-VRH" secondAttribute="leading" constant="40" id="4mM-IU-Gpn"/>
                 <constraint firstItem="McJ-Ia-VcZ" firstAttribute="centerX" secondItem="HSM-eT-VRH" secondAttribute="centerX" id="9gb-KC-mrg"/>
                 <constraint firstAttribute="bottomMargin" secondItem="McJ-Ia-VcZ" secondAttribute="bottom" id="ImJ-88-WGh"/>
                 <constraint firstItem="7jM-R6-Uqf" firstAttribute="leading" secondItem="HSM-eT-VRH" secondAttribute="leadingMargin" constant="-16" id="O7e-Gm-QEY"/>
-                <constraint firstItem="lxW-zn-M9W" firstAttribute="top" secondItem="HSM-eT-VRH" secondAttribute="top" constant="52" id="VHN-rc-HtX"/>
                 <constraint firstAttribute="trailing" secondItem="6wE-Es-XY5" secondAttribute="trailing" id="csN-af-BlO"/>
                 <constraint firstItem="6wE-Es-XY5" firstAttribute="leading" secondItem="HSM-eT-VRH" secondAttribute="leading" id="dKX-F2-FI9"/>
                 <constraint firstItem="6wE-Es-XY5" firstAttribute="top" secondItem="7jM-R6-Uqf" secondAttribute="bottom" constant="8" id="dsJ-ec-bWX"/>
                 <constraint firstAttribute="trailingMargin" secondItem="7jM-R6-Uqf" secondAttribute="trailing" constant="-16" id="jBx-md-wvT"/>
-                <constraint firstAttribute="trailing" secondItem="lxW-zn-M9W" secondAttribute="trailing" constant="40" id="uJZ-m5-PCr"/>
+                <constraint firstItem="7jM-R6-Uqf" firstAttribute="top" secondItem="HSM-eT-VRH" secondAttribute="top" id="oFd-Jy-v8L"/>
                 <constraint firstItem="McJ-Ia-VcZ" firstAttribute="top" secondItem="6wE-Es-XY5" secondAttribute="bottom" constant="-1" id="uKe-zz-eXb"/>
             </constraints>
             <point key="canvasLocation" x="34.399999999999999" y="52.623688155922046"/>
         </view>
     </objects>
     <resources>
-        <image name="LogoClear" width="1024" height="1024"/>
+        <image name="LogoClear" width="856" height="331"/>
     </resources>
 </document>
