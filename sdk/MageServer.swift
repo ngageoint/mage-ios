@@ -312,7 +312,9 @@ import OSLog
       success: ((MageServer) -> Void)?,
       failure: ((NSError) -> Void)?
     ) {
-        server(url: url, policy: .useCachedIfAvailable, success: success, failure: failure)
+        // Force Refresh of login strategies so that changes in Admin server propogate to client
+        // Otherwise the app needs to be deleted and reinstalled to re-fetch new authentication methods.
+        server(url: url, policy: .forceRefresh, success: success, failure: failure)
     }
     
     public init(url: URL) {
