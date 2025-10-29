@@ -40,7 +40,10 @@ import CoreData
         self.localPath = json[AttachmentKey.localPath.key] as? String
         
         if let lastModified = json[AttachmentKey.lastModified.key] as? String {
-            self.lastModified = Date.ISO8601FormatStyle.gmtZeroDate(from: lastModified);
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
+            self.lastModified = formatter.date(from: lastModified);
         } else {
             self.lastModified = Date();
         }

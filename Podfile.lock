@@ -19,8 +19,6 @@ PODS:
   - KIF (3.8.9):
     - KIF/Core (= 3.8.9)
   - KIF/Core (3.8.9)
-  - KIF/IdentifierTests (3.8.9):
-    - KIF/Core
   - libPhoneNumber-iOS (0.9.15)
   - MagicalRecord (2.3.2):
     - MagicalRecord/Core (= 2.3.2)
@@ -697,7 +695,6 @@ DEPENDENCIES:
   - DateTools (~> 2.0.0)
   - HexColors (~> 4.0.0)
   - KIF
-  - KIF/IdentifierTests
   - libPhoneNumber-iOS (~> 0.9.15)
   - MagicalRecord (~> 2.3.2)
   - MaterialComponents
@@ -752,6 +749,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: f367e23955eec9e6421c66f4709be782d870471f
+PODFILE CHECKSUM: 771b6bac50259936f169031e9d2429e3a753f5c2
 
 COCOAPODS: 1.16.2

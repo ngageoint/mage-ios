@@ -205,6 +205,15 @@ import Kingfisher
                 return
             }
             context.performAndWait {
+                // Get roles
+                var roleIdMap: [String : Role] = [:];
+                if let roles = context.fetchAll(Role.self) {
+                    for role in roles {
+                        if let remoteId = role.remoteId {
+                            roleIdMap[remoteId] = role
+                        }
+                    }
+                }
                 // Get the user ids to query
                 var userIds: [String] = [];
                 for userJson in users {

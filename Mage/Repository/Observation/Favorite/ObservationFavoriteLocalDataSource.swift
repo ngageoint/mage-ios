@@ -154,6 +154,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
     }
 
     func handleServerPushResponse(favorite: ObservationFavoriteModel, response: [AnyHashable: Any]) {
+        MageLogger.misc.debug("Successfuly submitted favorite")
         guard let context = context else { return }
         
         context.performAndWait {
@@ -175,7 +176,10 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
         if let favorite = anObject as? ObservationFavorite {
             switch type {
             case .insert:
+                MageLogger.misc.debug("favorite inserted, push em")
                 if favorite.observation?.remoteId != nil {
+                    MageLogger.misc.debug("sending favorite to push subject")
+
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }
             case .delete:
@@ -183,6 +187,8 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
             case .move:
                 break
             case .update:
+                MageLogger.misc.debug("favorite updated, push em")
+
                 if favorite.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }
