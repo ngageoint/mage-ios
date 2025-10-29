@@ -66,9 +66,11 @@ class UserViewViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .assign(to: &$user)
+        
+        createFetchObservationsPublisher()
     }
     
-    func fetchObservations(limit: Int = 100) {
+    func createFetchObservationsPublisher(limit: Int = 100) {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, observationRepository, uri] in
@@ -76,7 +78,9 @@ class UserViewViewModel: ObservableObject {
                 userUri: uri,
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
-            .scan([]) { $0 + $1 }
+            .scan([]) { existing, new in
+                (existing + new).uniqued() // FIX: loadMore appears to duplicate fresh observations until they sync
+            }
             .map { State.loaded(rows: $0) }
             .catch { error in
                 return Just(State.failure(error: error))

@@ -25,11 +25,7 @@ import CoreData
         self.reason = json[ObservationImportantKey.description.key] as? String;
         
         if let timestamp = json[ObservationImportantKey.timestamp.key] as? String {
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
-            
-            self.timestamp = formatter.date(from: timestamp);
+            self.timestamp = Date.ISO8601FormatStyle.gmtZeroDate(from: timestamp);
         }
     }
 }

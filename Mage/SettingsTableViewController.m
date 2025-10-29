@@ -226,16 +226,55 @@
     }
 }
 
+#pragma mark - Contact Us
+
 - (void) onContactUs {
-    NSString *recipient = @"magesuitesupport@nga.mil";
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    // Prefer the Swift-exposed property if it exists, otherwise read by key.
+    NSString *recipient = nil;
+    if ([defaults respondsToSelector:@selector(contactInfoEmail)]) {
+        recipient = [defaults contactInfoEmail]; // from your UserDefaults extension
+    } else {
+        recipient = [defaults stringForKey:@"contactInfoEmail"]; // safe fallback
+    }
+
+    // Fallback to your current hardcoded address only if nothing is set.
+    if (recipient.length == 0) {
+        recipient = @"magesuitesupport@nga.mil";
+    }
+
     NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@", recipient];
     NSURL *mailtoURL = [NSURL URLWithString:mailtoURLString];
 
-    // Open the mail client
     if ([[UIApplication sharedApplication] canOpenURL:mailtoURL]) {
         [[UIApplication sharedApplication] openURL:mailtoURL options:@{} completionHandler:nil];
     } else {
-        NSLog(@"Cannot open mail client.");
+        NSLog(@"Cannot open mail client for: %@, It looks like you don't have a mail app configured on this device.", mailtoURL);
+
+        // This is the popup
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Could not open mail"
+                                                                       message:[NSString stringWithFormat:@"Please contact support at: %@", recipient]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+
+        // This is the "Copy Address" action that copies our *supportEmail* to the iPhone's clipboard
+        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:@"Copy Address"
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * _Nonnull action) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = recipient;
+        }];
+
+        // Both buttons close the popup, but this one is just a backup for if the user doesn't want to copy the address
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+
+        [alert addAction:copyAction];
+        [alert addAction:okAction];
+
+        UINavigationController *navigationController = self.navigationController;
+        [navigationController presentViewController:alert animated:YES completion:nil];
     }
 }
 

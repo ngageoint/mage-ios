@@ -130,8 +130,6 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     important.userId = userRemoteId;
                     important.reason = reason
                     important.timestamp = Date();
-
-                    MageLogger.misc.debug("Important existed, updating it")
                 } else {
                     let important = ObservationImportant(context: context)
                     important.observation = observation
@@ -142,13 +140,11 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     important.reason = reason
                     important.timestamp = Date();
                     try? context.obtainPermanentIDs(for: [important])
-                    MageLogger.misc.debug("Important created")
                 }
             }
-            MageLogger.misc.debug("Saving the flagged important")
+
             do {
                 try context.save()
-                MageLogger.misc.debug("Saved")
             } catch {
                 MageLogger.misc.error("Error saving important \(error)")
 
@@ -248,13 +244,9 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
 
 extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-
-        MageLogger.misc.debug("fetch controller found a thing \(String(describing: anObject))")
         if let observationImportant = anObject as? ObservationImportant {
             switch type {
             case .insert:
-                MageLogger.misc.debug("important inserted, push em")
-
                 if observationImportant.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
                 }
@@ -263,8 +255,6 @@ extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDele
             case .move:
                 break
             case .update:
-                MageLogger.misc.debug("important updated, push em")
-
                 if observationImportant.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
                 }

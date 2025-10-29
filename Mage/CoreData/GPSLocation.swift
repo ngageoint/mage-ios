@@ -48,19 +48,8 @@ import SimpleFeatures
         }
     }
     
-    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation? {
-        var gpsLocation: GPSLocation? {
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            if let context = context {
-                return GPSLocation(context: context)
-            }
-            return nil
-        }
-        
-        guard let gpsLocation = gpsLocation else {
-            return nil;
-        }
+    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation {
+        let gpsLocation = GPSLocation(context: context)
         
         let device = UIDevice.current
         device.isBatteryMonitoringEnabled = true;
@@ -99,7 +88,7 @@ import SimpleFeatures
             GPSLocationKey.bearing.key: location.course,
             GPSLocationKey.speed.key: location.speed,
             GPSLocationKey.millis.key: location.timestamp.timeIntervalSince1970,
-            GPSLocationKey.timestamp.key: ISO8601DateFormatter.string(from: location.timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]),
+            GPSLocationKey.timestamp.key: Date.ISO8601FormatStyle.gmtZeroString(from: location.timestamp),
             GPSLocationKey.battery_level.key: device.batteryLevel * 100,
             GPSLocationKey.battery_state.key: batteryState,
             GPSLocationKey.telephone_network.key: telephonyInfo.serviceCurrentRadioAccessTechnology ?? "Unknown",

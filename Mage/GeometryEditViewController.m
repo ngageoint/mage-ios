@@ -414,7 +414,9 @@ static NSString *garsTitle = @"GARS";
     [self.hintView autoPinEdgeToSuperviewEdge:ALEdgeRight];
     [self.hintView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.slidescroll];
     
-    if (defaults.showMapSearch) {
+    // TODO: When this class is moved to Swift, properly observe the value change
+    int32_t code = [SettingsProvider.instance getMapSearchTypeCode];
+    if (code != 0) { // none search type
         self.searchButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
         self.searchButton.accessibilityLabel = @"search";
         [self.searchButton setImage:[UIImage systemImageNamed:@"magnifyingglass"] forState:UIControlStateNormal];
@@ -1369,9 +1371,9 @@ static NSString *garsTitle = @"GARS";
                                                          message:[NSString stringWithFormat:@"Do you want to delete this point?\n%f, %f", mapPoint.coordinate.latitude, mapPoint.coordinate.longitude]
                                                          preferredStyle:UIAlertControllerStyleAlert];
                             
-                            [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:nil]];
+                            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Alert cancel button") style:UIAlertActionStyleDefault handler:nil]];
                             
-                            [alert addAction:[UIAlertAction actionWithTitle:@"DELETE" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", @"Alert delete button") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                                 NSArray<GPKGMapPoint *> *points = [self shapePoints];
                                 
                                 // Find the index of the point being deleted

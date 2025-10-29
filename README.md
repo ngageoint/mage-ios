@@ -20,6 +20,36 @@ If you'd like to contribute to this project, please make a pull request. We'll r
 
 Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC § 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
+## Install
+
+* Mage iOS uses both Cocoapods and Swift Package Manager (SPM) to build. Cocoapods is being phased out, but is still required. 
+* You can run Mage on an iOS Simulator without Apple developer credentials.
+* You need an Apple developer account to run Mage on an iPhone.
+
+```
+brew install cocoapods
+git clone https://github.com/ngageoint/mage-ios.git
+
+# Setup Cocopods dependencies
+cd mage-ios
+pod install
+
+# Open the Xcode Workspace (Used with Cocoapods)
+open MAGE.xcworkspace
+```
+
+## Build Issues
+
+When you switch branches and dependencies change, it can break the build (either Cocoapods or Swift Package Manager (SPM). Try these workarounds to fix any build issues:
+
+* If you get a PIF build error (Related to SPM). Try one of these steps:
+    * Close/reopen Xcode
+    * Use the Menu: File > Packages > Reset Package Caches
+* If switching branches has altered the cocoapods dependencies, you may need to close the project, run `pod install`, and reopen the Xcode project.
+    * The benefit of this fix is that you usually do not need to rebuild everything (fast).
+* Sometimes you need to Clean the Build Folder: `Command + Shift + K`. This will make your next build rebuild everything from scratch (slow).
+* Rarely do you need to delete the DerivedData folder (or delete a build/ folder if using SPM)
+
 ## License
 
 Copyright 2015 BIT Systems

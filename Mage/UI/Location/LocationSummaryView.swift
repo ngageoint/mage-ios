@@ -34,7 +34,7 @@ struct LocationSummaryView: View {
                         .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                         .forceRefresh()
                         .cacheOriginalImage()
-                        .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
+                        .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
                         .placeholder {
                             Image(systemName: "person.crop.square")
                                 .symbolRenderingMode(.monochrome)

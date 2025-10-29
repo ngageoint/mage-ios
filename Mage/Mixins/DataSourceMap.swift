@@ -67,11 +67,11 @@ class DataSourceMap: MapMixin {
             }
             .store(in: &cancellable)
         
-        viewModel?.$tileOverlays
+        viewModel?.$tileOverlay
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] tileOverlays in
+            .sink { [weak self] tileOverlay in
                 Task { [weak self] in
-                    await self?.updateTileOverlays(tileOverlays: tileOverlays)
+                    await self?.updateTileOverlay(tileOverlay: tileOverlay)
                 }
             }
             .store(in: &cancellable)
@@ -86,7 +86,7 @@ class DataSourceMap: MapMixin {
     }
     
     @MainActor
-    private func updateTileOverlays(tileOverlays: [DataSourceTileOverlay]) {
+    private func updateTileOverlay(tileOverlay: DataSourceTileOverlay?) {
         guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
@@ -96,7 +96,8 @@ class DataSourceMap: MapMixin {
             clearPreviousTiles(previousTiles: previousTiles)
             return
         }
-        mapView.addOverlays(tileOverlays, level: .aboveLabels)
+        guard let tileOverlay = tileOverlay else { return }
+        mapView.addOverlay(tileOverlay, level: .aboveLabels)
         // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
         DispatchQueue.main.async {
             Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
@@ -180,7 +181,7 @@ class DataSourceMap: MapMixin {
         var removals: [DataSourceAnnotation] = []
         for change in differences {
             switch change {
-            case .insert(let offset, let element, _):
+            case .insert(_, let element, _):
                 let existing = mapView.annotations.first(where: { mapAnnotation in
                     guard let mapAnnotation = mapAnnotation as? DataSourceAnnotation else {
                         return false
@@ -192,8 +193,7 @@ class DataSourceMap: MapMixin {
                 } else {
                     inserts.append(element)
                 }
-                MageLogger.misc.debug("insert offset \(offset) for element \(element)")
-            case .remove(let offset, let element, _):
+            case .remove(_, let element, _):
                 let existing = mapView.annotations.compactMap({ mapAnnotation in
                     mapAnnotation as? DataSourceAnnotation
                 }).filter({ mapAnnotation in
@@ -204,14 +204,11 @@ class DataSourceMap: MapMixin {
                     return false
                 })
                 removals.append(contentsOf: existing)
-                MageLogger.misc.debug("remove offset \(offset) for element \(element)")
             }
         }
-        MageLogger.misc.debug("Inserting \(inserts.count), removing: \(removals.count)")
         
         mapView.addAnnotations(inserts)
         mapView.removeAnnotations(removals)
-        MageLogger.misc.debug("Annotation count: \(mapView.annotations.count)")
         
         return !inserts.isEmpty || !removals.isEmpty
     }
@@ -239,7 +236,7 @@ class DataSourceMap: MapMixin {
         var removals: [MKOverlay] = []
         for change in differences {
             switch change {
-            case .insert(let offset, let element, _):
+            case .insert(_, let element, _):
                 let existing = mapView.overlays.first(where: { mapOverlay in
                     guard let mapOverlay = mapOverlay as? DataSourceIdentifiable else {
                         return false
@@ -249,8 +246,7 @@ class DataSourceMap: MapMixin {
                 if existing == nil, let element = element as? MKOverlay {
                     inserts.append(element)
                 }
-                MageLogger.misc.debug("insert offset: \(String(describing: offset)) for element: \(String(describing: element))")
-            case .remove(let offset, let element, _):
+            case .remove(_, let element, _):
                 let existing = mapView.overlays.compactMap({ mapOverlay in
                     mapOverlay as? DataSourceIdentifiable
                 }).filter({ mapOverlay in
@@ -263,21 +259,20 @@ class DataSourceMap: MapMixin {
                     identifiable as? MKOverlay
                 }
                 removals.append(contentsOf: existing)
-                MageLogger.misc.debug("remove offset: \(String(describing: offset)) for element: \(String(describing: element))")
             }
         }
-        MageLogger.misc.debug("Inserting \(inserts.count), removing: \(removals.count)")
         
         mapView.addOverlays(inserts)
         mapView.removeOverlays(removals)
-        MageLogger.misc.debug("Annotation count: \(mapView.overlays.count)")
         return !inserts.isEmpty || !removals.isEmpty
     }
     
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
         mapView.removeAnnotations(viewModel?.annotations ?? [])
-        mapView.removeOverlays(viewModel?.tileOverlays ?? [])
+        if let tileOverlay = viewModel?.tileOverlay {
+            mapView.removeOverlay(tileOverlay)
+        }
         for cancellable in cancellable {
             cancellable.cancel()
         }

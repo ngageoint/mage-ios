@@ -63,7 +63,6 @@ import Kingfisher
     
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
         return context.performAndWait {
-            MageLogger.misc.debug("XXX current user \(String(describing: UserDefaults.standard.currentUserId))")
             return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: UserDefaults.standard.currentUserId ?? "")
         }
     }
@@ -75,13 +74,8 @@ import Kingfisher
         
         let url = "\(baseURL.absoluteURL)/api/users/myself";
         let manager = MageSessionManager.shared();
-        let methodStart = Date()
-        MageLogger.misc.debug("TIMING Fetching Myself @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            MageLogger.misc.debug("TIMING Fetched Myself. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             
-            let saveStart = Date()
-            MageLogger.misc.debug("TIMING Saving Myself @ \(saveStart)")
             @Injected(\.persistence)
             var persistence: Persistence
             
@@ -119,16 +113,11 @@ import Kingfisher
         }
         let url = "\(baseURL.absoluteURL)/api/users/\(userId)";
         let manager = MageSessionManager.shared();
-        let methodStart = Date()
-        MageLogger.misc.debug("TIMING Fetching User /api/users/\(userId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            MageLogger.misc.debug("TIMING Fetched User /api/users/\(userId) . Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             
             let saveStart = Date()
-            MageLogger.misc.debug("TIMING Saving User /api/users/\(userId)  @ \(saveStart)")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
-                    MageLogger.misc.debug("Users are empty");
                     success?(task, nil);
                     return;
                 }
@@ -153,7 +142,7 @@ import Kingfisher
                     }
                 }
             } completion: { contextDidSave, error in
-                MageLogger.misc.debug("TIMING Saved User /api/users/\(userId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+                MageLogger.misc.debug("TIMING Saved User /api/users/\(userId, privacy: .private). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
 
                 if let error = error {
                     if let failure = failure {
@@ -179,15 +168,12 @@ import Kingfisher
         let url = "\(baseURL.absoluteURL)/api/users";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        MageLogger.misc.debug("TIMING Fetching Users @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             MageLogger.misc.debug("TIMING Fetched Users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             
             let saveStart = Date()
-            MageLogger.misc.debug("TIMING Saving Users @ \(saveStart)")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
-                    MageLogger.misc.debug("Users are empty");
                     success?(task, nil);
                     return;
                 }
@@ -205,15 +191,6 @@ import Kingfisher
                 return
             }
             context.performAndWait {
-                // Get roles
-                var roleIdMap: [String : Role] = [:];
-                if let roles = context.fetchAll(Role.self) {
-                    for role in roles {
-                        if let remoteId = role.remoteId {
-                            roleIdMap[remoteId] = role
-                        }
-                    }
-                }
                 // Get the user ids to query
                 var userIds: [String] = [];
                 for userJson in users {

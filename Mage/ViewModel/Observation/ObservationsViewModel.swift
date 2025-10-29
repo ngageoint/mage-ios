@@ -50,10 +50,10 @@ class ObservationsViewModel: ObservableObject {
     
     enum State {
         case loading
-        case loaded(rows: [URIItem])
+        case loaded(rows: [ObservationItem])
         case failure(error: Error)
         
-        fileprivate var rows: [URIItem] {
+        fileprivate var rows: [ObservationItem] {
             if case let .loaded(rows: rows) = self {
                 return rows
             } else {
@@ -68,6 +68,8 @@ class ObservationsViewModel: ObservableObject {
     }
     
     init() {
+        createFetchObservationsPublisher()
+
         repository.refreshPublisher?.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] _ in
             self?.reload()
         })
@@ -102,14 +104,29 @@ class ObservationsViewModel: ObservableObject {
         }
     }
     
-    func fetchObservations(limit: Int = 100) {
+    func createFetchObservationsPublisher(limit: Int = 100) {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, repository] in
             repository.observations(
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
-            .scan([]) { $0 + $1 }
+            .scan([URIItem]()) { existing, new in
+                (existing + new).uniqued() // FIX: loadMore appears to duplicate fresh observations until they sync
+            }
+            .map { uriItems in
+                // Convert [URIItem] to [ObservationItem]
+                uriItems.compactMap { uriItem in
+                    switch uriItem {
+                    case .listItem(let uri):
+                        return ObservationItem.listItem(uri)
+                    case .sectionHeader:
+                        // If you want to support section headers as well:
+                        // return ObservationItem.sectionHeader(header)
+                        return nil
+                    }
+                }
+            }
             .map { State.loaded(rows: $0) }
             .catch { error in
                 return Just(State.failure(error: error))

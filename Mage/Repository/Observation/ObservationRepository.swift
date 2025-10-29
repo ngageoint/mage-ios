@@ -170,8 +170,6 @@ class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
     }
 
     func fetchObservations() async -> Int {
-        MageLogger.misc.debug("Fetching Observations")
-
         guard let eventId = Server.currentEventId() else {
             return 0
         }
