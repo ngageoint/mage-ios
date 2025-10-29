@@ -11,31 +11,46 @@ import SwiftUI
 struct PasswordFieldView: View {
     @Binding var password: String
     @Binding var showPassword: Bool
-    
+    @FocusState var isPasswordFocused: Bool
+    let cornerRadius: CGFloat = 8
+
     var body: some View {
         HStack {
             Image(systemName: "key.fill")
                 .foregroundStyle(.secondary)
             
-            if showPassword {
+            ZStack { // Use opacity to toggle visibilty so that keyboard does not dismiss
                 TextField("Password", text: $password)
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-            } else {
+                    .focused($isPasswordFocused)
+                    .opacity(showPassword ? 1 : 0)
                 SecureField("Password", text: $password)
                     .textContentType(.password)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .focused($isPasswordFocused)
+                    .opacity(showPassword ? 0 : 1)
             }
             
-            Button(action: { showPassword.toggle() }) {
+            Button {
+                showPassword.toggle()
+                isPasswordFocused = true  // maintain keyboard focus
+            } label: {
                 Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
                     .foregroundStyle(.secondary)
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2)))
+        .background(
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(Color.gray.opacity(0.2))
+                .contentShape(RoundedRectangle(cornerRadius: cornerRadius)) // Allow transparent pixels to be tappable
+        )
+        .onTapGesture {
+            isPasswordFocused = true // Expand touch area to border padding
+        }
     }
 }
 

@@ -28,6 +28,10 @@ import SwiftUI
     /// Returns a ready-to-use UIHostingController containing the SwiftUI login view.
     @objc public static func hostingController(withViewModel viewModel: LocalLoginViewModel) -> UIViewController {
         let swiftUIView = LocalLoginViewSwiftUI(viewModel: viewModel)
-        return UIHostingController(rootView: swiftUIView)
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        hostingController.sizingOptions = [
+                .intrinsicContentSize // Allow host view to automatically update in iOS 16+
+        ]
+        return hostingController
     }
 }

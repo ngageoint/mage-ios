@@ -33,6 +33,8 @@
 @property (strong, nonatomic) NSString *errorMessageDetail;
 @property (strong, nonatomic) OrView *orView;
 @property (strong, nonatomic) UITapGestureRecognizer *gestureRecognizer;
+@property (nonatomic) BOOL didSetupAuthentication;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -45,6 +47,7 @@
     self.delegate = delegate;
     self.server = server;
     self.scheme = containerScheme;
+    self.didSetupAuthentication = NO;
     
     return self;
 }
@@ -52,12 +55,14 @@
 - (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [self initWithMageServer:server andDelegate:delegate andScheme:containerScheme]) {
         self.user = user;
+        self.didSetupAuthentication = NO;
     }
     return self;
 }
 
 - (void) setMageServer: (MageServer *) server {
     self.server = server;
+    self.didSetupAuthentication = NO;
 }
 
 #pragma mark - Theme Changes
@@ -79,6 +84,11 @@
     }
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark -
 
 - (void) viewDidLoad {
@@ -92,6 +102,17 @@
     [self.view addGestureRecognizer:tap];
     
     [self applyThemeWithContainerScheme:self.scheme];
+
+    // Listen for keyboard notifications to adjust scrollView as needed
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -123,38 +144,50 @@
     [self.view endEditing:YES];
 }
 
+- (void)keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    CGRect keyboardFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardFrame = [self.view convertRect:keyboardFrame fromView:nil];
+    CGFloat keyboardHeight = keyboardFrame.size.height;
+
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        UIEdgeInsets insets = self.scrollView.contentInset;
+        // Add the keyboard height to the bottom inset
+        insets.bottom = keyboardHeight;
+        self.scrollView.contentInset = insets;
+        self.scrollView.scrollIndicatorInsets = insets;
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        UIEdgeInsets insets = self.scrollView.contentInset;
+        // Reset the bottom inset
+        insets.bottom = 0;
+        self.scrollView.contentInset = insets;
+        self.scrollView.scrollIndicatorInsets = insets;
+    }];
+}
+
 - (void) setupAuthentication {
-    NSArray *strategies = self.server.strategies;
-    
-    for (UIView *subview in [self.loginsStackView subviews]) {
-        [subview removeFromSuperview];
+    if (self.didSetupAuthentication) { // Only configure UI one time to preserve logo image
+        return;
     }
+    self.didSetupAuthentication = true;
+    NSArray *strategies = self.server.strategies;
     
     BOOL localAuth = NO;
     for (NSDictionary *strategy in strategies) {
         if ([[strategy valueForKey:@"identifier"] isEqualToString:@"local"]) {
             localAuth = YES;
             
-            // 1. Create the SwiftUI ViewModel via wrapper
             LocalLoginViewModelWrapper *swiftUIViewModel = [[LocalLoginViewModelWrapper alloc] initWithStrategy:strategy delegate:self.delegate user:self.user];
-            
-            // 2. Create the SwiftUI hosting controller
             UIViewController *swiftUILoginVC = [LocalLoginViewHoster hostingControllerWithViewModel:swiftUIViewModel.viewModel];
-            
-            // 3. Embed in a stack view as a child view controller
             [self addChildViewController:swiftUILoginVC];
-            swiftUILoginVC.view.translatesAutoresizingMaskIntoConstraints = NO;
-            
-            UIView *swiftUIWrapper = [[UIView alloc] init];
-            [swiftUIWrapper addSubview:swiftUILoginVC.view];
-            
-            [swiftUILoginVC.view.topAnchor constraintEqualToAnchor:swiftUIWrapper.topAnchor].active = YES;
-            [swiftUILoginVC.view.bottomAnchor constraintEqualToAnchor:swiftUIWrapper.bottomAnchor].active = YES;
-            [swiftUILoginVC.view.leadingAnchor constraintEqualToAnchor:swiftUIWrapper.leadingAnchor].active = YES;
-            [swiftUILoginVC.view.trailingAnchor constraintEqualToAnchor:swiftUIWrapper.trailingAnchor].active = YES;
-            
-            [self.loginsStackView addArrangedSubview:swiftUIWrapper];
-            
+            [self.loginsStackView addArrangedSubview:swiftUILoginVC.view];
             [swiftUILoginVC didMoveToParentViewController:self];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
