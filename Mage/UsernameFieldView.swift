@@ -12,6 +12,8 @@ struct UsernameFieldView: View {
     @Binding var username: String
     var isDisabled: Bool = false
     var isLoading: Bool = false
+    let cornerRadius: CGFloat = 8
+    @FocusState private var isTextFieldFocused: Bool
     
     var body: some View {
         HStack {
@@ -24,9 +26,17 @@ struct UsernameFieldView: View {
                 .textContentType(.username)
                 .disabled(isDisabled || isLoading)
                 .opacity((isDisabled || isLoading) ? 0.6 : 1)
+                .focused($isTextFieldFocused)
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2)))
+        .background(
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(Color.gray.opacity(0.2))
+                .contentShape(RoundedRectangle(cornerRadius: cornerRadius)) // Required for touch on transparent pixels
+        )
+        .onTapGesture { // Expand the touch area to the background shape
+            isTextFieldFocused = true
+        }
     }
 }
 
