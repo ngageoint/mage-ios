@@ -164,6 +164,11 @@
     self.password.placeholder = @"Password *";
     self.password.label.text = @"Password *";
     self.password.leadingAssistiveLabel.text = @" ";
+    /*
+     `textContentType = UITextContentTypeOneTimeCode`
+     UITextField with secureTextEntry enabled shows a yellow background and "Strong Password" text, then the keyboard becomes unresponsive, is related to iOS's password autofill and strong password suggestions. This is specific to simulator, but would also prevent the error on real device
+     */
+    self.password.textContentType = UITextContentTypeOneTimeCode;
     [self.password sizeToFit];
     
     UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -173,6 +178,7 @@
     self.passwordConfirm.placeholder = @"Confirm Password *";
     self.passwordConfirm.label.text = @"Confirm Password *";
     self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    self.passwordConfirm.textContentType = UITextContentTypeOneTimeCode;
     [self.passwordConfirm sizeToFit];
     
     UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"checkmark"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
