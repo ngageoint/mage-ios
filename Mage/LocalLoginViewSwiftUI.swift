@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LocalLoginViewSwiftUI: View {
+public struct LocalLoginViewSwiftUI: View {
     enum Field: Int, CaseIterable {
         case username
         case password
@@ -18,7 +18,7 @@ struct LocalLoginViewSwiftUI: View {
     @State var isIntroViewsShown: Bool = false
     @FocusState var focusedField: Field?
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
                 .focused($focusedField, equals: .username)
@@ -26,15 +26,18 @@ struct LocalLoginViewSwiftUI: View {
                 .onSubmit {
                     focusedField = .password
                 }
+            
             PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
                 .focused($focusedField, equals: .password)
                 .submitLabel(.go)
+                .textContentType(.password)
                 .onSubmit {
                     viewModel.loginTapped()
                 }
                         
             SignInButtonView(isLoading: viewModel.isLoading) {
                 viewModel.loginTapped()
+                focusedField = nil  // Dismiss the keyboard
             }
             .accessibilityLabel("Sign In")
             

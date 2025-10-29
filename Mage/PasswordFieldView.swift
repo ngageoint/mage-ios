@@ -9,34 +9,41 @@
 import SwiftUI
 
 struct PasswordFieldView: View {
+    enum Field {
+        case passwordHidden
+        case passwordVisible
+    }
+    
     @Binding var password: String
     @Binding var showPassword: Bool
-    @FocusState var isPasswordFocused: Bool
     let cornerRadius: CGFloat = 8
+    @FocusState var focusField: Field?
 
     var body: some View {
         HStack {
             Image(systemName: "key.fill")
                 .foregroundStyle(.secondary)
             
-            ZStack { // Use opacity to toggle visibilty so that keyboard does not dismiss
-                TextField("Password", text: $password)
-                    .textContentType(.password)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .focused($isPasswordFocused)
-                    .opacity(showPassword ? 1 : 0)
+            ZStack { // Use opacity to toggle visibilty so that keyboard does not dismiss with the showPassword button
+                // Use SecureField before TextField so that the default case will always show the cursor. Otherwise the TextField can have focus leaving the user without a cursor in the Password prompt (when hidden)
                 SecureField("Password", text: $password)
                     .textContentType(.password)
-                    .autocapitalization(.none)
+                    .textInputAutocapitalization(.never)
                     .disableAutocorrection(true)
-                    .focused($isPasswordFocused)
+                    .focused($focusField, equals: .passwordHidden)
                     .opacity(showPassword ? 0 : 1)
+                
+                TextField("Password", text: $password)
+                    .textContentType(.password)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .focused($focusField, equals: .passwordVisible)
+                    .opacity(showPassword ? 1 : 0)
             }
-            
+     
             Button {
                 showPassword.toggle()
-                isPasswordFocused = true  // maintain keyboard focus
+                updateKeyboardFocus() // Update the focus to re-show the password, because it will defocus the text fields
             } label: {
                 Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
                     .foregroundStyle(.secondary)
@@ -49,7 +56,15 @@ struct PasswordFieldView: View {
                 .contentShape(RoundedRectangle(cornerRadius: cornerRadius)) // Allow transparent pixels to be tappable
         )
         .onTapGesture {
-            isPasswordFocused = true // Expand touch area to border padding
+            updateKeyboardFocus()
+        }
+    }
+    
+    func updateKeyboardFocus() {
+        if showPassword {
+            focusField = .passwordVisible
+        } else {
+            focusField = .passwordHidden
         }
     }
 }
