@@ -22,7 +22,7 @@ struct AttachmentPreviewView: View {
                 )
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                 .cacheOriginalImage()
-                .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
+                .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
                 .placeholder {
                     Image("observations")
                         .symbolRenderingMode(.monochrome)

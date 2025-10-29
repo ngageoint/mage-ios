@@ -37,7 +37,9 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
     var cancellables: Set<AnyCancellable> = Set()
     
     init() {
+        MageLogger.misc.debug("XXX setup push subject for favorites")
         localDataSource.pushSubject?.sink(receiveValue: { [weak self] favorite in
+            MageLogger.misc.debug("XXX favorite push subject activated")
             Task { [weak self] in
                 await self?.pushFavorites(favorites: [favorite])
             }
@@ -58,6 +60,7 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
     // TODO: There is some sort of bug causing a crash here.
     // BRENT: 03/21/2025
     func pushFavorites(favorites: [ObservationFavoriteModel]?) async {
+        MageLogger.misc.debug("XXX push favorites \(String(describing: favorites))")
         guard let favorites = favorites, !favorites.isEmpty else {
             return
         }
@@ -76,6 +79,7 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
             }
         }
         
+        MageLogger.misc.debug("about to push an additional \(favoritesToPush.count) favorites")
         for favorite in favoritesToPush.values {
             let response = await remoteDataSource.pushFavorite(favorite: favorite)
             localDataSource.handleServerPushResponse(favorite: favorite, response: response)

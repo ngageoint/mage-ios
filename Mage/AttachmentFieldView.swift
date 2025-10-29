@@ -17,7 +17,7 @@ import UIKit
     @objc func addGalleryAttachment();
 }
 
-class AttachmentFieldView : BaseFieldView, UICollectionViewDelegate {
+class AttachmentFieldView : BaseFieldView {
     private var attachments: [AttachmentModel]?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
@@ -42,8 +42,10 @@ class AttachmentFieldView : BaseFieldView, UICollectionViewDelegate {
         var cv: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout);
         cv.configureForAutoLayout();
         cv.register(AttachmentCell.self, forCellWithReuseIdentifier: "AttachmentCell");
-        cv.delegate = self;
+        cv.delegate = attachmentCollectionDataStore;
         cv.dataSource = attachmentCollectionDataStore;
+        cv.accessibilityLabel = "Attachment Collection";
+        cv.accessibilityIdentifier = "Attachment Collection";
         attachmentCollectionDataStore.attachmentCollection = cv;
         return cv;
     }();

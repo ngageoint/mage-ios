@@ -15,7 +15,7 @@ import Kingfisher
 
 @testable import MAGE
 
-// TODO: These tests are flaky and need to be revisited
+// TODO: These tests are flaky
 class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     let recordSnapshots = false;
     var controller: FeedItemsViewController!
@@ -137,7 +137,6 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
 }
         
 
-// TODO: These tests are flaky and need to be revisited
 class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     let recordSnapshots = false;
     var controller: FeedItemsViewController!

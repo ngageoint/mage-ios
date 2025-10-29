@@ -26,7 +26,6 @@ def test_pods
   pod 'Quick', '~> 6'
   pod 'Nimble', '~> 9'
   pod 'KIF'
-  pod 'KIF/IdentifierTests'
 end
 
 target 'MAGE' do

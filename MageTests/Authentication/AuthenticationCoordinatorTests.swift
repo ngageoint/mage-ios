@@ -266,7 +266,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldLoginAsADifferentUser() {
-        let _ = MageCoreDataFixtures.addUser();
+        let u = MageCoreDataFixtures.addUser();
         MageCoreDataFixtures.addUnsyncedObservationToEvent();
         
         UserDefaults.standard.deviceRegistered = true;

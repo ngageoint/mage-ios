@@ -106,14 +106,23 @@ import CoreData
     }
     
     @objc public static func getCurrentEvent(context: NSManagedObjectContext) -> Event? {
-        if let currentEventId = Server.currentEventId() {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        if let context = context, let currentEventId = Server.currentEventId() {
             return context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: currentEventId)
         }
         return nil;
     }
     
     @objc public static func getEvent(eventId: NSNumber, context: NSManagedObjectContext) -> Event? {
-        return context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: eventId)
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        if let context = context {
+            return context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: eventId)
+        }
+        return nil;
     }
     
     @objc public static func caseInsensitiveSortFetchAll(sortTerm: String?, ascending: Bool, predicate: NSPredicate?, groupBy: String?, context: NSManagedObjectContext) -> NSFetchedResultsController<Event>? {
