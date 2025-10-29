@@ -61,16 +61,22 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fH-La-tFM">
-                    <rect key="frame" x="0.0" y="190" width="375" height="628"/>
+                    <rect key="frame" x="0.0" y="20" width="375" height="798"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ka-Hj-Vpz">
-                            <rect key="frame" x="0.0" y="-10" width="375" height="627"/>
+                            <rect key="frame" x="0.0" y="-10" width="375" height="722"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="djZ-oe-5cp">
-                                    <rect key="frame" x="16" y="20" width="343" height="527"/>
+                                    <rect key="frame" x="16" y="20" width="343" height="622"/>
                                     <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoClear" translatesAutoresizingMaskIntoConstraints="NO" id="3Vq-uv-feU">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="95"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="95" id="ofg-aj-nRl"/>
+                                            </constraints>
+                                        </imageView>
                                         <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tkk-eU-cI7" customClass="MDCFilledTextField">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="45"/>
+                                            <rect key="frame" x="0.0" y="95" width="343" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" hint="" label="Username"/>
                                             <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
@@ -89,7 +95,7 @@
                                             </connections>
                                         </textField>
                                         <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Display Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BRG-7p-IkC" customClass="MDCFilledTextField">
-                                            <rect key="frame" x="0.0" y="45" width="343" height="45"/>
+                                            <rect key="frame" x="0.0" y="140" width="343" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" hint="" label="Username"/>
                                             <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
@@ -107,7 +113,7 @@
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ppn-lM-Kd3" userLabel="email" customClass="MDCFilledTextField">
-                                            <rect key="frame" x="0.0" y="90" width="343" height="45"/>
+                                            <rect key="frame" x="0.0" y="185" width="343" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Password"/>
                                             <constraints>
@@ -124,7 +130,7 @@
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QbZ-cp-HSy" customClass="MDCFilledTextField">
-                                            <rect key="frame" x="0.0" y="135" width="343" height="45"/>
+                                            <rect key="frame" x="0.0" y="230" width="343" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="kwp-kx-bia"/>
@@ -140,7 +146,7 @@
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sfe-cM-xS2" userLabel="password" customClass="MDCFilledTextField">
-                                            <rect key="frame" x="0.0" y="180" width="343" height="45"/>
+                                            <rect key="frame" x="0.0" y="275" width="343" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Password"/>
                                             <constraints>
@@ -157,7 +163,7 @@
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jkm-10-TAs">
-                                            <rect key="frame" x="0.0" y="225" width="343" height="169"/>
+                                            <rect key="frame" x="0.0" y="320" width="343" height="169"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XX4-h8-cXB" userLabel="password confirm" customClass="MDCFilledTextField">
                                                     <rect key="frame" x="0.0" y="-3" width="343" height="69"/>
@@ -247,7 +253,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4BW-Gb-lLx">
-                                            <rect key="frame" x="0.0" y="394" width="343" height="88"/>
+                                            <rect key="frame" x="0.0" y="489" width="343" height="88"/>
                                             <subviews>
                                                 <wkWebView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r9E-8y-73U">
                                                     <rect key="frame" x="56" y="0.0" width="231" height="88"/>
@@ -312,7 +318,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bZY-SW-SMa" userLabel="Captcha Text" customClass="MDCFilledTextField">
-                                            <rect key="frame" x="0.0" y="482" width="343" height="45"/>
+                                            <rect key="frame" x="0.0" y="577" width="343" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="j9f-hI-eTu"/>
@@ -326,14 +332,14 @@
                                     </subviews>
                                 </stackView>
                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="S3E-a2-52h">
-                                    <rect key="frame" x="327" y="581" width="20" height="20"/>
+                                    <rect key="frame" x="327" y="676" width="20" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="gtE-LR-v0W"/>
                                         <constraint firstAttribute="width" constant="20" id="y4d-5r-ndn"/>
                                     </constraints>
                                 </activityIndicatorView>
                                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gCm-GX-f4X" customClass="MDCButton">
-                                    <rect key="frame" x="197.5" y="571" width="157.5" height="40"/>
+                                    <rect key="frame" x="197.5" y="666" width="157.5" height="40"/>
                                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <accessibility key="accessibilityConfiguration" label="Sign Up"/>
                                     <constraints>
@@ -352,7 +358,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mQc-Hw-40O" customClass="MDCButton">
-                                    <rect key="frame" x="20" y="571" width="157" height="40"/>
+                                    <rect key="frame" x="20" y="666" width="157" height="40"/>
                                     <color key="backgroundColor" red="0.066666666669999999" green="0.3294117647" blue="0.64313725489999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <accessibility key="accessibilityConfiguration" label="Log In"/>
                                     <constraints>
@@ -395,35 +401,26 @@
                         <constraint firstAttribute="trailing" secondItem="3Ka-Hj-Vpz" secondAttribute="trailing" id="wam-fa-v5W"/>
                     </constraints>
                 </scrollView>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoClear" translatesAutoresizingMaskIntoConstraints="NO" id="3Vq-uv-feU">
-                    <rect key="frame" x="75" y="75" width="225" height="95"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="95" id="ofg-aj-nRl"/>
-                    </constraints>
-                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="K8Z-Q4-kKA"/>
-                <constraint firstItem="3Vq-uv-feU" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="top" constant="75" id="PgT-62-lPU"/>
                 <constraint firstAttribute="trailing" secondItem="8fH-La-tFM" secondAttribute="trailing" id="RxY-T6-ToG"/>
                 <constraint firstItem="Jub-3d-HY1" firstAttribute="top" secondItem="iYb-oq-i8M" secondAttribute="bottom" constant="-1" id="Szk-N4-jKN"/>
+                <constraint firstItem="8fH-La-tFM" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="topMargin" id="bbN-9j-GgU"/>
                 <constraint firstItem="Jub-3d-HY1" firstAttribute="centerX" secondItem="LIg-r8-Wga" secondAttribute="centerX" id="cc7-ew-WjR"/>
-                <constraint firstItem="8fH-La-tFM" firstAttribute="top" secondItem="3Vq-uv-feU" secondAttribute="bottom" constant="20" id="cee-CR-fSp"/>
                 <constraint firstItem="8fH-La-tFM" firstAttribute="centerX" secondItem="LIg-r8-Wga" secondAttribute="centerX" id="kZa-Yi-q6f"/>
                 <constraint firstAttribute="bottomMargin" secondItem="Jub-3d-HY1" secondAttribute="bottom" id="otl-Sa-Jt6" customClass="KeyboardConstraint"/>
                 <constraint firstItem="8fH-La-tFM" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="p1r-p7-xHf"/>
-                <constraint firstItem="3Vq-uv-feU" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" constant="75" id="q0k-Cj-9fJ"/>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="top" secondItem="8fH-La-tFM" secondAttribute="bottom" constant="8" id="rwm-oJ-pvD"/>
                 <constraint firstAttribute="trailing" secondItem="iYb-oq-i8M" secondAttribute="trailing" id="v1P-3l-oHz"/>
-                <constraint firstAttribute="trailing" secondItem="3Vq-uv-feU" secondAttribute="trailing" constant="75" id="yRj-Tr-8Im"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="29.600000000000001" y="190.70464767616193"/>
         </view>
     </objects>
     <resources>
-        <image name="LogoClear" width="1024" height="1024"/>
+        <image name="LogoClear" width="856" height="331"/>
         <image name="refresh" width="24" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
