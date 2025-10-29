@@ -24,10 +24,10 @@ class ObservationsMap: DataSourceMap {
     @Injected(\.observationIconRepository)
     var iconRepository: ObservationIconRepository
     
-    @Injected(\.observationImageRepository)
     var imageRepository: ObservationImageRepository
 
-    init() {
+    init(imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
+        self.imageRepository = imageRepository
         super.init(
             dataSource: DataSources.observation
         )
@@ -193,44 +193,72 @@ class ObservationsMap: DataSourceMap {
             }
         }
     }
-
+    
     override func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
         guard let mapItemAnnotation = annotation as? ObservationMapItemAnnotation else {
             return nil
         }
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
 
-        if let annotationView = annotationView {
-            annotationView.annotation = annotation
+        var annotationView = mapView.dequeueReusableAnnotationView(
+            withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID
+        )
+
+        if let view = annotationView {
+            view.annotation = annotation
         } else {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+            annotationView = MKAnnotationView(
+                annotation: annotation,
+                reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID
+            )
             annotationView?.isEnabled = true
         }
 
-        let image = imageRepository.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
-        if let annotationView = annotationView {
-            annotationView.image = image
+        // --- Default placeholder immediately ---
+        let placeholder = UIImage(named: "defaultMarker")!
+        annotationView?.image = placeholder
+        annotationView?.frame.size = CGSize(width: 40, height: 40)
+        annotationView?.centerOffset = CGPoint(x: 0, y: -(placeholder.size.height/2.0))
+        annotationView?.displayPriority = .required
 
-            var size = CGSize(width: 40, height: 40)
-            let max = max(image.size.height, image.size.width)
-            size.width *= ((image.size.width) / max)
-            size.height *= ((image.size.height) / max)
-            annotationView.frame.size = size
-            annotationView.canShowCallout = false
-            annotationView.isEnabled = false
-            annotationView.accessibilityLabel = "Enlarged"
-            annotationView.zPriority = .max
-            annotationView.selectedZPriority = .max
+        // --- Kick off async image load ---
+        if let iconPath = mapItemAnnotation.mapItem.iconPath,
+           let annotationView = annotationView {
 
+            Task {
+                let image = await imageRepository.imageAtPath(imagePath: iconPath)
 
-            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
-//            annotationView.accessibilityLabel = "Observation"
-//            annotationView.accessibilityValue = "Observation"
-            annotationView.displayPriority = .required
-//            annotationView.canShowCallout = true
+                await MainActor.run {
+                    // double-check the annotationView is still in use
+                    guard currentAnnotationViews[mapItemAnnotation.id] === annotationView else { return }
+
+                    annotationView.image = image
+
+                    // Recalculate size based on real image
+                    var size = CGSize(width: 40, height: 40)
+                    let max = max(image.size.height, image.size.width)
+                    if max > 0 {
+                        size.width *= (image.size.width / max)
+                        size.height *= (image.size.height / max)
+                    }
+                    annotationView.frame.size = size
+
+                    annotationView.canShowCallout = false
+                    annotationView.isEnabled = false
+                    annotationView.accessibilityLabel = "Enlarged"
+                    annotationView.zPriority = .max
+                    annotationView.selectedZPriority = .max
+                    annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height / 2.0))
+                }
+            }
         }
+
+        // keep references
         mapItemAnnotation.annotationView = annotationView
-        currentAnnotationViews[mapItemAnnotation.id] = annotationView
+        if let annotationView = annotationView {
+            currentAnnotationViews[mapItemAnnotation.id] = annotationView
+        }
+
         return annotationView
     }
+
 }

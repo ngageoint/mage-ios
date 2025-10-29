@@ -261,7 +261,6 @@ class TestHelpers {
         defaultAttachmentInjection()
         defaultRoleInjection()
         defaultLocationInjection()
-        defaultObservationImageInjection()
         defaultStaticLayerInjection()
         defaultGeoPackageInjection()
         defaultFeedItemInjection()
@@ -323,10 +322,6 @@ class TestHelpers {
     static func defaultLocationInjection() {
         InjectedValues[\.locationLocalDataSource] = LocationCoreDataDataSource()
         InjectedValues[\.locationRepository] = LocationRepositoryImpl()
-    }
-    
-    static func defaultObservationImageInjection() {
-        InjectedValues[\.observationImageRepository] = ObservationImageRepositoryImpl()
     }
     
     static func defaultStaticLayerInjection() {

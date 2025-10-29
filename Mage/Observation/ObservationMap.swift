@@ -12,7 +12,6 @@ import DataSourceTileOverlay
 import MapFramework
 
 class ObservationMap: DataSourceMap {
-    @Injected(\.observationImageRepository)
     var imageRepository: ObservationImageRepository
     
     override var REFRESH_KEY: String {
@@ -22,8 +21,10 @@ class ObservationMap: DataSourceMap {
     
     init(
         repository: TileRepository? = nil,
-        mapFeatureRepository: MapFeatureRepository? = nil
+        mapFeatureRepository: MapFeatureRepository? = nil,
+        imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared
     ) {
+        self.imageRepository = imageRepository
         super.init(dataSource: DataSources.observation)
         viewModel = DataSourceMapViewModel(
             dataSource: dataSource,
@@ -31,7 +32,6 @@ class ObservationMap: DataSourceMap {
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
-//        , repository: repository, mapFeatureRepository: mapFeatureRepository)
     }
     
     override func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
@@ -55,14 +55,16 @@ class ObservationMap: DataSourceMap {
             annotationView?.isEnabled = true
         }
 
-        if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
-            let image = imageRepository.imageAtPath(imagePath: iconPath)
-            annotationView.image = image
-            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
-            annotationView.accessibilityLabel = "Observation"
-            annotationView.accessibilityValue = "Observation"
-            annotationView.displayPriority = .required
-            annotationView.canShowCallout = true
+        Task {
+            if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
+                let image = await imageRepository.imageAtPath(imagePath: iconPath)
+                annotationView.image = image
+                annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
+                annotationView.accessibilityLabel = "Observation"
+                annotationView.accessibilityValue = "Observation"
+                annotationView.displayPriority = .required
+                annotationView.canShowCallout = true
+            }
         }
         return annotationView
     }

@@ -107,7 +107,7 @@ class ObservationAnnotationTests: KIFSpec {
                 expect(annotation.accessibilityValue).to(equal("Observation Annotation"))
                 
                 let mapView = MKMapView(forAutoLayout: ());
-                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+                let imageRepository = ObservationImageRepositoryImpl.shared
                 
                 let annotationView = annotation.viewForAnnotation(on: mapView, scheme: MAGEScheme.scheme());
                 expect(annotationView).toNot(beNil());
@@ -151,7 +151,7 @@ class ObservationAnnotationTests: KIFSpec {
                 expect(annotation.accessibilityValue).to(equal("Observation Annotation"))
                 
                 let mapView = MKMapView(forAutoLayout: ());
-                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+                let imageRepository = ObservationImageRepositoryImpl.shared
 
                 let annotationView = annotation.viewForAnnotation(on: mapView, scheme: MAGEScheme.scheme());
                 expect(annotationView).toNot(beNil());

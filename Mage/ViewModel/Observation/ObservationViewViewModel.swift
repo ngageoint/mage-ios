@@ -29,7 +29,6 @@ class ObservationViewViewModel: NSObject, ObservableObject {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
-    @Injected(\.observationImageRepository)
     var imageRepository: ObservationImageRepository
     
     @Published
@@ -99,7 +98,8 @@ class ObservationViewViewModel: NSObject, ObservableObject {
         
     var cancellables = Set<AnyCancellable>()
     
-    init(uri: URL) {
+    init(uri: URL, imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl.shared) {
+        self.imageRepository = imageRepository
         super.init()
         
         $observationModel.sink { [weak self] observationModel in
