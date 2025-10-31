@@ -134,7 +134,7 @@
         [self.tableView endUpdates];
     } else if ([indexPath section] == 0 && [indexPath row] == 2) {
         UIViewController *swiftUIUserFilter = [UserObservationFilterViewUIHostingFactory makeViewController];
-        [self.navigationController pushViewController:swiftUIUserFilter animated:YES];
+        [self presentViewController:swiftUIUserFilter animated:YES completion:nil];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:true];
 }

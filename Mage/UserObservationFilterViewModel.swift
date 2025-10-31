@@ -14,11 +14,11 @@ class UserObservationFilterViewModel: ObservableObject {
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
     
-    @Published var users: [User] = []
-    @Published var selectedUsers: Set<String> = []
-    @Published var searchText: String = ""
+    @Published var users: [UserModel]
+    @Published var selectedUsers: Set<String>
+    @Published var searchText: String
     
-    var filteredUsers: [User] {
+    var filteredUsers: [UserModel] {
         if searchText.isEmpty {
             return users
         } else {
@@ -30,7 +30,10 @@ class UserObservationFilterViewModel: ObservableObject {
         }
     }
     
-    init() {
+    init(users: [UserModel] = []) {
+        self.users = users
+        self.selectedUsers = []
+        self.searchText = ""
         setupUsers()
         setupSelectedUsers()
     }
@@ -40,11 +43,12 @@ class UserObservationFilterViewModel: ObservableObject {
               let event = Event.getCurrentEvent(context: context)
         else { return }
         
-        var tempUsers: Set<User> = []
+        var tempUsers: Set<UserModel> = []
         if let teams = event.teams {
             for team in teams {
                 if let users = team.users {
-                    tempUsers.formUnion(users)
+                    let userModels: [UserModel] = users.map { UserModel(user: $0) }
+                    tempUsers.formUnion(userModels)
                 }
             }
         }

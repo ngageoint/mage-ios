@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ObservationFilterView: View {
     @StateObject var observationFilterViewModel = ObservationFilterViewModel()
+    @State private var showingUserFilter = false
 
     var body: some View {
         List {
@@ -38,14 +39,18 @@ struct ObservationFilterView: View {
                     }
                 }
 
-                NavigationLink(destination: UserObservationFilterView()) {
-                    VStack(alignment: .leading) {
-                        Text("User Filter")
-                        Text("Only show selected users observations")
-                            .font(.body2)
-                            .foregroundStyle(.gray)
+                Button {
+                    showingUserFilter = true
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("User Filter")
+                            Text("Only show selected users’ observations")
+                                .font(.body2)
+                                .foregroundStyle(.gray)
+                        }
+                        .padding(.leading, 8)
                     }
-                    .padding(.leading, 8)
                 }
             }
 
@@ -69,6 +74,9 @@ struct ObservationFilterView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
         .task { observationFilterViewModel.loadFromObjC() }
+        .sheet(isPresented: $showingUserFilter) {
+            UserObservationFilterView()
+        }
         .onChange(of: observationFilterViewModel.isFavoriteOn)  { observationFilterViewModel.saveFavorites($0) }
         .onChange(of: observationFilterViewModel.isImportantOn) { observationFilterViewModel.saveImportant($0) }
         .onChange(of: observationFilterViewModel.selectedTime)  { observationFilterViewModel.saveTimeFilter($0) }

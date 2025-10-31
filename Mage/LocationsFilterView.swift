@@ -9,12 +9,7 @@
 import SwiftUI
 
 struct LocationsFilterView: View {
-    
-    @Environment(\.dismiss) var dismiss
     @StateObject private var locationsFilterViewModel = LocationsFilterViewModel()
-    @State private var selectedTime: TimeFilterEnum = .all
-    @State var customTimeFieldValue: Int = UserDefaults.standard.observationTimeFilterNumberKey
-    @State var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     
     var body: some View {
         List {
@@ -28,7 +23,7 @@ struct LocationsFilterView: View {
                         customTimePickerEnum: $locationsFilterViewModel.customTimePickerEnum,
                         isSelected: Binding(
                             get: { locationsFilterViewModel.selectedTime == option },
-                            set: { newValue in if newValue { locationsFilterViewModel.selectedTime = option } }
+                            set: { if $0 { locationsFilterViewModel.selectedTime = option } }
                         )
                     )
                 }

@@ -9,33 +9,55 @@
 import Foundation
 
 struct UserModel: Equatable, Hashable {
-    var userId: URL?
-    var remoteId: String?
-    var name: String?
-    var coordinate: CLLocationCoordinate2D?
-    var email: String?
-    var phone: String?
-    var lastUpdated: Date?
+    var active: NSNumber?
     var avatarUrl: String?
-    var username: String?
-    var timestamp: Date?
-    var hasEditPermissions: Bool = false
+    var createdAt: Date?
     var cllocation: CLLocation?
+    var coordinate: CLLocationCoordinate2D?
+    var currentUser: NSNumber?
+    var email: String?
+    var iconUrl: String?
+    var iconText: String?
+    var iconColor: String?
+    var hasEditPermissions: Bool = false
+    var lastUpdated: Date?
+    var location: Location?
+    var name: String?
+    var observations: Set<Observation>?
+    var phone: String?
+    var recentEventIds: [NSNumber]?
+    var remoteId: String?
+    var role: Role?
+    var teams: Set<Team>?
+    var timestamp: Date?
+    var username: String?
+    var userId: URL?
 }
 
 extension UserModel {
     init(user: User) {
-        remoteId = user.remoteId
-        name = user.name
-        coordinate = user.coordinate
-        email = user.email
-        phone = user.phone
-        lastUpdated = user.lastUpdated
-        avatarUrl = user.cacheAvatarUrl
-        username = user.username
-        timestamp = user.location?.timestamp
-        userId = user.objectID.uriRepresentation()
+        active = user.active // NSNumber?
+        avatarUrl = user.avatarUrl // String?
+        createdAt = user.createdAt // Date?
+        cllocation = user.cllocation // CLLocation?
+        coordinate = user.coordinate // CLLocationCoordinate2D?
+        currentUser = user.currentUser // NSNumber?
+        email = user.email // String?
+        iconUrl = user.iconUrl // String?
+        iconText = user.iconText // String?
+        iconColor = user.iconColor // String?
         hasEditPermissions = user.hasEditPermission
-        cllocation = user.cllocation
+        lastUpdated = user.lastUpdated // Date?
+        location = user.location // Location?
+        name = user.name // String?
+        observations = user.observations // Set<Observation>?
+        phone = user.phone // String?
+        recentEventIds = user.recentEventIds // [NSNumber]?
+        remoteId = user.remoteId // String?
+        role = user.role // Role?
+        teams = user.teams // Set<Team>?
+        timestamp = user.location?.timestamp // Date?
+        username = user.username // String?
+        userId = user.objectID.uriRepresentation() // URL?
     }
 }

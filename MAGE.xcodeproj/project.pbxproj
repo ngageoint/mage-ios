@@ -96,6 +96,7 @@
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		313FA0702E130399008DA52E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FA06F2E130399008DA52E /* Date.swift */; };
+		315336192EB5322300DAAC0C /* MainFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315336182EB5322300DAAC0C /* MainFilterViewModel.swift */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.swift */; };
@@ -1110,6 +1111,7 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		313FA06F2E130399008DA52E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		315336182EB5322300DAAC0C /* MainFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterViewModel.swift; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
@@ -2200,6 +2202,7 @@
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
 				A8B2B7E62E9F356A00A6E199 /* MainFilterView.swift */,
+				315336182EB5322300DAAC0C /* MainFilterViewModel.swift */,
 				A84D63EF2E95646E00577E19 /* UserObservationFilterView.swift */,
 				A84D63F12E9564C400577E19 /* UserObservationFilterViewModel.swift */,
 				A8B2B7EA2E9F425400A6E199 /* ObservationFilterView.swift */,
@@ -5189,6 +5192,7 @@
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
 				F706889F2BA4A2E300D8E2EA /* ObservationMapItem.swift in Sources */,
 				F73564CE2C613BB400466813 /* ObservationImportantLocalDataSource.swift in Sources */,
+				315336192EB5322300DAAC0C /* MainFilterViewModel.swift in Sources */,
 				F7C097952C81255C003FA115 /* FeedItemBottomSheeViewModel.swift in Sources */,
 				F7489B3927A09D7D00A9E314 /* UserTrackingMap.swift in Sources */,
 				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,

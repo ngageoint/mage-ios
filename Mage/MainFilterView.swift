@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MainFilterView: View {
     @Environment(\.dismiss) var dismiss
+    @StateObject var viewModel: MainFilterViewModel = MainFilterViewModel()
 
     var body: some View {
         NavigationStack {
@@ -18,7 +19,7 @@ struct MainFilterView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Observations")
-                            Text("Last Month")
+                            Text(viewModel.observationsTime)
                                 .font(.body2)
                                 .foregroundStyle(.gray)
                         }
@@ -29,7 +30,7 @@ struct MainFilterView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Locations")
-                            Text("Last Month")
+                            Text(viewModel.locationsTime)
                                 .font(.body2)
                                 .foregroundStyle(.gray)
                         }
