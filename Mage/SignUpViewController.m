@@ -128,6 +128,7 @@
     self.username.placeholder = @"Username *";
     self.username.label.text = @"Username *";
     self.username.leadingAssistiveLabel.text = @" ";
+    self.username.textContentType = UITextContentTypeUsername;
     [self.username sizeToFit];
     
     UIImageView *displayNameImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"contact_card"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -137,6 +138,7 @@
     self.displayName.placeholder = @"Display Name *";
     self.displayName.label.text = @"Display Name *";
     self.displayName.leadingAssistiveLabel.text = @" ";
+    self.displayName.textContentType = UITextContentTypeName;
     [self.displayName sizeToFit];
     
     UIImageView *emailImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"envelope"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -146,6 +148,7 @@
     self.email.placeholder = @"Email";
     self.email.label.text = @"Email";
     self.email.leadingAssistiveLabel.text = @" ";
+    self.email.textContentType = UITextContentTypeEmailAddress;
     [self.email sizeToFit];
     
     UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"phone.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -155,6 +158,7 @@
     self.phone.placeholder = @"Phone";
     self.phone.label.text = @"Phone";
     self.phone.leadingAssistiveLabel.text = @" ";
+    self.phone.textContentType = UITextContentTypeTelephoneNumber;
     [self.phone sizeToFit];
     
     UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -164,6 +168,7 @@
     self.password.placeholder = @"Password *";
     self.password.label.text = @"Password *";
     self.password.leadingAssistiveLabel.text = @" ";
+    self.password.textContentType = UITextContentTypeNewPassword;
     [self.password sizeToFit];
     
     UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -173,6 +178,7 @@
     self.passwordConfirm.placeholder = @"Confirm Password *";
     self.passwordConfirm.label.text = @"Confirm Password *";
     self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    self.passwordConfirm.textContentType = UITextContentTypeNewPassword;
     [self.passwordConfirm sizeToFit];
     
     UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"checkmark"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];

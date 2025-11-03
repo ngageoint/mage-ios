@@ -8,26 +8,45 @@
 
 import SwiftUI
 
-struct LocalLoginViewSwiftUI: View {
+public struct LocalLoginViewSwiftUI: View {
+    enum Field: Int, CaseIterable {
+        case username
+        case password
+     }
+    
     @ObservedObject var viewModel: LocalLoginViewModel
     @State var isIntroViewsShown: Bool = false
+    @FocusState var focusedField: Field?
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             UsernameFieldView(username: $viewModel.username, isDisabled: viewModel.userExists, isLoading: viewModel.isLoading)
+                .focused($focusedField, equals: .username)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .password
+                }
+            
             PasswordFieldView(password: $viewModel.password, showPassword: $viewModel.showPassword)
-            
-            if let error = viewModel.errorMessage {
-                Text(error)
-                    .lineLimit(nil)
-                    .foregroundColor(.red)
-            }
-            
+                .focused($focusedField, equals: .password)
+                .submitLabel(.go)
+                .textContentType(.password)
+                .onSubmit {
+                    viewModel.loginTapped()
+                }
+                        
             SignInButtonView(isLoading: viewModel.isLoading) {
                 viewModel.loginTapped()
+                focusedField = nil  // Dismiss the keyboard
             }
             .accessibilityLabel("Sign In")
             
+            Text(viewModel.errorMessage ?? "")
+                .foregroundColor(.red)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
+                .opacity((viewModel.errorMessage != nil) ? 1 : 0)
+
             SignUpButtonView {
                 viewModel.signupTapped()
             }
