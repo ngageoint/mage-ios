@@ -60,4 +60,12 @@ extension UserModel {
         username = user.username
         userId = user.objectID.uriRepresentation()
     }
+    
+    static func == (lhs: UserModel, rhs: UserModel) -> Bool {
+        return lhs.remoteId == rhs.remoteId
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(remoteId)
+    }
 }
