@@ -36,28 +36,28 @@ struct UserModel: Equatable, Hashable {
 
 extension UserModel {
     init(user: User) {
-        active = user.active // NSNumber?
-        avatarUrl = user.avatarUrl // String?
-        createdAt = user.createdAt // Date?
-        cllocation = user.cllocation // CLLocation?
-        coordinate = user.coordinate // CLLocationCoordinate2D?
-        currentUser = user.currentUser // NSNumber?
-        email = user.email // String?
-        iconUrl = user.iconUrl // String?
-        iconText = user.iconText // String?
-        iconColor = user.iconColor // String?
+        active = user.active
+        avatarUrl = user.avatarUrl
+        createdAt = user.createdAt
+        cllocation = user.cllocation
+        coordinate = user.coordinate
+        currentUser = user.currentUser
+        email = user.email
+        iconUrl = user.iconUrl
+        iconText = user.iconText
+        iconColor = user.iconColor
         hasEditPermissions = user.hasEditPermission
-        lastUpdated = user.lastUpdated // Date?
-        location = user.location // Location?
-        name = user.name // String?
-        observations = user.observations // Set<Observation>?
-        phone = user.phone // String?
-        recentEventIds = user.recentEventIds // [NSNumber]?
-        remoteId = user.remoteId // String?
-        role = user.role // Role?
-        teams = user.teams // Set<Team>?
-        timestamp = user.location?.timestamp // Date?
-        username = user.username // String?
-        userId = user.objectID.uriRepresentation() // URL?
+        lastUpdated = user.lastUpdated
+        location = user.location
+        name = user.name
+        observations = user.observations
+        phone = user.phone
+        recentEventIds = user.recentEventIds
+        remoteId = user.remoteId
+        role = user.role
+        teams = user.teams
+        timestamp = user.location?.timestamp
+        username = user.username
+        userId = user.objectID.uriRepresentation()
     }
 }

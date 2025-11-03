@@ -50,8 +50,11 @@ struct ObservationFilterView: View {
                                 .foregroundStyle(.gray)
                         }
                         .padding(.leading, 8)
+                        Spacer()
+                        Image(systemName: "chevron.right")
                     }
                 }
+                .buttonStyle(.plain)
             }
 
             Section("Time Filter") {

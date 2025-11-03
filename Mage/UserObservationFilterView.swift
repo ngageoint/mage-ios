@@ -148,15 +148,6 @@ struct UserObservationCellView: View {
     }
 }
 
-//NavigationView {
-//        List(oceans, selection: $multiSelection) {
-//            Text($0.name)
-//        }
-//        .navigationTitle("Oceans")
-//        .toolbar { EditButton() }
-//    }
-//    Text("\(multiSelection.count) selections")
-
 #Preview {
     var dan: UserModel = UserModel(active: nil, avatarUrl: nil, createdAt: nil, cllocation: nil, coordinate: nil, currentUser: nil, email: "dan@test.com", iconUrl: nil, iconText: nil, iconColor: nil, lastUpdated: nil, location: nil, name: "dan", observations: nil, phone: "234-321-1212", recentEventIds: nil, remoteId: "2342342343", role: nil, teams: nil, timestamp: nil, username: "DanUsername", userId: nil)
     var paul: UserModel = UserModel(active: nil, avatarUrl: nil, createdAt: nil, cllocation: nil, coordinate: nil, currentUser: nil, email: "paul@test.com", iconUrl: nil, iconText: nil, iconColor: nil, lastUpdated: nil, location: nil, name: "paul", observations: nil, phone: "234-321-1212", recentEventIds: nil, remoteId: "5675675676", role: nil, teams: nil, timestamp: nil, username: "PaulUsername", userId: nil)
