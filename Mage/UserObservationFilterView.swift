@@ -54,8 +54,8 @@ struct UserObservationFilterView: View {
                         }
                         .frame(maxWidth: .infinity, minHeight: 240)
                     } else {
-                        LazyVStack(alignment:.leading) {
-                            ForEach(Array(viewModel.filteredUsers), id: \.remoteId) { user in
+                        VStack(alignment:.leading) {
+                            ForEach(viewModel.filteredUsers, id: \.remoteId) { user in
                                 UserObservationCellView(viewModel: viewModel, isSelected: $isSelected, user: user)
                                     .padding(.vertical, 4)
                             }

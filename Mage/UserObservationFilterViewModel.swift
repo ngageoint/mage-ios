@@ -43,16 +43,13 @@ class UserObservationFilterViewModel: ObservableObject {
               let event = Event.getCurrentEvent(context: context)
         else { return }
         
-        var tempUsers: Set<UserModel> = []
+        var uniqueUsers: Set<UserModel> = []
         if let teams = event.teams {
-            for team in teams {
-                if let users = team.users {
-                    let userModels: [UserModel] = users.map { UserModel(user: $0) }
-                    tempUsers.formUnion(userModels)
-                }
-            }
+            let allUsers = teams.flatMap { $0.users ?? [] }
+            uniqueUsers = Set(allUsers.map { UserModel(user: $0) })
         }
-        self.users = Array(tempUsers).sorted { ($0.username ?? "") < ($1.username ?? "") }
+        
+        self.users = Array(uniqueUsers).sorted { ($0.username ?? "") < ($1.username ?? "") }
     }
     
     func setupSelectedUsers() {
