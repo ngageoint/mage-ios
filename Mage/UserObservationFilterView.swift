@@ -100,18 +100,16 @@ struct UserObservationCellView: View {
                         .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                         .cacheOriginalImage()
                         .fromMemoryCacheOrRefresh()
+                        .placeholder {
+                            placeholderImage
+                        }
                         .fade(duration: 0.3)
                         .resizable()
                         .scaledToFill()
                         .frame(idealWidth: 48, maxWidth: 48, idealHeight: 48, maxHeight: 48)
                         .clipShape(.circle)
                 } else {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(idealWidth: 48, maxWidth: 48, idealHeight: 48, maxHeight: 48)
-                        .clipShape(.circle)
-                        .foregroundStyle(.secondary)
+                    placeholderImage
                 }
                 VStack(alignment: .leading) {
                     Text(user.name ?? "")
@@ -137,6 +135,7 @@ struct UserObservationCellView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
+            .contentShape(Rectangle())
             .onTapGesture {
                 if let remoteId = user.remoteId {
                     viewModel.updateSelectedUsers(remoteId: remoteId)
@@ -145,6 +144,15 @@ struct UserObservationCellView: View {
             .contentShape(Rectangle())
             Divider()
         }
+    }
+    
+    var placeholderImage: some View {
+        Image(systemName: "person.circle.fill")
+            .resizable()
+            .scaledToFill()
+            .frame(idealWidth: 48, maxWidth: 48, idealHeight: 48, maxHeight: 48)
+            .clipShape(.circle)
+            .foregroundStyle(.secondary)
     }
 }
 

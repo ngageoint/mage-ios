@@ -14,7 +14,7 @@ class LocationsFilterViewModel: ObservableObject {
     @Published var customTimeFieldValue: Int = UserDefaults.standard.locationTimeFilterNumber
     @Published var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.locationTimeFilterUnit)
     
-    func loadFromObjC() {
+    init() {
         selectedTime  = TimeFilterEnum(objc: TimeFilter.getLocationTimeFilter())
     }
 

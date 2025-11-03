@@ -22,7 +22,7 @@ struct ObservationFilterView: View {
                             Text("Favorites")
                             Text("Only show my favorite observations")
                                 .font(.body2)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -34,7 +34,7 @@ struct ObservationFilterView: View {
                             Text("Important")
                             Text("Only show observations flagged as important")
                                 .font(.body2)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -47,12 +47,18 @@ struct ObservationFilterView: View {
                             Text("User Filter")
                             Text("Only show selected users’ observations")
                                 .font(.body2)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(.secondary)
                         }
                         .padding(.leading, 8)
+
                         Spacer()
+
+                        if observationFilterViewModel.selectedUserCount > 0 {
+                            Text("\(observationFilterViewModel.selectedUserCount)")
+                        }
                         Image(systemName: "chevron.right")
                     }
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             }
@@ -76,7 +82,6 @@ struct ObservationFilterView: View {
         .navigationTitle("Observation Filter")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
-        .task { observationFilterViewModel.loadFromObjC() }
         .sheet(isPresented: $showingUserFilter) {
             UserObservationFilterView()
         }
@@ -86,4 +91,8 @@ struct ObservationFilterView: View {
         .onChange(of: observationFilterViewModel.customTimeFieldValue) { observationFilterViewModel.saveCustomTimeFieldValueFilter($0)}
         .onChange(of: observationFilterViewModel.customTimePickerEnum) { observationFilterViewModel.saveCustomTimeEnumFilter($0)}
     }
+}
+
+#Preview {
+    ObservationFilterView()
 }

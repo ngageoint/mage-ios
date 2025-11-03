@@ -32,7 +32,6 @@ struct LocationsFilterView: View {
         .navigationTitle("Locations Filter")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
-        .task { locationsFilterViewModel.loadFromObjC() }
         .onChange(of: locationsFilterViewModel.selectedTime)  { locationsFilterViewModel.saveTimeFilter($0) }
         .onChange(of: locationsFilterViewModel.customTimeFieldValue) { locationsFilterViewModel.saveCustomTimeFieldValueFilter($0)}
         .onChange(of: locationsFilterViewModel.customTimePickerEnum) { locationsFilterViewModel.saveCustomTimeEnumFilter($0)}
