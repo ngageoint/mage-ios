@@ -263,9 +263,9 @@ class MageNavStack: UIViewController {
                 cache.retrieveImage(forKey: cacheKey) { result in
                     switch result {
                     case .success(let value):
-                        if let image = value.image, let imageData = image.pngData() {
+                        if let image = value.image, let imageData = image.jpegData(compressionQuality: 1) {
                             let docsUrl = URL.documentsDirectory
-                            let filename = docsUrl.appendingPathComponent("image.png")
+                            let filename = docsUrl.appendingPathComponent("image.jpg")
                             
                             try? imageData.write(to: filename)
                             
