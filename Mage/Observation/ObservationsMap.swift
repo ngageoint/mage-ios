@@ -103,6 +103,16 @@ class ObservationsMap: DataSourceMap {
                 }
             }
             .store(in: &cancellable)
+        
+        UserDefaults.standard.publisher(for: \.userFilterRemoteIds)
+            .removeDuplicates()
+            .sink { [weak self] order in
+                Task { [self] in
+                    await self?.repository.clearCache()
+                    self?.viewModel?.refresh()
+                }
+            }
+            .store(in: &cancellable)
 
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)

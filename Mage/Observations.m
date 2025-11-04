@@ -33,6 +33,12 @@
     [defaults synchronize];
 }
 
++ (NSArray *) getUserFilterRemoteIDs {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray<NSString *> *selectedIds = [defaults userFilterRemoteIds];
+    return selectedIds;
+}
+
 + (NSMutableArray *) getPredicatesForObservationsForMap: (NSManagedObjectContext *) context {
     NSMutableArray *predicates = [Observations getPredicatesForObservations: context];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -56,6 +62,12 @@
         [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", [NSNumber numberWithBool:YES], currentUser.remoteId]];
     }
     
+    if ([[Observations getUserFilterRemoteIDs] count] > 0)  {
+        NSArray<NSString *> *selectedUserRemoteIds = [NSUserDefaults.standardUserDefaults userFilterRemoteIds];
+        NSLog(@"zzz: selectedUserRemoteIds: %@", selectedUserRemoteIds);
+        NSPredicate *predicate = [NSPredicate predicateWithFormat: @"userId IN %@", selectedUserRemoteIds];
+        [predicates addObject:predicate];
+    }
     return predicates;
 }
 

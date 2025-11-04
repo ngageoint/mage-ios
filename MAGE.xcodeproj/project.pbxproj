@@ -96,6 +96,7 @@
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		313FA0702E130399008DA52E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FA06F2E130399008DA52E /* Date.swift */; };
+		315336192EB5322300DAAC0C /* MainFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315336182EB5322300DAAC0C /* MainFilterViewModel.swift */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.swift */; };
@@ -184,7 +185,15 @@
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		84CF83E02E4CEE9B00A8DE0A /* URLAccessTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CF83DF2E4CEE9B00A8DE0A /* URLAccessTokenTests.swift */; };
 		A811F2B22E3BFB9C0016C5AB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */; };
+		A84D63F02E95646E00577E19 /* UserObservationFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84D63EF2E95646E00577E19 /* UserObservationFilterView.swift */; };
+		A84D63F22E9564C400577E19 /* UserObservationFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84D63F12E9564C400577E19 /* UserObservationFilterViewModel.swift */; };
 		A89A21CF2E3959A00080A11C /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89A21CE2E3959A00080A11C /* UIScreen.swift */; };
+		A8B2B7E72E9F356A00A6E199 /* MainFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2B7E62E9F356A00A6E199 /* MainFilterView.swift */; };
+		A8B2B7EB2E9F425400A6E199 /* ObservationFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2B7EA2E9F425400A6E199 /* ObservationFilterView.swift */; };
+		A8B2B7ED2E9F44E300A6E199 /* LocationsFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */; };
+		A8B2B7EF2E9F48CB00A6E199 /* TimeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */; };
+		A8C1DE9C2EA2863200DA687F /* ObservationFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C1DE9B2EA2863200DA687F /* ObservationFilterViewModel.swift */; };
+		A8C1DE9E2EA29E0E00DA687F /* LocationsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C1DE9D2EA29E0E00DA687F /* LocationsFilterViewModel.swift */; };
 		BD6C27F82DE10EE70086F310 /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27F72DE10EE70086F310 /* GeoPackage */; };
 		BD6C27FB2DE110FA0086F310 /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FA2DE110FA0086F310 /* MGRS */; };
 		BD6C27FE2DE111190086F310 /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6C27FD2DE111190086F310 /* GARS */; };
@@ -1102,6 +1111,7 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		313FA06F2E130399008DA52E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		315336182EB5322300DAAC0C /* MainFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterViewModel.swift; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
@@ -1143,7 +1153,15 @@
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		A811F2B12E3BFB9C0016C5AB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A84D63EF2E95646E00577E19 /* UserObservationFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObservationFilterView.swift; sourceTree = "<group>"; };
+		A84D63F12E9564C400577E19 /* UserObservationFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObservationFilterViewModel.swift; sourceTree = "<group>"; };
 		A89A21CE2E3959A00080A11C /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
+		A8B2B7E62E9F356A00A6E199 /* MainFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterView.swift; sourceTree = "<group>"; };
+		A8B2B7EA2E9F425400A6E199 /* ObservationFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFilterView.swift; sourceTree = "<group>"; };
+		A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsFilterView.swift; sourceTree = "<group>"; };
+		A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFilterView.swift; sourceTree = "<group>"; };
+		A8C1DE9B2EA2863200DA687F /* ObservationFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFilterViewModel.swift; sourceTree = "<group>"; };
+		A8C1DE9D2EA29E0E00DA687F /* LocationsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsFilterViewModel.swift; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B29DE4B6C2FE6308F8758572 /* Pods-MAGEGeoPackageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2187,6 +2205,15 @@
 				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
+				A8B2B7E62E9F356A00A6E199 /* MainFilterView.swift */,
+				315336182EB5322300DAAC0C /* MainFilterViewModel.swift */,
+				A84D63EF2E95646E00577E19 /* UserObservationFilterView.swift */,
+				A84D63F12E9564C400577E19 /* UserObservationFilterViewModel.swift */,
+				A8B2B7EA2E9F425400A6E199 /* ObservationFilterView.swift */,
+				A8C1DE9B2EA2863200DA687F /* ObservationFilterViewModel.swift */,
+				A8B2B7EC2E9F44E300A6E199 /* LocationsFilterView.swift */,
+				A8C1DE9D2EA29E0E00DA687F /* LocationsFilterViewModel.swift */,
+				A8B2B7EE2E9F48CB00A6E199 /* TimeFilterView.swift */,
 			);
 			name = Filter;
 			sourceTree = "<group>";
@@ -4913,6 +4940,8 @@
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
 				F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
+				A8C1DE9C2EA2863200DA687F /* ObservationFilterViewModel.swift in Sources */,
+				A8C1DE9E2EA29E0E00DA687F /* LocationsFilterViewModel.swift in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
@@ -4993,6 +5022,7 @@
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
+				A8B2B7EB2E9F425400A6E199 /* ObservationFilterView.swift in Sources */,
 				F70C343F2C73D801007616FA /* VideoView.swift in Sources */,
 				F776AC9F2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
@@ -5019,6 +5049,7 @@
 				F7E40A6626939A4200E50E26 /* UserBottomSheetView.swift in Sources */,
 				F79D2959282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
+				A8B2B7E72E9F356A00A6E199 /* MainFilterView.swift in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
 				8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */,
@@ -5042,6 +5073,7 @@
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
 				F706889F2BA4A2E300D8E2EA /* ObservationMapItem.swift in Sources */,
 				F73564CE2C613BB400466813 /* ObservationImportantLocalDataSource.swift in Sources */,
+				315336192EB5322300DAAC0C /* MainFilterViewModel.swift in Sources */,
 				F7C097952C81255C003FA115 /* FeedItemBottomSheeViewModel.swift in Sources */,
 				F7489B3927A09D7D00A9E314 /* UserTrackingMap.swift in Sources */,
 				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,
@@ -5113,10 +5145,12 @@
 				F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */,
+				A8B2B7EF2E9F48CB00A6E199 /* TimeFilterView.swift in Sources */,
 				F7EBAEB82760F62000650F4F /* MainMageMapView.swift in Sources */,
 				F73564D22C61430900466813 /* ObservationImportantService.swift in Sources */,
 				F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */,
 				F72D432A2694B60300F9AC3B /* Observation.swift in Sources */,
+				A84D63F02E95646E00577E19 /* UserObservationFilterView.swift in Sources */,
 				F70C34372C73D753007616FA /* DownloadingFileViewModel.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */,
@@ -5307,6 +5341,7 @@
 				F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */,
 				F754C6532C35E66E00E408E9 /* MapStateRepository.swift in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.swift in Sources */,
+				A84D63F22E9564C400577E19 /* UserObservationFilterViewModel.swift in Sources */,
 				F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */,
 				F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
@@ -5322,6 +5357,7 @@
 				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.swift in Sources */,
+				A8B2B7ED2E9F44E300A6E199 /* LocationsFilterView.swift in Sources */,
 				F763FF0E2C7663A600403A00 /* UserService.swift in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
