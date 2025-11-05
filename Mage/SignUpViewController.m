@@ -216,6 +216,17 @@
     return YES;
 }
 
+- (void)textFieldDidChangeSelection:(UITextField *)textField {
+    // Password fields do not match
+    if (_password.text.length > 0 && ![_passwordConfirm.text isEqualToString:_password.text]) {
+        [self markFieldError:self.passwordConfirm errorText:@"Passwords Do Not Match"];
+    } else if (_passwordConfirm.text.length > 0 && ![_passwordConfirm.text isEqualToString:_password.text]) {
+        [self markFieldError:self.password errorText:@"Passwords Do Not Match"];
+    } else if ([_passwordConfirm.text isEqualToString:_password.text]) {
+        [self clearPasswordErrors];
+    }
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == _phone) {
@@ -382,6 +393,13 @@
 
 - (IBAction) onCancel:(id) sender {
     [self.delegate signupCanceled];
+}
+
+- (void) clearPasswordErrors {
+    self.password.leadingAssistiveLabel.text = @" ";
+    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    [self.password applyThemeWithScheme:self.scheme];
+    [self.passwordConfirm applyThemeWithScheme:self.scheme];
 }
 
 - (void) clearFieldErrors {
