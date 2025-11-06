@@ -224,23 +224,18 @@
     BOOL confirmEmpty = (confirm.length == 0);
     BOOL match = [password isEqualToString:confirm];
     
-    if (passwordEmpty && confirmEmpty) {
+    if (confirmEmpty) { // no text entered && we don't want to show confirm error pre-emptively
         [self clearPasswordErrors];
         return;
     }
     
-    if (!passwordEmpty && confirmEmpty) {
-        [self clearPasswordErrors];
-        return;
-    }
-    
-    if (passwordEmpty && !confirmEmpty) {
+    if (passwordEmpty && !confirmEmpty) { // they skipped or deleted the password
         [self clearPasswordErrors];
         [self markFieldError:self.password errorText:@"Enter password first"];
         return;
     }
     
-    if (!passwordEmpty && !confirmEmpty && !match) {
+    if (!passwordEmpty && !confirmEmpty && !match) { // standard mismatch
         [self clearPasswordErrors];
         [self markFieldError:self.passwordConfirm errorText:@"Passwords do not match"];
         return;
