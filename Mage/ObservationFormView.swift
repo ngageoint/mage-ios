@@ -10,6 +10,7 @@ import Foundation
 
 import MaterialComponents.MaterialTextFields
 import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
+import SwiftUI
 
 @objc protocol ObservationFormFieldListener {
     @objc func fieldValueChanged(_ field: [String : Any], value: Any?);
@@ -135,7 +136,8 @@ class ObservationFormView: UIStackView {
             case FieldType.textfield.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case FieldType.textarea.key:
-                fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, multiline: true);
+                let hc = UIHostingController(rootView: ExpandingTextEditor(title: "someTitle", text: value as? String ?? "default string"));
+                fieldView = hc.view
             case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
             case FieldType.password.key:
@@ -161,6 +163,9 @@ class ObservationFormView: UIStackView {
                 fieldViews[key] = baseFieldView;
                 formFieldAdded = true;
                 self.addArrangedSubview(baseFieldView);
+            } else if let fieldView = fieldView {
+                MageLogger.misc.error("Unable to create BaseFieldView for field \(fieldDictionary)")
+                self.addArrangedSubview(fieldView);
             }
         }
     }
