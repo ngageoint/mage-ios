@@ -59,8 +59,8 @@ final class UserRepositoryTests: MageInjectionTestCase {
     func testGetUserByRemoteId() {
         userLocalDataSource.users = [
             UserModel(
+                remoteId: "1",
                 userId: URL(string: "magetest://user/1"),
-                remoteId: "1"
             )
         ]
                 
@@ -73,12 +73,12 @@ final class UserRepositoryTests: MageInjectionTestCase {
     
     func testCanUpdate() async {
         let userModel = UserModel(
+            remoteId: "1",
             userId: URL(string: "magetest://user/1"),
-            remoteId: "1"
         )
         let userModel2 = UserModel(
+            remoteId: "2",
             userId: URL(string: "magetest://user/2"),
-            remoteId: "2"
         )
         userLocalDataSource.users = [
             userModel,
@@ -105,9 +105,9 @@ final class UserRepositoryTests: MageInjectionTestCase {
     
     func testObserveUser() {
         let userModel = UserModel(
-            userId: URL(string: "magetest://user/1"),
+            name: "first",
             remoteId: "1",
-            name: "first"
+            userId: URL(string: "magetest://user/1"),
         )
         userLocalDataSource.users = [
             userModel
@@ -136,9 +136,9 @@ final class UserRepositoryTests: MageInjectionTestCase {
         wait(for: [firstExpectation], timeout: 1)
         
         userLocalDataSource.updateUser(userUri: URL(string: "magetest://user/1")!, model: UserModel(
-            userId: URL(string: "magetest://user/1"),
+            name: "second",
             remoteId: "1",
-            name: "second"
+            userId: URL(string: "magetest://user/1"),
         ))
         
         wait(for: [changeExpectation], timeout: 1)
@@ -168,9 +168,9 @@ final class UserRepositoryTests: MageInjectionTestCase {
         let userRepostory = UserRepositoryImpl()
         
         let userModel = UserModel(
-            userId: URL(string: "magetest://user/1"),
+            name: "first",
             remoteId: "1",
-            name: "first"
+            userId: URL(string: "magetest://user/1"),
         )
         userLocalDataSource.users = [userModel]
 
@@ -205,9 +205,9 @@ final class UserRepositoryTests: MageInjectionTestCase {
         // insert another item
         userLocalDataSource.users += [
             UserModel(
-                userId: URL(string: "magetest://user/2"),
+                name: "second",
                 remoteId: "2",
-                name: "second"
+                userId: URL(string: "magetest://user/2"),
             )
         ]
 
@@ -218,9 +218,9 @@ final class UserRepositoryTests: MageInjectionTestCase {
     
     func testAvatarChosen() async {
         let userModel = UserModel(
-            userId: URL(string: "magetest://user/1"),
+            name: "first",
             remoteId: "1",
-            name: "first"
+            userId: URL(string: "magetest://user/1"),
         )
         
         var repository = UserRepositoryImpl()

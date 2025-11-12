@@ -146,9 +146,9 @@ final class ObservationViewViewModelTests: MageInjectionTestCase {
         ]
         
         let user = UserModel(
-            userId: URL(string: "magetest://user/1"),
+            hasEditPermissions: true,
             remoteId: "user1",
-            hasEditPermissions: true
+            userId: URL(string: "magetest://user/1"),
         )
         
         roleRepository.roles = [
