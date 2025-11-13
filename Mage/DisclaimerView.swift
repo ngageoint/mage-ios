@@ -70,6 +70,20 @@ public struct DisclaimerView: View {
     }
 }
 
-#Preview {
-    DisclaimerView(delegate: nil)
+struct DisclaimerView_Previews: PreviewProvider {
+
+    class MockDelegate: NSObject, DisclaimerDelegate {
+        func disclaimerAgree() { print("Agreed (preview)") }
+        func disclaimerDisagree() { print("Disagreed (preview)") }
+    }
+
+    static var previews: some View {
+        Group {
+            DisclaimerView(delegate: MockDelegate())
+                .previewDisplayName("with Delegate")
+
+            DisclaimerView(delegate: nil)
+                .previewDisplayName("without Delegate")
+        }
+    }
 }
