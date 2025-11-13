@@ -4516,8 +4516,6 @@
 			knownRegions = (
 				Base,
 				en,
-				"es-419",
-				"es-US",
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
 			packageReferences = (
