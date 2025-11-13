@@ -96,6 +96,7 @@
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		313FA0702E130399008DA52E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FA06F2E130399008DA52E /* Date.swift */; };
+		314737AB2EC6323D002A8DD0 /* DisclaimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314737AA2EC63236002A8DD0 /* DisclaimerView.swift */; };
 		315336192EB5322300DAAC0C /* MainFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315336182EB5322300DAAC0C /* MainFilterViewModel.swift */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
@@ -680,7 +681,6 @@
 		F7B1C4722674033D0005FCE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */; };
 		F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B1C477267405A50005FCE4 /* ViewLoader.swift */; };
-		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */; };
 		F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */; };
 		F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5772B245CABE600879C9C /* ExpandableCard.swift */; };
 		F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */; };
@@ -1111,6 +1111,7 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		313FA06F2E130399008DA52E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		314737AA2EC63236002A8DD0 /* DisclaimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerView.swift; sourceTree = "<group>"; };
 		315336182EB5322300DAAC0C /* MainFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterViewModel.swift; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -1720,7 +1721,6 @@
 		F7B1C474267404BC0005FCE4 /* ViewLoaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewLoaderAppDelegate.h; sourceTree = "<group>"; };
 		F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewLoaderAppDelegate.m; sourceTree = "<group>"; };
 		F7B1C477267405A50005FCE4 /* ViewLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLoader.swift; sourceTree = "<group>"; };
-		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
 		F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCardCollectionViewController.swift; sourceTree = "<group>"; };
 		F7B5772B245CABE600879C9C /* ExpandableCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCard.swift; sourceTree = "<group>"; };
 		F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageServerTests.swift; sourceTree = "<group>"; };
@@ -2240,6 +2240,7 @@
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				314737AA2EC63236002A8DD0 /* DisclaimerView.swift */,
 				2FCDC35422C2866A004189AD /* AuthenticationButton.h */,
 				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
@@ -3657,7 +3658,6 @@
 				8474FD9426FB8AFE0041891A /* Contact */,
 				F7A5A336270CE20F00961CAA /* CoreData */,
 				4CF141B11992A5D900C4B70E /* DeviceUUID.swift */,
-				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */,
 				F76949131AA6434A00CB680B /* Event */,
 				F743008A2547759C00DCE050 /* Extensions */,
 				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
@@ -5272,6 +5272,7 @@
 				F7C097672C7FBC73003FA115 /* RoleModel.swift in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */,
+				314737AB2EC6323D002A8DD0 /* DisclaimerView.swift in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7C097B02C85168C003FA115 /* FetchEventsUseCase.swift in Sources */,
@@ -5427,7 +5428,6 @@
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				8423B10F2E46676E0069C1CD /* Attachment+FileURL.swift in Sources */,
-				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */,

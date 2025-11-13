@@ -75,17 +75,6 @@ class TestHelpers {
         }
     }
 
-    
-    @MainActor
-    public static func handleDisclaimerAcceptance(coordinator: AuthenticationCoordinator, navigationController: UINavigationController) async {
-        await waitForCondition({
-            navigationController.topViewController is DisclaimerViewController
-        }, timeout: 2, message: "Disclaimer screen never appeared")
-
-        let disclaimerDelegate = coordinator as! DisclaimerDelegate
-        disclaimerDelegate.disclaimerAgree()
-    }
-
     @MainActor
     public static func waitForAuthenticationSuccess(delegate: MockAuthenticationCoordinatorDelegate) async {
         await waitForCondition({
@@ -429,19 +418,6 @@ extension TestHelpers {
 }
 
 extension TestHelpers {
-    @MainActor
-    static func waitForDisclaimerScreen(navigationController: UINavigationController) async {
-        await waitForCondition({
-            navigationController.topViewController is DisclaimerViewController
-        }, timeout: 2, message: "Disclaimer screen never appeared")
-
-        await waitForCondition({
-            guard let topView = navigationController.topViewController?.view else { return false }
-            return viewHasAccessibilityLabel(topView, label: "disclaimer title") &&
-                   viewHasAccessibilityLabel(topView, label: "disclaimer text")
-        }, timeout: 2, message: "Disclaimer text/title not found")
-    }
-
     private static func viewHasAccessibilityLabel(_ view: UIView, label: String) -> Bool {
         if view.accessibilityLabel == label {
             return true
