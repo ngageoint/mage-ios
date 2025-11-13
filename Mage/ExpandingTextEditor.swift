@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ExpandingTextEditor: View {
-    @Environment(\.undoManager) private var undoManager
+    @Environment(\.undoManager) private var undoManager // TODO: not working
     
     var title: String
     @State var text: String
@@ -21,7 +21,7 @@ struct ExpandingTextEditor: View {
     }
     
     var body: some View {
-        VStack() {
+        VStack {
             HStack {
                 Text(title)
                     .font(.subtitle1)
@@ -36,46 +36,50 @@ struct ExpandingTextEditor: View {
             }
             .padding([.top, .trailing], 6)
             TextEditor(text: $text)
-                .frame(minHeight: 50, maxHeight: 175)
-                .cornerRadius(8)
+                .frame(minHeight: 55, maxHeight: 650)
         }
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray, lineWidth: 1)
         )
         .sheet(isPresented: $showSheet) {
-            NavigationView() {
+            NavigationView() { // nav required to use toolbar items
                 TextEditor(text: $text)
                     .foregroundColor(.primary)
                     .cornerRadius(16)
                     .toolbar {
-                        ToolbarItemGroup(placement: .topBarLeading) {
-                            Button(action: {
-                                undoManager?.undo()
-                            }) {
-                                Image(systemName: "arrow.uturn.backward.circle")
-                                    .imageScale(.large)
-                            }
-                            .disabled(undoManager?.canUndo == false)
-                            Button(action: {
-                                undoManager?.redo()
-                            }) {
-                                Image(systemName: "arrow.uturn.forward.circle")
-                                    .imageScale(.large)
-                            }
-                            .disabled(undoManager?.canRedo == false)
-                        }
-                        ToolbarItem(placement: .principal) {
-                            Text(title)
-                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button(action: {
-                                showSheet = false
-                            }) {
-                                Image(systemName: "checkmark")
+                        ToolbarItemGroup() {
+                            HStack {
+                                Button(action: {
+                                    showSheet = false
+                                }) {
+                                    Image(systemName: "xmark.circle")
+                                }
+                                Spacer()
+                                Button(action: {
+                                    undoManager?.undo()
+                                }) {
+                                    Image(systemName: "arrow.uturn.backward.circle")
+                                        .imageScale(.large)
+                                }
+                                .disabled(undoManager?.canUndo == false)
+                                Button(action: {
+                                    undoManager?.redo()
+                                }) {
+                                    Image(systemName: "arrow.uturn.forward.circle")
+                                        .imageScale(.large)
+                                }
+                                .disabled(undoManager?.canRedo == false)
+                                Spacer()
+                                Button(action: {
+                                    showSheet = false
+                                }) {
+                                    Image(systemName: "checkmark.circle")
+                                }
                             }
                         }
                     }
+                    .toolbarBackground(.gray, for: .navigationBar)
             }
         }
     }
