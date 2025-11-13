@@ -64,6 +64,7 @@ public struct DisclaimerView: View {
                 .background(RoundedRectangle(cornerRadius: 16).fill(Color.blue))
                 Spacer()
             }
+            .opacity(delegate != nil ? 1 : 0)
             Spacer()
         }
     }
