@@ -9,7 +9,6 @@
 import SwiftUI
 
 @objc public class DisclaimerViewHoster: NSObject {
-    /// Returns a ready-to-use UIHostingController containing the SwiftUI login view.
     @objc public static func hostingController(delegate: DisclaimerDelegate?) -> UIViewController {
         let swiftUIView = DisclaimerView(delegate: delegate)
         let hostingController = UIHostingController(rootView: swiftUIView)
