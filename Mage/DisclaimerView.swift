@@ -25,7 +25,8 @@ import SwiftUI
 public struct DisclaimerView: View {
     @Environment(\.dismiss) var dismiss
     let delegate: DisclaimerDelegate?
-    let disclaimer: String = UserDefaults.standard.disclaimerText ?? "no disclaimer available"
+    let disclaimerTitle: String = UserDefaults.standard.disclaimerTitle ?? "no disclaimer title available"
+    let disclaimerText: String = UserDefaults.standard.disclaimerText ?? "no disclaimer available"
     
     public var body: some View {
         VStack(alignment: .center) {
@@ -33,10 +34,10 @@ public struct DisclaimerView: View {
                 .resizable()
                 .scaledToFit()
                 .padding([.top, .leading, .trailing], 16)
-            Text("Consent to Monitoring")
+            Text(disclaimerTitle)
                 .font(.title)
                 .padding()
-            Text(disclaimer)
+            Text(disclaimerText)
                 .font(.body1)
                 .foregroundStyle(.primary)
                 .padding(36)
