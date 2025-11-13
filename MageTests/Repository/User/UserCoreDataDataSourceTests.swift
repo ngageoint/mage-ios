@@ -402,9 +402,9 @@ final class UserCoreDataDataSourceTests: MageCoreDataTestCase {
     
     func testAvatarChosen() async {
         let userModel = UserModel(
-            userId: URL(string: "magetest://user/1"),
+            name: "first",
             remoteId: "1",
-            name: "first"
+            userId: URL(string: "magetest://user/1"),
         )
         
         let localDataSource = UserCoreDataDataSource()
