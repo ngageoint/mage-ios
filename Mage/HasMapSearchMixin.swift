@@ -61,7 +61,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     func removeMixin(mapView: MKMapView, mapState: MapState) {
-
+        cancelSubscriptions()
     }
 
     func updateMixin(mapView: MKMapView, mapState: MapState) {
@@ -94,7 +94,13 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     func cleanupMixin() {
-        self.searchController.dismiss(animated: true)
+        cancelSubscriptions() // MAGE-1695 Prevents event switch crash (always cleanup subscriptions)
+        searchController.dismiss(animated: true)
+    }
+    
+    func cancelSubscriptions() {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
     }
     
     @objc func mapSearchButtonTapped(_ sender: UIButton) {
