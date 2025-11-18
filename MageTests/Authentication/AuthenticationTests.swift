@@ -63,7 +63,6 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         
         await TestHelpers.waitForLoginScreen(navigationController: navigationController)
         TestHelpers.executeTestLogin(coordinator: coordinator)
-        await TestHelpers.handleDisclaimerAcceptance(coordinator: coordinator, navigationController: navigationController)
         await TestHelpers.waitForAuthenticationSuccess(delegate: delegate)
         
         XCTAssertTrue(delegate.authenticationSuccessfulCalled, "Expected authenticationSuccessful to be called")
@@ -129,10 +128,6 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         // Step 4: Execute login
         let loginExpectation = XCTestExpectation(description: "User attempts to log in")
         TestHelpers.executeTestLogin(coordinator: coordinator, expectation: loginExpectation)
-        
-        // Step 5: Proceed through disclaimer if applicable
-        await TestHelpers.waitForDisclaimerScreen(navigationController: navigationController)
-        await TestHelpers.handleDisclaimerAcceptance(coordinator: coordinator, navigationController: navigationController)
         
         await TestHelpers.waitForAuthenticationSuccess(delegate: delegate)
         XCTAssertTrue(delegate.authenticationSuccessfulCalled, "Authentication was not successful")
