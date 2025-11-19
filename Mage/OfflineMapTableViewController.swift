@@ -453,7 +453,8 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             } else {
                 if let fileDictionary = layer.file {
                     let downloadBytes = layer.downloadedBytes ?? 0
-                    let totalBytes = fileDictionary["size"] as? Int ?? 0
+                    let totalBytesString = fileDictionary["size"] as? String ?? "0"
+                    let totalBytes = (try? Int(totalBytesString, format: .number, lenient: true)) ?? 0
                     cell?.detailTextLabel?.text = "Downloading, Please wait: \(ByteCountFormatter.string(fromByteCount: Int64(truncating: downloadBytes), countStyle: .file)) of \(ByteCountFormatter.string(fromByteCount: Int64(totalBytes), countStyle: .file))"
                 } else {
                     cell?.detailTextLabel?.text = "Loading static feature data, Please wait"
@@ -589,7 +590,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                 let cancelAction = UIAlertAction(title: "Cancel Download", style: .cancel) { [weak self] _ in
                     self?.cancelGeoPackageDownload(layer: layer)
                 }
-                let continueAction = UIAlertAction(title: "Continue Download", style: .cancel)
+                let continueAction = UIAlertAction(title: "Continue Download", style: .default)
                 
                 alert.addAction(restartAction)
                 alert.addAction(cancelAction)
