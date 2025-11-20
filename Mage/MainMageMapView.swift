@@ -12,7 +12,6 @@ import CoreData
 
 class MainMageMapView: 
     MageMapView,
-        FilteredObservationsMap,
         FilteredUsersMap,
         BottomSheetEnabled,
         MapDirections,
@@ -51,7 +50,6 @@ class MainMageMapView:
     var bottomSheet: MDCBottomSheetController?
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
 
-    var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
     var bottomSheetMixin: BottomSheetMixin?
     var mapDirectionsMixin: MapDirectionsMixin?
@@ -107,12 +105,10 @@ class MainMageMapView:
             NotificationCenter.default.removeObserver(viewFeedItemNotificationObserver, name: .ViewFeedItem, object: nil)
         }
         viewController = nil
-//        navigationController = nil
     }
     
     override func removeFromSuperview() {
         cleanupMapMixins()
-        filteredObservationsMapMixin = nil
         filteredUsersMapMixin = nil
         bottomSheetMixin = nil
         mapDirectionsMixin = nil

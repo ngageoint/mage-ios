@@ -92,8 +92,8 @@ class DataSourceMap: MapMixin {
         }
         // save these so we can remove them later
         let previousTiles = currentTileOverlays()
-        if !viewModel.show && !viewModel.repositoryAlwaysShow {
-            clearPreviousTiles(previousTiles: previousTiles)
+        if !viewModel.showObservations {
+            mapView.removeOverlays(mapView.overlays)
             return
         }
         guard let tileOverlay = tileOverlay else { return }
@@ -163,7 +163,8 @@ class DataSourceMap: MapMixin {
     @discardableResult
     @MainActor
     func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
-        guard let mapView = mapView else { return false }
+        guard let mapView = mapView, let viewModel = viewModel else { return false }
+        
         let existingAnnotations = mapView.annotations.compactMap({ annotation in
             (annotation as? DataSourceAnnotation)
         }).filter({ annotation in
@@ -171,6 +172,10 @@ class DataSourceMap: MapMixin {
         }).sorted(by: { first, second in
             first.id < second.id
         })
+        if !viewModel.showObservations {
+            mapView.removeAnnotations(existingAnnotations)
+            return true
+        }
         
         // this is how to create the annotations array from the previous annotations array
         let differences = annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
@@ -216,7 +221,11 @@ class DataSourceMap: MapMixin {
     @discardableResult
     @MainActor
     func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
-        guard let mapView = mapView else { return false }
+        guard let mapView = mapView, let viewModel = viewModel else { return false }
+        if !viewModel.showObservations {
+            mapView.removeOverlays(mapView.overlays)
+            return true
+        }
         let existingFeatureOverlays = mapView.overlays.compactMap({ overlay in
             (overlay as? DataSourceIdentifiable)
         }).filter({ featureOverlay in
@@ -276,22 +285,6 @@ class DataSourceMap: MapMixin {
         for cancellable in cancellable {
             cancellable.cancel()
         }
-    }
-
-    func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]? {
-        return nil
-    }
-
-    func itemKeys(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [String: [String]] {
-        return await viewModel?.itemKeys(at: location, mapView: mapView, touchPoint: touchPoint) ?? [:]
     }
 
     var tileRenderer: MKOverlayRenderer?

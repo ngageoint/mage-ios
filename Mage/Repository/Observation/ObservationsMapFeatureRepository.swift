@@ -30,7 +30,7 @@ class ObservationsMapFeatureRepository: MapFeatureRepository, ObservableObject {
 
     var alwaysShow: Bool = true
 
-    var minimumZoom: Int = 7
+    var minimumZoom: Int = 1
     func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion?) async -> AnnotationsAndOverlays {
         if zoom < minimumZoom {
             return AnnotationsAndOverlays(annotations: [], overlays: [])
