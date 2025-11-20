@@ -50,22 +50,26 @@ class SettingsLocalDataSourceImpl: CoreDataDataSource<Settings>, SettingsLocalDa
     
     func setUpSettingsFetchedResultsController() {
         guard let context else { return }
-        let fetchRequest: NSFetchRequest<Settings> = Settings.fetchRequest()
-        fetchRequest.predicate = NSPredicate(value: true)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "mapSearchUrl", ascending: false)]
-        
-        self.settingsResultsController = NSFetchedResultsController<Settings>(
-            fetchRequest: fetchRequest,
-            managedObjectContext: context,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        self.settingsResultsController?.delegate = self
-        try? self.settingsResultsController?.performFetch()
-        if let settings = self.settingsResultsController?.fetchedObjects,
-           let firstSettings = settings.first
-        {
-            settingsSubject.send(SettingsModel(settings: firstSettings))
+        context.perform { [weak self] in
+            guard let self else { return }
+            
+            let fetchRequest: NSFetchRequest<Settings> = Settings.fetchRequest()
+            fetchRequest.predicate = NSPredicate(value: true)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "mapSearchUrl", ascending: false)]
+            
+            self.settingsResultsController = NSFetchedResultsController<Settings>(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            self.settingsResultsController?.delegate = self
+            try? self.settingsResultsController?.performFetch()
+            if let settings = self.settingsResultsController?.fetchedObjects,
+               let firstSettings = settings.first
+            {
+                self.settingsSubject.send(SettingsModel(settings: firstSettings))
+            }
         }
     }
     
