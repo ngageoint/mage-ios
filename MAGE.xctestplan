@@ -18,10 +18,32 @@
         }
       ]
     },
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "-com.apple.CoreData.ConcurrencyDebug 1"
+      },
+      {
+        "argument" : "-com.apple.CoreData.SQLDebug 1",
+        "enabled" : false
+      }
+    ],
     "environmentVariableEntries" : [
+      {
+        "enabled" : false,
+        "key" : "SQLITE_AUTO_TRACE",
+        "value" : "1"
+      },
+      {
+        "key" : "SQLITE_ENABLE_THREAD_ASSERTIONS",
+        "value" : "1"
+      },
       {
         "key" : "OS_ACTIVITY_MODE",
         "value" : "enable"
+      },
+      {
+        "key" : "SQLITE_ENABLE_FILE_ASSERTIONS",
+        "value" : "1"
       },
       {
         "enabled" : false,
