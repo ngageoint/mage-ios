@@ -25,22 +25,25 @@ protocol LayerLocalDataSource: Actor {
     func markRemoteLayerLoaded(remoteId: NSNumber)
     func createGeoPackageLayer(name: String) async -> Layer?
     func removeOutdatedOfflineMapArchives()
-    func count(eventId: NSNumber, layerId: Int) -> Int
+    func count(eventId: NSNumber, layerId: Int) async -> Int
 }
 
 actor LayerLocalCoreDataDataSource: LayerLocalDataSource {
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
     
-    func count(eventId: NSNumber, layerId: Int) -> Int {
-        let count = try? context?.countOfObjects(
-            Layer.self,
-            predicate: NSPredicate(
-                format: "eventId == %@ AND remoteId == %@", eventId, NSNumber(value:layerId)
-            )
-        )
+    func count(eventId: NSNumber, layerId: Int) async -> Int {
+        guard let context else { return 0 }
         
-        return count ?? 0
+        return await context.perform {
+            let count = try? context.countOfObjects(
+                Layer.self,
+                predicate: NSPredicate(
+                    format: "eventId == %@ AND remoteId == %@", eventId, NSNumber(value:layerId)
+                )
+            )
+            return count ?? 0
+        }
     }
     
     func createLoadedXYZLayer(name: String) async -> Layer? {
