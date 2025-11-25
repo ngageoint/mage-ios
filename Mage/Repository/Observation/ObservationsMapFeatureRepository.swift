@@ -30,11 +30,7 @@ class ObservationsMapFeatureRepository: MapFeatureRepository, ObservableObject {
 
     var alwaysShow: Bool = true
 
-    var minimumZoom: Int = 1
     func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion?) async -> AnnotationsAndOverlays {
-        if zoom < minimumZoom {
-            return AnnotationsAndOverlays(annotations: [], overlays: [])
-        }
         let corners = region?.corners()
         let mapItems = await localDataSource.getMapItems(
             minLatitude: corners?.southWest.latitude,
