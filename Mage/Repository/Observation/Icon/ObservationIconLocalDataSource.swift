@@ -21,47 +21,35 @@ extension InjectedValues {
 
 protocol ObservationIconLocalDataSource {
     func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize
-    func resetEventIconSize(eventId: Int)
+    func resetEventIconSize(eventId: Int) async
 }
 
-class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
+/// Uses an actor to maintain thread safe access to shared state
+actor ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
     @Injected(\.observationLocalDataSource)
     var localDataSource: ObservationLocalDataSource
     
     var iconSizePerEvent: [Int: CGSize] = [:]
     
-    let queue = DispatchQueue(label: "Queue")
-
-    @MainActor
     func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize {
-        if let eventIconSize = iconSizePerEvent[eventId] {
-            return eventIconSize
-        }
-        
-        return await withCheckedContinuation { continuation in
-            // doing this to synchronize access to the size
-            // see: https://www.donnywals.com/an-introduction-to-synchronizing-access-with-swifts-actors/
-            queue.async {
-                if let iconSize = self.iconSizePerEvent[eventId] {
-                    continuation.resume(returning: iconSize)
-                } else {
-                    // start with the default marker
-                    var size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)
-                    if let defaultMarker = UIImage(named: "defaultMarker") {
-                        size = defaultMarker.size
-                    }
-                    let iconSize = self.iterateIconDirectoriesAtRoot(
-                        directory: self.rootIconFolder(eventId: eventId),
-                        currentLargest: size
-                    )
-                    self.iconSizePerEvent[eventId] = iconSize
-                    continuation.resume(returning: iconSize)
-                }
+        if let iconSize = iconSizePerEvent[eventId] {
+            return iconSize
+        } else {
+            // start with the default marker
+            var size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)
+            if let defaultMarker = UIImage(named: "defaultMarker") {
+                size = defaultMarker.size
             }
-          }
+            let iconSize = iterateIconDirectoriesAtRoot(
+                directory: rootIconFolder(eventId: eventId),
+                currentLargest: size
+            )
+            iconSizePerEvent[eventId] = iconSize
+            return iconSize
+        }
     }
     
-    func resetEventIconSize(eventId: Int) {
+    func resetEventIconSize(eventId: Int) async {
         iconSizePerEvent.removeValue(forKey: eventId)
     }
 

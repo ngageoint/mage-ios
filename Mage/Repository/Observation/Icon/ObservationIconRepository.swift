@@ -26,23 +26,17 @@ class ObservationIconRepository: ObservableObject {
     
     init() {
         if let currentEventId = Server.currentEventId() {
-            self.resetEventIconSize(eventId: Int(truncating: currentEventId))
+            Task {
+                await self.resetEventIconSize(eventId: Int(truncating: currentEventId))
+            }
         }
     }
-
-//    func getIconPath(observationUri: URL) async -> String? {
-//        await localDataSource.getIconPath(observationUri: observationUri)
-//    }
-//
-//    func getIconPath(observation: Observation) -> String? {
-//        localDataSource.getIconPath(observation: observation)
-//    }
 
     func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize {
         await localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)
     }
     
-    func resetEventIconSize(eventId: Int) {
-        localDataSource.resetEventIconSize(eventId: eventId)
+    func resetEventIconSize(eventId: Int) async {
+        await localDataSource.resetEventIconSize(eventId: eventId)
     }
 }
