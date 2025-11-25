@@ -90,18 +90,17 @@ class DataSourceMap: MapMixin {
         guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
-        // save these so we can remove them later
-        let previousTiles = currentTileOverlays()
         if !viewModel.showObservations {
-            mapView.removeOverlays(mapView.overlays)
+            mapView.removeOverlays(currentTileOverlays())
+            for lay in mapView.overlays {
+                if lay.isKind(of: StyledPolygon.self) || lay.isKind(of: StyledPolyline.self) {
+                    mapView.removeOverlay(lay)
+                }
+            }
             return
         }
         guard let tileOverlay = tileOverlay else { return }
         mapView.addOverlay(tileOverlay, level: .aboveLabels)
-        // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
-        DispatchQueue.main.async {
-            Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
-        }
     }
     
     @MainActor
@@ -222,10 +221,7 @@ class DataSourceMap: MapMixin {
     @MainActor
     func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
         guard let mapView = mapView, let viewModel = viewModel else { return false }
-        if !viewModel.showObservations {
-            mapView.removeOverlays(mapView.overlays)
-            return true
-        }
+        
         let existingFeatureOverlays = mapView.overlays.compactMap({ overlay in
             (overlay as? DataSourceIdentifiable)
         }).filter({ featureOverlay in
@@ -233,6 +229,10 @@ class DataSourceMap: MapMixin {
         }).sorted(by: { first, second in
             first.id < second.id
         })
+        if !viewModel.showObservations {
+            mapView.removeOverlays(existingFeatureOverlays as! [MKOverlay])
+            return true
+        }
         
         // this is how to create the annotations array from the previous annotations array
         let differences = featureOverlays.compactMap({ overlay in
