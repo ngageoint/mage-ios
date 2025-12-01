@@ -61,6 +61,7 @@ struct DataSourceTileProvider: ImageDataProvider {
         "\(tileRepository.cacheSourceKey ?? Date().formatted())"
     }
 
+    // NOTE: dead code?
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
         Task(priority: .userInitiated) {
             let zoomLevel = path.z

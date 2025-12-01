@@ -69,6 +69,7 @@ class DataSourceMap: MapMixin {
         
         viewModel?.$tileOverlay
             .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(1), scheduler: DispatchQueue.main) // reduced calls by 75%
             .sink { [weak self] tileOverlay in
                 Task { [weak self] in
                     await self?.updateTileOverlay(tileOverlay: tileOverlay)
@@ -90,17 +91,17 @@ class DataSourceMap: MapMixin {
         guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
+        let previousTiles = currentTileOverlays()
         if !viewModel.showObservations {
-            mapView.removeOverlays(currentTileOverlays())
-            for lay in mapView.overlays {
-                if lay.isKind(of: StyledPolygon.self) || lay.isKind(of: StyledPolyline.self) {
-                    mapView.removeOverlay(lay)
-                }
-            }
+            clearPreviousTiles(previousTiles: previousTiles)
             return
         }
         guard let tileOverlay = tileOverlay else { return }
         mapView.addOverlay(tileOverlay, level: .aboveLabels)
+        // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
+        }
     }
     
     @MainActor
@@ -162,7 +163,7 @@ class DataSourceMap: MapMixin {
     @discardableResult
     @MainActor
     func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
-        guard let mapView = mapView, let viewModel = viewModel else { return false }
+        guard let mapView = mapView else { return false }
         
         let existingAnnotations = mapView.annotations.compactMap({ annotation in
             (annotation as? DataSourceAnnotation)
@@ -171,10 +172,6 @@ class DataSourceMap: MapMixin {
         }).sorted(by: { first, second in
             first.id < second.id
         })
-        if !viewModel.showObservations {
-            mapView.removeAnnotations(existingAnnotations)
-            return true
-        }
         
         // this is how to create the annotations array from the previous annotations array
         let differences = annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
@@ -217,10 +214,11 @@ class DataSourceMap: MapMixin {
         return !inserts.isEmpty || !removals.isEmpty
     }
     
+    // NOTE: this function gets called FOR EACH OVERLAY
     @discardableResult
     @MainActor
     func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
-        guard let mapView = mapView, let viewModel = viewModel else { return false }
+        guard let mapView = mapView else { return false }
         
         let existingFeatureOverlays = mapView.overlays.compactMap({ overlay in
             (overlay as? DataSourceIdentifiable)
@@ -229,10 +227,6 @@ class DataSourceMap: MapMixin {
         }).sorted(by: { first, second in
             first.id < second.id
         })
-        if !viewModel.showObservations {
-            mapView.removeOverlays(existingFeatureOverlays as! [MKOverlay])
-            return true
-        }
         
         // this is how to create the annotations array from the previous annotations array
         let differences = featureOverlays.compactMap({ overlay in

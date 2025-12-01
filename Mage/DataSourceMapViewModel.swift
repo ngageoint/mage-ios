@@ -51,6 +51,7 @@ class DataSourceMapViewModel {
         self.repository = repository
         self.mapFeatureRepository = mapFeatureRepository
         
+        // DataSourceMap -> annotations/featureOverlays/tileOverlay -> each trigger this
         requerySubject
             .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
             .sink { [weak self] index in
@@ -85,6 +86,11 @@ class DataSourceMapViewModel {
     
     private func queryFeatures() async {
         guard let zoom = mapStateRepository.zoom, let region = mapStateRepository.region else { return }
+        if !showObservations {
+            annotations = []
+            featureOverlays = []
+            return
+        }
         let features = await mapFeatureRepository?.getAnnotationsAndOverlays(
             zoom: zoom,
             region: region.padded(percentage: 0.05)
