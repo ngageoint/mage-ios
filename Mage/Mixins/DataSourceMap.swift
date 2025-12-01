@@ -92,7 +92,7 @@ class DataSourceMap: MapMixin {
             return
         }
         let previousTiles = currentTileOverlays()
-        if !viewModel.showObservations {
+        if UserDefaults.standard.hideObservations {
             clearPreviousTiles(previousTiles: previousTiles)
             return
         }

@@ -27,7 +27,6 @@ class DataSourceMapViewModel {
     @Injected(\.mapStateRepository)
     var mapStateRepository: MapStateRepository
     
-    var showObservations = false
     var repositoryAlwaysShow: Bool {
         repository?.alwaysShow ?? mapFeatureRepository?.alwaysShow ?? false
     }
@@ -86,7 +85,7 @@ class DataSourceMapViewModel {
     
     private func queryFeatures() async {
         guard let zoom = mapStateRepository.zoom, let region = mapStateRepository.region else { return }
-        if !showObservations {
+        if UserDefaults.standard.hideObservations {
             annotations = []
             featureOverlays = []
             return

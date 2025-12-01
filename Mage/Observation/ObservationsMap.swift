@@ -43,7 +43,6 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] show in
                 guard let self = self else { return }
                 Task { [self] in
-                    self.viewModel?.showObservations.toggle()
                     await self.repository.clearCache()
                     await MainActor.run {
                         self.viewModel?.refresh()
