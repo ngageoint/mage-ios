@@ -121,7 +121,6 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
     }
 
     // TODO: always returns nil, only being called when you open an observation or user from People tab
-    // NOTE: THIS is the reason all other maps don't work right and show whole U.S. instead of shapes
     public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         //        if let enlarged = annotation as? EnlargedAnnotation {
         //            let annotationView = mapView.dequeueReusableAnnotationView(
