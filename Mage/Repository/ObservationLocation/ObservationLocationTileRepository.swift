@@ -43,7 +43,8 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         self.observationUrl = observationUrl
 //        _ = getMaximumIconHeightToWidthRatio()
     }
-
+    
+    // dead code
     func getTileableItems(
         minLatitude: Double,
         maxLatitude: Double,
@@ -119,6 +120,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         }
     }
     
+    // dead code
     func getItemKeys(
         minLatitude: Double,
         maxLatitude: Double,
@@ -136,6 +138,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         return []
     }
     
+    // dead code
     func getMaximumIconHeightToWidthRatio() async -> CGSize {
         if let currentEvent = Server.currentEventId() {
             return await iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
@@ -143,6 +146,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         return .zero
     }
 
+    // dead code
     func getMaxHeightAndWidth(zoom: Int) async -> CGSize {
         // icons should be a max of 35 wide
         let pixelWidthTolerance = max(0.3, (CGFloat(zoom) / 18.0)) * 35

@@ -69,6 +69,7 @@ class DataSourceMap: MapMixin {
         
         viewModel?.$tileOverlay
             .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(1), scheduler: DispatchQueue.main) // reduced calls by 75%
             .sink { [weak self] tileOverlay in
                 Task { [weak self] in
                     await self?.updateTileOverlay(tileOverlay: tileOverlay)
@@ -90,9 +91,8 @@ class DataSourceMap: MapMixin {
         guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
-        // save these so we can remove them later
         let previousTiles = currentTileOverlays()
-        if !viewModel.show && !viewModel.repositoryAlwaysShow {
+        if UserDefaults.standard.hideObservations {
             clearPreviousTiles(previousTiles: previousTiles)
             return
         }
@@ -164,6 +164,7 @@ class DataSourceMap: MapMixin {
     @MainActor
     func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
         guard let mapView = mapView else { return false }
+        
         let existingAnnotations = mapView.annotations.compactMap({ annotation in
             (annotation as? DataSourceAnnotation)
         }).filter({ annotation in
@@ -213,10 +214,12 @@ class DataSourceMap: MapMixin {
         return !inserts.isEmpty || !removals.isEmpty
     }
     
+    // NOTE: this function gets called FOR EACH OVERLAY
     @discardableResult
     @MainActor
     func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
         guard let mapView = mapView else { return false }
+        
         let existingFeatureOverlays = mapView.overlays.compactMap({ overlay in
             (overlay as? DataSourceIdentifiable)
         }).filter({ featureOverlay in
@@ -276,22 +279,6 @@ class DataSourceMap: MapMixin {
         for cancellable in cancellable {
             cancellable.cancel()
         }
-    }
-
-    func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]? {
-        return nil
-    }
-
-    func itemKeys(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [String: [String]] {
-        return await viewModel?.itemKeys(at: location, mapView: mapView, touchPoint: touchPoint) ?? [:]
     }
 
     var tileRenderer: MKOverlayRenderer?

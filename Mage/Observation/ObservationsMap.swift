@@ -37,8 +37,19 @@ class ObservationsMap: DataSourceMap {
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
-        viewModel?.userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
 
+        UserDefaults.standard.publisher(for: \.hideObservations)
+            .removeDuplicates()
+            .sink { [weak self] show in
+                guard let self = self else { return }
+                Task { [self] in
+                    await self.repository.clearCache()
+                    await MainActor.run {
+                        self.viewModel?.refresh()
+                    }
+                }
+            }
+            .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in

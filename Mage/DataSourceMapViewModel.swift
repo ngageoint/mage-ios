@@ -27,17 +27,11 @@ class DataSourceMapViewModel {
     @Injected(\.mapStateRepository)
     var mapStateRepository: MapStateRepository
     
-    var show = false
     var repositoryAlwaysShow: Bool {
         repository?.alwaysShow ?? mapFeatureRepository?.alwaysShow ?? false
     }
     
     var cancellable = Set<AnyCancellable>()
-    var userDefaultsShowPublisher: NSObject.KeyValueObservingPublisher<UserDefaults, Bool>? {
-        didSet {
-            setupUserDefaultsShowPublisher()
-        }
-    }
     
     @Published var annotations: [DataSourceAnnotation] = []
     @Published var featureOverlays: [MKOverlay] = []
@@ -56,6 +50,7 @@ class DataSourceMapViewModel {
         self.repository = repository
         self.mapFeatureRepository = mapFeatureRepository
         
+        // DataSourceMap -> annotations/featureOverlays/tileOverlay -> each trigger this
         requerySubject
             .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
             .sink { [weak self] index in
@@ -82,18 +77,6 @@ class DataSourceMapViewModel {
         createTileOverlays()
     }
     
-    func setupUserDefaultsShowPublisher() {
-        userDefaultsShowPublisher?
-            .removeDuplicates()
-            .receive(on: RunLoop.main)
-            .sink { [weak self] show in
-                self?.show = !show
-                NSLog("Show \(self?.dataSource.key ?? ""): \(!show)")
-                self?.refresh()
-            }
-            .store(in: &cancellable)
-    }
-    
     // this requeries for all features and recreates all tile overlays
     func refresh() {
         requerySubject.send(())
@@ -102,6 +85,11 @@ class DataSourceMapViewModel {
     
     private func queryFeatures() async {
         guard let zoom = mapStateRepository.zoom, let region = mapStateRepository.region else { return }
+        if UserDefaults.standard.hideObservations {
+            annotations = []
+            featureOverlays = []
+            return
+        }
         let features = await mapFeatureRepository?.getAnnotationsAndOverlays(
             zoom: zoom,
             region: region.padded(percentage: 0.05)
@@ -119,50 +107,5 @@ class DataSourceMapViewModel {
         newOverlay.maximumZ = maximumTileZoom
         
         tileOverlay = newOverlay
-    }
-    
-    func itemKeys(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [String: [String]] {
-        guard let zoom = mapStateRepository.zoom else { return [:] }
-        if zoom < minZoom {
-            return [:]
-        }
-        if zoom > maximumTileZoom {
-            return [:]
-        }
-        guard show == true else {
-            return [:]
-        }
-
-        let viewWidth = await mapView.frame.size.width
-        let viewHeight = await mapView.frame.size.height
-
-        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
-        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
-        
-        let screenPercentage = 0.03
-        let distanceTolerance = await mapView.visibleMapRect.size.width * Double(screenPercentage)
-
-        let queryLocationMinLongitude = location.longitude
-        let queryLocationMaxLongitude = location.longitude
-        let queryLocationMinLatitude = location.latitude
-        let queryLocationMaxLatitude = location.latitude
-
-        return [
-            dataSource.key: await repository?.getItemKeys(
-                minLatitude: queryLocationMinLatitude,
-                maxLatitude: queryLocationMaxLatitude,
-                minLongitude: queryLocationMinLongitude,
-                maxLongitude: queryLocationMaxLongitude,
-                latitudePerPixel: latitudePerPixel,
-                longitudePerPixel: longitudePerPixel,
-                zoom: zoom,
-                precise: true,
-                distanceTolerance: distanceTolerance
-            ) ?? []
-        ]
     }
 }

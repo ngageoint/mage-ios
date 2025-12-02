@@ -61,7 +61,7 @@ import UIKit
             viewController?.pushViewController(eventController, animated: false)
         }
         
-        MageUseCases.fetchEvents()
+        FetchEventsUseCase().execute()
     }
 
     func eventsFetched() {

@@ -120,6 +120,7 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
         return MKTileOverlayRenderer(overlay: overlay)
     }
 
+    // TODO: always returns nil, only being called when you open an observation or user from People tab
     public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         //        if let enlarged = annotation as? EnlargedAnnotation {
         //            let annotationView = mapView.dequeueReusableAnnotationView(
