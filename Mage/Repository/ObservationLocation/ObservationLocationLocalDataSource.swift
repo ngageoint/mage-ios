@@ -274,6 +274,8 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
 
             let results = context.fetch(request: fetchRequest)
             return results?.compactMap { location in
+                // NOTE: this prevents sub-geometries from showing (extra locations in forms)
+                if let fieldName = location.fieldName, fieldName != Observation.PRIMARY_OBSERVATION_GEOMETRY { return nil }
                 return ObservationMapItem(observation: location)
             } ?? []
         }
