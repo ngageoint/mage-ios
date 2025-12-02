@@ -63,12 +63,6 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
     @Injected(\.roleLocalDataSource)
     var roleLocalDataSource: RoleLocalDataSource
     
-    private func getUserNSManagedObject(remoteId: String, context: NSManagedObjectContext) async -> User? {
-        return await context.perform {
-            return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: remoteId)
-        }
-    }
-    
     private func getUserNSManagedObject(userUri: URL) async -> User? {
         guard let context = context else { return nil }
         return await context.perform {
@@ -76,6 +70,28 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
                 return try? context.existingObject(with: id) as? User
             }
             return nil
+        }
+    }
+    
+    /**
+     * Safely fetches a User on its context and executes a closure of work.
+     *
+     * This wrapper ensures the 'User' object is always used on context.perform { } \\
+     *
+     * @param userUri The URL of the user to fetch.
+     * @param work A closure that receives the fetched 'User' and returns a value of type T.
+     * @return An optional value of type T
+     */
+    func withUser<T>(userUri: URL,
+                   perform work: @escaping (User) -> T) async -> T? {
+        guard let context = context else { return nil }
+        
+        return await context.perform {
+            guard let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
+                  let user = try? context.existingObject(with: id) as? User else {
+                return nil
+            }
+            return work(user)
         }
     }
     
@@ -158,25 +174,26 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
         event: EventModel,
         userUri: URL
     ) async -> Bool {
-        let user = await getUserNSManagedObject(userUri: userUri)
-                
-        if let userRemoteId = user?.remoteId,
-           let acl = event.acl,
-           let userAcl = acl[userRemoteId] as? [String : Any],
-           let userPermissions = userAcl[PermissionsKey.permissions.key] as? [String] {
-            if (userPermissions.contains(PermissionsKey.update.key)) {
-                return true
+        let canUpdateImportant = await withUser(userUri: userUri) { user in
+            if let userRemoteId = user.remoteId,
+               let acl = event.acl,
+               let userAcl = acl[userRemoteId] as? [String : Any],
+               let userPermissions = userAcl[PermissionsKey.permissions.key] as? [String] {
+                if (userPermissions.contains(PermissionsKey.update.key)) {
+                    return true
+                }
             }
-        }
-        
-        // if the user has UPDATE_EVENT permission
-        if let role = user?.role, let rolePermissions = role.permissions {
-            if rolePermissions.contains(PermissionsKey.UPDATE_EVENT.key) {
-                return true
+            
+            // if the user has UPDATE_EVENT permission
+            if let role = user.role, let rolePermissions = role.permissions {
+                if rolePermissions.contains(PermissionsKey.UPDATE_EVENT.key) {
+                    return true
+                }
             }
+            
+            return false
         }
-
-        return false
+        return canUpdateImportant ?? false
     }
     
     func avatarChosen(user: UserModel, imageData: Data) {

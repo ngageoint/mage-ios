@@ -122,7 +122,7 @@ class ObservationsMap: DataSourceMap {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         guard let self = self else { return }
                         Task { [self] in
-                            self.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
+                            await self.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
                             await self.repository.clearCache()
                             await self.redrawFeatures()
                             await MainActor.run {
