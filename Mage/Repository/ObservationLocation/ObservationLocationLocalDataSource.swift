@@ -152,7 +152,8 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         {
             predicates.append(NSPredicate(format: "observation.favorites.favorite CONTAINS %@ AND observation.favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
         }
-        // Only fetch primary geometry
+        // NOTE: this prevents sub-geometries from showing (extra locations in forms)
+        // TODO: add potential Feature Flag for [None, Top-Level-Only, Sub-Level-Only, All]
         predicates.append(NSPredicate(format: "fieldName == %@", Observation.PRIMARY_OBSERVATION_GEOMETRY))
         return predicates
     }
@@ -276,9 +277,6 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
 
             let results = context.fetch(request: fetchRequest)
             return results?.compactMap { location in
-                // NOTE: this prevents sub-geometries from showing (extra locations in forms)
-                // TODO: add potential Feature Flag for [None, Top-Level-Only, Sub-Level-Only, All]
-                if let fieldName = location.fieldName, fieldName != Observation.PRIMARY_OBSERVATION_GEOMETRY { return nil }
                 return ObservationMapItem(observation: location)
             } ?? []
         }
