@@ -112,7 +112,7 @@ import CoreData
         return json[FeedKey.id.key] as? String;
     }
     
-    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext) -> URLSessionDataTask? {
+    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: (() -> Void)? = nil) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
@@ -141,8 +141,10 @@ import CoreData
                     }
                 }
                 try? context.save()
+                completion?()
             }
             }, failure: { task, error in
+                NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
             });
         return task;
     }
@@ -171,9 +173,9 @@ import CoreData
         return task;
     }
     
-    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext) {
+    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: (() -> Void)? = nil) {
         let manager = MageSessionManager.shared();
-        let task = Feed.operationToPullFeeds(eventId: eventId, context: context);
+        let task = Feed.operationToPullFeeds(eventId: eventId, context: context, completion: completion);
         manager?.addTask(task);
     }
     

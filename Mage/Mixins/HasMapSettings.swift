@@ -80,7 +80,9 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     @objc func mapSettingsButtonTapped(_ sender: UIButton) {
         settingsCoordinator = MapSettingsCoordinator(rootViewController: hasMapSettings.navigationController, scheme: hasMapSettings.scheme, context: context)
         settingsCoordinator?.delegate = self
-        settingsCoordinator?.start()
+        if let eventId = Server.currentEventId(), let context = self.context {
+            Feed.refreshFeeds(eventId: eventId, context: context, completion: self.settingsCoordinator?.start)
+        }
     }
     
     func setupMapSettingsButton() {
