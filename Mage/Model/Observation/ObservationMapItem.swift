@@ -91,7 +91,7 @@ struct ObservationMapItem: Equatable, Hashable {
 }
 
 extension ObservationMapItem {
-    init(observation: ObservationLocation) {
+    init(observation: ObservationLocation) { //}, forms: [FormModel]) {
         self.observationId = observation.observation?.objectID.uriRepresentation()
         self.observationLocationId = observation.objectID.uriRepresentation()
         self.formId = Int(observation.formId)
