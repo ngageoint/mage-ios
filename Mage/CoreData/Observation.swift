@@ -869,7 +869,7 @@ enum ObservationState: Int, CustomStringConvertible {
     
     @objc public var primaryObservationForm: [AnyHashable : Any]? {
         get {
-            if let properties = self.properties, let forms = properties[ObservationKey.forms.key] as? [[AnyHashable:Any]] {
+            if let properties = self.properties, let forms = properties[ObservationKey.forms.key] as? [[AnyHashable:Any]] { // FIXME: This is really slow on self.properties (Transformable) why? what is it? What is it doing? (Profile + test by commenting out and always return nil)
                 for (index, form) in forms.enumerated() {
                     // here we can ignore forms which will be deleted
                     if !self.formsToBeDeleted.contains(index) {
