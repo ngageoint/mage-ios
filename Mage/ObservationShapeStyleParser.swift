@@ -32,7 +32,8 @@
     @objc static func style(
         observation: Observation,
         primaryFieldText: String? = nil,
-        secondaryFieldText: String? = nil
+        secondaryFieldText: String? = nil,
+//        forms: [Forms]
     ) -> ObservationShapeStyle {
         let style = ObservationShapeStyle()
         
@@ -40,7 +41,8 @@
         if let primaryObservationForm = observation.primaryObservationForm, 
             let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber
         {
-            form = ObservationShapeStyleParser.formRepository.getForm(formId: formId)
+            // FIXME: We need to inject the form, this is very slow to refetch, we should cache all forms needed several levels up from this call
+            form = ObservationShapeStyleParser.formRepository.getForm(formId: formId) // FIXME: Comment out to see perf improvement (and skipping styling)
         }
         
 //        let form = observation.primaryEventForm

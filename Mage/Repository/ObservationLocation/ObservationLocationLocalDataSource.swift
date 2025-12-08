@@ -205,51 +205,6 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
     }
 
     func getMapItems(
-        observationUri: URL?,
-        minLatitude: Double?,
-        maxLatitude: Double?,
-        minLongitude: Double?,
-        maxLongitude: Double?
-    ) async -> [ObservationMapItem] {
-        guard let observationUri = observationUri else {
-            return []
-        }
-        guard let context = context else { return [] }
-        return await context.perform {
-
-            var predicates: [NSPredicate] = []
-            if let minLatitude = minLatitude,
-               let maxLatitude = maxLatitude,
-               let minLongitude = minLongitude,
-               let maxLongitude = maxLongitude
-            {
-                predicates.append(NSPredicate(
-                    format: "maxLatitude >= %lf AND minLatitude <= %lf AND maxLongitude >= %lf AND minLongitude <= %lf",
-                    minLatitude,
-                    maxLatitude,
-                    minLongitude,
-                    maxLongitude
-                ))
-            }
-
-            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-            let fetchRequest = ObservationLocation.fetchRequest()
-            fetchRequest.predicate = predicate
-
-            let results = context.fetch(request: fetchRequest)
-            
-            return results?.sorted(by: { one, two in
-                one.order < two.order
-            }).filter({ location in
-                location.observation?.objectID.uriRepresentation() == observationUri
-            })
-            .map({ location in
-                ObservationMapItem(observation: location)
-            }) ?? []
-        }
-    }
-
-    func getMapItems(
         minLatitude: Double?,
         maxLatitude: Double?,
         minLongitude: Double?,
@@ -277,7 +232,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
 
             let results = context.fetch(request: fetchRequest)
             return results?.compactMap { location in
-                return ObservationMapItem(observation: location)
+                return ObservationMapItem(observation: location) // FIXME: SLOW because of getForm. cache and pass in.
             } ?? []
         }
     }
