@@ -74,7 +74,13 @@ class BottomSheetMixin: NSObject, MapMixin {
         let mageBottomSheet = SwiftUIViewController(swiftUIView: MageBottomSheet())
         mageBottomSheet.modalPresentationStyle = .pageSheet
         if let sheet = mageBottomSheet.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [
+                .medium(),
+                .large(),
+                .custom(resolver: { context in
+                    return 220 // FIXME: Do we use all these custom sizes? Or should we pick one? ~220 is close to previous behavior. Why doesn't this "self size"?
+                })
+            ]
         }
         self.bottomSheetEnabled.navigationController?.present(mageBottomSheet, animated: true, completion: nil)
         
