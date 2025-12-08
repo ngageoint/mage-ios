@@ -7,7 +7,8 @@
 //
 
 import Foundation
-
+import MapKit
+import CoreLocation
 import GARS
 import MGRS
 
@@ -26,6 +27,7 @@ class GeocoderResult {
     var name: String
     var address: String? = nil
     var location: CLLocationCoordinate2D? = nil
+    var region: MKCoordinateRegion? = nil
     
     init(name: String, address: String? = nil, location: CLLocationCoordinate2D? = nil) {
         self.name = name

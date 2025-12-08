@@ -38,6 +38,13 @@ class NominatimService {
                     let location = geometry?.degreesCentroid().map { centroid in
                         CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue)
                     }
+
+                    if let bbox = feature["bbox"] as? [Double] {
+                        // FIXME: Nominatim/GeoJSON usually provides bbox as [minLon, minLat, maxLon, maxLat], we'd need to use similar logic to Native service for properly containing point of interest at it's natural zoom level via the bbox
+                        // Store it in properties so your UI can find it later
+//                            properties["bbox"] = bbox
+                        print(bbox)
+                    }
                     
                     return GeocoderResult(name: name, address: address, location: location)
                 }) ?? []
