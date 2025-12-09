@@ -191,7 +191,7 @@ class ObservationsMap: DataSourceMap {
 //            annotationView.canShowCallout = true
         }
         mapItemAnnotation.annotationView = annotationView
-        currentAnnotationViews[mapItemAnnotation.id] = annotationView
+        currentAnnotationViews[mapItemAnnotation.id] = annotationView // FIXME: Refactor/remove currentAnnotationViews. We should not maintain a collection that could get out of date from MapKit
         return annotationView
     }
 }
