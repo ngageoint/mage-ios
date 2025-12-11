@@ -11,6 +11,7 @@ import MaterialViews
 
 extension Notification.Name {
     public static let SnackbarNotification = Notification.Name("Snackbar")
+    public static let feedItemsUpdated = Notification.Name("feedItemsUpdated")
 }
 
 struct SnackbarNotification {

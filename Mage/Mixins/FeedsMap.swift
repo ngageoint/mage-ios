@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import MapFramework
+import Combine
 
 protocol FeedItemDelegate {
     func addFeedItem(_ feedItem: FeedItemAnnotation)
@@ -26,15 +27,18 @@ class FeedsMapMixin: NSObject, MapMixin {
     
     var mapAnnotationFocusedObserver: AnyObject?
 
-    var enlargedFeedItem: MKAnnotationView?
     var feedItemRetrievers: [String:FeedItemRetriever] = [:]
     var currentFeeds: [String] = []
-    var enlargedAnnotationView: MKAnnotationView?
     
     var userDefaultsEventName: String?
     
+    var cancellable: Set<AnyCancellable> = Set()
+    
     init(feedsMap: FeedsMap) {
         self.feedsMap = feedsMap
+        feedsMap.mapView?.register(MKAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: FEEDITEM_ANNOTATION_VIEW_REUSE_ID)
+
     }
     
     func cleanupMixin() {
@@ -48,33 +52,18 @@ class FeedsMapMixin: NSObject, MapMixin {
         }
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {}
 
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
+    func updateMixin(mapView: MKMapView, mapState: MapState) {}
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
-        if let currentEventId = Server.currentEventId() {
-            userDefaultsEventName = "selectedFeeds-\(currentEventId)"
-            UserDefaults.standard.addObserver(self, forKeyPath: userDefaultsEventName!, options: [.new], context: nil)
-        }
-        mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.feedsMap.mapView {
-                self?.focusAnnotation(annotation: notificationObject.annotation)
-            } else if notification.object == nil {
-                self?.focusAnnotation(annotation: nil)
+        NotificationCenter.default.publisher(for: .feedItemsUpdated)
+            .removeDuplicates()
+            .sink { [weak self] notification in
+                self?.addFeeds()
             }
-        }
+            .store(in: &cancellable)
         addFeeds()
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath?.starts(with: "selectedFeeds") == true {
-            addFeeds()
-        }
     }
     
     func addFeeds() {
@@ -98,8 +87,7 @@ class FeedsMapMixin: NSObject, MapMixin {
                         }
                         return false
                     }) as? FeedItemAnnotation {
-                        feedsMap.mapView?.removeAnnotation(feedAnnotation);
-                        feedAnnotation.view = nil
+                        feedsMap.mapView?.removeAnnotation(feedAnnotation); // NOTE: Toggling a Feed will trigger this...
                     }
                 }
             }
@@ -120,8 +108,19 @@ class FeedsMapMixin: NSObject, MapMixin {
             }
             feedItemRetrievers[feedId] = retriever
             if let items = retriever.startRetriever() {
-                for item in items {
-                    feedsMap.mapView?.addAnnotation(item)
+                // TODO: CHECK IF FIXED WITH NOTIFICATIONS
+                if items.count == 0 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        if let items = retriever.startRetriever() {
+                            for item in items {
+                                self.feedsMap.mapView?.addAnnotation(item)
+                            }
+                        }
+                    }
+                } else {
+                    for item in items {
+                        feedsMap.mapView?.addAnnotation(item)
+                    }
                 }
             }
         }
@@ -139,68 +138,19 @@ class FeedsMapMixin: NSObject, MapMixin {
             annotationView.canShowCallout = false
             annotationView.isEnabled = false
             annotationView.isUserInteractionEnabled = false
-            annotation.view = annotationView
             return annotationView
         }()
         
         FeedItemRetriever.setAnnotationImage(feedItem: annotation, annotationView: annotationView)
         annotationView.annotation = annotation
         annotationView.accessibilityLabel = "FeedItem \(annotation.id)"
-        annotation.view = annotationView
         return annotationView
-    }
-    
-    func focusAnnotation(annotation: MKAnnotation?) {
-        guard let annotation = annotation as? FeedItemAnnotation,
-              let annotationView = annotation.view else {
-                  if let enlargedAnnotationView = enlargedAnnotationView {
-                      // shrink the old focused view
-                      UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
-                          enlargedAnnotationView.transform = enlargedAnnotationView.transform.scaledBy(x: 0.5, y: 0.5)
-                          enlargedAnnotationView.centerOffset = CGPoint(x: 0, y: enlargedAnnotationView.centerOffset.y / 2.0)
-                      } completion: { success in
-                      }
-                      self.enlargedAnnotationView = nil
-                  }
-                  return
-              }
-        
-        if annotationView == enlargedAnnotationView {
-            // already focused ignore
-            return
-        } else if let enlargedAnnotationView = enlargedAnnotationView {
-            // shrink the old focused view
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
-                enlargedAnnotationView.transform = enlargedAnnotationView.transform.scaledBy(x: 0.5, y: 0.5)
-                enlargedAnnotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y / 2.0)
-            } completion: { success in
-            }
-        }
-        
-        enlargedAnnotationView = annotationView
-        
-        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
-            annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
-            annotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y * 2.0)
-        } completion: { success in
-        }
     }
 }
     
+// Triggered when RefreshFeeds are being called...
+// Was causing multiple annotations to be drawn, but interaction was disabled...
 extension FeedsMapMixin : FeedItemDelegate {
-    func addFeedItem(_ feedItem: FeedItemAnnotation) {
-        feedsMap.mapView?.addAnnotation(feedItem);
-    }
-    
-    func removeFeedItem(_ feedItem: FeedItemAnnotation) {
-        if let feedAnnotation = feedsMap.mapView?.annotations.first(where: { annotation in
-            if let annotation = annotation as? FeedItemAnnotation {
-                return annotation.id == feedItem.id
-            }
-            return false
-        }) as? FeedItemAnnotation {
-            feedsMap.mapView?.removeAnnotation(feedAnnotation);
-            feedAnnotation.view = nil
-        }
-    }
+    func addFeedItem(_ feedItem: FeedItemAnnotation) {}
+    func removeFeedItem(_ feedItem: FeedItemAnnotation) {}
 }

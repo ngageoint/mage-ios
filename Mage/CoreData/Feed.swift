@@ -134,14 +134,24 @@ import CoreData
                     for feedRemoteId in feedRemoteIds {
                         Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, context: context);
                     }
+                    if feedRemoteIds.isEmpty {
+                        NotificationCenter.default.post(name: .feedItemsUpdated, object: nil)
+                    }
                     
                     let feeds = try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId))
                     for feed in feeds ?? [] {
                         context.delete(feed)
                     }
                 }
-                try? context.save()
-                completion?()
+                
+                do {
+                    try context.save()
+                } catch {
+                    NSLog("Error saving feed context: \(error.localizedDescription)")
+                }
+                if let completion = completion {
+                    completion()
+                }
             }
             }, failure: { task, error in
                 NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
@@ -167,6 +177,7 @@ import CoreData
                     Feed.populateFeedItems(feedItems: features, feedId: feedId, eventId: eventId, context: context);
                 }
                 try? context.save()
+                NotificationCenter.default.post(name: .feedItemsUpdated, object: feedId)
             }
         }, failure: { task, error in
         });
