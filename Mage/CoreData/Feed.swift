@@ -112,7 +112,7 @@ import CoreData
         return json[FeedKey.id.key] as? String;
     }
     
-    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: (() -> Void)? = nil) -> URLSessionDataTask? {
+    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: ((UIAlertController?) -> Void)? = nil) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
@@ -150,11 +150,16 @@ import CoreData
                     NSLog("Error saving feed context: \(error.localizedDescription)")
                 }
                 if let completion = completion {
-                    completion()
+                    completion(nil)
                 }
             }
             }, failure: { task, error in
                 NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
+                let alert = UIAlertController(title: "Feeds Sync Failed", message: "Contact server administrator for error: \(error.localizedDescription)", preferredStyle: .actionSheet)
+                alert.addAction(UIAlertAction(title: "Done", style: .cancel))
+                if let completion = completion {
+                    completion(alert)
+                }
             });
         return task;
     }
@@ -184,7 +189,7 @@ import CoreData
         return task;
     }
     
-    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: (() -> Void)? = nil) {
+    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: ((UIAlertController?) -> Void)? = nil) {
         let manager = MageSessionManager.shared();
         let task = Feed.operationToPullFeeds(eventId: eventId, context: context, completion: completion);
         manager?.addTask(task);

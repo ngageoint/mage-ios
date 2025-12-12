@@ -81,7 +81,12 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         settingsCoordinator = MapSettingsCoordinator(rootViewController: hasMapSettings.navigationController, scheme: hasMapSettings.scheme, context: context)
         settingsCoordinator?.delegate = self
         if let eventId = Server.currentEventId(), let context = self.context {
-            Feed.refreshFeeds(eventId: eventId, context: context, completion: self.settingsCoordinator?.start)
+            Feed.refreshFeeds(eventId: eventId, context: context) { alert in
+                self.settingsCoordinator?.start()
+                if let alert {
+                    self.hasMapSettings.navigationController?.present(alert, animated: true, completion: nil)
+                }
+            }
         }
     }
     
