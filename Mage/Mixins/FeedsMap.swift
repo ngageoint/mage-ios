@@ -104,7 +104,6 @@ class FeedsMapMixin: NSObject, MapMixin {
             }
             feedItemRetrievers[feedId] = retriever
             if let items = retriever.startRetriever() {
-                // TODO: CHECK IF FIXED WITH NOTIFICATIONS
                 if items.count == 0 {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         if let items = retriever.startRetriever() {
