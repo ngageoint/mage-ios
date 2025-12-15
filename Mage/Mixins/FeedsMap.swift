@@ -11,10 +11,6 @@ import MapKit
 import MapFramework
 import Combine
 
-protocol FeedItemDelegate {
-    func addFeedItem(_ feedItem: FeedItemAnnotation)
-    func removeFeedItem(_ feedItem: FeedItemAnnotation)
-}
 protocol FeedsMap {
     var mapView: MKMapView? { get set }
     var scheme: MDCContainerScheming? { get set }
@@ -102,7 +98,7 @@ class FeedsMapMixin: NSObject, MapMixin {
                 continue
             }
             guard let retriever = feedItemRetrievers[feedId] ?? {
-                return FeedItemRetriever.getMappableFeedRetriever(feedId: feedId, eventId: currentEventId, delegate: self)
+                return FeedItemRetriever.getMappableFeedRetriever(feedId: feedId, eventId: currentEventId)
             }() else {
                 continue
             }
@@ -146,11 +142,4 @@ class FeedsMapMixin: NSObject, MapMixin {
         annotationView.accessibilityLabel = "FeedItem \(annotation.id)"
         return annotationView
     }
-}
-    
-// Triggered when RefreshFeeds are being called...
-// Was causing multiple annotations to be drawn, but interaction was disabled...
-extension FeedsMapMixin : FeedItemDelegate {
-    func addFeedItem(_ feedItem: FeedItemAnnotation) {}
-    func removeFeedItem(_ feedItem: FeedItemAnnotation) {}
 }
