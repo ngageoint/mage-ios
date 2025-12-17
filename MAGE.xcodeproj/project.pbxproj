@@ -1952,6 +1952,11 @@
 			path = IntroViews;
 			sourceTree = "<group>";
 		};
+		BD16DD222EE88F1C00F90354 /* Helpers */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3635,6 +3640,7 @@
 				2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */,
 				F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */,
 				F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */,
+				BD16DD222EE88F1C00F90354 /* Helpers */,
 				4C546FE9195A27D1000CF230 /* Map */,
 				F739682F2460B0290017D481 /* MaterialComponents */,
 				F7AA61AE27A9E73400D617B7 /* Media */,
@@ -4350,6 +4356,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A811F2832E3BEAF80016C5AB /* IntroViews */,
+				BD16DD222EE88F1C00F90354 /* Helpers */,
 			);
 			name = MAGE;
 			packageProductDependencies = (

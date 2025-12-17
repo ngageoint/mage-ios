@@ -164,50 +164,40 @@ class DataSourceMap: MapMixin {
     @MainActor
     func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
         guard let mapView = mapView else { return false }
+        let annotationDictionary = [String : DataSourceAnnotation]()
         
-        let existingAnnotations = mapView.annotations.compactMap({ annotation in
+        // Create a dictionary lookup so we don't fall into a O(n^2) complexity issue on inserts/removes
+        let existingAnnotations = mapView.annotations.compactMap { annotation in
             (annotation as? DataSourceAnnotation)
-        }).filter({ annotation in
+        }
+        .filter { annotation in
             annotation.dataSource.key == self.dataSource.key
-        }).sorted(by: { first, second in
-            first.id < second.id
-        })
-        
-        // this is how to create the annotations array from the previous annotations array
-        let differences = annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
-            annotation1.id == annotation2.id
+        }
+        .reduce(into: annotationDictionary) { dictionary, annotation in
+            dictionary[annotation.id] = annotation
         }
         
         var inserts: [DataSourceAnnotation] = []
         var removals: [DataSourceAnnotation] = []
-        for change in differences {
-            switch change {
-            case .insert(_, let element, _):
-                let existing = mapView.annotations.first(where: { mapAnnotation in
-                    guard let mapAnnotation = mapAnnotation as? DataSourceAnnotation else {
-                        return false
-                    }
-                    return mapAnnotation.id == element.id
-                }) as? DataSourceAnnotation
-                if let existing = existing {
-                    existing.coordinate = element.coordinate
-                } else {
-                    inserts.append(element)
-                }
-            case .remove(_, let element, _):
-                let existing = mapView.annotations.compactMap({ mapAnnotation in
-                    mapAnnotation as? DataSourceAnnotation
-                }).filter({ mapAnnotation in
-                    if mapAnnotation.id == element.id {
-                        currentAnnotationViews.removeValue(forKey: mapAnnotation.id)
-                        return true
-                    }
-                    return false
-                })
-                removals.append(contentsOf: existing)
+
+        // Update or prepare to insert annotations
+        for annotation in annotations {
+            if let existing = existingAnnotations[annotation.id] {
+                existing.coordinate = annotation.coordinate
+            } else {
+                inserts.append(annotation)
             }
         }
         
+        // Prepare to remove observations
+        let newIds = Set(annotations.map { $0.id })
+        for (id, existingAnnotation) in existingAnnotations {
+            if !newIds.contains(id) {
+                removals.append(existingAnnotation)
+                currentAnnotationViews.removeValue(forKey: id) // FIXME: Refactor/remove currentAnnotationViews. We should not maintain a collection that could get out of date from MapKit
+            }
+        }
+                
         mapView.addAnnotations(inserts)
         mapView.removeAnnotations(removals)
         
