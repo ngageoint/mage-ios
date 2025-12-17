@@ -691,6 +691,15 @@ extension UserDefaults {
         }
     }
     
+    var feedItemsToRemove: [String] {
+        get {
+            return array(forKey: #function) as? [String] ?? []
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     // MARK: GeoPackage keys
     @objc public var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {

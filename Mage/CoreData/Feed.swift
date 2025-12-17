@@ -129,38 +129,43 @@ import CoreData
             NSLog("TIMING Saving Feeds @ \(saveStart)")
             
             context.performAndWait {
-                if let feedsJson = responseObject as? [[AnyHashable : Any]] {
-                    feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: context);
-                    for feedRemoteId in feedRemoteIds {
-                        Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, context: context);
-                    }
-                    if feedRemoteIds.isEmpty {
+                guard let feedsJson = responseObject as? [[AnyHashable : Any]] else {
+                    try? context.save()
+                    completion?(nil)
+                    return
+                }
+                feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: context)
+                for feedRemoteId in feedRemoteIds {
+                    Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, context: context)
+                }
+                
+                let obsoleteFeeds = try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId)
+                )
+                var removedItemRemoteIds:Set<String> = []
+                for feed in obsoleteFeeds ?? [] {
+                    removedItemRemoteIds.formUnion(feed.items.compactMap { $0.remoteId })
+                    context.delete(feed) // NOTE: this is the reason *addFeeds* does not find FeedItems
+                }
+                
+                try? context.save()
+                
+                if !removedItemRemoteIds.isEmpty {
+                    UserDefaults.standard.feedItemsToRemove = Array(removedItemRemoteIds)
+                    DispatchQueue.main.async {
                         NotificationCenter.default.post(name: .feedItemsUpdated, object: nil)
-                    }
-                    
-                    let feeds = try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId))
-                    for feed in feeds ?? [] {
-                        context.delete(feed)
                     }
                 }
                 
-                do {
-                    try context.save()
-                } catch {
-                    NSLog("Error saving feed context: \(error.localizedDescription)")
-                }
-                if let completion = completion {
-                    completion(nil)
-                }
+                completion?(nil)
             }
-            }, failure: { task, error in
-                NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
-                let alert = UIAlertController(title: "Feeds Sync Failed", message: "Contact server administrator for error: \(error.localizedDescription)", preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "Done", style: .cancel))
-                if let completion = completion {
-                    completion(alert)
-                }
-            });
+        }, failure: { task, error in
+            NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
+            let alert = UIAlertController(title: "Feeds Sync Failed", message: "Contact server administrator for error: \(error.localizedDescription)", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "Done", style: .cancel))
+            if let completion = completion {
+                completion(alert)
+            }
+        });
         return task;
     }
     

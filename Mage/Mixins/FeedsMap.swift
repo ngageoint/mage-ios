@@ -54,8 +54,8 @@ class FeedsMapMixin: NSObject, MapMixin {
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
         NotificationCenter.default.publisher(for: .feedItemsUpdated)
-            .removeDuplicates()
-            .sink { [weak self] notification in
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
                 self?.addFeeds()
             }
             .store(in: &cancellable)
@@ -68,6 +68,8 @@ class FeedsMapMixin: NSObject, MapMixin {
         }
         
         let feedIdsInEvent = UserDefaults.standard.currentEventSelectedFeeds
+        // If nothing changed, skip work
+        if feedIdsInEvent == currentFeeds { return }
         // remove any feeds that are no longer selected
         let removeFeeds = currentFeeds.filter { feedId in
             return !feedIdsInEvent.contains(feedId)
@@ -75,16 +77,22 @@ class FeedsMapMixin: NSObject, MapMixin {
         // current feeds is now any that used to be selected but not any more
         for feedId in removeFeeds {
             feedItemRetrievers.removeValue(forKey: feedId)
-            if let items = FeedItem.getFeedItems(feedId: feedId, eventId: currentEventId.intValue) {
-                for item in items {
-                    if let feedAnnotation = feedsMap.mapView?.annotations.first(where: { annotation in
-                        if let annotation = annotation as? FeedItemAnnotation {
-                            return annotation.id == item.id
-                        }
-                        return false
-                    }) as? FeedItemAnnotation {
-                        feedsMap.mapView?.removeAnnotation(feedAnnotation); // NOTE: Toggling a Feed will trigger this...
-                    }
+            // Collect IDs to remove from Core Data if available
+            // TODO: in some instances the CoreData feed items are getting deleted before we can perform this step. Logic in Feed and FeedsMap needs to be moved together where possible
+            let itemIDsToRemove: [String] = FeedItem.getFeedItems(feedId: feedId, eventId: currentEventId.intValue)?.map { $0.id } ?? []
+            // Fallback to previously stored IDs if Core Data didn't return items
+            let fallbackRemoteIDs: [String] = itemIDsToRemove.isEmpty ? UserDefaults.standard.feedItemsToRemove : []
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, let mapView = self.feedsMap.mapView else { return }
+                
+                if !itemIDsToRemove.isEmpty {
+                    let annotationsToRemove = mapView.annotations.compactMap { $0 as? FeedItemAnnotation }.filter { itemIDsToRemove.contains($0.id) }
+                    mapView.removeAnnotations(annotationsToRemove)
+                } else if !fallbackRemoteIDs.isEmpty {
+                    let annotationsToRemove = mapView.annotations.compactMap { $0 as? FeedItemAnnotation }.filter { fallbackRemoteIDs.contains($0.remoteId ?? "") }
+                    mapView.removeAnnotations(annotationsToRemove)
+                    UserDefaults.standard.feedItemsToRemove.removeAll()
                 }
             }
         }
@@ -105,11 +113,9 @@ class FeedsMapMixin: NSObject, MapMixin {
             feedItemRetrievers[feedId] = retriever
             if let items = retriever.startRetriever() {
                 if items.count == 0 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        if let items = retriever.startRetriever() {
-                            for item in items {
-                                self.feedsMap.mapView?.addAnnotation(item)
-                            }
+                    if let items = retriever.startRetriever() {
+                        for item in items {
+                            self.feedsMap.mapView?.addAnnotation(item)
                         }
                     }
                 } else {
