@@ -111,7 +111,7 @@ class MageTests: MageCoreDataTestCase {
             mageFormFetchedCalled.fulfill();
         }
         
-        MageUseCases.fetchEvents()
+        FetchEventsUseCase().execute()
         await fulfillment(
             of: [
                 usersFetchStubCalled,

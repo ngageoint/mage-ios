@@ -126,7 +126,7 @@ import MapKit
                     FeedItemAnnotation(feedItem: feedItem)
                 })
             }
-            return [];
+            return nil;
         }
         
     }

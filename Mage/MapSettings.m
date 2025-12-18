@@ -342,6 +342,9 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
     [defaults setObject:selectedFeedsForEvent forKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
     [defaults synchronize];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"feedItemsUpdated"
+                                                        object:nil];
+    
     BOOL isOn = sender.on;
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         Feed *localFeed = [feed MR_inContext:localContext];

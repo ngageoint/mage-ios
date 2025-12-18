@@ -57,7 +57,7 @@ extension UIImage {
         }
     }
     
-    public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+    public static func createFeedItemRetrievers() -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
@@ -68,7 +68,7 @@ extension UIImage {
             if let feeds: [Feed] = context.fetchAll(Feed.self) {
             
                 for feed: Feed in feeds {
-                    let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
+                    let retriever = FeedItemRetriever(feed: feed);
                     feedRetrievers.append(retriever);
                 }
             }
@@ -76,20 +76,20 @@ extension UIImage {
         }
     }
     
-    public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber) -> FeedItemRetriever? {
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         
         guard let context = context else { return nil }
         return context.performAndWait {
             if let feed: Feed = context.fetchFirst(Feed.self, key: "tag", value: feedTag) {
-                return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
+                return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId);
             }
             return nil
         }
     }
     
-    public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber) -> FeedItemRetriever? {
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         
@@ -97,14 +97,14 @@ extension UIImage {
         return context.performAndWait {
             if let feed: Feed = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
                 if (feed.itemsHaveSpatialDimension) {
-                    return FeedItemRetriever(feed: feed, delegate: delegate);
+                    return FeedItemRetriever(feed: feed);
                 }
             }
             return nil
         }
     }
     
-    public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+    public static func createMappableFeedItemRetrievers() -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
@@ -116,7 +116,7 @@ extension UIImage {
                 
                 for feed: Feed in feeds {
                     if (feed.itemsHaveSpatialDimension) {
-                        let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
+                        let retriever = FeedItemRetriever(feed: feed);
                         feedRetrievers.append(retriever);
                     }
                 }
@@ -126,7 +126,6 @@ extension UIImage {
     }
 
     @objc public let feed: Feed;
-    let delegate: FeedItemDelegate;
     
     var fetchedResultsController: NSFetchedResultsController<FeedItem>?
     
@@ -145,15 +144,10 @@ extension UIImage {
         guard let context = context else { return }
         
         self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        // Configure Fetched Results Controller
-        fetchedResultsController?.delegate = self
-        
     }
     
-    init(feed: Feed, delegate: FeedItemDelegate) {
+    init(feed: Feed) {
         self.feed = feed;
-        self.delegate = delegate;
     }
     
     @objc public func startRetriever() -> [FeedItemAnnotation]? {
@@ -174,29 +168,3 @@ extension UIImage {
     }
     
 }
-
-extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let feedItem = anObject as? FeedItem else {
-            return
-        }
-        switch type {
-        case .insert:
-            if feedItem.isMappable {
-                delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
-            }
-        case .delete:
-            delegate.removeFeedItem(FeedItemAnnotation(feedItem: feedItem))
-        case .update:
-            delegate.removeFeedItem(FeedItemAnnotation(feedItem: feedItem))
-            if feedItem.isMappable {
-                delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
-            }
-        case .move:
-            print("...")
-        @unknown default:
-            print("...")
-        }
-    }
-}
-
