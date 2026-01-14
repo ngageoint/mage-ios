@@ -77,12 +77,14 @@ class SFGeometryMapMixin: NSObject, MapMixin {
         var longitudeMeters = 2500.0
         if let geometry = sfGeometry {
 
-            let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
-            let boundingBox = GPKGBoundingBox(envelope: envelope)
-            if let size = boundingBox?.sizeInMeters() {
-                latitudeMeters = size.height + (2 * (size.height * 0.1))
-                longitudeMeters = size.width + (2 * (size.width * 0.1))
-                
+            if geometry.geometryType != .POINT { // Prevent incorrect point bounds
+                let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
+                let boundingBox = GPKGBoundingBox(envelope: envelope)
+                if let size = boundingBox?.sizeInMeters() {
+                    latitudeMeters = size.height + (2 * (size.height * 0.1))
+                    longitudeMeters = size.width + (2 * (size.width * 0.1))
+                    
+                }
             }
             
             if let centroid = geometry.centroid() {

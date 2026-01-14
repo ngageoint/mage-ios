@@ -42,11 +42,11 @@ class ObservationLocationFieldViewModel: ObservableObject {
         }
     }
     @Published var observationMapItems: [ObservationMapItem] = []
-    @Published var selectedItem: Int = 0
+    @Published var currentItemIndex: Int = 0
 
     var currentItem: ObservationMapItem? {
-        if selectedItem < observationMapItems.count {
-            return observationMapItems[selectedItem]
+        if currentItemIndex < observationMapItems.count {
+            return observationMapItems[currentItemIndex]
         }
         return nil
     }

@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import GeoPackage
 import SimpleFeatures
+import CoreLocation
 
 struct ObservationMapItem: Equatable, Hashable {
     var observationId: URL?
@@ -87,6 +89,31 @@ struct ObservationMapItem: Equatable, Hashable {
             primaryFieldText: primaryFieldText,
             secondaryFieldText: secondaryFieldText
         )
+    }
+    
+    // The default map bounding area around a point or coordinate
+    public func boundingRegion() -> MKCoordinateRegion {
+        if let geometry = geometry {
+            var latitudeMeters = 2500.0
+            var longitudeMeters = 2500.0
+            if geometry is SFPoint {
+                if let accuracy = accuracy, accuracy != 0 {
+                    latitudeMeters = accuracy * 2.5
+                    longitudeMeters = accuracy * 2.5
+                }
+            } else {
+                let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
+                let boundingBox = GPKGBoundingBox(envelope: envelope)
+                if let size = boundingBox?.sizeInMeters() {
+                    latitudeMeters = size.height + (2 * (size.height * 0.1))
+                    longitudeMeters = size.width + (2 * (size.width * 0.1))
+                }
+            }
+            if let centroid = geometry.centroid() {
+                return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue), latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
+            }
+        }
+        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: 50000, longitudinalMeters: 50000)
     }
 }
 
