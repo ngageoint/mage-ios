@@ -31,10 +31,12 @@ class SFGeometryMapMixin: NSObject, MapMixin {
         }
     }
     var geometryToShape: [SFGeometry : GPKGMapShape] = [:]
+    let userDefaults: UserDefaults
     
-    init(sfGeometryMap: SFGeometryMap, sfGeometry: SFGeometry?) {
+    init(sfGeometryMap: SFGeometryMap, sfGeometry: SFGeometry?, userDefaults: UserDefaults = .standard) {
         self.sfGeometryMap = sfGeometryMap
         self._sfGeometry = sfGeometry
+        self.userDefaults = userDefaults
     }
     
     func removeMixin(mapView: MKMapView, mapState: MapState) {
@@ -73,8 +75,8 @@ class SFGeometryMapMixin: NSObject, MapMixin {
     }
     
     func setMapRegion(sfGeometry: SFGeometry?) {
-        var latitudeMeters = 2500.0
-        var longitudeMeters = 2500.0
+        var latitudeMeters = userDefaults.pointCoordinateSpan
+        var longitudeMeters = userDefaults.pointCoordinateSpan
         if let geometry = sfGeometry {
 
             if geometry.geometryType != .POINT { // Prevent incorrect point bounds
