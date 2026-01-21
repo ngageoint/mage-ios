@@ -57,9 +57,7 @@ public struct MapRepresentable: UIViewRepresentable, MapProtocol {
         mapView.accessibilityLabel = name
 
         context.coordinator.mapView = mapView
-        if let region = context.coordinator.currentRegion {
-            context.coordinator.setMapRegion(region: region)
-        }
+        setMapLocation(context: context)
 
         mapView.register(
             EnlargedAnnotationView.self,
@@ -75,21 +73,11 @@ public struct MapRepresentable: UIViewRepresentable, MapProtocol {
     }
 
     func setMapLocation(context: Context) {
-        if let center = mapState.center,
-           center.center.latitude != context.coordinator.setCenter?.latitude,
-           center.center.longitude != context.coordinator.setCenter?.longitude {
-            context.coordinator.setMapRegion(region: center)
-            context.coordinator.setCenter = center.center
-        }
-
-        if let center = mapState.forceCenter, context.coordinator.forceCenterDate != mapState.forceCenterDate {
-            context.coordinator.setMapRegion(region: center)
-            context.coordinator.forceCenterDate = mapState.forceCenterDate
-        }
-
-        if let center = mapState.coordinateCenter, context.coordinator.forceCenterDate != mapState.forceCenterDate {
-            context.coordinator.setCoordinateCenter(coordinate: center)
-            context.coordinator.setCenter = center
+        if let region = mapState.centerRegion, // Default to region to have proper zoom on the observation point/geometry
+           region.center.latitude != context.coordinator.centerCoordinate?.latitude,
+           region.center.longitude != context.coordinator.centerCoordinate?.longitude {
+            context.coordinator.setMapRegion(region)
+            context.coordinator.centerCoordinate = region.center
         }
     }
 

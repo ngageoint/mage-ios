@@ -31,10 +31,12 @@ class SFGeometryMapMixin: NSObject, MapMixin {
         }
     }
     var geometryToShape: [SFGeometry : GPKGMapShape] = [:]
+    let userDefaults: UserDefaults
     
-    init(sfGeometryMap: SFGeometryMap, sfGeometry: SFGeometry?) {
+    init(sfGeometryMap: SFGeometryMap, sfGeometry: SFGeometry?, userDefaults: UserDefaults = .standard) {
         self.sfGeometryMap = sfGeometryMap
         self._sfGeometry = sfGeometry
+        self.userDefaults = userDefaults
     }
     
     func removeMixin(mapView: MKMapView, mapState: MapState) {
@@ -73,16 +75,18 @@ class SFGeometryMapMixin: NSObject, MapMixin {
     }
     
     func setMapRegion(sfGeometry: SFGeometry?) {
-        var latitudeMeters = 2500.0
-        var longitudeMeters = 2500.0
+        var latitudeMeters = userDefaults.pointCoordinateSpan
+        var longitudeMeters = userDefaults.pointCoordinateSpan
         if let geometry = sfGeometry {
 
-            let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
-            let boundingBox = GPKGBoundingBox(envelope: envelope)
-            if let size = boundingBox?.sizeInMeters() {
-                latitudeMeters = size.height + (2 * (size.height * 0.1))
-                longitudeMeters = size.width + (2 * (size.width * 0.1))
-                
+            if geometry.geometryType != .POINT { // Prevent incorrect point bounds
+                let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
+                let boundingBox = GPKGBoundingBox(envelope: envelope)
+                if let size = boundingBox?.sizeInMeters() {
+                    latitudeMeters = size.height + (2 * (size.height * 0.1))
+                    longitudeMeters = size.width + (2 * (size.width * 0.1))
+                    
+                }
             }
             
             if let centroid = geometry.centroid() {

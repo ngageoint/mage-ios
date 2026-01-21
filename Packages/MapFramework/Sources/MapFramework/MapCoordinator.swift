@@ -17,11 +17,8 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
     var focusedAnnotation: DataSourceAnnotation?
     var focusMapOnItemSink: AnyCancellable?
 
-    var setCenter: CLLocationCoordinate2D?
+    var centerCoordinate: CLLocationCoordinate2D?
     var trackingModeSet: MKUserTrackingMode?
-
-    var forceCenterDate: Date?
-    var centerDate: Date?
 
     var currentRegion: MKCoordinateRegion?
 
@@ -144,14 +141,17 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
 }
 
 extension MapCoordinator {
-    func setMapRegion(region: MKCoordinateRegion) {
+    
+    /// Sets the map to the current region
+    func setMapRegion(_ region: MKCoordinateRegion) {
         currentRegion = region
-        self.mapView?.setRegion(region, animated: true)
+        mapView?.setRegion(region, animated: true)
     }
 
-    func setCoordinateCenter(coordinate: CLLocationCoordinate2D) {
-        setCenter = coordinate
-        self.mapView?.setCenter(coordinate, animated: true)
+    /// Sets the map to a specific coordinate
+    func setCenterCoordinate(_ coordinate: CLLocationCoordinate2D) {
+        centerCoordinate = coordinate
+        mapView?.setCenter(coordinate, animated: true)
     }
 
     func addAnnotation(annotation: MKAnnotation) {

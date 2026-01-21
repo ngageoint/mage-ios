@@ -30,6 +30,8 @@ enum ObservationState: Int, CustomStringConvertible {
     
     public static let PRIMARY_OBSERVATION_GEOMETRY = "primary-observation-geometry"
 
+    var userDefaults = UserDefaults.standard    // Allow for injection since this is NSManagedObject
+    
     var orderedAttachments: [AttachmentModel]? {
         get {
             var observationForms: [[String: Any]] = []
@@ -87,14 +89,10 @@ enum ObservationState: Int, CustomStringConvertible {
 
     public func viewRegion(mapView: MKMapView) -> MKCoordinateRegion {
         if let geometry = self.geometry {
-            var latitudeMeters = 2500.0
-            var longitudeMeters = 2500.0
-            if geometry is SFPoint {
-                if let properties = properties, let accuracy = properties[ObservationKey.accuracy.key] as? Double {
-                    latitudeMeters = accuracy * 2.5
-                    longitudeMeters = accuracy * 2.5
-                }
-            } else {
+            var latitudeMeters = userDefaults.pointCoordinateSpan
+            var longitudeMeters = userDefaults.pointCoordinateSpan
+            
+            if geometry.geometryType != .POINT {
                 let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
                 let boundingBox = GPKGBoundingBox(envelope: envelope)
                 if let size = boundingBox?.sizeInMeters() {
