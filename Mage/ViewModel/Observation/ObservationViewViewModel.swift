@@ -209,41 +209,37 @@ class ObservationViewViewModel: NSObject, ObservableObject {
     
     public var primaryFieldText: String? {
         get {
-            if let primaryField = primaryEventForm?.primaryMapField, let observationForms = self.observationModel?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFieldName = primaryField[FieldKey.name.key] as? String, observationForms.count > 0 {
-                let value = self.primaryObservationForm?[primaryFieldName]
-                return Observation.fieldValueText(value: value, field: primaryField)
-            }
-            return nil;
+            return Observation.text(
+                form: primaryObservationForm,
+                fieldDefinition: primaryEventForm?.primaryMapField
+            )
         }
     }
 
     public var secondaryFieldText: String? {
         get {
-            if let variantField = primaryEventForm?.secondaryMapField, let observationForms = self.observationModel?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let variantFieldName = variantField[FieldKey.name.key] as? String, observationForms.count > 0 {
-                let value = self.primaryObservationForm?[variantFieldName]
-                return Observation.fieldValueText(value: value, field: variantField)
-            }
-            return nil;
+            return Observation.text(
+                form: primaryObservationForm,
+                fieldDefinition: primaryEventForm?.secondaryMapField
+            )
         }
     }
 
     public var primaryFeedFieldText: String? {
         get {
-            if let primaryFeedField = primaryEventForm?.primaryFeedField, let observationForms = self.observationModel?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFeedFieldName = primaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
-                let value = primaryObservationForm?[primaryFeedFieldName]
-                return Observation.fieldValueText(value: value, field: primaryFeedField)
-            }
-            return nil;
+            return Observation.text(
+                form: primaryObservationForm,
+                fieldDefinition: primaryEventForm?.primaryFeedField
+            )
         }
     }
 
     public var secondaryFeedFieldText: String? {
         get {
-            if let secondaryFeedField = primaryEventForm?.secondaryFeedField, let observationForms = self.observationModel?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let secondaryFeedFieldName = secondaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
-                let value = self.primaryObservationForm?[secondaryFeedFieldName]
-                return Observation.fieldValueText(value: value, field: secondaryFeedField)
-            }
-            return nil;
+            return Observation.text(
+                form: primaryObservationForm,
+                fieldDefinition: primaryEventForm?.secondaryFeedField
+            )
         }
     }
 }
