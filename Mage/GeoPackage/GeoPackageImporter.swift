@@ -70,8 +70,7 @@ import SSZipArchive
             return fileExtension == "zip" && !fileName.hasSuffix("Form.zip")
         })
         
-        let cacheOverlays = CacheOverlays.getInstance()
-        await cacheOverlays.addProcessing(from: archives)
+        await CacheOverlays.shared.addProcessing(from: archives)
         
         let baseCacheDirectory = (documentsDirectory  as NSString).appendingPathComponent(MageDirectories.cache.rawValue)
         
@@ -81,7 +80,7 @@ import SSZipArchive
         for cache in caches ?? [] {
             let cacheDirectory = (baseCacheDirectory as NSString).appendingPathComponent(cache)
             var isDirectory: ObjCBool = false
-            var exists = FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory)
+            let exists = FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory)
             if exists && isDirectory.boolValue {
                 let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, directory: cacheDirectory)
                 overlays.append(cacheOverlay)
@@ -107,7 +106,7 @@ import SSZipArchive
         overlays.append(contentsOf: geoPackageCacheOverlays)
 
         // Determine which caches are enabled
-        var selectedCaches = UserDefaults.standard.selectedCaches ?? []
+        let selectedCaches = UserDefaults.standard.selectedCaches ?? []
         if selectedCaches.count > 0 {
             for cacheOverlay in overlays {
                 // Check and enable the cache
@@ -138,7 +137,7 @@ import SSZipArchive
         }
         addedCacheOverlay = nil
         
-        await cacheOverlays.add(overlays)
+        await CacheOverlays.shared.add(overlays)
         
         for archive in archives ?? [] {
             let queue = DispatchQueue.global(qos: .background)
@@ -399,8 +398,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             }
         }
         
-        let cacheOverlays = CacheOverlays.getInstance()
-        await cacheOverlays.removeProcessing((path as NSString).lastPathComponent)
+        await CacheOverlays.shared.removeProcessing((path as NSString).lastPathComponent)
         
         // There is no way to know what was in the zip that was unarchived, so just add all current caches to the list
         let caches = try? FileManager.default.contentsOfDirectory(atPath: unzippedPath)
@@ -410,7 +408,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             let exists = FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory)
             if exists && isDirectory.boolValue {
                 let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, directory: cacheDirectory)
-                await cacheOverlays.add([cacheOverlay])
+                await CacheOverlays.shared.add([cacheOverlay])
                 MageLogger.misc.debug("Imported local XYZ Zip")
                 
                 _ = await layerRepository.createLoadedXYZLayer(name: cache)

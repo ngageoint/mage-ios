@@ -134,7 +134,7 @@ actor LayerLocalCoreDataDataSource: LayerLocalDataSource {
                 do {
                     let layers: [Layer] = try context.fetchObjects(Layer.self, predicate: NSPredicate(format: "eventId == -1 AND (type == %@ OR type == %@)", argumentArray: ["GeoPackage", "Local_XYZ"])) ?? []
                     for layer in layers {
-                        let overlay = CacheOverlays.getInstance().getByCacheName(layer.name)
+                        let overlay = CacheOverlays.shared.getByCacheName(layer.name)
                         
                         if (overlay == nil) {
                             context.delete(layer)

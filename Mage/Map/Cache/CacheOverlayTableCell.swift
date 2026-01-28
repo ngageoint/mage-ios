@@ -93,9 +93,8 @@ class CacheOverlayTableCell: UITableViewCell {
     
     func updateSelectedAndNotify() async {
         var overlays: [String] = []
-        let cacheOverlays = CacheOverlays.getInstance()
         var cacheOverlaysOverlays: [CacheOverlay] = []
-        cacheOverlaysOverlays.append(contentsOf: await cacheOverlays.getOverlays())
+        cacheOverlaysOverlays.append(contentsOf: await CacheOverlays.shared.getOverlays())
         
         for cacheOverlay in cacheOverlaysOverlays {
             var childAdded = false
@@ -112,7 +111,7 @@ class CacheOverlayTableCell: UITableViewCell {
         }
         
         UserDefaults.standard.selectedCaches = overlays
-        await cacheOverlays.notifyListeners()
+        await CacheOverlays.shared.notifyListeners()
     }
 }
 
@@ -139,57 +138,67 @@ extension CacheOverlayTableCell: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 && overlay?.getChildren().count != 1 {
-            overlay?.expanded.toggle()
+        guard let overlay = overlay else { return }
+        let hasMultipleChildren = overlay.getChildren().count != 1
+        if indexPath.row == 0 && hasMultipleChildren {
+            overlay.expanded.toggle()
             tableView.reloadData()
-            mainTable?.reloadData()
-        }
-        if let indexPath = tableView.indexPathForSelectedRow {
+            if let mainTable = mainTable {
+                mainTable.reloadData()
+            }
             tableView.deselectRow(at: indexPath, animated: false)
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "cacheOverlayCell")
-        if cell == nil {
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cacheOverlayCell")
-        }
-        cell?.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        cell?.detailTextLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        cell?.backgroundColor = scheme?.colorScheme.surfaceColor
-        cell?.imageView?.tintColor = scheme?.colorScheme.primaryColorVariant
+        let identifier = "cacheOverlayCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier)
+        ?? UITableViewCell(style: .subtitle, reuseIdentifier: identifier)
         
-        if let overlay {
-            if overlay.getChildren().count != 1 && indexPath.row == 0 {
+        cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+        cell.detailTextLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        cell.backgroundColor = scheme?.colorScheme.surfaceColor
+        cell.imageView?.tintColor = scheme?.colorScheme.primaryColorVariant
+        
+        if let overlay = overlay {
+            let children = overlay.getChildren()
+            let count = children.count
+            
+            if count != 1 && indexPath.row == 0 {
+                // Parent row
                 let cacheSwitch = CacheActiveSwitch(frame: .zero)
                 cacheSwitch.isOn = overlay.enabled
                 cacheSwitch.overlay = overlay
                 cacheSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant
                 cacheSwitch.addTarget(self, action: #selector(activeChanged), for: .touchUpInside)
-                cell?.accessoryView = cacheSwitch
-                cell?.textLabel?.text = (self.mageLayer != nil) ? self.mageLayer!.name : overlay.name
-                cell?.detailTextLabel?.text = "\(overlay.getChildren().count) layer\(overlay.getChildren().count == 1 ? "" : "s")"
-                cell?.imageView?.image = UIImage(systemName: "folder")
+                cell.accessoryView = cacheSwitch
+                
+                cell.textLabel?.text = (self.mageLayer != nil) ? self.mageLayer!.name : overlay.name
+                cell.detailTextLabel?.text = "\(count) layer\(count == 1 ? "" : "s")"
+                cell.imageView?.image = UIImage(systemName: "folder")
+                
             } else {
-                let cacheOverlay = overlay.getChildren()[overlay.getChildren().count == 1 ? indexPath.row : indexPath.row - 1]
-                var cellImage: UIImage?
-                if let typeImage = cacheOverlay.iconImageName {
-                    cellImage = UIImage(named: typeImage)
+                // Child row
+                let childIndex = (count == 1) ? indexPath.row : indexPath.row - 1
+                let cacheOverlay = children[childIndex]
+                
+                let imageName = cacheOverlay.iconImageName
+                if let imageName = imageName {
+                    cell.imageView?.image = UIImage(named: imageName)
                 }
-                if let cellImage {
-                    cell?.imageView?.image = cellImage
-                }
-                cell?.textLabel?.text = overlay.getChildren().count == 1 ? (self.mageLayer != nil ? self.mageLayer!.name : overlay.name) : cacheOverlay.name
-                cell?.detailTextLabel?.text = cacheOverlay.getInfo()
+                
+                cell.textLabel?.text = overlay.getChildren().count == 1 ? (self.mageLayer != nil ? self.mageLayer!.name : overlay.name) : cacheOverlay.name
+                cell.detailTextLabel?.text = cacheOverlay.getInfo()
                 
                 let cacheSwitch = CacheActiveSwitch(frame: .zero)
                 cacheSwitch.isOn = cacheOverlay.enabled
                 cacheSwitch.overlay = cacheOverlay
                 cacheSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant
                 cacheSwitch.addTarget(self, action: #selector(childActiveChanged), for: .touchUpInside)
-                cell?.accessoryView = cacheSwitch
+                cell.accessoryView = cacheSwitch
             }
         }
-        return cell!
+        return cell
     }
 }
+
