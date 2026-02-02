@@ -45,8 +45,8 @@ class GeoPackageRepositoryImpl: ObservableObject, GeoPackageRepository {
         self.darkBackgroundOverlay?.cleanup()
         self.darkBackgroundOverlay = nil
         
-        await CacheOverlays.getInstance().remove(byCacheName: "countries")
-        await CacheOverlays.getInstance().remove(byCacheName: "countries_dark")
+        await CacheOverlays.shared.remove(byCacheName: "countries")
+        await CacheOverlays.shared.remove(byCacheName: "countries_dark")
     }
     
     func getBaseMap() -> BaseMapOverlay? {
