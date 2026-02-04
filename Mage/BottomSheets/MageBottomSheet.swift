@@ -77,7 +77,6 @@ struct MageBottomSheet: View {
             )
             .animation(.default, value: self.viewModel.selectedItem)
             
-            Spacer()
         }
         .background(Color.surfaceColor)
         

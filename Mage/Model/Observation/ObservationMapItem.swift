@@ -132,7 +132,7 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
-        // TODO: should we store the primary and secondary feed field text too?
+        
         if let observation = observation.observation {
             let style = ObservationShapeStyleParser.style(
                 observation: observation,
