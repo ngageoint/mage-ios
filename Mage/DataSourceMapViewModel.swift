@@ -35,7 +35,6 @@ class DataSourceMapViewModel {
     
     @Published var annotations: [DataSourceAnnotation] = []
     @Published var featureOverlays: [MKOverlay] = []
-    @Published var tileOverlay: DataSourceTileOverlay?
     
     let requerySubject = PassthroughSubject<Void, Never>()
     
@@ -60,27 +59,30 @@ class DataSourceMapViewModel {
             }
             .store(in: &cancellable)
         
-        mapStateRepository.$zoom.sink { [weak self] zoom in
+        mapStateRepository.$zoom
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] zoom in
             self?.requerySubject.send(())
-        }.store(in: &cancellable)
+        }
+            .store(in: &cancellable)
         
-        mapStateRepository.$region.sink { [weak self] region in
+        mapStateRepository.$region
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] region in
             self?.requerySubject.send(())
-        }.store(in: &cancellable)
+        }
+            .store(in: &cancellable)
         
         repository?.refreshPublisher?
             .sink { [weak self] date in
                 self?.refresh()
             }
             .store(in: &cancellable)
-        
-        createTileOverlays()
     }
     
     // this requeries for all features and recreates all tile overlays
     func refresh() {
         requerySubject.send(())
-        createTileOverlays()
     }
     
     private func queryFeatures() async {
@@ -92,20 +94,18 @@ class DataSourceMapViewModel {
         }
         let features = await mapFeatureRepository?.getAnnotationsAndOverlays(
             zoom: zoom,
-            region: region.padded(percentage: 0.05)
+            region: region.padded(percentage: 2.0)
         )
         annotations = (features?.annotations ?? []).sorted(by: { first, second in
             first.id < second.id
         })
-        featureOverlays = features?.overlays ?? []
-    }
-    
-    private func createTileOverlays() {
-        guard let repository = repository else { return }
-        let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: key)
-        newOverlay.minimumZ = minZoom
-        newOverlay.maximumZ = maximumTileZoom
-        
-        tileOverlay = newOverlay
+        if let overlays = features?.overlays {
+            // Compare by stable identifiers
+            let newIds = overlays.compactMap { ($0 as? DataSourceIdentifiable)?.id }
+            let currentIds = featureOverlays.compactMap { ($0 as? DataSourceIdentifiable)?.id }
+            if newIds != currentIds {
+                featureOverlays = overlays
+            }
+        }
     }
 }
