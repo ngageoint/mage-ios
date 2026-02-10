@@ -120,10 +120,8 @@ class ObservationsViewModel: ObservableObject {
                     switch uriItem {
                     case .listItem(let uri):
                         return ObservationItem.listItem(uri)
-                    case .sectionHeader:
-                        // If you want to support section headers as well:
-                        // return ObservationItem.sectionHeader(header)
-                        return nil
+                    case .sectionHeader(let header):
+                        return ObservationItem.sectionHeader(header: header)
                     }
                 }
             }

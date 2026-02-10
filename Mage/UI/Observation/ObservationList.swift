@@ -117,8 +117,11 @@ struct ObservationList: View {
                 // fallback/error view
                 EmptyView()
             }
-        case .sectionHeader(_):
-            EmptyView()
+        case .sectionHeader(let header):
+            Text(header)
+                .font(.overline)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.backgroundColor)
         }
     }
 
