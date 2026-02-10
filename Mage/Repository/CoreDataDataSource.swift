@@ -110,20 +110,62 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit
         let previousHeader: String? = currentHeader
-        var users: [URIItem] = []
+        var uriItems: [URIItem] = []
         context?.performAndWait {
             if let fetched = context?.fetch(request: request) {
-
-                users = fetched.flatMap { user in
-                    return [URIItem.listItem(user.objectID.uriRepresentation())]
+                // First convert fetched to [ObservationModel] -> ObservationModel(observation: observation as! Observation)
+                let models: [ObservationModel] = fetched.compactMap { observation in
+                    guard let obs = observation as? Observation else { return nil }
+                    return ObservationModel(observation: obs)
                 }
+
+                // Second sort them by date (descending)
+                // NOTE: modelDate() defaulting to timeStamp not lastModified
+                let sortedModels = models.sorted { (a, b) in
+                    switch (a.modelDate(), b.modelDate()) {
+                    case let (d1?, d2?):
+                        return d1 > d2
+                    case (_?, nil):
+                        return true
+                    case (nil, _?):
+                        return false
+                    default:
+                        return false
+                    }
+                }
+
+                // For each DAY:
+                // - 1: URIItem.sectionHeader(header: DAY)
+                // - N: URIItem.listItem(.objectID.uriRepresentation())
+                let dayFormatter = DateFormatter()
+                dayFormatter.dateStyle = .long
+                dayFormatter.timeStyle = .none
+
+                var tempItems: [URIItem] = []
+                var lastHeader: String? = previousHeader
+                for model in sortedModels {
+                    let date = model.modelDate()
+                    let header = date.map { dayFormatter.string(from: $0) } ?? "Other"
+                    if header != lastHeader {
+                        tempItems.append(.sectionHeader(header: header))
+                        lastHeader = header
+                    }
+                    let url = model.observationId
+                    if let url = url {
+                        tempItems.append(.listItem(url))
+                    }
+                }
+                uriItems = tempItems
             }
         }
 
         let page: URIModelPage = URIModelPage(
-            list: users,
+            list: uriItems,
             next: (page ?? 0) + 1,
-            currentHeader: previousHeader
+            currentHeader: uriItems.compactMap { item -> String? in
+                if case let .sectionHeader(h) = item { return h }
+                return nil
+            }.last ?? previousHeader
         )
 
         return Just(page)
@@ -158,3 +200,4 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         }
     }
 }
+
