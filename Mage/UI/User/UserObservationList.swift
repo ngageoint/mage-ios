@@ -137,8 +137,15 @@ struct UserObservationRow: View {
                 // Fallback view if objectID cannot be resolved
                 Text("Unable to load observation")
             }
-        case .sectionHeader(_):
-            EmptyView()
+        case .sectionHeader(let header):
+            HStack {
+                Text(header)
+                    .padding()
+                    .font(.overline)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.backgroundColor)
+                Spacer()
+            }
         }
     }
 }
