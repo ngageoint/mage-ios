@@ -30,7 +30,8 @@ final class BottomSheetRepositoryTests: MageInjectionTestCase {
         observationLocationRepository.list = [
             ObservationMapItem(
                 observationId: URL(string: "magetest://observation/1"),
-                observationLocationId: URL(string: "magetest://observationLocation/1")
+                observationLocationId: URL(string: "magetest://observationLocation/1"),
+                userDefaults: .standard
             )
         ]
         
@@ -58,11 +59,13 @@ final class BottomSheetRepositoryTests: MageInjectionTestCase {
         observationLocationRepository.list = [
             ObservationMapItem(
                 observationId: URL(string: "magetest://observation/1"),
-                observationLocationId: URL(string: "magetest://observationLocation/1")
+                observationLocationId: URL(string: "magetest://observationLocation/1"),
+                userDefaults: .standard
             ),
             ObservationMapItem(
                 observationId: URL(string: "magetest://observation/1"),
-                observationLocationId: URL(string: "magetest://observationLocation/2")
+                observationLocationId: URL(string: "magetest://observationLocation/2"),
+                userDefaults: .standard
             )
         ]
         
