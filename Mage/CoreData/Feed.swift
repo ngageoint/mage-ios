@@ -160,11 +160,7 @@ import CoreData
             }
         }, failure: { task, error in
             NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
-            let alert = UIAlertController(title: "Feeds Sync Failed", message: "Contact server administrator for error: \(error.localizedDescription)", preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Done", style: .cancel))
-            if let completion = completion {
-                completion(alert)
-            }
+            completion?(nil)
         });
         return task;
     }
