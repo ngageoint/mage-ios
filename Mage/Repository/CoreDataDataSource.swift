@@ -111,67 +111,35 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         request.fetchOffset = (page ?? 0) * request.fetchLimit
         let previousHeader: String? = currentHeader
         var uriItems: [URIItem] = []
+        var newHeader: String? = previousHeader
         context?.performAndWait {
             if let fetched = context?.fetch(request: request) {
-                // First convert fetched to [ObservationModel] -> ObservationModel(observation: observation as! Observation)
-                let models: [ObservationModel] = fetched.compactMap { observation in
-                    guard let obs = observation as? Observation else { return nil }
-                    return ObservationModel(observation: obs)
-                }
-
-                // Second sort them by date (descending)
-                // NOTE: modelDate() defaulting to timeStamp not lastModified
-                let sortedModels = models.sorted { (a, b) in
-                    switch (a.modelDate(), b.modelDate()) {
-                    case let (d1?, d2?):
-                        return d1 > d2
-                    case (_?, nil):
-                        return true
-                    case (nil, _?):
-                        return false
-                    default:
-                        return false
-                    }
-                }
-
-                // For each DAY:
-                // - 1: URIItem.sectionHeader(header: DAY)
-                // - N: URIItem.listItem(.objectID.uriRepresentation())
-                let dayFormatter = DateFormatter()
-                dayFormatter.dateStyle = .long
-                dayFormatter.timeStyle = .none
-
-                var tempItems: [URIItem] = []
-                var lastHeader: String? = previousHeader
-                for model in sortedModels {
-                    let date = model.modelDate()
-                    let header = date.map { dayFormatter.string(from: $0) } ?? "Other"
-                    if header != lastHeader {
-                        tempItems.append(.sectionHeader(header: header))
-                        lastHeader = header
-                    }
-                    let url = model.observationId
-                    if let url = url {
-                        tempItems.append(.listItem(url))
-                    }
-                }
-                uriItems = tempItems
+                let items = makeURIItems(from: fetched, previousHeader: previousHeader)
+                uriItems = items.items
+                newHeader = items.currentHeader
             }
         }
 
         let page: URIModelPage = URIModelPage(
             list: uriItems,
             next: (page ?? 0) + 1,
-            currentHeader: uriItems.compactMap { item -> String? in
-                if case let .sectionHeader(h) = item { return h }
-                return nil
-            }.last ?? previousHeader
+            currentHeader: newHeader
         )
 
         return Just(page)
             .setFailureType(to: Error.self)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+    
+    func makeURIItems(
+        from fetched: [T],
+        previousHeader: String?
+    ) -> (items: [URIItem], currentHeader: String?) {
+        let items = fetched.map { item in
+            URIItem.listItem(item.objectID.uriRepresentation())
+        }
+        return (items, previousHeader)
     }
 
     func executeOperationInBackground(task: BGTask? = nil) async -> Int {
@@ -200,4 +168,3 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         }
     }
 }
-
