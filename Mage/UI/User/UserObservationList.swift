@@ -30,7 +30,7 @@ struct UserObservationList: View {
     @ViewBuilder
     private func loadedView(rows: [URIItem]) -> some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 8) {
                 if rows.isEmpty {
                     emptyPlaceholder
                 } else {
@@ -46,6 +46,7 @@ struct UserObservationList: View {
             }
             .background(Color.backgroundColor)
         }
+        .listRowSeparator(.hidden)
         .transition(.opacity)
     }
 
@@ -138,14 +139,17 @@ struct UserObservationRow: View {
                 Text("Unable to load observation")
             }
         case .sectionHeader(let header):
-            HStack {
-                Text(header)
-                    .padding()
-                    .font(.overline)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.backgroundColor)
-                Spacer()
+            if header.isEmpty {
+                EmptyView()
+            } else {
+                HStack {
+                    Text(header)
+                        .font(.overline)
+                    Spacer()
+                }
+                .padding()
             }
         }
     }
 }
+
