@@ -79,9 +79,8 @@ class BottomSheetMixin: NSObject, MapMixin {
                 .medium(),
                 .large(),
                 .custom(identifier: .init("contentFit")) { context in
-                    // Read the calculated height from the hosting controller
-                    let height = mageBottomSheet.preferredContentSize.height
-                    return height > 0 ? height : 220
+                    // TODO: Fix me, not self-sizing properly
+                    return 250
                 },
             ]
         }
