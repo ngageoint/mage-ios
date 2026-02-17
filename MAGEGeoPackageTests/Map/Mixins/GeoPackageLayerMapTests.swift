@@ -201,24 +201,24 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         var geopackageImported = XCTestExpectation(description: "GeoPackage imported")
         
         await fulfillment(of: [importedNotification], timeout: 2)
-        await CacheOverlays.getInstance().notifyListeners()
+        await CacheOverlays.shared.notifyListeners()
         geopackageImported.fulfill()
         
         await fulfillment(of: [geopackageImported], timeout: 2)
         
-        var overlayCount = await CacheOverlays.getInstance().getOverlays().count
+        var overlayCount = await CacheOverlays.shared.getOverlays().count
         XCTAssertEqual(overlayCount, 3)
-        let count = await CacheOverlays.getInstance().getOverlays().count
+        let count = await CacheOverlays.shared.getOverlays().count
         expect(count).to(equal(3))
 
-        for overlay in await CacheOverlays.getInstance().getOverlays() {
+        for overlay in await CacheOverlays.shared.getOverlays() {
             if overlay.cacheName == "gpkgWithMedia_1_from_server" {
                 overlay.enabled = true
                 for overlay in overlay.getChildren() {
                     overlay.enabled = true
                 }
                 UserDefaults.standard.selectedCaches = ["gpkgWithMedia_1_from_server"]
-                await CacheOverlays.getInstance().notifyListeners()
+                await CacheOverlays.shared.notifyListeners()
             }
         }
         
@@ -245,14 +245,14 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         XCTAssertEqual(key?.featureCount, 1)
         XCTAssertEqual(key?.maxFeaturesFound, false)
 
-        for overlay in await CacheOverlays.getInstance().getOverlays() {
+        for overlay in await CacheOverlays.shared.getOverlays() {
             if overlay.cacheName == "gpkgWithMedia_1_from_server" {
                 overlay.enabled = false
                 for overlay in overlay.getChildren() {
                     overlay.enabled = false
                 }
                 UserDefaults.standard.selectedCaches = []
-                await CacheOverlays.getInstance().notifyListeners()
+                await CacheOverlays.shared.notifyListeners()
             }
         }
         
