@@ -32,25 +32,23 @@ struct MageBottomSheet: View {
     
     var body: some View {
         VStack {
-            if viewModel.count > 1 {
-                PageController(count: viewModel.count, selectedItem: viewModel.selectedItem) {
-                    if viewModel.selectedItem == 0 {
-                        return
-                    }
-                    first = false
-                    isBack = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                        viewModel.selectedItem = max(0, viewModel.selectedItem - 1)
-                    }
-                } rightTap: {
-                    if viewModel.selectedItem == viewModel.count - 1 {
-                        return
-                    }
-                    first = false
-                    isBack = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                        viewModel.selectedItem = min(viewModel.count - 1, viewModel.selectedItem + 1)
-                    }
+            PageController(count: viewModel.count, selectedItem: viewModel.selectedItem) {
+                if viewModel.selectedItem == 0 {
+                    return
+                }
+                first = false
+                isBack = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    viewModel.selectedItem = max(0, viewModel.selectedItem - 1)
+                }
+            } rightTap: {
+                if viewModel.selectedItem == viewModel.count - 1 {
+                    return
+                }
+                first = false
+                isBack = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    viewModel.selectedItem = min(viewModel.count - 1, viewModel.selectedItem + 1)
                 }
             }
             
