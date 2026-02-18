@@ -19,7 +19,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     override func tearDown() async throws {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
-        await CacheOverlays.getInstance().removeAll()
+        await CacheOverlays.shared.removeAll()
         
         try await super.tearDown()
     }
@@ -28,7 +28,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try await super.setUp()
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
-        await CacheOverlays.getInstance().removeAll()
+        await CacheOverlays.shared.removeAll()
     }
     
     func testImportGeoPackageFileAndIndex() async throws {
@@ -140,7 +140,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     // TODO: Fails RANDOMLY
     func testImportGeoPackageFileIntoLayer() async throws {
         let mockListener = MockCacheOverlayListener()
-        await CacheOverlays.getInstance().register(mockListener)
+        await CacheOverlays.shared.register(mockListener)
         
         context.performAndWait {
             let layer = Layer(context: context)
@@ -190,7 +190,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     
     func testImportGeoPackageFileIntoCurrentEventLayer() async throws {
         let mockListener = MockCacheOverlayListener()
-        await CacheOverlays.getInstance().register(mockListener)
+        await CacheOverlays.shared.register(mockListener)
         Server.setCurrentEventId(1)
                 
         context.performAndWait {
@@ -241,7 +241,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     
     func testFailImportGeoPackageFileIntoCurrentEventLayer() async throws {
         let mockListener = MockCacheOverlayListener()
-        await CacheOverlays.getInstance().register(mockListener)
+        await CacheOverlays.shared.register(mockListener)
         Server.setCurrentEventId(1)
         
         context.performAndWait {
@@ -293,7 +293,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     
     func testImportGeoPackageTilesFileIntoLayer() async throws {
         let mockListener = MockCacheOverlayListener()
-        await CacheOverlays.getInstance().register(mockListener)
+        await CacheOverlays.shared.register(mockListener)
         
         Server.setCurrentEventId(1)
         
@@ -513,7 +513,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     
     func testProcessOfflineMapArchivesXYZZip() async throws {
         let mockListener = MockCacheOverlayListener()
-        await CacheOverlays.getInstance().register(mockListener)
+        await CacheOverlays.shared.register(mockListener)
         
         let documentsPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = documentsPaths[0] as String
@@ -558,7 +558,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             expect(layer?.name).to(equal("0"))
             expect(layer?.eventId).to(equal(-1))
             
-            let overlay = CacheOverlays.getInstance().getByCacheName("0")
+            let overlay = CacheOverlays.shared.getByCacheName("0")
             expect(overlay).toNot(beNil())
         }
         
@@ -569,7 +569,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             try FileManager.default.removeItem(at: fileURL)
         }
         
-        await CacheOverlays.getInstance().remove(byCacheName: "0")
+        await CacheOverlays.shared.remove(byCacheName: "0")
         
         await awaitDidSave {
             await importer.processOfflineMapArchives()
@@ -580,7 +580,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     
     func testProcessOfflineMapArchivesXYZDirectory() async throws {
         let mockListener = MockCacheOverlayListener()
-        await CacheOverlays.getInstance().register(mockListener)
+        await CacheOverlays.shared.register(mockListener)
         
         let documentsPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = documentsPaths[0] as String
@@ -630,7 +630,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             try FileManager.default.removeItem(at: fileURL)
         }
         
-        await CacheOverlays.getInstance().remove(byCacheName: "testxyz")
+        await CacheOverlays.shared.remove(byCacheName: "testxyz")
         
         await awaitDidSave {
             await importer.processOfflineMapArchives()

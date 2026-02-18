@@ -38,7 +38,7 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : false,
+      "parallelizable" : true,
       "skippedTests" : [
         "AttachmentFieldViewTests\/testSetOneAttachmentThatIsSyncedAndOneThatIsNot()",
         "AttachmentFieldViewTests\/testSetOneAttachmentThatIsSyncedAndOneThatIsNotDifferentOrder()",
