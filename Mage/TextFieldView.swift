@@ -16,7 +16,6 @@ class TextFieldView : BaseFieldView {
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         multilineTextField.textView.delegate = self;
-        multilineTextField.textView.inputAccessoryView = accessoryView;
         multilineTextField.textView.keyboardType = keyboardType;
         if (field[FieldKey.type.key] as? String == FieldType.textarea.key) {
             multilineTextField.trailingView = UIImageView(image: UIImage(named: "text_fields"));
@@ -37,7 +36,6 @@ class TextFieldView : BaseFieldView {
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
-        textField.inputAccessoryView = accessoryView;
         textField.keyboardType = keyboardType;
         if (field[FieldKey.type.key] as? String == FieldType.email.key) {
             textField.trailingView = UIImageView(image: UIImage(systemName: "envelope"));
@@ -60,22 +58,17 @@ class TextFieldView : BaseFieldView {
         return textField;
     }()
     
-    private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 44);
-        
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        doneBarButton.accessibilityLabel = "Done";
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
-        cancelBarButton.accessibilityLabel = "Cancel";
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-        
-        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
-        return toolbar;
-    }()
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+
+    func focusField() -> Bool {
+        if (multiline) {
+            multilineTextField.textView.becomeFirstResponder()
+        } else {
+            textField.becomeFirstResponder()
+        }
+        return true
     }
     
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
@@ -225,6 +218,28 @@ extension TextFieldView: UITextFieldDelegate {
             }
             delegate?.fieldValueChanged(field, value: value);
         }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let formView = findObservationFormView(),
+           formView.focusNextTextField(after: self) {
+            return false
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+extension TextFieldView {
+    private func findObservationFormView() -> ObservationFormView? {
+        var currentView: UIView? = self
+        while let view = currentView {
+            if let formView = view as? ObservationFormView {
+                return formView
+            }
+            currentView = view.superview
+        }
+        return nil
     }
 }
 

@@ -186,6 +186,23 @@ class ObservationFormView: UIStackView {
         containingCard?.markValid(valid);
         return valid;
     }
+
+    func focusNextTextField(after fieldView: BaseFieldView) -> Bool {
+        guard let index = arrangedSubviews.firstIndex(where: { $0 === fieldView }) else {
+            return false
+        }
+        let nextIndex = index + 1
+        guard nextIndex < arrangedSubviews.count else {
+            return false
+        }
+        for viewIndex in nextIndex..<arrangedSubviews.count {
+            if let textFieldView = arrangedSubviews[viewIndex] as? TextFieldView,
+               textFieldView.focusField() {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 extension ObservationFormView: FieldSelectionDelegate {

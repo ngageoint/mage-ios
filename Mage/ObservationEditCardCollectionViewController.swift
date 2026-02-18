@@ -144,6 +144,10 @@ import MaterialComponents.MDCCard
         addStackViewConstraints();
         setupStackView(stackView: stackView);
         self.view.addSubview(addFormFAB);
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapToDismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGesture)
         addFormFAB.autoPinEdge(toSuperviewMargin: .bottom);
         addFormFAB.autoPinEdge(toSuperviewMargin: .right);
         
@@ -155,10 +159,7 @@ import MaterialComponents.MDCCard
             }
             switch animation {
             case .keyboardWillShow:
-                self.navigationItem.rightBarButtonItem?.isEnabled = false;
-                self.navigationItem.leftBarButtonItem?.isEnabled = false;
-                self.bottomConstraint?.constant = -keyboardFrame.height;
-                self.view.layoutIfNeeded();
+                self.navigationItem.rightBarButtonItem?.isEnabled = true;
 
                 if let firstResponder = self.stackView.firstResponder {
                     let firstResponderPoint = self.scrollView.convert(CGPoint(x: 0, y: firstResponder.frame.origin.y + 20), from: firstResponder.superview);
@@ -167,9 +168,11 @@ import MaterialComponents.MDCCard
                     self.scrollView.contentOffset = CGPoint(x: self.scrollView.contentOffset.x, y: self.scrollView.contentOffset.y + keyboardFrame.height - 60)
                 }
 
+                self.bottomConstraint?.constant = -keyboardFrame.height;
+                self.view.layoutIfNeeded();
+
             case .keyboardWillHide:
                 self.navigationItem.rightBarButtonItem?.isEnabled = true;
-                self.navigationItem.leftBarButtonItem?.isEnabled = true;
                 self.bottomConstraint?.constant = -60;
                 self.view.layoutIfNeeded();
             
@@ -429,6 +432,12 @@ import MaterialComponents.MDCCard
         guard let observation = self.observation else { return }
         if (checkObservationValidity()) {
             self.delegate?.saveObservation(observation: observation);
+        }
+    }
+
+    @objc func handleTapToDismissKeyboard() {
+        if let firstResponder = view.firstResponder as? UITextView {
+            firstResponder.resignFirstResponder()
         }
     }
     
