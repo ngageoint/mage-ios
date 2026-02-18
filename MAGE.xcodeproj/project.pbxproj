@@ -97,6 +97,7 @@
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		311C6FB92F2A646C00298067 /* ObservationTableHeaderViewSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311C6FB82F2A646C00298067 /* ObservationTableHeaderViewSwift.swift */; };
 		313FA0702E130399008DA52E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FA06F2E130399008DA52E /* Date.swift */; };
+		31EA7F152F463ED3009C9FA7 /* ExpandingTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA7F142F463ED3009C9FA7 /* ExpandingTextEditor.swift */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.swift */; };
@@ -1098,6 +1099,7 @@
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		311C6FB82F2A646C00298067 /* ObservationTableHeaderViewSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableHeaderViewSwift.swift; sourceTree = "<group>"; };
 		313FA06F2E130399008DA52E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		31EA7F142F463ED3009C9FA7 /* ExpandingTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingTextEditor.swift; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
@@ -2100,6 +2102,7 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				31EA7F142F463ED3009C9FA7 /* ExpandingTextEditor.swift */,
 				F796E44B24193C9A005CA09C /* Attachment */,
 				F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */,
 				F7A292291FC3938F00DE5463 /* Authentication */,
@@ -5018,6 +5021,7 @@
 				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
 				F72D43132694B60300F9AC3B /* ImageryLayer.swift in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
+				31EA7F152F463ED3009C9FA7 /* ExpandingTextEditor.swift in Sources */,
 				F763FF322C79180F00403A00 /* EventModel.swift in Sources */,
 				F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */,
 				2F6D80D52B1FAB9900545221 /* Geocoder.swift in Sources */,
