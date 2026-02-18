@@ -49,22 +49,5 @@ public class MapState: ObservableObject, Hashable {
     @Published public var userTrackingMode: Int = Int(MKUserTrackingMode.none.rawValue)
     @Published public var mixinStates: [String: Any] = [:]
 
-    public var centerDate: Date?
-    @Published public var center: MKCoordinateRegion? {
-        didSet {
-            centerDate = Date()
-        }
-    }
-    @Published public var forceCenter: MKCoordinateRegion? {
-        didSet {
-            forceCenterDate = Date()
-        }
-    }
-    public var forceCenterDate: Date?
-
-    @Published public var coordinateCenter: CLLocationCoordinate2D? {
-        didSet {
-            forceCenterDate = Date()
-        }
-    }
+    @Published public var centerRegion: MKCoordinateRegion?
 }

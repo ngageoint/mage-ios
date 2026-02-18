@@ -39,7 +39,7 @@ class GeometryView : BaseFieldView {
     
     lazy var mapView: SingleFeatureMapView = {
         let mapView = SingleFeatureMapView(observation: nil, scheme: scheme)
-        mapView.autoSetDimension(.height, toSize: editMode ? 150 : 200);
+        mapView.autoSetDimension(.height, toSize: 200) // keep a consistent size
 
         return mapView;
     }()

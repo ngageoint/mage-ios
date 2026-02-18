@@ -6,9 +6,10 @@
 //  Copyright © 2021 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+import Combine
 import Foundation
 import MapFramework
-import Combine
+import SwiftUI
 
 protocol BottomSheetEnabled {
     var mapView: MKMapView? { get set }
@@ -74,8 +75,16 @@ class BottomSheetMixin: NSObject, MapMixin {
         let mageBottomSheet = SwiftUIViewController(swiftUIView: MageBottomSheet())
         mageBottomSheet.modalPresentationStyle = .pageSheet
         if let sheet = mageBottomSheet.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [
+                .medium(),
+                .large(),
+                .custom(identifier: .init("contentFit")) { context in
+                    // TODO: Fix me, not self-sizing properly
+                    return 250
+                },
+            ]
         }
+        
         self.bottomSheetEnabled.navigationController?.present(mageBottomSheet, animated: true, completion: nil)
         
         self.mageBottomSheet = mageBottomSheet

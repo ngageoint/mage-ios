@@ -41,9 +41,9 @@ struct ObservationHeaderViewSwiftUI: View {
                 ObservationLocationSummary(
                     timestamp: viewModel.observationModel?.timestamp,
                     user: viewModel.user?.name,
-                    primaryFieldText: viewModel.primaryFieldText,
-                    secondaryFieldText: viewModel.secondaryFieldText,
-                    iconPath: nil, 
+                    primaryFieldText: viewModel.primaryFeedFieldText,
+                    secondaryFieldText: viewModel.secondaryFeedFieldText,
+                    iconPath: nil,
                     error: viewModel.observationModel?.error ?? false,
                     syncing: viewModel.observationModel?.syncing ?? false
                 )

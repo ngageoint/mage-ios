@@ -30,6 +30,8 @@ enum ObservationState: Int, CustomStringConvertible {
     
     public static let PRIMARY_OBSERVATION_GEOMETRY = "primary-observation-geometry"
 
+    var userDefaults = UserDefaults.standard    // Allow for injection since this is NSManagedObject
+    
     var orderedAttachments: [AttachmentModel]? {
         get {
             var observationForms: [[String: Any]] = []
@@ -87,14 +89,10 @@ enum ObservationState: Int, CustomStringConvertible {
 
     public func viewRegion(mapView: MKMapView) -> MKCoordinateRegion {
         if let geometry = self.geometry {
-            var latitudeMeters = 2500.0
-            var longitudeMeters = 2500.0
-            if geometry is SFPoint {
-                if let properties = properties, let accuracy = properties[ObservationKey.accuracy.key] as? Double {
-                    latitudeMeters = accuracy * 2.5
-                    longitudeMeters = accuracy * 2.5
-                }
-            } else {
+            var latitudeMeters = userDefaults.pointCoordinateSpan
+            var longitudeMeters = userDefaults.pointCoordinateSpan
+            
+            if geometry.geometryType != .POINT {
                 let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
                 let boundingBox = GPKGBoundingBox(envelope: envelope)
                 if let size = boundingBox?.sizeInMeters() {
@@ -917,8 +915,8 @@ enum ObservationState: Int, CustomStringConvertible {
             return nil
         }
     }
-    
-    @available(*, deprecated, message: "Don't use this anymore")
+   
+    @available(*, deprecated, message: "Don't use this anymore") // FIXME: Can we migrate off this method?
     @objc public var primaryFieldText: String? {
         get {
             if let primaryField = primaryEventForm?.primaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFieldName = primaryField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -929,7 +927,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
-    @available(*, deprecated, message: "Don't use this anymore")
+    @available(*, deprecated, message: "Don't use this anymore") // FIXME: Can we migrate off this method?
     @objc public var secondaryFieldText: String? {
         get {
             if let variantField = primaryEventForm?.secondaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let variantFieldName = variantField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -940,26 +938,17 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
-    @available(*, deprecated, message: "Don't use this anymore")
-    @objc public var primaryFeedFieldText: String? {
-        get {
-            if let primaryFeedField = primaryEventForm?.primaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFeedFieldName = primaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
-                let value = primaryObservationForm?[primaryFeedFieldName]
-                return Observation.fieldValueText(value: value, field: primaryFeedField)
-            }
-            return nil;
+    /// Get the text for a form field. General purpose and returns `nil` if values are empty.
+    static func text(form: [AnyHashable: Any]?, fieldDefinition: [AnyHashable: Any]?) -> String? {
+        guard let form = form,
+              let field = fieldDefinition,
+              let fieldName = field[FieldKey.name.key] as? String,
+              let value = form[fieldName] else {
+            return nil
         }
-    }
-    
-    @available(*, deprecated, message: "Don't use this anymore")
-    @objc public var secondaryFeedFieldText: String? {
-        get {
-            if let secondaryFeedField = primaryEventForm?.secondaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let secondaryFeedFieldName = secondaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
-                let value = self.primaryObservationForm?[secondaryFeedFieldName]
-                return Observation.fieldValueText(value: value, field: secondaryFeedField)
-            }
-            return nil;
-        }
+        
+        let text = Observation.fieldValueText(value: value, field: field)
+        return text.isEmpty ? nil : text
     }
     
     public func getAccuracy() -> Double? {
@@ -1072,20 +1061,10 @@ enum ObservationState: Int, CustomStringConvertible {
                     in: context
                 )
                 
-                if let form = primaryObservationForm,
-                   let eventForm = eventForm,
-                   let primaryField = eventForm.primaryMapField,
-                   let primaryFieldName = primaryField[FieldKey.name.key] as? String
-                {
+                if let form = primaryObservationForm {
                     observationLocation.observationFormId = form[FormKey.id.key] as? String
-                    let primaryValue = form[primaryFieldName]
-                    observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
-                    if let secondaryField = eventForm.secondaryMapField,
-                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
-                    {
-                        let secondaryValue = form[secondaryFieldName]
-                        observationLocation.secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
-                    }
+                    observationLocation.primaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.primaryFeedField)
+                    observationLocation.secondaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.secondaryFeedField)
                 }
                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                 if let centroid = geometry.centroid() {
@@ -1140,20 +1119,8 @@ enum ObservationState: Int, CustomStringConvertible {
                                     in: context
                                 )
                                 
-                                if let eventForm = eventForm,
-                                   let primaryField = eventForm.primaryMapField,
-                                   let primaryFieldName = primaryField[FieldKey.name.key] as? String
-                                {
-                                    let primaryValue = form[primaryFieldName]
-                                    observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
-                                    if let secondaryField = eventForm.secondaryMapField,
-                                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
-                                    {
-                                        let secondaryValue = form[secondaryFieldName]
-                                        observationLocation.secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
-                                    }
-                                }
-                                
+                                observationLocation.primaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.primaryFeedField)
+                                observationLocation.secondaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.secondaryFeedField)
                                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                                 if let centroid = geometry.centroid() {
                                     observationLocation.latitude = centroid.y.doubleValue

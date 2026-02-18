@@ -14,6 +14,15 @@ class MageHostingController<Content>: UIHostingController<Content> where Content
         super.viewDidLayoutSubviews()
         self.view.invalidateIntrinsicContentSize()
     }
+    
+    override init(rootView: Content) {
+        super.init(rootView: rootView)
+        sizingOptions = .preferredContentSize
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Not implemented")
+    }
 }
 
 class SwiftUIViewController: UIViewController {

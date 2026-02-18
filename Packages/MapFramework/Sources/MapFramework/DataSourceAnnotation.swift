@@ -13,8 +13,14 @@ import DataSourceDefinition
 public protocol DataSourceIdentifiable {
     var id: String { get set }
     var itemKey: String { get set }
-    
     var dataSource: any DataSourceDefinition { get set }
+    func key() -> String
+}
+
+public extension DataSourceIdentifiable {
+    func key() -> String {
+        return itemKey.isEmpty ? id : itemKey
+    }
 }
 
 public class UnknownDefinition: DataSourceDefinition {

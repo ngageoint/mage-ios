@@ -127,6 +127,46 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         return request
     }
     
+    // Observation lists need date section headers and observationId URIs.
+    override func makeURIItems(
+        from fetched: [Observation],
+        previousHeader: String?
+    ) -> (items: [URIItem], currentHeader: String?) {
+        let models = fetched.map { ObservationModel(observation: $0) }
+        let sortedModels = models.sorted { (a, b) in
+            switch (a.modelDate(), b.modelDate()) {
+            case let (d1?, d2?):
+                return d1 > d2
+            case (_?, nil):
+                return true
+            case (nil, _?):
+                return false
+            default:
+                return false
+            }
+        }
+
+        let dayFormatter = DateFormatter()
+        dayFormatter.dateStyle = .long
+        dayFormatter.timeStyle = .none
+
+        var items: [URIItem] = []
+        var lastHeader: String? = previousHeader
+        for model in sortedModels {
+            let date = model.modelDate()
+            let header = date.map { dayFormatter.string(from: $0) } ?? "Other"
+            if header != lastHeader {
+                items.append(.sectionHeader(header: header))
+                lastHeader = header
+            }
+            if let url = model.observationId {
+                items.append(.listItem(url))
+            }
+        }
+
+        return (items, lastHeader)
+    }
+    
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
         guard let observationUri = observationUri else {
             return nil

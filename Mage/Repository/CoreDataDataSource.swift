@@ -110,26 +110,36 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit
         let previousHeader: String? = currentHeader
-        var users: [URIItem] = []
+        var uriItems: [URIItem] = []
+        var newHeader: String? = previousHeader
         context?.performAndWait {
             if let fetched = context?.fetch(request: request) {
-
-                users = fetched.flatMap { user in
-                    return [URIItem.listItem(user.objectID.uriRepresentation())]
-                }
+                let items = makeURIItems(from: fetched, previousHeader: previousHeader)
+                uriItems = items.items
+                newHeader = items.currentHeader
             }
         }
 
         let page: URIModelPage = URIModelPage(
-            list: users,
+            list: uriItems,
             next: (page ?? 0) + 1,
-            currentHeader: previousHeader
+            currentHeader: newHeader
         )
 
         return Just(page)
             .setFailureType(to: Error.self)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+    
+    func makeURIItems(
+        from fetched: [T],
+        previousHeader: String?
+    ) -> (items: [URIItem], currentHeader: String?) {
+        let items = fetched.map { item in
+            URIItem.listItem(item.objectID.uriRepresentation())
+        }
+        return (items, previousHeader)
     }
 
     func executeOperationInBackground(task: BGTask? = nil) async -> Int {
