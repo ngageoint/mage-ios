@@ -262,6 +262,7 @@ class MagicalRecordPersistence: Persistence {
             context.mr_saveToPersistentStoreAndWait()
             DispatchQueue.main.async {
                 self.refreshSubject.send(Date())
+                NotificationCenter.default.post(name: .ObservationLocationMigrationCompleted, object: nil)
             }
         }
     }

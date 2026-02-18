@@ -81,6 +81,13 @@ class ObservationsMap: DataSourceMap {
                 self.focusAnnotation(mapItem: output?.item as? ObservationMapItem)
             }
             .store(in: &cancellable)
+
+        NotificationCenter.default.publisher(for: .ObservationLocationMigrationCompleted)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshAll()
+            }
+            .store(in: &cancellable)
     }
 
     private func refreshAll() {
