@@ -75,6 +75,7 @@ class DateView : BaseFieldView {
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        textField.tintColor = scheme.colorScheme.onSurfaceColor;
     }
     
     required init(coder aDecoder: NSCoder) {
