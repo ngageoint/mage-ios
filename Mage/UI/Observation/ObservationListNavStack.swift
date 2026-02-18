@@ -20,9 +20,14 @@ class ObservationListNavStack: MageNavStack {
         setNavBarTitle()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(launchObservationFilter))
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavBarTitle()
+    }
     
     func setNavBarTitle() {
-        let timeFilterString = MageFilter.getString();
+        let timeFilterString = TimeFilter.getObservationTimeFilterString();
         self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
     }
     
