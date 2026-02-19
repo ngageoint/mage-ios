@@ -6,367 +6,454 @@
 //  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import Foundation
+import XCTest
 import CoreData
-import Combine
-import OHHTTPStubs
+import ExceptionCatcher
 
 @testable import MAGE
 
-final class ObservationToObservationPolicyTests: MageCoreDataTestCase {
-
-    override func setUp() {
-        super.setUp()
-        var cleared = false;
-//        while (!cleared) {
-//            let clearMap = TestHelpers.clearAndSetUpStack()
-//            cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationLocation.self)] ?? false)
-//
-//            if (!cleared) {
-//                cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && ObservationLocation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-//            }
-//
-//            if (!cleared) {
-//                Thread.sleep(forTimeInterval: 0.5);
-//            }
-//
-//        }
-//
-//        let e = XCTNSPredicateExpectation(predicate: NSPredicate(block: { context, change in
-//            guard let context = context as? NSManagedObjectContext else {
-//                return false
-//            }
-//            if let count = Observation.mr_findAll(in: context)?.count {
-//                return count == 0
-//            }
-//            return false
-//        }), object: NSManagedObjectContext.mr_default())
-////        wait(for: [e], timeout: 10)
-//
-//        let e2 = XCTNSPredicateExpectation(predicate: NSPredicate(block: { context, change in
-//            guard let context = context as? NSManagedObjectContext else {
-//                return false
-//            }
-//            if let count = Observation.mr_findAll(in: context)?.count {
-//                return count == 0
-//            }
-//            return false
-//        }), object: NSManagedObjectContext.mr_rootSaving())
-//        wait(for: [e, e2], timeout: 10)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
-    private let storeType = NSSQLiteStoreType
+final class ObservationToObservationPolicyTests: XCTestCase {
     private let modelName = "mage-ios-sdk"
-    private let modelNameVersionFormatString = "mage-ios-sdk %@"
+    private let modelVersionFormat = "mage-ios-sdk %@"
+    private let realV22FixtureRelativePath = "Migration/real-v22/mage-v22-simple-event"
+    private var temporaryStoreURLs: [URL] = []
+    private var temporaryDirectories: [URL] = []
 
-    private func storeURL(_ version: String) -> URL? {
-        let storeURL = URL(fileURLWithPath: "\(NSTemporaryDirectory())\(version).sqlite" )
-        return storeURL
-    }
-
-    private func createObjectModel(_ version: String) -> NSManagedObjectModel? {
-        let bundle = Bundle.main
-        let managedObjectModelURL = bundle.url(forResource: modelName, withExtension: "momd")
-        let managedObjectModelURLBundle = Bundle(url: managedObjectModelURL!)
-        let modelVersionName = String(format: modelNameVersionFormatString, version)
-        let managedObjectModelVersionURL = managedObjectModelURLBundle!.url(forResource: modelVersionName, withExtension: "mom")
-        return NSManagedObjectModel(contentsOf: managedObjectModelVersionURL!)
-    }
-
-    private func createStore(_ version: String) -> NSPersistentStoreCoordinator {
-        let model = createObjectModel(version)
-        let storeCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model!)
-        try! storeCoordinator.addPersistentStore(ofType: storeType,
-                                                 configurationName: nil,
-                                                 at: storeURL(version),
-                                                 options: nil)
-        return storeCoordinator
-    }
-
-    private func migrateStore(fromVersionMOM: String, toVersionMOM: String) {
-        let store = createStore(fromVersionMOM)
-
-        NSPersistentStoreCoordinator.mr_setDefaultStoreCoordinator(store)
-        NSManagedObjectContext.mr_initializeDefaultContext(with: store)
-
-
-        let nextVersionObjectModel = createObjectModel(toVersionMOM)!
-        let mappingModel = NSMappingModel(from: [Bundle.main], forSourceModel: store.managedObjectModel, destinationModel: nextVersionObjectModel)!
-        let migrationManager = NSMigrationManager(sourceModel: store.managedObjectModel, destinationModel: nextVersionObjectModel)
-        do {
-            try migrationManager.migrateStore(from: store.persistentStores.first!.url!,
-                                              sourceType: storeType,
-                                              options: nil,
-                                              with: mappingModel,
-                                              toDestinationURL: storeURL(toVersionMOM)!,
-                                              destinationType: NSSQLiteStoreType,
-                                              destinationOptions: nil)
-        } catch {
-            print("Error: \(error)")
-            XCTAssertNil(error)
+    override func tearDownWithError() throws {
+        for url in temporaryStoreURLs {
+            removeSQLiteArtifacts(at: url)
         }
-        try! FileManager.default.removeItem(at: storeURL(toVersionMOM)!)
-        try! FileManager.default.removeItem(at: storeURL(fromVersionMOM)!)
+        temporaryStoreURLs.removeAll()
+        for directoryURL in temporaryDirectories {
+            try? FileManager.default.removeItem(at: directoryURL)
+        }
+        temporaryDirectories.removeAll()
+        try super.tearDownWithError()
     }
 
-    func testMigratingStores() {
+    func testBundled22To23MappingModelHashMismatchThrows() throws {
+        let sourceURL = createTemporaryStoreURL(name: "mapping-mismatch-source")
+        let destinationURL = createTemporaryStoreURL(name: "mapping-mismatch-destination")
 
+        let sourceModel = try createSeededModel22Store(at: sourceURL)
+        let destinationModel = try objectModel(version: "23")
+        let mappingModel = try model22To23MappingModel()
+        let migrationManager = NSMigrationManager(sourceModel: sourceModel, destinationModel: destinationModel)
 
-
+        XCTAssertThrowsError(
+            try runMigration(
+                manager: migrationManager,
+                sourceURL: sourceURL,
+                destinationURL: destinationURL,
+                mappingModel: mappingModel
+            )
+        ) { error in
+            XCTAssertTrue(
+                error.localizedDescription.contains("Mismatch between mapping and source/destination models"),
+                "Unexpected migration error: \(error.localizedDescription)"
+            )
+        }
     }
 
+    func testAutomaticMigrationWithInferMappingSkipsCustomPolicy() throws {
+        let sourceURL = createTemporaryStoreURL(name: "migration-auto-source")
+        _ = try createSeededModel22Store(at: sourceURL)
 
-    func xtestMigration22To23() {
-        let fromVersionMOM = "22"
-        let toVersionMOM = "23"
+        let destinationModel = try objectModel(version: "23")
+        let options: [AnyHashable: Any] = [
+            NSMigratePersistentStoresAutomaticallyOption: true,
+            NSInferMappingModelAutomaticallyOption: true
+        ]
 
-        let store = createStore(fromVersionMOM)
+        let destinationCoordinator = try addStore(model: destinationModel, url: sourceURL, options: options)
+        let locations = try fetchObservationLocations(coordinator: destinationCoordinator)
 
-//        NSPersistentStoreCoordinator.mr_setDefaultStoreCoordinator(store)
-//        NSManagedObjectContext.mr_initializeDefaultContext(with: store)
-//
-//        // insert observations
-//        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
-//
-//        let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
-//
-//        var baseObservationJson: [AnyHashable : Any] = [:]
-//        baseObservationJson["important"] = nil;
-//        baseObservationJson["favoriteUserIds"] = nil;
-//        baseObservationJson["attachments"] = nil;
-//        baseObservationJson["lastModified"] = nil;
-//        baseObservationJson["createdAt"] = nil;
-//        baseObservationJson["eventId"] = 1;
-//        baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
-//        baseObservationJson["state"] = [
-//            "name": "active"
-//        ]
-//        baseObservationJson["geometry"] = [
-//            "coordinates": [-1.1, 2.1],
-//            "type": "Point"
-//        ]
-//        baseObservationJson["properties"] = [
-//            "timestamp": "2020-06-05T17:21:46.969Z",
-//            "forms": [[
-//                "formId":1,
-//                "field1":[
-//                    "coordinates": [-1.1, 2.1],
-//                    "type": "Point"
-//                ]
-//            ],
-//            [
-//                "formId": 2,
-//                "field1": [
-//                    "coordinates": [-4.1, 5.1],
-//                    "type": "Point"
-//                ]
-//            ]]
-//        ];
-//
-//        MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
-//
-//        baseObservationJson["properties"] = [
-//            "timestamp": "2020-06-05T17:21:46.969Z",
-//            "forms": [[
-//                "formId":1,
-//                "field1":[
-//                    "coordinates": [-1.1, 2.1],
-//                    "type": "Point"
-//                ]
-//            ],
-//              [
-//                "formId": 2,
-//                "field1": [
-//                    "coordinates": [-4.1, 5.1],
-//                    "type": "Point"
-//                ],
-//                "field3": [
-//                    "coordinates": [
-//                        [100.0, 0.0],
-//                        [101.0, 1.0]
-//                    ],
-//                    "type": "LineString"
-//                ]
-//              ]]
-//        ]
-//
-//        MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
+        XCTAssertEqual(
+            locations.count,
+            0,
+            "App-style inferred migration does not invoke ObservationToObservationPolicy, so ObservationLocation rows are never created."
+        )
+    }
 
-        // let core data do the migration
-        let nextVersionObjectModel = createObjectModel(toVersionMOM)!
+    func testNormalizedMappingWithoutModelVersionSkipsCustomPolicy() throws {
+        let sourceURL = createTemporaryStoreURL(name: "normalized-no-modelversion-source")
+        let destinationURL = createTemporaryStoreURL(name: "normalized-no-modelversion-destination")
 
-//        NSMappingModel *mappingModel = [NSMappingModel
-//                                        mappingModelFromBundles:@[[NSBundle bundleForClass:[MyTestClass class]]]
-//                                        forSourceModel:version1Model destinationModel:version2Model];
+        let sourceModel = try createSeededModel22Store(at: sourceURL)
+        let destinationModel = try objectModel(version: "23")
+        let mappingModel = try normalizedModel22To23Mapping(sourceModel: sourceModel, destinationModel: destinationModel)
 
-//        let mappingModel = NSMappingModel(from: [Bundle.main], forSourceModel: store.managedObjectModel, destinationModel: nextVersionObjectModel)!
+        for entityMapping in mappingModel.entityMappings where entityMapping.sourceEntityName == "Observation" {
+            entityMapping.userInfo = nil
+        }
 
-//        let mappingModel = NSMappingModel(from: [Bundle(for: ObservationToObservationPolicyTests.self)], forSourceModel: store.managedObjectModel, destinationModel: nextVersionObjectModel)!
+        let migrationManager = NSMigrationManager(sourceModel: sourceModel, destinationModel: destinationModel)
+        try runMigration(
+            manager: migrationManager,
+            sourceURL: sourceURL,
+            destinationURL: destinationURL,
+            mappingModel: mappingModel
+        )
 
-//        let mappingModel = NSMappingModel(from: nil, forSourceModel: store.managedObjectModel, destinationModel: nextVersionObjectModel)!
+        let destinationCoordinator = try addStore(model: destinationModel, url: destinationURL, options: nil)
+        let locations = try fetchObservationLocations(coordinator: destinationCoordinator)
 
-//        NSString *mappingModelPath = [[NSBundle mainBundle] pathForResource:@"mappingModel10" ofType:@"cdm"];
-//        NSLog(@"mapping model path:%@", mappingModelPath);
-//        NSURL *mappingModelUrl = [NSURL fileURLWithPath:mappingModelPath];
-//        NSMappingModel *mappingModel = [[NSMappingModel alloc] initWithContentsOfURL:mappingModelUrl];
+        XCTAssertEqual(locations.count, 0)
+    }
 
-        do {
+    func testRealV22FixtureAutomaticMigrationLeavesObservationLocationsMissing() throws {
+        let storeURL = try copyRealV22FixtureStoreToTemporaryLocation()
+        let sourceModel = try objectModel(version: "22")
+        let sourceCoordinator = try addStore(model: sourceModel, url: storeURL, options: nil)
+        let sourceObservationCount = try countEntities(named: "Observation", coordinator: sourceCoordinator)
+        XCTAssertGreaterThan(sourceObservationCount, 0, "Fixture has no observations; cannot validate migration behavior.")
+        if let store = sourceCoordinator.persistentStores.first {
+            try sourceCoordinator.remove(store)
+        }
 
-            let mappingModelUrl = Bundle.main.url(forResource: "Model22To23", withExtension: "cdm")!
-            let mappingModel = NSMappingModel(contentsOf: mappingModelUrl)
+        let destinationModel = try objectModel(version: "23")
+        let options: [AnyHashable: Any] = [
+            NSMigratePersistentStoresAutomaticallyOption: true,
+            NSInferMappingModelAutomaticallyOption: true
+        ]
+        let destinationCoordinator = try addStore(model: destinationModel, url: storeURL, options: options)
+        let locationCount = try countEntities(named: "ObservationLocation", coordinator: destinationCoordinator)
 
-            var newEntityMappings: [NSEntityMapping] = mappingModel?.entityMappings ?? []
-            for entityMapping in newEntityMappings {
-//                var newMapping = entityMapping
-                if let sourceEntityName = entityMapping.sourceEntityName {
-                    print("BEGIN ---- \(sourceEntityName) -----")
-                    print("Entity Mapping is: \n \(entityMapping)")
-                    print("entity mapping sourceEntityVersionHash \(entityMapping.sourceEntityVersionHash?.testDescription)")
-                    print("store entityVersionHash \(store.managedObjectModel.entityVersionHashesByName[sourceEntityName]?.testDescription)")
-                    entityMapping.sourceEntityVersionHash = store.managedObjectModel.entityVersionHashesByName[sourceEntityName]
+        XCTAssertEqual(
+            locationCount,
+            0,
+            "Expected app-style inferred migration to skip ObservationToObservationPolicy for this fixture."
+        )
+    }
 
-                    print("entity mapping destinationEntityVersionHash \(entityMapping.destinationEntityVersionHash?.testDescription)")
-                    print("store destinationEntityVersionHash \(nextVersionObjectModel.entityVersionHashesByName[sourceEntityName]?.testDescription)")
-                    entityMapping.destinationEntityVersionHash = nextVersionObjectModel.entityVersionHashesByName[sourceEntityName]
-                    print("Now entity Mapping is: \n\(entityMapping)")
-                    print("Are they they same? \(entityMapping == entityMapping)")
-                    print("END ---- \(sourceEntityName) -----")
-                } else {
-                    print("entitymapping: \(entityMapping)")
+    func testRealV22FixtureSubqueryFindsMissingLocationsAndMigrationCreatesThem() throws {
+        let storeURL = try copyRealV22FixtureStoreToTemporaryLocation()
+        let sourceModel = try objectModel(version: "22")
+        let sourceCoordinator = try addStore(model: sourceModel, url: storeURL, options: nil)
+        let sourceObservationCount = try countEntities(named: "Observation", coordinator: sourceCoordinator)
+        XCTAssertGreaterThan(sourceObservationCount, 0, "Fixture has no observations; cannot validate migration behavior.")
+        if let store = sourceCoordinator.persistentStores.first {
+            try sourceCoordinator.remove(store)
+        }
+
+        let destinationModel = try objectModel(version: "23")
+        let options: [AnyHashable: Any] = [
+            NSMigratePersistentStoresAutomaticallyOption: true,
+            NSInferMappingModelAutomaticallyOption: true
+        ]
+        let destinationCoordinator = try addStore(model: destinationModel, url: storeURL, options: options)
+
+        let noneMatches = try countObservationsMissingPrimaryWithNonePredicate(coordinator: destinationCoordinator)
+        let subqueryMatches = try countObservationsMissingPrimaryWithSubqueryPredicate(coordinator: destinationCoordinator)
+
+        XCTAssertEqual(noneMatches, 0, "NONE predicate does not match missing to-many relationships in this migrated fixture.")
+        XCTAssertGreaterThan(subqueryMatches, 0, "SUBQUERY should detect observations missing primary locations.")
+
+        _ = try migrateMissingPrimaryLocations(coordinator: destinationCoordinator)
+
+        let postSubqueryMatches = try countObservationsMissingPrimaryWithSubqueryPredicate(coordinator: destinationCoordinator)
+        XCTAssertEqual(postSubqueryMatches, 0, "Migration should eliminate all observations missing primary locations.")
+    }
+
+    private func runMigration(
+        manager: NSMigrationManager,
+        sourceURL: URL,
+        destinationURL: URL,
+        mappingModel: NSMappingModel
+    ) throws {
+        try ExceptionCatcher.catch {
+            try manager.migrateStore(
+                from: sourceURL,
+                sourceType: NSSQLiteStoreType,
+                options: nil,
+                with: mappingModel,
+                toDestinationURL: destinationURL,
+                destinationType: NSSQLiteStoreType,
+                destinationOptions: nil
+            )
+        }
+    }
+
+    private func normalizedModel22To23Mapping(
+        sourceModel: NSManagedObjectModel,
+        destinationModel: NSManagedObjectModel
+    ) throws -> NSMappingModel {
+        let mappingModel = try model22To23MappingModel()
+        for entityMapping in mappingModel.entityMappings {
+            if let sourceEntityName = entityMapping.sourceEntityName,
+               let sourceHash = sourceModel.entityVersionHashesByName[sourceEntityName] {
+                entityMapping.sourceEntityVersionHash = sourceHash
+            }
+
+            let destinationEntityName = entityMapping.destinationEntityName ?? entityMapping.sourceEntityName
+            if let destinationEntityName,
+               let destinationHash = destinationModel.entityVersionHashesByName[destinationEntityName] {
+                entityMapping.destinationEntityVersionHash = destinationHash
+            }
+
+            if entityMapping.sourceEntityName == "Observation" {
+                entityMapping.entityMigrationPolicyClassName = NSStringFromClass(ObservationToObservationPolicy.self)
+            }
+        }
+        return mappingModel
+    }
+
+    private func createTemporaryStoreURL(name: String) -> URL {
+        let fileName = "ObservationMigration-\(name)-\(UUID().uuidString).sqlite"
+        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+        temporaryStoreURLs.append(url)
+        return url
+    }
+
+    private func removeSQLiteArtifacts(at storeURL: URL) {
+        let fileManager = FileManager.default
+        let walURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
+        let shmURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
+
+        try? fileManager.removeItem(at: storeURL)
+        try? fileManager.removeItem(at: walURL)
+        try? fileManager.removeItem(at: shmURL)
+    }
+
+    private func objectModel(version: String) throws -> NSManagedObjectModel {
+        let versionedModelName = String(format: modelVersionFormat, version)
+        let bundles = [Bundle.main, Bundle(for: ObservationToObservationPolicyTests.self)]
+
+        for bundle in bundles {
+            if let momdURL = bundle.url(forResource: modelName, withExtension: "momd"),
+               let momdBundle = Bundle(url: momdURL),
+               let momURL = momdBundle.url(forResource: versionedModelName, withExtension: "mom"),
+               let model = NSManagedObjectModel(contentsOf: momURL) {
+                return model
+            }
+        }
+
+        throw TestError.missingModel(version: version)
+    }
+
+    private func model22To23MappingModel() throws -> NSMappingModel {
+        let bundles = [Bundle.main, Bundle(for: ObservationToObservationPolicyTests.self)]
+
+        for bundle in bundles {
+            if let cdmURL = bundle.url(forResource: "Model22To23", withExtension: "cdm"),
+               let model = NSMappingModel(contentsOf: cdmURL) {
+                return model
+            }
+            if let xmlURL = bundle.url(forResource: "Model22To23", withExtension: "xcmappingmodel"),
+               let model = NSMappingModel(contentsOf: xmlURL) {
+                return model
+            }
+        }
+
+        throw TestError.missingMappingModel
+    }
+
+    @discardableResult
+    private func createSeededModel22Store(at sourceURL: URL) throws -> NSManagedObjectModel {
+        let sourceModel = try objectModel(version: "22")
+        let coordinator = try addStore(model: sourceModel, url: sourceURL, options: nil)
+
+        try insertLegacyObservation(coordinator: coordinator)
+
+        if let store = coordinator.persistentStores.first {
+            try coordinator.remove(store)
+        }
+        return sourceModel
+    }
+
+    private func addStore(
+        model: NSManagedObjectModel,
+        url: URL,
+        options: [AnyHashable: Any]?
+    ) throws -> NSPersistentStoreCoordinator {
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+        _ = try coordinator.addPersistentStore(
+            ofType: NSSQLiteStoreType,
+            configurationName: nil,
+            at: url,
+            options: options
+        )
+        return coordinator
+    }
+
+    private func insertLegacyObservation(coordinator: NSPersistentStoreCoordinator) throws {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+
+        var caughtError: Error?
+        context.performAndWait {
+            do {
+                guard let entity = NSEntityDescription.entity(forEntityName: "Observation", in: context) else {
+                    throw TestError.missingEntity("Observation")
                 }
-//                newEntityMappings.append(newMapping)
-            }
-            mappingModel?.entityMappings = newEntityMappings
 
-            let migrationManager = NSMigrationManager(sourceModel: store.managedObjectModel, destinationModel: nextVersionObjectModel)
-            try migrationManager.migrateStore(from: store.persistentStores.first!.url!,
-                                              sourceType: storeType,
-                                              options: nil,
-                                              with: mappingModel,
-                                              toDestinationURL: storeURL(toVersionMOM)!,
-                                              destinationType: storeType,
-                                              destinationOptions: nil)
-        } catch {
-            print("Error: \(error)")
-            XCTAssertNil(error)
+                let observation = NSManagedObject(entity: entity, insertInto: context)
+                observation.setValue("legacy-observation-1", forKey: "remoteId")
+                observation.setValue(NSNumber(value: 1), forKey: "eventId")
+                observation.setValue(NSNumber(value: true), forKey: "dirty")
+                observation.setValue(Date(), forKey: "timestamp")
+                observation.setValue(SFGeometryUtils.encode(SFPoint(x: -104.9, andY: 39.6)), forKey: "geometryData")
+
+                try context.save()
+            } catch {
+                caughtError = error
+            }
         }
 
-        // verify the migration worked
-
-        try! FileManager.default.removeItem(at: storeURL(toVersionMOM)!)
-        try! FileManager.default.removeItem(at: storeURL(fromVersionMOM)!)
-
-//        let context = NSManagedObjectContext.mr_default()
-//        context.perform {
-//            let migration = ObservationToObservationPolicy()
-//
-//            let observations = context.fetchAll(Observation.self) ?? []
-//            XCTAssertEqual(observations.count, 2)
-//
-//            let mapping = NSEntityMapping()
-//            for observation in observations {
-//                migration.createDestinationInstances(forSource: observation, in: mapping, manager: )
-//            }
-//        }
+        if let caughtError {
+            throw caughtError
+        }
     }
 
-    func xtestMigration22To23Two() async {
-//        let fromVersionMOM = "22"
-//        let toVersionMOM = "23"
-//
-//        let store = createStore(fromVersionMOM)
-//
-//        NSPersistentStoreCoordinator.mr_setDefaultStoreCoordinator(store)
-//        NSManagedObjectContext.mr_initializeDefaultContext(with: store)
+    private func fetchObservationLocations(
+        coordinator: NSPersistentStoreCoordinator
+    ) throws -> [ObservationLocation] {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
 
-        // insert observations
-        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
-
-        let url = Bundle(for: ObservationToObservationPolicyTests.self).url(forResource: "test_marker", withExtension: "png")!
-
-        var baseObservationJson: [AnyHashable : Any] = [:]
-        baseObservationJson["important"] = nil;
-        baseObservationJson["favoriteUserIds"] = nil;
-        baseObservationJson["attachments"] = nil;
-        baseObservationJson["lastModified"] = nil;
-        baseObservationJson["createdAt"] = nil;
-        baseObservationJson["eventId"] = 1;
-        baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
-        baseObservationJson["state"] = [
-            "name": "active"
-        ]
-        baseObservationJson["geometry"] = [
-            "coordinates": [-1.1, 2.1],
-            "type": "Point"
-        ]
-        baseObservationJson["properties"] = [
-            "timestamp": "2020-06-05T17:21:46.969Z",
-            "forms": [[
-                "formId":1,
-                "field1":[
-                    "coordinates": [-1.1, 2.1],
-                    "type": "Point"
-                ]
-            ],
-                      [
-                        "formId": 2,
-                        "field1": [
-                            "coordinates": [-4.1, 5.1],
-                            "type": "Point"
-                        ]
-                      ]]
-        ];
-
-        MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
-
-        baseObservationJson["properties"] = [
-            "timestamp": "2020-06-05T17:21:46.969Z",
-            "forms": [[
-                "formId":1,
-                "field1":[
-                    "coordinates": [-1.1, 2.1],
-                    "type": "Point"
-                ]
-            ],
-                      [
-                        "formId": 2,
-                        "field1": [
-                            "coordinates": [-4.1, 5.1],
-                            "type": "Point"
-                        ],
-                        "field3": [
-                            "coordinates": [
-                                [100.0, 0.0],
-                                [101.0, 1.0]
-                            ],
-                            "type": "LineString"
-                        ]
-                      ]]
-        ]
-
-        MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
-
-        let context = NSManagedObjectContext.mr_default()
-        await context.perform {
-            let migration = ObservationToObservationPolicy()
-
-            let observations = context.fetchAll(Observation.self) ?? []
-            XCTAssertEqual(observations.count, 2)
-
-            for observation in observations {
-                observation.createObservationLocations(context: context)
+        var locations: [ObservationLocation] = []
+        var caughtError: Error?
+        context.performAndWait {
+            do {
+                let request = NSFetchRequest<ObservationLocation>(entityName: "ObservationLocation")
+                request.sortDescriptors = [NSSortDescriptor(key: "order", ascending: true)]
+                locations = try context.fetch(request)
+            } catch {
+                caughtError = error
             }
-            try? context.save()
         }
 
-        await context.perform {
-            let locations = ObservationLocation.mr_findAll() ?? []
-            XCTAssertEqual(locations.count, 7)
+        if let caughtError {
+            throw caughtError
         }
-
+        return locations
     }
+
+    private func countEntities(
+        named entityName: String,
+        coordinator: NSPersistentStoreCoordinator,
+        predicate: NSPredicate? = nil
+    ) throws -> Int {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+
+        var count = 0
+        var caughtError: Error?
+        context.performAndWait {
+            do {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+                request.predicate = predicate
+                count = try context.count(for: request)
+            } catch {
+                caughtError = error
+            }
+        }
+
+        if let caughtError {
+            throw caughtError
+        }
+        return count
+    }
+
+    private func countObservationsMissingPrimaryWithNonePredicate(
+        coordinator: NSPersistentStoreCoordinator
+    ) throws -> Int {
+        let predicate = NSPredicate(
+            format: "NONE locations.fieldName == %@",
+            Observation.PRIMARY_OBSERVATION_GEOMETRY
+        )
+        return try countEntities(named: "Observation", coordinator: coordinator, predicate: predicate)
+    }
+
+    private func countObservationsMissingPrimaryWithSubqueryPredicate(
+        coordinator: NSPersistentStoreCoordinator
+    ) throws -> Int {
+        let predicate = NSPredicate(
+            format: "SUBQUERY(locations, $loc, $loc.fieldName == %@).@count == 0",
+            Observation.PRIMARY_OBSERVATION_GEOMETRY
+        )
+        return try countEntities(named: "Observation", coordinator: coordinator, predicate: predicate)
+    }
+
+    private func migrateMissingPrimaryLocations(
+        coordinator: NSPersistentStoreCoordinator
+    ) throws -> Int {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+
+        var created = 0
+        var caughtError: Error?
+        context.performAndWait {
+            do {
+                let request = NSFetchRequest<Observation>(entityName: "Observation")
+                request.fetchBatchSize = 250
+                request.predicate = NSPredicate(
+                    format: "SUBQUERY(locations, $loc, $loc.fieldName == %@).@count == 0",
+                    Observation.PRIMARY_OBSERVATION_GEOMETRY
+                )
+                let observations = try context.fetch(request)
+                created = observations.count
+                for observation in observations {
+                    observation.createObservationLocations(context: context)
+                }
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+                caughtError = error
+            }
+        }
+
+        if let caughtError {
+            throw caughtError
+        }
+        return created
+    }
+
+    private func copyRealV22FixtureStoreToTemporaryLocation() throws -> URL {
+        let fixtureDirectoryURL = repositoryRootURL()
+            .appendingPathComponent(realV22FixtureRelativePath, isDirectory: true)
+        let fixtureStoreURL = fixtureDirectoryURL.appendingPathComponent("Mage.sqlite")
+        let fileManager = FileManager.default
+
+        guard fileManager.fileExists(atPath: fixtureStoreURL.path) else {
+            throw XCTSkip("Real fixture missing at \(fixtureStoreURL.path)")
+        }
+
+        let destinationDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("ObservationMigration-RealFixture-\(UUID().uuidString)", isDirectory: true)
+        try fileManager.createDirectory(at: destinationDirectoryURL, withIntermediateDirectories: true)
+        temporaryDirectories.append(destinationDirectoryURL)
+
+        let destinationStoreURL = destinationDirectoryURL.appendingPathComponent("Mage.sqlite")
+        let suffixes = ["", "-wal", "-shm"]
+        for suffix in suffixes {
+            let actualSourceURL: URL
+            if suffix.isEmpty {
+                actualSourceURL = fixtureStoreURL
+            } else {
+                actualSourceURL = URL(fileURLWithPath: fixtureStoreURL.path + suffix)
+            }
+            if fileManager.fileExists(atPath: actualSourceURL.path) {
+                let destinationURL = URL(fileURLWithPath: destinationStoreURL.path + suffix)
+                try fileManager.copyItem(at: actualSourceURL, to: destinationURL)
+            }
+        }
+
+        temporaryStoreURLs.append(destinationStoreURL)
+        return destinationStoreURL
+    }
+
+    private func repositoryRootURL() -> URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+    }
+}
+
+private enum TestError: Error {
+    case missingEntity(String)
+    case missingModel(version: String)
+    case missingMappingModel
 }
