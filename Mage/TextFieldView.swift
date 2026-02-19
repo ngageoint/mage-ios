@@ -304,17 +304,6 @@ extension TextFieldView: UITextFieldDelegate {
         }
     }
 
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if isEmailField {
-            let isValid = validateEmailText(textField.text);
-            if !isValid {
-                updateEmailValidationState(for: textField.text);
-                return false
-            }
-        }
-        return true
-    }
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let formView = findObservationFormView(),
            formView.focusNextTextField(after: self) {
