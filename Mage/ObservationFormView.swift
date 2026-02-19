@@ -199,6 +199,9 @@ class ObservationFormView: UIStackView {
             if let textFieldView = arrangedSubviews[viewIndex] as? TextFieldView,
                textFieldView.focusField() {
                 return true
+            } else if let numFieldView = arrangedSubviews[viewIndex] as? NumberFieldView,
+                      numFieldView.focusField() {
+                return true
             }
         }
         return false

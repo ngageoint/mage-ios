@@ -168,9 +168,6 @@ import MaterialComponents.MDCCard
                     self.scrollView.contentOffset = CGPoint(x: self.scrollView.contentOffset.x, y: self.scrollView.contentOffset.y + keyboardFrame.height - 60)
                 }
 
-                self.bottomConstraint?.constant = -keyboardFrame.height;
-                self.view.layoutIfNeeded();
-
             case .keyboardWillHide:
                 self.navigationItem.rightBarButtonItem?.isEnabled = true;
                 self.bottomConstraint?.constant = -60;

@@ -11,7 +11,6 @@ import MaterialComponents.MDCTextField;
 
 class DateView : BaseFieldView {
     private var date: Date?;
-    private var shouldResign: Bool = false;
     
     internal lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker();
@@ -25,6 +24,18 @@ class DateView : BaseFieldView {
         }
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         return datePicker;
+    }()
+
+    private lazy var accessoryView: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 54));
+        toolbar.autoSetDimension(.height, toSize: 54);
+
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
+        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
+
+        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
+        return toolbar;
     }()
     
     private lazy var timeZoneLabel: UILabel = {
@@ -41,25 +52,12 @@ class DateView : BaseFieldView {
         return formatter;
     }()
     
-    private lazy var dateAccessoryView: UIToolbar = {
-        // this frame is to prevent breaking constraints
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 44);
-        
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-        
-        toolbar.items = [cancelBarButton, flexSpace, UIBarButtonItem(customView: timeZoneLabel), flexSpace, doneBarButton];
-        return toolbar;
-    }()
-    
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         textField.inputView = datePicker;
-        textField.inputAccessoryView = dateAccessoryView;
+        textField.inputAccessoryView = accessoryView;
         textField.leadingAssistiveLabel.text = " ";
         textField.trailingView = UIImageView(image: UIImage(named: "today"));
         textField.trailingViewMode = .always;
@@ -120,22 +118,20 @@ class DateView : BaseFieldView {
         textField.clearButtonMode = .always;
         textField.trailingViewMode = .never;
     }
-    
+
     @objc func doneButtonPressed() {
-        shouldResign = true;
         textField.resignFirstResponder();
     }
-    
+
     @objc func cancelButtonPressed() {
-        shouldResign = true;
-        date = value as? Date;
+        date = value as? Date
         if let date = date {
-            datePicker.date = date;
+            datePicker.date = date
         }
-        setTextFieldValue();
+        setTextFieldValue()
         textField.resignFirstResponder();
     }
-    
+
     override func isEmpty() -> Bool{
         return (textField.text ?? "").count == 0
     }
@@ -181,10 +177,6 @@ class DateView : BaseFieldView {
 }
 
 extension DateView: UITextFieldDelegate {
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        return shouldResign;
-    }
 
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
@@ -218,6 +210,5 @@ extension DateView: UITextFieldDelegate {
         } else {
             datePicker.date = Date()
         }
-        shouldResign = false;
     }
 }

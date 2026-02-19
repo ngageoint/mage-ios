@@ -40,8 +40,8 @@ class NumberFieldView : BaseFieldView {
     }()
     
     private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 44);
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 54));
+        toolbar.autoSetDimension(.height, toSize: 54);
         
         let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
         let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
@@ -95,6 +95,7 @@ class NumberFieldView : BaseFieldView {
     
     func setupInputView() {
         if (editMode) {
+            textField.inputAccessoryView = accessoryView;
             viewStack.addArrangedSubview(textField);
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
@@ -131,12 +132,25 @@ class NumberFieldView : BaseFieldView {
         textField.text = number?.stringValue
     }
     
+    func focusField() -> Bool {
+        textField.becomeFirstResponder()
+        return true
+    }
+    
     @objc func doneButtonPressed() {
+        let text = textField.text ?? ""
+        let newNumber = formatter.number(from: text)
+        let valid = isValid(enforceRequired: true, number: newNumber)
+        setValid(valid)
+        if !valid {
+            return
+        }
         textField.resignFirstResponder();
     }
     
     @objc func cancelButtonPressed() {
         setTextFieldValue();
+        setValid(isValid(enforceRequired: true, number: number));
         textField.resignFirstResponder();
     }
     
