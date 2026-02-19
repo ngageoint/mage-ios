@@ -12,12 +12,46 @@ import MaterialComponents.MDCTextField;
 class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
+    private let emailValidationMessage = "Enter a valid email address";
+    private var multilineOriginalText: String?;
+
+    private var isEmailField: Bool {
+        return field[FieldKey.type.key] as? String == FieldType.email.key
+    }
+
+    private var isRequiredField: Bool {
+        return (field[FieldKey.required.key] as? Bool) == true
+    }
+
+    private lazy var emailAccessoryView: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 54));
+        toolbar.autoSetDimension(.height, toSize: 54);
+
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
+        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
+
+        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
+        return toolbar;
+    }()
+
+    private lazy var multilineAccessoryView: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 54));
+        toolbar.autoSetDimension(.height, toSize: 54);
+
+        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelMultilineButtonPressed));
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneMultilineButtonPressed));
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
+
+        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
+        return toolbar;
+    }()
 
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         multilineTextField.textView.delegate = self;
-        multilineTextField.textView.inputAccessoryView = accessoryView;
         multilineTextField.textView.keyboardType = keyboardType;
+        multilineTextField.textView.inputAccessoryView = multilineAccessoryView;
         if (field[FieldKey.type.key] as? String == FieldType.textarea.key) {
             multilineTextField.trailingView = UIImageView(image: UIImage(named: "text_fields"));
             multilineTextField.trailingViewMode = .always;
@@ -37,7 +71,6 @@ class TextFieldView : BaseFieldView {
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
-        textField.inputAccessoryView = accessoryView;
         textField.keyboardType = keyboardType;
         if (field[FieldKey.type.key] as? String == FieldType.email.key) {
             textField.trailingView = UIImageView(image: UIImage(systemName: "envelope"));
@@ -56,26 +89,25 @@ class TextFieldView : BaseFieldView {
         if (value != nil) {
             textField.text = value as? String;
         }
+        if (isEmailField) {
+            textField.inputAccessoryView = emailAccessoryView;
+            textField.addTarget(self, action: #selector(emailTextChanged), for: .editingChanged);
+        }
         textField.sizeToFit();
         return textField;
     }()
     
-    private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 44);
-        
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        doneBarButton.accessibilityLabel = "Done";
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
-        cancelBarButton.accessibilityLabel = "Cancel";
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-        
-        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
-        return toolbar;
-    }()
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+
+    func focusField() -> Bool {
+        if (multiline) {
+            multilineTextField.textView.becomeFirstResponder()
+        } else {
+            textField.becomeFirstResponder()
+        }
+        return true
     }
     
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
@@ -196,6 +228,39 @@ class TextFieldView : BaseFieldView {
             }
         }
     }
+
+    override func isValid(enforceRequired: Bool = false) -> Bool {
+        if !super.isValid(enforceRequired: enforceRequired) {
+            return false
+        }
+        if isEmailField {
+            return validateEmailText(textField.text)
+        }
+        return true
+    }
+
+    private func validateEmailText(_ text: String?) -> Bool {
+        let trimmed = (text ?? "").trimmingCharacters(in: .whitespacesAndNewlines);
+        if trimmed.isEmpty {
+            return !isRequiredField
+        }
+        let pattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: trimmed);
+    }
+
+    private func updateEmailValidationState(for text: String?) {
+        let isValid = validateEmailText(text);
+        if isValid {
+            setValid(true);
+            return
+        }
+        textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+        textField.leadingAssistiveLabel.text = emailValidationMessage;
+    }
+
+    @objc private func emailTextChanged() {
+        updateEmailValidationState(for: textField.text);
+    }
 }
 
 extension TextFieldView {
@@ -213,6 +278,18 @@ extension TextFieldView {
     
     @objc func cancelButtonPressed() {
         setValue(self.value as? String ?? nil);
+        if isEmailField && !isRequiredField {
+            setValid(true);
+        }
+        self.resignFieldFirstResponder();
+    }
+
+    @objc func cancelMultilineButtonPressed() {
+        setValue(multilineOriginalText);
+        self.resignFieldFirstResponder();
+    }
+
+    @objc func doneMultilineButtonPressed() {
         self.resignFieldFirstResponder();
     }
 }
@@ -228,9 +305,35 @@ extension TextFieldView: UITextFieldDelegate {
             delegate?.fieldValueChanged(field, value: value);
         }
     }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let formView = findObservationFormView(),
+           formView.focusNextTextField(after: self) {
+            return false
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+extension TextFieldView {
+    private func findObservationFormView() -> ObservationFormView? {
+        var currentView: UIView? = self
+        while let view = currentView {
+            if let formView = view as? ObservationFormView {
+                return formView
+            }
+            currentView = view.superview
+        }
+        return nil
+    }
 }
 
 extension TextFieldView: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        multilineOriginalText = textView.text
+    }
+
     func textViewDidEndEditing(_ textView: UITextView) {
         if (value as? String != textView.text) {
             if (textView.text == "") {

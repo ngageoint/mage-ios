@@ -141,8 +141,8 @@ class ObservationActionsView: UIView {
     }()
     
     private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 44);
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 54));
+        toolbar.autoSetDimension(.height, toSize: 54);
         
         let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
         doneBarButton.accessibilityLabel = "Done";
