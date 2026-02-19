@@ -433,7 +433,7 @@ import MaterialComponents.MDCCard
     }
 
     @objc func handleTapToDismissKeyboard() {
-        if let firstResponder = view.firstResponder as? UITextView {
+        if let firstResponder = view.firstResponder {
             firstResponder.resignFirstResponder()
         }
     }
