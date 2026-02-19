@@ -23,6 +23,14 @@ class MageMapViewController: MageNavStack {
         NotificationCenter.default.addObserver(forName: .LocationFiltersChanged, object:nil, queue: .main) { [weak self] notification in
             self?.setNavBarTitle()
         }
+
+        NotificationCenter.default.addObserver(
+            forName: UserDefaults.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.setNavBarTitle()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,11 +60,25 @@ class MageMapViewController: MageNavStack {
         guard let event = Event.getCurrentEvent(context: context) else {
             return
         }
-        if !MageFilter.getString().isEmpty || !MageFilter.getLocationFilterString().isEmpty {
-            self.navigationItem.setTitle(event.name, subtitle: "Showing filtered results.", scheme: scheme)
-        } else {
-            self.navigationItem.setTitle(event.name, subtitle: nil, scheme: scheme)
+        let timeFilterString = TimeFilter.getObservationTimeFilterString() ?? ""
+        var observationFilters: [String] = []
+        if !timeFilterString.isEmpty && timeFilterString != "All" {
+            observationFilters.append(timeFilterString)
         }
+        if Observations.getFavoritesFilter() {
+            observationFilters.append("Favorites")
+        }
+        if Observations.getImportantFilter() {
+            observationFilters.append("Important")
+        }
+        let observationFilter = observationFilters.joined(separator: " & ")
+
+        let locationTimeFilterString = TimeFilter.getLocationTimeFilterString() ?? ""
+        let locationFilter = (locationTimeFilterString == "All") ? "" : locationTimeFilterString
+
+        let subtitleComponents = [observationFilter, locationFilter].filter { !$0.isEmpty }
+        let subtitle = subtitleComponents.isEmpty ? nil : subtitleComponents.joined(separator: " | ")
+        self.navigationItem.setTitle(event.name, subtitle: subtitle, scheme: scheme)
     }
     
     @objc func filterTapped(_ sender: UIBarButtonItem) {

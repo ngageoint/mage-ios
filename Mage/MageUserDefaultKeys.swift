@@ -31,6 +31,7 @@ extension Notification.Name {
     public static let AttachmentPushed = Notification.Name("AttachmentPushed")
     public static let ContactInfoDidChange = Notification.Name("ContactInfoDidChange")
     public static let DefaultMapPointSpan = Notification.Name("DefaultMapPointSpan")
+    public static let ObservationLocationMigrationCompleted = Notification.Name("ObservationLocationMigrationCompleted")
 }
 
 @objc public enum LocationDisplay : Int {
