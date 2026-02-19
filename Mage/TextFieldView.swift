@@ -242,7 +242,7 @@ class TextFieldView : BaseFieldView {
         if trimmed.isEmpty {
             return !isRequiredField
         }
-        let pattern = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        let pattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: trimmed);
     }
 
