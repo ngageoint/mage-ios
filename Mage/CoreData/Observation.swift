@@ -1063,8 +1063,8 @@ enum ObservationState: Int, CustomStringConvertible {
                 
                 if let form = primaryObservationForm {
                     observationLocation.observationFormId = form[FormKey.id.key] as? String
-                    observationLocation.primaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.primaryFeedField)
-                    observationLocation.secondaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.secondaryFeedField)
+                    observationLocation.primaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.primaryMapField)
+                    observationLocation.secondaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.secondaryMapField)
                 }
                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                 if let centroid = geometry.centroid() {
@@ -1119,8 +1119,8 @@ enum ObservationState: Int, CustomStringConvertible {
                                     in: context
                                 )
                                 
-                                observationLocation.primaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.primaryFeedField)
-                                observationLocation.secondaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.secondaryFeedField)
+                                observationLocation.primaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.primaryMapField)
+                                observationLocation.secondaryFieldText = Observation.text(form: form, fieldDefinition: eventForm?.secondaryMapField)
                                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                                 if let centroid = geometry.centroid() {
                                     observationLocation.latitude = centroid.y.doubleValue
