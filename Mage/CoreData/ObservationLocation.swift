@@ -11,6 +11,21 @@ import CoreData
 import MapKit
 
 class ObservationLocation: NSManagedObject {
+    @Injected(\.formRepository)
+    var formRepository: FormRepository
+    
+    var iconPathPrimaryText: String? {
+        let eventForm = formRepository.getForm(formId: formId as NSNumber)
+        
+        let temp = Observation.text(form: observation?.primaryObservationForm, fieldDefinition: eventForm?.primaryMapField)
+        return temp
+    }
+    var iconPathSecondaryText: String? {
+        let eventForm = formRepository.getForm(formId: formId as NSNumber)
+        
+        let temp = Observation.text(form: observation?.primaryObservationForm, fieldDefinition: eventForm?.secondaryMapField)
+        return temp
+    }
 
     var region: MKCoordinateRegion {
         var center = CLLocationCoordinate2D(
