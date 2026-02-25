@@ -131,8 +131,8 @@ class MainMageMapView:
 
         if let mapView = mapView {
             self.insertSubview(buttonStack, aboveSubview: mapView)
-            buttonStack.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
-            buttonStack.autoPinEdge(toSuperviewMargin: .left)
+            buttonStack.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 10)
+            buttonStack.autoPinEdge(toSuperviewSafeArea: .top, withInset: 10)
             
 //            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
