@@ -16,15 +16,11 @@ class ObservationLocation: NSManagedObject {
     
     var iconPathPrimaryText: String? {
         let eventForm = formRepository.getForm(formId: formId as NSNumber)
-        
-        let temp = Observation.text(form: observation?.primaryObservationForm, fieldDefinition: eventForm?.primaryMapField)
-        return temp
+        return Observation.text(form: observation?.primaryObservationForm, fieldDefinition: eventForm?.primaryMapField)
     }
     var iconPathSecondaryText: String? {
         let eventForm = formRepository.getForm(formId: formId as NSNumber)
-        
-        let temp = Observation.text(form: observation?.primaryObservationForm, fieldDefinition: eventForm?.secondaryMapField)
-        return temp
+        return Observation.text(form: observation?.primaryObservationForm, fieldDefinition: eventForm?.secondaryMapField)
     }
 
     var region: MKCoordinateRegion {
