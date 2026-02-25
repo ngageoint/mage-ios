@@ -14,8 +14,8 @@ struct ExpandingTextEditor: View {
     @State var workingText: String
     @State private var showSheet = false
     
-    init(title: String = "Text Area", text: String = "") {
-        self.title = title
+    init(title: [String: Any] = [:], text: String = "") {
+        self.title = title[FieldKey.name.key] as? String ?? "Text Area"
         self.text = text
         self.workingText = text
     }
@@ -41,54 +41,59 @@ struct ExpandingTextEditor: View {
                 .tint(.onSurfaceColor)
                 .frame(minHeight: 55, maxHeight: 650)
         }
+        .padding(.bottom, 8)
         .overlay(
             RoundedRectangle(cornerRadius: 4)
                 .stroke(Color.gray, lineWidth: 1)
         )
         .sheet(isPresented: $showSheet) {
             NavigationStack {
-                TextEditor(text: $workingText)
-                    .tint(.onSurfaceColor)
-                    .cornerRadius(16)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button(action: {
-                                showSheet = false
-                            }) {
-                                Image(systemName: "xmark")
-                            }
-                        }
-                        // TODO: add undo/redo
-//                        ToolbarItem(placement: .principal) {
-//                            HStack(spacing: 16) {
-//                                Button(action: {
-//                                    undoManager?.undo()
-//                                }) {
-//                                    Image(systemName: "arrow.uturn.backward.circle")
-//                                }
-//                                .disabled(undoManager?.canUndo == false)
-//                                Button(action: {
-//                                    undoManager?.redo()
-//                                }) {
-//                                    Image(systemName: "arrow.uturn.forward.circle")
-//                                }
-//                                .disabled(undoManager?.canRedo == false)
-//                            }
-//                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button(action: {
-                                showSheet = false
-                                text = workingText
-                            }) {
-                                Image(systemName: "checkmark")
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
-                        
-                    }
-                    .navigationTitle(title)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbarBackground(.primary, for: .navigationBar)
+                 VStack {
+                     TextEditor(text: $workingText)
+                         .tint(.onSurfaceColor)
+                         .cornerRadius(16)
+                         .toolbar {
+                             ToolbarItem(placement: .topBarLeading) {
+                                 Button(action: {
+                                     showSheet = false
+                                 }) {
+                                     Image(systemName: "xmark")
+                                 }
+                             }
+                             // TODO: add undo/redo
+     //                        ToolbarItem(placement: .principal) {
+     //                            HStack(spacing: 16) {
+     //                                Button(action: {
+     //                                    undoManager?.undo()
+     //                                }) {
+     //                                    Image(systemName: "arrow.uturn.backward.circle")
+     //                                }
+     //                                .disabled(undoManager?.canUndo == false)
+     //                                Button(action: {
+     //                                    undoManager?.redo()
+     //                                }) {
+     //                                    Image(systemName: "arrow.uturn.forward.circle")
+     //                                }
+     //                                .disabled(undoManager?.canRedo == false)
+     //                            }
+     //                        }
+                             ToolbarItem(placement: .topBarTrailing) {
+                                 Button(action: {
+                                     showSheet = false
+                                     text = workingText
+                                 }) {
+                                     Image(systemName: "checkmark")
+                                 }
+                                 .buttonStyle(.borderedProminent)
+                             }
+                             
+                         }
+                         .navigationTitle(title)
+                         .navigationBarTitleDisplayMode(.inline)
+                         .toolbarBackground(.primary, for: .navigationBar)
+                 }
+                 .padding(20)
+                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
     }
