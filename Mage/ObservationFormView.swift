@@ -136,7 +136,7 @@ class ObservationFormView: UIStackView {
             case FieldType.textfield.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case FieldType.textarea.key:
-                let hc = UIHostingController(rootView: ExpandingTextEditor(title: fieldDictionary, text: value as? String ?? ""));
+                let hc = UIHostingController(rootView: ExpandingTextEditor(field: fieldDictionary, value: value as? String ?? "", delegate: self));
                 fieldView = hc.view
             case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);

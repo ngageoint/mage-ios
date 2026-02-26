@@ -10,14 +10,18 @@ import SwiftUI
 
 struct ExpandingTextEditor: View {
     var title: String
+    var field: [String: Any]
+    var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?
     @State var text: String
     @State var workingText: String
     @State private var showSheet = false
     
-    init(title: [String: Any] = [:], text: String = "") {
-        self.title = title[FieldKey.name.key] as? String ?? "Text Area"
-        self.text = text
-        self.workingText = text
+    init(field: [String: Any] = [:], value: String, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+        self.title = field[FieldKey.name.key] as? String ?? "Text Area"
+        self.field = field
+        self.delegate = delegate
+        self.text = value
+        self.workingText = value
     }
     
     var body: some View {
@@ -42,6 +46,9 @@ struct ExpandingTextEditor: View {
                 .frame(minHeight: 55, maxHeight: 650)
         }
         .padding(.bottom, 8)
+        .onDisappear(perform: {
+            delegate?.fieldValueChanged(field, value: text)
+        })
         .overlay(
             RoundedRectangle(cornerRadius: 4)
                 .stroke(Color.gray, lineWidth: 1)
@@ -81,6 +88,7 @@ struct ExpandingTextEditor: View {
                                  Button(action: {
                                      showSheet = false
                                      text = workingText
+                                     delegate?.fieldValueChanged(field, value: text)
                                  }) {
                                      Image(systemName: "checkmark")
                                  }
@@ -100,5 +108,5 @@ struct ExpandingTextEditor: View {
 }
 
 #Preview {
-    ExpandingTextEditor()
+    ExpandingTextEditor(value: "NARF")
 }
