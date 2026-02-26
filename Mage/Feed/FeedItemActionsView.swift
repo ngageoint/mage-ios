@@ -76,7 +76,7 @@ class FeedItemActionsView: UIView {
             actionButtonView.autoSetDimension(.height, toSize: 56);
             actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16), excludingEdge: .left);
             latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
-            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
+            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
             didSetupConstraints = true;
         }
         super.updateConstraints();

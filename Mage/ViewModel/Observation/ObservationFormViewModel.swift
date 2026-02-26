@@ -61,6 +61,7 @@ class ObservationFormViewModel: ObservableObject {
     }()
     
     func shouldDisplay(field: ObservationFormFieldModel) -> Bool {
+        if field.type == FieldType.attachment.key { return true }
         guard let value = form.form[field.name] else { return false }
         
         if let value = value as? String {

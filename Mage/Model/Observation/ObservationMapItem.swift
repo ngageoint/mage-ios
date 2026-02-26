@@ -26,6 +26,8 @@ struct ObservationMapItem: Equatable, Hashable {
     var minLongitude: Double?
     var primaryFieldText: String?
     var secondaryFieldText: String?
+    var iconPathPrimaryFieldText: String?
+    var iconPathSecondaryFieldText: String?
     var strokeColor: UIColor?
     var fillColor: UIColor?
     var lineWidth: CGFloat?
@@ -88,8 +90,8 @@ struct ObservationMapItem: Equatable, Hashable {
         return imageRepository.imageName(
             eventId: eventId,
             formId: formId,
-            primaryFieldText: primaryFieldText,
-            secondaryFieldText: secondaryFieldText
+            primaryFieldText: iconPathPrimaryFieldText,
+            secondaryFieldText: iconPathSecondaryFieldText
         )
     }
     
@@ -132,6 +134,8 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
+        self.iconPathPrimaryFieldText = observation.iconPathPrimaryText
+        self.iconPathSecondaryFieldText = observation.iconPathSecondaryText
         
         if let observation = observation.observation {
             let style = ObservationShapeStyleParser.style(

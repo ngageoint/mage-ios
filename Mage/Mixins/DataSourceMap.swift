@@ -170,8 +170,8 @@ class DataSourceMap: MapMixin {
             }
         }
                 
-        mapView.addAnnotations(inserts)
         mapView.removeAnnotations(removals)
+        mapView.addAnnotations(inserts)
         
         return !inserts.isEmpty || !removals.isEmpty
     }
