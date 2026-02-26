@@ -21,14 +21,34 @@ extension InjectedValues {
 
 protocol FormRepository {
     func getForm(formId: NSNumber) -> FormModel?
+    func clearCache()
 }
 
 class FormRepositoryImpl: ObservableObject, FormRepository {
     @Injected(\.formLocalDataSource)
     var localDataSource: FormLocalDataSource
+
+    private var formCache: [Int64: FormModel] = [:]
+    private let formCacheQueue = DispatchQueue(label: "mil.nga.mage.formRepository.formCache", attributes: .concurrent)
     
-    // TODO: This needs to be a model not a managed object
     func getForm(formId: NSNumber) -> FormModel? {
-        localDataSource.getForm(formId: formId)
+        let cacheKey = formId.int64Value
+        if let cachedForm = formCacheQueue.sync(execute: { formCache[cacheKey] }) {
+            return cachedForm
+        }
+
+        let form = localDataSource.getForm(formId: formId)
+        if let form = form {
+            formCacheQueue.async(flags: .barrier) { [weak self] in
+                self?.formCache[cacheKey] = form
+            }
+        }
+        return form
+    }
+    
+    func clearCache() {
+        formCacheQueue.async(flags: .barrier) { [weak self] in
+            self?.formCache.removeAll()
+        }
     }
 }

@@ -17,4 +17,8 @@ class FormRepositoryMock: FormRepository {
             form.formId == Int(truncating: formId)
         }
     }
+    
+    func clearCache() {
+        forms.removeAll()
+    }
 }
