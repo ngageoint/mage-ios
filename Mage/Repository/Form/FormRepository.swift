@@ -21,6 +21,7 @@ extension InjectedValues {
 
 protocol FormRepository {
     func getForm(formId: NSNumber) -> FormModel?
+    func clearCache()
 }
 
 class FormRepositoryImpl: ObservableObject, FormRepository {
@@ -43,5 +44,11 @@ class FormRepositoryImpl: ObservableObject, FormRepository {
             }
         }
         return form
+    }
+    
+    func clearCache() {
+        formCacheQueue.async(flags: .barrier) { [weak self] in
+            self?.formCache.removeAll()
+        }
     }
 }
