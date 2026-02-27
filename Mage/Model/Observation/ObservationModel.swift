@@ -59,6 +59,18 @@ struct ObservationModel: Equatable, Hashable {
         }
         return nil
     }
+    
+    func modelDate(preferTimeStamp: Bool = true) -> Date? {
+        switch preferTimeStamp {
+            case true:
+            if let ts = self.timestamp { return ts }
+            if let lm = self.lastModified { return lm }
+        case false:
+            if let lm = self.lastModified { return lm }
+            if let ts = self.timestamp { return ts }
+        }
+        return nil
+    }
 }
 
 extension ObservationModel {

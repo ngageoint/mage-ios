@@ -74,7 +74,8 @@ final class ObservationTileRepositoryTests: MageCoreDataTestCase {
             maxLatitude:  39.62691,
             maxLongitude: -104.90241,
             minLatitude: 39.62691,
-            minLongitude: -104.90241
+            minLongitude: -104.90241,
+            userDefaults: .standard
         ))
         
         let itemKeys = await tileRepository.getItemKeys(

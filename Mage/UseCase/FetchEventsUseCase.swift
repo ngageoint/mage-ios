@@ -27,7 +27,9 @@ class FetchEventsUseCase {
         }
     }
     
-    // TODO: this will move to it's own repository
+    /// For each event get form icons.
+    /// - high-priority for the current event, low-priority batch for others.
+    /// - Queues tasks in a session manager, updates event-task mappings, clears image cache on success, and posts a fetch notification.
     func fetchFormAndStaticLayers(events: [EventModel]) {
         let manager = MageSessionManager.shared();
         let task = SessionTask(maxConcurrentTasks: Int32(MAGE_MaxConcurrentEvents));

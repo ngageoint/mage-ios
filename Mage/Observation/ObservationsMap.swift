@@ -6,9 +6,11 @@
 //  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+import Combine
 import Foundation
 import DataSourceTileOverlay
 import MapFramework
+
 
 class ObservationsMap: DataSourceMap {
     let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
@@ -37,72 +39,21 @@ class ObservationsMap: DataSourceMap {
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
-        viewModel?.userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
-
-        UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
-                guard let self = self else { return }
-                Task { [self] in
-                    await self.repository.clearCache()
-                    await MainActor.run {
-                        self.viewModel?.refresh()
-                    }
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.observationTimeFilterUnitKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
-                guard let self = self else { return }
-                Task { [self] in
-                    await self.repository.clearCache()
-                    await MainActor.run {
-                        self.viewModel?.refresh()
-                    }
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.observationTimeFilterNumberKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
-                guard let self = self else { return }
-                Task { [self] in
-                    await self.repository.clearCache()
-                    await MainActor.run {
-                        self.viewModel?.refresh()
-                    }
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.importantFilterKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
-                guard let self = self else { return }
-                Task { [self] in
-                    await self.repository.clearCache()
-                    await MainActor.run {
-                        self.viewModel?.refresh()
-                    }
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.favoritesFilterKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                guard let self = self else { return }
-                Task { [self] in
-                    await self.repository.clearCache()
-                    await MainActor.run {
-                        self.viewModel?.refresh()
-                    }
-                }
-            }
-            .store(in: &cancellable)
+       
+        let defaults = UserDefaults.standard
+        Publishers.MergeMany([ // Group all the settings into one publisher so we don't trigger on every property change
+            defaults.settingsChangePublisher(\.hideObservations),
+            defaults.settingsChangePublisher(\.observationTimeFilterKey),
+            defaults.settingsChangePublisher(\.observationTimeFilterUnitKey),
+            defaults.settingsChangePublisher(\.observationTimeFilterNumberKey),
+            defaults.settingsChangePublisher(\.importantFilterKey),
+            defaults.settingsChangePublisher(\.favoritesFilterKey)
+        ])
+        .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+        .sink { [weak self] _ in
+            self?.refreshAll()
+        }
+        .store(in: &cancellable)
         
         UserDefaults.standard.publisher(for: \.userFilterRemoteIds)
             .removeDuplicates()
@@ -121,7 +72,7 @@ class ObservationsMap: DataSourceMap {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         guard let self = self else { return }
                         Task { [self] in
-                            self.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
+                            await self.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
                             await self.repository.clearCache()
                             await self.redrawFeatures()
                             await MainActor.run {
@@ -140,11 +91,28 @@ class ObservationsMap: DataSourceMap {
                 self.focusAnnotation(mapItem: output?.item as? ObservationMapItem)
             }
             .store(in: &cancellable)
+
+        NotificationCenter.default.publisher(for: .ObservationLocationMigrationCompleted)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshAll()
+            }
+            .store(in: &cancellable)
     }
 
+    private func refreshAll() {
+        Task {
+            await repository.clearCache()
+            await MainActor.run {
+                viewModel?.refresh()
+            }
+        }
+    }
+    
     func focusAnnotation(mapItem: ObservationMapItem?) {
         if !self.currentAnnotationViews.isEmpty {
             if let mapItem = mapItem {
+                
                 for annotationView in self.currentAnnotationViews.values {
                     if let annotation = annotationView.annotation as? DataSourceAnnotation {
                         if annotation.id != mapItem.observationLocationId?.absoluteString {
@@ -240,7 +208,7 @@ class ObservationsMap: DataSourceMap {
 //            annotationView.canShowCallout = true
         }
         mapItemAnnotation.annotationView = annotationView
-        currentAnnotationViews[mapItemAnnotation.id] = annotationView
+        currentAnnotationViews[mapItemAnnotation.id] = annotationView // FIXME: Refactor/remove currentAnnotationViews. We should not maintain a collection that could get out of date from MapKit
         return annotationView
     }
 }

@@ -65,8 +65,8 @@ class HasMapSettingsMixin: NSObject, MapMixin {
             return
         }
         rootView?.insertSubview(mapSettingsButton, aboveSubview: mapView)
-        mapSettingsButton.autoPinEdge(.top, to: .top, of: mapView, withOffset: 75)
-        mapSettingsButton.autoPinEdge(toSuperviewMargin: .right)
+        mapSettingsButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 10)
+        mapSettingsButton.autoPinEdge(toSuperviewSafeArea: .top, withInset: 10)
         
         setupMapSettingsButton()
 
@@ -80,7 +80,14 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     @objc func mapSettingsButtonTapped(_ sender: UIButton) {
         settingsCoordinator = MapSettingsCoordinator(rootViewController: hasMapSettings.navigationController, scheme: hasMapSettings.scheme, context: context)
         settingsCoordinator?.delegate = self
-        settingsCoordinator?.start()
+        if let eventId = Server.currentEventId(), let context = self.context {
+            Feed.refreshFeeds(eventId: eventId, context: context) { alert in
+                self.settingsCoordinator?.start()
+                if let alert {
+                    self.hasMapSettings.navigationController?.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     func setupMapSettingsButton() {

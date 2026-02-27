@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import GeoPackage
 import SimpleFeatures
+import CoreLocation
 
 struct ObservationMapItem: Equatable, Hashable {
     var observationId: URL?
@@ -24,6 +26,8 @@ struct ObservationMapItem: Equatable, Hashable {
     var minLongitude: Double?
     var primaryFieldText: String?
     var secondaryFieldText: String?
+    var iconPathPrimaryFieldText: String?
+    var iconPathSecondaryFieldText: String?
     var strokeColor: UIColor?
     var fillColor: UIColor?
     var lineWidth: CGFloat?
@@ -33,6 +37,8 @@ struct ObservationMapItem: Equatable, Hashable {
     var syncing: Bool = false
     var important: ObservationImportantModel?
 
+    let userDefaults: UserDefaults
+    
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
             return nil
@@ -84,14 +90,36 @@ struct ObservationMapItem: Equatable, Hashable {
         return imageRepository.imageName(
             eventId: eventId,
             formId: formId,
-            primaryFieldText: primaryFieldText,
-            secondaryFieldText: secondaryFieldText
+            primaryFieldText: iconPathPrimaryFieldText,
+            secondaryFieldText: iconPathSecondaryFieldText
         )
+    }
+    
+    // The default map bounding area around a point or coordinate
+    public func boundingRegion() -> MKCoordinateRegion {
+        print("Map Point Span: \(UserDefaults.standard.pointCoordinateSpan)")
+        if let geometry = geometry {
+            var latitudeMeters = userDefaults.pointCoordinateSpan
+            var longitudeMeters = userDefaults.pointCoordinateSpan
+            
+            if geometry.geometryType != .POINT {
+                let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
+                let boundingBox = GPKGBoundingBox(envelope: envelope)
+                if let size = boundingBox?.sizeInMeters() {
+                    latitudeMeters = size.height + (2 * (size.height * 0.1))
+                    longitudeMeters = size.width + (2 * (size.width * 0.1))
+                }
+            }
+            if let centroid = geometry.centroid() {
+                return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue), latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
+            }
+        }
+        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: 50000, longitudinalMeters: 50000)
     }
 }
 
 extension ObservationMapItem {
-    init(observation: ObservationLocation) {
+    init(observation: ObservationLocation, userDefaults: UserDefaults = .standard) {
         self.observationId = observation.observation?.objectID.uriRepresentation()
         self.observationLocationId = observation.objectID.uriRepresentation()
         self.formId = Int(observation.formId)
@@ -106,7 +134,9 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
-        // TODO: should we store the primary and secondary feed field text too?
+        self.iconPathPrimaryFieldText = observation.iconPathPrimaryText
+        self.iconPathSecondaryFieldText = observation.iconPathSecondaryText
+        
         if let observation = observation.observation {
             let style = ObservationShapeStyleParser.style(
                 observation: observation,
@@ -124,5 +154,6 @@ extension ObservationMapItem {
                 self.important = ObservationImportantModel(observationImportant: observationImportant)
             }
         }
+        self.userDefaults = userDefaults
     }
 }

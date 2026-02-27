@@ -66,15 +66,6 @@ class DataSourceMap: MapMixin {
                 }
             }
             .store(in: &cancellable)
-        
-        viewModel?.$tileOverlay
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] tileOverlay in
-                Task { [weak self] in
-                    await self?.updateTileOverlay(tileOverlay: tileOverlay)
-                }
-            }
-            .store(in: &cancellable)
     }
     
     func currentTileOverlays() -> [DataSourceTileOverlay] {
@@ -83,25 +74,6 @@ class DataSourceMap: MapMixin {
         }).filter({ overlay in
             overlay.key == uuid.uuidString
         }) ?? []
-    }
-    
-    @MainActor
-    private func updateTileOverlay(tileOverlay: DataSourceTileOverlay?) {
-        guard let mapView = mapView, let viewModel = viewModel else {
-            return
-        }
-        // save these so we can remove them later
-        let previousTiles = currentTileOverlays()
-        if !viewModel.show && !viewModel.repositoryAlwaysShow {
-            clearPreviousTiles(previousTiles: previousTiles)
-            return
-        }
-        guard let tileOverlay = tileOverlay else { return }
-        mapView.addOverlay(tileOverlay, level: .aboveLabels)
-        // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
-        DispatchQueue.main.async {
-            Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
-        }
     }
     
     @MainActor
@@ -164,104 +136,92 @@ class DataSourceMap: MapMixin {
     @MainActor
     func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
         guard let mapView = mapView else { return false }
-        let existingAnnotations = mapView.annotations.compactMap({ annotation in
-            (annotation as? DataSourceAnnotation)
-        }).filter({ annotation in
-            annotation.dataSource.key == self.dataSource.key
-        }).sorted(by: { first, second in
-            first.id < second.id
-        })
+        let annotationDictionary = [String : DataSourceAnnotation]()
         
-        // this is how to create the annotations array from the previous annotations array
-        let differences = annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
-            annotation1.id == annotation2.id
+        // Create a dictionary lookup so we don't fall into a O(n^2) complexity issue on inserts/removes
+        let existingAnnotations = mapView.annotations.compactMap { annotation in
+            (annotation as? DataSourceAnnotation)
+        }
+        .filter { annotation in
+            annotation.dataSource.key == self.dataSource.key
+        }
+        .reduce(into: annotationDictionary) { dictionary, annotation in
+            dictionary[annotation.id] = annotation
         }
         
         var inserts: [DataSourceAnnotation] = []
         var removals: [DataSourceAnnotation] = []
-        for change in differences {
-            switch change {
-            case .insert(_, let element, _):
-                let existing = mapView.annotations.first(where: { mapAnnotation in
-                    guard let mapAnnotation = mapAnnotation as? DataSourceAnnotation else {
-                        return false
-                    }
-                    return mapAnnotation.id == element.id
-                }) as? DataSourceAnnotation
-                if let existing = existing {
-                    existing.coordinate = element.coordinate
-                } else {
-                    inserts.append(element)
-                }
-            case .remove(_, let element, _):
-                let existing = mapView.annotations.compactMap({ mapAnnotation in
-                    mapAnnotation as? DataSourceAnnotation
-                }).filter({ mapAnnotation in
-                    if mapAnnotation.id == element.id {
-                        currentAnnotationViews.removeValue(forKey: mapAnnotation.id)
-                        return true
-                    }
-                    return false
-                })
-                removals.append(contentsOf: existing)
+
+        // Update or prepare to insert annotations
+        for annotation in annotations {
+            if let existing = existingAnnotations[annotation.id] {
+                existing.coordinate = annotation.coordinate
+            } else {
+                inserts.append(annotation)
             }
         }
         
-        mapView.addAnnotations(inserts)
+        // Prepare to remove observations
+        let newIds = Set(annotations.map { $0.id })
+        for (id, existingAnnotation) in existingAnnotations {
+            if !newIds.contains(id) {
+                removals.append(existingAnnotation)
+                currentAnnotationViews.removeValue(forKey: id) // FIXME: Refactor/remove currentAnnotationViews. We should not maintain a collection that could get out of date from MapKit
+            }
+        }
+                
         mapView.removeAnnotations(removals)
+        mapView.addAnnotations(inserts)
         
         return !inserts.isEmpty || !removals.isEmpty
     }
     
+    /// Compares incoming overlays to the map's current overlays using a stable key (itemKey, falling back to id).
+    /// It computes inserts and removals by key, then adds/removes only the necessary overlays to avoid flicker during small pans.
     @discardableResult
     @MainActor
     func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
         guard let mapView = mapView else { return false }
-        let existingFeatureOverlays = mapView.overlays.compactMap({ overlay in
-            (overlay as? DataSourceIdentifiable)
-        }).filter({ featureOverlay in
-            featureOverlay.dataSource.key == self.dataSource.key
-        }).sorted(by: { first, second in
-            first.id < second.id
-        })
-        
-        // this is how to create the annotations array from the previous annotations array
-        let differences = featureOverlays.compactMap({ overlay in
-            (overlay as? DataSourceIdentifiable)
-        }).difference(from: existingFeatureOverlays) { overlay1, overlay2 in
-            overlay1.id == overlay2.id
-        }
-        
+
+        let featureOverlayChanges: [DataSourceIdentifiable] = featureOverlays
+            .compactMap { $0 as? DataSourceIdentifiable }
+            .filter { $0.dataSource.key == self.dataSource.key }
+
+        let existingOverlays: [DataSourceIdentifiable] = mapView.overlays
+            .compactMap { $0 as? DataSourceIdentifiable }
+            .filter { $0.dataSource.key == self.dataSource.key }
+
+        // Sort both sides by the stable key to make diffs predictable
+        let sortedNew = featureOverlayChanges.sorted { $0.key() < $1.key() }
+        let sortedExisting = existingOverlays.sorted { $0.key() < $1.key() }
+
+        // Compute key sets
+        let newKeys = Set(sortedNew.map { $0.key() })
+        let existingKeys = Set(sortedExisting.map { $0.key() })
+
+        // Determine inserts and removals by key
+        let keysToInsert = newKeys.subtracting(existingKeys)
+        let keysToRemove = existingKeys.subtracting(newKeys)
+
+        // Build overlay arrays to add/remove
         var inserts: [MKOverlay] = []
         var removals: [MKOverlay] = []
-        for change in differences {
-            switch change {
-            case .insert(_, let element, _):
-                let existing = mapView.overlays.first(where: { mapOverlay in
-                    guard let mapOverlay = mapOverlay as? DataSourceIdentifiable else {
-                        return false
-                    }
-                    return mapOverlay.id == element.id
-                })
-                if existing == nil, let element = element as? MKOverlay {
-                    inserts.append(element)
-                }
-            case .remove(_, let element, _):
-                let existing = mapView.overlays.compactMap({ mapOverlay in
-                    mapOverlay as? DataSourceIdentifiable
-                }).filter({ mapOverlay in
-                    if mapOverlay.id == element.id {
-                        currentFeatureOverlays.removeValue(forKey: mapOverlay.id)
-                        return true
-                    }
-                    return false
-                }).compactMap { identifiable in
-                    identifiable as? MKOverlay
-                }
-                removals.append(contentsOf: existing)
+
+        // Inserts: take the overlay instances from the new list
+        for newOverlay in sortedNew where keysToInsert.contains(newOverlay.key()) {
+            if let overlay = newOverlay as? MKOverlay {
+                inserts.append(overlay)
             }
         }
-        
+
+        // Removals: find overlays on the map with matching keys
+        for existingOverlay in sortedExisting where keysToRemove.contains(existingOverlay.key()) {
+            if let overlay = existingOverlay as? MKOverlay {
+                removals.append(overlay)
+                currentFeatureOverlays.removeValue(forKey: existingOverlay.key())
+            }
+        }
+
         mapView.addOverlays(inserts)
         mapView.removeOverlays(removals)
         return !inserts.isEmpty || !removals.isEmpty
@@ -270,28 +230,9 @@ class DataSourceMap: MapMixin {
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
         mapView.removeAnnotations(viewModel?.annotations ?? [])
-        if let tileOverlay = viewModel?.tileOverlay {
-            mapView.removeOverlay(tileOverlay)
-        }
         for cancellable in cancellable {
             cancellable.cancel()
         }
-    }
-
-    func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]? {
-        return nil
-    }
-
-    func itemKeys(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [String: [String]] {
-        return await viewModel?.itemKeys(at: location, mapView: mapView, touchPoint: touchPoint) ?? [:]
     }
 
     var tileRenderer: MKOverlayRenderer?
@@ -314,3 +255,4 @@ class DataSourceMap: MapMixin {
         return nil
     }
 }
+

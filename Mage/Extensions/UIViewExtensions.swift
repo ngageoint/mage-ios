@@ -21,6 +21,18 @@ extension UIView {
         }
         return getSubView(views: self.subviews)
     }
+
+    func firstInputResponder() -> UIView? {
+        if self is UITextField || self is UITextView || self is NumberFieldView {
+            return self
+        }
+        for subview in subviews {
+            if let found = subview.firstInputResponder() {
+                return found
+            }
+        }
+        return nil
+    }
     
     private func getSubView(views: [UIView]) -> UIView? {
         guard subviews.count > 0 else {

@@ -27,7 +27,7 @@ final class GeoPackageImporterUITests: AsyncMageCoreDataTestCase {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
 //        Task {
-            await CacheOverlays.getInstance().removeAll()
+            await CacheOverlays.shared.removeAll()
 //        }
         
         await setupViews()
@@ -56,7 +56,7 @@ final class GeoPackageImporterUITests: AsyncMageCoreDataTestCase {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
 //        Task {
-            await CacheOverlays.getInstance().removeAll()
+            await CacheOverlays.shared.removeAll()
 //        }
         
         await tearDownViews()
@@ -119,7 +119,7 @@ final class GeoPackageImporterUITests: AsyncMageCoreDataTestCase {
     func testShouldHandleGeoPackageImportTwiceImportAsNew() async throws {
         let mockListener = MockCacheOverlayListener()
         Task {
-            await CacheOverlays.getInstance().register(mockListener)
+            await CacheOverlays.shared.register(mockListener)
         }
         
         Server.setCurrentEventId(1)
@@ -183,7 +183,7 @@ final class GeoPackageImporterUITests: AsyncMageCoreDataTestCase {
     func testShouldHandleGeoPackageImportTwiceOverwrite() throws {
         let mockListener = MockCacheOverlayListener()
         Task {
-            await CacheOverlays.getInstance().register(mockListener)
+            await CacheOverlays.shared.register(mockListener)
         }
         
         Server.setCurrentEventId(1)

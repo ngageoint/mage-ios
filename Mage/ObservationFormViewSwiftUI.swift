@@ -17,7 +17,6 @@ struct ObservationFormViewSwiftUI: View {
     var router: MageRouter
     
     var viewModel: ObservationFormViewModel
-//    var selectedAttachment: (_ attachmentUri: URL) -> Void
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
@@ -55,49 +54,53 @@ struct ObservationFormViewSwiftUI: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         ForEach(viewModel.formFields) { field in
-                            if field.type != FieldType.attachment.key {
-                                Text(field.title)
-                                    .secondaryText()
-                            }
-                            switch (field.type) {
-                            case FieldType.password.key:
-                                Text(viewModel.fieldStringValue(fieldName: field.name) ?? "")
-                                    .privacySensitive()
-                                    .padding(.bottom, 8)
-                            case FieldType.checkbox.key:
-                                if (viewModel.fieldStringValue(fieldName: field.name) ?? "false") == "true" {
-                                    Image(systemName:"checkmark.square.fill")
-                                        .foregroundStyle(Color.primaryColorVariant)
-                                        .padding(.bottom, 8)
-                                } else {
-                                    Image(systemName:"square")
-                                        .foregroundStyle(Color.primaryColorVariant)
-                                        .padding(.bottom, 8)
+                            if viewModel.shouldDisplay(field: field) {
+                                let fieldValue = viewModel.fieldStringValue(fieldName: field.name) ?? ""
+                                
+                                if field.type != FieldType.attachment.key {
+                                    Text(field.title)
+                                        .secondaryText()
                                 }
-                            case FieldType.attachment.key:
-                                AttachmentFieldViewSwiftUI(
-                                    viewModel: AttachmentFieldViewModel(
-                                        observationUri: viewModel.form.observationId,
-                                        observationFormId: viewModel.form.id,
-                                        fieldName: field.name,
-                                        fieldTitle: field.title
-                                    ),
-//                                    selectedAttachment: selectedAttachment,
-                                    selectedUnsentAttachment: selectedUnsentAttachment
-                                )
-                                .padding(.bottom, 8)
-                            case FieldType.geometry.key:
-                                if let observationUri = viewModel.form.observationId {
-                                    ObservationLocationFieldView(
-                                        observationUri: observationUri,
-                                        observationFormId: viewModel.form.id,
-                                        fieldName: field.name
+                                
+                                switch (field.type) {
+                                case FieldType.password.key:
+                                    Text(fieldValue)
+                                        .privacySensitive()
+                                        .padding(.bottom, 8)
+                                case FieldType.checkbox.key:
+                                    if fieldValue == "true" {
+                                        Image(systemName:"checkmark.square.fill")
+                                            .foregroundStyle(Color.primaryColorVariant)
+                                            .padding(.bottom, 8)
+                                    } else {
+                                        Image(systemName:"square")
+                                            .foregroundStyle(Color.primaryColorVariant)
+                                            .padding(.bottom, 8)
+                                    }
+                                case FieldType.attachment.key:
+                                    AttachmentFieldViewSwiftUI(
+                                        viewModel: AttachmentFieldViewModel(
+                                            observationUri: viewModel.form.observationId,
+                                            observationFormId: viewModel.form.id,
+                                            fieldName: field.name,
+                                            fieldTitle: field.title
+                                        ),
+                                        selectedUnsentAttachment: selectedUnsentAttachment
                                     )
                                     .padding(.bottom, 8)
+                                case FieldType.geometry.key:
+                                    if let observationUri = viewModel.form.observationId { // This part is different from the file content
+                                        ObservationLocationFieldView(
+                                            observationUri: observationUri,
+                                            observationFormId: viewModel.form.id,
+                                            fieldName: field.name
+                                        )
+                                        .padding(.bottom, 8)
+                                    }
+                                default:
+                                    Text(fieldValue)
+                                        .padding(.bottom, 8)
                                 }
-                            default:
-                                Text(viewModel.fieldStringValue(fieldName: field.name) ?? "")
-                                    .padding(.bottom, 8)
                             }
                         }
                     }

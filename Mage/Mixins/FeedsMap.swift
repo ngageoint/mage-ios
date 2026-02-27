@@ -9,11 +9,8 @@
 import Foundation
 import MapKit
 import MapFramework
+import Combine
 
-protocol FeedItemDelegate {
-    func addFeedItem(_ feedItem: FeedItemAnnotation)
-    func removeFeedItem(_ feedItem: FeedItemAnnotation)
-}
 protocol FeedsMap {
     var mapView: MKMapView? { get set }
     var scheme: MDCContainerScheming? { get set }
@@ -26,15 +23,18 @@ class FeedsMapMixin: NSObject, MapMixin {
     
     var mapAnnotationFocusedObserver: AnyObject?
 
-    var enlargedFeedItem: MKAnnotationView?
     var feedItemRetrievers: [String:FeedItemRetriever] = [:]
     var currentFeeds: [String] = []
-    var enlargedAnnotationView: MKAnnotationView?
     
     var userDefaultsEventName: String?
     
+    var cancellable: Set<AnyCancellable> = Set()
+    
     init(feedsMap: FeedsMap) {
         self.feedsMap = feedsMap
+        feedsMap.mapView?.register(MKAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: FEEDITEM_ANNOTATION_VIEW_REUSE_ID)
+
     }
     
     func cleanupMixin() {
@@ -48,33 +48,18 @@ class FeedsMapMixin: NSObject, MapMixin {
         }
     }
     
-    func removeMixin(mapView: MKMapView, mapState: MapState) {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {}
 
-    }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-
-    }
+    func updateMixin(mapView: MKMapView, mapState: MapState) {}
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
-        if let currentEventId = Server.currentEventId() {
-            userDefaultsEventName = "selectedFeeds-\(currentEventId)"
-            UserDefaults.standard.addObserver(self, forKeyPath: userDefaultsEventName!, options: [.new], context: nil)
-        }
-        mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.feedsMap.mapView {
-                self?.focusAnnotation(annotation: notificationObject.annotation)
-            } else if notification.object == nil {
-                self?.focusAnnotation(annotation: nil)
+        NotificationCenter.default.publisher(for: .feedItemsUpdated)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.addFeeds()
             }
-        }
+            .store(in: &cancellable)
         addFeeds()
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath?.starts(with: "selectedFeeds") == true {
-            addFeeds()
-        }
     }
     
     func addFeeds() {
@@ -83,6 +68,8 @@ class FeedsMapMixin: NSObject, MapMixin {
         }
         
         let feedIdsInEvent = UserDefaults.standard.currentEventSelectedFeeds
+        // If nothing changed, skip work
+        if feedIdsInEvent == currentFeeds { return }
         // remove any feeds that are no longer selected
         let removeFeeds = currentFeeds.filter { feedId in
             return !feedIdsInEvent.contains(feedId)
@@ -90,17 +77,22 @@ class FeedsMapMixin: NSObject, MapMixin {
         // current feeds is now any that used to be selected but not any more
         for feedId in removeFeeds {
             feedItemRetrievers.removeValue(forKey: feedId)
-            if let items = FeedItem.getFeedItems(feedId: feedId, eventId: currentEventId.intValue) {
-                for item in items {
-                    if let feedAnnotation = feedsMap.mapView?.annotations.first(where: { annotation in
-                        if let annotation = annotation as? FeedItemAnnotation {
-                            return annotation.id == item.id
-                        }
-                        return false
-                    }) as? FeedItemAnnotation {
-                        feedsMap.mapView?.removeAnnotation(feedAnnotation);
-                        feedAnnotation.view = nil
-                    }
+            // Collect IDs to remove from Core Data if available
+            // TODO: in some instances the CoreData feed items are getting deleted before we can perform this step. Logic in Feed and FeedsMap needs to be moved together where possible
+            let itemIDsToRemove: [String] = FeedItem.getFeedItems(feedId: feedId, eventId: currentEventId.intValue)?.map { $0.id } ?? []
+            // Fallback to previously stored IDs if Core Data didn't return items
+            let fallbackRemoteIDs: [String] = itemIDsToRemove.isEmpty ? UserDefaults.standard.feedItemsToRemove : []
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, let mapView = self.feedsMap.mapView else { return }
+                
+                if !itemIDsToRemove.isEmpty {
+                    let annotationsToRemove = mapView.annotations.compactMap { $0 as? FeedItemAnnotation }.filter { itemIDsToRemove.contains($0.id) }
+                    mapView.removeAnnotations(annotationsToRemove)
+                } else if !fallbackRemoteIDs.isEmpty {
+                    let annotationsToRemove = mapView.annotations.compactMap { $0 as? FeedItemAnnotation }.filter { fallbackRemoteIDs.contains($0.remoteId ?? "") }
+                    mapView.removeAnnotations(annotationsToRemove)
+                    UserDefaults.standard.feedItemsToRemove.removeAll()
                 }
             }
         }
@@ -114,14 +106,22 @@ class FeedsMapMixin: NSObject, MapMixin {
                 continue
             }
             guard let retriever = feedItemRetrievers[feedId] ?? {
-                return FeedItemRetriever.getMappableFeedRetriever(feedId: feedId, eventId: currentEventId, delegate: self)
+                return FeedItemRetriever.getMappableFeedRetriever(feedId: feedId, eventId: currentEventId)
             }() else {
                 continue
             }
             feedItemRetrievers[feedId] = retriever
             if let items = retriever.startRetriever() {
-                for item in items {
-                    feedsMap.mapView?.addAnnotation(item)
+                if items.count == 0 {
+                    if let items = retriever.startRetriever() {
+                        for item in items {
+                            self.feedsMap.mapView?.addAnnotation(item)
+                        }
+                    }
+                } else {
+                    for item in items {
+                        feedsMap.mapView?.addAnnotation(item)
+                    }
                 }
             }
         }
@@ -139,68 +139,12 @@ class FeedsMapMixin: NSObject, MapMixin {
             annotationView.canShowCallout = false
             annotationView.isEnabled = false
             annotationView.isUserInteractionEnabled = false
-            annotation.view = annotationView
             return annotationView
         }()
         
         FeedItemRetriever.setAnnotationImage(feedItem: annotation, annotationView: annotationView)
         annotationView.annotation = annotation
         annotationView.accessibilityLabel = "FeedItem \(annotation.id)"
-        annotation.view = annotationView
         return annotationView
-    }
-    
-    func focusAnnotation(annotation: MKAnnotation?) {
-        guard let annotation = annotation as? FeedItemAnnotation,
-              let annotationView = annotation.view else {
-                  if let enlargedAnnotationView = enlargedAnnotationView {
-                      // shrink the old focused view
-                      UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
-                          enlargedAnnotationView.transform = enlargedAnnotationView.transform.scaledBy(x: 0.5, y: 0.5)
-                          enlargedAnnotationView.centerOffset = CGPoint(x: 0, y: enlargedAnnotationView.centerOffset.y / 2.0)
-                      } completion: { success in
-                      }
-                      self.enlargedAnnotationView = nil
-                  }
-                  return
-              }
-        
-        if annotationView == enlargedAnnotationView {
-            // already focused ignore
-            return
-        } else if let enlargedAnnotationView = enlargedAnnotationView {
-            // shrink the old focused view
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
-                enlargedAnnotationView.transform = enlargedAnnotationView.transform.scaledBy(x: 0.5, y: 0.5)
-                enlargedAnnotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y / 2.0)
-            } completion: { success in
-            }
-        }
-        
-        enlargedAnnotationView = annotationView
-        
-        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
-            annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
-            annotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y * 2.0)
-        } completion: { success in
-        }
-    }
-}
-    
-extension FeedsMapMixin : FeedItemDelegate {
-    func addFeedItem(_ feedItem: FeedItemAnnotation) {
-        feedsMap.mapView?.addAnnotation(feedItem);
-    }
-    
-    func removeFeedItem(_ feedItem: FeedItemAnnotation) {
-        if let feedAnnotation = feedsMap.mapView?.annotations.first(where: { annotation in
-            if let annotation = annotation as? FeedItemAnnotation {
-                return annotation.id == feedItem.id
-            }
-            return false
-        }) as? FeedItemAnnotation {
-            feedsMap.mapView?.removeAnnotation(feedAnnotation);
-            feedAnnotation.view = nil
-        }
     }
 }

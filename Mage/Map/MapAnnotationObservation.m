@@ -42,16 +42,8 @@
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView{
-    CLLocationDistance latitudeMeters = 2500;
-    CLLocationDistance longitudeMeters = 2500;
-    Observation *observation = [self observation];
-    NSDictionary *properties = observation.properties;
-    id accuracyProperty = [properties valueForKeyPath:@"accuracy"];
-    if (accuracyProperty != nil) {
-        double accuracy = [accuracyProperty doubleValue];
-        latitudeMeters = accuracy * 2.5;  // double the radius w/ padding
-        longitudeMeters = accuracy * 2.5; // double the radius w/ padding
-    }
+    CLLocationDistance latitudeMeters = NSUserDefaults.standardUserDefaults.pointCoordinateSpan;
+    CLLocationDistance longitudeMeters = NSUserDefaults.standardUserDefaults.pointCoordinateSpan;
     
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(_annotation.coordinate, latitudeMeters, longitudeMeters);
     return [mapView regionThatFits:region];

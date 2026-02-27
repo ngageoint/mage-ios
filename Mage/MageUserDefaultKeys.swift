@@ -30,6 +30,8 @@ extension Notification.Name {
     public static let MapRequestFocus = Notification.Name("MapRequestFocus")
     public static let AttachmentPushed = Notification.Name("AttachmentPushed")
     public static let ContactInfoDidChange = Notification.Name("ContactInfoDidChange")
+    public static let DefaultMapPointSpan = Notification.Name("DefaultMapPointSpan")
+    public static let ObservationLocationMigrationCompleted = Notification.Name("ObservationLocationMigrationCompleted")
 }
 
 @objc public enum LocationDisplay : Int {
@@ -39,12 +41,31 @@ extension Notification.Name {
     case gars
 }
 
+public enum Defaults {
+    static let defaultPointCoordinateSpan: Double = 1000 // Previously 2,500 (FUTURE: User setting)
+}
+
+private extension String {
+    static let pointCoordinateSpan = "pointCoordinateSpan"
+}
+
 public enum MageDirectories: String {
     case cache = "MapCache"
 }
 
 public enum MageZooms: Int {
     case featureMaxZoom = 21
+}
+
+extension UserDefaults {
+    @objc var pointCoordinateSpan: Double {
+        get {
+            return double(forKey: .pointCoordinateSpan)
+        }
+        set {
+            setValue(newValue, forKey: .pointCoordinateSpan)
+        }
+    }
 }
 
 extension UserDefaults {
@@ -688,6 +709,15 @@ extension UserDefaults {
         }
         set {
             set(newValue, forKey: "selectedFeeds-\(Server.currentEventId() ?? -1)")
+        }
+    }
+    
+    var feedItemsToRemove: [String] {
+        get {
+            return array(forKey: #function) as? [String] ?? []
+        }
+        set {
+            set(newValue, forKey: #function)
         }
     }
     

@@ -112,7 +112,7 @@ import CoreData
         return json[FeedKey.id.key] as? String;
     }
     
-    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext) -> URLSessionDataTask? {
+    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: ((UIAlertController?) -> Void)? = nil) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
@@ -129,21 +129,39 @@ import CoreData
             NSLog("TIMING Saving Feeds @ \(saveStart)")
             
             context.performAndWait {
-                if let feedsJson = responseObject as? [[AnyHashable : Any]] {
-                    feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: context);
-                    for feedRemoteId in feedRemoteIds {
-                        Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, context: context);
-                    }
-                    
-                    let feeds = try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId))
-                    for feed in feeds ?? [] {
-                        context.delete(feed)
+                guard let feedsJson = responseObject as? [[AnyHashable : Any]] else {
+                    try? context.save()
+                    completion?(nil)
+                    return
+                }
+                feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: context)
+                for feedRemoteId in feedRemoteIds {
+                    Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, context: context)
+                }
+                
+                let obsoleteFeeds = try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId)
+                )
+                var removedItemRemoteIds:Set<String> = []
+                for feed in obsoleteFeeds ?? [] {
+                    removedItemRemoteIds.formUnion(feed.items.compactMap { $0.remoteId })
+                    context.delete(feed) // NOTE: this is the reason *addFeeds* does not find FeedItems
+                }
+                
+                try? context.save()
+                
+                if !removedItemRemoteIds.isEmpty {
+                    UserDefaults.standard.feedItemsToRemove = Array(removedItemRemoteIds)
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: .feedItemsUpdated, object: nil)
                     }
                 }
-                try? context.save()
+                
+                completion?(nil)
             }
-            }, failure: { task, error in
-            });
+        }, failure: { task, error in
+            NSLog("Error: operationToPullFeeds: \(error.localizedDescription)")
+            completion?(nil)
+        });
         return task;
     }
     
@@ -165,15 +183,16 @@ import CoreData
                     Feed.populateFeedItems(feedItems: features, feedId: feedId, eventId: eventId, context: context);
                 }
                 try? context.save()
+                NotificationCenter.default.post(name: .feedItemsUpdated, object: feedId)
             }
         }, failure: { task, error in
         });
         return task;
     }
     
-    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext) {
+    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext, completion: ((UIAlertController?) -> Void)? = nil) {
         let manager = MageSessionManager.shared();
-        let task = Feed.operationToPullFeeds(eventId: eventId, context: context);
+        let task = Feed.operationToPullFeeds(eventId: eventId, context: context, completion: completion);
         manager?.addTask(task);
     }
     

@@ -8,11 +8,10 @@
 
 import Foundation
 
-@objc protocol CacheOverlayListener: NSObjectProtocol {
-    @objc func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay])
+protocol CacheOverlayListener: NSObjectProtocol {
+    func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay])
 }
 
-// TODO: This should be an actor
 actor CacheOverlays: NSObject {
     @Injected(\.layerRepository)
     var layerRepository: LayerRepository
@@ -24,11 +23,7 @@ actor CacheOverlays: NSObject {
     var listeners: [CacheOverlayListener] = []
     var processing: [String] = []
     
-    @objc static func getInstance() -> CacheOverlays {
-        shared
-    }
-    
-    @objc func register(_ listener: CacheOverlayListener) async {
+    func register(_ listener: CacheOverlayListener) async {
         listeners.append(listener)
         listener.cacheOverlaysUpdated(await getOverlays())
     }
@@ -69,11 +64,11 @@ actor CacheOverlays: NSObject {
         await notifyListeners()
     }
     
-    @objc func notifyListeners() async {
+    func notifyListeners() async {
         await notifyListenersExceptCaller(caller: nil)
     }
     
-    @objc func notifyListenersExceptCaller(caller: (any CacheOverlayListener)?) async {
+    func notifyListenersExceptCaller(caller: (any CacheOverlayListener)?) async {
         let overlaySnapshot = await getOverlays()
         
         for listener in listeners {
@@ -83,7 +78,7 @@ actor CacheOverlays: NSObject {
         }
     }
     
-    @objc func getOverlays() async -> [CacheOverlay] {
+    func getOverlays() async -> [CacheOverlay] {
         var overlaysInCurrentEvent: [CacheOverlay] = []
         
         let sortedNames = overlayNames.sorted()
@@ -127,7 +122,7 @@ actor CacheOverlays: NSObject {
         return overlays[cacheName]
     }
     
-    @objc func removeCacheOverlay(overlay: CacheOverlay) async {
+    func removeCacheOverlay(overlay: CacheOverlay) async {
         await remove(byCacheName: overlay.cacheName)
     }
     

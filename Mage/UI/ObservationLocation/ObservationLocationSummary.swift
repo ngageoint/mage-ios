@@ -68,7 +68,6 @@ struct ObservationLocationSummary: View {
                         Text(secondaryFieldText)
                             .secondaryText()
                     }
-                    Spacer()
                 }
                 Spacer()
                 if let iconPath = iconPath {

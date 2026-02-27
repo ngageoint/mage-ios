@@ -38,21 +38,11 @@ class ObservationFormViewModel: ObservableObject {
     }
     
     var primaryFieldText: String? {
-        if let field = eventForm?.primaryFeedField, let fieldName = field[FieldKey.name.key] as? String {
-            if let obsfield = form.form[fieldName] {
-                return Observation.fieldValueText(value: obsfield, field: field)
-            }
-        }
-        return nil
+        return Observation.text(form: form.form, fieldDefinition: eventForm?.primaryFeedField)
     }
     
     var secondaryFieldText: String? {
-        if let field = eventForm?.secondaryFeedField, let fieldName = field[FieldKey.name.key] as? String {
-            if let obsfield = form.form[fieldName] {
-                return Observation.fieldValueText(value: obsfield, field: field)
-            }
-        }
-        return nil
+        return Observation.text(form: form.form, fieldDefinition: eventForm?.secondaryFeedField)
     }
     
     lazy var formFields: [ObservationFormFieldModel] = {
@@ -69,6 +59,21 @@ class ObservationFormViewModel: ObservableObject {
             ObservationFormFieldModel(field: fieldDictionary)
         }
     }()
+    
+    func shouldDisplay(field: ObservationFormFieldModel) -> Bool {
+        if field.type == FieldType.attachment.key { return true }
+        guard let value = form.form[field.name] else { return false }
+        
+        if let value = value as? String {
+            return !value.isEmpty
+        }
+        
+        if let value = value as? [Any] {
+            return !value.isEmpty
+        }
+        
+        return true
+    }
     
     func fieldStringValue(fieldName: String) -> String? {
         let field = formFields.first { fieldModel in

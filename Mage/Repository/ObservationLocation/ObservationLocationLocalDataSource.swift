@@ -133,7 +133,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         }
     }
 
-    func getObservationPredicates() -> [NSPredicate] {
+    static func getObservationPredicates() -> [NSPredicate] {
         var predicates: [NSPredicate] = []
         predicates.append(NSPredicate(format: "observation.eventId == %@", Server.currentEventId() ?? -1))
         if let timePredicate = TimeFilter.getObservationTimePredicate(forField: "observation.timestamp") {
@@ -152,6 +152,9 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         {
             predicates.append(NSPredicate(format: "observation.favorites.favorite CONTAINS %@ AND observation.favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
         }
+        // NOTE: this prevents sub-geometries from showing (extra locations in forms)
+        // TODO: add potential Feature Flag for [None, Top-Level-Only, Sub-Level-Only, All]
+        predicates.append(NSPredicate(format: "fieldName == %@", Observation.PRIMARY_OBSERVATION_GEOMETRY))
 
         if let userIds = UserDefaults.standard.userFilterRemoteIds, !userIds.isEmpty {
             predicates.append(NSPredicate(format: "observation.userId IN %@", userIds))
@@ -259,7 +262,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
     ) async -> [ObservationMapItem] {
         guard let context = context else { return [] }
         return await context.perform {
-            var predicates: [NSPredicate] = self.getObservationPredicates()
+            var predicates: [NSPredicate] = Self.getObservationPredicates()
             if let minLatitude = minLatitude,
                let maxLatitude = maxLatitude,
                let minLongitude = minLongitude,

@@ -11,6 +11,7 @@ import MaterialViews
 import SwiftUI
 import MAGEStyle
 import MapFramework
+import GeoPackage
 
 struct ObservationMapItemView: View {
 
@@ -31,13 +32,24 @@ struct ObservationMapItemView: View {
         .onChange(of: observationUri) { observationUri in
             viewModel.observationUri = observationUri
         }
-        .onChange(of: viewModel.selectedItem) { selectedItem in
-            mapState.coordinateCenter = viewModel.currentItem?.coordinate
+        .onChange(of: viewModel.currentItemIndex) { _ in
+            updateMap()
+        }
+        .onChange(of: viewModel.observationMapItems) { _ in
+            updateMap()
         }
         .onAppear {
             viewModel.observationUri = observationUri
+            updateMap()
             mixins.addMixin(OnlineLayerMapMixin())
             mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(observationUri: observationUri)))
+        }
+    }
+    
+    func updateMap() {
+        if let currentItem = viewModel.currentItem {
+            let region = currentItem.boundingRegion()
+            mapState.centerRegion = region
         }
     }
 
@@ -62,9 +74,7 @@ struct ObservationMapItemView: View {
             } else if viewModel.observationMapItems.count > 1 {
                 Button(
                     action: {
-                        withAnimation {
-                            viewModel.selectedItem = max(0, viewModel.selectedItem  - 1)
-                        }
+                        viewModel.currentItemIndex = max(0, viewModel.currentItemIndex  - 1)
                     },
                     label: {
                         Label(
@@ -72,7 +82,7 @@ struct ObservationMapItemView: View {
                             icon: {
                                 Image(systemName: "chevron.left")
                                     .renderingMode(.template)
-                                    .foregroundColor(viewModel.selectedItem  != 0
+                                    .foregroundColor(viewModel.currentItemIndex  != 0
                                                      ? Color.primaryColorVariant : Color.disabledColor
                                     )
                             })
@@ -92,9 +102,7 @@ struct ObservationMapItemView: View {
                 }
                 Button(
                     action: {
-                        withAnimation {
-                            viewModel.selectedItem = min(viewModel.observationMapItems.count - 1, viewModel.selectedItem + 1)
-                        }
+                        viewModel.currentItemIndex = min(viewModel.observationMapItems.count - 1, viewModel.currentItemIndex + 1)
                     },
                     label: {
                         Label(
@@ -102,7 +110,7 @@ struct ObservationMapItemView: View {
                             icon: {
                                 Image(systemName: "chevron.right")
                                     .renderingMode(.template)
-                                    .foregroundColor(viewModel.observationMapItems.count - 1 != viewModel.selectedItem
+                                    .foregroundColor(viewModel.observationMapItems.count - 1 != viewModel.currentItemIndex
                                                      ? Color.primaryColorVariant : Color.disabledColor)
                             })
                     }

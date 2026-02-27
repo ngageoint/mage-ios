@@ -12,7 +12,6 @@ import DataSourceDefinition
 import MapFramework
 
 public class FeedItemAnnotation: DataSourceAnnotation {
-    var view: MKAnnotationView?
     
     public var iconURL: URL?
     public var remoteId: String?

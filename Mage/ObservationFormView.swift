@@ -10,6 +10,7 @@ import Foundation
 
 import MaterialComponents.MaterialTextFields
 import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
+import SwiftUI
 
 @objc protocol ObservationFormFieldListener {
     @objc func fieldValueChanged(_ field: [String : Any], value: Any?);
@@ -135,7 +136,8 @@ class ObservationFormView: UIStackView {
             case FieldType.textfield.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case FieldType.textarea.key:
-                fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, multiline: true);
+                let hc = UIHostingController(rootView: ExpandingTextEditor(field: fieldDictionary, value: value as? String ?? "", delegate: self));
+                fieldView = hc.view
             case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
             case FieldType.password.key:
@@ -161,6 +163,9 @@ class ObservationFormView: UIStackView {
                 fieldViews[key] = baseFieldView;
                 formFieldAdded = true;
                 self.addArrangedSubview(baseFieldView);
+            } else if let fieldView = fieldView {
+                MageLogger.misc.error("Unable to create BaseFieldView for field \(fieldDictionary)")
+                self.addArrangedSubview(fieldView);
             }
         }
     }
@@ -186,6 +191,26 @@ class ObservationFormView: UIStackView {
         containingCard?.markValid(valid);
         return valid;
     }
+
+    func focusNextTextField(after fieldView: BaseFieldView) -> Bool {
+        guard let index = arrangedSubviews.firstIndex(where: { $0 === fieldView }) else {
+            return false
+        }
+        let nextIndex = index + 1
+        guard nextIndex < arrangedSubviews.count else {
+            return false
+        }
+        for viewIndex in nextIndex..<arrangedSubviews.count {
+            if let textFieldView = arrangedSubviews[viewIndex] as? TextFieldView,
+               textFieldView.focusField() {
+                return true
+            } else if let numFieldView = arrangedSubviews[viewIndex] as? NumberFieldView,
+                      numFieldView.focusField() {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 extension ObservationFormView: FieldSelectionDelegate {
@@ -202,10 +227,12 @@ extension ObservationFormView: ObservationFormFieldListener {
         } else {
             form[field[FieldKey.name.key] as? String ?? ""] = value;
         }
-        var forms: [[String: Any]] = newProperties?[ObservationKey.forms.key] as! [[String: Any]];
-        forms[0] = form;
-        newProperties![ObservationKey.forms.key] = forms;
-        self.observation.properties = newProperties;
-        self.observationFormListener?.formUpdated(form, form: formIndex);
+        if var forms: [[String: Any]] = newProperties?[ObservationKey.forms.key] as? [[String: Any]],
+           !forms.isEmpty {
+            forms[0] = form
+            newProperties?[ObservationKey.forms.key] = forms
+            self.observation.properties = newProperties
+            self.observationFormListener?.formUpdated(form, form: formIndex)
+        }
     }
 }

@@ -26,7 +26,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
-        await CacheOverlays.getInstance().removeAll()
+        await CacheOverlays.shared.removeAll()
         
         if (navController != nil) {
             await navController.dismiss(animated: false)
@@ -71,7 +71,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
     override func tearDown() async throws {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
-        await CacheOverlays.getInstance().removeAll()
+        await CacheOverlays.shared.removeAll()
         
         for subview in await view.subviews {
             await subview.removeFromSuperview();
@@ -142,7 +142,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackage = GeoPackage(mapView: mapView)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 1
@@ -206,7 +206,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackage = GeoPackage(mapView: mapView)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 1
@@ -219,10 +219,10 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations.count, 0)
         
         UserDefaults.standard.selectedCaches = []
-        let cacheOverlay = await CacheOverlays.getInstance().getByCacheName("gpkgWithMedia_1_from_server")!
+        let cacheOverlay = await CacheOverlays.shared.getByCacheName("gpkgWithMedia_1_from_server")!
         cacheOverlay.enabled = false
-        await CacheOverlays.getInstance().addCacheOverlay(overlay: cacheOverlay)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await CacheOverlays.shared.addCacheOverlay(overlay: cacheOverlay)
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation2 = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 0
@@ -302,7 +302,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackageClass = GeoPackage(mapView: mapView)
-        let cacheOverlays = await CacheOverlays.getInstance().getOverlays()
+        let cacheOverlays = await CacheOverlays.shared.getOverlays()
         var newOverlays: [CacheOverlay] = []
         for overlay in cacheOverlays {
             if let overlay = overlay as? GeoPackageCacheOverlay {
@@ -423,7 +423,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackageClass = GeoPackage(mapView: mapView)
-        let cacheOverlays = await CacheOverlays.getInstance().getOverlays()
+        let cacheOverlays = await CacheOverlays.shared.getOverlays()
         var newOverlays: [CacheOverlay] = []
         for overlay in cacheOverlays {
             if let overlay = overlay as? GeoPackageCacheOverlay {
@@ -522,7 +522,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackage = GeoPackage(mapView: mapView)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 1
@@ -534,9 +534,9 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(overlays.count, 1)
         XCTAssertEqual(annotations.count, 0)
         
-        let cacheOverlays = await CacheOverlays.getInstance().getOverlays()
+        let cacheOverlays = await CacheOverlays.shared.getOverlays()
         
-        let initialOverlay = await CacheOverlays.getInstance().getOverlays()[0]
+        let initialOverlay = await CacheOverlays.shared.getOverlays()[0]
         let initialGeoPackageOverlay = overlays[0]
 
         var newOverlays: [CacheOverlay] = []
@@ -619,13 +619,13 @@ final class GeoPackageTests: MageCoreDataTestCase {
             await importer.processOfflineMapArchives()
         }
         
-        let cacheOverlays = await CacheOverlays.getInstance().getOverlays()
+        let cacheOverlays = await CacheOverlays.shared.getOverlays()
         let overlay = cacheOverlays[0]
         overlay.enabled = true
-        await CacheOverlays.getInstance().addCacheOverlay(overlay: overlay)
+        await CacheOverlays.shared.addCacheOverlay(overlay: overlay)
         
         let geoPackage = GeoPackage(mapView: mapView)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 1
@@ -689,7 +689,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackage = GeoPackage(mapView: mapView)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 1
@@ -700,7 +700,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         let annotations = getAnnotations()
         XCTAssertEqual(overlays.count, 1)
         XCTAssertEqual(annotations.count, 0)
-        let initialOverlay = await CacheOverlays.getInstance().getOverlays()[0]
+        let initialOverlay = await CacheOverlays.shared.getOverlays()[0]
         let initialGeoPackageOverlay = overlays[0]
 
         var newOverlays: [CacheOverlay] = []
@@ -798,7 +798,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         Server.setCurrentEventId(1)
         
         let geoPackage = GeoPackage(mapView: mapView)
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             return self.getMapOverlays().count == 1
@@ -809,10 +809,10 @@ final class GeoPackageTests: MageCoreDataTestCase {
         let annotations = getAnnotations()
         XCTAssertEqual(overlays.count, 1)
         XCTAssertEqual(annotations.count, 0)
-        let initialOverlay = await CacheOverlays.getInstance().getOverlays()[0]
+        let initialOverlay = await CacheOverlays.shared.getOverlays()[0]
         let initialGeoPackageOverlay = overlays[0]
 
-        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackage.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
 
         let predicateExpectation2 = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             let overlays = self.getMapOverlays()
@@ -859,7 +859,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         Server.setCurrentEventId(1)
         let geoPackageClass = GeoPackage(mapView: mapView)
-        await geoPackageClass.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        await geoPackageClass.updateCacheOverlaysSynchronized(CacheOverlays.shared.getOverlays())
         
         let predicateExpectation = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
             let count = self.getAnnotations().count

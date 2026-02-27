@@ -21,6 +21,11 @@ class LocationListNavStack: MageNavStack {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(launchLocationFilter))
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavBarTitle()
+    }
+    
     func setNavBarTitle() {
         let timeFilterString = MageFilter.getLocationFilterString()
         self.navigationItem.setTitle("People", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
