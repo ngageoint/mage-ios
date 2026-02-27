@@ -64,7 +64,6 @@
     
     if ([[Observations getUserFilterRemoteIDs] count] > 0)  {
         NSArray<NSString *> *selectedUserRemoteIds = [NSUserDefaults.standardUserDefaults userFilterRemoteIds];
-        NSLog(@"zzz: selectedUserRemoteIds: %@", selectedUserRemoteIds);
         NSPredicate *predicate = [NSPredicate predicateWithFormat: @"userId IN %@", selectedUserRemoteIds];
         [predicates addObject:predicate];
     }
