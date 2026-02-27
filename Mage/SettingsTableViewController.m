@@ -200,8 +200,7 @@
             break;
         }
         case kDisclaimer: {
-            DisclaimerViewController *viewController = [[DisclaimerViewController alloc] init];
-            [viewController applyThemeWithContainerScheme:self.scheme];
+            UIViewController *viewController = [DisclaimerViewHoster hostingControllerWithDelegate:nil];
             [self showSetting:viewController];
             break;
         }

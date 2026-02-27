@@ -216,6 +216,36 @@
     return YES;
 }
 
+- (void)textFieldDidChangeSelection:(UITextField *)textField {
+    NSString *password = self.password.text;
+    NSString *confirm = self.passwordConfirm.text;
+    
+    BOOL passwordEmpty = (password.length == 0);
+    BOOL confirmEmpty = (confirm.length == 0);
+    BOOL match = [password isEqualToString:confirm];
+    
+    if (confirmEmpty) { // no text entered && we don't want to show confirm error pre-emptively
+        [self clearPasswordErrors];
+        return;
+    }
+    
+    if (passwordEmpty && !confirmEmpty) { // they skipped or deleted the password
+        [self clearPasswordErrors];
+        [self markFieldError:self.password errorText:@"Enter password first"];
+        return;
+    }
+    
+    if (!passwordEmpty && !confirmEmpty && !match) { // standard mismatch
+        [self clearPasswordErrors];
+        [self markFieldError:self.passwordConfirm errorText:@"Passwords do not match"];
+        return;
+    }
+    
+    if (match) {
+        [self clearPasswordErrors];
+    }
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == _phone) {
@@ -382,6 +412,13 @@
 
 - (IBAction) onCancel:(id) sender {
     [self.delegate signupCanceled];
+}
+
+- (void) clearPasswordErrors {
+    self.password.leadingAssistiveLabel.text = @" "; // String literal must be prefixed by '@'
+    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    [self.password applyThemeWithScheme:self.scheme];
+    [self.passwordConfirm applyThemeWithScheme:self.scheme];
 }
 
 - (void) clearFieldErrors {

@@ -155,6 +155,11 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         // NOTE: this prevents sub-geometries from showing (extra locations in forms)
         // TODO: add potential Feature Flag for [None, Top-Level-Only, Sub-Level-Only, All]
         predicates.append(NSPredicate(format: "fieldName == %@", Observation.PRIMARY_OBSERVATION_GEOMETRY))
+
+        if let userIds = UserDefaults.standard.userFilterRemoteIds, !userIds.isEmpty {
+            predicates.append(NSPredicate(format: "observation.userId IN %@", userIds))
+        }
+        
         return predicates
     }
     
