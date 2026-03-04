@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Combine
 
 class ObservationFilterViewModel: ObservableObject {
     
@@ -18,25 +17,13 @@ class ObservationFilterViewModel: ObservableObject {
     @Published var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     @Published var selectedUserCount: Int = 0
     
-    var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
-
-    init() {
-        update()
-                
-        NotificationCenter.default
-            .publisher(for: UserDefaults.didChangeNotification)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.update()
-            }
-            .store(in: &cancellables)
-    }
-    
     func update() {
         selectedUserCount = UserDefaults.standard.userFilterRemoteIds?.count ?? 0
         isFavoriteOn  = Observations.getFavoritesFilter()
         isImportantOn = Observations.getImportantFilter()
         selectedTime  = TimeFilterEnum(objc: TimeFilter.getObservationTimeFilter())
+        customTimeFieldValue = UserDefaults.standard.observationTimeFilterNumberKey
+        customTimePickerEnum = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     }
 
     func saveFavorites(_ newValue: Bool) {
@@ -73,5 +60,7 @@ class ObservationFilterViewModel: ObservableObject {
         saveTimeFilter(selectedTime)
         saveImportant(isImportantOn)
         saveFavorites(isFavoriteOn)
+        saveCustomTimeFieldValueFilter(customTimeFieldValue)
+        saveCustomTimeEnumFilter(customTimePickerEnum)
     }
 }

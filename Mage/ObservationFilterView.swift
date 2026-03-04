@@ -11,6 +11,8 @@ import SwiftUI
 struct ObservationFilterView: View {
     @StateObject var observationFilterViewModel = ObservationFilterViewModel()
     @State private var showingUserFilter = false
+    @State private var showingAllTimeConfirmation = false
+    @State private var lastConfirmedTime: TimeFilterEnum = .all
 
     var body: some View {
         List {
@@ -73,7 +75,15 @@ struct ObservationFilterView: View {
                         customTimePickerEnum: $observationFilterViewModel.customTimePickerEnum,
                         isSelected: Binding(
                             get: { observationFilterViewModel.selectedTime == option },
-                            set: { if $0 { observationFilterViewModel.selectedTime = option } }
+                            set: { isSelected in
+                                guard isSelected else { return }
+                                if option == .all && observationFilterViewModel.selectedTime != .all {
+                                    showingAllTimeConfirmation = true
+                                    return
+                                }
+                                observationFilterViewModel.selectedTime = option
+                                lastConfirmedTime = option
+                            }
                         )
                     )
                 }
@@ -85,11 +95,24 @@ struct ObservationFilterView: View {
         .sheet(isPresented: $showingUserFilter) {
             UserObservationFilterView()
         }
-        .onChange(of: observationFilterViewModel.isFavoriteOn)  { observationFilterViewModel.saveFavorites($0) }
-        .onChange(of: observationFilterViewModel.isImportantOn) { observationFilterViewModel.saveImportant($0) }
-        .onChange(of: observationFilterViewModel.selectedTime)  { observationFilterViewModel.saveTimeFilter($0) }
-        .onChange(of: observationFilterViewModel.customTimeFieldValue) { observationFilterViewModel.saveCustomTimeFieldValueFilter($0)}
-        .onChange(of: observationFilterViewModel.customTimePickerEnum) { observationFilterViewModel.saveCustomTimeEnumFilter($0)}
+        .onAppear {
+            observationFilterViewModel.update()
+            lastConfirmedTime = observationFilterViewModel.selectedTime
+        }
+        .onDisappear {
+            observationFilterViewModel.applyFilter()
+        }
+        .alert("Show all observations?", isPresented: $showingAllTimeConfirmation) {
+            Button("Show All") {
+                observationFilterViewModel.selectedTime = .all
+                lastConfirmedTime = .all
+            }
+            Button("Cancel", role: .cancel) {
+                observationFilterViewModel.selectedTime = lastConfirmedTime
+            }
+        } message: {
+            Text("Loading 5,000+ observations may cause the application to become unresponsive and lag.")
+        }
     }
 }
 
