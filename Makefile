@@ -3,7 +3,9 @@ SHELL := /bin/zsh
 
 WORKSPACE ?= MAGE.xcworkspace
 SCHEME ?= MAGE
-DESTINATION ?= platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
+SIM_NAME ?= iPhone 17
+SIM_OS ?= 26.2
+DESTINATION ?= platform=iOS Simulator,name=$(SIM_NAME),OS=$(SIM_OS)
 DERIVED_DATA ?= build/DerivedData
 RESULT_BUNDLE_BASE ?= build/TestResults
 RESULT_STAMP ?= $(shell date +%Y%m%d-%H%M%S)
@@ -15,8 +17,17 @@ SIMCTL ?= xcrun simctl
 APP_NAME ?= MAGE
 APP_BUNDLE_ID ?= mil.nga.mage
 APP_PATH ?= $(DERIVED_DATA)/Build/Products/Debug-iphonesimulator/$(APP_NAME).app
+SIM_DEVICE_UDID ?= $(shell xcrun simctl list devices "iOS $(SIM_OS)" available | awk -v device="$(SIM_NAME)" -F '[()]' '{name=$$1; gsub(/^[[:space:]]+|[[:space:]]+$$/, "", name); if (name == device) {print $$2; exit}}')
 TEST_TARGET ?= MAGETests/ObservationToObservationPolicyTests
 MIGRATION_TEST_TARGET ?= MAGETests/ObservationToObservationPolicyTests
+TEST_TARGETS ?=
+TEST_TARGET_BUNDLE ?= $(word 1,$(subst /, ,$(TEST_TARGET)))
+
+normalize_test_target = $(if $(findstring /,$(1)),$(1),$(TEST_TARGET_BUNDLE)/$(1))
+
+define only_testing_args
+$(foreach t,$(1),-only-testing:$(call normalize_test_target,$(t)))
+endef
 
 .PHONY: help list build test test-migration run build-and-run clean check-tools bootstrap
 
@@ -41,9 +52,13 @@ help:
 	@echo "make bootstrap # Install required local tool(s), currently xcbeautify"
 	@echo "make check-tools # Verify required local tool(s) are installed"
 	@echo "make list   # Show workspace schemes"
-	@echo "make build  # Build MAGE for iPhone 17 Pro simulator"
+	@echo "make build  # Build MAGE for $(SIM_NAME) simulator (iOS $(SIM_OS))"
 	@echo "make test   # Run targeted tests only (default: $(TEST_TARGET), unique xcresult)"
-	@echo "            # Override: make test TEST_TARGET=MAGETests/SomeTestCase"
+	@echo "            # Override tests with TEST_TARGETS='TestClass TestCase/testMethod'"
+	@echo "            # Multiple tests can be space-separated"
+	@echo "            # Example: make test TEST_TARGETS='OfflineMapTableViewControllerTests/testDownloadedStaticLayerRowSelectionDoesNotTriggerToggle'"
+	@echo "            # You can also use fully-qualified names: MAGETests/FooTests/testMethod"
+	@echo "            # Optional: make test TEST_TARGETS='...' RESULT_BUNDLE=build/MySuite.xcresult"
 	@echo "make test-migration # Run migration-focused tests only (unique xcresult)"
 	@echo "                   # Target: $(MIGRATION_TEST_TARGET)"
 	@echo "make run    # Install and launch built app on booted simulator"
@@ -74,9 +89,9 @@ test: check-tools
 			-destination '$(DESTINATION)' \
 			-derivedDataPath $(DERIVED_DATA) \
 			-resultBundlePath $(RESULT_BUNDLE) \
-		-only-testing:$(TEST_TARGET) \
+		$(call only_testing_args,$(if $(strip $(TEST_TARGETS)),$(TEST_TARGETS),$(TEST_TARGET))) \
 		CODE_SIGNING_ALLOWED=NO \
-		test | xcbeautify
+			test | xcbeautify
 
 test-migration: check-tools
 	@mkdir -p build
@@ -98,10 +113,16 @@ run:
 		echo "Run 'make build' first or use 'make build-and-run'."; \
 		exit 1; \
 	fi
+	@if [ -z "$(SIM_DEVICE_UDID)" ]; then \
+		echo "No available simulator found for $(SIM_NAME) on iOS $(SIM_OS)."; \
+		echo "Run: xcrun simctl list devices available"; \
+		exit 1; \
+	fi
 	@open -a Simulator
-	@$(SIMCTL) bootstatus booted -b >/dev/null
-	@$(SIMCTL) install booted "$(APP_PATH)"
-	@$(SIMCTL) launch booted "$(APP_BUNDLE_ID)"
+	@$(SIMCTL) boot "$(SIM_DEVICE_UDID)" >/dev/null 2>&1 || true
+	@$(SIMCTL) bootstatus "$(SIM_DEVICE_UDID)" -b >/dev/null
+	@$(SIMCTL) install "$(SIM_DEVICE_UDID)" "$(APP_PATH)"
+	@$(SIMCTL) launch "$(SIM_DEVICE_UDID)" "$(APP_BUNDLE_ID)"
 
 build-and-run: build run
 
