@@ -9,6 +9,8 @@
 import SwiftUI
 
 class ObservationFilterViewModel: ObservableObject {
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
     
     @Published var isFavoriteOn: Bool = false
     @Published var isImportantOn: Bool = false
@@ -16,6 +18,8 @@ class ObservationFilterViewModel: ObservableObject {
     @Published var customTimeFieldValue: Int = UserDefaults.standard.observationTimeFilterNumberKey
     @Published var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     @Published var selectedUserCount: Int = 0
+    
+    private let ALERT_THRESHOLD = 5000
     
     func update() {
         selectedUserCount = UserDefaults.standard.userFilterRemoteIds?.count ?? 0
@@ -62,5 +66,19 @@ class ObservationFilterViewModel: ObservableObject {
         saveFavorites(isFavoriteOn)
         saveCustomTimeFieldValueFilter(customTimeFieldValue)
         saveCustomTimeEnumFilter(customTimePickerEnum)
+    }
+
+    func warningCountForTimeSelection(
+        _ timeFilter: TimeFilterEnum,
+        customNumber: Int,
+        customUnit: TimeUnitWrapper
+    ) async -> Int? {
+        guard timeFilter == .all || timeFilter == .custom else { return nil }
+        let count = await observationRepository.count(
+            timeFilter: timeFilter.objc,
+            customNumber: customNumber,
+            customUnit: customUnit.objcValue
+        )
+        return count > ALERT_THRESHOLD ? count : nil
     }
 }

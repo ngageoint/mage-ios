@@ -67,6 +67,11 @@ class ObservationRepositoryMock: ObservationRepository {
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
         return AnyPublisher(filteredCountSubject)
     }
+
+    var countToReturn: Int?
+    func count(timeFilter: TimeFilterType, customNumber: Int, customUnit: TimeUnit) async -> Int {
+        countToReturn ?? list.count
+    }
     
     func observations(paginatedBy paginator: Trigger.Signal? = nil) -> AnyPublisher<[URIItem], any Error> {
         AnyPublisher(Just(list.compactMap{ model in

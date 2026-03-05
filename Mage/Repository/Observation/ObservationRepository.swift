@@ -23,6 +23,7 @@ extension InjectedValues {
 protocol ObservationRepository {
     var refreshPublisher: AnyPublisher<Date, Never>? { get }
     func observeFilteredCount() -> AnyPublisher<Int, Never>?
+    func count(timeFilter: TimeFilterType, customNumber: Int, customUnit: TimeUnit) async -> Int
     func observations(
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[URIItem], Error>
@@ -129,6 +130,10 @@ class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
     
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
         localDataSource.observeFilteredCount()
+    }
+
+    func count(timeFilter: TimeFilterType, customNumber: Int, customUnit: TimeUnit) async -> Int {
+        await localDataSource.count(timeFilter: timeFilter, customNumber: customNumber, customUnit: customUnit)
     }
     
     func observations(

@@ -171,20 +171,25 @@
 + (NSPredicate *) getObservationTimePredicateForField:(NSString *) field {
     TimeFilterType timeFilter = [TimeFilter getObservationTimeFilter];
     TimeUnit unit = [TimeFilter getObservationCustomTimeFilterUnit];
+    NSInteger number = [TimeFilter getObservationCustomTimeFilterNumber];
+    return [TimeFilter getObservationTimePredicateForField:field timeFilter:timeFilter customUnit:unit customNumber:number];
+}
+
++ (NSPredicate *) getObservationTimePredicateForField:(NSString *) field timeFilter:(TimeFilterType) timeFilter customUnit:(TimeUnit) unit customNumber:(NSInteger) number {
     switch (timeFilter) {
         case TimeFilterCustom: {
             switch (unit) {
                 case Hours: {
-                    NSDate *date = [[NSDate date] dateByAddingTimeInterval:-60*60* [TimeFilter getObservationCustomTimeFilterNumber]];
+                    NSDate *date = [[NSDate date] dateByAddingTimeInterval:-60*60* number];
                     return [NSPredicate predicateWithFormat:@"%K >= %@", field, date];
                 }
                 case Days: {
-                    NSDate *date = [[NSDate date] dateByAddingTimeInterval:-24*60*60* [TimeFilter getObservationCustomTimeFilterNumber]];
+                    NSDate *date = [[NSDate date] dateByAddingTimeInterval:-24*60*60* number];
                     return [NSPredicate predicateWithFormat:@"%K >= %@", field, date];
                 }
                 case Months: {
                     NSDateComponents *components = [[NSDateComponents alloc] init];
-                    components.month = -1*[TimeFilter getObservationCustomTimeFilterNumber];
+                    components.month = -1 * number;
                     NSDate *date = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:[[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]] options:NSCalendarMatchStrictly];
                     
                     return [NSPredicate predicateWithFormat:@"%K >= %@", field, date];

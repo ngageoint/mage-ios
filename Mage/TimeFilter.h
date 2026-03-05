@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, TimeUnit) {
 + (NSString *) getObservationTimeFilterString;
 
 + (NSPredicate *) getObservationTimePredicateForField:(NSString *) timeField;
++ (NSPredicate *) getObservationTimePredicateForField:(NSString *) timeField timeFilter:(TimeFilterType) timeFilter customUnit:(TimeUnit) unit customNumber:(NSInteger) number;
 
 + (TimeFilterType) getLocationTimeFilter;
 + (void) setLocationTimeFilter:(TimeFilterType) timeFilter;
