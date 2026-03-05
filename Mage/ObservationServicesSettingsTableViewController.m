@@ -33,6 +33,10 @@ static NSInteger ATTACHMENT_FETCH_SECTION = 1;
 static NSInteger FETCH_ITEMS_CELL = 0;
 static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 
+- (UIColor *) layerToggleOnColor {
+    return [UIColor colorNamed:@"layerToggleOn"];
+}
+
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Observation Sync";
@@ -180,7 +184,7 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *toggle = [[UISwitch alloc] init];
-            toggle.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+            toggle.onTintColor = [self layerToggleOnColor];
             cell.accessoryView = toggle;
     
             [toggle setOn:self.observationFetchEnabled animated:NO];
@@ -210,7 +214,7 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
                 cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *toggle = [[UISwitch alloc] init];
-                toggle.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+                toggle.onTintColor = [self layerToggleOnColor];
                 cell.accessoryView = toggle;
         
                 [toggle setOn:self.attachmentFetchEnabled animated:NO];
@@ -294,4 +298,3 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 }
 
 @end
-

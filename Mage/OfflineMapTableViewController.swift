@@ -188,7 +188,7 @@ import GeoPackage
     }
 
     private var layerToggleOnColor: UIColor {
-        UIColor(named: "layerToggleOn") ?? scheme.colorScheme.primaryColorVariant
+        UIColor(named: "layerToggleOn")!
     }
 }
 
