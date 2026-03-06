@@ -67,6 +67,10 @@ final class ObservationStaticLocalDataSource: ObservationLocalDataSource {
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
         return AnyPublisher(filteredCountSubject)
     }
+
+    func count(timeFilter: TimeFilterType, customNumber: Int, customUnit: TimeUnit) async -> Int {
+        list.count
+    }
     
     func insert(task: BGTask?, observations: [[AnyHashable : Any]], eventId: Int) async -> Int {
         observations.count

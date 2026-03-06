@@ -5,6 +5,7 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "TimeFilter.h"
 
 @class Observation;
 @class User;
@@ -27,6 +28,7 @@
 + (Observations *) observationsForObservation:(Observation *) observation context: (NSManagedObjectContext *) context;
 
 + (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context;
++ (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context timeFilter:(TimeFilterType) timeFilter customUnit:(TimeUnit) unit customNumber:(NSInteger) number;
 + (NSMutableArray *) getPredicatesForObservationsForMap: (NSManagedObjectContext *) context;
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;

@@ -7,9 +7,10 @@
 //
 
 import SwiftUI
-import Combine
 
 class ObservationFilterViewModel: ObservableObject {
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
     
     @Published var isFavoriteOn: Bool = false
     @Published var isImportantOn: Bool = false
@@ -18,25 +19,15 @@ class ObservationFilterViewModel: ObservableObject {
     @Published var customTimePickerEnum: TimeUnitWrapper = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     @Published var selectedUserCount: Int = 0
     
-    var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
-
-    init() {
-        update()
-                
-        NotificationCenter.default
-            .publisher(for: UserDefaults.didChangeNotification)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.update()
-            }
-            .store(in: &cancellables)
-    }
+    private let ALERT_THRESHOLD = 5000
     
     func update() {
         selectedUserCount = UserDefaults.standard.userFilterRemoteIds?.count ?? 0
         isFavoriteOn  = Observations.getFavoritesFilter()
         isImportantOn = Observations.getImportantFilter()
         selectedTime  = TimeFilterEnum(objc: TimeFilter.getObservationTimeFilter())
+        customTimeFieldValue = UserDefaults.standard.observationTimeFilterNumberKey
+        customTimePickerEnum = TimeUnitWrapper(objcValue: UserDefaults.standard.observationTimeFilterUnitKey)
     }
 
     func saveFavorites(_ newValue: Bool) {
@@ -73,5 +64,21 @@ class ObservationFilterViewModel: ObservableObject {
         saveTimeFilter(selectedTime)
         saveImportant(isImportantOn)
         saveFavorites(isFavoriteOn)
+        saveCustomTimeFieldValueFilter(customTimeFieldValue)
+        saveCustomTimeEnumFilter(customTimePickerEnum)
+    }
+
+    func warningCountForTimeSelection(
+        _ timeFilter: TimeFilterEnum,
+        customNumber: Int,
+        customUnit: TimeUnitWrapper
+    ) async -> Int? {
+        guard timeFilter == .all || timeFilter == .custom else { return nil }
+        let count = await observationRepository.count(
+            timeFilter: timeFilter.objc,
+            customNumber: customNumber,
+            customUnit: customUnit.objcValue
+        )
+        return count > ALERT_THRESHOLD ? count : nil
     }
 }

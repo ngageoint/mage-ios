@@ -47,8 +47,12 @@
 }
 
 + (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context {
+    return [Observations getPredicatesForObservations:context timeFilter:[TimeFilter getObservationTimeFilter] customUnit:[TimeFilter getObservationCustomTimeFilterUnit] customNumber:[TimeFilter getObservationCustomTimeFilterNumber]];
+}
+
++ (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context timeFilter:(TimeFilterType) timeFilter customUnit:(TimeUnit) unit customNumber:(NSInteger) number {
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:[NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]]];
-    NSPredicate *timePredicate = [TimeFilter getObservationTimePredicateForField:@"timestamp"];
+    NSPredicate *timePredicate = [TimeFilter getObservationTimePredicateForField:@"timestamp" timeFilter:timeFilter customUnit:unit customNumber:number];
     if (timePredicate) {
         [predicates addObject:timePredicate];
     }

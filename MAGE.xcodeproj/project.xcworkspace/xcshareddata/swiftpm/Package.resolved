@@ -1,5 +1,5 @@
 {
-  "originHash" : "207c6ed47e45e25f40d2ab20afcc890a28577e7ad35a49d3145f40980c999e56",
+  "originHash" : "ef6625289e51aefb73813613aa0ec36b02c43ab547fb3815c8dc0c494a068963",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,24 @@
       "state" : {
         "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
         "version" : "5.9.1"
+      }
+    },
+    {
+      "identity" : "color-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/color-ios",
+      "state" : {
+        "revision" : "1c588dafaf599a32d9adc29880264281dfbf286f",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "coordinate-reference-systems-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ngageoint/coordinate-reference-systems-ios.git",
+      "state" : {
+        "revision" : "d0d8cd34710aa78adb1bef3cdb2bf09a18356fa0",
+        "version" : "2.0.0"
       }
     },
     {

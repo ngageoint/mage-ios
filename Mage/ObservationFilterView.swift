@@ -11,6 +11,48 @@ import SwiftUI
 struct ObservationFilterView: View {
     @StateObject var observationFilterViewModel = ObservationFilterViewModel()
     @State private var showingUserFilter = false
+    @State private var showingLargeCountWarning = false
+    @State private var pendingTimeSelection: TimeFilterEnum?
+    @State private var pendingPreviousTimeSelection: TimeFilterEnum = .all
+    @State private var pendingObservationCount: Int?
+    @State private var lastConfirmedTime: TimeFilterEnum = .all
+
+    private var warningTitle: String {
+        "Show Observations?"
+    }
+
+    private var warningMessage: String {
+        let countText = pendingObservationCount.map { "\($0) observations" } ?? "these observations"
+        return "Are you sure you want to show \(countText)? The application may become unresponsive."
+    }
+
+    private var confirmButtonTitle: String {
+        "Show Observations"
+    }
+
+    private func evaluateCustomTimeWarning() {
+        guard observationFilterViewModel.selectedTime == .custom else { return }
+        guard !showingLargeCountWarning else { return }
+        let previousSelection = lastConfirmedTime
+        Task {
+            let warningCount = await observationFilterViewModel.warningCountForTimeSelection(
+                .custom,
+                customNumber: observationFilterViewModel.customTimeFieldValue,
+                customUnit: observationFilterViewModel.customTimePickerEnum
+            )
+            await MainActor.run {
+                guard observationFilterViewModel.selectedTime == .custom else { return }
+                if let warningCount {
+                    pendingTimeSelection = .custom
+                    pendingPreviousTimeSelection = previousSelection
+                    pendingObservationCount = warningCount
+                    showingLargeCountWarning = true
+                } else {
+                    lastConfirmedTime = .custom
+                }
+            }
+        }
+    }
 
     var body: some View {
         List {
@@ -73,7 +115,35 @@ struct ObservationFilterView: View {
                         customTimePickerEnum: $observationFilterViewModel.customTimePickerEnum,
                         isSelected: Binding(
                             get: { observationFilterViewModel.selectedTime == option },
-                            set: { if $0 { observationFilterViewModel.selectedTime = option } }
+                            set: { isSelected in
+                                guard isSelected else { return }
+                                guard observationFilterViewModel.selectedTime != option else { return }
+                                if option == .all || option == .custom {
+                                    let previousSelection = lastConfirmedTime
+                                    observationFilterViewModel.selectedTime = option
+                                    Task {
+                                        let warningCount = await observationFilterViewModel.warningCountForTimeSelection(
+                                            option,
+                                            customNumber: observationFilterViewModel.customTimeFieldValue,
+                                            customUnit: observationFilterViewModel.customTimePickerEnum
+                                        )
+                                        await MainActor.run {
+                                            guard observationFilterViewModel.selectedTime == option else { return }
+                                            if let warningCount {
+                                                pendingTimeSelection = option
+                                                pendingPreviousTimeSelection = previousSelection
+                                                pendingObservationCount = warningCount
+                                                showingLargeCountWarning = true
+                                            } else {
+                                                lastConfirmedTime = option
+                                            }
+                                        }
+                                    }
+                                    return
+                                }
+                                observationFilterViewModel.selectedTime = option
+                                lastConfirmedTime = option
+                            }
                         )
                     )
                 }
@@ -85,11 +155,37 @@ struct ObservationFilterView: View {
         .sheet(isPresented: $showingUserFilter) {
             UserObservationFilterView()
         }
-        .onChange(of: observationFilterViewModel.isFavoriteOn)  { observationFilterViewModel.saveFavorites($0) }
-        .onChange(of: observationFilterViewModel.isImportantOn) { observationFilterViewModel.saveImportant($0) }
-        .onChange(of: observationFilterViewModel.selectedTime)  { observationFilterViewModel.saveTimeFilter($0) }
-        .onChange(of: observationFilterViewModel.customTimeFieldValue) { observationFilterViewModel.saveCustomTimeFieldValueFilter($0)}
-        .onChange(of: observationFilterViewModel.customTimePickerEnum) { observationFilterViewModel.saveCustomTimeEnumFilter($0)}
+        .onAppear {
+            observationFilterViewModel.update()
+            lastConfirmedTime = observationFilterViewModel.selectedTime
+        }
+        .onDisappear {
+            observationFilterViewModel.applyFilter()
+        }
+        .onChange(of: observationFilterViewModel.customTimeFieldValue) { _ in
+            evaluateCustomTimeWarning()
+        }
+        .onChange(of: observationFilterViewModel.customTimePickerEnum) { _ in
+            evaluateCustomTimeWarning()
+        }
+        .alert(warningTitle, isPresented: $showingLargeCountWarning) {
+            Button(confirmButtonTitle) {
+                if let pendingTimeSelection {
+                    observationFilterViewModel.selectedTime = pendingTimeSelection
+                    lastConfirmedTime = pendingTimeSelection
+                }
+                pendingTimeSelection = nil
+                pendingObservationCount = nil
+            }
+            Button("Cancel", role: .cancel) {
+                observationFilterViewModel.selectedTime = pendingPreviousTimeSelection
+                lastConfirmedTime = pendingPreviousTimeSelection
+                pendingTimeSelection = nil
+                pendingObservationCount = nil
+            }
+        } message: {
+            Text(warningMessage)
+        }
     }
 }
 

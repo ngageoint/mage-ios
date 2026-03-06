@@ -33,6 +33,7 @@ protocol ObservationLocalDataSource {
     func getObservation(remoteId: String?) async -> ObservationModel?
     func getObservation(observationUri: URL?) async -> ObservationModel?
     func observeFilteredCount() -> AnyPublisher<Int, Never>?
+    func count(timeFilter: TimeFilterType, customNumber: Int, customUnit: TimeUnit) async -> Int
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
@@ -295,6 +296,21 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
             .eraseToAnyPublisher()
         }
         return itemChanges
+    }
+
+    func count(timeFilter: TimeFilterType, customNumber: Int, customUnit: TimeUnit) async -> Int {
+        guard let context = context else { return 0 }
+        return await context.perform {
+            let predicates = Observations.getPredicatesForObservations(
+                context,
+                timeFilter: timeFilter,
+                customUnit: customUnit,
+                customNumber: customNumber
+            ) as? [NSPredicate] ?? []
+            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            let count = try? context.countOfObjects(Observation.self, predicate: predicate)
+            return count ?? 0
+        }
     }
 
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int {
