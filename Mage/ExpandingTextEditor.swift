@@ -46,7 +46,7 @@ struct ExpandingTextEditor: View {
                 .frame(minHeight: 55, maxHeight: 650)
                 .padding([.bottom], 12)
         }
-        .background(Color(UIColor.systemGray5))
+        .background(Color(UIColor.systemGray4).opacity(0.7))
         .onDisappear(perform: {
             delegate?.fieldValueChanged(field, value: text)
         })
