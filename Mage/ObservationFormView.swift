@@ -188,6 +188,26 @@ class ObservationFormView: UIStackView {
             fieldView.setValid(formValid);
             valid = valid && formValid;
         }
+        /**
+            NOTE: Required textarea validation must be handled here for the SwiftUI ExpandingTextEditor.
+            It is hosted as a plain UIView (not a BaseFieldView), so the normal fieldViews validation path doesn't cover it.
+            When legacy text area is enabled, TextFieldView handles required validation as usual.
+            Otherwise we explicitly validate textarea fields against the form model.
+         */
+        if enforceRequired {
+            for fieldDictionary in formFields {
+                let isTextArea = fieldDictionary[FieldKey.type.key] as? String == FieldType.textarea.key
+                let isRequired = fieldDictionary[FieldKey.required.key] as? Bool ?? false
+                if isTextArea && isRequired {
+                    let key = fieldDictionary[FieldKey.name.key] as? String ?? ""
+                    let value = form[key] as? String
+                    let isEmpty = (value ?? "").isEmpty
+                    if isEmpty {
+                        valid = false
+                    }
+                }
+            }
+        }
         containingCard?.markValid(valid);
         return valid;
     }

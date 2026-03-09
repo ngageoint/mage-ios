@@ -16,6 +16,10 @@ struct ExpandingTextEditor: View {
     @State var workingText: String
     @State private var showSheet = false
     
+    private var isRequiredField: Bool {
+        return (field[FieldKey.required.key] as? Bool) == true
+    }
+    
     init(field: [String: Any] = [:], value: String, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.title = field[FieldKey.name.key] as? String ?? "Text Area"
         self.field = field
@@ -27,7 +31,7 @@ struct ExpandingTextEditor: View {
     var body: some View {
         VStack {
             HStack {
-                Text(title)
+                Text("\(title)" + (isRequiredField ? "*" : ""))
                     .font(.subtitle1)
                     .foregroundStyle(.secondary)
                     .padding(.leading, 8)
@@ -46,9 +50,9 @@ struct ExpandingTextEditor: View {
                 .frame(minHeight: 55, maxHeight: 650)
         }
         .padding(.bottom, 8)
-        .onDisappear(perform: {
-            delegate?.fieldValueChanged(field, value: text)
-        })
+        .onChange(of: text) { newValue in
+            delegate?.fieldValueChanged(field, value: newValue)
+        }
         .overlay(
             RoundedRectangle(cornerRadius: 4)
                 .stroke(Color.gray, lineWidth: 1)
