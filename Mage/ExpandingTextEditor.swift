@@ -17,7 +17,7 @@ struct ExpandingTextEditor: View {
     @State private var showSheet = false
     
     init(field: [String: Any] = [:], value: String, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
-        self.title = field[FieldKey.name.key] as? String ?? "Text Area"
+        self.title = field[FieldKey.title.key] as? String ?? "Text Area"
         self.field = field
         self.delegate = delegate
         self.text = value
@@ -38,14 +38,15 @@ struct ExpandingTextEditor: View {
                 } label: {
                     Image(systemName: "arrow.down.left.and.arrow.up.right")
                 }
-                .foregroundStyle(.primary)
             }
             .padding([.top, .trailing], 6)
             TextEditor(text: $text)
                 .tint(.onSurfaceColor)
+                .scrollContentBackground(.hidden) // this hides the special background color that only lives behind the text inside this area
                 .frame(minHeight: 55, maxHeight: 650)
+                .padding([.bottom], 12)
         }
-        .padding(.bottom, 8)
+        .background(Color(UIColor.systemGray5))
         .onDisappear(perform: {
             delegate?.fieldValueChanged(field, value: text)
         })
@@ -53,6 +54,7 @@ struct ExpandingTextEditor: View {
             RoundedRectangle(cornerRadius: 4)
                 .stroke(Color.gray, lineWidth: 1)
         )
+        .padding([.bottom], 20)
         .sheet(isPresented: $showSheet) {
             NavigationStack {
                  VStack {
