@@ -191,8 +191,7 @@ class ObservationFormView: UIStackView {
         /**
             NOTE: Required textarea validation must be handled here for the SwiftUI ExpandingTextEditor.
             It is hosted as a plain UIView (not a BaseFieldView), so the normal fieldViews validation path doesn't cover it.
-            When legacy text area is enabled, TextFieldView handles required validation as usual.
-            Otherwise we explicitly validate textarea fields against the form model.
+            We explicitly validate textarea fields against the form model.
          */
         if enforceRequired {
             for fieldDictionary in formFields {

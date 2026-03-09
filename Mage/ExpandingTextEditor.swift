@@ -15,6 +15,7 @@ struct ExpandingTextEditor: View {
     @State var text: String
     @State var workingText: String
     @State private var showSheet = false
+    @State private var showRequiredError: Bool = false
     
     private var isRequiredField: Bool {
         return (field[FieldKey.required.key] as? Bool) == true
@@ -29,34 +30,47 @@ struct ExpandingTextEditor: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("\(title)" + (isRequiredField ? "*" : ""))
-                    .font(.subtitle1)
-                    .foregroundStyle(.secondary)
-                    .padding(.leading, 8)
-                Spacer()
-                Button {
-                    workingText = text
-                    showSheet = true
-                } label: {
-                    Image(systemName: "arrow.down.left.and.arrow.up.right")
+        VStack(alignment: .leading) {
+            VStack {
+                HStack {
+                    Text("\(title)" + (isRequiredField ? "*" : ""))
+                        .font(.subtitle1)
+                        .foregroundStyle(text.isEmpty && isRequiredField ? .red : .secondary)
+                        .padding(.leading, 8)
+                    Spacer()
+                    Button {
+                        workingText = text
+                        showSheet = true
+                    } label: {
+                        Image(systemName: "arrow.down.left.and.arrow.up.right")
+                    }
+                    .foregroundStyle(.primary)
                 }
-                .foregroundStyle(.primary)
+                .padding([.top, .trailing], 6)
+                TextEditor(text: $text)
+                    .tint(.onSurfaceColor)
+                    .frame(minHeight: 55, maxHeight: 650)
             }
-            .padding([.top, .trailing], 6)
-            TextEditor(text: $text)
-                .tint(.onSurfaceColor)
-                .frame(minHeight: 55, maxHeight: 650)
+            .padding(.bottom, 8)
+            .onChange(of: text) { newValue in
+                if !newValue.isEmpty {
+                    showRequiredError = false
+                } else {
+                    showRequiredError = true
+                }
+                delegate?.fieldValueChanged(field, value: newValue)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(showRequiredError && isRequiredField ? Color.red : Color.gray, lineWidth: 1)
+            )
+            Text("\(title) is required")
+                .foregroundColor(.red)
+                .font(.caption)
+                .padding(.leading, 10)
+                .opacity(showRequiredError && isRequiredField ? 1 : 0)
         }
-        .padding(.bottom, 8)
-        .onChange(of: text) { newValue in
-            delegate?.fieldValueChanged(field, value: newValue)
-        }
-        .overlay(
-            RoundedRectangle(cornerRadius: 4)
-                .stroke(Color.gray, lineWidth: 1)
-        )
+        .listRowSeparator(.hidden)
         .sheet(isPresented: $showSheet) {
             NavigationStack {
                  VStack {
