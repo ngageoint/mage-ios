@@ -64,6 +64,10 @@ class ObservationFormViewModel: ObservableObject {
         if field.type == FieldType.attachment.key { return true }
         guard let value = form.form[field.name] else { return false }
         
+        if value is NSNull { // Ignore Null values (server created entries use null values)
+            return false
+        }
+        
         if let value = value as? String {
             return !value.isEmpty
         }
