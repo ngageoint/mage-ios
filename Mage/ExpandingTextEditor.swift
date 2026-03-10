@@ -8,18 +8,28 @@
 
 import SwiftUI
 
+final class ExpandingTextEditorState: ObservableObject {
+    @Published var showRequiredError: Bool = false
+}
+
 struct ExpandingTextEditor: View {
     var title: String
     var field: [String: Any]
     var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?
+    @ObservedObject var state: ExpandingTextEditorState
     @State var text: String
     @State var workingText: String
     @State private var showSheet = false
     
-    init(field: [String: Any] = [:], value: String, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
-        self.title = field[FieldKey.title.key] as? String ?? "Text Area"
+    private var isRequiredField: Bool {
+        return (field[FieldKey.required.key] as? Bool) == true
+    }
+    
+    init(field: [String: Any] = [:], value: String, state: ExpandingTextEditorState = ExpandingTextEditorState(), delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+        self.title = field[FieldKey.name.key] as? String ?? "Text Area"
         self.field = field
         self.delegate = delegate
+        self.state = state
         self.text = value
         self.workingText = value
     }
@@ -27,25 +37,44 @@ struct ExpandingTextEditor: View {
     var body: some View {
         VStack {
             HStack {
-                Text(title)
-                    .font(.caption)
-                    .foregroundStyle(Color(.onSurface).opacity(0.6)) // derived from MAGEScheme
-                    .padding(.leading, 8)
-                Spacer()
-                Button {
-                    workingText = text
-                    showSheet = true
-                } label: {
-                    Image(systemName: "arrow.down.left.and.arrow.up.right")
+        VStack(alignment: .leading) {
+            VStack {
+                HStack {
+                    Text("\(title)" + (isRequiredField ? " *" : ""))
+                        .font(.subtitle1)
+                        .foregroundStyle(state.showRequiredError && isRequiredField ? .red : .secondary)
+                        .padding(.leading, 8)
+                    Spacer()
+                    Button {
+                        workingText = text
+                        showSheet = true
+                    } label: {
+                        Image(systemName: "arrow.down.left.and.arrow.up.right")
+                    }
+                    .foregroundStyle(.primary)
                 }
+                .padding([.top, .trailing], 6)
+                TextEditor(text: $text)
+                    .tint(.onSurfaceColor)
+                    .frame(minHeight: 55, maxHeight: 650)
             }
-            .padding([.top, .trailing], 6)
-            TextEditor(text: $text)
-                .tint(.onSurfaceColor)
-                .scrollContentBackground(.hidden) // this hides the special background color that only lives behind the text inside this area
-                .frame(minHeight: 55, maxHeight: 650)
-                .padding([.bottom], 12)
-        }
+            .padding(.bottom, 8)
+            .onChange(of: text) { newValue in
+                if !newValue.isEmpty {
+                    state.showRequiredError = false
+                }
+                delegate?.fieldValueChanged(field, value: newValue)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(state.showRequiredError && isRequiredField ? Color.red : Color.gray, lineWidth: 1)
+            )
+            Text("\(title) is required")
+                .foregroundColor(.red)
+                .font(.caption)
+                .padding([.leading, .bottom], 12)
+                .opacity(state.showRequiredError && isRequiredField ? 1 : 0)
+        .onDisappear(perform: {
         .background(Color(.onSurface).opacity(0.12)) // derived from MAGEScheme
         .onDisappear(perform: {
             delegate?.fieldValueChanged(field, value: text)
@@ -55,8 +84,6 @@ struct ExpandingTextEditor: View {
                 .stroke(Color.gray, lineWidth: 1)
         )
         .padding([.bottom], 20)
-        .sheet(isPresented: $showSheet) {
-            NavigationStack {
                  VStack {
                      TextEditor(text: $workingText)
                          .tint(.onSurfaceColor)
