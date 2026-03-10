@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import MapFramework
+import SwiftUI
 
 protocol CanCreateObservation {
     var mapView: MKMapView? { get set }
@@ -26,13 +27,19 @@ class CanCreateObservationMixin: NSObject, MapMixin {
     weak var locationService: LocationService?
     var shouldShowFab: Bool = true
     
-    private lazy var createFab: MDCFloatingButton = {
-        let createFab = MDCFloatingButton(shape: .default)
-        createFab.setImage(UIImage(named:"add_location"), for: .normal)
-        createFab.addTarget(self, action: #selector(createNewObservation(_:)), for: .touchUpInside)
-        createFab.accessibilityLabel = "New"
-        createFab.isHidden = !shouldShowFab
-        return createFab
+    private lazy var createObservationButtonHC: UIHostingController<CreateObservationButton>? = {
+        let swiftUIView = CreateObservationButton { [weak self] in
+            self?.createNewObservation(nil)
+        }
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        hostingController.sizingOptions = [.intrinsicContentSize] // Support self-sizing (iOS 16+)
+        hostingController.view.backgroundColor = .clear
+        
+        let view = hostingController.view
+        view?.translatesAutoresizingMaskIntoConstraints = false
+        view?.isHidden = !shouldShowFab
+        return hostingController
     }()
     
     init(canCreateObservation: CanCreateObservation, shouldShowFab: Bool? = true, rootView: UIView?, mapStackView: UIStackView?, locationService: LocationService? = nil) {
@@ -53,7 +60,6 @@ class CanCreateObservationMixin: NSObject, MapMixin {
             return
         }
         canCreateObservation.scheme = scheme
-        createFab.applySecondaryTheme(withScheme: scheme)
     }
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
@@ -68,17 +74,25 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         guard let mapView = self.canCreateObservation.mapView, let mapStackView = mapStackView else {
             return
         }
-        rootView?.insertSubview(createFab, aboveSubview: mapView)
-        createFab.autoPinEdge(.bottom, to: .top, of: mapStackView, withOffset: -25)
-        createFab.autoPinEdge(toSuperviewMargin: .right)
-                
+        
+        // Add the shared CreateObservation button from SwiftUI
+        if let createObservationButtonHC,
+           let createObservationButton = createObservationButtonHC.view {
+            rootView?.insertSubview(createObservationButton, aboveSubview: mapView)
+            createObservationButton.autoPinEdge(.bottom, to: .top, of: mapStackView, withOffset: -25)
+            createObservationButton.autoPinEdge(toSuperviewMargin: .trailing)
+            if let parentVC = rootView?.parentViewController {
+                parentVC.addChild(createObservationButtonHC)
+                createObservationButtonHC.didMove(toParent: parentVC)
+            }
+        }
         applyTheme(scheme: canCreateObservation.scheme)
         
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(mapLongPress(_:)))
         mapView.addGestureRecognizer(longPressGestureRecognizer)
     }
     
-    @objc func createNewObservation(_ sender: UIButton) {
+    @objc func createNewObservation(_ sender: UIButton?) {
         let location = locationService?.location()
         startCreateNewObservation(location: location, provider: "gps")
     }

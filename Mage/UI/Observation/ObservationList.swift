@@ -31,7 +31,9 @@ struct ObservationList: View {
         }
         .overlay(alignment: .bottomTrailing) {
             if viewModel.currentUserCanEdit {
-                fabButton
+                createObservationButton
+                    .padding(.trailing, 8)
+                    .padding(.bottom, 25)
             }
         }
         .navigationTitle(DataSources.observation.fullName)
@@ -65,7 +67,6 @@ struct ObservationList: View {
             ProgressView()
                 .tint(Color.primaryColorVariant)
         }
-        .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.backgroundColor)
         .transition(.opacity)
@@ -110,7 +111,7 @@ struct ObservationList: View {
                         viewModel.setFirstRowVisible(visible: false)
                     }
                 }
-                .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.backgroundColor)
             } else {
@@ -169,9 +170,20 @@ struct ObservationList: View {
 
     // MARK: - FAB Button
 
-    private var fabButton: some View {
-        Button {
+    private var createObservationButton: some View {
+        CreateObservationButton {
             router.appendRoute(ObservationRoute.create)
+        }
+    }
+}
+
+struct CreateObservationButton: View {
+    var action: (() -> Void)?
+    
+    var body: some View {
+        Button {
+            
+            action?()
         } label: {
             Label {
                 Text("")
@@ -190,7 +202,6 @@ struct ObservationList: View {
                 backgroundColor: .secondaryColor
             )
         )
-        .padding(.trailing, 16)
-        .padding(.bottom, 16)
+        .accessibilityLabel("New Observation")
     }
 }
