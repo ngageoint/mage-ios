@@ -15,6 +15,7 @@ class CacheOverlayTableCell: UITableViewCell {
     var overlay: CacheOverlay?
     var mageLayer: Layer?
     var mainTable: UITableView?
+    weak var excludedListener: (any CacheOverlayListener)? // Used to prevent duplicate reloads when tapping toggles
     var tableView: UITableView
     
     var scheme: MDCContainerScheming?
@@ -58,7 +59,8 @@ class CacheOverlayTableCell: UITableViewCell {
         }
         
         if modified {
-            tableView.reloadData()
+            // Refresh the parent row for expanded layers (GeoPackage)
+            tableView.reloadRows(at: rowIndexPathsForLayers(overlay: cacheOverlay), with: .none)
         }
         Task {
             await updateSelectedAndNotify()
@@ -84,7 +86,10 @@ class CacheOverlayTableCell: UITableViewCell {
         
         if parentEnabled != parentOverlay.enabled {
             parentOverlay.enabled = parentEnabled
-            tableView.reloadData()
+            // Refresh the parent row for expanded layers (GeoPackage)
+            if let parentRow = rowIndexPathForExpandableGroupIfPresent(overlay: parentOverlay) {
+                tableView.reloadRows(at: [parentRow], with: .none)
+            }
         }
         Task {
             await updateSelectedAndNotify()
@@ -111,7 +116,30 @@ class CacheOverlayTableCell: UITableViewCell {
         }
         
         UserDefaults.standard.selectedCaches = overlays
-        await CacheOverlays.shared.notifyListeners()
+        await CacheOverlays.shared.notifyListenersExceptCaller(caller: excludedListener)
+    }
+
+    private func isExpandableGroup(_ overlay: CacheOverlay) -> Bool {
+        overlay.getChildren().count > 1
+    }
+
+    private func rowIndexPathsForLayers(overlay: CacheOverlay) -> [IndexPath] {
+        // Single-child overlays do not have an expand/collapse parent row; child lives at row 0.
+        if !isExpandableGroup(overlay) {
+            return [IndexPath(row: 0, section: 0)]
+        }
+
+        // Multi-child overlays use row 0 as the expandable parent and rows 1...n as children.
+        return overlay.getChildren().indices.map { IndexPath(row: $0 + 1, section: 0) }
+    }
+
+    private func rowIndexPathForExpandableGroupIfPresent(overlay: CacheOverlay) -> IndexPath? {
+        // Multi-child overlays have a parent row at index 0; single-child overlays do not.
+        isExpandableGroup(overlay) ? IndexPath(row: 0, section: 0) : nil
+    }
+
+    private var layerToggleOnColor: UIColor {
+        UIColor(named: "layerToggleOn") ?? .systemBlue
     }
 }
 
@@ -139,8 +167,7 @@ extension CacheOverlayTableCell: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let overlay = overlay else { return }
-        let hasMultipleChildren = overlay.getChildren().count != 1
-        if indexPath.row == 0 && hasMultipleChildren {
+        if indexPath.row == 0 && isExpandableGroup(overlay) {
             overlay.expanded.toggle()
             tableView.reloadData()
             if let mainTable = mainTable {
@@ -169,8 +196,8 @@ extension CacheOverlayTableCell: UITableViewDataSource, UITableViewDelegate {
                 let cacheSwitch = CacheActiveSwitch(frame: .zero)
                 cacheSwitch.isOn = overlay.enabled
                 cacheSwitch.overlay = overlay
-                cacheSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant
-                cacheSwitch.addTarget(self, action: #selector(activeChanged), for: .touchUpInside)
+                cacheSwitch.onTintColor = layerToggleOnColor
+                cacheSwitch.addTarget(self, action: #selector(activeChanged), for: .valueChanged)
                 cell.accessoryView = cacheSwitch
                 
                 cell.textLabel?.text = (self.mageLayer != nil) ? self.mageLayer!.name : overlay.name
@@ -193,12 +220,11 @@ extension CacheOverlayTableCell: UITableViewDataSource, UITableViewDelegate {
                 let cacheSwitch = CacheActiveSwitch(frame: .zero)
                 cacheSwitch.isOn = cacheOverlay.enabled
                 cacheSwitch.overlay = cacheOverlay
-                cacheSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant
-                cacheSwitch.addTarget(self, action: #selector(childActiveChanged), for: .touchUpInside)
+                cacheSwitch.onTintColor = layerToggleOnColor
+                cacheSwitch.addTarget(self, action: #selector(childActiveChanged), for: .valueChanged)
                 cell.accessoryView = cacheSwitch
             }
         }
         return cell
     }
 }
-

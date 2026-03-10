@@ -12,7 +12,7 @@ import GeoPackage
 @objc class OfflineMapTableViewController: UITableViewController, CacheOverlayListener {
     
     var refreshLayersButton: UIBarButtonItem?
-    var selectedStaticLayers: Set<NSNumber>?
+    var selectedStaticLayers: Set<NSNumber> = []
     var mapsFetchedResultsController: NSFetchedResultsController<any NSFetchRequestResult>?
     var scheme: MDCContainerScheming
     var context: NSManagedObjectContext
@@ -71,6 +71,13 @@ import GeoPackage
             await CacheOverlays.shared.register(self)
         }
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Task {
+            await CacheOverlays.shared.unregisterListener(self)
+        }
+    }
     
     func layerFromIndexPath(_ indexPath: IndexPath) -> Layer? {
         return mapsFetchedResultsController?.object(at: indexPath) as? Layer
@@ -89,8 +96,8 @@ import GeoPackage
             in: context
         )
         try? mapsFetchedResultsController?.performFetch()
-        
-        selectedStaticLayers = Set(UserDefaults.standard.array(forKey: "selectedStaticLayers.\(Server.currentEventId() ?? -1)") as? [NSNumber] ?? [])
+
+        selectedStaticLayers = Set(UserDefaults.standard.selectedStaticLayers?[currentEventStaticLayerKey] ?? [])
     }
     
     func geoPackageImported(notification: NSNotification) {
@@ -127,6 +134,61 @@ import GeoPackage
     
     func layer(indexPath: IndexPath) -> Layer? {
         mapsFetchedResultsController?.object(at: indexPath) as? Layer
+    }
+
+    private var currentEventStaticLayerKey: String {
+        "\(Server.currentEventId() ?? -1)"
+    }
+
+    private func saveSelectedStaticLayers() {
+        var staticLayers = UserDefaults.standard.selectedStaticLayers ?? [:]
+        staticLayers[currentEventStaticLayerKey] = Array(selectedStaticLayers)
+        UserDefaults.standard.selectedStaticLayers = staticLayers
+    }
+
+    private func configureAvailableLayerCell(_ cell: UITableViewCell, layer: Layer) {
+        cell.textLabel?.text = layer.name
+
+        if !layer.downloading {
+            if
+                let fileDictionary = layer.file,
+                let byteCount = fileDictionary["size"] as? String
+            {
+                cell.detailTextLabel?.text = ByteCountFormatter.string(fromByteCount: Int64((byteCount)) ?? 0, countStyle: .file)
+            } else {
+                cell.detailTextLabel?.text = "Static feature data"
+            }
+
+            let imageView = UIImageView(image: UIImage(named: "download"))
+            imageView.tintColor = scheme.colorScheme.primaryColorVariant
+            cell.accessoryView = imageView
+        } else {
+            if
+                let fileDictionary = layer.file,
+                let totalSizeString = fileDictionary["size"] as? String,
+                let totalBytes = Int64(totalSizeString)
+            {
+                let downloadedBytes = Int64(truncating: layer.downloadedBytes ?? 0)
+                let downloadedText = ByteCountFormatter.string(fromByteCount: downloadedBytes, countStyle: .file)
+                let totalText = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
+                cell.detailTextLabel?.text = "Downloading, Please wait: \(downloadedText) of \(totalText)"
+            } else {
+                cell.detailTextLabel?.text = "Loading static feature data, Please wait"
+            }
+
+            if let activityIndicatorView = cell.accessoryView as? UIActivityIndicatorView {
+                activityIndicatorView.startAnimating()
+            } else {
+                let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+                activityIndicatorView.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+                activityIndicatorView.startAnimating()
+                cell.accessoryView = activityIndicatorView
+            }
+        }
+    }
+
+    private var layerToggleOnColor: UIColor {
+        UIColor(named: "layerToggleOn")!
     }
 }
 
@@ -182,21 +244,9 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
             guard let layer = anObject as? Layer else { return }
             guard let indexPath else { return }
             let section = getSectionFromLayer(layer: layer)
-            if section == Sections.AVAILABLE_SECTION.rawValue && indexPath.row == 0 {
-                let cell = tableView.cellForRow(at: indexPath)
-                if
-                    let fileDictionary = layer.file,
-                    let totalString = fileDictionary["size"] as? String,
-                    let totalBytes = Int64(totalString)
-                {
-                    let downloaded = Int64(truncating: layer.downloadedBytes ?? 0)
-                    let downloadedText = ByteCountFormatter.string(fromByteCount: downloaded, countStyle: .file)
-                    let totalText = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
-                    cell?.detailTextLabel?.text = "Downloading, Please wait: \(downloadedText) of \(totalText)"
-                    tableView.reloadRows(at: [indexPath], with: .none)
-                } else {
-                    tableView.reloadRows(at: [indexPath], with: .none)
-                }
+            if section == Sections.AVAILABLE_SECTION.rawValue,
+               let cell = tableView.cellForRow(at: indexPath) {
+                configureAvailableLayerCell(cell, layer: layer)
             }
         @unknown default:
             break
@@ -437,78 +487,54 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "onlineLayerCell")
-        if cell == nil {
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "onlineLayerCell")
-        }
-        cell?.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        cell?.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        cell?.backgroundColor = scheme.colorScheme.surfaceColor
-        cell?.imageView?.tintColor = scheme.colorScheme.primaryColorVariant
-        cell?.imageView?.image = nil
-        cell?.accessoryView = nil
+        let cell = tableView.dequeueReusableCell(withIdentifier: "onlineLayerCell")
+            ?? UITableViewCell(style: .subtitle, reuseIdentifier: "onlineLayerCell")
+        cell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+        cell.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        cell.backgroundColor = scheme.colorScheme.surfaceColor
+        cell.imageView?.tintColor = scheme.colorScheme.primaryColorVariant
+        cell.imageView?.image = nil
+        cell.accessoryView = nil
         
-        guard let layer = layer(indexPath: indexPath) else { return cell! }
+        guard let layer = layer(indexPath: indexPath) else { return cell }
         let section = getSectionFromLayer(layer: layer)
         
         if section == Sections.AVAILABLE_SECTION.rawValue {
-            cell?.textLabel?.text = layer.name
-            if !layer.downloading {
-                if
-                    let fileDictionary = layer.file,
-                    let byteCount = fileDictionary["size"] as? String
-                {
-                    cell?.detailTextLabel?.text = ByteCountFormatter.string(fromByteCount: Int64((byteCount)) ?? 0, countStyle: .file)
-                } else {
-                    cell?.detailTextLabel?.text = "Static feature data"
-                }
-                
-                let imageView = UIImageView(image: UIImage(named: "download"))
-                imageView.tintColor = scheme.colorScheme.primaryColorVariant
-                cell?.accessoryView = imageView
-            } else {
-                if
-                    let fileDictionary = layer.file,
-                    let totalSizeString = fileDictionary["size"] as? String,
-                    let totalBytes = Int64(totalSizeString)
-                {
-                    let downloadedBytes = Int64(truncating: layer.downloadedBytes ?? 0)
-                    let downloadedText = ByteCountFormatter.string(fromByteCount: downloadedBytes, countStyle: .file)
-                    let totalText = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
-                    cell?.detailTextLabel?.text = "Downloading, Please wait: \(downloadedText) of \(totalText)"
-                } else {
-                    cell?.detailTextLabel?.text = "Loading static feature data, Please wait"
-                }
-                
-                let activityIndicatorView = UIActivityIndicatorView(style: .medium)
-                activityIndicatorView.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-                activityIndicatorView.startAnimating()
-                cell?.accessoryView = activityIndicatorView
-            }
+            configureAvailableLayerCell(cell, layer: layer)
         } else if section == Sections.DOWNLOADED_SECTION.rawValue {
             if let staticLayer = layer as? StaticLayer {
-                cell?.textLabel?.text = staticLayer.name
-                cell?.detailTextLabel?.text = "\((staticLayer.data?["features"] as? [Any] ?? []).count)"
-                
-                cell?.imageView?.image = UIImage(named: "marker_outline")
-                
-                let cacheSwitch = UISwitch(frame: .zero)
-                cacheSwitch.isOn = selectedStaticLayers?.contains((layer.remoteId ?? -1)) ?? false
-                cacheSwitch.onTintColor = scheme.colorScheme.primaryColorVariant
-                cacheSwitch.tag = indexPath.row
-                cacheSwitch.addTarget(self, action: #selector(staticLayerToggled), for: .touchUpInside)
-                cell?.accessoryView = cacheSwitch
+                let staticCell = (tableView.dequeueReusableCell(
+                    withIdentifier: StaticLayerToggleTableViewCell.cellIdentifier
+                ) as? StaticLayerToggleTableViewCell) ?? StaticLayerToggleTableViewCell(
+                        style: .subtitle,
+                        reuseIdentifier: StaticLayerToggleTableViewCell.cellIdentifier
+                    )
+                staticCell.textLabel?.text = staticLayer.name
+                staticCell.detailTextLabel?.text = "\((staticLayer.data?["features"] as? [Any] ?? []).count)"
+                staticCell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+                staticCell.detailTextLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+                staticCell.backgroundColor = scheme.colorScheme.surfaceColor
+                staticCell.imageView?.tintColor = scheme.colorScheme.primaryColorVariant
+                staticCell.imageView?.image = UIImage(named: "marker_outline")
+                staticCell.configureToggle(
+                    remoteId: layer.remoteId,
+                    isOn: layer.remoteId.map { selectedStaticLayers.contains($0) } ?? false,
+                    onTintColor: layerToggleOnColor,
+                    onToggle: { [weak self] remoteId, isOn in
+                        self?.staticLayerToggled(remoteId: remoteId, isOn: isOn)
+                    }
+                )
+                return staticCell
             } else {
-                var gpCell = tableView.dequeueReusableCell(withIdentifier: "geoPackageLayerCell") as? CacheOverlayTableCell
-                if gpCell == nil {
-                    gpCell = CacheOverlayTableCell(style: .subtitle, reuseIdentifier: "geoPackageLayerCell", scheme: scheme)
-                }
-                gpCell?.backgroundColor = scheme.colorScheme.surfaceColor
+                let gpCell = (tableView.dequeueReusableCell(withIdentifier: "geoPackageLayerCell") as? CacheOverlayTableCell)
+                    ?? CacheOverlayTableCell(style: .subtitle, reuseIdentifier: "geoPackageLayerCell", scheme: scheme)
+                gpCell.backgroundColor = scheme.colorScheme.surfaceColor
                 
-                gpCell?.overlay = nil
-                gpCell?.mageLayer = layer
-                gpCell?.mainTable = self.tableView
-                gpCell?.configure()
+                gpCell.overlay = nil
+                gpCell.mageLayer = layer
+                gpCell.mainTable = self.tableView
+                gpCell.excludedListener = self
+                gpCell.configure()
                 
                 // Capture indexPath and update when overlay is ready
                 let currentIndexPath = indexPath
@@ -521,6 +547,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                                 visibleCell.overlay = overlay
                                 visibleCell.mageLayer = layer
                                 visibleCell.mainTable = self.tableView
+                                visibleCell.excludedListener = self
                                 visibleCell.configure()
                                 visibleCell.bringSubviewToFront(visibleCell.tableView)
                             }
@@ -528,57 +555,56 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                     }
                 }
                 
-                gpCell?.bringSubviewToFront(gpCell!.tableView)
-                return gpCell!
+                gpCell.bringSubviewToFront(gpCell.tableView)
+                return gpCell
             }
         } else if section == Sections.MY_MAPS_SECTION.rawValue {
             let localOverlay = self.cacheOverlays.first(where: { $0.name == layer.name })
             if let localOverlay = localOverlay as? GeoPackageCacheOverlay {
-                var gpCell = tableView.dequeueReusableCell(withIdentifier: "geoPackageLayerCell") as? CacheOverlayTableCell
-                if gpCell == nil {
-                    gpCell = CacheOverlayTableCell(style: .subtitle, reuseIdentifier: "geoPackageLayerCell", scheme: scheme)
-                }
-                gpCell?.backgroundColor = scheme.colorScheme.surfaceColor
+                let gpCell = (tableView.dequeueReusableCell(withIdentifier: "geoPackageLayerCell") as? CacheOverlayTableCell)
+                    ?? CacheOverlayTableCell(style: .subtitle, reuseIdentifier: "geoPackageLayerCell", scheme: scheme)
+                gpCell.backgroundColor = scheme.colorScheme.surfaceColor
                 
-                gpCell?.overlay = localOverlay
-                gpCell?.mageLayer = layer
-                gpCell?.mainTable = self.tableView
-                gpCell?.configure()
-                gpCell?.bringSubviewToFront(gpCell!.tableView)
-                return gpCell!
+                gpCell.overlay = localOverlay
+                gpCell.mageLayer = layer
+                gpCell.mainTable = self.tableView
+                gpCell.excludedListener = self
+                gpCell.configure()
+                gpCell.bringSubviewToFront(gpCell.tableView)
+                return gpCell
             } else {
-                cell?.textLabel?.text = localOverlay?.cacheName
-                cell?.detailTextLabel?.text = localOverlay?.getInfo()
-                cell?.imageView?.image = UIImage(named: localOverlay?.iconImageName ?? "")
+                cell.textLabel?.text = localOverlay?.cacheName
+                cell.detailTextLabel?.text = localOverlay?.getInfo()
+                cell.imageView?.image = UIImage(named: localOverlay?.iconImageName ?? "")
                 
                 let cacheSwitch = CacheActiveSwitch(frame: .zero)
                 cacheSwitch.isOn = localOverlay?.enabled ?? false
                 cacheSwitch.overlay = localOverlay
-                cacheSwitch.onTintColor = scheme.colorScheme.primaryColorVariant
+                cacheSwitch.onTintColor = layerToggleOnColor
                 cacheSwitch.addTarget(self, action: #selector(activeChanged), for: .touchUpInside)
-                cell?.accessoryView = cacheSwitch
+                cell.accessoryView = cacheSwitch
             }
         } else if section == Sections.PROCESSING_SECTION.rawValue {
             let documentsDirectory = getDocumentsDirectory()
             let processingOverlay = CacheOverlays.shared.getProcessing()[indexPath.row]
-            cell?.textLabel?.text = processingOverlay
+            cell.textLabel?.text = processingOverlay
             if
                 let attrs = try? FileManager.default.attributesOfItem(atPath: documentsDirectory.appendingPathComponent(processingOverlay)),
                 let fileSize = attrs[.size] as? String
             {
-                cell?.detailTextLabel?.text = ByteCountFormatter.string(fromByteCount: Int64(Int(fileSize) ?? 0), countStyle: .file)
+                cell.detailTextLabel?.text = ByteCountFormatter.string(fromByteCount: Int64(Int(fileSize) ?? 0), countStyle: .file)
             }
-            cell?.imageView?.image = nil
+            cell.imageView?.image = nil
             let activityIndicator = UIActivityIndicatorView(style: .medium)
             activityIndicator.startAnimating()
             activityIndicator.color = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            cell?.accessoryView = activityIndicator
+            cell.accessoryView = activityIndicator
         } else {
-            cell?.textLabel?.text = layer.name
-            cell?.detailTextLabel?.text = nil
-            cell?.accessoryView = nil
+            cell.textLabel?.text = layer.name
+            cell.detailTextLabel?.text = nil
+            cell.accessoryView = nil
         }
-        return cell!
+        return cell
     }
     
     func getDocumentsDirectory() -> NSString {
@@ -586,19 +612,15 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
         let documentsDirectory = paths[0]
         return documentsDirectory as NSString
     }
-    
-    @objc func staticLayerToggled(sender: UISwitch) {
-        guard let layer = layer(indexPath: IndexPath(row: sender.tag, section: 0)) else { return }
-        guard let remoteId = layer.remoteId else { return }
-        if sender.isOn {
-            selectedStaticLayers?.insert(remoteId)
+
+    private func staticLayerToggled(remoteId: NSNumber, isOn: Bool) {
+        if isOn {
+            selectedStaticLayers.insert(remoteId)
         } else {
-            selectedStaticLayers?.remove(remoteId)
+            selectedStaticLayers.remove(remoteId)
         }
-        
-        var staticLayers = UserDefaults.standard.selectedStaticLayers ?? [:]
-        staticLayers["\(Server.currentEventId() ?? -1)"] = Array(selectedStaticLayers ?? Set<NSNumber>())
-        UserDefaults.standard.selectedStaticLayers = staticLayers
+
+        saveSelectedStaticLayers()
     }
     
     func retrieveLayerData(layer: Layer) {
@@ -614,7 +636,7 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let layer = layer(indexPath: indexPath) else { return }
         let section = getSectionFromLayer(layer: layer)
-        
+
         if section == Sections.AVAILABLE_SECTION.rawValue {
             if layer.downloading {
                 let alert = UIAlertController(
@@ -629,30 +651,13 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
                     self?.cancelGeoPackageDownload(layer: layer)
                 }
                 let continueAction = UIAlertAction(title: "Continue Download", style: .cancel)
-                
+
                 alert.addAction(restartAction)
                 alert.addAction(cancelAction)
                 alert.addAction(continueAction)
                 self.navigationController?.present(alert, animated: true, completion: nil)
             } else {
                 retrieveLayerData(layer: layer)
-            }
-        } else if section == Sections.DOWNLOADED_SECTION.rawValue {
-            if let _ = layer as? StaticLayer {
-                if let cell = tableView.cellForRow(at: indexPath) {
-                    if cell.accessoryType == .none {
-                        cell.accessoryType = .checkmark
-                        selectedStaticLayers?.insert(layer.remoteId ?? -1)
-                    } else {
-                        cell.accessoryType = .none
-                        selectedStaticLayers?.remove(layer.remoteId ?? -1)
-                    }
-                }
-                var staticLayers = UserDefaults.standard.selectedStaticLayers ?? [:]
-                staticLayers["\(Server.currentEventId() ?? -1)"] = Array(selectedStaticLayers ?? Set<NSNumber>())
-                UserDefaults.standard.selectedStaticLayers = staticLayers
-                
-                tableView.reloadData()
             }
         }
     }
@@ -838,4 +843,3 @@ extension OfflineMapTableViewController: NSFetchedResultsControllerDelegate {
         await CacheOverlays.shared.removeCacheOverlay(overlay: geoPackageCacheOverlay)
     }
 }
-

@@ -203,11 +203,13 @@
 		BD6E578C2DE0D3A000C046FD /* MGRS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578B2DE0D3A000C046FD /* MGRS */; };
 		BD6E578F2DE0D3C000C046FD /* GARS in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E578E2DE0D3C000C046FD /* GARS */; };
 		BD6E57922DE0D3D700C046FD /* GeoPackage in Frameworks */ = {isa = PBXBuildFile; productRef = BD6E57912DE0D3D700C046FD /* GeoPackage */; };
+		BDAA14DD2F509C5C0049F657 /* OfflineMapTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDAA14DC2F509C5C0049F657 /* OfflineMapTableViewControllerTests.swift */; };
 		BDB16FA22DF770F900FDD03B /* SimpleFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA12DF770F900FDD03B /* SimpleFeatures */; };
 		BDB16FA52DF7713300FDD03B /* Projections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA42DF7713300FDD03B /* Projections */; };
 		BDB16FA82DF7715400FDD03B /* SimpleFeaturesWKT in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FA72DF7715400FDD03B /* SimpleFeaturesWKT */; };
 		BDB16FAB2DF7717700FDD03B /* SimpleFeaturesProjections in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAA2DF7717700FDD03B /* SimpleFeaturesProjections */; };
 		BDB16FAE2DF7719600FDD03B /* SimpleFeaturesGeoJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BDB16FAD2DF7719600FDD03B /* SimpleFeaturesGeoJSON */; };
+		BDF39E422F59CE0500EDEE41 /* StaticLayerToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF39E412F59CE0500EDEE41 /* StaticLayerToggleTableViewCell.swift */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		D258D7802E253A4900A44AC4 /* SettingsLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */; };
 		D258D7852E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D258D7842E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift */; };
@@ -1167,6 +1169,8 @@
 		B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGEGeoPackageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61E70D96990B16652014926 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD66678D2D82152100D9BBA0 /* MAGE.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MAGE.xctestplan; sourceTree = "<group>"; };
+		BDAA14DC2F509C5C0049F657 /* OfflineMapTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMapTableViewControllerTests.swift; sourceTree = "<group>"; };
+		BDF39E412F59CE0500EDEE41 /* StaticLayerToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerToggleTableViewCell.swift; sourceTree = "<group>"; };
 		D258D77F2E253A4900A44AC4 /* SettingsLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalDataSource.swift; sourceTree = "<group>"; };
 		D258D7842E253B1300A44AC4 /* SettingsLocalDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocalDataSourceTests.swift; sourceTree = "<group>"; };
 		D258D7862E253D2700A44AC4 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
@@ -2362,6 +2366,7 @@
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.swift */,
 				F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */,
 				F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */,
+				BDF39E412F59CE0500EDEE41 /* StaticLayerToggleTableViewCell.swift */,
 				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.swift */,
 				F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */,
 				F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */,
@@ -4117,6 +4122,7 @@
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				BDAA14DC2F509C5C0049F657 /* OfflineMapTableViewControllerTests.swift */,
 				F7D31F852CB8871800126468 /* Cache */,
 				F7BEF68027D69DA1000E8CDE /* Mixins */,
 				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
@@ -5344,6 +5350,7 @@
 				F70688992BA4920D00D8E2EA /* ObservationLocalDataSource.swift in Sources */,
 				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
+				BDF39E422F59CE0500EDEE41 /* StaticLayerToggleTableViewCell.swift in Sources */,
 				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
 				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
@@ -5490,6 +5497,7 @@
 				F763FF352C7BAB7B00403A00 /* LocationRepositoryTests.swift in Sources */,
 				F77DDE212CE5273800D24775 /* ServerAuthenticationTests.swift in Sources */,
 				F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */,
+				BDAA14DD2F509C5C0049F657 /* OfflineMapTableViewControllerTests.swift in Sources */,
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
 				F7489B37279A13CE00A9E314 /* CoordinateFieldTests.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* GeometryViewTests.swift in Sources */,
