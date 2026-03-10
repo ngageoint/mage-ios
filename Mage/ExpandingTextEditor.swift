@@ -38,7 +38,7 @@ struct ExpandingTextEditor: View {
         VStack(alignment: .leading) {
             VStack {
                 HStack {
-                    Text("\(title)" + (isRequiredField ? "*" : ""))
+                    Text("\(title)" + (isRequiredField ? " *" : ""))
                         .font(.subtitle1)
                         .foregroundStyle(state.showRequiredError && isRequiredField ? .red : .secondary)
                         .padding(.leading, 8)
