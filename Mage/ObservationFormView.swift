@@ -33,6 +33,7 @@ class ObservationFormView: UIStackView {
     private var formFieldAdded: Bool = false;
     private var includeAttachmentFields: Bool = true;
     private var scheme: MDCContainerScheming?;
+    private var expandingTextEditorStates: [String: ExpandingTextEditorState] = [:];
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?.fields ?? [];
@@ -136,7 +137,10 @@ class ObservationFormView: UIStackView {
             case FieldType.textfield.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case FieldType.textarea.key:
-                let hc = UIHostingController(rootView: ExpandingTextEditor(field: fieldDictionary, value: value as? String ?? "", delegate: self));
+                let key = fieldDictionary[FieldKey.name.key] as? String ?? ""
+                let state = expandingTextEditorStates[key] ?? ExpandingTextEditorState()
+                expandingTextEditorStates[key] = state
+                let hc = UIHostingController(rootView: ExpandingTextEditor(field: fieldDictionary, value: value as? String ?? "", state: state, delegate: self))
                 fieldView = hc.view
             case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
@@ -197,11 +201,14 @@ class ObservationFormView: UIStackView {
             for fieldDictionary in formFields {
                 let isTextArea = fieldDictionary[FieldKey.type.key] as? String == FieldType.textarea.key
                 let isRequired = fieldDictionary[FieldKey.required.key] as? Bool ?? false
-                if isTextArea && isRequired {
+                if isTextArea {
                     let key = fieldDictionary[FieldKey.name.key] as? String ?? ""
                     let value = form[key] as? String
                     let isEmpty = (value ?? "").isEmpty
-                    if isEmpty {
+                    if let state = expandingTextEditorStates[key] {
+                        state.showRequiredError = isRequired && isEmpty
+                    }
+                    if isRequired && isEmpty {
                         valid = false
                     }
                 }

@@ -8,23 +8,28 @@
 
 import SwiftUI
 
+final class ExpandingTextEditorState: ObservableObject {
+    @Published var showRequiredError: Bool = false
+}
+
 struct ExpandingTextEditor: View {
     var title: String
     var field: [String: Any]
     var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?
+    @ObservedObject var state: ExpandingTextEditorState
     @State var text: String
     @State var workingText: String
     @State private var showSheet = false
-    @State private var showRequiredError: Bool = false
     
     private var isRequiredField: Bool {
         return (field[FieldKey.required.key] as? Bool) == true
     }
     
-    init(field: [String: Any] = [:], value: String, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
+    init(field: [String: Any] = [:], value: String, state: ExpandingTextEditorState = ExpandingTextEditorState(), delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.title = field[FieldKey.name.key] as? String ?? "Text Area"
         self.field = field
         self.delegate = delegate
+        self.state = state
         self.text = value
         self.workingText = value
     }
@@ -35,7 +40,7 @@ struct ExpandingTextEditor: View {
                 HStack {
                     Text("\(title)" + (isRequiredField ? "*" : ""))
                         .font(.subtitle1)
-                        .foregroundStyle(text.isEmpty && isRequiredField ? .red : .secondary)
+                        .foregroundStyle(state.showRequiredError && isRequiredField ? .red : .secondary)
                         .padding(.leading, 8)
                     Spacer()
                     Button {
@@ -54,21 +59,19 @@ struct ExpandingTextEditor: View {
             .padding(.bottom, 8)
             .onChange(of: text) { newValue in
                 if !newValue.isEmpty {
-                    showRequiredError = false
-                } else {
-                    showRequiredError = true
+                    state.showRequiredError = false
                 }
                 delegate?.fieldValueChanged(field, value: newValue)
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(showRequiredError && isRequiredField ? Color.red : Color.gray, lineWidth: 1)
+                    .stroke(state.showRequiredError && isRequiredField ? Color.red : Color.gray, lineWidth: 1)
             )
             Text("\(title) is required")
                 .foregroundColor(.red)
                 .font(.caption)
-                .padding(.leading, 10)
-                .opacity(showRequiredError && isRequiredField ? 1 : 0)
+                .padding([.leading, .bottom], 12)
+                .opacity(state.showRequiredError && isRequiredField ? 1 : 0)
         }
         .listRowSeparator(.hidden)
         .sheet(isPresented: $showSheet) {
