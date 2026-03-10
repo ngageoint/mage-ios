@@ -13,6 +13,7 @@ import Foundation
 @objc final class MockCacheOverlayListener: NSObject, CacheOverlayListener {
     var updatedOverlays: [CacheOverlay]?
     var cacheOverlaysUpdatedCalled: Int = 0
+    var onUpdate: (([CacheOverlay]) -> Void)?
     
     var updatedOverlaysWithoutBase: [CacheOverlay]? {
         guard let updatedOverlays = updatedOverlays else { return nil }
@@ -28,5 +29,6 @@ import Foundation
             print("XXX overlay named \(overlay.cacheName)")
         }
         updatedOverlays = cacheOverlays
+        onUpdate?(cacheOverlays)
     }
 }

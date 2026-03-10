@@ -27,13 +27,23 @@ class MeNavStack: MageNavStack {
                 })
                 .store(in: &cancellables)
             
-            let svc = SwiftUIViewController(
-                swiftUIView: UserViewSwiftUI(
+            let controller = MageHostingController(
+                rootView: UserViewSwiftUI(
                     viewModel: self.viewModel!
                     )
                     .environmentObject(router)
             )
-            self.view.addSubview(svc.view)
+            addChild(controller)
+            controller.view.translatesAutoresizingMaskIntoConstraints = false
+            self.view.addSubview(controller.view)
+            controller.didMove(toParent: self)
+            
+            NSLayoutConstraint.activate([
+                controller.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                controller.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                controller.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                controller.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            ])
         }
     }
 }

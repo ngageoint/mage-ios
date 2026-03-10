@@ -34,6 +34,10 @@ static NSInteger REPORT_LOCATION_CELL = 0;
 static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 static NSInteger GPS_DISTANCE_CELL_ROW = 2;
 
+- (UIColor *) layerToggleOnColor {
+    return [UIColor colorNamed:@"layerToggleOn"];
+}
+
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Location Sync";
@@ -159,7 +163,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *toggle = [[UISwitch alloc] init];
-            toggle.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+            toggle.onTintColor = [self layerToggleOnColor];
             cell.accessoryView = toggle;
     
             [toggle setOn:self.locationServicesEnabled animated:NO];

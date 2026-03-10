@@ -17,6 +17,10 @@ struct ObservationFilterView: View {
     @State private var pendingObservationCount: Int?
     @State private var lastConfirmedTime: TimeFilterEnum = .all
 
+    private var toggleTintColor: Color {
+        Color(uiColor: UIColor(named: "layerToggleOn")!)
+    }
+    
     private var warningTitle: String {
         "Show Observations?"
     }
@@ -67,6 +71,7 @@ struct ObservationFilterView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .tint(toggleTintColor)
                 }
                 
                 HStack {
@@ -79,6 +84,7 @@ struct ObservationFilterView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .tint(toggleTintColor)
                 }
 
                 Button {

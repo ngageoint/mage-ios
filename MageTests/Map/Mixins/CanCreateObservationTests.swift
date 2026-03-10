@@ -136,8 +136,8 @@ class CanCreateObservationTests: AsyncMageCoreDataTestCase {
         let mapState = MapState()
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-        tester().waitForView(withAccessibilityLabel: "New")
-        tester().tapView(withAccessibilityLabel: "New")
+        tester().waitForView(withAccessibilityLabel: "New Observation")
+        tester().tapView(withAccessibilityLabel: "New Observation")
         tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection")
         tester().tapView(withAccessibilityLabel: "CANCEL")
         

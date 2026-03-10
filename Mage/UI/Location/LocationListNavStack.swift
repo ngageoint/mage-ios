@@ -12,11 +12,22 @@ import SwiftUI
 class LocationListNavStack: MageNavStack {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let svc = SwiftUIViewController(
-            swiftUIView: LocationList()
+        let controller = MageHostingController(
+            rootView: LocationList()
             .environmentObject(router)
         )
-        self.view.addSubview(svc.view)
+        addChild(controller)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(controller.view)
+        controller.didMove(toParent: self)
+        
+        NSLayoutConstraint.activate([
+            controller.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+            controller.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            controller.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            controller.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+        
         setNavBarTitle()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(launchLocationFilter))
     }
