@@ -26,7 +26,7 @@ struct ExpandingTextEditor: View {
     }
     
     init(field: [String: Any] = [:], value: String, state: ExpandingTextEditorState = ExpandingTextEditorState(), delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
-        self.title = field[FieldKey.name.key] as? String ?? "Text Area"
+        self.title = field[FieldKey.title.key] as? String ?? "Text Area"
         self.field = field
         self.delegate = delegate
         self.state = state
@@ -35,14 +35,12 @@ struct ExpandingTextEditor: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
         VStack(alignment: .leading) {
             VStack {
                 HStack {
                     Text("\(title)" + (isRequiredField ? " *" : ""))
-                        .font(.subtitle1)
-                        .foregroundStyle(state.showRequiredError && isRequiredField ? .red : .secondary)
+                        .font(text.isEmpty ? .subheadline : .caption)
+                        .foregroundStyle(state.showRequiredError && isRequiredField ? .red : Color(.onSurface).opacity(0.6))
                         .padding(.leading, 8)
                     Spacer()
                     Button {
@@ -56,9 +54,11 @@ struct ExpandingTextEditor: View {
                 .padding([.top, .trailing], 6)
                 TextEditor(text: $text)
                     .tint(.onSurfaceColor)
+                    .scrollContentBackground(.hidden) // this hides the special background color that only lives behind the text inside this area
                     .frame(minHeight: 55, maxHeight: 650)
+                    .padding([.bottom], 12)
             }
-            .padding(.bottom, 8)
+            .background(Color(.onSurface).opacity(0.12)) // derived from MAGEScheme
             .onChange(of: text) { newValue in
                 if !newValue.isEmpty {
                     state.showRequiredError = false
@@ -69,70 +69,48 @@ struct ExpandingTextEditor: View {
                 RoundedRectangle(cornerRadius: 4)
                     .stroke(state.showRequiredError && isRequiredField ? Color.red : Color.gray, lineWidth: 1)
             )
+            .padding([.bottom], 2)
             Text("\(title) is required")
                 .foregroundColor(.red)
                 .font(.caption)
                 .padding([.leading, .bottom], 12)
                 .opacity(state.showRequiredError && isRequiredField ? 1 : 0)
-        .onDisappear(perform: {
-        .background(Color(.onSurface).opacity(0.12)) // derived from MAGEScheme
-        .onDisappear(perform: {
-            delegate?.fieldValueChanged(field, value: text)
-        })
-        .overlay(
-            RoundedRectangle(cornerRadius: 4)
-                .stroke(Color.gray, lineWidth: 1)
-        )
-        .padding([.bottom], 20)
-                 VStack {
-                     TextEditor(text: $workingText)
-                         .tint(.onSurfaceColor)
-                         .scrollContentBackground(.hidden)
-                         .background(Color(.onSurface).opacity(0.12))
-                         .cornerRadius(16)
-                         .toolbar {
-                             ToolbarItem(placement: .topBarLeading) {
-                                 Button(action: {
-                                     showSheet = false
-                                 }) {
-                                     Image(systemName: "xmark")
-                                 }
-                             }
-                             // TODO: add undo/redo
-     //                        ToolbarItem(placement: .principal) {
-     //                            HStack(spacing: 16) {
-     //                                Button(action: {
-     //                                    undoManager?.undo()
-     //                                }) {
-     //                                    Image(systemName: "arrow.uturn.backward.circle")
-     //                                }
-     //                                .disabled(undoManager?.canUndo == false)
-     //                                Button(action: {
-     //                                    undoManager?.redo()
-     //                                }) {
-     //                                    Image(systemName: "arrow.uturn.forward.circle")
-     //                                }
-     //                                .disabled(undoManager?.canRedo == false)
-     //                            }
-     //                        }
-                             ToolbarItem(placement: .topBarTrailing) {
-                                 Button(action: {
-                                     showSheet = false
-                                     text = workingText
-                                     delegate?.fieldValueChanged(field, value: text)
-                                 }) {
-                                     Image(systemName: "checkmark")
-                                 }
-                                 .buttonStyle(.borderedProminent)
-                             }
-                             
-                         }
-                         .navigationTitle(title)
-                         .navigationBarTitleDisplayMode(.inline)
-                         .toolbarBackground(.primary, for: .navigationBar)
-                 }
-                 .padding(20)
-                 .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .listRowSeparator(.hidden)
+        .sheet(isPresented: $showSheet) {
+            NavigationStack {
+                VStack {
+                    TextEditor(text: $workingText)
+                        .tint(.onSurfaceColor)
+                        .scrollContentBackground(.hidden)
+                        .background(Color(.onSurface).opacity(0.12))
+                        .cornerRadius(16)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button(action: {
+                                    showSheet = false
+                                }) {
+                                    Image(systemName: "xmark")
+                                }
+                            }
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button(action: {
+                                    showSheet = false
+                                    text = workingText
+                                    delegate?.fieldValueChanged(field, value: text)
+                                }) {
+                                    Image(systemName: "checkmark")
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
+                            
+                        }
+                        .navigationTitle(title)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbarBackground(.primary, for: .navigationBar)
+                }
+                .padding(20)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
     }
