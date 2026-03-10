@@ -87,7 +87,7 @@ func globalContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.secondaryColor = UIColor(named: "secondary") ?? (MDCPalette.orange.accent700 ?? .systemFill);
     containerScheme.colorScheme.onSecondaryColor = UIColor(named: "onSecondary") ?? .label;
     containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
-    containerScheme.colorScheme.onSurfaceColor = UIColor.label;
+    containerScheme.colorScheme.onSurfaceColor = UIColor(resource: .onSurface) //UIColor.label;
     containerScheme.colorScheme.backgroundColor = UIColor(named: "background") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
