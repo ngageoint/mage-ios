@@ -60,6 +60,8 @@ struct ExpandingTextEditor: View {
                  VStack {
                      TextEditor(text: $workingText)
                          .tint(.onSurfaceColor)
+                         .scrollContentBackground(.hidden)
+                         .background(Color(.onSurface).opacity(0.12))
                          .cornerRadius(16)
                          .toolbar {
                              ToolbarItem(placement: .topBarLeading) {
