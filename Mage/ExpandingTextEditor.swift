@@ -28,8 +28,8 @@ struct ExpandingTextEditor: View {
         VStack {
             HStack {
                 Text(title)
-                    .font(.subtitle1)
-                    .foregroundStyle(.secondary)
+                    .font(.caption)
+                    .foregroundStyle(Color(.onSurface).opacity(0.6)) // derived from MAGEScheme
                     .padding(.leading, 8)
                 Spacer()
                 Button {
@@ -46,7 +46,7 @@ struct ExpandingTextEditor: View {
                 .frame(minHeight: 55, maxHeight: 650)
                 .padding([.bottom], 12)
         }
-        .background(Color(UIColor.systemGray4).opacity(0.7))
+        .background(Color(.onSurface).opacity(0.12)) // derived from MAGEScheme
         .onDisappear(perform: {
             delegate?.fieldValueChanged(field, value: text)
         })
