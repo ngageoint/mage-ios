@@ -39,6 +39,10 @@ static NSString *LAYERS_SECTION_NAME = @"Layers";
 static NSString *MAGE_SECTION_NAME = @"MAGE";
 static NSString *FEED_SECTION_NAME = @"Feeds";
 
+- (UIColor *) layerToggleOnColor {
+    return [UIColor colorNamed:@"layerToggleOn"];
+}
+
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;
@@ -145,7 +149,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.detailTextLabel.text = @"Show Apple Maps Traffic";
             UISwitch *trafficSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             trafficSwitch.on = [defaults boolForKey:@"mapShowTraffic"];
-            trafficSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+            trafficSwitch.onTintColor = [self layerToggleOnColor];
             [trafficSwitch addTarget:self action:@selector(trafficSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = trafficSwitch;
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -191,7 +195,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.detailTextLabel.text = @"Show observations on map";
             UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             observationSwitch.on = !defaults.hideObservations;
-            observationSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+            observationSwitch.onTintColor = [self layerToggleOnColor];
             [observationSwitch addTarget:self action:@selector(observationSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = observationSwitch;
             cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
@@ -207,7 +211,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.detailTextLabel.text = @"Show people on map";
             UISwitch *peopleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             peopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
-            peopleSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+            peopleSwitch.onTintColor = [self layerToggleOnColor];
             [peopleSwitch addTarget:self action:@selector(peopleSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = peopleSwitch;
             cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];

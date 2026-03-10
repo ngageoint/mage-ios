@@ -8,6 +8,7 @@
 
 import XCTest
 import GeoPackage
+import UIKit
 
 @testable import MAGE
 
@@ -15,6 +16,7 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
     
     override func tearDown() async throws {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
+        UserDefaults.standard.selectedCaches = nil
         
         await CacheOverlays.shared.removeAll()
         try await super.tearDown()
@@ -23,6 +25,7 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
     override func setUp() async throws {
         try await super.setUp()
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
+        UserDefaults.standard.selectedCaches = nil
         
         await CacheOverlays.shared.removeAll()
     }
@@ -321,5 +324,119 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         overlayCount = await CacheOverlays.shared.getOverlays().count
         XCTAssertEqual(overlayCount, 2)
+    }
+
+    @MainActor
+    func testCacheOverlayTableCellChildToggleSkipsCallerNotification() async {
+        let callerListener = MockCacheOverlayListener()
+        let otherListener = MockCacheOverlayListener()
+        await CacheOverlays.shared.register(callerListener)
+        await CacheOverlays.shared.register(otherListener)
+
+        let parent = TestParentCacheOverlay(name: "Geopackage Layer")
+        let child1 = TestChildCacheOverlay(name: "Points Layer", parent: parent)
+        let child2 = TestChildCacheOverlay(name: "Tile Layer", parent: parent)
+        parent.children = [child1, child2]
+        await CacheOverlays.shared.setCacheOverlays(overlays: [parent])
+
+        let cell = CacheOverlayTableCell(style: .subtitle, reuseIdentifier: "cache-cell", scheme: MAGEScheme.scheme())
+        cell.overlay = parent
+        cell.excludedListener = callerListener
+        cell.configure()
+
+        let callerBeforeNotifyCount = callerListener.cacheOverlaysUpdatedCalled
+        let otherBeforeNotifyCount = otherListener.cacheOverlaysUpdatedCalled
+        let callerNotNotified = expectation(description: "Caller listener is not notified")
+        callerNotNotified.isInverted = true
+        let otherListenerNotified = expectation(description: "Other listener is notified")
+        var callerExpectationFulfilled = false
+        var otherExpectationFulfilled = false
+        callerListener.onUpdate = { _ in
+            if !callerExpectationFulfilled && callerListener.cacheOverlaysUpdatedCalled > callerBeforeNotifyCount {
+                callerExpectationFulfilled = true
+                callerNotNotified.fulfill()
+            }
+        }
+        otherListener.onUpdate = { _ in
+            if !otherExpectationFulfilled && otherListener.cacheOverlaysUpdatedCalled > otherBeforeNotifyCount {
+                otherExpectationFulfilled = true
+                otherListenerNotified.fulfill()
+            }
+        }
+
+        let toggle = CacheActiveSwitch(frame: .zero)
+        toggle.overlay = child1
+        toggle.isOn = true
+        cell.childActiveChanged(sender: toggle)
+        await fulfillment(of: [otherListenerNotified, callerNotNotified], timeout: 1.0)
+
+        XCTAssertEqual(callerListener.cacheOverlaysUpdatedCalled, callerBeforeNotifyCount)
+        XCTAssertGreaterThan(otherListener.cacheOverlaysUpdatedCalled, otherBeforeNotifyCount)
+        XCTAssertEqual(UserDefaults.standard.selectedCaches, [child1.cacheName])
+        callerListener.onUpdate = nil
+        otherListener.onUpdate = nil
+    }
+
+    @MainActor
+    func testCacheOverlayTableCellChildToggleNotifiesWhenCallerNotSet() async {
+        let listener = MockCacheOverlayListener()
+        await CacheOverlays.shared.register(listener)
+
+        let parent = TestParentCacheOverlay(name: "Geopackage Layer")
+        let child1 = TestChildCacheOverlay(name: "Points Layer", parent: parent)
+        let child2 = TestChildCacheOverlay(name: "Tile Layer", parent: parent)
+        parent.children = [child1, child2]
+        await CacheOverlays.shared.setCacheOverlays(overlays: [parent])
+
+        let cell = CacheOverlayTableCell(style: .subtitle, reuseIdentifier: "cache-cell", scheme: MAGEScheme.scheme())
+        cell.overlay = parent
+        cell.excludedListener = nil
+        cell.configure()
+
+        let beforeNotifyCount = listener.cacheOverlaysUpdatedCalled
+        let notifyExpectation = expectation(description: "Listener notified")
+        var notifyExpectationFulfilled = false
+        listener.onUpdate = { _ in
+            if !notifyExpectationFulfilled && listener.cacheOverlaysUpdatedCalled > beforeNotifyCount {
+                notifyExpectationFulfilled = true
+                notifyExpectation.fulfill()
+            }
+        }
+
+        let toggle = CacheActiveSwitch(frame: .zero)
+        toggle.overlay = child1
+        toggle.isOn = true
+        cell.childActiveChanged(sender: toggle)
+        await fulfillment(of: [notifyExpectation], timeout: 1.0)
+
+        XCTAssertGreaterThan(listener.cacheOverlaysUpdatedCalled, beforeNotifyCount)
+        XCTAssertEqual(UserDefaults.standard.selectedCaches, [child1.cacheName])
+        listener.onUpdate = nil
+    }
+}
+
+private final class TestParentCacheOverlay: CacheOverlay {
+    var children: [CacheOverlay] = []
+
+    init(name: String) {
+        super.init(name: name, type: .XYZ_DIRECTORY, supportsChildren: true)
+    }
+
+    override func getChildren() -> [CacheOverlay] {
+        children
+    }
+}
+
+private final class TestChildCacheOverlay: CacheOverlay {
+    weak var parent: CacheOverlay?
+
+    init(name: String, parent: CacheOverlay) {
+        self.parent = parent
+        super.init(name: name, cacheName: CacheOverlay.buildChildCacheName(name: parent.name, childName: name), type: .GEOPACKAGE_FEATURE_TABLE, supportsChildren: false)
+        self.isChild = true
+    }
+
+    override func getParent() -> CacheOverlay? {
+        parent
     }
 }
