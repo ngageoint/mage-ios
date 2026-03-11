@@ -29,7 +29,7 @@ class ObservationListNavStack: MageNavStack {
         ])
         
         setNavBarTitle()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(launchObservationFilter))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(launchObservationFilter(_:)))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -42,7 +42,9 @@ class ObservationListNavStack: MageNavStack {
         self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
     }
     
-    @objc func launchObservationFilter() {
-        router.appendRoute(MageRoute.observationFilter)
+    @objc func launchObservationFilter(_ sender: UIBarButtonItem) {
+        let filterView = ObservationFilterView()
+        let hostingController = UIHostingController(rootView: filterView)
+        navigationController?.pushViewController(hostingController, animated: true)
     }
 }

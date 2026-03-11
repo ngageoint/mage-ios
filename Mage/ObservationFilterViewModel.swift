@@ -20,9 +20,30 @@ class ObservationFilterViewModel: ObservableObject {
     @Published var selectedUserCount: Int = 0
     
     private let ALERT_THRESHOLD = 5000
+    private var defaultsObserver: NSObjectProtocol?
+    
+    init() {
+        defaultsObserver = NotificationCenter.default.addObserver(
+            forName: UserDefaults.didChangeNotification,
+            object: UserDefaults.standard,
+            queue: .main
+        ) { [weak self] _ in
+            self?.refreshSelectedUserCount()
+        }
+    }
+    
+    deinit {
+        if let defaultsObserver {
+            NotificationCenter.default.removeObserver(defaultsObserver)
+        }
+    }
+    
+    private func refreshSelectedUserCount() {
+        selectedUserCount = UserDefaults.standard.userFilterRemoteIds?.count ?? 0
+    }
     
     func update() {
-        selectedUserCount = UserDefaults.standard.userFilterRemoteIds?.count ?? 0
+        refreshSelectedUserCount()
         isFavoriteOn  = Observations.getFavoritesFilter()
         isImportantOn = Observations.getImportantFilter()
         selectedTime  = TimeFilterEnum(objc: TimeFilter.getObservationTimeFilter())
