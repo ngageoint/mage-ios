@@ -66,8 +66,9 @@ struct ObservationFilterView: View {
                     Toggle(isOn: $observationFilterViewModel.isFavoriteOn) {
                         VStack(alignment: .leading) {
                             Text("Favorites")
+                                .font(.body)
                             Text("Only show my favorite observations")
-                                .font(.body2)
+                                .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -79,8 +80,9 @@ struct ObservationFilterView: View {
                     Toggle(isOn: $observationFilterViewModel.isImportantOn) {
                         VStack(alignment: .leading) {
                             Text("Important")
+                                .font(.body)
                             Text("Only show observations flagged as important")
-                                .font(.body2)
+                                .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -93,8 +95,9 @@ struct ObservationFilterView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("User Filter")
+                                .font(.body)
                             Text("Only show selected users’ observations")
-                                .font(.body2)
+                                .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
                         .padding(.leading, 8)

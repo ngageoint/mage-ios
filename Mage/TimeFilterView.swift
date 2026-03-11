@@ -99,9 +99,10 @@ struct TimeFilterView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(title)
+                        .font(.body)
                     Text(subTitle)
-                        .font(.body2)
-                        .foregroundStyle(.gray)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
                 if isSelected { Image(systemName: "checkmark") }
