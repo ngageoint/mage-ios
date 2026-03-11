@@ -85,6 +85,7 @@ struct ObservationHeaderViewSwiftUI: View {
                     }.padding()
                 }
                 ObservationViewActionBar(
+                    showImportant: viewModel.currentUserCanUpdateImportant,
                     isImportant: viewModel.isImportant,
                     importantAction: {
                         viewModel.settingImportant = !viewModel.settingImportant
