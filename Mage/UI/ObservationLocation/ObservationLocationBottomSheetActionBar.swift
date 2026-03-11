@@ -120,6 +120,7 @@ struct ObservationLocationBottomSheetActionBar: View {
 }
 
 struct ObservationViewActionBar: View {
+    var showImportant: Bool
     var isImportant: Bool
     var importantAction: () -> Void
     var favoriteCount: Int?
@@ -138,10 +139,12 @@ struct ObservationViewActionBar: View {
             
             Spacer()
             
-            ImportantButton(
-                importantAction: importantAction,
-                isImportant: isImportant
-            )
+            if showImportant {
+                ImportantButton(
+                    importantAction: importantAction,
+                    isImportant: isImportant
+                )
+            }
             
             FavoriteButton(
                 currentUserFavorite: currentUserFavorite,
