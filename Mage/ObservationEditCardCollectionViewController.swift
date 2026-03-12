@@ -58,6 +58,7 @@ import MaterialComponents.MDCCard
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.accessibilityIdentifier = "card scroll";
         scrollView.accessibilityLabel = "card scroll"
+        scrollView.keyboardDismissMode = .interactive
         return scrollView;
     }()
     
