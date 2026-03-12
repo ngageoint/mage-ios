@@ -34,6 +34,7 @@ class ObservationFormView: UIStackView {
     private var includeAttachmentFields: Bool = true;
     private var scheme: MDCContainerScheming?;
     private var expandingTextEditorStates: [String: ExpandingTextEditorState] = [:];
+    private var hostedControllers: [UIViewController] = []
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?.fields ?? [];
@@ -74,6 +75,11 @@ class ObservationFormView: UIStackView {
     }
     
     override func removeFromSuperview() {
+        hostedControllers.forEach { controller in
+            controller.willMove(toParent: nil)
+            controller.removeFromParent()
+        }
+        hostedControllers.removeAll()
         super.removeFromSuperview();
         self.viewController = nil;
         self.attachmentSelectionDelegate = nil;
@@ -96,6 +102,7 @@ class ObservationFormView: UIStackView {
         for fieldDictionary in self.formFields {
             let type = fieldDictionary[FieldKey.type.key] as! String;
             var value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
+            var hostedController: UIViewController?
             
             // special case for attachments
             var unsentAttachments: [[String : AnyHashable]] = [];
@@ -140,8 +147,12 @@ class ObservationFormView: UIStackView {
                 let key = fieldDictionary[FieldKey.name.key] as? String ?? ""
                 let state = expandingTextEditorStates[key] ?? ExpandingTextEditorState()
                 expandingTextEditorStates[key] = state
-                let hc = UIHostingController(rootView: ExpandingTextEditor(field: fieldDictionary, value: value as? String ?? "", state: state, delegate: self))
-                fieldView = hc.view
+                hostedController = createExpandingTextEditor(
+                    for: fieldDictionary,
+                    value: value as? String ?? "",
+                    state: state
+                )
+                fieldView = hostedController?.view
             case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
             case FieldType.password.key:
@@ -171,6 +182,7 @@ class ObservationFormView: UIStackView {
                 MageLogger.misc.error("Unable to create BaseFieldView for field \(fieldDictionary)")
                 self.addArrangedSubview(fieldView);
             }
+            hostedController?.didMove(toParent: viewController)
         }
     }
     
@@ -236,6 +248,27 @@ class ObservationFormView: UIStackView {
             }
         }
         return false
+    }
+
+    private func createExpandingTextEditor(
+        for fieldDictionary: [String: Any],
+        value: String,
+        state: ExpandingTextEditorState
+    ) -> UIViewController {
+        let hostingController = UIHostingController(
+            rootView: ExpandingTextEditor(
+                field: fieldDictionary,
+                value: value,
+                state: state,
+                delegate: self
+            )
+        )
+        // Child view controllers need to be tracked for proper view life cycle events (taps + visibility)
+        if let parentViewController = viewController {
+            parentViewController.addChild(hostingController)
+        }
+        hostedControllers.append(hostingController)
+        return hostingController
     }
 }
 
