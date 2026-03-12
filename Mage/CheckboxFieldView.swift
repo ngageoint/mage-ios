@@ -108,6 +108,7 @@ class CheckboxFieldView : BaseFieldView {
     }
     
     @objc func switchValueChanged(theSwitch: UISwitch) {
+        dismissActiveEditing()
         delegate?.fieldValueChanged(field, value: theSwitch.isOn);
     }
     

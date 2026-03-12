@@ -155,8 +155,13 @@ class BaseFieldView : UIView {
         tapView.addGestureRecognizer(tapGesture)
         return tapView;
     }
+
+    func dismissActiveEditing() {
+        window?.endEditing(true)
+    }
     
     @objc func handleTap() {
+        dismissActiveEditing()
         fieldSelectionCoordinator?.fieldSelected();
     }
 }
