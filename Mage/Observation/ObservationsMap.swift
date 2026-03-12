@@ -16,6 +16,7 @@ class ObservationsMap: DataSourceMap {
     let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
     var enlargedAnnotation: DataSourceAnnotation?
     var focusedObservationTileOverlay: DataSourceTileOverlay?
+    private var refreshCompletionWorkItem: DispatchWorkItem?
     
     @Injected(\.observationsMapFeatureRepository)
     var mapFeatureRepository: ObservationsMapFeatureRepository
@@ -98,6 +99,44 @@ class ObservationsMap: DataSourceMap {
                 self?.refreshAll()
             }
             .store(in: &cancellable)
+
+        viewModel?.requerySubject
+            .debounce(for: .milliseconds(150), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.scheduleRefreshCompletionFallback()
+                ObservationImportProgress.postIndeterminate(message: "Refreshing observations...")
+            }
+            .store(in: &cancellable)
+
+        viewModel?.$annotations
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.cancelRefreshCompletionFallback()
+                ObservationImportProgress.postFinished()
+            }
+            .store(in: &cancellable)
+
+        viewModel?.$featureOverlays
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.cancelRefreshCompletionFallback()
+                ObservationImportProgress.postFinished()
+            }
+            .store(in: &cancellable)
+    }
+
+    private func scheduleRefreshCompletionFallback() {
+        cancelRefreshCompletionFallback()
+        let workItem = DispatchWorkItem {
+            ObservationImportProgress.postFinished()
+        }
+        refreshCompletionWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: workItem)
+    }
+
+    private func cancelRefreshCompletionFallback() {
+        refreshCompletionWorkItem?.cancel()
+        refreshCompletionWorkItem = nil
     }
 
     private func refreshAll() {

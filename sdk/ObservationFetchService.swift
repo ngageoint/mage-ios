@@ -64,6 +64,7 @@ public class ObservationFetchService: NSObject {
             scheduleTimer()
             return
         }
+        ObservationImportProgress.postIndeterminate(message: "Fetching observations...")
         Task {
             let pulled = await observationRepository.fetchObservations()
             self.scheduleTimer()

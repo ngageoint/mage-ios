@@ -69,6 +69,45 @@ class MainMageMapView:
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
     var viewFeedItemNotificationObserver: Any?
+    private var observationImportObserver: NSObjectProtocol?
+    private var didSetupObservationImportStatusView = false
+    private var isObservationImportDeterminateActive = false
+    
+    private lazy var observationImportStatusView: UIView = {
+        let statusView = UIView.newAutoLayout()
+        statusView.backgroundColor = scheme?.colorScheme.surfaceColor.withAlphaComponent(0.92) ?? UIColor.systemBackground.withAlphaComponent(0.92)
+        statusView.layer.cornerRadius = 10
+        statusView.isHidden = true
+        statusView.alpha = 0
+        statusView.isUserInteractionEnabled = false
+        return statusView
+    }()
+
+    private lazy var observationImportLabel: UILabel = {
+        let label = UILabel.newAutoLayout()
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.font = scheme?.typographyScheme.body2 ?? UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = scheme?.colorScheme.onSurfaceColor
+        return label
+    }()
+
+    private lazy var observationImportProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.trackTintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.15)
+        progressView.progressTintColor = scheme?.colorScheme.primaryColor
+        return progressView
+    }()
+
+    private lazy var observationImportStackView: UIStackView = {
+        let stackView = UIStackView.newAutoLayout()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        return stackView
+    }()
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -88,6 +127,13 @@ class MainMageMapView:
         super.init(scheme: scheme)
         // this initializes the location manager, this should go somewhere else in the future
         _ = currentLocationRepository.getLastLocation()
+        observationImportObserver = NotificationCenter.default.addObserver(
+            forName: .ObservationImportProgress,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleObservationImportProgress(notification)
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -103,6 +149,9 @@ class MainMageMapView:
         }
         if let viewFeedItemNotificationObserver = viewFeedItemNotificationObserver {
             NotificationCenter.default.removeObserver(viewFeedItemNotificationObserver, name: .ViewFeedItem, object: nil)
+        }
+        if let observationImportObserver {
+            NotificationCenter.default.removeObserver(observationImportObserver)
         }
         viewController = nil
     }
@@ -133,6 +182,7 @@ class MainMageMapView:
             self.insertSubview(buttonStack, aboveSubview: mapView)
             buttonStack.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 10)
             buttonStack.autoPinEdge(toSuperviewSafeArea: .top, withInset: 10)
+            setupObservationImportStatusViewIfNeeded()
             
 //            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
@@ -200,6 +250,79 @@ class MainMageMapView:
                 }
             }
         }
+    }
+
+    private func setupObservationImportStatusViewIfNeeded() {
+        guard !didSetupObservationImportStatusView else { return }
+        didSetupObservationImportStatusView = true
+        observationImportStackView.addArrangedSubview(observationImportLabel)
+        observationImportStackView.addArrangedSubview(observationImportProgressView)
+        observationImportStatusView.addSubview(observationImportStackView)
+        addSubview(observationImportStatusView)
+        observationImportStatusView.autoPinEdge(toSuperviewSafeArea: .top, withInset: 200)
+        observationImportStatusView.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
+        observationImportStatusView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
+        observationImportStackView.autoPinEdgesToSuperviewEdges(
+            with: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        )
+    }
+
+    private func handleObservationImportProgress(_ notification: Notification) {
+        setupObservationImportStatusViewIfNeeded()
+        guard
+            let userInfo = notification.userInfo,
+            let stateValue = userInfo[ObservationImportProgress.stateKey] as? String,
+            let state = ObservationImportProgressState(rawValue: stateValue)
+        else {
+            return
+        }
+        let message = userInfo[ObservationImportProgress.messageKey] as? String
+        let current = userInfo[ObservationImportProgress.currentKey] as? Int ?? 0
+        let total = userInfo[ObservationImportProgress.totalKey] as? Int ?? 0
+
+        switch state {
+        case .indeterminate:
+            guard !isObservationImportDeterminateActive else { return }
+            showObservationImportStatus(
+                message: message ?? "Fetching observations...",
+                progress: 0,
+                animated: false
+            )
+        case .progress:
+            isObservationImportDeterminateActive = true
+            let fallbackMessage = total > 0
+            ? "Processing observations \(current) of \(total)"
+            : "Processing observations..."
+            let progressValue: Float = total > 0 ? Float(current) / Float(total) : 0
+            showObservationImportStatus(
+                message: message ?? fallbackMessage,
+                progress: progressValue,
+                animated: true
+            )
+        case .finished:
+            isObservationImportDeterminateActive = false
+            hideObservationImportStatus()
+        }
+    }
+
+    private func showObservationImportStatus(message: String, progress: Float, animated: Bool) {
+        observationImportLabel.text = message
+        observationImportProgressView.setProgress(progress, animated: animated)
+        guard observationImportStatusView.isHidden else { return }
+        observationImportStatusView.alpha = 0
+        observationImportStatusView.isHidden = false
+        UIView.animate(withDuration: 0.2) {
+            self.observationImportStatusView.alpha = 1
+        }
+    }
+
+    private func hideObservationImportStatus() {
+        guard !observationImportStatusView.isHidden else { return }
+        UIView.animate(withDuration: 0.2, animations: {
+            self.observationImportStatusView.alpha = 0
+        }, completion: { _ in
+            self.observationImportStatusView.isHidden = true
+        })
     }
     
     func viewFeedItem(_ feedItem: FeedItem) {
