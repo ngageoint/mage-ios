@@ -93,6 +93,16 @@ class CommonFieldsView: MDCCard {
         dateView.setValid(dateView.isValid(enforceRequired: enforceRequired));
         return valid;
     }
+
+    func firstInvalidFieldView(enforceRequired: Bool = false) -> UIView? {
+        if !dateView.isValid(enforceRequired: enforceRequired) {
+            return dateView
+        }
+        if !geometryView.isValid(enforceRequired: enforceRequired) {
+            return geometryView
+        }
+        return nil
+    }
     
     func setDateValue() {
         if let observationProperties: [String : Any] = observation?.properties as? [String : Any] {

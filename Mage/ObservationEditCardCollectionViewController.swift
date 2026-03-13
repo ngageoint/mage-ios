@@ -39,8 +39,8 @@ import MaterialComponents.MDCCard
     var formViews: [ObservationFormView] = [];
     var commonFieldView: CommonFieldsView?;
     private var keyboardHelper: KeyboardHelper?;
-    private var bottomConstraint: NSLayoutConstraint?;
-    
+    private let formBottomClearance: CGFloat = 60 // Padding for the Add Form button
+
     private lazy var event: Event? = {
         guard let observation = observation, let eventId = observation.eventId, let context = observation.managedObjectContext else {
             return nil
@@ -90,13 +90,11 @@ import MaterialComponents.MDCCard
     }()
     
     private func addStackViewConstraints() {
-        bottomConstraint = stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -60)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            // Add room for the "Add Form" FAB
-            bottomConstraint!,
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -formBottomClearance), // Add room for the "Add Form" button
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
@@ -158,24 +156,21 @@ import MaterialComponents.MDCCard
             guard let self = self else {
                 return;
             }
+            guard self.isViewLoaded, self.view.window != nil else {
+                return
+            }
             switch animation {
             case .keyboardWillShow:
                 self.navigationItem.rightBarButtonItem?.isEnabled = true;
-
-                if let firstResponder = self.stackView.firstResponder {
-                    let firstResponderPoint = self.scrollView.convert(CGPoint(x: 0, y: firstResponder.frame.origin.y + 20), from: firstResponder.superview);
-                    self.scrollView.setContentOffset(CGPoint(x:self.scrollView.contentOffset.x, y: firstResponderPoint.y - 60), animated: true);
-                } else {
-                    self.scrollView.contentOffset = CGPoint(x: self.scrollView.contentOffset.x, y: self.scrollView.contentOffset.y + keyboardFrame.height - 60)
-                }
+                self.updateKeyboardInsets(for: keyboardFrame)
+                self.scrollActiveFieldIntoView(duration: duration)
 
             case .keyboardWillHide:
                 self.navigationItem.rightBarButtonItem?.isEnabled = true;
-                self.bottomConstraint?.constant = -60;
-                self.view.layoutIfNeeded();
+                self.updateKeyboardInsets(for: .zero)
             
             case .keyboardDidShow:
-                NSLog("keyboard did show")
+                break
             }
         }
     }
@@ -434,9 +429,7 @@ import MaterialComponents.MDCCard
     }
 
     @objc func handleTapToDismissKeyboard() {
-        if let firstResponder = view.firstResponder {
-            firstResponder.resignFirstResponder()
-        }
+        view.endEditing(true)
     }
     
     func checkObservationValidity() -> Bool {
@@ -445,7 +438,11 @@ import MaterialComponents.MDCCard
         if let commonFieldView = commonFieldView {
             valid = commonFieldView.checkValidity(enforceRequired: true)
             if !valid {
-                scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: 0), animated: true)
+                if let invalidCommonField = commonFieldView.firstInvalidFieldView(enforceRequired: true) {
+                    scrollFieldIntoView(invalidCommonField, animated: true)
+                } else {
+                    scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: 0), animated: true)
+                }
                 scrolledToInvalidField = true
             }
         } else {
@@ -455,18 +452,17 @@ import MaterialComponents.MDCCard
             let formValid = formView.checkValidity(enforceRequired: true);
             valid = valid && formValid;
             if !formValid && !scrolledToInvalidField {
-                var yOffset:Double = 0.0
-                var fieldViews = Array(formView.fieldViews.values)
-                fieldViews.sort { ($0.field[FieldKey.id.key] as? Int ?? Int.max ) < ($1.field[FieldKey.id.key] as? Int ?? Int.max) }
-                for subview in fieldViews {
-                    if !subview.isValid(enforceRequired: true) && !scrolledToInvalidField {
-                        yOffset += Double(subview.frame.origin.y)
-                        yOffset += Double(-(bottomConstraint?.constant ?? 0.0))
-                        scrollView.setContentOffset(CGPoint(x: Double(scrollView.contentOffset.x), y: yOffset), animated: true)
-                        
-                        scrolledToInvalidField = true
-                    }
+                if let containingCard = formView.containingCard, !containingCard.expanded {
+                    containingCard.expanded = true
+                    view.layoutIfNeeded()
                 }
+                if let invalidFieldView = formView.firstInvalidFieldView(enforceRequired: true) {
+                    scrollFieldIntoView(invalidFieldView, animated: true)
+                } else {
+                    scrollFieldIntoView(formView, animated: true)
+                }
+                
+                scrolledToInvalidField = true
             }
         }
         
@@ -637,6 +633,71 @@ import MaterialComponents.MDCCard
         cards = [];
         setupObservation(observation: observation);
         addFormViews(stackView: stackView);
+    }
+}
+
+/// Keyboard Helper Utilities
+extension ObservationEditCardCollectionViewController {
+    var activeFieldRevealInset: CGFloat {
+        stackView.spacing
+    }
+
+    var validationFieldTopPadding: CGFloat {
+        stackView.directionalLayoutMargins.top + stackView.spacing
+    }
+
+    func updateKeyboardInsets(for keyboardFrame: CGRect) {
+        let keyboardBottomInset = keyboardOverlapHeight(for: keyboardFrame)
+        scrollView.contentInset.bottom = keyboardBottomInset > 0 ? keyboardBottomInset + formBottomClearance : 0
+        var verticalIndicatorInsets = scrollView.verticalScrollIndicatorInsets
+        verticalIndicatorInsets.bottom = keyboardBottomInset
+        scrollView.verticalScrollIndicatorInsets = verticalIndicatorInsets
+    }
+
+    func keyboardOverlapHeight(for keyboardFrame: CGRect) -> CGFloat {
+        guard keyboardFrame != .zero else {
+            return 0
+        }
+
+        let keyboardFrameInView = view.convert(keyboardFrame, from: nil)
+        let intersection = view.bounds.intersection(keyboardFrameInView)
+        let overlap = max(0, intersection.height - view.safeAreaInsets.bottom)
+        return overlap
+    }
+
+    func scrollActiveFieldIntoView(duration: TimeInterval) {
+        guard let firstResponder = stackView.firstResponder else {
+            return
+        }
+
+        // Editing keeps the active field visible with the minimum required movement.
+        let originalResponderFrame = scrollView.convert(firstResponder.bounds, from: firstResponder)
+        let responderFrame = originalResponderFrame
+            .insetBy(dx: 0, dy: -activeFieldRevealInset)
+
+        UIView.animate(withDuration: duration) {
+            self.scrollView.scrollRectToVisible(responderFrame, animated: false)
+        }
+    }
+
+    func scrollFieldIntoView(_ targetView: UIView, animated: Bool) {
+        view.layoutIfNeeded()
+        let targetFrame = scrollView.convert(targetView.bounds, from: targetView)
+        // Validation aligns the invalid field near the top so the field state and snackbar are both visible.
+        let scrollTarget = ObservationValidationScrollTarget.topAligned(
+            for: targetFrame,
+            contentInset: scrollView.adjustedContentInset,
+            contentSize: scrollView.contentSize,
+            boundsSize: scrollView.bounds.size,
+            topPadding: validationFieldTopPadding
+        )
+        if animated {
+            UIView.animate(withDuration: 0.25) {
+                self.scrollView.setContentOffset(scrollTarget.offset, animated: false)
+            }
+        } else {
+            scrollView.setContentOffset(scrollTarget.offset, animated: false)
+        }
     }
 }
 
