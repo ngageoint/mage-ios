@@ -288,7 +288,9 @@ extension ObservationFormView: ObservationFormFieldListener {
         }
         if var forms: [[String: Any]] = newProperties?[ObservationKey.forms.key] as? [[String: Any]],
            !forms.isEmpty {
-            forms[0] = form
+            if forms.indices.contains(formIndex) {
+                forms[formIndex] = form
+            }
             newProperties?[ObservationKey.forms.key] = forms
             self.observation.properties = newProperties
             self.observationFormListener?.formUpdated(form, form: formIndex)
