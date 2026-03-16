@@ -6,6 +6,7 @@
 //  Copyright © 2025 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+import Foundation
 import SwiftUI
 
 class ObservationFilterViewModel: ObservableObject {
@@ -87,6 +88,7 @@ class ObservationFilterViewModel: ObservableObject {
         saveFavorites(isFavoriteOn)
         saveCustomTimeFieldValueFilter(customTimeFieldValue)
         saveCustomTimeEnumFilter(customTimePickerEnum)
+        NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
     }
 
     func warningCountForTimeSelection(
