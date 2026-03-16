@@ -15,6 +15,7 @@ import MaterialViews
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
     @EnvironmentObject var router: MageRouter
+    @State private var showingFilter = false
     // We need to get the "context" from our "persistence" object
     @Injected(\.persistence) var persistence: Persistence
 
@@ -40,6 +41,14 @@ struct ObservationList: View {
         .navigationBarTitleDisplayMode(.inline)
         .background(Color.backgroundColor)
         .foregroundColor(Color.onSurfaceColor)
+        .background(
+            NavigationLink(isActive: $showingFilter) {
+                ObservationFilterView()
+            } label: {
+                EmptyView()
+            }
+            .hidden()
+        )
         .onAppear {
             viewModel.reload()
         }
@@ -152,7 +161,7 @@ struct ObservationList: View {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 8)
             Button {
-                router.appendRoute(MageRoute.observationFilter)
+                showingFilter = true
             } label: {
                 Label {
                     Text("Adjust Filter")
