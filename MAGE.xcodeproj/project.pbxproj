@@ -4392,7 +4392,6 @@
 				F7A94D6218AD9CB000CB9EE0 /* Sources */,
 				F7A94D6318AD9CB000CB9EE0 /* Frameworks */,
 				F7A94D6418AD9CB000CB9EE0 /* Resources */,
-				2F7AB0BF1D12EEF7006F99FC /* Set Build Number */,
 				9CF7EBC76E4C31BF783CE73D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -4750,20 +4749,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		2F7AB0BF1D12EEF7006F99FC /* Set Build Number */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Set Build Number";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh\n";
 		};
 		4653E2877DC153D788382778 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5773,6 +5758,7 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -5807,6 +5793,7 @@
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
