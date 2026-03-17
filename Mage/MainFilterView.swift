@@ -19,9 +19,10 @@ struct MainFilterView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Observations")
+                                .font(.body)
                             Text(viewModel.observationsTime)
-                                .font(.body2)
-                                .foregroundStyle(.gray)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -30,9 +31,10 @@ struct MainFilterView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Locations")
+                                .font(.body)
                             Text(viewModel.locationsTime)
-                                .font(.body2)
-                                .foregroundStyle(.gray)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
