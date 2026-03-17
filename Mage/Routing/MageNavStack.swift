@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import Kingfisher
+import SwiftUI
 import UIKit
 import CoreLocation
 
@@ -215,12 +216,11 @@ class MageNavStack: UIViewController {
     func handleMageRoute(route: MageRoute) {
         switch route {
         case .observationFilter:
-            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
-            let fvc: ObservationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "observationFilter")
-            fvc.applyTheme(withContainerScheme: self.scheme)
-            pushViewController(vc: fvc)
+            let filterView = ObservationFilterView()
+            let hostingController = UIHostingController(rootView: filterView)
+            pushViewController(vc: hostingController)
         case .locationFilter:
-            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
+            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil) // FIXME: Update this route to SwiftUI view
             let fvc: LocationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "locationFilter")
             fvc.applyTheme(withContainerScheme: self.scheme)
             pushViewController(vc: fvc)
