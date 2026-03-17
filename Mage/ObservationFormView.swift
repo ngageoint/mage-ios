@@ -23,7 +23,12 @@ class ObservationFormView: UIStackView {
     private var eventForm: Form?;
     private var form: [String: Any]!;
     private var formIndex: Int!;
+    // Refactor the fieldViews and fieldScrollTargets into one unified protocol so that we can scroll to any UI element regardless of framework.
     var fieldViews: [String: BaseFieldView] = [ : ];
+    private var fieldScrollTargets: [String: UIView] = [:]; // Includes UIView + SwiftUI view fields
+    private var hostedControllers: [UIViewController] = []
+    private var expandingTextEditorStates: [String: ExpandingTextEditorState] = [:];
+
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private weak var viewController: UIViewController!;
     private weak var fieldSelectionDelegate: FieldSelectionDelegate?;
@@ -33,7 +38,6 @@ class ObservationFormView: UIStackView {
     private var formFieldAdded: Bool = false;
     private var includeAttachmentFields: Bool = true;
     private var scheme: MDCContainerScheming?;
-    private var expandingTextEditorStates: [String: ExpandingTextEditorState] = [:];
 
     private lazy var formFields: [[String: Any]] = {
         let fields: [[String: Any]] = self.eventForm?.fields ?? [];
@@ -74,6 +78,12 @@ class ObservationFormView: UIStackView {
     }
     
     override func removeFromSuperview() {
+        hostedControllers.forEach { controller in
+            controller.willMove(toParent: nil)
+            controller.removeFromParent()
+        }
+        hostedControllers.removeAll()
+        fieldScrollTargets = [:]
         super.removeFromSuperview();
         self.viewController = nil;
         self.attachmentSelectionDelegate = nil;
@@ -96,6 +106,7 @@ class ObservationFormView: UIStackView {
         for fieldDictionary in self.formFields {
             let type = fieldDictionary[FieldKey.type.key] as! String;
             var value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
+            var hostedController: UIViewController?
             
             // special case for attachments
             var unsentAttachments: [[String : AnyHashable]] = [];
@@ -140,8 +151,12 @@ class ObservationFormView: UIStackView {
                 let key = fieldDictionary[FieldKey.name.key] as? String ?? ""
                 let state = expandingTextEditorStates[key] ?? ExpandingTextEditorState()
                 expandingTextEditorStates[key] = state
-                let hc = UIHostingController(rootView: ExpandingTextEditor(field: fieldDictionary, value: value as? String ?? "", state: state, delegate: self))
-                fieldView = hc.view
+                hostedController = createExpandingTextEditor(
+                    for: fieldDictionary,
+                    value: value as? String ?? "",
+                    state: state
+                )
+                fieldView = hostedController?.view
             case FieldType.email.key:
                 fieldView = TextFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String, keyboardType: .emailAddress);
             case FieldType.password.key:
@@ -165,12 +180,17 @@ class ObservationFormView: UIStackView {
             if let baseFieldView = fieldView as? BaseFieldView, let key = fieldDictionary[FieldKey.name.key] as? String {
                 baseFieldView.applyTheme(withScheme: scheme)
                 fieldViews[key] = baseFieldView;
+                fieldScrollTargets[key] = baseFieldView;
                 formFieldAdded = true;
                 self.addArrangedSubview(baseFieldView);
             } else if let fieldView = fieldView {
-                MageLogger.misc.error("Unable to create BaseFieldView for field \(fieldDictionary)")
+                if let key = fieldDictionary[FieldKey.name.key] as? String {
+                    fieldScrollTargets[key] = fieldView
+                }
+                formFieldAdded = true;
                 self.addArrangedSubview(fieldView);
             }
+            hostedController?.didMove(toParent: viewController)
         }
     }
     
@@ -218,6 +238,29 @@ class ObservationFormView: UIStackView {
         return valid;
     }
 
+    func firstInvalidFieldView(enforceRequired: Bool = false) -> UIView? {
+        for fieldDictionary in formFields {
+            guard let key = fieldDictionary[FieldKey.name.key] as? String else {
+                continue
+            }
+
+            if fieldDictionary[FieldKey.type.key] as? String == FieldType.textarea.key {
+                let isRequired = fieldDictionary[FieldKey.required.key] as? Bool ?? false
+                let value = form[key] as? String ?? ""
+                if enforceRequired && isRequired && value.isEmpty {
+                    return fieldScrollTargets[key]
+                }
+                continue
+            }
+
+            if let fieldView = fieldViews[key], !fieldView.isValid(enforceRequired: enforceRequired) {
+                return fieldView
+            }
+        }
+
+        return nil
+    }
+
     func focusNextTextField(after fieldView: BaseFieldView) -> Bool {
         guard let index = arrangedSubviews.firstIndex(where: { $0 === fieldView }) else {
             return false
@@ -237,6 +280,27 @@ class ObservationFormView: UIStackView {
         }
         return false
     }
+
+    private func createExpandingTextEditor(
+        for fieldDictionary: [String: Any],
+        value: String,
+        state: ExpandingTextEditorState
+    ) -> UIViewController {
+        let hostingController = UIHostingController(
+            rootView: ExpandingTextEditor(
+                field: fieldDictionary,
+                value: value,
+                state: state,
+                delegate: self
+            )
+        )
+        // Child view controllers need to be tracked for proper view life cycle events (taps + visibility)
+        if let parentViewController = viewController {
+            parentViewController.addChild(hostingController)
+        }
+        hostedControllers.append(hostingController)
+        return hostingController
+    }
 }
 
 extension ObservationFormView: FieldSelectionDelegate {
@@ -248,14 +312,17 @@ extension ObservationFormView: FieldSelectionDelegate {
 extension ObservationFormView: ObservationFormFieldListener {
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
         var newProperties = self.observation.properties as? [String: Any];
+        let fieldName = field[FieldKey.name.key] as? String ?? ""
         if (value == nil) {
-            form.removeValue(forKey: field[FieldKey.name.key] as? String ?? "");
+            form.removeValue(forKey: fieldName);
         } else {
-            form[field[FieldKey.name.key] as? String ?? ""] = value;
+            form[fieldName] = value;
         }
         if var forms: [[String: Any]] = newProperties?[ObservationKey.forms.key] as? [[String: Any]],
            !forms.isEmpty {
-            forms[0] = form
+            if forms.indices.contains(formIndex) {
+                forms[formIndex] = form
+            }
             newProperties?[ObservationKey.forms.key] = forms
             self.observation.properties = newProperties
             self.observationFormListener?.formUpdated(form, form: formIndex)
