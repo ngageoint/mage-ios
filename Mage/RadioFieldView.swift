@@ -112,6 +112,7 @@ class RadioFieldView: BaseFieldView {
     }
     
     @objc func handleRadioTap(_ button: MDCButton) {
+        dismissActiveEditing()
         for cb in choiceButtons {
             if (cb.value.button == button) {
                 value = cb.key;

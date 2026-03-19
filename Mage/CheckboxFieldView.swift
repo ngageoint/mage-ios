@@ -54,7 +54,7 @@ class CheckboxFieldView : BaseFieldView {
         label.font = scheme?.typographyScheme.body1;
         label.textColor = scheme?.colorScheme.onSurfaceColor;
         errorLabel.font = scheme?.typographyScheme.caption;
-        checkboxSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant;
+        checkboxSwitch.onTintColor = UIColor(named: "layerToggleOn")
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -108,6 +108,7 @@ class CheckboxFieldView : BaseFieldView {
     }
     
     @objc func switchValueChanged(theSwitch: UISwitch) {
+        dismissActiveEditing()
         delegate?.fieldValueChanged(field, value: theSwitch.isOn);
     }
     

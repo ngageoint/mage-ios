@@ -20,7 +20,8 @@ struct ExpandingTextEditor: View {
     @State var text: String
     @State var workingText: String
     @State private var showSheet = false
-    
+    @FocusState private var isFocused: Bool
+
     private var isRequiredField: Bool {
         return (field[FieldKey.required.key] as? Bool) == true
     }
@@ -57,6 +58,7 @@ struct ExpandingTextEditor: View {
                     .scrollContentBackground(.hidden) // this hides the special background color that only lives behind the text inside this area
                     .frame(minHeight: 55, maxHeight: 650)
                     .padding([.bottom], 12)
+                    .focused($isFocused)
             }
             .background(Color(.onSurface).opacity(0.12)) // derived from MAGEScheme
             .onChange(of: text) { newValue in
@@ -75,6 +77,10 @@ struct ExpandingTextEditor: View {
                 .font(.caption)
                 .padding([.leading, .bottom], 12)
                 .opacity(state.showRequiredError && isRequiredField ? 1 : 0)
+        }
+        .clipShape(Rectangle()) // Allows taps in transparent areas so we can focus the keyboard
+        .onTapGesture {
+            isFocused = true    // Helps focus keyboard on the TextEditor that is smaller than the visuals when empty
         }
         .listRowSeparator(.hidden)
         .sheet(isPresented: $showSheet) {
