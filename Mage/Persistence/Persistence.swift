@@ -254,8 +254,10 @@ class MagicalRecordPersistence: Persistence {
     }
 
     private func createObservationLocations(for observations: [Observation], in context: NSManagedObjectContext) {
+        let formCache = ObservationFormCache()
+
         for observation in observations {
-            observation.createObservationLocations(context: context)
+            observation.createObservationLocations(context: context, formCache: formCache)
         }
 
         if context.hasChanges {

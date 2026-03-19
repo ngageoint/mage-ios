@@ -72,7 +72,9 @@ class MainMageMapView:
     private var observationImportObserver: NSObjectProtocol?
     private var didSetupObservationImportStatusView = false
     private var isObservationImportDeterminateActive = false
-    
+    private var mapFeatureUpdateObserver: NSObjectProtocol?
+    private var didSetupMapFeatureUpdateStatusView = false
+
     private lazy var observationImportStatusView: UIView = {
         let statusView = UIView.newAutoLayout()
         statusView.backgroundColor = scheme?.colorScheme.surfaceColor.withAlphaComponent(0.92) ?? UIColor.systemBackground.withAlphaComponent(0.92)
@@ -108,6 +110,42 @@ class MainMageMapView:
         stackView.spacing = 8
         return stackView
     }()
+
+    private lazy var mapFeatureUpdateStatusView: UIView = {
+        let statusView = UIView.newAutoLayout()
+        statusView.backgroundColor = scheme?.colorScheme.surfaceColor.withAlphaComponent(0.92) ?? UIColor.systemBackground.withAlphaComponent(0.92)
+        statusView.layer.cornerRadius = 10
+        statusView.isHidden = true
+        statusView.alpha = 0
+        statusView.isUserInteractionEnabled = false
+        return statusView
+    }()
+
+    private lazy var mapFeatureUpdateLabel: UILabel = {
+        let label = UILabel.newAutoLayout()
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.font = scheme?.typographyScheme.body2 ?? UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = scheme?.colorScheme.onSurfaceColor
+        return label
+    }()
+
+    private lazy var mapFeatureUpdateProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.trackTintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.15)
+        progressView.progressTintColor = scheme?.colorScheme.primaryColor
+        return progressView
+    }()
+
+    private lazy var mapFeatureUpdateStackView: UIStackView = {
+        let stackView = UIStackView.newAutoLayout()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        return stackView
+    }()
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -134,6 +172,13 @@ class MainMageMapView:
         ) { [weak self] notification in
             self?.handleObservationImportProgress(notification)
         }
+        mapFeatureUpdateObserver = NotificationCenter.default.addObserver(
+            forName: .MapFeatureUpdateProgress,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleMapFeatureUpdateProgress(notification)
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -152,6 +197,9 @@ class MainMageMapView:
         }
         if let observationImportObserver {
             NotificationCenter.default.removeObserver(observationImportObserver)
+        }
+        if let mapFeatureUpdateObserver {
+            NotificationCenter.default.removeObserver(mapFeatureUpdateObserver)
         }
         viewController = nil
     }
@@ -183,6 +231,7 @@ class MainMageMapView:
             buttonStack.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 10)
             buttonStack.autoPinEdge(toSuperviewSafeArea: .top, withInset: 10)
             setupObservationImportStatusViewIfNeeded()
+            setupMapFeatureUpdateStatusViewIfNeeded()
             
 //            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
@@ -267,6 +316,21 @@ class MainMageMapView:
         )
     }
 
+    private func setupMapFeatureUpdateStatusViewIfNeeded() {
+        guard !didSetupMapFeatureUpdateStatusView else { return }
+        didSetupMapFeatureUpdateStatusView = true
+        mapFeatureUpdateStackView.addArrangedSubview(mapFeatureUpdateLabel)
+        mapFeatureUpdateStackView.addArrangedSubview(mapFeatureUpdateProgressView)
+        mapFeatureUpdateStatusView.addSubview(mapFeatureUpdateStackView)
+        addSubview(mapFeatureUpdateStatusView)
+        mapFeatureUpdateStatusView.autoPinEdge(toSuperviewSafeArea: .top, withInset: 260)
+        mapFeatureUpdateStatusView.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
+        mapFeatureUpdateStatusView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
+        mapFeatureUpdateStackView.autoPinEdgesToSuperviewEdges(
+            with: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        )
+    }
+
     private func handleObservationImportProgress(_ notification: Notification) {
         setupObservationImportStatusViewIfNeeded()
         guard
@@ -322,6 +386,80 @@ class MainMageMapView:
             self.observationImportStatusView.alpha = 0
         }, completion: { _ in
             self.observationImportStatusView.isHidden = true
+        })
+    }
+
+    private func handleMapFeatureUpdateProgress(_ notification: Notification) {
+        setupMapFeatureUpdateStatusViewIfNeeded()
+        guard
+            let userInfo = notification.userInfo,
+            let stateValue = userInfo[MapFeatureUpdateProgress.stateKey] as? String,
+            let state = MapFeatureUpdateProgressState(rawValue: stateValue),
+            let operationValue = userInfo[MapFeatureUpdateProgress.operationKey] as? String,
+            let operation = MapFeatureUpdateOperation(rawValue: operationValue)
+        else {
+            return
+        }
+
+        let message = userInfo[MapFeatureUpdateProgress.messageKey] as? String
+        let current = userInfo[MapFeatureUpdateProgress.currentKey] as? Int ?? 0
+        let total = userInfo[MapFeatureUpdateProgress.totalKey] as? Int ?? 0
+        let fallbackMessage = mapFeatureUpdateFallbackMessage(operation: operation, current: current, total: total)
+
+        switch state {
+        case .indeterminate:
+            showMapFeatureUpdateStatus(
+                message: message ?? fallbackMessage,
+                progress: 0,
+                animated: false
+            )
+        case .progress:
+            let progressValue: Float = total > 0 ? Float(current) / Float(total) : 0
+            showMapFeatureUpdateStatus(
+                message: message ?? fallbackMessage,
+                progress: progressValue,
+                animated: true
+            )
+        case .finished:
+            hideMapFeatureUpdateStatus()
+        }
+    }
+
+    private func mapFeatureUpdateFallbackMessage(
+        operation: MapFeatureUpdateOperation,
+        current: Int,
+        total: Int
+    ) -> String {
+        let hasTotal = total > 0
+        switch operation {
+        case .addAnnotations:
+            return hasTotal ? "Adding annotations \(current) of \(total)" : "Adding annotations..."
+        case .removeAnnotations:
+            return hasTotal ? "Removing annotations \(current) of \(total)" : "Removing annotations..."
+        case .addOverlays:
+            return hasTotal ? "Adding overlays \(current) of \(total)" : "Adding overlays..."
+        case .removeOverlays:
+            return hasTotal ? "Removing overlays \(current) of \(total)" : "Removing overlays..."
+        }
+    }
+
+    private func showMapFeatureUpdateStatus(message: String, progress: Float, animated: Bool) {
+        mapFeatureUpdateLabel.text = message
+        mapFeatureUpdateProgressView.setProgress(progress, animated: animated)
+        guard mapFeatureUpdateStatusView.isHidden else { return }
+        mapFeatureUpdateStatusView.alpha = 0
+        mapFeatureUpdateStatusView.isHidden = false
+        UIView.animate(withDuration: 0.2) {
+            self.mapFeatureUpdateStatusView.alpha = 1
+        }
+    }
+
+    private func hideMapFeatureUpdateStatus() {
+        guard !mapFeatureUpdateStatusView.isHidden else { return }
+        UIView.animate(withDuration: 0.2, animations: {
+            self.mapFeatureUpdateStatusView.alpha = 0
+        }, completion: { _ in
+            self.mapFeatureUpdateStatusView.isHidden = true
         })
     }
     

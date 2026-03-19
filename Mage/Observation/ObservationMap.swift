@@ -34,8 +34,8 @@ class ObservationMap: DataSourceMap {
 //        , repository: repository, mapFeatureRepository: mapFeatureRepository)
     }
     
-    override func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
-        let changed = super.handleFeatureChanges(annotations: annotations)
+    override func handleFeatureChanges(annotations: [DataSourceAnnotation]) async -> Bool {
+        let changed = await super.handleFeatureChanges(annotations: annotations)
         if changed {
             mapView?.showAnnotations(annotations, animated: true)
         }
@@ -63,6 +63,7 @@ class ObservationMap: DataSourceMap {
             annotationView.accessibilityValue = "Observation"
             annotationView.displayPriority = .required
             annotationView.canShowCallout = true
+//            annotationView.clusteringIdentifier = "observation"
         }
         return annotationView
     }

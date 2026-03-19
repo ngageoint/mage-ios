@@ -238,6 +238,7 @@ class ObservationsMap: DataSourceMap {
             annotationView.accessibilityLabel = "Enlarged"
             annotationView.zPriority = .max
             annotationView.selectedZPriority = .max
+//            annotationView.clusteringIdentifier = "observation"
 
 
             annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
