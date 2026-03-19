@@ -30,6 +30,8 @@ class DataSourceMap: MapMixin {
     
     var currentAnnotationViews: [String: MKAnnotationView] = [:]
     var currentFeatureOverlays: [String: MKOverlay] = [:]
+    private let overlayBatchSize: Int = 200
+    private let annotationBatchSize: Int = 400
 
     init(
         dataSource: any DataSourceDefinition
@@ -134,7 +136,7 @@ class DataSourceMap: MapMixin {
 
     @discardableResult
     @MainActor
-    func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
+    func handleFeatureChanges(annotations: [DataSourceAnnotation]) async -> Bool {
         guard let mapView = mapView else { return false }
         let annotationDictionary = [String : DataSourceAnnotation]()
         
@@ -169,9 +171,76 @@ class DataSourceMap: MapMixin {
                 currentAnnotationViews.removeValue(forKey: id) // FIXME: Refactor/remove currentAnnotationViews. We should not maintain a collection that could get out of date from MapKit
             }
         }
+        
+        if !inserts.isEmpty {
+            MageLogger.misc.debug(
+                "DataSourceMap annotations update \(self.dataSource.key): add=\(inserts.count) existing=\(existingAnnotations.count) new=\(newIds.count)"
+            )
+        }
                 
-        mapView.removeAnnotations(removals)
-        mapView.addAnnotations(inserts)
+//        if !removals.isEmpty {
+//            for chunk in removals.chunked(into: annotationBatchSize) {
+//                mapView.removeAnnotations(chunk)
+//                await Task.yield()
+//            }
+//        }
+        if !removals.isEmpty {
+            let total = removals.count
+            var processed = 0
+            MapFeatureUpdateProgress.postProgress(
+                operation: .removeOverlays,
+                dataSourceKey: dataSource.key,
+                current: processed,
+                total: total,
+                message: "Removing overlays..."
+            )
+            for chunk in removals.chunked(into: overlayBatchSize) {
+                mapView.removeOverlays(chunk as! [any MKOverlay])
+                processed += chunk.count
+                MapFeatureUpdateProgress.postProgress(
+                    operation: .removeOverlays,
+                    dataSourceKey: dataSource.key,
+                    current: processed,
+                    total: total,
+                    message: "Removing overlays..."
+                )
+                await Task.yield()
+            }
+            MapFeatureUpdateProgress.postFinished(
+                operation: .removeOverlays,
+                dataSourceKey: dataSource.key,
+                message: "Overlays removed."
+            )
+        }
+        
+        if !inserts.isEmpty {
+            let total = inserts.count
+            var processed = 0
+            MapFeatureUpdateProgress.postProgress(
+                operation: .addAnnotations,
+                dataSourceKey: dataSource.key,
+                current: processed,
+                total: total,
+                message: "Adding annotations..."
+            )
+            for chunk in inserts.chunked(into: annotationBatchSize) {
+                mapView.addAnnotations(chunk)
+                processed += chunk.count
+                MapFeatureUpdateProgress.postProgress(
+                    operation: .addAnnotations,
+                    dataSourceKey: dataSource.key,
+                    current: processed,
+                    total: total,
+                    message: "Adding annotations..."
+                )
+                await Task.yield()
+            }
+            MapFeatureUpdateProgress.postFinished(
+                operation: .addAnnotations,
+                dataSourceKey: dataSource.key,
+                message: "Annotations ready."
+            )
+        }
         
         return !inserts.isEmpty || !removals.isEmpty
     }
@@ -180,7 +249,7 @@ class DataSourceMap: MapMixin {
     /// It computes inserts and removals by key, then adds/removes only the necessary overlays to avoid flicker during small pans.
     @discardableResult
     @MainActor
-    func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
+    func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) async -> Bool {
         guard let mapView = mapView else { return false }
 
         let featureOverlayChanges: [DataSourceIdentifiable] = featureOverlays
@@ -222,8 +291,69 @@ class DataSourceMap: MapMixin {
             }
         }
 
-        mapView.addOverlays(inserts)
-        mapView.removeOverlays(removals)
+        if !inserts.isEmpty || !removals.isEmpty {
+            MageLogger.misc.debug(
+                "DataSourceMap overlays update \(self.dataSource.key): remove=\(removals.count) add=\(inserts.count) existing=\(sortedExisting.count) new=\(sortedNew.count)"
+            )
+        }
+
+        if !removals.isEmpty {
+            let total = removals.count
+            var processed = 0
+            MapFeatureUpdateProgress.postProgress(
+                operation: .removeOverlays,
+                dataSourceKey: dataSource.key,
+                current: processed,
+                total: total,
+                message: "Removing overlays..."
+            )
+            for chunk in removals.chunked(into: overlayBatchSize) {
+                mapView.removeOverlays(chunk)
+                processed += chunk.count
+                MapFeatureUpdateProgress.postProgress(
+                    operation: .removeOverlays,
+                    dataSourceKey: dataSource.key,
+                    current: processed,
+                    total: total,
+                    message: "Removing overlays..."
+                )
+                await Task.yield()
+            }
+            MapFeatureUpdateProgress.postFinished(
+                operation: .removeOverlays,
+                dataSourceKey: dataSource.key,
+                message: "Overlays removed."
+            )
+        }
+        
+        if !inserts.isEmpty {
+            let total = inserts.count
+            var processed = 0
+            MapFeatureUpdateProgress.postProgress(
+                operation: .addOverlays,
+                dataSourceKey: dataSource.key,
+                current: processed,
+                total: total,
+                message: "Adding overlays..."
+            )
+            for chunk in inserts.chunked(into: overlayBatchSize) {
+                mapView.addOverlays(chunk)
+                processed += chunk.count
+                MapFeatureUpdateProgress.postProgress(
+                    operation: .addOverlays,
+                    dataSourceKey: dataSource.key,
+                    current: processed,
+                    total: total,
+                    message: "Adding overlays..."
+                )
+                await Task.yield()
+            }
+            MapFeatureUpdateProgress.postFinished(
+                operation: .addOverlays,
+                dataSourceKey: dataSource.key,
+                message: "Overlays ready."
+            )
+        }
         return !inserts.isEmpty || !removals.isEmpty
     }
     

@@ -69,6 +69,83 @@ class MainMageMapView:
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
     var viewFeedItemNotificationObserver: Any?
+    private var observationImportObserver: NSObjectProtocol?
+    private var didSetupObservationImportStatusView = false
+    private var isObservationImportDeterminateActive = false
+    private var mapFeatureUpdateObserver: NSObjectProtocol?
+    private var didSetupMapFeatureUpdateStatusView = false
+
+    private lazy var observationImportStatusView: UIView = {
+        let statusView = UIView.newAutoLayout()
+        statusView.backgroundColor = scheme?.colorScheme.surfaceColor.withAlphaComponent(0.92) ?? UIColor.systemBackground.withAlphaComponent(0.92)
+        statusView.layer.cornerRadius = 10
+        statusView.isHidden = true
+        statusView.alpha = 0
+        statusView.isUserInteractionEnabled = false
+        return statusView
+    }()
+
+    private lazy var observationImportLabel: UILabel = {
+        let label = UILabel.newAutoLayout()
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.font = scheme?.typographyScheme.body2 ?? UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = scheme?.colorScheme.onSurfaceColor
+        return label
+    }()
+
+    private lazy var observationImportProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.trackTintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.15)
+        progressView.progressTintColor = scheme?.colorScheme.primaryColor
+        return progressView
+    }()
+
+    private lazy var observationImportStackView: UIStackView = {
+        let stackView = UIStackView.newAutoLayout()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        return stackView
+    }()
+
+    private lazy var mapFeatureUpdateStatusView: UIView = {
+        let statusView = UIView.newAutoLayout()
+        statusView.backgroundColor = scheme?.colorScheme.surfaceColor.withAlphaComponent(0.92) ?? UIColor.systemBackground.withAlphaComponent(0.92)
+        statusView.layer.cornerRadius = 10
+        statusView.isHidden = true
+        statusView.alpha = 0
+        statusView.isUserInteractionEnabled = false
+        return statusView
+    }()
+
+    private lazy var mapFeatureUpdateLabel: UILabel = {
+        let label = UILabel.newAutoLayout()
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.font = scheme?.typographyScheme.body2 ?? UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = scheme?.colorScheme.onSurfaceColor
+        return label
+    }()
+
+    private lazy var mapFeatureUpdateProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.trackTintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.15)
+        progressView.progressTintColor = scheme?.colorScheme.primaryColor
+        return progressView
+    }()
+
+    private lazy var mapFeatureUpdateStackView: UIStackView = {
+        let stackView = UIStackView.newAutoLayout()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        return stackView
+    }()
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -88,6 +165,20 @@ class MainMageMapView:
         super.init(scheme: scheme)
         // this initializes the location manager, this should go somewhere else in the future
         _ = currentLocationRepository.getLastLocation()
+        observationImportObserver = NotificationCenter.default.addObserver(
+            forName: .ObservationImportProgress,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleObservationImportProgress(notification)
+        }
+        mapFeatureUpdateObserver = NotificationCenter.default.addObserver(
+            forName: .MapFeatureUpdateProgress,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleMapFeatureUpdateProgress(notification)
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -103,6 +194,12 @@ class MainMageMapView:
         }
         if let viewFeedItemNotificationObserver = viewFeedItemNotificationObserver {
             NotificationCenter.default.removeObserver(viewFeedItemNotificationObserver, name: .ViewFeedItem, object: nil)
+        }
+        if let observationImportObserver {
+            NotificationCenter.default.removeObserver(observationImportObserver)
+        }
+        if let mapFeatureUpdateObserver {
+            NotificationCenter.default.removeObserver(mapFeatureUpdateObserver)
         }
         viewController = nil
     }
@@ -133,6 +230,8 @@ class MainMageMapView:
             self.insertSubview(buttonStack, aboveSubview: mapView)
             buttonStack.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 10)
             buttonStack.autoPinEdge(toSuperviewSafeArea: .top, withInset: 10)
+            setupObservationImportStatusViewIfNeeded()
+            setupMapFeatureUpdateStatusViewIfNeeded()
             
 //            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
@@ -200,6 +299,168 @@ class MainMageMapView:
                 }
             }
         }
+    }
+
+    private func setupObservationImportStatusViewIfNeeded() {
+        guard !didSetupObservationImportStatusView else { return }
+        didSetupObservationImportStatusView = true
+        observationImportStackView.addArrangedSubview(observationImportLabel)
+        observationImportStackView.addArrangedSubview(observationImportProgressView)
+        observationImportStatusView.addSubview(observationImportStackView)
+        addSubview(observationImportStatusView)
+        observationImportStatusView.autoPinEdge(toSuperviewSafeArea: .top, withInset: 200)
+        observationImportStatusView.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
+        observationImportStatusView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
+        observationImportStackView.autoPinEdgesToSuperviewEdges(
+            with: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        )
+    }
+
+    private func setupMapFeatureUpdateStatusViewIfNeeded() {
+        guard !didSetupMapFeatureUpdateStatusView else { return }
+        didSetupMapFeatureUpdateStatusView = true
+        mapFeatureUpdateStackView.addArrangedSubview(mapFeatureUpdateLabel)
+        mapFeatureUpdateStackView.addArrangedSubview(mapFeatureUpdateProgressView)
+        mapFeatureUpdateStatusView.addSubview(mapFeatureUpdateStackView)
+        addSubview(mapFeatureUpdateStatusView)
+        mapFeatureUpdateStatusView.autoPinEdge(toSuperviewSafeArea: .top, withInset: 260)
+        mapFeatureUpdateStatusView.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
+        mapFeatureUpdateStatusView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
+        mapFeatureUpdateStackView.autoPinEdgesToSuperviewEdges(
+            with: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        )
+    }
+
+    private func handleObservationImportProgress(_ notification: Notification) {
+        setupObservationImportStatusViewIfNeeded()
+        guard
+            let userInfo = notification.userInfo,
+            let stateValue = userInfo[ObservationImportProgress.stateKey] as? String,
+            let state = ObservationImportProgressState(rawValue: stateValue)
+        else {
+            return
+        }
+        let message = userInfo[ObservationImportProgress.messageKey] as? String
+        let current = userInfo[ObservationImportProgress.currentKey] as? Int ?? 0
+        let total = userInfo[ObservationImportProgress.totalKey] as? Int ?? 0
+
+        switch state {
+        case .indeterminate:
+            guard !isObservationImportDeterminateActive else { return }
+            showObservationImportStatus(
+                message: message ?? "Fetching observations...",
+                progress: 0,
+                animated: false
+            )
+        case .progress:
+            isObservationImportDeterminateActive = true
+            let fallbackMessage = total > 0
+            ? "Processing observations \(current) of \(total)"
+            : "Processing observations..."
+            let progressValue: Float = total > 0 ? Float(current) / Float(total) : 0
+            showObservationImportStatus(
+                message: message ?? fallbackMessage,
+                progress: progressValue,
+                animated: true
+            )
+        case .finished:
+            isObservationImportDeterminateActive = false
+            hideObservationImportStatus()
+        }
+    }
+
+    private func showObservationImportStatus(message: String, progress: Float, animated: Bool) {
+        observationImportLabel.text = message
+        observationImportProgressView.setProgress(progress, animated: animated)
+        guard observationImportStatusView.isHidden else { return }
+        observationImportStatusView.alpha = 0
+        observationImportStatusView.isHidden = false
+        UIView.animate(withDuration: 0.2) {
+            self.observationImportStatusView.alpha = 1
+        }
+    }
+
+    private func hideObservationImportStatus() {
+        guard !observationImportStatusView.isHidden else { return }
+        UIView.animate(withDuration: 0.2, animations: {
+            self.observationImportStatusView.alpha = 0
+        }, completion: { _ in
+            self.observationImportStatusView.isHidden = true
+        })
+    }
+
+    private func handleMapFeatureUpdateProgress(_ notification: Notification) {
+        setupMapFeatureUpdateStatusViewIfNeeded()
+        guard
+            let userInfo = notification.userInfo,
+            let stateValue = userInfo[MapFeatureUpdateProgress.stateKey] as? String,
+            let state = MapFeatureUpdateProgressState(rawValue: stateValue),
+            let operationValue = userInfo[MapFeatureUpdateProgress.operationKey] as? String,
+            let operation = MapFeatureUpdateOperation(rawValue: operationValue)
+        else {
+            return
+        }
+
+        let message = userInfo[MapFeatureUpdateProgress.messageKey] as? String
+        let current = userInfo[MapFeatureUpdateProgress.currentKey] as? Int ?? 0
+        let total = userInfo[MapFeatureUpdateProgress.totalKey] as? Int ?? 0
+        let fallbackMessage = mapFeatureUpdateFallbackMessage(operation: operation, current: current, total: total)
+
+        switch state {
+        case .indeterminate:
+            showMapFeatureUpdateStatus(
+                message: message ?? fallbackMessage,
+                progress: 0,
+                animated: false
+            )
+        case .progress:
+            let progressValue: Float = total > 0 ? Float(current) / Float(total) : 0
+            showMapFeatureUpdateStatus(
+                message: message ?? fallbackMessage,
+                progress: progressValue,
+                animated: true
+            )
+        case .finished:
+            hideMapFeatureUpdateStatus()
+        }
+    }
+
+    private func mapFeatureUpdateFallbackMessage(
+        operation: MapFeatureUpdateOperation,
+        current: Int,
+        total: Int
+    ) -> String {
+        let hasTotal = total > 0
+        switch operation {
+        case .addAnnotations:
+            return hasTotal ? "Adding annotations \(current) of \(total)" : "Adding annotations..."
+        case .removeAnnotations:
+            return hasTotal ? "Removing annotations \(current) of \(total)" : "Removing annotations..."
+        case .addOverlays:
+            return hasTotal ? "Adding overlays \(current) of \(total)" : "Adding overlays..."
+        case .removeOverlays:
+            return hasTotal ? "Removing overlays \(current) of \(total)" : "Removing overlays..."
+        }
+    }
+
+    private func showMapFeatureUpdateStatus(message: String, progress: Float, animated: Bool) {
+        mapFeatureUpdateLabel.text = message
+        mapFeatureUpdateProgressView.setProgress(progress, animated: animated)
+        guard mapFeatureUpdateStatusView.isHidden else { return }
+        mapFeatureUpdateStatusView.alpha = 0
+        mapFeatureUpdateStatusView.isHidden = false
+        UIView.animate(withDuration: 0.2) {
+            self.mapFeatureUpdateStatusView.alpha = 1
+        }
+    }
+
+    private func hideMapFeatureUpdateStatus() {
+        guard !mapFeatureUpdateStatusView.isHidden else { return }
+        UIView.animate(withDuration: 0.2, animations: {
+            self.mapFeatureUpdateStatusView.alpha = 0
+        }, completion: { _ in
+            self.mapFeatureUpdateStatusView.isHidden = true
+        })
     }
     
     func viewFeedItem(_ feedItem: FeedItem) {

@@ -36,6 +36,9 @@ class DataSourceMapViewModel {
     @Published var annotations: [DataSourceAnnotation] = []
     @Published var featureOverlays: [MKOverlay] = []
     
+    private var lastAnnotationKeys: Set<String> = []
+    private var lastOverlayKeys: Set<String> = []
+    
     let requerySubject = PassthroughSubject<Void, Never>()
     
     init(
@@ -58,21 +61,21 @@ class DataSourceMapViewModel {
                 }
             }
             .store(in: &cancellable)
-        
-        mapStateRepository.$zoom
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] zoom in
-            self?.requerySubject.send(())
-        }
-            .store(in: &cancellable)
-        
-        mapStateRepository.$region
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] region in
-            self?.requerySubject.send(())
-        }
-            .store(in: &cancellable)
-        
+//        
+//        mapStateRepository.$zoom
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] zoom in
+//            self?.requerySubject.send(())
+//        }
+//            .store(in: &cancellable)
+//        
+//        mapStateRepository.$region
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] region in
+//            self?.requerySubject.send(())
+//        }
+//            .store(in: &cancellable)
+//        
         repository?.refreshPublisher?
             .sink { [weak self] date in
                 self?.refresh()
@@ -90,20 +93,26 @@ class DataSourceMapViewModel {
         if UserDefaults.standard.hideObservations {
             annotations = []
             featureOverlays = []
+            lastAnnotationKeys = []
+            lastOverlayKeys = []
             return
         }
         let features = await mapFeatureRepository?.getAnnotationsAndOverlays(
             zoom: zoom,
             region: region.padded(percentage: 2.0)
         )
-        annotations = (features?.annotations ?? []).sorted(by: { first, second in
-            first.id < second.id
-        })
+        let newAnnotations = features?.annotations ?? []
+        let newAnnotationKeys = Set(newAnnotations.map { $0.key() })
+        if newAnnotationKeys.count != lastAnnotationKeys.count || newAnnotationKeys != lastAnnotationKeys {
+            lastAnnotationKeys = newAnnotationKeys
+            annotations = newAnnotations.sorted(by: { first, second in
+                first.id < second.id
+            })
+        }
         if let overlays = features?.overlays {
-            // Compare by stable identifiers
-            let newIds = overlays.compactMap { ($0 as? DataSourceIdentifiable)?.id }
-            let currentIds = featureOverlays.compactMap { ($0 as? DataSourceIdentifiable)?.id }
-            if newIds != currentIds {
+            let newOverlayKeys = Set(overlays.compactMap { ($0 as? DataSourceIdentifiable)?.key() })
+            if newOverlayKeys.count != lastOverlayKeys.count || newOverlayKeys != lastOverlayKeys {
+                lastOverlayKeys = newOverlayKeys
                 featureOverlays = overlays
             }
         }

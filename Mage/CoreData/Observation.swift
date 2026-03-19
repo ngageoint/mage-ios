@@ -1042,7 +1042,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
 
-    func createObservationLocations(context: NSManagedObjectContext) {
+    func createObservationLocations(context: NSManagedObjectContext, formCache: ObservationFormCache? = nil) {
         var order: Int64 = 0
         var observationLocations: Set<ObservationLocation> = Set<ObservationLocation>()
         // save the observations location
@@ -1055,7 +1055,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 observationLocation.fieldName = Observation.PRIMARY_OBSERVATION_GEOMETRY
                 observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
                 
-                let eventForm = Form.mr_findFirst(
+                let eventForm = formCache?.form(for: observationLocation.formId, in: context) ?? Form.mr_findFirst(
                     byAttribute: "formId",
                     withValue: observationLocation.formId,
                     in: context
@@ -1113,7 +1113,7 @@ enum ObservationState: Int, CustomStringConvertible {
                                 observationLocation.formId = eventFormId.int64Value
                                 observationLocation.observationFormId = form[FormKey.id.key] as? String
                                 
-                                let eventForm = Form.mr_findFirst(
+                                let eventForm = formCache?.form(for: observationLocation.formId, in: context) ?? Form.mr_findFirst(
                                     byAttribute: "formId",
                                     withValue: observationLocation.formId,
                                     in: context
@@ -1144,3 +1144,25 @@ enum ObservationState: Int, CustomStringConvertible {
         self.locations = observationLocations
     }
 }
+
+final class ObservationFormCache {
+    private var formsById: [Int64: Form] = [:]
+
+    func form(for formId: Int64, in context: NSManagedObjectContext) -> Form? {
+        if let cachedForm = formsById[formId] {
+            return cachedForm
+        }
+
+        guard let fetchedForm = Form.mr_findFirst(
+            byAttribute: "formId",
+            withValue: NSNumber(value: formId),
+            in: context
+        ) else {
+            return nil
+        }
+
+        formsById[formId] = fetchedForm
+        return fetchedForm
+    }
+}
+

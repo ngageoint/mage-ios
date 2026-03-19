@@ -323,6 +323,11 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
     }
 
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int {
+        let total = propertyList.count
+        if total == 0 {
+            ObservationImportProgress.postFinished(message: "No new observations.")
+            return 0
+        }
         var regionsChanged: [MKCoordinateRegion] = []
         let initial = true
         let saveStart = Date()
@@ -363,6 +368,12 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
             var chunks = propertyList.chunked(into: 250);
             var newObservationCount = 0;
             var observationToNotifyAbout: Observation?;
+            var processedCount = 0
+            ObservationImportProgress.postProgress(
+                current: 0,
+                total: total,
+                message: "Processing observations..."
+            )
             while (chunks.count > 0) {
                 autoreleasepool {
                     guard let features = chunks.last else {
@@ -378,6 +389,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                             }
                         }
                     }
+                    processedCount += features.count
                 }
 
                 // only save once per chunk
@@ -397,6 +409,11 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
 
                 }
                 backgroundContext.reset();
+                ObservationImportProgress.postProgress(
+                    current: min(processedCount, total),
+                    total: total,
+                    message: "Processing observations \(min(processedCount, total)) of \(total)"
+                )
             }
 
             if ((initial && newObservationCount > 0) || newObservationCount > 1) {
@@ -408,6 +425,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
             }
             
             self.changedRegionsPushSubject.send(regionsChanged)
+            ObservationImportProgress.postFinished(message: "Observations ready.")
 
             return newObservationCount
         }

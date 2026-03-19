@@ -102,10 +102,12 @@ import DateTools
                 annotationView?.image = image;
                 annotationView?.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
             }
+//            annotationView?.clusteringIdentifier = "observation"
         } else {
             annotationView?.image = nil
             annotationView?.frame = .zero
             annotationView?.centerOffset = .zero
+            annotationView?.clusteringIdentifier = nil
         }
         if let annotationView = annotationView {
             annotationView.accessibilityLabel = "Observation"
