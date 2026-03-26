@@ -26,30 +26,51 @@
 }
 
 + (BOOL) polygonHasIntersections: (SFPolygon *) wkbPolygon {
+    // Iterate over each ring (closed line string) in the polygon
     for (SFLineString *line1 in wkbPolygon.rings) {
+        // Get the last point of the current ring (used for handling wrap-around edge cases)
         SFPoint *lastPoint = [line1.points objectAtIndex:[line1 numPoints] - 1];
+        
+        // Compare the current ring with every other ring in the polygon (including itself)
         for (SFLineString *line2 in wkbPolygon.rings) {
+            // Loop through each segment of the first ring (line1)
             for (int i = 0; i < [line1 numPoints] - 1; i++) {
+                // Get the start point of the current segment in line1
                 SFPoint *point1 = [line1.points objectAtIndex:i];
+                // Get the end point of the current segment in line1
                 SFPoint *nextPoint1 = [line1.points objectAtIndex:i+1];
+                
+                // Loop through each segment of the second ring (line2)
                 for (int k = i; k < [line2 numPoints] - 1; k++) {
+                    // Get the start point of the current segment in line2
                     SFPoint *point2 = [line2.points objectAtIndex:k];
+                    // Get the end point of the current segment in line2
                     SFPoint *nextPoint2 = [line2.points objectAtIndex:k+1];
+                    
+                    // Skip comparison if we are checking the same ring (we only want self-intersections)
                     if (line1 != line2) continue;
-                    if (abs(i-k) == 1) {
-                        continue;
-                    }
-                    if (i == 0 && k == [line1 numPoints] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) {
-                        continue;
-                    }
+                    
+                    // Skip adjacent segments in the same ring (they share a vertex and will always intersect)
+                    if (abs(i-k) <= 1) continue;
+                    
+                    // Skip comparison of the first and last segment if they share the same point (closing segment)
+                    if (i == 0 && k == [line1 numPoints] - 2 && point1.x == lastPoint.x && point1.y == lastPoint.y) continue;
+                    
+                    // Check if the two line segments (point1->nextPoint1 and point2->nextPoint2) intersect
                     BOOL intersects = [MapUtils line1Start:CGPointMake([point1.x doubleValue], [point1.y doubleValue]) andEnd:CGPointMake([nextPoint1.x doubleValue], [nextPoint1.y doubleValue]) intersectsLine2Start:CGPointMake([point2.x doubleValue], [point2.y doubleValue]) andEnd:CGPointMake([nextPoint2.x doubleValue], [nextPoint2.y doubleValue])];
+                    
+                    // If an intersection is found, return YES immediately
                     if (intersects) return YES;
                 }
             }
         }
     }
+    
+    // If no intersections are found after checking all segments, return NO
     return NO;
 }
+
+
 
 + (BOOL) line1Start: (CGPoint) line1Start andEnd: (CGPoint) line1End intersectsLine2Start: (CGPoint) line2Start andEnd: (CGPoint) line2End {
     CGFloat q =
