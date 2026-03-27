@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -51,7 +51,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sso-gG-3z7">
-                    <rect key="frame" x="16" y="40" width="343" height="55"/>
+                    <rect key="frame" x="16" y="60" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRc-G2-cIA">
                             <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
@@ -110,7 +110,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fH-La-tFM">
-                    <rect key="frame" x="0.0" y="103" width="375" height="715"/>
+                    <rect key="frame" x="0.0" y="123" width="375" height="695"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ka-Hj-Vpz">
                             <rect key="frame" x="0.0" y="-10" width="375" height="627"/>
@@ -225,7 +225,7 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fum-f9-TSY">
-                                                    <rect key="frame" x="57" y="74" width="120" height="21"/>
+                                                    <rect key="frame" x="69" y="74" width="120" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="uWa-5f-HK6"/>
                                                     </constraints>
@@ -234,11 +234,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cI7-dz-MoF">
-                                                    <rect key="frame" x="0.0" y="69" width="51" height="31"/>
+                                                    <rect key="frame" x="0.0" y="69" width="63" height="31"/>
                                                     <accessibility key="accessibilityConfiguration" label="Show Password"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="gx0-D7-AoD"/>
-                                                        <constraint firstAttribute="width" constant="49" id="sck-aZ-dtl"/>
                                                     </constraints>
                                                     <connections>
                                                         <action selector="showPasswordChanged:" destination="-1" eventType="valueChanged" id="mGC-5D-pbC"/>
