@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,11 +17,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="251"/>
                     <subviews>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Q8A-73-ehK">
-                            <rect key="frame" x="20" y="122" width="51" height="31"/>
+                            <rect key="frame" x="20" y="122" width="63" height="31"/>
                             <accessibility key="accessibilityConfiguration" label="Show Password"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="31" id="MQe-zQ-zFI"/>
-                                <constraint firstAttribute="width" constant="49" id="QFY-52-aJU"/>
                             </constraints>
                             <connections>
                                 <action selector="showPasswordSwitchAction:" destination="NGa-Oo-ehZ" eventType="valueChanged" id="o3n-0v-4Kc"/>
@@ -42,7 +41,7 @@
                             </connections>
                         </textField>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjf-hp-DFx">
-                            <rect key="frame" x="77" y="127" width="278" height="21"/>
+                            <rect key="frame" x="89" y="127" width="266" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="yrC-lk-Mgp"/>
                             </constraints>
