@@ -83,35 +83,35 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
         let tolerance = (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
-        
-        var annotations: [Any] = []
+
+        var annotations: [ObservationIdentityKey: Observation] = [:]
         for lineObservation in lineObservations {
             if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance) {
-               if let observation = lineObservation.observation, !containsObservation(observation, in: annotations) {
-                    annotations.append(observation)
+               if let observation = lineObservation.observation {
+                    annotations[observationKey(for: observation)] = observation
                }
             }
         }
         for polygonObservation in polygonObservations {
             if polygonHitTest(polygonObservation: polygonObservation, location: location) {
-                if let observation = polygonObservation.observation, !containsObservation(observation, in: annotations) {
-                    annotations.append(observation)
+                if let observation = polygonObservation.observation {
+                    annotations[observationKey(for: observation)] = observation
                 }
             }
         }
-        return annotations
+        return Array(annotations.values)
     }
 
-    private func containsObservation(_ observation: Observation, in annotations: [Any]) -> Bool {
-        return annotations.contains { annotation in
-            guard let existingObservation = annotation as? Observation else {
-                return false
-            }
-            if let existingRemoteId = existingObservation.remoteId, let remoteId = observation.remoteId {
-                return existingRemoteId == remoteId
-            }
-            return existingObservation.objectID == observation.objectID
+    private enum ObservationIdentityKey: Hashable {
+        case remoteId(String)
+        case objectId(NSManagedObjectID)
+    }
+
+    private func observationKey(for observation: Observation) -> ObservationIdentityKey {
+        if let remoteId = observation.remoteId {
+            return .remoteId(remoteId)
         }
+        return .objectId(observation.objectID)
     }
     
     func addFilteredObservations() {
