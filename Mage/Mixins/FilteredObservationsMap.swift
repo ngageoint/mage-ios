@@ -87,19 +87,31 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         var annotations: [Any] = []
         for lineObservation in lineObservations {
             if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance) {
-               if let observation = lineObservation.observation {
+               if let observation = lineObservation.observation, !containsObservation(observation, in: annotations) {
                     annotations.append(observation)
                }
             }
         }
         for polygonObservation in polygonObservations {
             if polygonHitTest(polygonObservation: polygonObservation, location: location) {
-                if let observation = polygonObservation.observation {
+                if let observation = polygonObservation.observation, !containsObservation(observation, in: annotations) {
                     annotations.append(observation)
                 }
             }
         }
         return annotations
+    }
+
+    private func containsObservation(_ observation: Observation, in annotations: [Any]) -> Bool {
+        return annotations.contains { annotation in
+            guard let existingObservation = annotation as? Observation else {
+                return false
+            }
+            if let existingRemoteId = existingObservation.remoteId, let remoteId = observation.remoteId {
+                return existingRemoteId == remoteId
+            }
+            return existingObservation.objectID == observation.objectID
+        }
     }
     
     func addFilteredObservations() {
