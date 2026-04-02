@@ -26,8 +26,12 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     
     var observations: Observations?
     var mapObservationManager: MapObservationManager
-    var lineObservations: [StyledPolyline] = []
-    var polygonObservations: [StyledPolygon] = []
+    private var pointAnnotationsByObjectID: [NSManagedObjectID: ObservationAnnotation] = [:]
+    private var lineObservationsByObjectID: [NSManagedObjectID: StyledPolyline] = [:]
+    private var polygonObservationsByObjectID: [NSManagedObjectID: StyledPolygon] = [:]
+    private var objectIDByRemoteID: [String: NSManagedObjectID] = [:]
+    var lineObservations: [StyledPolyline] { Array(lineObservationsByObjectID.values) }
+    var polygonObservations: [StyledPolygon] { Array(polygonObservationsByObjectID.values) }
     
     init(filteredObservationsMap: FilteredObservationsMap, user: User? = nil) {
         self.filteredObservationsMap = filteredObservationsMap
@@ -49,6 +53,10 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         
         observations?.delegate = nil
         observations = nil
+        pointAnnotationsByObjectID.removeAll()
+        lineObservationsByObjectID.removeAll()
+        polygonObservationsByObjectID.removeAll()
+        objectIDByRemoteID.removeAll()
     }
     
     func setupMixin() {
@@ -142,31 +150,96 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
     }
+
+    /// Perform all work on the main thread
+    private func performMapMutation(_ mutation: () -> Void) {
+        if Thread.isMainThread {
+            mutation()
+        } else {
+            DispatchQueue.main.sync(execute: mutation)
+        }
+    }
+
+    /// We need a stable CoreData ID for any geometry, so we can prevent adding duplicates
+    private func stableObjectID(for observation: Observation) -> NSManagedObjectID {
+        if observation.objectID.isTemporaryID {
+            do {
+                try observation.managedObjectContext?.obtainPermanentIDs(for: [observation])
+            } catch {
+                NSLog("Failed to obtain permanent objectID for observation: \(error)")
+            }
+        }
+        return observation.objectID
+    }
+
+    private func trackedObjectID(for observation: Observation) -> NSManagedObjectID {
+        let objectID = stableObjectID(for: observation)
+        if let remoteId = observation.remoteId, let existingObjectID = objectIDByRemoteID[remoteId] {
+            return existingObjectID
+        }
+        return objectID
+    }
+
+    private func registerRemoteAlias(objectID: NSManagedObjectID, remoteId: String?) {
+        if let remoteId = remoteId {
+            objectIDByRemoteID[remoteId] = objectID
+        }
+    }
+
+    private func unregisterRemoteAlias(objectID: NSManagedObjectID, remoteId: String?) {
+        if let remoteId = remoteId, objectIDByRemoteID[remoteId] == objectID {
+            objectIDByRemoteID.removeValue(forKey: remoteId)
+        }
+    }
+
+    private func removeTrackedObservation(objectID: NSManagedObjectID, remoteId: String?) {
+        if let annotation = pointAnnotationsByObjectID.removeValue(forKey: objectID) {
+            filteredObservationsMap.mapView?.removeAnnotation(annotation)
+            unregisterRemoteAlias(objectID: objectID, remoteId: annotation.observationId ?? remoteId)
+            return
+        }
+
+        if let polyline = lineObservationsByObjectID.removeValue(forKey: objectID) {
+            filteredObservationsMap.mapView?.removeOverlay(polyline)
+            unregisterRemoteAlias(objectID: objectID, remoteId: polyline.observationRemoteId ?? remoteId)
+            return
+        }
+
+        if let polygon = polygonObservationsByObjectID.removeValue(forKey: objectID) {
+            filteredObservationsMap.mapView?.removeOverlay(polygon)
+            unregisterRemoteAlias(objectID: objectID, remoteId: polygon.observationRemoteId ?? remoteId)
+        }
+    }
     
     func updateObservation(observation: Observation, animated: Bool = false, zoom: Bool = false) {
+        let objectID = stableObjectID(for: observation)
         deleteObservation(observation: observation)
-        if let geometry = observation.geometry {
+        guard let geometry = observation.geometry else {
+            return
+        }
+
+        performMapMutation {
             if geometry.geometryType == SF_POINT {
                 let annotation = ObservationAnnotation(observation: observation, geometry: geometry)
-//                annotation.view.layer.zPosition = CGFloat(observation.timestamp?.timeIntervalSinceReferenceDate ?? 0)
                 annotation.animateDrop = animated
+                pointAnnotationsByObjectID[objectID] = annotation
+                registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
                 filteredObservationsMap.mapView?.addAnnotation(annotation)
             } else {
                 let style = ObservationShapeStyleParser.style(of: observation)
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
                 shapeConverter?.close()
-                
+
                 if let mkpolyline = shape?.shape as? MKPolyline {
                     let styledPolyline = StyledPolyline.create(polyline: mkpolyline)
                     styledPolyline.lineColor = style?.strokeColor ?? .black
                     styledPolyline.lineWidth = style?.lineWidth ?? 1
                     styledPolyline.observationRemoteId = observation.remoteId
                     styledPolyline.observation = observation
-                    lineObservations.append(styledPolyline)
-                    DispatchQueue.main.async { [weak self] in
-                        self?.filteredObservationsMap.mapView?.addOverlay(styledPolyline)
-                    }
+                    lineObservationsByObjectID[objectID] = styledPolyline
+                    registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
+                    filteredObservationsMap.mapView?.addOverlay(styledPolyline)
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
                     styledPolygon.lineColor = style?.strokeColor ?? .black
@@ -174,10 +247,9 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolygon.fillColor = style?.fillColor ?? .clear
                     styledPolygon.observation = observation
                     styledPolygon.observationRemoteId = observation.remoteId
-                    polygonObservations.append(styledPolygon)
-                    DispatchQueue.main.async { [weak self] in
-                        self?.filteredObservationsMap.mapView?.addOverlay(styledPolygon)
-                    }
+                    polygonObservationsByObjectID[objectID] = styledPolygon
+                    registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
+                    filteredObservationsMap.mapView?.addOverlay(styledPolygon)
                 }
             }
         }
@@ -187,37 +259,9 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     func deleteObservation(observation: Observation) {
-        let annotation = filteredObservationsMap.mapView?.annotations.first(where: { annotation in
-            if let annotation = annotation as? ObservationAnnotation {
-                if let observationRemoteId = annotation.observationId {
-                    return observationRemoteId == observation.remoteId
-                }
-                
-                return annotation.observation?.objectID == observation.objectID
-            }
-            return false
-        })
-        
-        if let annotation = annotation {
-            filteredObservationsMap.mapView?.removeAnnotation(annotation)
-        } else {
-            // it might be a line
-            let polyline = lineObservations.first { polyline in
-                return polyline.observationRemoteId == observation.remoteId
-            }
-            
-            if let polyline = polyline {
-                filteredObservationsMap.mapView?.removeOverlay(polyline)
-            } else {
-                // it might be a polygon
-                let polygon = polygonObservations.first { polygon in
-                    return polygon.observationRemoteId == observation.remoteId
-                }
-                
-                if let polygon = polygon {
-                    filteredObservationsMap.mapView?.removeOverlay(polygon)
-                }
-            }
+        let objectID = trackedObjectID(for: observation)
+        performMapMutation {
+            removeTrackedObservation(objectID: objectID, remoteId: observation.remoteId)
         }
     }
     

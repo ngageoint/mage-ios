@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import MagicalRecord
+import XCTest
 
 @testable import MAGE
 
@@ -699,5 +700,245 @@ class FilteredObservationsMapTests: KIFSpec {
                 }
             }
         }
+    }
+}
+
+@MainActor
+final class FilteredObservationsOverlayIdentityTests: XCTestCase {
+    private var navController: UINavigationController!
+    private var window: UIWindow!
+    private var controller: UIViewController!
+    private var mapTestImpl: FilteredObservationsMapTestImpl!
+    private var filteredObservationsMapMixin: FilteredObservationsMapMixin!
+    private var didSetupMixin = false
+
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+
+        TestHelpers.clearAndSetUpStack()
+        window = TestHelpers.getKeyWindowVisible()
+        UserDefaults.standard.mapType = 0
+        UserDefaults.standard.themeOverride = 0
+        UserDefaults.standard.locationDisplay = .latlng
+        UserDefaults.standard.baseServerUrl = "https://magetest"
+
+        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+        MageCoreDataFixtures.addUser(userId: "userabc")
+        MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+        Server.setCurrentEventId(1)
+        UserDefaults.standard.currentUserId = "userabc"
+
+        controller = UIViewController()
+        let mapView = MKMapView()
+        controller.view = mapView
+
+        mapTestImpl = FilteredObservationsMapTestImpl()
+        mapTestImpl.mapView = mapView
+        mapTestImpl.scheme = MAGEScheme.scheme()
+
+        filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: mapTestImpl)
+        mapTestImpl.filteredObservationsMapMixin = filteredObservationsMapMixin
+
+        navController = UINavigationController(rootViewController: controller)
+        window.rootViewController = navController
+        window.overrideUserInterfaceStyle = .unspecified
+        didSetupMixin = false
+    }
+
+    override func tearDownWithError() throws {
+        if didSetupMixin {
+            filteredObservationsMapMixin?.cleanupMixin()
+        }
+        filteredObservationsMapMixin = nil
+        mapTestImpl = nil
+        controller?.view.subviews.forEach { $0.removeFromSuperview() }
+        controller = nil
+        navController = nil
+        window?.resignKey()
+        window?.rootViewController = nil
+        window = nil
+        UserDefaults.standard.themeOverride = 0
+        TestHelpers.clearAndSetUpStack()
+        HTTPStubs.removeAllStubs()
+        try super.tearDownWithError()
+    }
+
+    private func polygonGeometry(centerLongitude: Double, centerLatitude: Double, delta: Double = 0.1) -> SFPolygon {
+        return SFPolygon(ring: SFLineString(points: [
+            SFPoint(xValue: centerLongitude + delta, andYValue: centerLatitude + delta) as Any,
+            SFPoint(xValue: centerLongitude - delta, andYValue: centerLatitude + delta) as Any,
+            SFPoint(xValue: centerLongitude - delta, andYValue: centerLatitude - delta) as Any,
+            SFPoint(xValue: centerLongitude + delta, andYValue: centerLatitude - delta) as Any,
+            SFPoint(xValue: centerLongitude + delta, andYValue: centerLatitude + delta) as Any
+        ]))
+    }
+
+    private func polylineGeometry(startLongitude: Double, startLatitude: Double, endLongitude: Double, endLatitude: Double) -> SFLineString {
+        return SFLineString(points: [
+            SFPoint(xValue: startLongitude, andYValue: startLatitude) as Any,
+            SFPoint(xValue: endLongitude, andYValue: endLatitude) as Any
+        ])
+    }
+
+    private func overlayCount<T>(of type: T.Type) -> Int {
+        return mapTestImpl.mapView?.overlays.filter { $0 is T }.count ?? 0
+    }
+
+    func testLocalPolygonRedrawKeepsSingleOverlay() {
+        let observation = Observation.create(geometry: polygonGeometry(centerLongitude: 16, centerLatitude: 21), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+
+        observation.geometry = polygonGeometry(centerLongitude: 17, centerLatitude: 22)
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+    }
+
+    func testDeletingOneLocalPolygonKeepsOtherPolygonVisible() {
+        let first = Observation.create(geometry: polygonGeometry(centerLongitude: 16, centerLatitude: 21), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+        let second = Observation.create(geometry: polygonGeometry(centerLongitude: 18, centerLatitude: 23), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: first)
+        filteredObservationsMapMixin.updateObservation(observation: second)
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(2))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(2))
+
+        filteredObservationsMapMixin.deleteObservation(observation: first)
+
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+        XCTAssertEqual(filteredObservationsMapMixin.polygonObservations.first?.observation, second)
+    }
+
+    func testDeletingLocalPolygonClearsBookkeeping() {
+        let observation = Observation.create(geometry: polygonGeometry(centerLongitude: 16, centerLatitude: 21), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.deleteObservation(observation: observation)
+
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(0))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(0))
+    }
+
+    func testLocalPolygonRemoteIdTransitionKeepsSingleOverlay() {
+        let observation = Observation.create(geometry: polygonGeometry(centerLongitude: 16, centerLatitude: 21), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+
+        observation.remoteId = "polygon-remote-id"
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.deleteObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(0))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(0))
+    }
+
+    func testFetchedPolygonRedrawsDoNotAccumulateOverlays() {
+        let observation = Observation.create(geometry: polygonGeometry(centerLongitude: 16, centerLatitude: 21), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+        observation.remoteId = "server-polygon"
+        UserDefaults.standard.observationTimeFilterKey = .all
+
+        filteredObservationsMapMixin.setupMixin()
+        didSetupMixin = true
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.addFilteredObservations()
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.addFilteredObservations()
+        expect(self.overlayCount(of: StyledPolygon.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.polygonObservations.count).toEventually(equal(1))
+    }
+
+    func testLocalPolylineRedrawKeepsSingleOverlay() {
+        let observation = Observation.create(geometry: polylineGeometry(startLongitude: 16, startLatitude: 21, endLongitude: 17, endLatitude: 22), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+
+        observation.geometry = polylineGeometry(startLongitude: 18, startLatitude: 23, endLongitude: 19, endLatitude: 24)
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+    }
+
+    func testDeletingOneLocalPolylineKeepsOtherPolylineVisible() {
+        let first = Observation.create(geometry: polylineGeometry(startLongitude: 16, startLatitude: 21, endLongitude: 17, endLatitude: 22), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+        let second = Observation.create(geometry: polylineGeometry(startLongitude: 18, startLatitude: 23, endLongitude: 19, endLatitude: 24), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: first)
+        filteredObservationsMapMixin.updateObservation(observation: second)
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(2))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(2))
+
+        filteredObservationsMapMixin.deleteObservation(observation: first)
+
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+        XCTAssertEqual(filteredObservationsMapMixin.lineObservations.first?.observation, second)
+    }
+
+    func testDeletingLocalPolylineClearsBookkeeping() {
+        let observation = Observation.create(geometry: polylineGeometry(startLongitude: 16, startLatitude: 21, endLongitude: 17, endLatitude: 22), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.deleteObservation(observation: observation)
+
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(0))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(0))
+    }
+
+    func testLocalPolylineRemoteIdTransitionKeepsSingleOverlay() {
+        let observation = Observation.create(geometry: polylineGeometry(startLongitude: 16, startLatitude: 21, endLongitude: 17, endLatitude: 22), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+
+        observation.remoteId = "polyline-remote-id"
+        filteredObservationsMapMixin.updateObservation(observation: observation)
+
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.deleteObservation(observation: observation)
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(0))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(0))
+    }
+
+    func testFetchedPolylineRedrawsDoNotAccumulateOverlays() {
+        let observation = Observation.create(geometry: polylineGeometry(startLongitude: 16, startLatitude: 21, endLongitude: 17, endLatitude: 22), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default())
+        observation.remoteId = "server-polyline"
+        UserDefaults.standard.observationTimeFilterKey = .all
+
+        filteredObservationsMapMixin.setupMixin()
+        didSetupMixin = true
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.addFilteredObservations()
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
+
+        filteredObservationsMapMixin.addFilteredObservations()
+        expect(self.overlayCount(of: StyledPolyline.self)).toEventually(equal(1))
+        expect(self.filteredObservationsMapMixin.lineObservations.count).toEventually(equal(1))
     }
 }
