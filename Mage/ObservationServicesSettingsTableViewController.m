@@ -1,7 +1,6 @@
 //
-//  LocationServicesSettingsTableViewController.m
+//  ObservationServicesSettingsTableViewController.m
 //  Mage
-//
 //
 
 #import "ObservationServicesSettingsTableViewController.h"
@@ -90,17 +89,29 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
     [defaults synchronize];
 }
 
-- (void) fetchAttachmentsChnaged:(id) sender {
+- (void) fetchAttachmentsChanged:(id)sender {
     BOOL on = [sender isOn];
-    self.attachmentFetchEnabled = on;
-    NSArray *rows = [[NSArray alloc] initWithObjects:[NSIndexPath indexPathForRow:TIME_INTERVAL_CELL_ROW inSection:ATTACHMENT_FETCH_SECTION], nil];
-    if (on) {
-        [self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
-    } else {
-        [self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
-
-    }
     
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:TIME_INTERVAL_CELL_ROW inSection:ATTACHMENT_FETCH_SECTION];
+
+    [self.tableView beginUpdates];
+
+    if (on) {
+        self.attachmentFetchEnabled = YES;
+        // Only insert if it doesn't already exist
+        if ([self.tableView numberOfRowsInSection:ATTACHMENT_FETCH_SECTION] <= TIME_INTERVAL_CELL_ROW) {
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } else {
+        // Only delete if it currently exists
+        if ([self.tableView numberOfRowsInSection:ATTACHMENT_FETCH_SECTION] > TIME_INTERVAL_CELL_ROW) {
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        self.attachmentFetchEnabled = NO;
+    }
+
+    [self.tableView endUpdates];
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject: on ? @"YES" : @"NO" forKey:@"attachmentFetchEnabled"];
     [defaults synchronize];
@@ -110,18 +121,29 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
     [self setPreferenceDisplayLabel:label forPreference:prefValuesKey withKey:NULL];
 }
 
-- (void) setPreferenceDisplayLabel : (UILabel*) label forPreference: (NSString*) prefValuesKey withKey: (nullable NSString *) preferencesKey {
+- (void) setPreferenceDisplayLabel : (UILabel*) label
+                     forPreference : (NSString*) prefValuesKey
+                           withKey : (nullable NSString *) preferencesKey {
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary *frequencyDictionary = [defaults dictionaryForKey:prefValuesKey];
     NSArray *labels = [frequencyDictionary valueForKey:@"labels"];
     NSArray *values = [frequencyDictionary valueForKey:@"values"];
     
-    NSNumber *frequency = [defaults valueForKey:preferencesKey ? preferencesKey : [frequencyDictionary valueForKey:@"preferenceKey"]];
+    NSString *resolvedPreferencesKey = preferencesKey ?: [frequencyDictionary valueForKey:@"preferenceKey"];
     
+    NSNumber *frequency = [defaults valueForKey:resolvedPreferencesKey];
+    if (frequency == nil) {
+        frequency = @1800;
+    }
+
     for (int i = 0; i < values.count; i++) {
-        if ([frequency integerValue] == [[values objectAtIndex:i] integerValue]) {
-            [label setText:[labels objectAtIndex:i]];
+        NSInteger currentValue = [values[i] integerValue];
+        NSString *currentLabel = labels[i];
+
+        if ([frequency integerValue] == currentValue) {
+            [label setText:currentLabel];
             break;
         }
     }
@@ -190,8 +212,8 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
                 toggle.onTintColor = self.scheme.colorScheme.primaryColorVariant;
                 cell.accessoryView = toggle;
         
-                [toggle setOn:self.observationFetchEnabled animated:NO];
-                [toggle addTarget:self action:@selector(fetchAttachmentsChnaged:) forControlEvents:UIControlEventValueChanged];
+                [toggle setOn:self.attachmentFetchEnabled animated:NO];
+                [toggle addTarget:self action:@selector(fetchAttachmentsChanged:) forControlEvents:UIControlEventValueChanged];
         
                 return cell;
             }
@@ -271,4 +293,3 @@ static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 }
 
 @end
-
