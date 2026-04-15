@@ -23,26 +23,28 @@ import CoreData
     @objc public static func populateFeeds(feeds: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [String] {
         var feedRemoteIds: [String] = []
         var selectedFeedsForEvent: [String] = UserDefaults.standard.array(forKey: "selectedFeeds-\(eventId)") as? [String] ?? [];
-        var count = Feed.mr_countOfEntities();
-        for feed in feeds {
-            if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
-                feedRemoteIds.append(remoteFeedId);
-                if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-                    f.populate(json: feed, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
-                } else {
-                    let f = Feed.mr_createEntity(in: context);
-                    selectedFeedsForEvent.append(remoteFeedId);
-                    f?.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
-                    f?.selected = true
-                    count = count + 1;
+        context.performAndWait {
+            var count = Feed.mr_countOfEntities(with: context)
+
+            for feed in feeds {
+                if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
+                    feedRemoteIds.append(remoteFeedId);
+                    if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
+                        f.populate(json: feed, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
+                    } else {
+                        let f = Feed.mr_createEntity(in: context);
+                        selectedFeedsForEvent.append(remoteFeedId);
+                        f?.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
+                        f?.selected = true
+                        count = count + 1;
+                    }
                 }
             }
+            selectedFeedsForEvent = selectedFeedsForEvent.filter { feedRemoteId in
+                return feedRemoteIds.contains(feedRemoteId)
+            }
+            UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
         }
-        selectedFeedsForEvent = selectedFeedsForEvent.filter { feedRemoteId in
-            return feedRemoteIds.contains(feedRemoteId)
-        }
-        UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
-        
         return feedRemoteIds;
     }
     
