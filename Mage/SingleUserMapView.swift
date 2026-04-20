@@ -38,6 +38,8 @@ class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap,
     }
     
     override func removeFromSuperview() {
+        super.removeFromSuperview()
+        cleanupMapMixins()
         filteredUsersMapMixin = nil
         filteredObservationsMapMixin = nil
         followUserMapMixin = nil
