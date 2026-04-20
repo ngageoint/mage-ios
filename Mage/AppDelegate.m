@@ -374,6 +374,7 @@
 
 - (void)tokenDidExpire:(NSNotification *)notification {
     [[Mage singleton] stopServices];
+    [[LocationService singleton] stop];
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
     [self createRootView];
 }
