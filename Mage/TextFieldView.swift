@@ -118,9 +118,11 @@ class TextFieldView : BaseFieldView {
         if (multiline) {
             multilineTextField.applyTheme(withScheme: scheme);
             multilineTextField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            multilineTextField.textView.tintColor = scheme.colorScheme.onSurfaceColor;
         } else {
             textField.applyTheme(withScheme: scheme);
             textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+            textField.tintColor = scheme.colorScheme.onSurfaceColor;
         }
     }
     
