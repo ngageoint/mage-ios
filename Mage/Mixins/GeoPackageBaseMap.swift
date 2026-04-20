@@ -9,13 +9,13 @@
 import Foundation
 import MapKit
 
-protocol GeoPackageBaseMap {
+protocol GeoPackageBaseMap: AnyObject {
     var mapView: MKMapView? { get set }
     var geoPackageBaseMapMixin: GeoPackageBaseMapMixin? { get set }
 }
 
 class GeoPackageBaseMapMixin: NSObject, MapMixin {
-    var mapView: MKMapView?
+    weak var mapView: MKMapView?
     var gridOverlay: MKTileOverlay?
     
     init(mapView: MKMapView?) {

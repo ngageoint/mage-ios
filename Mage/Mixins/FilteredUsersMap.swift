@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-protocol FilteredUsersMap {
+protocol FilteredUsersMap: AnyObject {
     var mapView: MKMapView? { get set }
     var filteredUsersMapMixin: FilteredUsersMapMixin? { get set }
     func addFilteredUsers()
@@ -23,8 +23,8 @@ extension FilteredUsersMap {
 
 class FilteredUsersMapMixin: NSObject, MapMixin {
     var mapAnnotationFocusedObserver: AnyObject?
-    var filteredUsersMap: FilteredUsersMap?
-    var mapView: MKMapView?
+    weak var filteredUsersMap: FilteredUsersMap?
+    weak var mapView: MKMapView?
     var scheme: MDCContainerScheming?
     
     var enlargedLocationView: MKAnnotationView?

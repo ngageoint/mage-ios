@@ -10,15 +10,15 @@ import Foundation
 import MapKit
 import MaterialComponents
 
-protocol UserTrackingMap {
+protocol UserTrackingMap: AnyObject {
     var mapView: MKMapView? { get set }
     var navigationController: UINavigationController? { get }
     var userTrackingMapMixin: UserTrackingMapMixin? { get set }
 }
 
 class UserTrackingMapMixin: NSObject, MapMixin {
-    var mapView: MKMapView?
-    var userTrackingMap: UserTrackingMap
+    weak var mapView: MKMapView?
+    weak var userTrackingMap: UserTrackingMap?
     var scheme: MDCContainerScheming?
     weak var buttonParentView: UIStackView?
     var indexInView: Int = 0
@@ -86,11 +86,11 @@ class UserTrackingMapMixin: NSObject, MapMixin {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }))
-            userTrackingMap.navigationController?.present(alert, animated: true, completion: nil)
+            userTrackingMap?.navigationController?.present(alert, animated: true, completion: nil)
             return
         }
         
-        guard let mapView = userTrackingMap.mapView else {
+        guard let mapView = userTrackingMap?.mapView else {
             return
         }
 
