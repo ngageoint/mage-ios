@@ -1219,7 +1219,7 @@ enum State: Int, CustomStringConvertible {
             if let localObservation = self?.mr_(in: localContext),
                let user = User.fetchCurrentUser(context: localContext),
                let userRemoteId = user.remoteId {
-                if let important = self?.observationImportant {
+                if let important = localObservation.observationImportant {
                     important.dirty = true;
                     important.important = true;
                     important.userId = userRemoteId;
@@ -1252,7 +1252,7 @@ enum State: Int, CustomStringConvertible {
             if let localObservation = self?.mr_(in: localContext),
                let user = User.fetchCurrentUser(context: localContext),
                let userRemoteId = user.remoteId {
-                if let important = self?.observationImportant {
+                if let important = localObservation.observationImportant {
                     important.dirty = true;
                     important.important = false;
                     important.userId = userRemoteId;
