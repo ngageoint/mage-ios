@@ -69,6 +69,7 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Fil
     }
     
     override func removeFromSuperview() {
+        super.removeFromSuperview()
         cleanupMapMixins()
         geoPackageLayerMapMixin = nil
         onlineLayerMapMixin = nil

@@ -10,14 +10,14 @@ import Foundation
 import MapKit
 import geopackage_ios
 
-protocol FilteredObservationsMap {
+protocol FilteredObservationsMap: AnyObject {
     var mapView: MKMapView? { get set }
     var scheme: MDCContainerScheming? { get set }
     var filteredObservationsMapMixin: FilteredObservationsMapMixin? { get set }
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
-    var filteredObservationsMap: FilteredObservationsMap
+    weak var filteredObservationsMap: FilteredObservationsMap?
     var mapAnnotationFocusedObserver: AnyObject?
     var user: User?
     
@@ -67,7 +67,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey), options: [.new], context: nil)
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.filteredObservationsMap.mapView {
+            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.filteredObservationsMap?.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)
             } else if notification.object == nil {
                 self?.focusAnnotation(annotation: nil)
@@ -90,7 +90,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
 
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = (self.filteredObservationsMap?.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
@@ -194,19 +194,19 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
 
     private func removeTrackedObservation(objectID: NSManagedObjectID, remoteId: String?) {
         if let annotation = pointAnnotationsByObjectID.removeValue(forKey: objectID) {
-            filteredObservationsMap.mapView?.removeAnnotation(annotation)
+            filteredObservationsMap?.mapView?.removeAnnotation(annotation)
             unregisterRemoteAlias(objectID: objectID, remoteId: annotation.observationId ?? remoteId)
             return
         }
 
         if let polyline = lineObservationsByObjectID.removeValue(forKey: objectID) {
-            filteredObservationsMap.mapView?.removeOverlay(polyline)
+            filteredObservationsMap?.mapView?.removeOverlay(polyline)
             unregisterRemoteAlias(objectID: objectID, remoteId: polyline.observationRemoteId ?? remoteId)
             return
         }
 
         if let polygon = polygonObservationsByObjectID.removeValue(forKey: objectID) {
-            filteredObservationsMap.mapView?.removeOverlay(polygon)
+            filteredObservationsMap?.mapView?.removeOverlay(polygon)
             unregisterRemoteAlias(objectID: objectID, remoteId: polygon.observationRemoteId ?? remoteId)
         }
     }
@@ -224,7 +224,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 annotation.animateDrop = animated
                 pointAnnotationsByObjectID[objectID] = annotation
                 registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
-                filteredObservationsMap.mapView?.addAnnotation(annotation)
+                filteredObservationsMap?.mapView?.addAnnotation(annotation)
             } else {
                 let style = ObservationShapeStyleParser.style(of: observation)
                 let shapeConverter = GPKGMapShapeConverter()
@@ -239,7 +239,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolyline.observation = observation
                     lineObservationsByObjectID[objectID] = styledPolyline
                     registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
-                    filteredObservationsMap.mapView?.addOverlay(styledPolyline)
+                    filteredObservationsMap?.mapView?.addOverlay(styledPolyline)
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
                     styledPolygon.lineColor = style?.strokeColor ?? .black
@@ -249,7 +249,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolygon.observationRemoteId = observation.remoteId
                     polygonObservationsByObjectID[objectID] = styledPolygon
                     registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
-                    filteredObservationsMap.mapView?.addOverlay(styledPolygon)
+                    filteredObservationsMap?.mapView?.addOverlay(styledPolygon)
                 }
             }
         }
@@ -266,7 +266,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     func zoomAndCenterMap(observation: Observation?) {
-        if let mapView = filteredObservationsMap.mapView, let viewRegion = observation?.viewRegion(mapView: mapView) {
+        if let mapView = filteredObservationsMap?.mapView, let viewRegion = observation?.viewRegion(mapView: mapView) {
             mapView.setRegion(viewRegion, animated: true)
         }
     }
@@ -276,7 +276,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             return nil
         }
         
-        let annotationView = observationAnnotation.viewForAnnotation(on: mapView, scheme: filteredObservationsMap.scheme ?? globalContainerScheme())
+        let annotationView = observationAnnotation.viewForAnnotation(on: mapView, scheme: filteredObservationsMap?.scheme ?? globalContainerScheme())
         
         // adjiust the center offset if this is the enlargedPin
         if (annotationView == self.enlargedObservationView) {
@@ -294,7 +294,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
               let observation = annotation.observation,
               let annotationView = annotation.view else {
             if let selectedObservationAccuracy = selectedObservationAccuracy {
-                filteredObservationsMap.mapView?.removeOverlay(selectedObservationAccuracy)
+                filteredObservationsMap?.mapView?.removeOverlay(selectedObservationAccuracy)
                 self.selectedObservationAccuracy = nil
             }
             if let enlargedObservationView = enlargedObservationView {
@@ -322,7 +322,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
         
         if let selectedObservationAccuracy = selectedObservationAccuracy {
-            filteredObservationsMap.mapView?.removeOverlay(selectedObservationAccuracy)
+            filteredObservationsMap?.mapView?.removeOverlay(selectedObservationAccuracy)
         }
         
         enlargedObservationView = annotationView
@@ -330,7 +330,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
            let coordinate = observation.location?.coordinate
         {
             selectedObservationAccuracy = ObservationAccuracy(center: coordinate, radius: CLLocationDistance(truncating: accuracy))
-            filteredObservationsMap.mapView?.addOverlay(selectedObservationAccuracy!)
+            filteredObservationsMap?.mapView?.addOverlay(selectedObservationAccuracy!)
         }
 
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
@@ -343,7 +343,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? ObservationAccuracy {
             let renderer = ObservationAccuracyRenderer(overlay: overlay)
-            if let scheme = filteredObservationsMap.scheme {
+            if let scheme = filteredObservationsMap?.scheme {
                 renderer.applyTheme(withContainerScheme: scheme)
             }
             return renderer

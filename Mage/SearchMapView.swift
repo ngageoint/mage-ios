@@ -57,6 +57,7 @@ class SearchMapView: MageMapView, HasMapSearch {
     }
     
     override func removeFromSuperview() {
+        super.removeFromSuperview()
         cleanupMapMixins()
         hasMapSearchMixin = nil
     }
