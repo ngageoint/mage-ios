@@ -43,6 +43,13 @@ class MageMapView: UIView, GeoPackageBaseMap {
 
     func layoutView() {
         mapView = MKMapView.newAutoLayout()
+
+        if #available(iOS 26, *) { // Compass on iOS 18 vs full bleed Map view on iOS 26
+            mapView?.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 42, leading: 0, bottom: 0, trailing: -8) // Adjusts Compass below layer button (based on iOS 26 compass)
+        } else {
+            mapView?.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 54, leading: 0, bottom: 0, trailing: 4) // Adjusts Compass below layer button (based on iOS 18 compass)
+        }
+
         guard let mapView = mapView else {
             return
         }
