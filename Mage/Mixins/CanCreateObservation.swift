@@ -61,7 +61,7 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         }
         rootView?.insertSubview(createFab, aboveSubview: mapView)
         createFab.autoPinEdge(.bottom, to: .top, of: mapStackView, withOffset: -25)
-        createFab.autoPinEdge(toSuperviewMargin: .right)
+        createFab.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 10)
                 
         applyTheme(scheme: canCreateObservation.scheme)
         

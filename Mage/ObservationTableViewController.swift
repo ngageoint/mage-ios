@@ -137,8 +137,8 @@ class ObservationTableViewController: UITableViewController {
         self.setNavBarTitle();
         self.startUpdateTimer();
         self.navigationController?.view.addSubview(createFab);
-        self.createFab.autoPinEdge(toSuperviewMargin: .right);
-        self.createFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
+        self.createFab.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 10);
+        self.createFab.autoPinEdge(toSuperviewSafeArea: .bottom, withInset: 25);
         self.applyTheme(withContainerScheme: self.scheme);
         setupFilterListeners();
         
