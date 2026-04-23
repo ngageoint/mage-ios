@@ -57,6 +57,7 @@ import Kingfisher
     }
     
     override func removeFromSuperview() {
+        super.removeFromSuperview()
         self.imageView.cancel();
     }
     

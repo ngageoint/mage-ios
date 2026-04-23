@@ -58,13 +58,13 @@ class SingleObservationMapMixin: FilteredObservationsMapMixin {
     override func updateObservation(observation: Observation, animated: Bool = false, zoom: Bool = false) {
         super.updateObservation(observation: observation, animated:animated, zoom: zoom)
         if let selectedObservationAccuracy = selectedObservationAccuracy {
-            filteredObservationsMap.mapView?.removeOverlay(selectedObservationAccuracy)
+            filteredObservationsMap?.mapView?.removeOverlay(selectedObservationAccuracy)
         }
         if let accuracy = observation.properties?[ObservationKey.accuracy.key] as? NSNumber,
            let coordinate = observation.location?.coordinate
         {
             selectedObservationAccuracy = ObservationAccuracy(center: coordinate, radius: CLLocationDistance(truncating: accuracy))
-            filteredObservationsMap.mapView?.addOverlay(selectedObservationAccuracy!)
+            filteredObservationsMap?.mapView?.addOverlay(selectedObservationAccuracy!)
         }
     }
 }
