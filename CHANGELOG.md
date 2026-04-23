@@ -7,6 +7,21 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 ##### Bug Fixes
 
+## 4.2.2
+
+* Fixes duplicate polygon rendering
+* Fixes dark mode cursor color in text areas
+* Fixes crashes when syncing feeds, flagging important observations, or logging out
+* Fixes Done/Cancel button placement on iOS 26 keyboard
+* Moves compass below the Layer button on iOS 18 and iOS 26
+
+## 4.2.1
+
+#### Bug Fixes 
+
+* Fixed Server URL authentication issue (Invalid error messages when logging into different servers).
+* Fixed Invalid Polygon issue (You can now save polygons again).
+
 ## 4.2.0 (Rollback release)
 * Roll back to 4.0.7 logic.
 
