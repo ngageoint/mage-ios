@@ -9,11 +9,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 4.2.2
 
-* Fixes duplicate polygon rendering
-* Fixes dark mode cursor color in text areas
-* Fixes crashes when syncing feeds, flagging important observations, or logging out
-* Fixes Done/Cancel button placement on iOS 26 keyboard
-* Moves compass below the Layer button on iOS 18 and iOS 26
+* Fixes duplicate polygon rendering on map.
+* Fixes dark mode cursor color in form text field and text areas.
+* Fixes crashes when syncing feeds, flagging important observations, or logging out.
+* Moves the Done/Cancel buttons above the iOS 26 keyboard.
+* Moves compass below the Layer button on iOS 18 and iOS 26.
 
 ## 4.2.1
 
