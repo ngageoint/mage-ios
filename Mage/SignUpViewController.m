@@ -93,6 +93,14 @@
     self.email.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.phone.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.captchaText.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    
+    self.username.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.displayName.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.password.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.passwordConfirm.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.email.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.phone.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.captchaText.tintColor = self.scheme.colorScheme.onSurfaceColor;
 
     self.captchaProgressView.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.captchaProgressLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];

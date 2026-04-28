@@ -39,6 +39,9 @@
     self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
+    self.usernameField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.passwordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    
     self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
     [self.authenticationButton applyThemeWithContainerScheme:containerScheme];

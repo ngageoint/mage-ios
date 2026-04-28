@@ -64,6 +64,11 @@
     self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.confirmPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.currentPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    
+    self.usernameField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.passwordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.currentPasswordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.confirmPasswordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
 
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
