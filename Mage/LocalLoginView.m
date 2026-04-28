@@ -34,7 +34,10 @@
     self.scheme = containerScheme;
     [self.usernameField applyThemeWithScheme:containerScheme];
     [self.passwordField applyThemeWithScheme:containerScheme];
-    
+    UIColor *placeholderTextColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [self.usernameField setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.passwordField setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+
     self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.usernameField.tintColor = self.scheme.colorScheme.onSurfaceColor;
@@ -202,4 +205,3 @@
 }
 
 @end
-

@@ -85,6 +85,14 @@
     [self.email applyThemeWithScheme:containerScheme];
     [self.phone applyThemeWithScheme:containerScheme];
     [self.captchaText applyThemeWithScheme:containerScheme];
+    UIColor *placeholderTextColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [self.username setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.displayName setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.password setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.passwordConfirm setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.email setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.phone setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.captchaText setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
     
     self.username.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.displayName.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
