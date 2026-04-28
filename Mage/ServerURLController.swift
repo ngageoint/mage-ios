@@ -165,6 +165,7 @@ class ServerURLController: UIViewController {
         okButton.applyContainedTheme(withScheme: scheme)
         cancelButton.applyContainedTheme(withScheme: scheme)
         serverURL.applyTheme(withScheme: scheme)
+        serverURL.tintColor = scheme.colorScheme.onSurfaceColor
         serverURL.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         errorImage.tintColor = scheme.colorScheme.errorColor
         errorInfoLink.textColor = scheme.colorScheme.primaryColorVariant
