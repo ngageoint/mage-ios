@@ -106,8 +106,6 @@ BOOL signingIn = YES;
     
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups/verifications"];
     
-    NSLog(@"Parameters to sign up with %@", parameters);
-
     MageSessionManager *manager = [MageSessionManager sharedManager];
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
     [request setValue:[NSString stringWithFormat:@"Bearer %@", self.captchaToken] forHTTPHeaderField:@"Authorization"];
