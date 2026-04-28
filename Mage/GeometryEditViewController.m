@@ -89,6 +89,7 @@ static NSString *garsTitle = @"GARS";
     [field applyThemeWithScheme:containerScheme];
     [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateNormal];
     [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateEditing];
+    field.tintColor = containerScheme.colorScheme.onSurfaceColor;
 }
 
 - (void) applyThemeTextField: (MDCFilledTextField *) field {
