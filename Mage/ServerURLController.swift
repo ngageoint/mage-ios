@@ -164,11 +164,18 @@ class ServerURLController: UIViewController {
         errorStatus.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         okButton.applyContainedTheme(withScheme: scheme)
         cancelButton.applyContainedTheme(withScheme: scheme)
-        serverURL.applyTheme(withScheme: scheme)
+        applyServerURLNormalTheme(with: scheme)
         serverURL.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         errorImage.tintColor = scheme.colorScheme.errorColor
         errorInfoLink.textColor = scheme.colorScheme.primaryColorVariant
         errorInfoLink.font = UIFont.systemFont(ofSize: 12)
+    }
+
+    private func applyServerURLNormalTheme(with scheme: MDCContainerScheming) {
+        serverURL.applyTheme(withScheme: scheme)
+        let placeholderTextColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        serverURL.tintColor = scheme.colorScheme.onSurfaceColor
+        serverURL.setFloatingLabelColor(placeholderTextColor, for: .editing)
     }
     
     public override func viewDidLoad() {
@@ -196,7 +203,7 @@ class ServerURLController: UIViewController {
             cancelButton.isHidden = true
             serverURL.text = url?.absoluteString
         } else if let scheme = scheme {
-            serverURL.applyTheme(withScheme: scheme)
+            applyServerURLNormalTheme(with: scheme)
         }
         
         if let url = url {
@@ -298,7 +305,7 @@ class ServerURLController: UIViewController {
             progressView.startAnimating()
             delegate?.setServerURL(url: url)
             if let scheme = scheme {
-                serverURL.applyTheme(withScheme: scheme)
+                applyServerURLNormalTheme(with: scheme)
             }
         } else {
             showError(error: "Invalid URL")
