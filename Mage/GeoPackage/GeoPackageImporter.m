@@ -8,19 +8,12 @@
 
 #import "GeoPackageImporter.h"
 
-#import "GPKGGeoPackageFactory.h"
-#import "GPKGGeoPackageValidate.h"
+@import GeoPackage;
 #import "CacheOverlays.h"
 #import "GeoPackageCacheOverlay.h"
 #import "GeoPackageTableCacheOverlay.h"
 #import "GeoPackageTileTableCacheOverlay.h"
-#import "GPKGFeatureIndexManager.h"
 #import "GeoPackageFeatureTableCacheOverlay.h"
-#import "GPKGFeatureTileTableLinker.h"
-#import "GPKGExtendedRelationsDao.h"
-#import "GPKGRelationTypes.h"
-#import "GPKGRelatedTablesExtension.h"
-#import "GPKGMediaDao.h"
 #import "MageConstants.h"
 #import "XYZDirectoryCacheOverlay.h"
 #import <SSZipArchive/SSZipArchive.h>

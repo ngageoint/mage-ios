@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 import UIKit
 import CoreTelephony
-import AFNetworking
-import sf_ios
+//import AFNetworking
+import SimpleFeatures
 
 @objc public class GPSLocation: NSManagedObject {
     

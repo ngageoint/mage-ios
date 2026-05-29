@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 import CoreData
-import geopackage_ios
+import GeoPackage
 
 protocol StaticLayerMap {
     var mapView: MKMapView? { get set }

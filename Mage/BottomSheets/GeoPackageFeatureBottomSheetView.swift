@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import geopackage_ios
+import GeoPackage
 
 class GeoPackageFeatureBottomSheetView: BottomSheetView {
     
@@ -166,9 +166,9 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
                     valueTextView.textContainerInset = UIEdgeInsets(top: 2, left: -4, bottom: 0, right: 0);
                     if let dataType = featureItem.featureDataTypes?[key] {
                         let gpkgDataType = GPKGDataTypes.fromName(dataType)
-                        if (gpkgDataType == GPKG_DT_BOOLEAN) {
+                        if (gpkgDataType == .DT_BOOLEAN) {
                             valueTextView.text = "\((value as? Int) == 0 ? "true" : "false")"
-                        } else if (gpkgDataType == GPKG_DT_DATE) {
+                        } else if (gpkgDataType == .DT_DATE) {
                             let dateDisplayFormatter = DateFormatter();
                             dateDisplayFormatter.dateFormat = "yyyy-MM-dd";
                             dateDisplayFormatter.timeZone = TimeZone(secondsFromGMT: 0);
@@ -176,7 +176,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
                             if let date = value as? Date {
                                 valueTextView.text = "\(dateDisplayFormatter.string(from: date))"
                             }
-                        } else if (gpkgDataType == GPKG_DT_DATETIME) {
+                        } else if (gpkgDataType == .DT_DATETIME) {
                             valueTextView.text = "\((value as? NSDate)?.formattedDisplay() ?? value)";
                         } else {
                             valueTextView.text = "\(value)"

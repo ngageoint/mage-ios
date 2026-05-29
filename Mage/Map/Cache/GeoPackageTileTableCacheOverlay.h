@@ -7,7 +7,7 @@
 //
 
 #import "GeoPackageTableCacheOverlay.h"
-#import "GPKGFeatureOverlayQuery.h"
+@import GeoPackage;
 
 @interface GeoPackageTileTableCacheOverlay : GeoPackageTableCacheOverlay
 

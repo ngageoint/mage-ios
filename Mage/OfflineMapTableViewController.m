@@ -12,7 +12,7 @@
 #import "ChildCacheOverlayTableCell.h"
 #import "XYZDirectoryCacheOverlay.h"
 #import "GeoPackageCacheOverlay.h"
-#import "GPKGGeoPackageFactory.h"
+@import GeoPackage;
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
 

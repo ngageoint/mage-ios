@@ -7,7 +7,7 @@
 //
 
 #import "MapObservation.h"
-#import "GPKGMapShape.h"
+@import GeoPackage;
 
 /**
  * Observation represented by a shape on the map

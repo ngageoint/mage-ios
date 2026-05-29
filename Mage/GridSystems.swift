@@ -8,8 +8,8 @@
 
 import Foundation
 
-import gars_ios
-import mgrs_ios
+import GARS
+import MGRS
 
 /**
  * Grid Systems support for GARS and MGRS grid tile overlays and coordinates

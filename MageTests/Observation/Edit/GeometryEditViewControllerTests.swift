@@ -200,7 +200,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 expect(mockGeometryEditDelegate.geometryEditCompleteCalled).to(beTrue());
                 let geometry: SFGeometry? = mockGeometryEditDelegate.geometryEditCompleteGeometry;
                 expect(geometry).toNot(beNil());
-                expect(geometry?.geometryType).to(equal(SF_POINT))
+                expect(geometry?.geometryType).to(equal(.POINT))
             }
             
             xit("create a line with long press") {
@@ -237,7 +237,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 expect(mockGeometryEditDelegate.geometryEditCompleteCalled).to(beTrue());
                 let geometry: SFGeometry? = mockGeometryEditDelegate.geometryEditCompleteGeometry;
                 expect(geometry).toNot(beNil());
-                expect(geometry?.geometryType).to(equal(SF_LINESTRING))
+                expect(geometry?.geometryType).to(equal(.LINESTRING))
             }
             
             // this test will not run in conjunction with other tests, the map will not drag
@@ -269,7 +269,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 expect(mockGeometryEditDelegate.geometryEditCompleteCalled).to(beTrue());
                 let geometry: SFGeometry? = mockGeometryEditDelegate.geometryEditCompleteGeometry;
                 expect(geometry).toNot(beNil());
-                expect(geometry?.geometryType).to(equal(SF_POLYGON))
+                expect(geometry?.geometryType).to(equal(.POLYGON))
                 let poly = geometry as? SFPolygon;
                 let linestrings: [SFLineString] = poly?.lineStrings() as? [SFLineString] ?? [];
                 expect(linestrings.count).to(equal(1));
@@ -311,7 +311,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 expect(mockGeometryEditDelegate.geometryEditCompleteCalled).to(beTrue());
                 let geometry: SFGeometry? = mockGeometryEditDelegate.geometryEditCompleteGeometry;
                 expect(geometry).toNot(beNil());
-                expect(geometry?.geometryType).to(equal(SF_POLYGON))
+                expect(geometry?.geometryType).to(equal(.POLYGON))
                 let poly = geometry as? SFPolygon;
                 let linestrings: [SFLineString] = poly?.lineStrings() as? [SFLineString] ?? [];
                 expect(linestrings.count).to(equal(1));

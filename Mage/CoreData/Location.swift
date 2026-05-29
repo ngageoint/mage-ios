@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 import CoreLocation
-import sf_ios
+import SimpleFeatures
 import MagicalRecord
 
 @objc public class Location: NSManagedObject, Navigable {

@@ -8,8 +8,8 @@
 
 import Foundation
 
-import gars_ios
-import mgrs_ios
+import GARS
+import MGRS
 
 enum SearchResponseType {
     case mgrs

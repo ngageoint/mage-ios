@@ -9,7 +9,7 @@
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
 #import "LocationService.h"
-#import "SFPoint.h"
+@import SimpleFeatures;
 #import "MAGE-Swift.h"
 
 @interface GeometryEditCoordinator() <SearchMapViewControllerDelegate>

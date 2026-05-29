@@ -7,8 +7,8 @@
 //
 
 #import "MapUtils.h"
-#import "GPKGMapShapePoints.h"
-#import "SFLineString.h"
+@import SimpleFeatures;
+@import GeoPackage;
 
 @implementation MapUtils
 

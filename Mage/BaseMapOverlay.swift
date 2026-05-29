@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import geopackage_ios
+import GeoPackage
 
 @objc class BaseMapOverlay: GPKGFeatureOverlay, OverlayRenderable {
     var renderer: MKOverlayRenderer {

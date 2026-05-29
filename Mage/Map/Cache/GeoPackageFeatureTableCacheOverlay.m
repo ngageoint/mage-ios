@@ -7,12 +7,7 @@
 //
 
 #import "GeoPackageFeatureTableCacheOverlay.h"
-#import "GPKGMapShapeConverter.h"
-#import "GPKGMapUtils.h"
-#import "GPKGProperties.h"
-#import "GPKGPropertyConstants.h"
-#import "GPKGDataColumnsDao.h"
-#import "GPKGGeoPackageFactory.h"
+@import GeoPackage;
 
 NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 
