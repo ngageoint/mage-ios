@@ -19,10 +19,6 @@ def common_pods
   pod "AFNetworking", "~> 4.0.1"
   pod "DateTools", "~> 2.0.0"
   pod "MagicalRecord", "~> 2.3.2"
-  pod 'geopackage-ios', '~> 8.0.6'
-  pod 'PROJ', :modular_headers => false
-  pod 'mgrs-ios', '~> 1.1.6'
-  pod 'gars-ios', '~> 1.1.5'
   pod 'SSZipArchive', '~> 2.2.2'
 end
 
@@ -48,12 +44,37 @@ post_install do |installer|
       config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
       config.build_settings['BITCODE_GENERATION_MODE'] = 'bitcode'
       config.build_settings['ENABLE_BITCODE'] = 'YES'
+
       # Fix Xcode 14 bundle code signing issue
       if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
         target.build_configurations.each do |config|
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
+
+      # ------ REMOVE ALL OF THIS WHEN AFNETWORKING IS REMOVED IT SHOULD BE REMOVED IN FAVOR OF Alamofire
+      # Fix 26.4 compiler error with AFNetworking
+      # Remove private netinet6/in6.h header (conflicts in iPhoneSimulator SDK >= 26.4s).
+      # netinet/in.h already covers the needed IPv6 definitions.
+      sessionmanager_m = File.join(File.dirname(__FILE__), 'Pods', 'AFNetworking', 'AFNetworking', 'AFHTTPSessionManager.m')
+      puts "[post_install] Patching #{sessionmanager_m} — exists: #{File.exist?(sessionmanager_m)}"
+      if File.exist?(sessionmanager_m)
+        File.chmod(0644, sessionmanager_m)
+        content = File.read(sessionmanager_m)
+        patched = content.gsub("#import <netinet6/in6.h>\n", "")
+        File.write(sessionmanager_m, patched)
+        puts "[post_install] Patch applied: #{!patched.include?('netinet6')}"
+      end
+      reachability_m = File.join(File.dirname(__FILE__), 'Pods', 'AFNetworking', 'AFNetworking', 'AFNetworkReachabilityManager.m')
+      puts "[post_install] Patching #{reachability_m} — exists: #{File.exist?(reachability_m)}"
+      if File.exist?(reachability_m)
+        File.chmod(0644, reachability_m)
+        content = File.read(reachability_m)
+        patched = content.gsub("#import <netinet6/in6.h>\n", "")
+        File.write(reachability_m, patched)
+        puts "[post_install] Patch applied: #{!patched.include?('netinet6')}"
+      end
+      # ------ END REMOVE
     end
   end
 end
