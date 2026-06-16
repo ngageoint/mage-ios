@@ -4126,10 +4126,10 @@
 		};
 		F7E0309F2FC9D2BF0042A671 /* XCRemoteSwiftPackageReference "mgrs-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielbarela/mgrs-ios";
+			repositoryURL = "https://github.com/ngageoint/mgrs-ios";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				minimumVersion = 2.1.0;
 			};
 		};
 		F7E066872FC9CFE1008C876C /* XCRemoteSwiftPackageReference "geopackage-ios" */ = {

@@ -1,5 +1,5 @@
 {
-  "originHash" : "087cb8cb906ea384087960a64ee6f85a8fa44c753f8703abc99986e004f1cc74",
+  "originHash" : "e5b1ea2daf3d1c191172e0460c8f3ac53b296129314d657d2e6b8125bc497f51",
   "pins" : [
     {
       "identity" : "color-ios",
@@ -49,10 +49,10 @@
     {
       "identity" : "mgrs-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/danielbarela/mgrs-ios",
+      "location" : "https://github.com/ngageoint/mgrs-ios",
       "state" : {
-        "revision" : "10b45c4d1f0149a71af71f824b88a4fbb4283c8f",
-        "version" : "2.1.1"
+        "revision" : "cf39b2457de46d5fbebede403a3afe13ac25a43c",
+        "version" : "2.1.0"
       }
     },
     {
