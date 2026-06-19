@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc class MageInitializer: NSObject {
     
@@ -25,14 +26,22 @@ import Foundation
         UserDefaults.standard.register(defaults: allPreferences)
     }
     
-    @objc public static func setupCoreData() {
-        MagicalRecord.setupMageCoreDataStack();
-        MagicalRecord.setLoggingLevel(.verbose);
-    }
-
-    @objc public static func clearAndSetupCoreData() {
-        MagicalRecord.deleteAndSetupMageCoreDataStack();
-        MagicalRecord.setLoggingLevel(.verbose);
+    @objc public static func setupPersistence() async {
+        guard let modelURL = Bundle.main.url(forResource: "mage-ios-sdk", withExtension: "momd") else {
+            print("Bundle.main = \(Bundle.main.bundleURL)")
+            
+            if let resourcePath = Bundle.main.resourcePath {
+                let contents = try? FileManager.default.contentsOfDirectory(atPath: resourcePath)
+                print(contents ?? [])
+            }
+            
+            print("mom:", Bundle.main.urls(forResourcesWithExtension: "mom", subdirectory: nil) ?? [])
+            print("momd:", Bundle.main.urls(forResourcesWithExtension: "momd", subdirectory: nil) ?? [])
+            fatalError("Core Data model not found")
+        }
+        let persistence = MagicalRecordPersistence()
+        
+        PersistenceContainer.shared.configure(persistence)
     }
     
     @discardableResult

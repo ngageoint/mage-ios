@@ -45,7 +45,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [MageInitializer initializePreferences];
     
-    [MageInitializer setupCoreData];
+    [MageInitializer setupPersistenceWithCompletionHandler:^{
+        
+    }];
 //    [MagicalRecord setupCoreDataStackWithInMemoryStore];
 //    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     

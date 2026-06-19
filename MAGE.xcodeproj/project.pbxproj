@@ -325,6 +325,8 @@
 		F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
 		F767AC7A27D95811005684E5 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
 		F76949161AA6436000CB680B /* EventChooserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.swift */; };
+		F76A02742FE49D0300CDBA4F /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = F76A02732FE49D0300CDBA4F /* Persistence */; };
+		F76A02772FE49F4400CDBA4F /* MagicalRecordPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A02762FE49F4400CDBA4F /* MagicalRecordPersistence.swift */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
@@ -1043,6 +1045,8 @@
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
 		F76949151AA6436000CB680B /* EventChooserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserController.swift; sourceTree = "<group>"; };
+		F76A02722FE49CAB00CDBA4F /* Persistence */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Persistence; sourceTree = "<group>"; };
+		F76A02762FE49F4400CDBA4F /* MagicalRecordPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicalRecordPersistence.swift; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
 		F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardConstraint.m; sourceTree = "<group>"; };
 		F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponder.h"; sourceTree = "<group>"; };
@@ -1383,6 +1387,7 @@
 				F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */,
 				F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
+				F76A02742FE49D0300CDBA4F /* Persistence in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
 				F7E066892FC9CFE1008C876C /* GeoPackage in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
@@ -2277,6 +2282,14 @@
 			name = Event;
 			sourceTree = "<group>";
 		};
+		F76A02752FE49F2B00CDBA4F /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				F76A02762FE49F4400CDBA4F /* MagicalRecordPersistence.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		F76A15BC1A93C33300F2BDF1 /* Constraints */ = {
 			isa = PBXGroup;
 			children = (
@@ -2473,6 +2486,7 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F76A02722FE49CAB00CDBA4F /* Persistence */,
 				F76B4A6F28E61E710012BF4F /* CHANGELOG.md */,
 				F72D422B2694B60300F9AC3B /* sdk */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
@@ -2522,6 +2536,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F76A02752FE49F2B00CDBA4F /* Persistence */,
 				2FAE23FB2B5596A900629721 /* Search */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
@@ -3567,6 +3582,7 @@
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7EBAEBC27615E5600650F4F /* MapMixin.swift in Sources */,
+				F76A02772FE49F4400CDBA4F /* MagicalRecordPersistence.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift in Sources */,
 				F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */,
@@ -4169,6 +4185,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F7E0309F2FC9D2BF0042A671 /* XCRemoteSwiftPackageReference "mgrs-ios" */;
 			productName = MGRS;
+		};
+		F76A02732FE49D0300CDBA4F /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
 		};
 		F7E0309D2FC9D2B00042A671 /* GARS */ = {
 			isa = XCSwiftPackageProductDependency;
