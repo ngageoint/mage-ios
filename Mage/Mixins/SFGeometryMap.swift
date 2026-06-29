@@ -8,8 +8,8 @@
 
 import Foundation
 import MapKit
-import geopackage_ios
-import sf_ios
+import GeoPackage
+import SimpleFeatures
 
 protocol SFGeometryMap {
     var mapView: MKMapView? { get set }

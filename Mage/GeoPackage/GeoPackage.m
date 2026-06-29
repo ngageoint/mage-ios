@@ -7,19 +7,12 @@
 //
 
 #import "GeoPackage.h"
-#import "GPKGGeoPackageCache.h"
-#import "GPKGGeoPackageFactory.h"
+@import GeoPackage;
 #import "GeoPackageCacheOverlay.h"
 #import "GeoPackageTileTableCacheOverlay.h"
 #import "GeoPackageFeatureTableCacheOverlay.h"
-#import "GPKGOverlayFactory.h"
-#import "GPKGNumberFeaturesTile.h"
-#import "GPKGMapShapeConverter.h"
-#import "GPKGFeatureTileTableLinker.h"
-#import "GPKGTileBoundingBoxUtils.h"
-#import "GPKGMapUtils.h"
 #import "CacheOverlayUpdate.h"
-#import "PROJProjectionConstants.h"
+@import Projections;
 #import "XYZDirectoryCacheOverlay.h"
 
 @interface GeoPackage ()

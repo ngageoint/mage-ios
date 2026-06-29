@@ -7,8 +7,7 @@
 //
 
 #import "GeoPackageTableCacheOverlay.h"
-#import "GPKGFeatureOverlayQuery.h"
-#import "GPKGMapShape.h"
+@import GeoPackage;
 #import "GeoPackageTileTableCacheOverlay.h"
 #import "MAGE-Swift.h"
 

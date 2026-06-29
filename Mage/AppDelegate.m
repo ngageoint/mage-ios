@@ -12,7 +12,7 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import "MageSessionManager.h"
 #import "MagicalRecord+MAGE.h"
-#import "GPKGGeoPackageFactory.h"
+@import GeoPackage;
 #import "MageConstants.h"
 #import "MageOfflineObservationManager.h"
 #import "MageAppCoordinator.h"

@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import geopackage_ios
+import GeoPackage
 
 protocol FilteredObservationsMap: AnyObject {
     var mapView: MKMapView? { get set }
@@ -219,7 +219,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
 
         performMapMutation {
-            if geometry.geometryType == SF_POINT {
+            if geometry.geometryType == .POINT {
                 let annotation = ObservationAnnotation(observation: observation, geometry: geometry)
                 annotation.animateDrop = animated
                 pointAnnotationsByObjectID[objectID] = annotation

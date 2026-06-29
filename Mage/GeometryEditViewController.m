@@ -6,20 +6,17 @@
 
 #import "GeometryEditViewController.h"
 #import "LocationService.h"
-#import "SFPoint.h"
-#import "SFGeometryUtils.h"
+@import SimpleFeatures;
 #import "MapObservation.h"
 #import "MapObservationManager.h"
-#import "GPKGMapShapeConverter.h"
+@import GeoPackage;
+@import Projections;
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"
-#import "PROJProjectionConstants.h"
-#import "SFGeometryEnvelopeBuilder.h"
 #import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
-#import "GPKGGeoPackageFactory.h"
 #import "AppDelegate.h"
 #import <PureLayout/PureLayout.h>
 #import "MAGE-Swift.h"

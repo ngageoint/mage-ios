@@ -6,7 +6,7 @@
 //  Copyright © 2021 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import geopackage_ios
+import GeoPackage
 
 @objc class GeoPackageFeatureItem: NSObject {
     @objc public override init() {

@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import geopackage_ios
+import GeoPackage
 
 //protocol SingleObservationMap {
 //    var mapView: MKMapView? { get set }

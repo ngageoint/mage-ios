@@ -7,7 +7,7 @@
 //
 
 #import "MapPolygonObservation.h"
-#import "GPKGMapUtils.h"
+@import GeoPackage;
 
 @interface MapPolygonObservation ()
 

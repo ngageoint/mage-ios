@@ -13,10 +13,6 @@
 #import "MapObservationManager.h"
 #import "ObservationShapeStyleParser.h"
 
-// Not sure why this isn't getting added via the geopackage pod...
-#import "GPKGMapShapeConverter.h"
-#import "GPKGFeatureRowData.h"
-
 #import "MAGERoutes.h"
 #import "NotificationRequester.h"
 #import "FadeTransitionSegue.h"
@@ -26,7 +22,6 @@
 #import "NSDate+display.h"
 #import "Locations.h"
 #import "Observations.h"
-#import "SFGeometryUtils.h"
 #import "ExternalDevice.h"
 #import "MageSessionManager.h"
 #import "MapSettings.h"
