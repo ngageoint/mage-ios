@@ -216,7 +216,7 @@ import MagicalRecord
                 
                 if (newUserFound) {
                     // for now if we find at least one new user lets just go grab the users again
-                    User.operationToFetchUsers(success: nil, failure: nil);
+                    User.operationToFetchCurrentEventUsers(success: nil, failure: nil);
                 }
             } completion: { contextDidSave, error in
                 NSLog("TIMING Saved Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")

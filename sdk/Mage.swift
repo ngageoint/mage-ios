@@ -14,37 +14,39 @@ import Foundation
     }
     
     @objc public func startServices(initial: Bool) {
-        var tasks: [URLSessionDataTask] = []
-        
-        LocationService.singleton().start();
-        if let rolesPullTask = Role.operationToFetchRoles(success: nil, failure: nil) {
-            tasks.append(rolesPullTask);
-        }
-        
-        let usersPullTask = User.operationToFetchUsers { task, response in
-            NSLog("Done with the initial user fetch, start location and observation services")
-            LocationFetchService.singleton.start();
-            ObservationFetchService.singleton.start(initial: initial);
-        } failure: { task, error in
-            NSLog("Failed to pull users \(error)")
-            // start the fetch services anyway.  Attempting to pull the users before starting these
-            // will cut down on the individual user requests which will be kicked off if a location
-            // or observation shows up with an unknown user
-            LocationFetchService.singleton.start();
-            ObservationFetchService.singleton.start(initial: initial);
-        }
-        if let usersPullTask = usersPullTask {
-            tasks.append(usersPullTask)
-        }
-        
         fetchSettings()
-        
+        let startFetchServices = {
+            LocationFetchService.singleton.start();
+            ObservationFetchService.singleton.start(initial: initial);
+        }
+        if initial {
+            var tasks: [URLSessionDataTask] = [];
+            if let fetchRolesTask = Role.operationToFetchRoles(success: nil, failure: nil) {
+                tasks.append(fetchRolesTask)
+            }
+            if let fetchUsersTask = User.operationToFetchCurrentEventUsers(
+                success: { task, response in
+                    NSLog("initial user fetch complete")
+                    startFetchServices()
+                },
+                failure: { task, error in
+                    NSLog("initial user fetch failed: \(error)")
+                    startFetchServices();
+                }
+            ) {
+                tasks.append(fetchUsersTask);
+            }
+            if tasks.count > 0 {
+                let sessionTask = SessionTask(tasks: tasks, andMaxConcurrentTasks: 1);
+                MageSessionManager.shared().add(sessionTask);
+            }
+        }
+        else {
+            startFetchServices()
+        }
+        LocationService.singleton().start();
         ObservationPushService.singleton.start();
-        AttachmentPushService.singleton().start();
-        
-        let sessionTask = SessionTask(tasks: tasks, andMaxConcurrentTasks: 1);
-        MageSessionManager.shared().add(sessionTask);
-        
+        AttachmentPushService.singleton().start();        
         MageSessionManager.setEventTasks(nil);
     }
     
@@ -132,7 +134,7 @@ import Foundation
         manager?.add(task);
     }
     
-    func add(task: URLSessionTask, eventTasks: inout [NSNumber: [NSNumber]], event: Event) {
+    private func add(task: URLSessionTask, eventTasks: inout [NSNumber: [NSNumber]], event: Event) {
         guard let remoteId = event.remoteId else {
             return;
         }

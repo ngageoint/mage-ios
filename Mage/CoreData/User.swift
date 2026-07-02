@@ -181,11 +181,14 @@ import Kingfisher
     }
     
     @discardableResult
-    @objc public static func operationToFetchUsers(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
+    @objc public static func operationToFetchCurrentEventUsers(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
-        let url = "\(baseURL.absoluteURL)/api/users";
+        guard let currentEventId = Server.currentEventId() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/users";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
         NSLog("TIMING Fetching Users @ \(methodStart)")
@@ -208,15 +211,6 @@ import Kingfisher
             }
             
             MagicalRecord.save { localContext in
-                // Get roles
-                var roleIdMap: [String : Role] = [:];
-                if let roles = Role.mr_findAll(in: localContext) as? [Role] {
-                    for role in roles {
-                        if let remoteId = role.remoteId {
-                            roleIdMap[remoteId] = role
-                        }
-                    }
-                }
                 // Get the user ids to query
                 var userIds: [String] = [];
                 for userJson in users {
