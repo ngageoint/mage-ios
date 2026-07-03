@@ -33,6 +33,8 @@ func applicationAppearance(scheme: MDCContainerScheming?) {
     UINavigationBar.appearance().barTintColor = scheme.colorScheme.primaryColor;
     UINavigationBar.appearance().isTranslucent = false;
     UINavigationBar.appearance().tintColor = scheme.colorScheme.onPrimaryColor;
+
+    UIToolbar.appearance().tintColor = scheme.colorScheme.primaryColor;
     
     UINavigationBar.appearance().standardAppearance = appearance;
     UINavigationBar.appearance().scrollEdgeAppearance = appearance;

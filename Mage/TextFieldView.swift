@@ -12,8 +12,7 @@ import MaterialComponents.MDCTextField;
 class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
-    private var shouldResign: Bool = false;
-    
+
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         multilineTextField.textView.delegate = self;
@@ -34,7 +33,7 @@ class TextFieldView : BaseFieldView {
         multilineTextField.sizeToFit();
         return multilineTextField;
     }()
-    
+
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
@@ -58,42 +57,57 @@ class TextFieldView : BaseFieldView {
             textField.text = value as? String;
         }
         textField.sizeToFit();
+        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged);
         return textField;
     }()
-    
+
     private lazy var accessoryView: UIToolbar = {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 50);
-        
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        doneBarButton.accessibilityLabel = "Done";
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
-        cancelBarButton.accessibilityLabel = "Cancel";
+        toolbar.autoSetDimension(.height, toSize: 60);
+        // Adding undo & redo components
+        let undoButton = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.uturn.backward"),
+            style: .plain,
+            target: self,
+            action: #selector(undoPressed)
+        );
+        undoButton.accessibilityLabel = "Undo";
+
+        let redoButton = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.uturn.forward"),
+            style: .plain,
+            target: self,
+            action: #selector(redoPressed)
+        );
+        redoButton.accessibilityLabel = "Redo";
+
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-        
-        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
+
+        // New toolbar to host the two buttons
+        toolbar.items = [undoButton, redoButton, flexSpace];
+        toolbar.alpha = 0;
         return toolbar;
     }()
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
-    
+
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, keyboardType: UIKeyboardType = .default) {
         self.init(field: field, editMode: editMode, delegate: delegate, value: nil, multiline: false, keyboardType: keyboardType);
     }
-    
+
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, multiline: Bool, keyboardType: UIKeyboardType = .default) {
         self.init(field: field, editMode: editMode, delegate: delegate, value: nil, multiline: multiline);
     }
-    
+
     init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.multiline = multiline;
         self.keyboardType = keyboardType;
         self.addFieldView();
     }
-    
+
     override func updateConstraints() {
         if (!didSetupConstraints) {
             if (editMode) {
@@ -102,13 +116,11 @@ class TextFieldView : BaseFieldView {
                 } else {
                     textField.autoPinEdgesToSuperviewEdges();
                 }
-            } else {
-                
             }
         }
         super.updateConstraints();
     }
-    
+
     override func applyTheme(withScheme scheme: MDCContainerScheming?) {
         guard let scheme = scheme else {
             return
@@ -125,7 +137,7 @@ class TextFieldView : BaseFieldView {
             textField.tintColor = scheme.colorScheme.onSurfaceColor;
         }
     }
-    
+
     func addFieldView() {
         if (editMode) {
             if (multiline) {
@@ -143,11 +155,11 @@ class TextFieldView : BaseFieldView {
             }
         }
     }
-    
+
     override func setValue(_ value: Any?) {
         self.setValue(value as? String);
     }
-    
+
     func setValue(_ value: String?) {
         self.value = value;
         if (self.multiline) {
@@ -156,11 +168,11 @@ class TextFieldView : BaseFieldView {
             self.editMode ? (textField.text = value) : (fieldValue.text = value);
         }
     }
-    
+
     func getValue() -> String? {
         return value as? String;
     }
-    
+
     override func isEmpty() -> Bool {
         if (self.multiline) {
             return (multilineTextField.textView.text ?? "").count == 0;
@@ -168,11 +180,11 @@ class TextFieldView : BaseFieldView {
             return (textField.text ?? "").count == 0;
         }
     }
-    
+
     override func getErrorMessage() -> String {
         return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
     }
-    
+
     override func setValid(_ valid: Bool) {
         super.setValid(valid);
         if (valid) {
@@ -201,32 +213,49 @@ class TextFieldView : BaseFieldView {
 
 extension TextFieldView {
     func resignFieldFirstResponder() {
-        shouldResign = true;
         if (self.multiline) {
             multilineTextField.textView.resignFirstResponder();
         } else {
             textField.resignFirstResponder();
         }
     }
-    
-    @objc func doneButtonPressed() {
-        self.resignFieldFirstResponder();
+
+    @objc func textFieldDidChange() {
+        showAccessoryView();
     }
-    
-    @objc func cancelButtonPressed() {
-        setValue(self.value as? String ?? nil);
-        self.resignFieldFirstResponder();
+
+    func showAccessoryView() {
+        guard accessoryView.alpha == 0 else { return }
+        UIView.animate(withDuration: 0.2) {
+            self.accessoryView.alpha = 1;
+        }
+    }
+
+    @objc func undoPressed() {
+        if multiline {
+            multilineTextField.textView.undoManager?.undo();
+        } else {
+            textField.undoManager?.undo();
+        }
+    }
+
+    @objc func redoPressed() {
+        if multiline {
+            multilineTextField.textView.undoManager?.redo();
+        } else {
+            textField.undoManager?.redo();
+        }
     }
 }
 
 extension TextFieldView: UITextFieldDelegate {
-    
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        shouldResign = false;
+        accessoryView.alpha = 0;
     }
-    
+
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        return shouldResign;
+        return true;
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -238,14 +267,21 @@ extension TextFieldView: UITextFieldDelegate {
             }
             delegate?.fieldValueChanged(field, value: value);
         }
-        shouldResign = false;
     }
 }
 
 extension TextFieldView: UITextViewDelegate {
-    
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        accessoryView.alpha = 0;
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        showAccessoryView();
+    }
+
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        return shouldResign;
+        return true;
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -257,6 +293,5 @@ extension TextFieldView: UITextViewDelegate {
             }
             delegate?.fieldValueChanged(field, value: value);
         }
-        shouldResign = false;
     }
 }

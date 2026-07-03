@@ -10,11 +10,10 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class NumberFieldView : BaseFieldView {
-    private var shouldResign: Bool = false;
     private var number: NSNumber?;
     private var min: NSNumber?;
     private var max: NSNumber?;
-    
+
     lazy var helperText: String? = {
         var helper: String? = nil;
         if (self.min != nil && self.max != nil) {
@@ -26,32 +25,46 @@ class NumberFieldView : BaseFieldView {
         }
         return helper;
     }()
-    
+
     lazy var titleLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.text = helperText;
         label.sizeToFit();
         return label;
     }()
-    
+
     private lazy var formatter: NumberFormatter = {
         let formatter = NumberFormatter();
         formatter.numberStyle = .decimal;
         return formatter;
     }()
-    
+
     private lazy var accessoryView: UIToolbar = {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 50);
-        
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
+        toolbar.autoSetDimension(.height, toSize: 60);
+
+        let undoButton = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.uturn.backward"),
+            style: .plain,
+            target: self,
+            action: #selector(undoPressed)
+        );
+        undoButton.accessibilityLabel = "Undo";
+
+        let redoButton = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.uturn.forward"),
+            style: .plain,
+            target: self,
+            action: #selector(redoPressed)
+        );
+        redoButton.accessibilityLabel = "Redo";
+
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-        
-        toolbar.items = [cancelBarButton, flexSpace, UIBarButtonItem(customView: titleLabel), flexSpace, doneBarButton];
+
+        toolbar.items = [undoButton, redoButton, flexSpace, UIBarButtonItem(customView: titleLabel)];
         return toolbar;
     }()
-    
+
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
@@ -65,25 +78,25 @@ class NumberFieldView : BaseFieldView {
         textField.sizeToFit();
         return textField;
     }()
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
-    
+
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil) {
         self.init(field: field, delegate: delegate, value: nil);
     }
-    
+
     init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
-        
+
         self.min = self.field[FieldKey.min.key] as? NSNumber;
         self.max = self.field[FieldKey.max.key] as? NSNumber;
-        
+
         setupInputView();
         setValue(value);
     }
-    
+
     override func applyTheme(withScheme scheme: MDCContainerScheming?) {
         guard let scheme = scheme else {
             return
@@ -94,7 +107,7 @@ class NumberFieldView : BaseFieldView {
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         textField.tintColor = scheme.colorScheme.onSurfaceColor;
     }
-    
+
     func setupInputView() {
         if (editMode) {
             viewStack.addArrangedSubview(textField);
@@ -104,19 +117,19 @@ class NumberFieldView : BaseFieldView {
             fieldValue.text = getValue()?.stringValue;
         }
     }
-    
+
     override func getValue() -> Any? {
         return number;
     }
-    
+
     func getValue() -> NSNumber? {
         return number;
     }
-    
+
     override func setValue(_ value: Any?) {
         setValue(value as? String);
     }
-    
+
     func setValue(_ value: String?) {
         number = nil;
         if (value != nil) {
@@ -128,44 +141,41 @@ class NumberFieldView : BaseFieldView {
             fieldValue.text = number?.stringValue;
         }
     }
-    
+
     func setTextFieldValue() {
         textField.text = number?.stringValue
     }
-    
-    @objc func doneButtonPressed() {
-        shouldResign = true;
-        textField.resignFirstResponder();
+
+    @objc func undoPressed() {
+        textField.undoManager?.undo();
     }
-    
-    @objc func cancelButtonPressed() {
-        shouldResign = true;
-        setTextFieldValue();
-        textField.resignFirstResponder();
+
+    @objc func redoPressed() {
+        textField.undoManager?.redo();
     }
-    
-    override func isEmpty() -> Bool{
+
+    override func isEmpty() -> Bool {
         if let checkText = textField.text {
             return checkText.count == 0;
         }
         return true;
     }
-    
+
     override func getErrorMessage() -> String {
         if let helperText = helperText {
             return helperText
         }
         return "Must be a number";
     }
-    
+
     override func isValid(enforceRequired: Bool = false) -> Bool {
         return self.isValid(enforceRequired: enforceRequired, number: self.number);
     }
-    
+
     func isValid(enforceRequired: Bool = false, number: NSNumber?) -> Bool {
         return super.isValid(enforceRequired: enforceRequired) && isValidNumber(number);
     }
-    
+
     func isValidNumber(_ number: NSNumber?) -> Bool {
         if (!isEmpty() && number == nil) {
             return false;
@@ -182,7 +192,7 @@ class NumberFieldView : BaseFieldView {
         }
         return true;
     }
-    
+
     override func setValid(_ valid: Bool) {
         super.setValid(valid);
         if (valid) {
@@ -198,11 +208,11 @@ class NumberFieldView : BaseFieldView {
 }
 
 extension NumberFieldView: UITextFieldDelegate {
-    
+
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        return shouldResign;
+        return true;
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let text: String = textField.text {
             let number = formatter.number(from: text);
@@ -213,15 +223,14 @@ extension NumberFieldView: UITextFieldDelegate {
             }
             self.number = number;
         }
-        shouldResign = false;
     }
-    
+
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // allow backspace
         if (string.count == 0) {
             return true;
         }
-        
+
         if let text = textField.text as NSString? {
             let txtAfterUpdate = text.replacingCharacters(in: range, with: string);
             let number = formatter.number(from: txtAfterUpdate);
@@ -231,7 +240,7 @@ extension NumberFieldView: UITextFieldDelegate {
             setValid(isValidNumber(number));
             return true;
         }
-        
+
         return false;
     }
 }
