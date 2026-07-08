@@ -726,7 +726,11 @@ enum State: Int, CustomStringConvertible {
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
                                 NSLog("Fetched user \(userId) successfully.")
-                                observation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
+                                context.perform {
+                                    let localObservation = observation.mr_(in: context)
+                                    let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
+                                    localObservation?.user = user
+                                }
                             } failure: { task, error in
                                 NSLog("Failed to fetch user \(userId) error \(error)")
                             }
