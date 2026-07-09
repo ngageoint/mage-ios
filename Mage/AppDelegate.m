@@ -212,6 +212,7 @@
 
 - (void) applicationWillResignActive:(UIApplication *)application {
     application.applicationIconBadgeNumber = [MageOfflineObservationManager offlineObservationCount];
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *) application {

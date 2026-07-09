@@ -135,6 +135,10 @@ import MaterialComponents.MDCCard
             self.title = "Edit Observation";
         }
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard));
+        tap.cancelsTouchesInView = false;
+        self.view.addGestureRecognizer(tap);
+
         self.view.addSubview(scrollView)
         addScrollViewConstraints();
         scrollView.addSubview(stackView)
@@ -458,6 +462,10 @@ import MaterialComponents.MDCCard
         }
     }
     
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true);
+    }
+
     @objc func cancel(sender: UIBarButtonItem) {
         self.delegate?.cancelEdit();
     }

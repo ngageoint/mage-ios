@@ -146,16 +146,16 @@ class TextFieldViewTests: KIFSpec {
 
                 textFieldView = TextFieldView(field: field, delegate: delegate);
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
+
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                
+
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().enterText("new text", intoViewWithAccessibilityLabel: field["name"] as? String);
-                tester().tapView(withAccessibilityLabel: "Done");
-                
+                textFieldView.resignFieldFirstResponder();
+
                 expect(delegate.fieldChangedCalled).to(beTrue());
-                
+
                 expect(textFieldView.textField.placeholder) == "Field Title"
                 expect(textFieldView.textField.text) == "new text";
             }
@@ -218,49 +218,34 @@ class TextFieldViewTests: KIFSpec {
                 expect(delegate.newValue as? String) == "new value";
             }
             
-            it("done button should send nil as new value") {
+            it("editing ended saves nil when text cleared") {
                 let delegate = MockFieldDelegate();
 
                 textFieldView = TextFieldView(field: field, delegate: delegate, value: "old value");
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                textFieldView.textField.text = nil;
-                textFieldView.doneButtonPressed();
+
+                textFieldView.textField.text = "";
                 textFieldView.textFieldDidEndEditing(textFieldView.textField);
                 expect(delegate.fieldChangedCalled).to(beTrue());
                 expect(delegate.newValue).to(beNil());
-                expect(textFieldView.textField.text).to(equal(""));
                 expect(textFieldView.value as? String).to(beNil());
             }
-            
-            it("done button should change text") {
+
+            it("editing ended saves new text value") {
                 textFieldView = TextFieldView(field: field, value: "old value");
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                
+
                 textFieldView.textField.text = "new value";
-                textFieldView.doneButtonPressed();
                 textFieldView.textFieldDidEndEditing(textFieldView.textField);
                 expect(textFieldView.textField.text) == "new value";
                 expect(textFieldView.value as? String) == "new value";
             }
-            
-            it("cancel button should not change text") {
-                textFieldView = TextFieldView(field: field, value: "old value");
-                textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                view.addSubview(textFieldView)
-                textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                textFieldView.textField.text = "new value";
-                textFieldView.cancelButtonPressed();
-                expect(textFieldView.textField.text) == "old value";
-                expect(textFieldView.value as? String) == "old value";
-            }
         }
-        
+
         describe("TextFieldView Multi Line") {
             
             var textFieldView: TextFieldView!
@@ -397,20 +382,20 @@ class TextFieldViewTests: KIFSpec {
             
             it("set value via input") {
                 let delegate = MockFieldDelegate();
-                
+
                 textFieldView = TextFieldView(field: field, delegate: delegate, multiline: true);
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
+
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 expect(textFieldView.multilineTextField.textView.text) == "";
-                
+
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().enterText("new\ntext", intoViewWithAccessibilityLabel: field["name"] as? String);
-                tester().tapView(withAccessibilityLabel: "Done");
-                
+                textFieldView.resignFieldFirstResponder();
+
                 expect(delegate.fieldChangedCalled).to(beTrue());
-                
+
                 expect(textFieldView.multilineTextField.textView.text) == "new\ntext";
                 expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
             }
@@ -472,46 +457,31 @@ class TextFieldViewTests: KIFSpec {
                 expect(delegate.newValue as? String) == "this is a new value";
             }
             
-            it("done button should send nil as new value") {
+            it("editing ended saves nil when text cleared") {
                 let delegate = MockFieldDelegate();
-                
-                textFieldView = TextFieldView(field: field, delegate: delegate, value: "old value");
+
+                textFieldView = TextFieldView(field: field, delegate: delegate, value: "old value", multiline: true);
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                textFieldView.multilineTextField.textView.text = nil;
-                textFieldView.doneButtonPressed();
+
+                textFieldView.multilineTextField.textView.text = "";
                 textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView);
                 expect(delegate.fieldChangedCalled).to(beTrue());
                 expect(delegate.newValue).to(beNil());
-                expect(textFieldView.multilineTextField.textView.text).to(equal(""));
                 expect(textFieldView.value as? String).to(beNil());
             }
-            
-            it("done button should change text") {
+
+            it("editing ended saves new text value") {
                 textFieldView = TextFieldView(field: field, value: "old value", multiline: true);
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                
+
                 textFieldView.multilineTextField.textView.text = "new value";
-                textFieldView.doneButtonPressed();
                 textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView);
                 expect(textFieldView.multilineTextField.textView.text) == "new value";
                 expect(textFieldView.value as? String) == "new value";
-            }
-            
-            it("cancel button should not change text") {
-                textFieldView = TextFieldView(field: field, value: "old value", multiline: true);
-                textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                view.addSubview(textFieldView)
-                textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                textFieldView.multilineTextField.textView.text = "new value";
-                textFieldView.cancelButtonPressed();
-                expect(textFieldView.multilineTextField.textView.text) == "old value";
-                expect(textFieldView.value as? String) == "old value";
             }
         }
     }

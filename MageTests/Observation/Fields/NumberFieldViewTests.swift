@@ -139,22 +139,22 @@ class NumberFieldViewTests: KIFSpec {
             
             it("set value via input") {
                 let delegate = MockFieldDelegate();
-                
+
                 numberFieldView = NumberFieldView(field: field, delegate: delegate);
                 numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
+
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                
+
                 expect(numberFieldView.textField.text) == "";
-                
+
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
                 tester().enterText("2", intoViewWithAccessibilityLabel: field[FieldKey.name.key] as? String);
-                tester().tapView(withAccessibilityLabel: "Done");
-                
+                numberFieldView.textField.resignFirstResponder();
+
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.fieldNameLabel.text) == "Number Field"
-                
+
                 expect(delegate.fieldChangedCalled).to(beTrue());
             }
             
@@ -481,42 +481,40 @@ class NumberFieldViewTests: KIFSpec {
                 expect(delegate.newValue as? NSNumber) == 5;
             }
             
-            it("allow canceling") {
+            it("editing ended saves new number value") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                
+
                 numberFieldView.textField.text = "4";
-                numberFieldView.cancelButtonPressed();
-                expect(delegate.fieldChangedCalled) == false;
-                expect(numberFieldView.textField.text) == "2";
-                expect(numberFieldView.getValue()) == 2;
-            }
-            
-            it("done button should change value") {
-                let delegate = MockFieldDelegate()
-                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
-                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                view.addSubview(numberFieldView)
-                numberFieldView.autoPinEdgesToSuperviewEdges();
-                numberFieldView.textField.text = "4";
-                numberFieldView.doneButtonPressed();
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(numberFieldView.textField.text) == "4";
                 expect(numberFieldView.getValue()) == 4;
             }
             
-            it("done button should send nil as new value") {
+            it("editing ended with new value notifies delegate") {
+                let delegate = MockFieldDelegate()
+                numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                view.addSubview(numberFieldView)
+                numberFieldView.autoPinEdgesToSuperviewEdges();
+                numberFieldView.textField.text = "4";
+                numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
+                expect(delegate.fieldChangedCalled) == true;
+                expect(numberFieldView.textField.text) == "4";
+                expect(numberFieldView.getValue()) == 4;
+            }
+
+            it("editing ended with empty value sends nil") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
                 numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 numberFieldView.textField.text = "";
-                numberFieldView.doneButtonPressed();
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(numberFieldView.textField.text) == "";
