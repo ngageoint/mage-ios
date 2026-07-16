@@ -3886,8 +3886,8 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 4.2.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/DateTools\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HexColors\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MDFInternationalization\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MDFTextAccessibility\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MagicalRecord\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MotionAnimator\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MotionInterchange\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/PureLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/UIImage-Categories\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/libPhoneNumber-iOS\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/zxcvbn-ios\"";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/UIImage_Categories/UIImage-Categories.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
@@ -3927,8 +3927,8 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 4.2.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 4.3.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_MODULE_VERIFIER_FLAGS = "$(inherited) \"-F${PODS_CONFIGURATION_BUILD_DIR}/DateTools\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/HexColors\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MDFInternationalization\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MDFTextAccessibility\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MagicalRecord\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MotionAnimator\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/MotionInterchange\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/PureLayout\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/UIImage-Categories\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/libPhoneNumber-iOS\" \"-F${PODS_CONFIGURATION_BUILD_DIR}/zxcvbn-ios\"";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
