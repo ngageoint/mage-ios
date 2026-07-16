@@ -5,11 +5,8 @@
 #  MAGE
 #
 
-BRANCH=${1:-'master'}
-APP_BUILD_NUMBER=$(expr $(git rev-list $BRANCH --count) - $(git rev-list HEAD..$BRANCH --count))
-
-BUILD_NUMBER=${APP_BUILD_NUMBER}
-echo "Updating build number to $BUILD_NUMBER using branch '$BRANCH'."
+BUILD_NUMBER=$(expr $(git rev-list main --count) - $(git rev-list HEAD..main --count))
+echo "Updating build number to $BUILD_NUMBER."
 
 APP_INFO_PLIST="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
 DSYM_INFO_PLIST="${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist"
