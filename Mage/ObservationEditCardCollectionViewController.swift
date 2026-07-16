@@ -156,8 +156,6 @@ import MaterialComponents.MDCCard
             }
             switch animation {
             case .keyboardWillShow:
-                self.navigationItem.rightBarButtonItem?.isEnabled = false;
-                self.navigationItem.leftBarButtonItem?.isEnabled = false;
                 self.bottomConstraint?.constant = -keyboardFrame.height;
                 self.view.layoutIfNeeded();
 
@@ -471,6 +469,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func saveObservation(sender: UIBarButtonItem) {
+        self.view.endEditing(true);
         removeDeletedForms();
         guard let observation = self.observation else { return }
         if (checkObservationValidity()) {
