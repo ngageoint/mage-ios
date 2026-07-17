@@ -7,6 +7,17 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 ##### Bug Fixes
 
+## 4.3.0
+
+##### Features
+* Undo/redo support in text fields
+* Minimum supported iOS version is now iOS 18
+* Migrated GeoPackage dependencies to Swift Package Manager
+
+##### Bug Fixes
+* Fixed Core Data crash when associating a user to an observation on the wrong thread
+* Fetch only users for the current event instead of all users
+
 ## 4.2.2
 
 * Fixes duplicate polygon rendering
