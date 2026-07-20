@@ -17,6 +17,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Bug Fixes
 * Fixed Core Data crash when associating a user to an observation on the wrong thread
 * Fetch only users for the current event instead of all users
+* Reactively toggle heading display when showHeading preference changes
 
 ## 4.2.2
 
