@@ -61,7 +61,8 @@ class NumberFieldView : BaseFieldView {
 
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
 
-        toolbar.items = [undoButton, redoButton, flexSpace, UIBarButtonItem(customView: titleLabel)];
+        toolbar.items = [undoButton, redoButton, flexSpace];
+        toolbar.alpha = 0;
         return toolbar;
     }()
 
@@ -76,6 +77,7 @@ class NumberFieldView : BaseFieldView {
         textField.keyboardType = .decimalPad;
         setPlaceholder(textField: textField);
         textField.sizeToFit();
+        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged);
         return textField;
     }()
 
@@ -207,7 +209,24 @@ class NumberFieldView : BaseFieldView {
     }
 }
 
+extension NumberFieldView {
+    @objc func textFieldDidChange() {
+        showAccessoryView();
+    }
+
+    func showAccessoryView() {
+        guard accessoryView.alpha == 0 else { return }
+        UIView.animate(withDuration: 0.2) {
+            self.accessoryView.alpha = 1;
+        }
+    }
+}
+
 extension NumberFieldView: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        accessoryView.alpha = 0;
+    }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return true;
