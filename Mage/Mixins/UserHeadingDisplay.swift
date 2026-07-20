@@ -23,7 +23,9 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
     var locationManager: CLLocationManager?
     var straightLineNavigation: StraightLineNavigation?
     weak var mapStack: UIStackView?
-    
+
+    private var showHeadingObserver: NSKeyValueObservation? = nil
+
     init(userHeadingDisplay: UserHeadingDisplay, mapStack: UIStackView, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
         self.userHeadingDisplay = userHeadingDisplay
         self.mapView = userHeadingDisplay.mapView
@@ -31,47 +33,38 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
         self.mapStack = mapStack
         self.locationManager = locationManager
     }
-    
+
     func cleanupMixin() {
         locationManager?.delegate = nil
         locationManager = nil
+        showHeadingObserver?.invalidate()
+        showHeadingObserver = nil
     }
-    
+
     func applyTheme(scheme: MDCContainerScheming?) {
         guard let scheme = scheme else {
             return
         }
         self.scheme = scheme
     }
-    
+
     func setupMixin() {
         applyTheme(scheme: scheme)
-        
+
         locationManager?.delegate = self
     }
-    
+
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? NavigationOverlay {
             return overlay.renderer
         }
         return nil
     }
-    
+
     func start() {
         if UserDefaults.standard.showHeadingSet {
             if UserDefaults.standard.showHeading {
-                locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager?.startUpdatingLocation()
-                locationManager?.headingFilter = 0.5
-                locationManager?.startUpdatingHeading()
-                guard let mapView = userHeadingDisplay.mapView, let mapStack = mapStack, let locationManager = locationManager else {
-                    return
-                }
-
-                straightLineNavigation = straightLineNavigation ?? {
-                    return StraightLineNavigation(mapView: mapView, locationManager: locationManager, mapStack: mapStack)
-                }()
-                straightLineNavigation?.startHeading(manager: locationManager)
+                showHeading()
             }
         } else {
             // show dialog asking them what they want to do and set the preference
@@ -85,14 +78,41 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
             }))
             userHeadingDisplay.navigationController?.present(alert, animated: true, completion: nil)
         }
+
+        showHeadingObserver = UserDefaults.standard.observe(\.showHeading, options: [.initial, .new], changeHandler: { [weak self] (defaults, change) in
+            if change.newValue == true {
+                Task { @MainActor in
+                    self?.showHeading()
+                }
+            } else {
+                Task { @MainActor in
+                    self?.stop()
+                }
+            }
+        })
     }
-    
+
+    func showHeading() {
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager?.startUpdatingLocation()
+        locationManager?.headingFilter = 0.5
+        locationManager?.startUpdatingHeading()
+        guard let mapView = userHeadingDisplay.mapView, let mapStack = mapStack, let locationManager = locationManager else {
+            return
+        }
+
+        straightLineNavigation = straightLineNavigation ?? {
+            return StraightLineNavigation(mapView: mapView, locationManager: locationManager, mapStack: mapStack)
+        }()
+        straightLineNavigation?.startHeading(manager: locationManager)
+    }
+
     func stop() {
         straightLineNavigation?.stopHeading()
         locationManager?.stopUpdatingHeading()
         locationManager?.stopUpdatingLocation()
     }
-    
+
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool) {
         guard let mode = userHeadingDisplay.mapView?.userTrackingMode else {
             return
@@ -114,7 +134,7 @@ extension UserHeadingDisplayMixin: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         straightLineNavigation?.updateNavigationLines(manager: manager, destinationCoordinate: nil)
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         straightLineNavigation?.updateNavigationLines(manager: manager, destinationCoordinate: nil)
     }
