@@ -20,6 +20,7 @@
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
 #import "GeoPackageImporter.h"
+@import Persistence;
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
@@ -46,7 +47,6 @@
             self.splashView = nil;
         }
         [self setupMageApplication:application];
-        [self startMageApp];
     }
 }
 
@@ -64,7 +64,6 @@
     
     if (protectedDataAvailable) {
         [self setupMageApplication:application];
-        [self startMageApp];
     }
 
 	return YES;
@@ -80,7 +79,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
     
     [MageInitializer initializePreferences];
-    [MageInitializer setupCoreData];
+    [MageInitializer setupPersistenceWithCompletionHandler:^{
+        [self startMageApp];
+    }];
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
@@ -134,26 +135,29 @@
 
 - (void) startMageApp {
     __weak typeof(self) weakSelf = self;
-
+    
     // do a canary save
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        Canary *canary = [Canary MR_findFirstInContext:localContext];
+    [ObjCCoreDataPersistence write:^PersistenceResult * _Nullable(NSManagedObjectContext * _Nonnull localContext) {
+        Canary *canary = [Canary findFirstInContext:localContext];
         if (!canary) {
-            canary = [Canary MR_createEntityInContext:localContext];
+            canary = [Canary createEntityInContext:localContext];
         }
         canary.launchDate = [NSDate date];
         NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
+        return nil;
+    } completion:^(PersistenceResult * _Nonnull result) {
+        NSLog(@"startMageApp canary save success? %d with error %@",
+              result.success,
+              result.persistenceError);
         // error should be null and contextDidSave should be true
-        if (contextDidSave && error == NULL) {
+        if (result.success && result.persistenceError == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
             [self.appCoordinator start];
             [self.gpImporter processOfflineMapArchives];
         } else {
-            NSLog(@"Could not read or write from the database %@", error);
+            NSLog(@"Could not read or write from the database %@", result.persistenceError);
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
-                                                                           message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
+                                                                           message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", result.persistenceError.localizedDescription]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
@@ -242,14 +246,17 @@
     
     if (protectedDataAvailable) {
         // do a canary save
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-            Canary *canary = [Canary MR_findFirstInContext:localContext];
+        [ObjCCoreDataPersistence write:^PersistenceResult * _Nullable(NSManagedObjectContext * _Nonnull localContext) {
+            Canary *canary = [Canary findFirstInContext:localContext];
             if (!canary) {
-                canary = [Canary MR_createEntityInContext:localContext];
+                canary = [Canary createEntityInContext:localContext];
             }
             canary.launchDate = [NSDate date];
-            NSLog(@"applicationDidBecomeActive Canary launch date %@", canary.launchDate);
-        } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+            NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
+            return nil;
+        } completion:^(PersistenceResult * _Nonnull result) {
+            BOOL contextDidSave = result.success;
+            NSError *error = result.persistenceError;
             NSLog(@"applicationDidBecomeActive canary save success? %d with error %@", contextDidSave, error);
             // error should be null and contextDidSave should be true
             if (error == NULL) {
