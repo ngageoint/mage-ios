@@ -227,8 +227,6 @@ extension NumberFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         accessoryView.alpha = isEmpty() ? 0 : 1;
-        let endPosition = textField.endOfDocument;
-        textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition);
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
