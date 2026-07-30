@@ -201,6 +201,7 @@ class NumberFieldView : BaseFieldView {
             textField.leadingAssistiveLabel.text = helperText;
             if let scheme = scheme {
                 textField.applyTheme(withScheme: scheme);
+                textField.tintColor = scheme.colorScheme.onSurfaceColor;
             }
         } else {
             textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
@@ -225,7 +226,9 @@ extension NumberFieldView {
 extension NumberFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        accessoryView.alpha = 0;
+        accessoryView.alpha = isEmpty() ? 0 : 1;
+        let endPosition = textField.endOfDocument;
+        textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition);
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

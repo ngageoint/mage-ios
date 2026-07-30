@@ -251,7 +251,9 @@ extension TextFieldView {
 extension TextFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        accessoryView.alpha = 0;
+        accessoryView.alpha = isEmpty() ? 0 : 1;
+        let endPosition = textField.endOfDocument;
+        textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition);
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -273,7 +275,9 @@ extension TextFieldView: UITextFieldDelegate {
 extension TextFieldView: UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        accessoryView.alpha = 0;
+        accessoryView.alpha = isEmpty() ? 0 : 1;
+        let endPosition = textView.endOfDocument;
+        textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition);
     }
 
     func textViewDidChange(_ textView: UITextView) {
