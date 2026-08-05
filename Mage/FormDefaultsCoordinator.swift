@@ -6,6 +6,8 @@
 //  Copyright © 2019 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+import Persistence
+
 @objc protocol FormDefaultsDelegate {
     @objc func formDefaultsComplete(coordinator: NSObject);
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Persistence
 
 protocol FilteredUsersMap: AnyObject {
     var mapView: MKMapView? { get set }
@@ -85,7 +86,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         }
         
         if let user = user {
-            locations = Locations(for: user)
+            locations = Locations(forUser: user)
             locations?.delegate = self
         } else if let locations = locations,
            let locationPredicates = Locations.getPredicatesForLocationsForMap() as? [NSPredicate] {
@@ -123,8 +124,8 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         }
         
         if let annotation: LocationAnnotation = mapView?.annotations.first(where: { annotation in
-            if let annotation = annotation as? LocationAnnotation {
-                return annotation.user?.remoteId == location.user?.remoteId
+            if let annotation = annotation as? LocationAnnotation, let user = annotation.user as? User {
+                return user.remoteId == location.user?.remoteId
             }
             return false
         }) as? LocationAnnotation {
@@ -138,8 +139,8 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     
     func deleteLocation(location: Location) {
         let annotation = mapView?.annotations.first(where: { annotation in
-            if let annotation = annotation as? LocationAnnotation {
-                return annotation.user.remoteId == location.user?.remoteId
+            if let annotation = annotation as? LocationAnnotation, let user = annotation.user as? User {
+                return user.remoteId == location.user?.remoteId
             }
             return false
         })

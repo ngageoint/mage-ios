@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 class UserViewController : UITableViewController {
     let user : User
@@ -61,7 +62,7 @@ class UserViewController : UITableViewController {
 
         userTableHeaderView.navigationController = self.navigationController;
         userTableHeaderView.start();
-        observationDataStore.startFetchController(observations: Observations(for: user));
+        observationDataStore.startFetchController(observations: Observations(forUser: user));
         applyTheme(withContainerScheme: self.scheme);
     }
     
@@ -102,7 +103,8 @@ extension UserViewController : ObservationActionsDelegate {
 }
 
 extension UserViewController : AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
+
+    func selectedAttachment(_ attachment: Attachment) {
         if (attachment.url != nil) {
             let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
             childCoordinators.append(attachmentCoordinator);
@@ -110,13 +112,13 @@ extension UserViewController : AttachmentSelectionDelegate {
         }
     }
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType:(unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
         self.childCoordinators.append(attachmentCoordinator);
         attachmentCoordinator.start();
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: ((Bool) -> Void)) {
         if (attachment.url != nil) {
             let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
             childCoordinators.append(attachmentCoordinator);

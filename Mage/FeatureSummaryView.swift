@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import Kingfisher
+import Persistence
 
 class FeatureItem: NSObject {
     

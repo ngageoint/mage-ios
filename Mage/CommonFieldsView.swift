@@ -11,6 +11,7 @@ import UIKit
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import PureLayout
+import Persistence
 
 class CommonFieldsView: MDCCard {
     var didSetupConstraints = false;

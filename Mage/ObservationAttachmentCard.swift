@@ -10,6 +10,7 @@ import Foundation
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import PureLayout
+import Persistence
 
 class ObservationAttachmentCard: MDCCard {
     var didSetupConstraints = false;

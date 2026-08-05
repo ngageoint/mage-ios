@@ -9,6 +9,7 @@
 import Foundation
 import Kingfisher
 import UIKit
+import Persistence
 
 protocol FeedItemSelectionDelegate {
     func feedItemSelected(_ feedItem: FeedItem)

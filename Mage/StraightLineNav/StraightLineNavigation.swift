@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 struct StraightLineNavigationNotification {
     var image: UIImage? = nil

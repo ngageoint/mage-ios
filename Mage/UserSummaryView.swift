@@ -9,6 +9,7 @@
 import Foundation
 import CoreImage
 import Kingfisher
+import Persistence
 
 class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
     

@@ -11,6 +11,7 @@ import UIKit
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import PureLayout
+import Persistence
 
 
 // for legacy servers add the attachment field to common

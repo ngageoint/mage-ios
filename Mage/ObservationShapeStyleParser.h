@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "ObservationShapeStyle.h"
 
-@class Observation;
 /**
  * Parses the observation form json and retrieves the style
  */
@@ -21,6 +20,6 @@
  * @param observation observation
  * @return shape style
  */
-+(ObservationShapeStyle *) styleOfObservation: (Observation *) observation;
++(ObservationShapeStyle *) styleOfObservation: (NSManagedObject *) observation;
 
 @end

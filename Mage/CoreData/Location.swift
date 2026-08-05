@@ -12,7 +12,9 @@ import CoreLocation
 import SimpleFeatures
 import MagicalRecord
 
-@objc public class Location: NSManagedObject, Navigable {
+import Persistence
+
+extension Location: Navigable {
     
     static func mostRecentLocationFetchedResultsController(_ user: User, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Location>? {
         let fetchRequest = Location.fetchRequest()

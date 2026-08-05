@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Persistence
 
 struct MapAnnotationFocusedNotification {
     var annotation: MKAnnotation?

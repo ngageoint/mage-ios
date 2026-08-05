@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc public class StaticLayer : Layer {
+import Persistence
+
+extension StaticLayer {
     
     public var features: [[AnyHashable: Any]]? {
         get {

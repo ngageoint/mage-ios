@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 import GARS
 import MGRS

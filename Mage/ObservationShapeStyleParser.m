@@ -6,6 +6,7 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 @import HexColors;
+@import Persistence;
 #import "ObservationShapeStyleParser.h"
 #import "MAGE-Swift.h"
 
@@ -18,18 +19,18 @@ static NSString * const FILL_OPACITY_ELEMENT = @"fillOpacity";
 static NSString * const STROKE_OPACITY_ELEMENT = @"strokeOpacity";
 static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
 
-+(ObservationShapeStyle *) styleOfObservation: (Observation *) observation{
-    
++(ObservationShapeStyle *) styleOfObservation: (NSManagedObject *) observation{
+    Observation *strongObservation = (Observation *)observation;
     ObservationShapeStyle *style = [[ObservationShapeStyle alloc] init];
     
-    Form *form = observation.primaryEventForm;
+    Form *form = strongObservation.primaryEventForm;
     
     // Check for a style
     NSDictionary *styleField = form.style;
     if(styleField != nil && styleField.count > 0){
         
         // Found the top level style
-        NSString *type = [observation primaryFieldText];
+        NSString *type = [strongObservation primaryFieldText];
         
         // Check for a type within the style
         NSDictionary *typeField = [styleField objectForKey:type];
@@ -40,7 +41,7 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
             
             // Check for a variant
             
-            NSString *variant = [observation secondaryFieldText];
+            NSString *variant = [strongObservation secondaryFieldText];
             if (variant != nil) {
                 // Check for a variant within the style type
                 NSDictionary *typeVariantField = [styleField objectForKey:variant];

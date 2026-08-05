@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
+import Persistence
 
 class ObservationListActionsView: UIView {
     var didSetupConstraints = false;

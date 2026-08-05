@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Persistence
 
 class BottomSheetItem: NSObject {
     var item: Any

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 enum MapSearchType: Int32 {
     case none
@@ -14,7 +15,7 @@ enum MapSearchType: Int32 {
     case nominatim
 }
 
-@objc public class Settings: NSManagedObject {
+extension Settings {
     
     var mapSearchType: MapSearchType {
         get { return MapSearchType(rawValue: self.mapSearchTypeCode) ?? .none }

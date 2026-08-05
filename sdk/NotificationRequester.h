@@ -8,12 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class Observation;
-@class Event;
-
 @interface NotificationRequester : NSObject
 
-+ (void) observationPulled: (Observation *) observation;
-+ (void) sendBulkNotificationCount: (NSUInteger) count inEvent: (Event *) event;
++ (void) observationPulled: (NSManagedObject *) observation;
++ (void) sendBulkNotificationCount: (NSUInteger) count inEvent: (NSManagedObject *) event;
 
 @end

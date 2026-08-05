@@ -8,8 +8,9 @@
 
 import Foundation
 import CoreData
+import Persistence
 
-@objc public class Event: NSManagedObject {
+extension Event {
     
     @objc public static func operationToFetchEvents(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {

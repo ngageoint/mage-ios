@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 class MageMapViewController: UIViewController {
     var mapView: MainMageMapView?

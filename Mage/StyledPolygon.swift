@@ -7,6 +7,8 @@
 //
 //
 
+import Persistence
+
 @objc class StyledPolygon: MKPolygon, OverlayRenderable {
     var renderer: MKOverlayRenderer {
         get {

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Persistence
 
 struct EventScheme {
     var event: Event?

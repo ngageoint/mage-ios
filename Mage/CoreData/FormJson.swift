@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
-@objc public class FormJson: NSManagedObject {
+import Persistence
+
+extension FormJson {
     
 }

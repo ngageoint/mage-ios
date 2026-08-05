@@ -8,6 +8,7 @@
 #import "Observation+Section.h"
 #import "TimeFilter.h"
 #import "MAGE-Swift.h"
+@import Persistence;
 
 @implementation Observations
 
@@ -96,8 +97,9 @@
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Observations *) observationsForUser:(User *) user {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"dirty,timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", user, [Server currentEventId]]];
++ (Observations *) observationsForUser:(NSManagedObject *) user {
+    User *strongUser = (User *)user;
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"dirty,timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"user == %@ AND eventId == %@", strongUser, [Server currentEventId]]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:@"dirtySection"
@@ -107,8 +109,9 @@
     return [[Observations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Observations *) observationsForObservation:(Observation *) observation {
-    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", observation]];
++ (Observations *) observationsForObservation:(NSManagedObject *) observation {
+    Observation *strongObservation = (Observation *)observation;
+    NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSPredicate predicateWithFormat:@"(self = %@)", strongObservation]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:[NSManagedObjectContext MR_defaultContext]
                                                                                                  sectionNameKeyPath:nil

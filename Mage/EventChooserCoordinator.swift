@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Persistence
 
 @objc protocol EventChooserDelegate {
     func eventChosen(event: Event)

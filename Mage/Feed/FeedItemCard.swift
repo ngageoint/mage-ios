@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import Kingfisher
+import Persistence
 
 class FeedItemCard : MDCCard {
     private var feedItem: FeedItem?;

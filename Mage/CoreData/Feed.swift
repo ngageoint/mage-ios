@@ -9,8 +9,9 @@
 
 import Foundation
 import CoreData
+import Persistence
 
-@objc public class Feed: NSManagedObject {
+extension Feed {
     
     @objc public static func getMappableFeeds(eventId: NSNumber) -> [Feed] {
         return Feed.mr_findAll(with: NSPredicate(format: "(\(FeedKey.itemsHaveSpatialDimension.key) == 1 AND \(FeedKey.eventId.key) == %@)", eventId)) as? [Feed] ?? [];

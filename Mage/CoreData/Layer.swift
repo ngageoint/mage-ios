@@ -19,7 +19,9 @@ public enum LayerType : String {
     }
 }
 
-@objc public class Layer : NSManagedObject {
+import Persistence
+
+extension Layer {
     
     @objc public static let GeoPackageDownloaded = "mil.nga.giat.mage.geopackage.downloaded";
     @objc public static let OFFLINE_LAYER_LOADED = 1.0;

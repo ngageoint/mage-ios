@@ -8,6 +8,7 @@
 
 import Foundation
 import Kingfisher
+import Persistence
 
 extension UIImage {
     

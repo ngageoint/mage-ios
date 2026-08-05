@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Persistence
 
 protocol CanCreateObservation {
     var mapView: MKMapView? { get set }

@@ -10,6 +10,7 @@ import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
 import UIKit
+import Persistence
 
 class UserActionsView: UIView {
     var didSetupConstraints = false;

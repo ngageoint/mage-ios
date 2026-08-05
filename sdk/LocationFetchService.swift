@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Persistence
 
 public class LocationFetchService: NSObject {
     

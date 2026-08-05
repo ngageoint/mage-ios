@@ -8,7 +8,6 @@
 #import "ManagedObjectContextHolder.h"
 
 @class Location;
-@class User;
 
 @interface Locations : NSObject
 
@@ -16,7 +15,7 @@
 @property(nonatomic, strong)  NSFetchedResultsController  *fetchedResultsController;
 
 + (Locations *) locationsForAllUsers;
-+ (Locations *) locationsForUser:(User *) user;
++ (Locations *) locationsForUser:(NSManagedObject *) user;
 + (Locations *) locationsForMap;
 
 + (NSMutableArray *) getPredicatesForLocations;

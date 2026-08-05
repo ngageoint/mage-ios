@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 protocol ObservationPushDelegate where Self: NSObject {
     func didPush(observation: Observation, success: Bool, error: Error?);

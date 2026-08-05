@@ -11,6 +11,7 @@ import UIKit
 import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
 import MaterialComponents.MDCContainerScheme;
+import Persistence
 
 class ObservationViewCardCollectionViewController: UIViewController {
     
@@ -299,7 +300,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
 }
 
 extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
+    func selectedAttachment(_ attachment: Attachment) {
         if (attachment.url == nil) {
             return;
         }
@@ -310,7 +311,7 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator?.start();
     }
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         guard let nav = self.navigationController else {
             return;
         }
@@ -318,7 +319,7 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator?.start();
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: @escaping ((Bool) -> Void)) {
         if (attachment.url == nil) {
             return;
         }

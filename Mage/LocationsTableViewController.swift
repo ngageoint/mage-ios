@@ -9,6 +9,7 @@
 import Foundation
 import Kingfisher
 import MaterialComponents.MaterialSnackbar
+import Persistence
 
 class LocationsTableViewController: UITableViewController {
     

@@ -9,6 +9,7 @@
 #import "ObservationRoutes.h"
 #import "NSDate+Iso8601.h"
 #import "MAGE-Swift.h"
+@import Persistence;
 
 @implementation ObservationRoutes
 
@@ -34,33 +35,37 @@
     return method;
 }
 
-- (RouteMethod *) deleteRoute: (Observation *) observation {
+- (RouteMethod *) deleteRoute: (NSManagedObject *) observation {
+    Observation *strongObservation = (Observation *)observation;
     RouteMethod *method = [[RouteMethod alloc] init];
     method.method = @"POST";
-    method.route = [NSString stringWithFormat:@"%@/states", observation.url];
+    method.route = [NSString stringWithFormat:@"%@/states", strongObservation.url];
     method.parameters = @{@"name":@"archive"};
     return method;
 }
 
-- (RouteMethod *) createId: (Observation *) observation {
+- (RouteMethod *) createId: (NSManagedObject *) observation {
+    Observation *strongObservation = (Observation *)observation;
     RouteMethod *method = [[RouteMethod alloc] init];
     method.method = @"POST";
-    method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], observation.eventId];
+    method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], strongObservation.eventId];
     return method;
 }
 
-- (RouteMethod *) pushFavorite: (ObservationFavorite *) favorite {
+- (RouteMethod *) pushFavorite: (NSManagedObject *) favorite {
+    ObservationFavorite *strongFavorite = (ObservationFavorite *)favorite;
     RouteMethod *method = [[RouteMethod alloc] init];
-    method.method = favorite.favorite ? @"PUT" : @"DELETE";
-    method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], favorite.observation.eventId, favorite.observation.remoteId];
+    method.method = strongFavorite.favorite ? @"PUT" : @"DELETE";
+    method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/favorite", [MageServer baseURL], strongFavorite.observation.eventId, strongFavorite.observation.remoteId];
     return method;
 }
 
-- (RouteMethod *) pushImportant: (ObservationImportant *) important {
+- (RouteMethod *) pushImportant: (NSManagedObject *) important {
+    ObservationImportant *strongImportant = (ObservationImportant *)important;
     RouteMethod *method = [[RouteMethod alloc] init];
-    method.method = important.important ? @"PUT" : @"DELETE";
-    method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], important.observation.eventId, important.observation.remoteId];
-    method.parameters = @{@"description":important.reason};
+    method.method = strongImportant.important ? @"PUT" : @"DELETE";
+    method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], strongImportant.observation.eventId, strongImportant.observation.remoteId];
+    method.parameters = @{@"description":strongImportant.reason};
     return method;
 }
 

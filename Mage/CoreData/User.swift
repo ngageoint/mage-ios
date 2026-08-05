@@ -10,7 +10,9 @@ import Foundation
 import CoreData
 import Kingfisher
 
-@objc public class User: NSManagedObject, Navigable {
+import Persistence
+
+extension User: Navigable {
     
     var cllocation: CLLocation? {
         get {

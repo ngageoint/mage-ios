@@ -10,6 +10,7 @@ import Foundation
 import Photos
 import PhotosUI
 import UniformTypeIdentifiers
+import Persistence
 
 @objc public protocol AudioRecordingDelegate {
     @objc func recordingAvailable(recording: Recording);

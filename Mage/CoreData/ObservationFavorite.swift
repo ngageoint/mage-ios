@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc public class ObservationFavorite: NSManagedObject {
+import Persistence
+
+extension ObservationFavorite {
     @objc public static func favorite(userId: String, context: NSManagedObjectContext) -> ObservationFavorite? {
         let favorite = ObservationFavorite.mr_createEntity(in: context);
         favorite?.dirty = false

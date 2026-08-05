@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc public class ObservationImportant : NSManagedObject {
+import Persistence
+
+extension ObservationImportant {
     
     @objc public static func important(json: [String : Any], context: NSManagedObjectContext) -> ObservationImportant? {
         let important = ObservationImportant.mr_createEntity(in: context);

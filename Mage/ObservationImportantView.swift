@@ -8,6 +8,7 @@
 
 import Foundation
 import PureLayout
+import Persistence
 
 class ObservationImportantView: UIView {
     weak var observation: Observation?;

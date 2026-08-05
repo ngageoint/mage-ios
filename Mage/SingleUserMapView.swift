@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap, FollowUser {
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?

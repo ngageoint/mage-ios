@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 extension Notification.Name {
     public static let StartStraightLineNavigation = Notification.Name("StartStraightLineNavigation")

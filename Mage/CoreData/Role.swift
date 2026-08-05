@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc public class Role: NSManagedObject {
+import Persistence
+
+extension Role {
     
     @discardableResult
     @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Role? {

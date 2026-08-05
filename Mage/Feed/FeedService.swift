@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc public class FeedService : NSObject {
     

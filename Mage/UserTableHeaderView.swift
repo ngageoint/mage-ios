@@ -10,6 +10,7 @@ import Foundation
 import PureLayout
 import CoreData
 import Kingfisher
+import Persistence
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var didSetupConstraints = false;

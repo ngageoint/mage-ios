@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc public class Mage: NSObject {
     

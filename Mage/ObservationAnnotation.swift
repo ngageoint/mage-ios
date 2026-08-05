@@ -8,6 +8,7 @@ import Foundation
 import CoreLocation
 import MapKit
 import DateTools
+import Persistence
 
 @objc class ObservationAnnotation : MapAnnotation {
     

@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import GeoPackage
+import Persistence
 
 protocol FilteredObservationsMap: AnyObject {
     var mapView: MKMapView? { get set }
@@ -118,7 +119,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
         
         if let user = user {
-            observations = Observations(for: user)
+            observations = Observations(forUser: user)
             observations?.delegate = self
         } else if let observations = observations,
            let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
@@ -226,7 +227,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
                 filteredObservationsMap?.mapView?.addAnnotation(annotation)
             } else {
-                let style = ObservationShapeStyleParser.style(of: observation)
+                let style = ObservationShapeStyleParser.style(ofObservation: observation)
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
                 shapeConverter?.close()

@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc public class Team: NSManagedObject {
+import Persistence
+
+extension Team {
     
     @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Team? {
         let team = Team.mr_createEntity(in: context);

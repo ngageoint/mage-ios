@@ -13,7 +13,9 @@ import CoreTelephony
 //import AFNetworking
 import SimpleFeatures
 
-@objc public class GPSLocation: NSManagedObject {
+import Persistence
+
+extension GPSLocation {
     
     var cllocation: CLLocation? {
         get {

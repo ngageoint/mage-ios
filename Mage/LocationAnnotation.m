@@ -6,6 +6,7 @@
 
 @import DateTools;
 @import MaterialComponents;
+@import Persistence;
 
 #import "LocationAnnotation.h"
 @import SimpleFeatures;
@@ -14,41 +15,43 @@
 
 @implementation LocationAnnotation
 
--(id) initWithLocation:(Location *) location {
+-(id) initWithLocation:(NSManagedObject *) location {
 	if ((self = [super init])) {
-        _location = location.location;
+        Location* strongLocation = (Location *)location;
+        _location = strongLocation.location;
         
         [self setCoordinate:_location.coordinate];
         
-		_timestamp = location.timestamp;
+		_timestamp = strongLocation.timestamp;
 		
-        _user = location.user;
-        [self setTitle:location.user.name];
-        [self setSubtitle:location.timestamp.timeAgoSinceNow];
+        _user = strongLocation.user;
+        [self setTitle:strongLocation.user.name];
+        [self setSubtitle:strongLocation.timestamp.timeAgoSinceNow];
     }
 		
     return self;
 }
 
--(id) initWithGPSLocation: (GPSLocation *) gpsLocation user: (User *) user {
+-(id) initWithGPSLocation: (NSManagedObject *) gpsLocation user: (User *) user {
     if ((self = [super init])) {
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:gpsLocation.geometry];
+        GPSLocation *strongGpsLocation = (GPSLocation *)gpsLocation;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:strongGpsLocation.geometry];
         // TODO: when this is swift, use user.location
         _location = [[CLLocation alloc] initWithCoordinate:(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]))
-                                                  altitude:[[gpsLocation.properties valueForKey:@"altitude"] doubleValue]
-                                        horizontalAccuracy:[[gpsLocation.properties valueForKey:@"accuracy"] doubleValue]
-                                          verticalAccuracy:[[gpsLocation.properties valueForKey:@"verticalAccuracy"] doubleValue]
-                                                    course:[[gpsLocation.properties valueForKey:@"course"] doubleValue]
-                                                     speed:[[gpsLocation.properties valueForKey:@"speed"] doubleValue]
-                                                 timestamp:gpsLocation.timestamp];
+                                                  altitude:[[strongGpsLocation.properties valueForKey:@"altitude"] doubleValue]
+                                        horizontalAccuracy:[[strongGpsLocation.properties valueForKey:@"accuracy"] doubleValue]
+                                          verticalAccuracy:[[strongGpsLocation.properties valueForKey:@"verticalAccuracy"] doubleValue]
+                                                    course:[[strongGpsLocation.properties valueForKey:@"course"] doubleValue]
+                                                     speed:[[strongGpsLocation.properties valueForKey:@"speed"] doubleValue]
+                                                 timestamp:strongGpsLocation.timestamp];
         
         [self setCoordinate:_location.coordinate];
         
-        _timestamp = gpsLocation.timestamp;
+        _timestamp = strongGpsLocation.timestamp;
         
         _user = user;
         [self setTitle:user.name];
-        [self setSubtitle:gpsLocation.timestamp.timeAgoSinceNow];
+        [self setSubtitle:strongGpsLocation.timestamp.timeAgoSinceNow];
     }
     
     return self;
@@ -56,7 +59,8 @@
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
     MKAnnotationView *annotationView = nil;
-    if (self.user.iconColor || self.user.iconUrl == nil) {
+    User *user = (User *)self.user;
+    if (user.iconColor || user.iconUrl == nil) {
         PersonAnnotationView *personAnnotationView = (PersonAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
         if (personAnnotationView == nil) {
             personAnnotationView = [[PersonAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"locationAnnotation"];

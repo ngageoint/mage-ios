@@ -7,7 +7,8 @@
 //
 
 import CoreData
+import Persistence
 
-@objc public class Canary : NSManagedObject {
+extension Canary {
     
 }

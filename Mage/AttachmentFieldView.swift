@@ -10,6 +10,7 @@ import Foundation
 import MaterialComponents.MDCButton;
 import UIKit
 
+import Persistence
 @objc protocol AttachmentCreationDelegate {
     @objc func addVoiceAttachment();
     @objc func addVideoAttachment();
@@ -29,7 +30,7 @@ class AttachmentFieldView : BaseFieldView {
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
         let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash.fill", useErrorColor: true) : AttachmentCollectionDataStore();
-        ads.attachments = attachments;
+        ads.attachments = attachments ?? [];
         ads.attachmentSelectionDelegate = self;
         return ads;
     }();
@@ -186,7 +187,7 @@ class AttachmentFieldView : BaseFieldView {
             attachmentCollectionView.backgroundColor = .clear
             attachmentHolderView.backgroundColor = .clear
         }
-        attachmentCollectionDataStore.applyTheme(withContainerScheme: scheme);
+        attachmentCollectionDataStore.applyTheme(with: scheme);
         emptyDoc.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         attachmentCollectionEmptyView.backgroundColor = .clear
         divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12)
@@ -336,7 +337,9 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     func setCollectionData(attachments: [Attachment]?) {
-        attachmentCollectionDataStore.attachments = attachments;
+        if let attachments {
+            attachmentCollectionDataStore.attachments = attachments;
+        }
         attachmentCollectionView.reloadData();
         setNeedsUpdateConstraints();
     }
@@ -447,33 +450,36 @@ extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
 }
 
 extension AttachmentFieldView : AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
+    func selectedAttachment(_ attachment: Attachment) {
         attachmentSelectionDelegate?.selectedAttachment(attachment);
     }
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         attachmentSelectionDelegate?.selectedUnsentAttachment(unsentAttachment);
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: @escaping ((Bool) -> Void)) {
         attachmentSelectionDelegate?.selectedNotCachedAttachment(attachment, completionHandler: handler);
     }
     
-    func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: { [self] deleted in
+    func attachmentFabTapped(_ attachment: Attachment, completionHandler handler: @escaping ((Bool) -> Void)) {
+        attachmentSelectionDelegate?.attachmentFabTapped(attachment, completionHandler: { [self] deleted in
             attachmentCollectionView.reloadData();
             setNeedsUpdateConstraints();
             handler(deleted);
         });
     }
     
-    func attachmentFabTappedField(_ field: [AnyHashable : Any]!, completionHandler handler: ((Bool) -> Void)!) {
+    func attachmentFabTappedField(
+        _ field: [AnyHashable : Any],
+        completionHandler handler: @escaping ((Bool) -> Void)
+    ) {
         var deletedField = field as! [String : AnyHashable];
         guard let index = unsentAttachments.firstIndex (where: { $0["name"] == deletedField["name"] }) else {
             return;
         }
         
-        attachmentSelectionDelegate?.attachmentFabTappedField?(field, completionHandler: { [self] deleted in
+        attachmentSelectionDelegate?.attachmentFabTappedField(field, completionHandler: { [self] deleted in
             deletedField["markedForDeletion"] = deleted;
             unsentAttachments.replaceSubrange(index...index, with: [deletedField])
             attachmentCollectionDataStore.unsentAttachments = unsentAttachments;

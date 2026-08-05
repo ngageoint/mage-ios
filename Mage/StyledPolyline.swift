@@ -5,6 +5,7 @@
 //
 
 import CoreLocation
+import Persistence
 
 @objc class StyledPolyline : MKPolyline, OverlayRenderable {
     var renderer: MKOverlayRenderer {

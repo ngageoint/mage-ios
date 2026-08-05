@@ -6,9 +6,6 @@
 
 #import <CoreData/CoreData.h>
 
-@class Observation;
-@class User;
-
 @interface Observations : NSObject
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
 @property(nonatomic, weak) id< NSFetchedResultsControllerDelegate > delegate;
@@ -24,8 +21,8 @@
 + (Observations *) list;
 + (Observations *) observationsForMap;
 + (Observations *) hideObservations;
-+ (Observations *) observationsForUser:(User *) user;
-+ (Observations *) observationsForObservation:(Observation *) observation;
++ (Observations *) observationsForUser:(NSManagedObject *) user;
++ (Observations *) observationsForObservation:(NSManagedObject *) observation;
 
 + (NSMutableArray *) getPredicatesForObservations;
 + (NSMutableArray *) getPredicatesForObservationsForMap;

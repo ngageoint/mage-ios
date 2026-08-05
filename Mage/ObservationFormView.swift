@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 import MaterialComponents.MaterialTextFields
 import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming

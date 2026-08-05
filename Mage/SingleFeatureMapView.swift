@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, FilteredObservationsMap, SFGeometryMap {
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?

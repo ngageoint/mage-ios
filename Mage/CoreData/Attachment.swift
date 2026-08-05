@@ -7,8 +7,9 @@
 //
 
 import CoreData
+import Persistence
 
-@objc public class Attachment: NSManagedObject {
+extension Attachment {
     
     public static func attachment(json: [AnyHashable : Any], order: Int? = 0, context: NSManagedObjectContext) -> Attachment? {
         let attachment = Attachment.mr_createEntity(in: context);
@@ -52,7 +53,9 @@ import CoreData
         }
         
     }
-    
+}
+
+@objc extension Attachment {
     @objc public func sourceURL(size: NSInteger) -> URL? {
         if let localPath = self.localPath, FileManager.default.fileExists(atPath: localPath) {
             return URL(fileURLWithPath: localPath);

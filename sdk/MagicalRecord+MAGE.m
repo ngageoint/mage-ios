@@ -7,11 +7,14 @@
 //
 
 #import "MagicalRecord+MAGE.h"
+#import "MAGE-Swift.h"
 
 @implementation MagicalRecord (MAGE)
 
 +(void) setupMageCoreDataStack {
-    NSManagedObjectModel *model = [NSManagedObjectModel MR_defaultManagedObjectModel];
+//    NSManagedObjectModel *model = [NSManagedObjectModel MR_defaultManagedObjectModel];
+    NSManagedObjectModel *model = [MAGEPersistenceModel managedObjectModel];
+    [NSManagedObjectModel MR_setDefaultManagedObjectModel:model];
     NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
     
     // Adding the journalling mode recommended by apple
@@ -30,7 +33,9 @@
     
     [NSManagedObjectContext MR_initializeDefaultContextWithCoordinator:coordinator];
     
-    
+    for (NSEntityDescription *entity in model.entities) {
+        NSLog(@"%@ -> %@", entity.name, entity.managedObjectClassName);
+    }
     // Prevent MAGE database from being backed up
     NSURL *storeURL = [[NSPersistentStore MR_urlForStoreName:@"Mage.sqlite"] URLByDeletingLastPathComponent];
     NSError *error = nil;

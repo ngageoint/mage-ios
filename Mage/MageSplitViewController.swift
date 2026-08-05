@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc class MageSplitViewController : UISplitViewController {
     var startStraightLineNavigationObserver: AnyObject?
@@ -129,7 +130,7 @@ extension MageSplitViewController: UISplitViewControllerDelegate {
 }
 
 extension MageSplitViewController: ObservationActionsDelegate & UserActionsDelegate & AttachmentSelectionDelegate & FeedItemSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
+    func selectedAttachment(_ attachment: Attachment) {
         if let attachmentCoordinator = self.attachmentCoordinator {
             attachmentCoordinator.setAttachment(attachment: attachment);
         } else if let nav = self.mapViewController?.navigationController {
@@ -139,7 +140,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
         }
     }
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         if let nav = self.mapViewController?.navigationController {
             self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: unsentAttachment["localPath"] as! URL, contentType: unsentAttachment["contentType"] as! String, delegate: self, scheme: self.scheme)
             self.attachmentCoordinator?.start();
@@ -147,7 +148,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
         }
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: ((Bool) -> Void)) {
         
     }
     
@@ -156,31 +157,31 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
         self.masterViewController?.pushViewController(feedItemViewController, animated: true);
     }
     
-    func selectedObservation(_ observation: Observation!) {
+    func selectedObservation(_ observation: Observation) {
         let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);
     }
     
-    func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
+    func selectedObservation(_ observation: Observation, region: MKCoordinateRegion) {
         let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);    }
     
-    func observationDetailSelected(_ observation: Observation!) {
+    func observationDetailSelected(_ observation: Observation) {
         let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);
     }
     
-    func selectedUser(_ user: User!) {
+    func selectedUser(_ user: User) {
         let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
-    func selectedUser(_ user: User!, region: MKCoordinateRegion) {
+    func selectedUser(_ user: User, region: MKCoordinateRegion) {
         let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
-    func userDetailSelected(_ user: User!) {
+    func userDetailSelected(_ user: User) {
         let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }

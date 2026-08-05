@@ -6,6 +6,7 @@
 
 import CoreData
 import UIKit
+import Persistence
 
 class EventTableDataSource: NSObject {
     var scheme: MDCContainerScheming?

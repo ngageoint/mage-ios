@@ -9,10 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "RouteMethod.h"
 
-@class Observation;
-@class ObservationFavorite;
-@class ObservationImportant;
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ObservationRoutes : NSObject
@@ -20,10 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype) singleton;
 
 - (RouteMethod *) pull: (NSNumber *) eventId;
-- (RouteMethod *) deleteRoute: (Observation *) observation;
-- (RouteMethod *) createId: (Observation *) observation;
-- (RouteMethod *) pushFavorite: (ObservationFavorite *) observationFavorite;
-- (RouteMethod *) pushImportant: (ObservationImportant *) important;
+- (RouteMethod *) deleteRoute: (NSManagedObject *) observation;
+- (RouteMethod *) createId: (NSManagedObject *) observation;
+- (RouteMethod *) pushFavorite: (NSManagedObject *) observationFavorite;
+- (RouteMethod *) pushImportant: (NSManagedObject *) important;
 
 @end
 

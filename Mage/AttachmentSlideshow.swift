@@ -9,6 +9,7 @@
 import Foundation
 import Kingfisher
 import UIKit
+import Persistence
 
 class MDCActivityIndicatorProgress: Indicator {
     private let progressIndicatorView: IndicatorView
@@ -284,15 +285,19 @@ class AttachmentSlideShow: UIView {
     
     @objc func imageViewTapped(sender: UITapGestureRecognizer) {
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
-        attachmentSelectionDelegate?.selectedAttachment(attachmentImageView.attachment);
+        if let attachment = attachmentImageView.attachment {
+            attachmentSelectionDelegate?.selectedAttachment(attachment);
+        }
     }
     
     @objc func notCachedImageViewTapped(sender: UITapGestureRecognizer) {
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
 //        attachmentImageView.kf.indicatorType = .activity;
-        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachmentImageView.attachment, completionHandler: { forceDownload in
-            self.showThumbnail(imageView: attachmentImageView, cacheOnly: !forceDownload);
-        });
+        if let attachment = attachmentImageView.attachment {
+            attachmentSelectionDelegate?.selectedNotCachedAttachment(attachment, completionHandler: { forceDownload in
+                self.showThumbnail(imageView: attachmentImageView, cacheOnly: !forceDownload);
+            });
+        }
     }
     
     override func updateConstraints() {

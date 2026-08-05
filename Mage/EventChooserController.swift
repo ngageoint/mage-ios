@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreData
+import Persistence
 
 @objc protocol EventSelectionDelegate {
 

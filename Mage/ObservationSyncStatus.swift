@@ -9,6 +9,7 @@
 import Foundation
 import MaterialComponents.MDCBannerView
 import MaterialComponents.MDCPalettes
+import Persistence
 
 class ObservationSyncStatus: UIView {
     private var didSetupConstraints = false;

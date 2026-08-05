@@ -6,6 +6,7 @@
 
 import Foundation
 import PureLayout
+import Persistence
 
 @objc class MapViewController_iPad : MageMapViewController {
     

@@ -7,6 +7,7 @@
 #import "Locations.h"
 #import "TimeFilter.h"
 #import "MAGE-Swift.h"
+@import Persistence;
 
 @implementation Locations
 
@@ -56,10 +57,11 @@
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
 }
 
-+ (Locations *) locationsForUser:(User *) user {
++ (Locations *) locationsForUser:(NSManagedObject *) user {
+    User *strongUser = (User *)user;
     NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
                                                                                ascending:NO
-                                                                           withPredicate:[NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", user, [Server currentEventId]]
+                                                                           withPredicate:[NSPredicate predicateWithFormat:@"user = %@ AND eventId == %@", strongUser, [Server currentEventId]]
                                                                                  groupBy:nil
                                                                                 delegate:nil
                                                                                inContext:[NSManagedObjectContext MR_defaultContext]];

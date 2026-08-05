@@ -7,6 +7,7 @@
 import Foundation
 import Kingfisher
 import PureLayout
+import Persistence
 
 class SidebarUIButton: UIButton {
     

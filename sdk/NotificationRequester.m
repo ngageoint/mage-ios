@@ -9,19 +9,21 @@
 #import "NotificationRequester.h"
 #import <UserNotifications/UserNotifications.h>
 #import "MAGE-Swift.h"
+@import Persistence;
 
 @implementation NotificationRequester
 
-+ (UNNotificationRequest *) buildObservationNotificationRequest: (Observation *) observation {
++ (UNNotificationRequest *) buildObservationNotificationRequest: (NSManagedObject *) observation {
+    Observation *strongObservation = (Observation *)observation;
     UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
-    Event *event = [Event getEventWithEventId:observation.eventId context:observation.managedObjectContext];
+    Event *event = [Event getEventWithEventId:strongObservation.eventId context:observation.managedObjectContext];
     
     NSString *body = @"";
-    if ([observation primaryFeedFieldText] != nil) {
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@", [observation primaryFeedFieldText]]];
+    if ([strongObservation primaryFeedFieldText] != nil) {
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@", [strongObservation primaryFeedFieldText]]];
     }
-    if ([observation secondaryFeedFieldText] != nil) {
-        body = [body stringByAppendingString:[NSString stringWithFormat:@", %@", [observation secondaryFeedFieldText]]];
+    if ([strongObservation secondaryFeedFieldText] != nil) {
+        body = [body stringByAppendingString:[NSString stringWithFormat:@", %@", [strongObservation secondaryFeedFieldText]]];
     }
     
     body = [body stringByAppendingString:[NSString stringWithFormat:@" observation was created in %@ event.", event.name]];
@@ -30,7 +32,7 @@
     content.body = body;
     
     NSMutableArray *attachments = [[NSMutableArray alloc] init];
-    NSString *imageUrl = [ObservationImage imageNameWithObservation:observation];
+    NSString *imageUrl = [ObservationImage imageNameWithObservation:strongObservation];
     
     UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
     
@@ -45,7 +47,7 @@
     NSString *tmpUrl = [NSTemporaryDirectory() stringByAppendingString:@"image.png"];
     [UIImagePNGRepresentation(image) writeToFile:tmpUrl atomically:YES];
     
-    UNNotificationAttachment *icon = [UNNotificationAttachment attachmentWithIdentifier:observation.remoteId URL:[NSURL fileURLWithPath:tmpUrl] options:@{ UNNotificationAttachmentOptionsThumbnailClippingRectKey: (NSDictionary *)CFBridgingRelease(CGRectCreateDictionaryRepresentation(CGRectMake(0, 0, 1.0, 1.0)))} error:nil];
+    UNNotificationAttachment *icon = [UNNotificationAttachment attachmentWithIdentifier:strongObservation.remoteId URL:[NSURL fileURLWithPath:tmpUrl] options:@{ UNNotificationAttachmentOptionsThumbnailClippingRectKey: (NSDictionary *)CFBridgingRelease(CGRectCreateDictionaryRepresentation(CGRectMake(0, 0, 1.0, 1.0)))} error:nil];
     [attachments addObject:icon];
     content.attachments = attachments;
     content.categoryIdentifier = @"ObservationPulled";
@@ -53,17 +55,18 @@
     
     UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger
                                                   triggerWithTimeInterval:1 repeats:NO];
-    return [UNNotificationRequest requestWithIdentifier:observation.remoteId
+    return [UNNotificationRequest requestWithIdentifier:strongObservation.remoteId
                                                 content:content trigger:trigger];
 }
 
-+ (void) observationPulled: (Observation *) observationOld {
++ (void) observationPulled: (NSManagedObject *) observationOld {
+    Observation* strongObservation = (Observation *)observationOld;
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     NSManagedObjectContext *context = [NSManagedObjectContext MR_context];
     
     
     [context performBlockAndWait:^{
-        Observation *observation = [observationOld MR_inContext:context];
+        Observation *observation = [strongObservation MR_inContext:context];
         UNNotificationRequest *request = [NotificationRequester buildObservationNotificationRequest:observation];
         
         [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {

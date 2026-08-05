@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreData
+import Persistence
 
 public class ObservationPushService: NSObject {
     

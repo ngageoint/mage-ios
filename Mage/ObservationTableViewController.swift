@@ -8,6 +8,7 @@
 
 import Foundation
 import MaterialComponents.MaterialSnackbar
+import Persistence
 
 class ObservationTableViewController: UITableViewController {
     
@@ -271,7 +272,7 @@ extension ObservationTableViewController: AttachmentViewDelegate {
 }
 
 extension ObservationTableViewController: AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
+    func selectedAttachment(_ attachment: Attachment) {
         if let attachmentDelegate = self.attachmentDelegate {
             attachmentDelegate.selectedAttachment(attachment);
         } else {
@@ -281,7 +282,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
         }
     }
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         if let attachmentDelegate = self.attachmentDelegate {
             attachmentDelegate.selectedUnsentAttachment(unsentAttachment);
         } else {
@@ -291,7 +292,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
         }
     }
 
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: @escaping ((Bool) -> Void)) {
         if let attachmentDelegate = self.attachmentDelegate {
             attachmentDelegate.selectedNotCachedAttachment(attachment, completionHandler: handler);
         } else {

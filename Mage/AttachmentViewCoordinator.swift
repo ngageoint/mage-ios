@@ -10,6 +10,7 @@ import AVKit;
 import MagicalRecord;
 import Kingfisher
 import QuickLook
+import Persistence
 
 @objc protocol AttachmentViewDelegate {
     @objc func doneViewing(coordinator: NSObject);

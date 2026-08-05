@@ -8,7 +8,9 @@ import Foundation
 import SSZipArchive
 import CoreData
 
-@objc public class Form: NSManagedObject {
+import Persistence
+
+extension Form {
     
     @objc public static let MAGEFormFetched = "mil.nga.giat.mage.form.fetched";
     

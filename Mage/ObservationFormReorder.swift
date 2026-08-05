@@ -8,6 +8,7 @@
 
 import Foundation
 import MaterialComponents.MDCContainerScheme;
+import Persistence
 
 @objc protocol ObservationFormReorderDelegate {
     func formsReordered(observation: Observation);

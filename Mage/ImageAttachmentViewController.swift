@@ -9,6 +9,7 @@
 import Foundation
 import Kingfisher
 import UIKit
+import Persistence
 
 class PlaceholderImage: UIImageView { }
 extension PlaceholderImage: Placeholder {}

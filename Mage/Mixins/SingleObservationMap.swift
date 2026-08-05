@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import GeoPackage
+import Persistence
 
 //protocol SingleObservationMap {
 //    var mapView: MKMapView? { get set }
@@ -41,7 +42,7 @@ class SingleObservationMapMixin: FilteredObservationsMapMixin {
         }
         
         if let observation = observation {
-            observations = Observations(for: observation)
+            observations = Observations(forObservation: observation)
             observations?.delegate = self
         }
         

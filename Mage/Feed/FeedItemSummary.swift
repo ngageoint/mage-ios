@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import Kingfisher
+import Persistence
 
 class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
     private var didSetUpConstraints = false;

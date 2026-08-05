@@ -26,7 +26,9 @@ enum State: Int, CustomStringConvertible {
     }
 }
 
-@objc public class Observation: NSManagedObject, Navigable {
+import Persistence
+
+extension Observation: Navigable {
     
     var orderedAttachments: [Attachment]? {
         get {
@@ -241,7 +243,7 @@ enum State: Int, CustomStringConvertible {
                 
                 NSLog("Received \(newObservationCount) new observations and send bulk is \(initial)")
                 if ((initial && newObservationCount > 0) || newObservationCount > 1) {
-                    NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
+                    NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), inEvent: Event.getCurrentEvent(context: localContext));
                 } else if let observationToNotifyAbout = observationToNotifyAbout {
                     NotificationRequester.observationPulled(observationToNotifyAbout);
                 }
@@ -881,8 +883,6 @@ enum State: Int, CustomStringConvertible {
         self.transientAttachments.append(attachment);
     }
     
-    @objc public var transientAttachments: [Attachment] = [];
-    
     @objc public var geometry: SFGeometry? {
         get {
             if let geometryData = self.geometryData {
@@ -1017,8 +1017,6 @@ enum State: Int, CustomStringConvertible {
             return "";
         }
     }
-
-    @objc public var formsToBeDeleted: NSMutableIndexSet = NSMutableIndexSet()
     
     @objc public func clearFormsToBeDeleted() {
         formsToBeDeleted = NSMutableIndexSet()

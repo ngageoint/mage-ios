@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
+import Persistence
 
 @objc protocol ObservationEditCardDelegate {
     @objc func addForm();
@@ -719,7 +720,7 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
 
 extension ObservationEditCardCollectionViewController: AttachmentSelectionDelegate {
     
-    func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func attachmentFabTapped(_ attachment: Attachment, completionHandler handler: @escaping ((Bool) -> Void)) {
         // delete the attachment
         attachment.markedForDeletion = true;
         attachment.dirty = true;
@@ -737,7 +738,7 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         MDCSnackbarManager.default.show(message);
     }
     
-    func attachmentFabTappedField(_ field: [AnyHashable : Any]!, completionHandler handler: ((Bool) -> Void)!) {
+    func attachmentFabTappedField(_ field: [AnyHashable : Any], completionHandler handler: @escaping ((Bool) -> Void)) {
         handler(true);
         let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted");
         let messageAction = MDCSnackbarMessageAction();
@@ -750,7 +751,7 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         MDCSnackbarManager.default.show(message);
     }
     
-    func selectedAttachment(_ attachment: Attachment!) {
+    func selectedAttachment(_ attachment: Attachment) {
         if (attachment.url == nil) {
             return;
         }
@@ -761,7 +762,7 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator?.start();
     }
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         guard let nav = self.navigationController else {
             return;
         }
@@ -769,7 +770,7 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator?.start();
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: ((Bool) -> Void)) {
         if (attachment.url == nil) {
             return;
         }

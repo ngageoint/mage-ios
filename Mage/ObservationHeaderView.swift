@@ -11,6 +11,7 @@ import PureLayout
 import Kingfisher
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
+import Persistence
 
 class ObservationHeaderView : MDCCard {
     var didSetupConstraints = false;

@@ -10,7 +10,9 @@
 import Foundation
 import CoreData
 
-@objc public class ImageryLayer: Layer {
+import Persistence
+
+extension ImageryLayer {
     @objc public override func populate(_ json: [AnyHashable : Any], eventId: NSNumber) {
         super.populate(json, eventId: eventId)
         self.format = json[LayerKey.format.key] as? String

@@ -5,6 +5,7 @@
 //
 import UIKit
 import Kingfisher
+import Persistence
 
 @objc class AttachmentCell: UICollectionViewCell {
     

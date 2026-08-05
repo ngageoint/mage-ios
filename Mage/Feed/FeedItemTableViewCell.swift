@@ -10,6 +10,7 @@ import Foundation
 import PureLayout
 import Kingfisher
 import MaterialComponents.MDCCard;
+import Persistence
 
 class FeedItemTableViewCell : UITableViewCell {
     private var constructed = false;

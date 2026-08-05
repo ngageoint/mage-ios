@@ -10,6 +10,7 @@ import Foundation
 import MapKit
 import CoreData
 import GeoPackage
+import Persistence
 
 protocol StaticLayerMap {
     var mapView: MKMapView? { get set }

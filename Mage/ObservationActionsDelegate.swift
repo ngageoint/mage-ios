@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc protocol ObservationActionsDelegate {
     @objc optional func viewObservation(_ observation: Observation);

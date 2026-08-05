@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc protocol UserActionsDelegate {
     @objc optional func getDirectionsToUser(_ user: User, sourceView: UIView?);

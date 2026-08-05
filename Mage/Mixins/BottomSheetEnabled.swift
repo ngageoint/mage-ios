@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 protocol BottomSheetEnabled: AnyObject {
     var mapView: MKMapView? { get set }

@@ -8,12 +8,14 @@
 
 import UIKit
 import Kingfisher
+import Persistence
+import PureLayout
 
 @objc class PersonAnnotationView: MKMarkerAnnotationView {
     
     @objc override var annotation: MKAnnotation? {
         didSet {
-            if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user {
+            if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user as? User {
                 
                 if let iconColor = user.iconColor {
                     self.markerTintColor = UIColor(hex: iconColor)
@@ -33,8 +35,8 @@ import Kingfisher
                     let circleView = UIImageView(image: circleImage)
                     self.addSubview(circleView)
                     circleView.accessibilityLabel = "circle"
-                    circleView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -5)
-                    circleView.autoAlignAxis(toSuperviewAxis: .vertical)
+                    circleView.autoPinEdge(toSuperviewEdge: ALEdge.bottom, withInset: -5)
+                    circleView.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
                     circleView.layer.zPosition = -1.0
                 }
             } else {
@@ -117,7 +119,7 @@ import Kingfisher
     @objc public override func prepareForDisplay() {
         super.prepareForDisplay();
         
-        if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user {
+        if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user as? User {
             if let iconColor = user.iconColor {
                 self.markerTintColor = UIColor(hex: iconColor)
                 self.glyphText = user.iconText
@@ -171,8 +173,8 @@ import Kingfisher
                 let circleView = UIImageView(image: circleImage)
                 self.addSubview(circleView)
                 circleView.accessibilityLabel = "circle"
-                circleView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -5)
-                circleView.autoAlignAxis(toSuperviewAxis: .vertical)
+                circleView.autoPinEdge(toSuperviewEdge: ALEdge.bottom, withInset: -5)
+                circleView.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
                 circleView.layer.zPosition = -1.0
             }
         } else {

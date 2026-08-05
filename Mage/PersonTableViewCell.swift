@@ -10,6 +10,7 @@ import Foundation
 import PureLayout
 import Kingfisher
 import MaterialComponents.MDCCard;
+import Persistence
 
 class PersonTableViewCell : UITableViewCell {
     private var constructed = false;

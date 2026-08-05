@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 @objc protocol FeedItemActionsDelegate {
     @objc optional func getDirectionsToFeedItem(_ feedItem: FeedItem, sourceView: UIView?);

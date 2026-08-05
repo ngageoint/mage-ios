@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistence
 
 class ObservationCompactView: UIView {
     private var constructed = false;
@@ -80,7 +81,7 @@ class ObservationCompactView: UIView {
         attachmentSlideshow.applyTheme(withScheme: scheme);
     }
     
-    @objc public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
+    public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.observation = observation;
         self.actionsDelegate = actionsDelegate;
         if (observation.isImportant) {

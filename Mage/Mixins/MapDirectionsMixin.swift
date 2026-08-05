@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import Kingfisher
+import Persistence
 
 protocol Navigable {
     var coordinate: CLLocationCoordinate2D { get }

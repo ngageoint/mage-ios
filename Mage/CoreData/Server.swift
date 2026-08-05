@@ -10,7 +10,9 @@ import Foundation
 import CoreData
 import MagicalRecord
 
-@objc public class Server: NSManagedObject {
+import Persistence
+
+extension Server {
     
     @objc public static func serverUrl() -> String? {
         return Server.getPropertyForKey(key: "serverUrl", context: NSManagedObjectContext.mr_default()) as? String

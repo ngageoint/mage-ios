@@ -8,6 +8,7 @@
 
 import Foundation
 import MaterialComponents.MDCCard;
+import Persistence
 
 @objc class ObservationListCardCell: UITableViewCell {
     
@@ -56,7 +57,7 @@ import MaterialComponents.MDCCard;
         }
     }
     
-    @objc public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
+    public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.observation = observation;
         card.accessibilityLabel = "observation card \(observation.objectID.uriRepresentation().absoluteString)"
         self.actionsDelegate = actionsDelegate;

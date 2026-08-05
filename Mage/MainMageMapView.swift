@@ -9,6 +9,7 @@
 import UIKit
 import MaterialComponents
 import CoreData
+import Persistence
 
 class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap, OnlineLayerMap {
     
