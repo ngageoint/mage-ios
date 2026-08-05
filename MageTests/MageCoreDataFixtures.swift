@@ -12,6 +12,7 @@ import SimpleFeatures
 import Quick
 import Nimble
 import OHHTTPStubs
+import Persistence
 
 @testable import MAGE
 

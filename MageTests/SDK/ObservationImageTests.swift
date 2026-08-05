@@ -12,6 +12,7 @@ import Nimble
 import Kingfisher
 import OHHTTPStubs
 import MagicalRecord
+import Persistence
 
 @testable import MAGE
 

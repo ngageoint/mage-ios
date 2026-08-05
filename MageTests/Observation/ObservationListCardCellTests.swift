@@ -12,6 +12,7 @@ import Nimble
 //import Nimble_Snapshots
 import Kingfisher
 import OHHTTPStubs
+import Persistence
 
 @testable import MAGE
 

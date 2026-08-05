@@ -13,7 +13,7 @@
 @interface LocalLoginView : UIStackView
 
 @property (strong, nonatomic) NSDictionary *strategy;
-@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) NSManagedObject *user;
 
 @property (weak, nonatomic) id<LoginDelegate> delegate;
 

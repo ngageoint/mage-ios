@@ -8,6 +8,7 @@
 
 import Foundation
 import MagicalRecord
+import Persistence
 
 @testable import MAGE
 

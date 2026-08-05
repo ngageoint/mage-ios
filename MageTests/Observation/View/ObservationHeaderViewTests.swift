@@ -11,6 +11,7 @@ import Quick
 import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
+import Persistence
 
 @testable import MAGE
 

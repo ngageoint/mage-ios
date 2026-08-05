@@ -77,9 +77,10 @@
     [self.usernameField setEnabled:YES];
     [self.passwordField setEnabled:YES];
     [self.passwordField setDelegate:self];
-    if (self.user) {
+    User *strongUser = (User *)self.user;
+    if (strongUser) {
         self.usernameField.enabled = NO;
-        self.usernameField.text = self.user.username;
+        self.usernameField.text = strongUser.username;
         self.signupContainerView.hidden = YES;
     }
 

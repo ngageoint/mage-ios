@@ -14,6 +14,7 @@ import OHHTTPStubs
 import UniformTypeIdentifiers
 import Photos
 import PhotosUI
+import Persistence
 
 @testable import MAGE
 

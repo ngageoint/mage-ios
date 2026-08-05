@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import MagicalRecord
+import Persistence
 
 @testable import MAGE
 

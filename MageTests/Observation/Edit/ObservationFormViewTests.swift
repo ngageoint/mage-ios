@@ -10,6 +10,7 @@ import Foundation
 import Quick
 import Nimble
 import SimpleFeatures
+import Persistence
 //import Nimble_Snapshots
 
 @testable import MAGE

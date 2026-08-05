@@ -12,6 +12,7 @@ import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
 import MagicalRecord
+import Persistence
 
 @testable import MAGE
 

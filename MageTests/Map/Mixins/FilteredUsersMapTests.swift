@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import MagicalRecord
+import Persistence
 
 @testable import MAGE
 import CoreLocation
@@ -135,7 +136,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     let la : LocationAnnotation = mixin.mapView!.annotations[0] as! LocationAnnotation
-                    expect(la.user?.remoteId).to(equal("userabc"))
+                    let user: User? = la.user as? User
+                    expect(user?.remoteId).to(equal("userabc"))
                     mixin.cleanupMixin()
                 }
             }
@@ -237,7 +239,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId == "userdef" || la.user?.remoteId == "userxyz").to(beTrue())
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId == "userdef" || user?.remoteId == "userxyz").to(beTrue())
                     }
                     mixin.cleanupMixin()
                 }
@@ -256,7 +259,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId).to(equal("userdef"))
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId).to(equal("userdef"))
                     }
                     mixin.cleanupMixin()
                 }
@@ -275,7 +279,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId == "userdef" || la.user?.remoteId == "userxyz").to(beTrue())
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId == "userdef" || user?.remoteId == "userxyz").to(beTrue())
                     }
                     
                     TimeFilter.setLocation(.lastWeek)
@@ -283,7 +288,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId).to(equal("userdef"))
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId).to(equal("userdef"))
                     }
 
                     mixin.cleanupMixin()
@@ -303,7 +309,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId).to(equal("userdef"))
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId).to(equal("userdef"))
                     }
                     mixin.cleanupMixin()
                 }
@@ -322,7 +329,8 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId).to(equal("userdef"))
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId).to(equal("userdef"))
                     }
                     mixin.cleanupMixin()
                 }
@@ -343,7 +351,8 @@ class FilteredUsersMapTests: KIFSpec {
                     var initialLocation: CLLocation?
                     for annotation in mixin.mapView!.annotations {
                         let la : LocationAnnotation = annotation as! LocationAnnotation
-                        expect(la.user?.remoteId).to(equal("userdef"))
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId).to(equal("userdef"))
                         initialLocation = la.location
                     }
                     
@@ -384,8 +393,8 @@ class FilteredUsersMapTests: KIFSpec {
                             tester().fail()
                             return
                         }
-
-                        expect(la.user?.remoteId).to(equal("userdef"))
+                        let user: User? = la.user as? User
+                        expect(user?.remoteId).to(equal("userdef"))
                         initialLocation = la.location
                         
                         guard let initialLocation = initialLocation else {
@@ -457,8 +466,8 @@ class FilteredUsersMapTests: KIFSpec {
                             tester().fail()
                             return
                         }
-                        
-                        if defla.user?.remoteId == "userdef" {
+                        let user: User? = defla.user as? User
+                        if user?.remoteId == "userdef" {
                             initialLocation = defla.location
                             
                             guard let initialLocation = initialLocation else {
@@ -498,8 +507,8 @@ class FilteredUsersMapTests: KIFSpec {
                             tester().fail()
                             return
                         }
-                        
-                        if xyzla.user?.remoteId == "userxyz" {
+                        let user: User? = xyzla.user as? User
+                        if user?.remoteId == "userxyz" {
                             initialLocation = xyzla.location
                             
                             guard let initialLocation = initialLocation else {
@@ -538,8 +547,8 @@ class FilteredUsersMapTests: KIFSpec {
                             tester().fail()
                             return
                         }
-                        
-                        if defla.user?.remoteId == "userdef" {
+                        let user: User? = defla.user as? User
+                        if user?.remoteId == "userdef" {
                             if let lav = defla.view as? PersonAnnotationView {
                                 expect(lav.frame.size.height).toEventually(equal(originalHeight))
                             } else {
@@ -573,8 +582,8 @@ class FilteredUsersMapTests: KIFSpec {
                             tester().fail()
                             return
                         }
-                        
-                        if defla.user?.remoteId == "userdef" {
+                        let user: User? = defla.user as? User
+                        if user?.remoteId == "userdef" {
                             initialLocation = defla.location
                             
                             guard let initialLocation = initialLocation else {
@@ -631,8 +640,8 @@ class FilteredUsersMapTests: KIFSpec {
                             tester().fail()
                             return
                         }
-                        
-                        if defla.user?.remoteId == "userdef" {
+                        let user: User? = defla.user as? User
+                        if user?.remoteId == "userdef" {
                             
                             expect(defla.view).to(beAKindOf(PersonAnnotationView.self))
                             if let lav = defla.view as? PersonAnnotationView {

@@ -9,6 +9,7 @@
 import Foundation
 import Quick
 import Nimble
+import Persistence
 
 @testable import MAGE
 import CoreData

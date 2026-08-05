@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import Kingfisher
+import Persistence
 
 @testable import MAGE
 

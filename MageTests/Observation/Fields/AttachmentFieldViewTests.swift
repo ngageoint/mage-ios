@@ -12,22 +12,23 @@ import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
 import Kingfisher
+import Persistence
 
 @testable import MAGE
 
 class MockAttachmentSelectionDelegate: AttachmentSelectionDelegate {
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachment: Attachment, completionHandler handler: ((Bool) -> Void)) {
         
     }
     
     var selectedAttachmentCalled = false;
     var attachmentSelected: Attachment?;
     
-    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]) {
         
     }
     
-    func selectedAttachment(_ attachment: Attachment!) {
+    func selectedAttachment(_ attachment: Attachment) {
         selectedAttachmentCalled = true;
         attachmentSelected = attachment;
     }

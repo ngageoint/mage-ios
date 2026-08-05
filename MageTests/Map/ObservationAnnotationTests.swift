@@ -13,6 +13,7 @@ import Kingfisher
 import OHHTTPStubs
 import MagicalRecord
 import DateTools
+import Persistence
 
 @testable import MAGE
 

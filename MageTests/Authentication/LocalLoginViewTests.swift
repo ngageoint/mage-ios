@@ -12,6 +12,7 @@ import Nimble
 import PureLayout
 import Kingfisher
 import OHHTTPStubs
+import Persistence
 
 @testable import MAGE
 

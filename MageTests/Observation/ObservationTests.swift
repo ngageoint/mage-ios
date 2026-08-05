@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import Kingfisher
 import OHHTTPStubs
+import Persistence
 
 @testable import MAGE
 import CoreData

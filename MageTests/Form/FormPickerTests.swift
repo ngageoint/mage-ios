@@ -12,6 +12,7 @@ import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
 import MaterialComponents.MaterialBottomSheet
+import Persistence
 
 @testable import MAGE
 

@@ -13,6 +13,7 @@ import PureLayout
 import OHHTTPStubs
 import Kingfisher
 import MagicalRecord
+import Persistence
 
 @testable import MAGE
 import UIKit
