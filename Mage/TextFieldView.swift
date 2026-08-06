@@ -290,6 +290,7 @@ extension TextFieldView: UITextFieldDelegate {
 extension TextFieldView: UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
+        textView.selectedTextRange = textView.textRange(from: textView.endOfDocument, to: textView.endOfDocument)
         sessionStartValue = value as? String
         isSessionActive = true
         accessoryView.alpha = isEmpty() ? 0 : 1;
