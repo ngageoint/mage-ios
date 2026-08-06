@@ -13,6 +13,10 @@ class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
 
+    private let fieldUndoManager = UndoManager()
+    private var sessionStartValue: String?
+    private var isSessionActive = false
+
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         multilineTextField.textView.delegate = self;
@@ -160,6 +164,24 @@ class TextFieldView : BaseFieldView {
         self.setValue(value as? String);
     }
 
+    private func setUndoableValue(_ newValue: String?, oldValue: String?) {
+        fieldUndoManager.registerUndo(withTarget: self) {
+            target in target.setUndoableValue(oldValue, oldValue: newValue)
+        }
+        setValue(newValue)
+        delegate?.fieldValueChanged(field, value: value)
+    }
+
+    private func closeCurrentSession() {
+        guard isSessionActive else { return }
+        let currentText = multiline ? multilineTextField.textView.text : textField.text
+        let newValue = currentText == "" ? nil : currentText
+        if sessionStartValue != newValue {
+            setUndoableValue(newValue, oldValue: sessionStartValue)
+            sessionStartValue = newValue
+        }
+    }
+
     func setValue(_ value: String?) {
         self.value = value;
         if (self.multiline) {
@@ -232,25 +254,22 @@ extension TextFieldView {
     }
 
     @objc func undoPressed() {
-        if multiline {
-            multilineTextField.textView.undoManager?.undo();
-        } else {
-            textField.undoManager?.undo();
-        }
+        closeCurrentSession()
+        fieldUndoManager.undo()
+        sessionStartValue = value as? String
     }
 
     @objc func redoPressed() {
-        if multiline {
-            multilineTextField.textView.undoManager?.redo();
-        } else {
-            textField.undoManager?.redo();
-        }
+        fieldUndoManager.redo()
+        sessionStartValue = value as? String
     }
 }
 
 extension TextFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        sessionStartValue = value as? String
+        isSessionActive = true
         accessoryView.alpha = isEmpty() ? 0 : 1;
     }
 
@@ -259,20 +278,20 @@ extension TextFieldView: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if (value as? String != textField.text) {
-            if (textField.text == "") {
-                value = nil;
-            } else {
-                value = textField.text;
-            }
-            delegate?.fieldValueChanged(field, value: value);
+        let newValue = textField.text == "" ? nil : textField.text
+        if sessionStartValue != newValue {
+            setUndoableValue(newValue, oldValue: sessionStartValue)
         }
+        sessionStartValue = nil
+        isSessionActive = false
     }
 }
 
 extension TextFieldView: UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
+        sessionStartValue = value as? String
+        isSessionActive = true
         accessoryView.alpha = isEmpty() ? 0 : 1;
     }
 
@@ -285,13 +304,11 @@ extension TextFieldView: UITextViewDelegate {
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if (value as? String != textView.text) {
-            if (textView.text == "") {
-                value = nil;
-            } else {
-                value = textView.text;
-            }
-            delegate?.fieldValueChanged(field, value: value);
+        let newValue = textView.text == "" ? nil : textView.text
+        if sessionStartValue != newValue {
+            setUndoableValue(newValue, oldValue: sessionStartValue)
         }
+        sessionStartValue = nil
+        isSessionActive = false
     }
 }

@@ -14,6 +14,10 @@ class NumberFieldView : BaseFieldView {
     private var min: NSNumber?;
     private var max: NSNumber?;
 
+    private let fieldUndoManager = UndoManager()
+    private var sessionStartValue: String?
+    private var isSessionActive = false
+
     lazy var helperText: String? = {
         var helper: String? = nil;
         if (self.min != nil && self.max != nil) {
@@ -148,12 +152,40 @@ class NumberFieldView : BaseFieldView {
         textField.text = number?.stringValue
     }
 
+    private func setUndoableText(_ newText: String?, oldText: String?) {
+        fieldUndoManager.registerUndo(withTarget: self) { target in
+            target.setUndoableText(oldText, oldText: newText)
+        }
+        setValue(newText)
+        let valid = isValid(enforceRequired: true, number: number)
+        setValid(valid)
+        delegate?.fieldValueChanged(field, value: number)
+    }
+
+    private func closeCurrentSession() {
+        guard isSessionActive else { return }
+        let currentText = textField.text
+        guard sessionStartValue != currentText else { return }
+        let number = formatter.number(from: currentText ?? "")
+        let valid = isValid(enforceRequired: true, number: number)
+        setValid(valid)
+        if valid {
+            setUndoableText(currentText, oldText: sessionStartValue)
+            sessionStartValue = currentText
+        } else {
+            self.number = number
+        }
+    }
+
     @objc func undoPressed() {
-        textField.undoManager?.undo();
+        closeCurrentSession()
+        fieldUndoManager.undo()
+        sessionStartValue = textField.text
     }
 
     @objc func redoPressed() {
-        textField.undoManager?.redo();
+        fieldUndoManager.redo()
+        sessionStartValue = textField.text
     }
 
     override func isEmpty() -> Bool {
@@ -226,6 +258,8 @@ extension NumberFieldView {
 extension NumberFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        sessionStartValue = textField.text
+        isSessionActive = true
         accessoryView.alpha = isEmpty() ? 0 : 1;
     }
 
@@ -234,15 +268,17 @@ extension NumberFieldView: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text: String = textField.text {
-            let number = formatter.number(from: text);
-            let valid = isValid(enforceRequired: true, number: number);
-            setValid(valid);
-            if (valid && (number == nil || (self.number?.stringValue != textField.text))) {
-                delegate?.fieldValueChanged(field, value: number);
-            }
-            self.number = number;
+        let newText = textField.text
+        let number = formatter.number(from: newText ?? "")
+        let valid = isValid(enforceRequired: true, number: number)
+        setValid(valid)
+        if valid, sessionStartValue != newText {
+            setUndoableText(newText, oldText: sessionStartValue)
+        } else {
+            self.number = number
         }
+        sessionStartValue = nil
+        isSessionActive = false
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
