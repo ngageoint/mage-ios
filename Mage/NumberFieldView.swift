@@ -169,7 +169,8 @@ class NumberFieldView : BaseFieldView {
     }
 
     private func refreshUndoRedoButtons() {
-        undoButton.isEnabled = fieldUndoManager.canUndo
+        let hasUncommittedChange = textField.text != sessionStartValue
+        undoButton.isEnabled = fieldUndoManager.canUndo || hasUncommittedChange
         redoButton.isEnabled = fieldUndoManager.canRedo
     }
 
@@ -261,6 +262,7 @@ class NumberFieldView : BaseFieldView {
 extension NumberFieldView {
     @objc func textFieldDidChange() {
         showAccessoryView();
+        refreshUndoRedoButtons()
     }
 
     func showAccessoryView() {

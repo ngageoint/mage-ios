@@ -179,7 +179,9 @@ class TextFieldView : BaseFieldView {
     }
 
     private func refreshUndoRedoButtons() {
-        undoButton.isEnabled = fieldUndoManager.canUndo
+        let currentText = multiline ? multilineTextField.textView.text : textField.text
+        let hasUncommittedChange = (currentText == "" ? nil : currentText) != sessionStartValue
+        undoButton.isEnabled = fieldUndoManager.canUndo || hasUncommittedChange
         redoButton.isEnabled = fieldUndoManager.canRedo
     }
 
@@ -258,6 +260,7 @@ extension TextFieldView {
 
     @objc func textFieldDidChange() {
         showAccessoryView();
+        refreshUndoRedoButtons()
     }
 
     func showAccessoryView() {
@@ -319,6 +322,7 @@ extension TextFieldView: UITextViewDelegate {
 
     func textViewDidChange(_ textView: UITextView) {
         showAccessoryView();
+        refreshUndoRedoButtons()
     }
 
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
