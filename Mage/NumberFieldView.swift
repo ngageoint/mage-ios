@@ -16,7 +16,6 @@ class NumberFieldView : BaseFieldView {
 
     private let fieldUndoManager = UndoManager()
     private var sessionStartValue: String?
-    private var isSessionActive = false
 
     lazy var helperText: String? = {
         var helper: String? = nil;
@@ -43,28 +42,34 @@ class NumberFieldView : BaseFieldView {
         return formatter;
     }()
 
-    private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 60);
-
-        let undoButton = UIBarButtonItem(
+    private lazy var undoButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
             image: UIImage(systemName: "arrow.uturn.backward"),
             style: .plain,
             target: self,
             action: #selector(undoPressed)
         );
-        undoButton.accessibilityLabel = "Undo";
+        button.accessibilityLabel = "Undo";
+        button.isEnabled = false;
+        return button;
+    }()
 
-        let redoButton = UIBarButtonItem(
+    private lazy var redoButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
             image: UIImage(systemName: "arrow.uturn.forward"),
             style: .plain,
             target: self,
             action: #selector(redoPressed)
         );
-        redoButton.accessibilityLabel = "Redo";
+        button.accessibilityLabel = "Redo";
+        button.isEnabled = false;
+        return button;
+    }()
 
+    private lazy var accessoryView: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
+        toolbar.autoSetDimension(.height, toSize: 60);
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-
         toolbar.items = [undoButton, redoButton, flexSpace];
         toolbar.alpha = 0;
         return toolbar;
@@ -160,10 +165,15 @@ class NumberFieldView : BaseFieldView {
         let valid = isValid(enforceRequired: true, number: number)
         setValid(valid)
         delegate?.fieldValueChanged(field, value: number)
+        refreshUndoRedoButtons()
+    }
+
+    private func refreshUndoRedoButtons() {
+        undoButton.isEnabled = fieldUndoManager.canUndo
+        redoButton.isEnabled = fieldUndoManager.canRedo
     }
 
     private func closeCurrentSession() {
-        guard isSessionActive else { return }
         let currentText = textField.text
         guard sessionStartValue != currentText else { return }
         let number = formatter.number(from: currentText ?? "")
@@ -179,13 +189,19 @@ class NumberFieldView : BaseFieldView {
 
     @objc func undoPressed() {
         closeCurrentSession()
-        fieldUndoManager.undo()
+        if fieldUndoManager.canUndo {
+            fieldUndoManager.undo()
+        }
         sessionStartValue = textField.text
+        refreshUndoRedoButtons()
     }
 
     @objc func redoPressed() {
-        fieldUndoManager.redo()
+        if fieldUndoManager.canRedo {
+            fieldUndoManager.redo()
+        }
         sessionStartValue = textField.text
+        refreshUndoRedoButtons()
     }
 
     override func isEmpty() -> Bool {
@@ -253,14 +269,17 @@ extension NumberFieldView {
             self.accessoryView.alpha = 1;
         }
     }
+
+    func shouldShowAccessoryView() -> Bool {
+        return !isEmpty() || fieldUndoManager.canUndo || fieldUndoManager.canRedo
+    }
 }
 
 extension NumberFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         sessionStartValue = textField.text
-        isSessionActive = true
-        accessoryView.alpha = isEmpty() ? 0 : 1;
+        accessoryView.alpha = shouldShowAccessoryView() ? 1 : 0;
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -278,7 +297,6 @@ extension NumberFieldView: UITextFieldDelegate {
             self.number = number
         }
         sessionStartValue = nil
-        isSessionActive = false
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

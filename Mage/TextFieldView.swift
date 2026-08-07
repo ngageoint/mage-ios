@@ -15,7 +15,6 @@ class TextFieldView : BaseFieldView {
 
     private let fieldUndoManager = UndoManager()
     private var sessionStartValue: String?
-    private var isSessionActive = false
 
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
@@ -65,29 +64,35 @@ class TextFieldView : BaseFieldView {
         return textField;
     }()
 
-    private lazy var accessoryView: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
-        toolbar.autoSetDimension(.height, toSize: 60);
-        // Adding undo & redo components
-        let undoButton = UIBarButtonItem(
+    // Undo/Redo components
+    private lazy var undoButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
             image: UIImage(systemName: "arrow.uturn.backward"),
             style: .plain,
             target: self,
             action: #selector(undoPressed)
         );
-        undoButton.accessibilityLabel = "Undo";
+        button.accessibilityLabel = "Undo";
+        button.isEnabled = false;
+        return button;
+    }()
 
-        let redoButton = UIBarButtonItem(
+    private lazy var redoButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
             image: UIImage(systemName: "arrow.uturn.forward"),
             style: .plain,
             target: self,
             action: #selector(redoPressed)
         );
-        redoButton.accessibilityLabel = "Redo";
+        button.accessibilityLabel = "Redo";
+        button.isEnabled = false;
+        return button;
+    }()
 
+    private lazy var accessoryView: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
+        toolbar.autoSetDimension(.height, toSize: 60);
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
-
-        // New toolbar to host the two buttons
         toolbar.items = [undoButton, redoButton, flexSpace];
         toolbar.alpha = 0;
         return toolbar;
@@ -169,11 +174,16 @@ class TextFieldView : BaseFieldView {
             target in target.setUndoableValue(oldValue, oldValue: newValue)
         }
         setValue(newValue)
-        delegate?.fieldValueChanged(field, value: value)
+        delegate?.fieldValueChanged(field, value: newValue)
+        refreshUndoRedoButtons()
+    }
+
+    private func refreshUndoRedoButtons() {
+        undoButton.isEnabled = fieldUndoManager.canUndo
+        redoButton.isEnabled = fieldUndoManager.canRedo
     }
 
     private func closeCurrentSession() {
-        guard isSessionActive else { return }
         let currentText = multiline ? multilineTextField.textView.text : textField.text
         let newValue = currentText == "" ? nil : currentText
         if sessionStartValue != newValue {
@@ -186,6 +196,10 @@ class TextFieldView : BaseFieldView {
         self.value = value;
         if (self.multiline) {
             self.editMode ? (multilineTextField.textView.text = value) : (fieldValue.text = value);
+            if (self.editMode) {
+                multilineTextField.setNeedsLayout()
+                multilineTextField.layoutIfNeeded()
+            }
         } else {
             self.editMode ? (textField.text = value) : (fieldValue.text = value);
         }
@@ -253,15 +267,25 @@ extension TextFieldView {
         }
     }
 
+    func shouldShowAccessoryView() -> Bool {
+        return !isEmpty() || fieldUndoManager.canUndo || fieldUndoManager.canRedo
+    }
+
     @objc func undoPressed() {
         closeCurrentSession()
-        fieldUndoManager.undo()
+        if fieldUndoManager.canUndo {
+            fieldUndoManager.undo()
+        }
         sessionStartValue = value as? String
+        refreshUndoRedoButtons()
     }
 
     @objc func redoPressed() {
-        fieldUndoManager.redo()
+        if fieldUndoManager.canRedo {
+            fieldUndoManager.redo()
+        }
         sessionStartValue = value as? String
+        refreshUndoRedoButtons()
     }
 }
 
@@ -269,8 +293,7 @@ extension TextFieldView: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         sessionStartValue = value as? String
-        isSessionActive = true
-        accessoryView.alpha = isEmpty() ? 0 : 1;
+        accessoryView.alpha = shouldShowAccessoryView() ? 1 : 0;
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -283,7 +306,6 @@ extension TextFieldView: UITextFieldDelegate {
             setUndoableValue(newValue, oldValue: sessionStartValue)
         }
         sessionStartValue = nil
-        isSessionActive = false
     }
 }
 
@@ -292,8 +314,7 @@ extension TextFieldView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.selectedTextRange = textView.textRange(from: textView.endOfDocument, to: textView.endOfDocument)
         sessionStartValue = value as? String
-        isSessionActive = true
-        accessoryView.alpha = isEmpty() ? 0 : 1;
+        accessoryView.alpha = shouldShowAccessoryView() ? 1 : 0;
     }
 
     func textViewDidChange(_ textView: UITextView) {
@@ -310,6 +331,5 @@ extension TextFieldView: UITextViewDelegate {
             setUndoableValue(newValue, oldValue: sessionStartValue)
         }
         sessionStartValue = nil
-        isSessionActive = false
     }
 }
