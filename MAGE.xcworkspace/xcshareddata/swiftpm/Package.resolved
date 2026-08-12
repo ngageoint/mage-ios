@@ -1,6 +1,15 @@
 {
-  "originHash" : "e5b1ea2daf3d1c191172e0460c8f3ac53b296129314d657d2e6b8125bc497f51",
+  "originHash" : "2bddc5da6043cde9ca28688289c79a16cad0f5511853d5db8581badd669f03a5",
   "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "7595cbcf59809f9977c5f6378500de2ad73b7ddb",
+        "version" : "5.12.0"
+      }
+    },
     {
       "identity" : "color-ios",
       "kind" : "remoteSourceControl",
@@ -17,6 +26,15 @@
       "state" : {
         "revision" : "d0d8cd34710aa78adb1bef3cdb2bf09a18356fa0",
         "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "exceptioncatcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/ExceptionCatcher",
+      "state" : {
+        "revision" : "9e57a89e7ed5e11cbc04fbaa5f1397448f91bb73",
+        "version" : "2.2.0"
       }
     },
     {
@@ -62,6 +80,15 @@
       "state" : {
         "revision" : "fb7c085c30205d86dba22fdad38c4b63de1171de",
         "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "ohhttpstubs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/OHHTTPStubs",
+      "state" : {
+        "revision" : "12f19662426d0434d6c330c6974d53e2eb10ecd9",
+        "version" : "9.1.0"
       }
     },
     {

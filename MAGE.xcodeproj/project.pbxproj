@@ -339,6 +339,8 @@
 		F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */; };
 		F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
+		F784500D302CE62A000A9ED5 /* FetchOperation in Frameworks */ = {isa = PBXBuildFile; productRef = F784500C302CE62A000A9ED5 /* FetchOperation */; };
+		F784500F302CE62A000A9ED5 /* Pipeline in Frameworks */ = {isa = PBXBuildFile; productRef = F784500E302CE62A000A9ED5 /* Pipeline */; };
 		F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F786492D273BFF16002D3DC2 /* LayerTests.swift */; };
 		F7864930273C5E71002D3DC2 /* staticFeatures.geojson in Resources */ = {isa = PBXBuildFile; fileRef = F786492F273C5E71002D3DC2 /* staticFeatures.geojson */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
@@ -912,6 +914,12 @@
 		F7331D1226541C2300D645AC /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
+		F7352CC1302CEBB300EEA4D7 /* MAGE.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MAGE.xctestplan; sourceTree = "<group>"; };
+		F7352CC2302CEF4900EEA4D7 /* ServerDTO */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ServerDTO; sourceTree = "<group>"; };
+		F7352CC4302CEF9B00EEA4D7 /* SendableExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SendableExtensions; sourceTree = "<group>"; };
+		F7352CC5302CEFAA00EEA4D7 /* CodableExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodableExtensions; sourceTree = "<group>"; };
+		F7352CC6302CEFB900EEA4D7 /* APIRouter */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = APIRouter; sourceTree = "<group>"; };
+		F7352CC7302CEFCA00EEA4D7 /* UseCaseFactory */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UseCaseFactory; sourceTree = "<group>"; };
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
 		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
 		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1030,6 +1038,10 @@
 		F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
 		F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
+		F7845007302CDF12000A9ED5 /* Pipeline */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Pipeline; sourceTree = "<group>"; };
+		F7845008302CE098000A9ED5 /* FetchOperation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FetchOperation; sourceTree = "<group>"; };
+		F7845009302CE372000A9ED5 /* TestUtilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TestUtilities; sourceTree = "<group>"; };
+		F784500B302CE60F000A9ED5 /* CoreDataContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContext.swift; sourceTree = "<group>"; };
 		F786492D273BFF16002D3DC2 /* LayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerTests.swift; sourceTree = "<group>"; };
 		F786492F273C5E71002D3DC2 /* staticFeatures.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = staticFeatures.geojson; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -1067,6 +1079,7 @@
 		F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewControllerTests.swift; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageRootViewController.swift; sourceTree = "<group>"; };
 		F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPushServiceTests.swift; sourceTree = "<group>"; };
+		F79A68CA302CE8DE00C80E45 /* ProgressReportingJSONDecoder */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ProgressReportingJSONDecoder; sourceTree = "<group>"; };
 		F79B5DE22821D94C001A5844 /* EventChooserCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventChooserCoordinatorTests.swift; sourceTree = "<group>"; };
 		F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLControllerTests.swift; sourceTree = "<group>"; };
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
@@ -1303,7 +1316,9 @@
 				F7E066892FC9CFE1008C876C /* GeoPackage in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
+				F784500D302CE62A000A9ED5 /* FetchOperation in Frameworks */,
 				F7E0309E2FC9D2B00042A671 /* GARS in Frameworks */,
+				F784500F302CE62A000A9ED5 /* Pipeline in Frameworks */,
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
 				F732E73B2FC9E8F600EA1D49 /* MGRS in Frameworks */,
@@ -2252,6 +2267,14 @@
 			name = Components;
 			sourceTree = "<group>";
 		};
+		F784500A302CE5F8000A9ED5 /* SwiftTesting */ = {
+			isa = PBXGroup;
+			children = (
+				F784500B302CE60F000A9ED5 /* CoreDataContext.swift */,
+			);
+			path = SwiftTesting;
+			sourceTree = "<group>";
+		};
 		F786492C273BFF02002D3DC2 /* Layer */ = {
 			isa = PBXGroup;
 			children = (
@@ -2361,11 +2384,22 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F7352CC7302CEFCA00EEA4D7 /* UseCaseFactory */,
+				F7352CC6302CEFB900EEA4D7 /* APIRouter */,
+				F7352CC5302CEFAA00EEA4D7 /* CodableExtensions */,
+				F7352CC4302CEF9B00EEA4D7 /* SendableExtensions */,
+				F7352CC2302CEF4900EEA4D7 /* ServerDTO */,
+				F7352CC1302CEBB300EEA4D7 /* MAGE.xctestplan */,
+				F79A68CA302CE8DE00C80E45 /* ProgressReportingJSONDecoder */,
+				F7845009302CE372000A9ED5 /* TestUtilities */,
+				F7845008302CE098000A9ED5 /* FetchOperation */,
+				F7845007302CDF12000A9ED5 /* Pipeline */,
 				F76A02722FE49CAB00CDBA4F /* Persistence */,
 				F76B4A6F28E61E710012BF4F /* CHANGELOG.md */,
 				F72D422B2694B60300F9AC3B /* sdk */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				2FD853771BE1564F00602CEA /* Resources */,
+				F784500A302CE5F8000A9ED5 /* SwiftTesting */,
 				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
 				2FDBB3021C65940E000C6C2F /* Scripts */,
@@ -4032,6 +4066,14 @@
 		F76A02732FE49D0300CDBA4F /* Persistence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Persistence;
+		};
+		F784500C302CE62A000A9ED5 /* FetchOperation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FetchOperation;
+		};
+		F784500E302CE62A000A9ED5 /* Pipeline */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Pipeline;
 		};
 		F7E0309D2FC9D2B00042A671 /* GARS */ = {
 			isa = XCSwiftPackageProductDependency;

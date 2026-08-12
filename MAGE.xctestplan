@@ -1,0 +1,87 @@
+{
+  "configurations" : [
+    {
+      "id" : "33A6B867-7FBC-4B51-9A08-CA912853B6E3",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ProgressReportingJSONDecoder",
+        "identifier" : "ProgressReportingJSONDecoderTests",
+        "name" : "ProgressReportingJSONDecoderTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Pipeline",
+        "identifier" : "PipelineTests",
+        "name" : "PipelineTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:TestUtilities",
+        "identifier" : "TestUtilitiesTests",
+        "name" : "TestUtilitiesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:FetchOperation",
+        "identifier" : "FetchOperationTests",
+        "name" : "FetchOperationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Persistence",
+        "identifier" : "PersistenceTests",
+        "name" : "PersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:UseCaseFactory",
+        "identifier" : "UseCaseFactoryTests",
+        "name" : "UseCaseFactoryTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:APIRouter",
+        "identifier" : "APIRouterTests",
+        "name" : "APIRouterTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:SendableExtensions",
+        "identifier" : "SendableExtensionsTests",
+        "name" : "SendableExtensionsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:CodableExtensions",
+        "identifier" : "CodableExtensionsTests",
+        "name" : "CodableExtensionsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:ServerDTO",
+        "identifier" : "ServerDTOTests",
+        "name" : "ServerDTOTests"
+      }
+    }
+  ],
+  "version" : 1
+}
