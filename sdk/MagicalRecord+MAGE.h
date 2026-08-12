@@ -12,5 +12,6 @@
 
 +(void) setupMageCoreDataStack;
 +(void) deleteAndSetupMageCoreDataStack;
++(void) deleteCoreDataStack;
 
 @end

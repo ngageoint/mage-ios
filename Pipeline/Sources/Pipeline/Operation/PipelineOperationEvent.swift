@@ -1,8 +1,6 @@
 //
 //  PipelineOperationEvent.swift
-//  FetchOperation
 //
-//  Created by Daniel Barela on 7/17/26.
 //
 
 /// Describes a state transition within a pipeline operation.

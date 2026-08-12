@@ -1,8 +1,5 @@
 //
 //  PipelineStep.swift
-//  FetchOperation
-//
-//  Created by Daniel Barela on 7/22/26.
 //
 
 

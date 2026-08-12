@@ -1,8 +1,5 @@
 //
 //  AnyPipeline.swift
-//  FetchOperation
-//
-//  Created by Daniel Barela on 7/17/26.
 //
 
 public struct AnyPipeline<Output: Sendable>: Sendable {

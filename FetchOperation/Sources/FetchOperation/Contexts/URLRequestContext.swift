@@ -2,7 +2,6 @@
 //  URLRequestContext.swift
 //  FetchOperation
 //
-//  Created by Daniel Barela on 7/29/26.
 //
 
 import Foundation

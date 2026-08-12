@@ -2,7 +2,6 @@
 //  DTOContext.swift
 //  FetchOperation
 //
-//  Created by Daniel Barela on 7/22/26.
 //
 
 import Foundation

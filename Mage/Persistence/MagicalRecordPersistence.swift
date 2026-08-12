@@ -11,17 +11,24 @@ import Persistence
 import MagicalRecord
 
 public final class MagicalRecordPersistence: PersistenceProtocol {
-
+    
     public let viewContext: NSManagedObjectContext
     public let writeContext: NSManagedObjectContext
-//    let persistentContainer: NSPersistentContainer
     
     public init() {
         MagicalRecord.setupMageCoreDataStack()
-        MagicalRecord.setLoggingLevel(.verbose);
-        viewContext = NSManagedObjectContext.mr_default()
-        writeContext = NSManagedObjectContext.mr_rootSaving()
+        MagicalRecord.setLoggingLevel(.verbose)
+        
+        viewContext = .mr_default()
+        writeContext = .mr_rootSaving()
     }
+    
+    func tearDownStack() {
+        MagicalRecord.deleteCoreDataStack()
+    }
+}
+
+extension MagicalRecordPersistence {
     
     public func readSync<T>(
         _ block: @escaping @Sendable (NSManagedObjectContext) -> T
@@ -30,7 +37,7 @@ public final class MagicalRecordPersistence: PersistenceProtocol {
             block(viewContext)
         }
     }
-
+    
     public func read<T>(
         _ block: @escaping @Sendable (NSManagedObjectContext) throws -> T
     ) async rethrows -> T where T : Sendable {
@@ -40,13 +47,13 @@ public final class MagicalRecordPersistence: PersistenceProtocol {
             try block(context)
         }
     }
-
+    
     public func write<T>(
         _ block: @escaping @Sendable (NSManagedObjectContext) throws -> T?
-    ) async throws -> PersistenceResult where T : Sendable {
+    ) async throws -> PersistenceResult<T> where T : Sendable {
         await withCheckedContinuation { continuation in
             var blockError: Error?
-            var blockReturn: Sendable?
+            var blockReturn: T?
             MagicalRecord.save { context in
                 do {
                     blockReturn = try block(context)
@@ -55,7 +62,7 @@ public final class MagicalRecordPersistence: PersistenceProtocol {
                 }
             } completion: { contextDidSave, error in
                 continuation.resume(
-                    returning: PersistenceResult(
+                    returning: PersistenceResult<T>(
                         success: contextDidSave,
                         persistenceError: error as? NSError,
                         blockReturn: blockReturn,
@@ -65,14 +72,14 @@ public final class MagicalRecordPersistence: PersistenceProtocol {
             }
         }
     }
-
+    
     public func background<T>(
         name: String?,
         _ block: @escaping @Sendable (NSManagedObjectContext) throws -> T
-    ) async rethrows -> PersistenceResult where T : Sendable {
+    ) async rethrows -> PersistenceResult<T> where T : Sendable {
         await withCheckedContinuation { continuation in
             var blockError: Error?
-            var blockReturn: Sendable?
+            var blockReturn: T?
             MagicalRecord.save { context in
                 context.name = name
                 do {
@@ -82,7 +89,7 @@ public final class MagicalRecordPersistence: PersistenceProtocol {
                 }
             } completion: { contextDidSave, error in
                 continuation.resume(
-                    returning: PersistenceResult(
+                    returning: PersistenceResult<T>(
                         success: contextDidSave,
                         persistenceError: error as? NSError,
                         blockReturn: blockReturn,
@@ -102,12 +109,12 @@ public final class MagicalRecordPersistence: PersistenceProtocol {
     ) async -> NSFetchedResultsController<T>
     where T: NSManagedObject & Sendable {
         T.mr_fetchAllSorted(
-                by: sortTerm,
-                ascending: ascending,
-                with: predicate,
-                groupBy: groupBy,
-                delegate: delegate,
-                in: viewContext
-            ) as! NSFetchedResultsController<T>
+            by: sortTerm,
+            ascending: ascending,
+            with: predicate,
+            groupBy: groupBy,
+            delegate: delegate,
+            in: viewContext
+        ) as! NSFetchedResultsController<T>
     }
 }

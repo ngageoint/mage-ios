@@ -11,8 +11,18 @@
 
 @implementation MagicalRecord (MAGE)
 
+
++ (NSManagedObjectModel *)mageManagedObjectModel {
+    static NSManagedObjectModel *model = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        model = [NSManagedObjectModel MR_defaultManagedObjectModel];
+    });
+    return model;
+}
+
 +(void) setupMageCoreDataStack {
-//    NSManagedObjectModel *model = [NSManagedObjectModel MR_defaultManagedObjectModel];
+    //    NSManagedObjectModel *model = [NSManagedObjectModel MR_defaultManagedObjectModel];
     NSManagedObjectModel *model = [MAGEPersistenceModel managedObjectModel];
     [NSManagedObjectModel MR_setDefaultManagedObjectModel:model];
     NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
@@ -27,7 +37,7 @@
                              NSFileProtectionCompleteUnlessOpen, NSPersistentStoreFileProtectionKey,
                              sqliteOptions, NSSQLitePragmasOption,
                              nil];
-
+    
     [coordinator MR_addSqliteStoreNamed:@"Mage.sqlite" withOptions:options];
     [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:coordinator];
     
@@ -43,10 +53,10 @@
     if (!success) {
         NSLog(@"Error excluding %@ from backup %@", storeURL, error);
     }
-
+    NSLog(@"Set up the Magical Record Stack");
 }
 
-+(void) deleteAndSetupMageCoreDataStack {
++(void) deleteCoreDataStack {
     NSLog(@"Remove persistent stores");
     @try {
         if ([NSManagedObjectContext MR_defaultContext] != nil) {
@@ -82,6 +92,10 @@
         NSLog(@"wal error description: %@", walError.description);
         NSLog(@"shm description: %@", shmError.description);
     }
+}
+
++(void) deleteAndSetupMageCoreDataStack {
+    [self deleteCoreDataStack];
     
     NSLog(@"setup stack");
     [self setupMageCoreDataStack];

@@ -13,8 +13,8 @@ public final class ObjCCoreDataPersistence: NSObject, @unchecked Sendable {
     
     @objc
     public static func write(
-        _ block: @Sendable @escaping (NSManagedObjectContext) -> PersistenceResult?,
-        completion: @Sendable @escaping (PersistenceResult) -> Void
+        _ block: @Sendable @escaping (NSManagedObjectContext) -> ObjCPersistenceResult?,
+        completion: @Sendable @escaping (ObjCPersistenceResult) -> Void
     ) {
         let persistence = PersistenceContainer.shared.get()
         
@@ -26,12 +26,12 @@ public final class ObjCCoreDataPersistence: NSObject, @unchecked Sendable {
                 }
                 
                 DispatchQueue.main.async {
-                    completion(result)
+                    completion(ObjCPersistenceResult(from: result))
                 }
             } catch {
                 DispatchQueue.main.async {
                     completion(
-                        PersistenceResult(success: false, persistenceError: error as NSError)
+                        ObjCPersistenceResult(success: false, persistenceError: error as NSError)
                     )
                 }
             }
@@ -60,9 +60,9 @@ public final class ObjCCoreDataPersistence: NSObject, @unchecked Sendable {
 }
 
 private final class ObjCWriteBlock: @unchecked Sendable {
-    let block: (NSManagedObjectContext) throws -> PersistenceResult?
+    let block: (NSManagedObjectContext) throws -> ObjCPersistenceResult?
     
-    init(_ block: @Sendable @escaping (NSManagedObjectContext) throws -> PersistenceResult?) {
+    init(_ block: @Sendable @escaping (NSManagedObjectContext) throws -> ObjCPersistenceResult?) {
         self.block = block
     }
 }
@@ -83,3 +83,4 @@ private final class ObjCReadBlockAny: @unchecked Sendable {
         self.block = block
     }
 }
+

@@ -2,7 +2,6 @@
 //  SaveResultContext.swift
 //  FetchOperation
 //
-//  Created by Daniel Barela on 8/11/26.
 //
 
 

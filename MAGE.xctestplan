@@ -81,6 +81,21 @@
         "identifier" : "ServerDTOTests",
         "name" : "ServerDTOTests"
       }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:MAGE.xcodeproj",
+        "identifier" : "F7ED5D2320052161007BD768",
+        "name" : "MAGETests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:MAGE.xcodeproj",
+        "identifier" : "F7352CCD302CF7EA00EEA4D7",
+        "name" : "SwiftTestingTests"
+      }
     }
   ],
   "version" : 1

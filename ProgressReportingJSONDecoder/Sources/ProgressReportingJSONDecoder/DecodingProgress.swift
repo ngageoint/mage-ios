@@ -2,7 +2,6 @@
 //  DecodingProgress.swift
 //  ProgressReportingJSONDecoder
 //
-//  Created by Daniel Barela on 7/21/26.
 //
 
 public struct DecodingProgress: Sendable {

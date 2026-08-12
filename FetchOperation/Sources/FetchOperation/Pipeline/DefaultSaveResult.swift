@@ -2,7 +2,6 @@
 //  DefaultSaveResult.swift
 //  FetchOperation
 //
-//  Created by Daniel Barela on 8/3/26.
 //
 
 public struct DefaultSaveResult: Sendable, Equatable, CustomStringConvertible {

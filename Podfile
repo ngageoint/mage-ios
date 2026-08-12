@@ -35,6 +35,12 @@ target 'MAGE' do
 #      pod 'Nimble-Snapshots', '~> 9'
       pod 'KIF'
     end
+    target 'SwiftTestingTests' do
+      inherit! :search_paths
+      common_pods
+      pod 'OHHTTPStubs'
+      pod 'OHHTTPStubs/Swift'
+    end
 end
 
 post_install do |installer|

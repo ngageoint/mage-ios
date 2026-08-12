@@ -1,8 +1,5 @@
 //
 //  PipelineOperationProgress.swift
-//  FetchOperation
-//
-//  Created by Daniel Barela on 7/17/26.
 //
 
 /// Progress reported by the currently executing pipeline phase.

@@ -2,8 +2,6 @@
 //  PersistenceProtocol.swift
 //  Persistence
 //
-//  Created by Daniel Barela on 6/18/26.
-//
 
 @preconcurrency import CoreData
 
@@ -16,19 +14,44 @@ public enum PersistenceError: Error {
 }
 
 @objc
-public final class PersistenceResult: NSObject, Sendable {
+public final class ObjCPersistenceResult: NSObject, Sendable {
     @objc public let success: Bool
     @objc public let persistenceError: NSError?
     @objc public let blockError: NSError?
-    @objc public let blockReturn: Sendable?
     
     @objc
-    public init(success: Bool = true, persistenceError: NSError? = nil, blockReturn: Sendable? = nil, blockError: NSError? = nil) {
+    public init(
+        success: Bool = true,
+        persistenceError: NSError? = nil,
+        blockError: NSError? = nil
+    ) {
         self.success = success
         self.persistenceError = persistenceError
-        self.blockReturn = blockReturn
         self.blockError = blockError
     }
+    
+    public convenience init<T>(from result: PersistenceResult<T>)
+    where T: AnyObject & Sendable {
+        self.init(
+            success: result.success,
+            persistenceError: result.persistenceError as NSError?,
+            blockError: result.blockError as NSError?
+        )
+    }
+}
+
+public struct PersistenceResult<T: Sendable>: Sendable {
+    public init(success: Bool, persistenceError: (any Error)? = nil, blockReturn: T? = nil, blockError: (any Error)? = nil) {
+        self.success = success
+        self.persistenceError = persistenceError
+        self.blockError = blockError
+        self.blockReturn = blockReturn
+    }
+    
+    public let success: Bool
+    public let persistenceError: Error?
+    public let blockError: Error?
+    public let blockReturn: T?
 }
 
 public protocol PersistenceProtocol: Sendable {
@@ -40,11 +63,11 @@ public protocol PersistenceProtocol: Sendable {
     ) async rethrows -> T
     func write<T: Sendable>(
         _ block: @escaping @Sendable (NSManagedObjectContext) throws -> T?
-    ) async throws -> PersistenceResult
+    ) async throws -> PersistenceResult<T>
     func background<T: Sendable>(
         name: String?,
         _ block: @escaping @Sendable (NSManagedObjectContext) throws -> T
-    ) async rethrows -> PersistenceResult
+    ) async rethrows -> PersistenceResult<T>
     
     func fetchAllSortedBy<T: NSManagedObject>(
         sortTerm: String,
@@ -54,5 +77,5 @@ public protocol PersistenceProtocol: Sendable {
         delegate: NSFetchedResultsControllerDelegate?
     ) async -> NSFetchedResultsController<T>
     where T: NSManagedObject & Sendable
-
+    
 }

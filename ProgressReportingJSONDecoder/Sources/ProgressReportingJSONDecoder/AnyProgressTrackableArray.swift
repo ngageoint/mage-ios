@@ -2,7 +2,6 @@
 //  AnyProgressTrackableArray.swift
 //  ProgressReportingJSONDecoder
 //
-//  Created by Daniel Barela on 7/21/26.
 //
 
 import Foundation

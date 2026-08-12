@@ -2,7 +2,6 @@
 //  FetchRepository.swift
 //  FetchOperation
 //
-//  Created by Daniel Barela on 7/17/26.
 //
 
 

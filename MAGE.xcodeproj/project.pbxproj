@@ -4,6 +4,7 @@
 	classes = {
 	};
 	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -99,6 +100,7 @@
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
+		7B2866C692E6452125D254D1 /* libPods-SwiftTestingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE7C436261D87884304B41A5 /* libPods-SwiftTestingTests.a */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
@@ -236,6 +238,8 @@
 		F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */; };
 		F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1226541C2300D645AC /* ColorPickerViewController.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
+		F7352CD7302CF80600EEA4D7 /* CoreDataContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F784500B302CE60F000A9ED5 /* CoreDataContext.swift */; };
+		F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7352CC8302CF79900EEA4D7 /* ExampleTest.swift */; };
 		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
 		F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */; };
 		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
@@ -565,6 +569,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		F7352CD2302CF7EA00EEA4D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F7A94D6518AD9CB000CB9EE0;
+			remoteInfo = MAGE;
+		};
 		F763326B2059CD4F00C5529C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
@@ -747,11 +758,14 @@
 		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AFA650362160E2EDC7666C5 /* Pods-SwiftTestingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTestingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftTestingTests/Pods-SwiftTestingTests.release.xcconfig"; sourceTree = "<group>"; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B61E70D96990B16652014926 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFC281F3D2708F993534F206 /* Pods-SwiftTestingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTestingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftTestingTests/Pods-SwiftTestingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE7C436261D87884304B41A5 /* libPods-SwiftTestingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftTestingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
@@ -920,6 +934,8 @@
 		F7352CC5302CEFAA00EEA4D7 /* CodableExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CodableExtensions; sourceTree = "<group>"; };
 		F7352CC6302CEFB900EEA4D7 /* APIRouter */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = APIRouter; sourceTree = "<group>"; };
 		F7352CC7302CEFCA00EEA4D7 /* UseCaseFactory */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UseCaseFactory; sourceTree = "<group>"; };
+		F7352CC8302CF79900EEA4D7 /* ExampleTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleTest.swift; sourceTree = "<group>"; };
+		F7352CCE302CF7EA00EEA4D7 /* SwiftTestingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftTestingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
 		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
 		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1302,7 +1318,19 @@
 		F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoAuthStrategies.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F7352CCF302CF7EA00EEA4D7 /* SwiftTestingTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SwiftTestingTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		F7352CCB302CF7EA00EEA4D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B2866C692E6452125D254D1 /* libPods-SwiftTestingTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7A94D6318AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1380,6 +1408,8 @@
 				3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */,
 				4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */,
 				85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */,
+				DFC281F3D2708F993534F206 /* Pods-SwiftTestingTests.debug.xcconfig */,
+				9AFA650362160E2EDC7666C5 /* Pods-SwiftTestingTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2271,6 +2301,7 @@
 			isa = PBXGroup;
 			children = (
 				F784500B302CE60F000A9ED5 /* CoreDataContext.swift */,
+				F7352CC8302CF79900EEA4D7 /* ExampleTest.swift */,
 			);
 			path = SwiftTesting;
 			sourceTree = "<group>";
@@ -2401,6 +2432,7 @@
 				2FD853771BE1564F00602CEA /* Resources */,
 				F784500A302CE5F8000A9ED5 /* SwiftTesting */,
 				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
+				F7352CCF302CF7EA00EEA4D7 /* SwiftTestingTests */,
 				F7A94D6818AD9CB000CB9EE0 /* Frameworks */,
 				2FDBB3021C65940E000C6C2F /* Scripts */,
 				F7A94D6718AD9CB000CB9EE0 /* Products */,
@@ -2414,6 +2446,7 @@
 			children = (
 				F7A94D6618AD9CB000CB9EE0 /* MAGE.app */,
 				F7ED5D2420052161007BD768 /* MAGETests.xctest */,
+				F7352CCE302CF7EA00EEA4D7 /* SwiftTestingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2438,6 +2471,7 @@
 				9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */,
 				B61E70D96990B16652014926 /* libPods-MAGE.a */,
 				E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */,
+				EE7C436261D87884304B41A5 /* libPods-SwiftTestingTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2793,6 +2827,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F7352CCD302CF7EA00EEA4D7 /* SwiftTestingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F7352CD4302CF7EA00EEA4D7 /* Build configuration list for PBXNativeTarget "SwiftTestingTests" */;
+			buildPhases = (
+				31222DF8FB500C78842E47AF /* [CP] Check Pods Manifest.lock */,
+				F7352CCA302CF7EA00EEA4D7 /* Sources */,
+				F7352CCB302CF7EA00EEA4D7 /* Frameworks */,
+				F7352CCC302CF7EA00EEA4D7 /* Resources */,
+				DBEFA9D4265FF8ED5B54E9EF /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F7352CD3302CF7EA00EEA4D7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F7352CCF302CF7EA00EEA4D7 /* SwiftTestingTests */,
+			);
+			name = SwiftTestingTests;
+			productName = SwiftTestingTests;
+			productReference = F7352CCE302CF7EA00EEA4D7 /* SwiftTestingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F7A94D6518AD9CB000CB9EE0 /* MAGE */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F7A94D9818AD9CB000CB9EE0 /* Build configuration list for PBXNativeTarget "MAGE" */;
@@ -2839,10 +2896,14 @@
 		F7A94D5E18AD9CAF00CB9EE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1230;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
+					F7352CCD302CF7EA00EEA4D7 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = F7A94D6518AD9CB000CB9EE0;
+					};
 					F7A94D6518AD9CB000CB9EE0 = {
 						LastSwiftMigration = 1130;
 						SystemCapabilities = {
@@ -2889,11 +2950,19 @@
 			targets = (
 				F7A94D6518AD9CB000CB9EE0 /* MAGE */,
 				F7ED5D2320052161007BD768 /* MAGETests */,
+				F7352CCD302CF7EA00EEA4D7 /* SwiftTestingTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F7352CCC302CF7EA00EEA4D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7A94D6418AD9CB000CB9EE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3032,6 +3101,28 @@
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "${SRCROOT}/Scripts/set_build_number.sh\n";
+		};
+		31222DF8FB500C78842E47AF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftTestingTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3179,9 +3270,82 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DBEFA9D4265FF8ED5B54E9EF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftTestingTests/Pods-SwiftTestingTests-resources.sh",
+				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Kingfisher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftTestingTests/Pods-SwiftTestingTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F7352CCA302CF7EA00EEA4D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */,
+				F7352CD7302CF80600EEA4D7 /* CoreDataContext.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7A94D6218AD9CB000CB9EE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3649,6 +3813,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		F7352CD3302CF7EA00EEA4D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
+			targetProxy = F7352CD2302CF7EA00EEA4D7 /* PBXContainerItemProxy */;
+		};
 		F763326C2059CD4F00C5529C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F7A94D6518AD9CB000CB9EE0 /* MAGE */;
@@ -3668,6 +3837,84 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		F7352CD5302CF7EA00EEA4D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DFC281F3D2708F993534F206 /* Pods-SwiftTestingTests.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.SwiftTestingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MAGE";
+			};
+			name = Debug;
+		};
+		F7352CD6302CF7EA00EEA4D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9AFA650362160E2EDC7666C5 /* Pods-SwiftTestingTests.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.SwiftTestingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAGE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MAGE";
+			};
+			name = Release;
+		};
 		F7A94D9618AD9CB000CB9EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4001,6 +4248,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F7352CD4302CF7EA00EEA4D7 /* Build configuration list for PBXNativeTarget "SwiftTestingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7352CD5302CF7EA00EEA4D7 /* Debug */,
+				F7352CD6302CF7EA00EEA4D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F7A94D6118AD9CAF00CB9EE0 /* Build configuration list for PBXProject "MAGE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

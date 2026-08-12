@@ -2,7 +2,6 @@
 //  SendableValue.swift
 //  SendableExtensions
 //
-//  Created by Daniel Barela on 7/21/26.
 //
 
 

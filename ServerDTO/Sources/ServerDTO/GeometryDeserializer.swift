@@ -2,7 +2,6 @@
 //  GeometryDeserializer.swift
 //  ServerDTO
 //
-//  Created by Daniel Barela on 8/7/26.
 //
 
 import SimpleFeatures

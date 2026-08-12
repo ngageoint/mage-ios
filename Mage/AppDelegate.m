@@ -137,7 +137,7 @@
     __weak typeof(self) weakSelf = self;
     
     // do a canary save
-    [ObjCCoreDataPersistence write:^PersistenceResult * _Nullable(NSManagedObjectContext * _Nonnull localContext) {
+    [ObjCCoreDataPersistence write:^ObjCPersistenceResult * _Nullable(NSManagedObjectContext * _Nonnull localContext) {
         Canary *canary = [Canary findFirstInContext:localContext];
         if (!canary) {
             canary = [Canary createEntityInContext:localContext];
@@ -145,7 +145,7 @@
         canary.launchDate = [NSDate date];
         NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
         return nil;
-    } completion:^(PersistenceResult * _Nonnull result) {
+    } completion:^(ObjCPersistenceResult * _Nonnull result) {
         NSLog(@"startMageApp canary save success? %d with error %@",
               result.success,
               result.persistenceError);
@@ -246,7 +246,7 @@
     
     if (protectedDataAvailable) {
         // do a canary save
-        [ObjCCoreDataPersistence write:^PersistenceResult * _Nullable(NSManagedObjectContext * _Nonnull localContext) {
+        [ObjCCoreDataPersistence write:^ObjCPersistenceResult * _Nullable(NSManagedObjectContext * _Nonnull localContext) {
             Canary *canary = [Canary findFirstInContext:localContext];
             if (!canary) {
                 canary = [Canary createEntityInContext:localContext];
@@ -254,7 +254,7 @@
             canary.launchDate = [NSDate date];
             NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
             return nil;
-        } completion:^(PersistenceResult * _Nonnull result) {
+        } completion:^(ObjCPersistenceResult * _Nonnull result) {
             BOOL contextDidSave = result.success;
             NSError *error = result.persistenceError;
             NSLog(@"applicationDidBecomeActive canary save success? %d with error %@", contextDidSave, error);
