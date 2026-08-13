@@ -42,15 +42,6 @@ extension Notification.Name {
 
 @objc extension UserDefaults {
     
-    @objc var showMapSearch: Bool {
-        get {
-            return bool(forKey: #function);
-        }
-        set {
-            set(newValue, forKey: #function);
-        }
-    }
-    
     @objc func color(forKey key: String) -> UIColor? {
         var color: UIColor?
         if let colorData = data(forKey: key) {

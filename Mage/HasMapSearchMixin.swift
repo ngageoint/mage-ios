@@ -66,7 +66,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
     
     @MainActor
     func updateSearchUI(using settings: SettingsModel) {
-        if settings.mapSearchType != .none && UserDefaults.standard.showMapSearch {
+        if settings.mapSearchType != .none {
             if rootView.arrangedSubviews.count < indexInView {
                 rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
             } else {
