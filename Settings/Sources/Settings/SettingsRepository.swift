@@ -12,6 +12,7 @@ import APIRouter
 public protocol SettingsRepository : Sendable{
     func getSettings() async -> SettingsModel?
     func getMapSearchSession() async -> TokenAPISession?
+    func observeSettings() -> AsyncStream<SettingsModel>
 }
 
 final class SettingsRepositoryImpl: SettingsRepository {
@@ -48,5 +49,9 @@ final class SettingsRepositoryImpl: SettingsRepository {
             SettingsPackage.logger.error("Error getting settings \(error)")
         }
         return nil
+    }
+    
+    func observeSettings() -> AsyncStream<SettingsModel> {
+        return localDataSource.observeSettings()
     }
 }

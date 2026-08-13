@@ -77,5 +77,8 @@ public protocol PersistenceProtocol: Sendable {
         delegate: NSFetchedResultsControllerDelegate?
     ) async -> NSFetchedResultsController<T>
     where T: NSManagedObject & Sendable
-    
+    func makeFetchedChangesStream<T: CoreDataDomainModelConvertible> (
+        request: @escaping @Sendable () -> NSFetchRequest<T.Entity>,
+        sectionNameKeyPath: String?
+    ) throws -> FetchedResultsChangesAsyncStream<T>
 }

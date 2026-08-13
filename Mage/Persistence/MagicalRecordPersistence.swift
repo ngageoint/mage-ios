@@ -117,4 +117,17 @@ extension MagicalRecordPersistence {
             in: viewContext
         ) as! NSFetchedResultsController<T>
     }
+    
+    @MainActor
+    public func makeFetchedChangesStream<T: CoreDataDomainModelConvertible> (
+        request: @escaping @Sendable () -> NSFetchRequest<T.Entity>,
+        sectionNameKeyPath: String?
+    ) throws -> FetchedResultsChangesAsyncStream<T> {
+        let context = viewContext
+        return try FetchedResultsChangesAsyncStream<T>(
+            fetchRequest: request(),
+            context: context,
+            sectionNameKeyPath: sectionNameKeyPath
+        )
+    }
 }

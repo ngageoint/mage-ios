@@ -7,6 +7,7 @@
 
 import UseCaseFactory
 import SettingsFetch
+import Settings
 
 @MainActor
 enum SettingsUseCaseModule: UseCaseModule {
@@ -19,6 +20,13 @@ enum SettingsUseCaseModule: UseCaseModule {
                         fetchRepository: deps.settingsFetch
                     )
                 }
+            },
+            .init { factory in
+                factory.register(.ObserveSettingsUseCase) {
+                    return ObserveSettingsUseCaseImpl(
+                        repository: deps.settingsRepository
+                    )
+                }
             }
         ]
     }
@@ -26,4 +34,5 @@ enum SettingsUseCaseModule: UseCaseModule {
 
 extension UseCaseKey {
     static var RefreshSettingsUseCase: UseCaseKey<RefreshSettingsUseCase> { .init() }
+    static var ObserveSettingsUseCase: UseCaseKey<ObserveSettingsUseCase> { .init() }
 }

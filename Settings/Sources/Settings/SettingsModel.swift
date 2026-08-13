@@ -24,3 +24,12 @@ extension SettingsModel {
         mapSearchUrl = settings.mapSearchUrl
     }
 }
+
+extension SettingsModel: CoreDataDomainModelConvertible {
+    public typealias Entity = Settings
+
+    public init(from entity: Settings) {
+        self.mapSearchUrl = entity.mapSearchUrl
+        self.mapSearchType = entity.mapSearchType
+    }
+}

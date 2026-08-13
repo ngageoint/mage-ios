@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Settings
 
 import MGRS
 import GARS
@@ -29,6 +30,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
     var navigationController: UINavigationController?
     var annotation: MKPointAnnotation?
     var searchController: SearchSheetController
+    private var observeSettingsTask: Task<Void, Never>!
 
     private lazy var mapSearchButton: MDCFloatingButton = {
         let mapSearchButton = MDCFloatingButton(shape: .mini)
@@ -45,6 +47,42 @@ class HasMapSearchMixin: NSObject, MapMixin {
         self.navigationController = navigationController
         self.scheme = scheme
         self.searchController = SearchSheetController(mapView: hasMapSearch.mapView, scheme: scheme)
+        super.init()
+        observeSettingsTask = Task { @MainActor [weak self] in
+            guard let observeSettings = try? await DependencyContainer.shared
+                .useCaseFactory
+                .resolve(.ObserveSettingsUseCase)
+            else {
+                return
+            }
+            
+            for await settings in observeSettings.execute() {
+                guard let self else { return }
+                self.updateSearchUI(using: settings)
+            }
+        }
+    }
+    
+    @MainActor
+    func updateSearchUI(using settings: SettingsModel) {
+        if settings.mapSearchType != .none && UserDefaults.standard.showMapSearch {
+            if rootView.arrangedSubviews.count < indexInView {
+                rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
+            } else {
+                rootView.insertArrangedSubview(mapSearchButton, at: indexInView)
+            }
+            
+            applyTheme(scheme: hasMapSearch.scheme)
+        } else {
+            if rootView.arrangedSubviews.contains(mapSearchButton) {
+                rootView.removeArrangedSubview(mapSearchButton)
+                mapSearchButton.removeFromSuperview()
+            }
+        }
+    }
+    
+    deinit {
+        observeSettingsTask.cancel()
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
@@ -54,19 +92,12 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     func setupMixin() {
-        if UserDefaults.standard.showMapSearch {
-            if rootView.arrangedSubviews.count < indexInView {
-                rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
-            } else {
-                rootView.insertArrangedSubview(mapSearchButton, at: indexInView)
-            }
-            
-            applyTheme(scheme: hasMapSearch.scheme)
-        }
+        applyTheme(scheme: hasMapSearch.scheme)
     }
     
     func cleanupMixin() {
         self.searchController.dismiss(animated: true)
+        observeSettingsTask.cancel()
     }
     
     @objc func mapSearchButtonTapped(_ sender: UIButton) {
