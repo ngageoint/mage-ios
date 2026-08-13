@@ -671,21 +671,6 @@ PODS:
   - MotionInterchange (3.0.0)
   - Nimble (9.2.1)
   - OCMock (3.9.4)
-  - OHHTTPStubs (9.1.0):
-    - OHHTTPStubs/Default (= 9.1.0)
-  - OHHTTPStubs/Core (9.1.0)
-  - OHHTTPStubs/Default (9.1.0):
-    - OHHTTPStubs/Core
-    - OHHTTPStubs/JSON
-    - OHHTTPStubs/NSURLSession
-    - OHHTTPStubs/OHPathHelpers
-  - OHHTTPStubs/JSON (9.1.0):
-    - OHHTTPStubs/Core
-  - OHHTTPStubs/NSURLSession (9.1.0):
-    - OHHTTPStubs/Core
-  - OHHTTPStubs/OHPathHelpers (9.1.0)
-  - OHHTTPStubs/Swift (9.1.0):
-    - OHHTTPStubs/Default
   - PureLayout (3.1.9)
   - Quick (4.0.0)
   - SSZipArchive (2.2.3)
@@ -704,8 +689,6 @@ DEPENDENCIES:
   - MDFInternationalization
   - Nimble (~> 9)
   - OCMock
-  - OHHTTPStubs
-  - OHHTTPStubs/Swift
   - PureLayout
   - Quick (from `https://github.com/Quick/Quick.git`, commit `a0a5fc857cea079fbe973e4faa80b6ceaf17bd46`)
   - SSZipArchive (~> 2.2.2)
@@ -728,7 +711,6 @@ SPEC REPOS:
     - MotionInterchange
     - Nimble
     - OCMock
-    - OHHTTPStubs
     - PureLayout
     - SSZipArchive
     - UIImage-Categories
@@ -759,13 +741,12 @@ SPEC CHECKSUMS:
   MotionInterchange: 13adae439b377e31d1674cc165539d50e1d1566a
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   OCMock: 589f2c84dacb1f5aaf6e4cec1f292551fe748e74
-  OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
   Quick: 5dc45f9bc11236594a7acc99f7bd85ecdc9a477d
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: cb9eb454b94c517e4bad451ed4c9d1f0e35ac8c8
+PODFILE CHECKSUM: 6cae9341fecd8e29d018815c06b2a0e5b5a06ee7
 
 COCOAPODS: 1.16.2

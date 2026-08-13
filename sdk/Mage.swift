@@ -6,6 +6,7 @@
 
 import Foundation
 import Persistence
+import Settings
 
 @objc public class Mage: NSObject {
     
@@ -15,7 +16,9 @@ import Persistence
     }
     
     @objc public func startServices(initial: Bool) {
-        fetchSettings()
+        Task {
+            await fetchSettings()
+        }
         let startFetchServices = {
             LocationFetchService.singleton.start();
             ObservationFetchService.singleton.start(initial: initial);
@@ -58,17 +61,13 @@ import Persistence
         AttachmentPushService.singleton().stop();
     }
     
-    private func fetchSettings() {
-        let manager = MageSessionManager.shared();
-        
-        let task = Settings.operationToPullMapSettings { task, response in
-            NSLog("Fetched settings");
-        } failure: { task, error in
-            NSLog("Failure to fetch settings");
-        }
-        
-        if let task = task {
-            manager?.addTask(task)
+    public func fetchSettings() async {
+        do {
+            let _ = try await DependencyContainer.shared.useCaseFactory
+                .resolve(.RefreshSettingsUseCase)
+                .execute()
+        } catch {
+            SettingsPackage.logger.error("Failed to fetch settings: \(error)")
         }
     }
     

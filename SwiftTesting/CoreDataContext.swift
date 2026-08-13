@@ -8,6 +8,13 @@
 import Testing
 import CoreData
 
+// This is a marker for all core data tests
+// they need to run serialized due to the way MagicalRecord has singletons for
+// the contexts.  When MagicalRecord is removed, these tests can be allowed
+// to run in parallel
+@Suite(.serialized) struct CoreDataTests {
+}
+
 public struct PersistenceContext: Sendable {
     public let persistence: PersistenceProtocol
     @TaskLocal public static var current: PersistenceContext?

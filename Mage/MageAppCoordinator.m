@@ -46,22 +46,28 @@
 
 - (void) start {
     // check for a valid token
+    NSURL *url = [MageServer baseURL];
     if ([[UserUtility singleton] isTokenExpired]) {
-        NSURL *url = [MageServer baseURL];
         if ([url absoluteString].length == 0) {
             [self changeServerUrl];
             return;
         } else {
             __weak __typeof__(self) weakSelf = self;
             [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
-                [weakSelf startAuthentication:mageServer];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [DependencyContainer.shared configureWithUrl:url additionalHeaders:nil];
+                    [weakSelf startAuthentication:mageServer];
+                });
             } failure:^(NSError *error) {
                 [weakSelf setServerURLWithError: error.localizedDescription];
             }];
         }
     } else {
         [MageSessionManager sharedManager].token = [StoredPassword retrieveStoredToken];
-        [self startEventChooser];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [DependencyContainer.shared configureWithUrl:url additionalHeaders:nil];
+            [self startEventChooser];
+        });
     }
 }
 
@@ -116,6 +122,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [FadeTransitionSegue addFadeTransitionToView:weakSelf.navigationController.view];
             [weakSelf.navigationController popViewControllerAnimated:NO];
+            [DependencyContainer.shared configureWithUrl:url additionalHeaders:nil];
             [weakSelf startAuthentication:mageServer];
         });
     } failure:^(NSError *error) {
@@ -133,7 +140,10 @@
     } else {
         __weak __typeof__(self) weakSelf = self;
         [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
-            [weakSelf startAuthentication:mageServer];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [DependencyContainer.shared configureWithUrl:url additionalHeaders:nil];
+                [weakSelf startAuthentication:mageServer];
+            });
         } failure:^(NSError *error) {
             [weakSelf setServerURLWithError: error.localizedDescription];
         }];
