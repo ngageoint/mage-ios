@@ -12,6 +12,7 @@ import Settings
 
 protocol SearchControllerDelegate {
     func onSearchResultSelected(type: SearchResponseType, result: GeocoderResult);
+    func clearSearchResults();
 }
 
 class SearchSheetController: UIViewController {
@@ -175,7 +176,11 @@ extension SearchSheetController : UITextFieldDelegate {
         self.searchType = nil
         self.searchResults = []
         self.tableView.reloadData()
-        
+        delegate?.clearSearchResults()
+        return true
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersInRanges ranges: [NSValue], replacementString string: String) -> Bool {
+        delegate?.clearSearchResults()
         return true
     }
 }

@@ -158,6 +158,14 @@ extension HasMapSearchMixin: SearchControllerDelegate {
         hasMapSearch.onSearchResultSelected(result: result)
     }
     
+    func clearSearchResults() {
+        guard let mapView = hasMapSearch.mapView else { return }
+
+        if let annotation = annotation {
+            mapView.removeAnnotation(annotation)
+        }
+    }
+    
     private func getRegion(searchType: SearchResponseType, location: CLLocationCoordinate2D, grid: String?) -> MKCoordinateRegion {
         var region = MKCoordinateRegion(center: location, latitudinalMeters: 1000, longitudinalMeters: 1000)
 
