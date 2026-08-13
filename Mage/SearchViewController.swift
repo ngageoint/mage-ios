@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Settings
 
 protocol SearchControllerDelegate {
     func onSearchResultSelected(type: SearchResponseType, result: GeocoderResult);
@@ -21,6 +22,7 @@ class SearchSheetController: UIViewController {
     var searchResults: [GeocoderResult] = []
     var delegate: SearchControllerDelegate?
     var mapView: MKMapView?
+    var settings: SettingsModel?
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
@@ -133,10 +135,16 @@ class SearchSheetController: UIViewController {
 
         progressView.tintColor = scheme?.colorScheme.onBackgroundColor
     }
+    
+    func configureSettings(settings: SettingsModel) {
+        self.settings = settings
+    }
 }
 
 extension SearchSheetController : UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(
+        _ searchBar: UISearchBar
+    ) {
         guard let text = searchBar.searchTextField.text else {
             return
         }
@@ -145,7 +153,7 @@ extension SearchSheetController : UISearchBarDelegate {
             self.refreshingView.alpha = 1.0
         }
                 
-        geocoder.search(text: text, region: mapView?.region) { searchResponse in
+        geocoder.search(text: text, region: mapView?.region, settings: settings) { searchResponse in
             switch searchResponse {
                 case let .success(type, results):
                     self.searchType = type

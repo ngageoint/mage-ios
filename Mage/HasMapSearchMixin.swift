@@ -58,6 +58,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
             
             for await settings in observeSettings.execute() {
                 guard let self else { return }
+                searchController.configureSettings(settings: settings)
                 self.updateSearchUI(using: settings)
             }
         }

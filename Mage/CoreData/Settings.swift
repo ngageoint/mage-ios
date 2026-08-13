@@ -22,7 +22,4 @@ extension Settings {
         set { self.mapSearchTypeCode = newValue.rawValue }
     }
     
-    @objc public static func getSettings() -> Settings? {
-        return Settings.mr_findFirst()
-    }
 }

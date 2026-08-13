@@ -8,6 +8,7 @@
 
 import Foundation
 import Persistence
+import Settings
 
 import GARS
 import MGRS
@@ -40,7 +41,7 @@ protocol PlacenameSearch {
 }
 
 class Geocoder {
-    func search(text: String, region: MKCoordinateRegion? = nil, completion: @escaping ((SearchResponse) -> Void)) {
+    func search(text: String, region: MKCoordinateRegion? = nil, settings: SettingsModel?, completion: @escaping ((SearchResponse) -> Void)) {
         if (GARS.isGARS(text)) {
             let point = GARS.parse(text).toCoordinate()
             let result = GeocoderResult(name: "GARS", address: text, location: point)
@@ -50,8 +51,7 @@ class Geocoder {
             let result = GeocoderResult(name: "MGRS", address: text, location: point)
             completion(SearchResponse.success(type: .mgrs, results: [result]))
         } else {
-            let settings = Settings.getSettings()
-            let searchType = settings?.mapSearchType ?? .native
+            let searchType = settings?.mapSearchType
             switch searchType {
             case .native:
                 NativeGeocoder().search(text: text, region: region, completion: completion)
