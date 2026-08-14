@@ -19,7 +19,7 @@ public class SettingsFetchRepositoryFactory {
         url: URL,
         session: TokenAPISession,
         persistence: PersistenceProtocol
-    ) -> AnyFetchRepository<[MapSettingsDTO]> {
+    ) -> AnyFetchRepository<Void, [MapSettingsDTO]> {
         return AnyFetchRepository(
             FetchRepository(
                 pipeline: AnyPipeline(

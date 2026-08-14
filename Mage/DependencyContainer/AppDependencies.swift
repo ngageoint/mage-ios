@@ -11,5 +11,5 @@ import Settings
 
 struct AppDependencies {
     let settingsRepository: SettingsRepository
-    let settingsFetch: AnyFetchRepository<[MapSettingsDTO]>
+    let settingsFetch: AnyFetchRepository<Void, [MapSettingsDTO]>
 }

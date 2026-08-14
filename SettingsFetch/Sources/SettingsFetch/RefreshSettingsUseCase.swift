@@ -14,11 +14,11 @@ import Settings
 public final class RefreshSettingsUseCase: Sendable, UseCase {
 
     private let repository: SettingsRepository
-    private let fetchRepository: AnyFetchRepository<[MapSettingsDTO]>
+    private let fetchRepository: AnyFetchRepository<Void, [MapSettingsDTO]>
 
     public init(
         repository: SettingsRepository,
-        fetchRepository: AnyFetchRepository<[MapSettingsDTO]>
+        fetchRepository: AnyFetchRepository<Void, [MapSettingsDTO]>
     ) {
         self.repository = repository
         self.fetchRepository = fetchRepository

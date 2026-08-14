@@ -17,11 +17,11 @@ import Pipeline
 /// `FetchOperation` represents the in-flight work and may be observed by
 /// zero or more consumers. Observation is optional and does not control
 /// the lifetime of the fetch operation.
-public struct AnyFetchRepository<Output: Sendable>:
-    FetchRepositoryProtocol<Output>,
+public struct AnyFetchRepository<Input: Sendable, Output: Sendable>:
+    FetchRepositoryProtocol<Input, Output>,
     Sendable {
     
-    private let fetchClosure: @Sendable () ->
+    private let fetchClosure: @Sendable (Input) ->
     any PipelineOperation<Output>
     
     
@@ -30,7 +30,7 @@ public struct AnyFetchRepository<Output: Sendable>:
     /// - Parameter repository: The concrete fetch repository to wrap.
     public init<R: FetchRepositoryProtocol>(
         _ repository: R
-    ) where R.Output == Output {
+    ) where R.Input == Input, R.Output == Output {
         self.fetchClosure = repository.startFetch
     }
     
@@ -46,8 +46,9 @@ public struct AnyFetchRepository<Output: Sendable>:
     /// requested explicitly through `FetchOperation.cancel()`.
     ///
     /// - Returns: A handle representing the running fetch operation.
-    public func startFetch()
-    -> any PipelineOperation<Output> {
-        fetchClosure()
+    public func startFetch(
+        _ input: Input
+    ) -> any PipelineOperation<Output> {
+        fetchClosure(input)
     }
 }

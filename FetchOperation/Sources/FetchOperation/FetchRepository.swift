@@ -8,7 +8,7 @@
 import Foundation
 import Pipeline
 
-public final class FetchRepository<Output: Sendable>:
+public final class FetchRepository<Input: Sendable, Output: Sendable>:
     FetchRepositoryProtocol,
     Sendable {
     
@@ -21,7 +21,7 @@ public final class FetchRepository<Output: Sendable>:
     }
     
     
-    public func startFetch()
+    public func startFetch(_ input: Input)
     -> any PipelineOperation<Output> {
         
         pipeline.execute()
