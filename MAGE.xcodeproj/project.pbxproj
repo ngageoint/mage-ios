@@ -372,6 +372,7 @@
 		F784500F302CE62A000A9ED5 /* Pipeline in Frameworks */ = {isa = PBXBuildFile; productRef = F784500E302CE62A000A9ED5 /* Pipeline */; };
 		F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F786492D273BFF16002D3DC2 /* LayerTests.swift */; };
 		F7864930273C5E71002D3DC2 /* staticFeatures.geojson in Resources */ = {isa = PBXBuildFile; fileRef = F786492F273C5E71002D3DC2 /* staticFeatures.geojson */; };
+		F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7874B9F302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */; };
 		F78D578B27B46F49003594D3 /* FeedsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D578A27B46F49003594D3 /* FeedsMap.swift */; };
@@ -1097,6 +1098,7 @@
 		F784500B302CE60F000A9ED5 /* CoreDataContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContext.swift; sourceTree = "<group>"; };
 		F786492D273BFF16002D3DC2 /* LayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerTests.swift; sourceTree = "<group>"; };
 		F786492F273C5E71002D3DC2 /* staticFeatures.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = staticFeatures.geojson; sourceTree = "<group>"; };
+		F7874B9F302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ObserveSettingsUseCaseTests.swift; path = SwiftTesting/ObserveSettingsUseCaseTests.swift; sourceTree = SOURCE_ROOT; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentUIImageView.swift; sourceTree = "<group>"; };
@@ -2372,6 +2374,7 @@
 			isa = PBXGroup;
 			children = (
 				F74BDAE4302E233A00F3E499 /* PersistenceTestUtilities.swift */,
+				F7874B9F302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift */,
 				F74BDAE1302E196B00F3E499 /* sdk */,
 				F784500B302CE60F000A9ED5 /* CoreDataContext.swift */,
 				F7352CC8302CF79900EEA4D7 /* ExampleTest.swift */,
@@ -3416,6 +3419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */,
 				F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */,
 				F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */,
 				F7352CD7302CF80600EEA4D7 /* CoreDataContext.swift in Sources */,

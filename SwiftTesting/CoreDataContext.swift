@@ -33,6 +33,7 @@ public struct PersistenceTrait: TestTrait, TestScoping {
         performing function: @concurrent  @Sendable () async throws -> Void
     ) async throws {
         let persistence = MagicalRecordPersistence()
+        PersistenceContainer.shared.reconfigure(persistence)
         let testContext = PersistenceContext(
             persistence: persistence
         )

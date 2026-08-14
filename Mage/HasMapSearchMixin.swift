@@ -55,7 +55,6 @@ class HasMapSearchMixin: NSObject, MapMixin {
             else {
                 return
             }
-            
             for await settings in observeSettings.execute() {
                 guard let self else { return }
                 searchController.configureSettings(settings: settings)
@@ -106,13 +105,23 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     func showSearchBottomSheet() {
+        if searchController.presentingViewController != nil {
+            searchController.dismiss(animated: true)
+            return
+        }
+        
         searchController.delegate = self
         searchController.modalPresentationStyle = .formSheet
+        
         if let sheet = searchController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
         }
-        self.navigationController?.present(searchController, animated: true, completion: nil)
+        
+        navigationController?.present(
+            searchController,
+            animated: true
+        )
     }
     
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {

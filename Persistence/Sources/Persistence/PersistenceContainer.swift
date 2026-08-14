@@ -22,6 +22,13 @@ public final class PersistenceContainer: NSObject, @unchecked Sendable {
         self.persistence = persistence
     }
     
+    public func reconfigure(_ persistence: PersistenceProtocol) {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        self.persistence = persistence
+    }
+    
     public func get() -> PersistenceProtocol {
         guard let persistence else {
             fatalError("Not configured")

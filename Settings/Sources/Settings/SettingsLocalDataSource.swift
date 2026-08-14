@@ -49,11 +49,11 @@ final class SettingsLocalDataSourceImpl: SettingsLocalDataSource {
                         for await value in fetchChanges.stream {
                             switch (value) {
                                 
-                            case .initial(let syncStates):
-                                guard let syncState = syncStates.first else {
-                                    return
+                            case .initial(let states):
+                                guard let state = states.first else {
+                                    continue
                                 }
-                                continuation.yield(syncState)
+                                continuation.yield(state)
                             case .insert(_, let state):
                                 continuation.yield(state)
                             case .delete(_, _):

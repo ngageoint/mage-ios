@@ -15,6 +15,8 @@ int main(int argc, char * argv[]) {
         NSLog(@"View testing is %@",[[[NSProcessInfo processInfo] environment] objectForKey:@"VIEW_TESTING"]);
         if ([[[[NSProcessInfo processInfo] environment] objectForKey:@"VIEW_TESTING"] isEqualToString:@"true"]) {
             appDelegateClass = NSClassFromString(@"ViewLoaderAppDelegate");
+        } else if ([[[[NSProcessInfo processInfo] environment] objectForKey:@"TESTING"] isEqualToString:@"true"]) {
+            return UIApplicationMain(argc, argv, nil, nil);
         }
         if (!appDelegateClass)
             appDelegateClass = [AppDelegate class];

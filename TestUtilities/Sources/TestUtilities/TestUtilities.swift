@@ -14,6 +14,30 @@ public class TestUtilities {
         return nil
         //        return Bundle.main.path(forResource: filename, ofType: withExtension)
     }
+    
+    @MainActor
+    public static func waitForCondition(_ condition: @escaping () -> Bool, timeout: TimeInterval, message: String) async {
+        let startTime = Date()
+        while !condition() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                Issue.record(Comment(rawValue: message))
+                return
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s delay
+        }
+    }
+    
+    @MainActor
+    public static func waitForCondition(_ condition: @escaping () async -> Bool, timeout: TimeInterval, message: String) async {
+        let startTime = Date()
+        while !(await condition()) {
+            if Date().timeIntervalSince(startTime) > timeout {
+                Issue.record(Comment(rawValue: message))
+                return
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s delay
+        }
+    }
 }
 
 // Don't do this in real code, only for tests
