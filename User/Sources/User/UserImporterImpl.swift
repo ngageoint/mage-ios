@@ -6,7 +6,6 @@
 //  Copyright © 2026 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-import User
 import CoreData
 import ServerDTO
 import Persistence

@@ -12,6 +12,7 @@ import ServerDTO
 import User
 import CoreData
 import Pipeline
+import User
 
 final class UserFetchLocalImpl: UserFetchLocal {
     typealias DTO = UserDTO

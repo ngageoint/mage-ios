@@ -5,7 +5,6 @@
 //  Created by Daniel Barela on 8/4/26.
 //
 
-import User
 import ServerDTO
 import CoreData
 
