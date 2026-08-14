@@ -12,7 +12,11 @@ import CoreData
 // they need to run serialized due to the way MagicalRecord has singletons for
 // the contexts.  When MagicalRecord is removed, these tests can be allowed
 // to run in parallel
-@Suite(.serialized) struct CoreDataTests {
+@Suite(
+    .serialized,
+    .persistence
+)
+struct CoreDataTests {
 }
 
 public struct PersistenceContext: Sendable {
@@ -25,7 +29,7 @@ public enum CoreDataType: Sendable {
     case fake(persistence: PersistenceProtocol)
 }
 
-public struct PersistenceTrait: TestTrait, TestScoping {
+public struct PersistenceTrait: TestTrait, SuiteTrait, TestScoping {
 
     public func provideScope(
         for test: Test,
@@ -53,11 +57,15 @@ public struct PersistenceTrait: TestTrait, TestScoping {
         }
 
     }
+    
+    public var isRecursive: Bool {
+        true
+    }
 }
 
 // Make the trait available as a static property
 public extension Trait where Self == PersistenceTrait {
-    static func persistence() -> Self {
+    static var persistence: Self {
         Self()
     }
 }

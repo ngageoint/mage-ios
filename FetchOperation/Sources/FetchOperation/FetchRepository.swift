@@ -12,18 +12,18 @@ public final class FetchRepository<Input: Sendable, Output: Sendable>:
     FetchRepositoryProtocol,
     Sendable {
     
-    private let pipeline: AnyPipeline<Output>
+    private let fetch: @Sendable (Input) -> any PipelineOperation<Output>
     
     public init(
-        pipeline: AnyPipeline<Output>
+        fetch: @escaping @Sendable (Input) -> any PipelineOperation<Output>
     ) {
-        self.pipeline = pipeline
+        self.fetch = fetch
     }
     
     
-    public func startFetch(_ input: Input)
-    -> any PipelineOperation<Output> {
-        
-        pipeline.execute()
+    public func startFetch(
+        _ input: Input
+    ) -> any PipelineOperation<Output> {
+        fetch(input)
     }
 }

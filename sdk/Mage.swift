@@ -7,6 +7,8 @@
 import Foundation
 import Persistence
 import Settings
+import UserFetch
+import ServerDTO
 
 @objc public class Mage: NSObject {
     
@@ -24,25 +26,10 @@ import Settings
             ObservationFetchService.singleton.start(initial: initial);
         }
         if initial {
-            var tasks: [URLSessionDataTask] = [];
-            if let fetchRolesTask = Role.operationToFetchRoles(success: nil, failure: nil) {
-                tasks.append(fetchRolesTask)
-            }
-            if let fetchUsersTask = User.operationToFetchCurrentEventUsers(
-                success: { task, response in
-                    NSLog("initial user fetch complete")
-                    startFetchServices()
-                },
-                failure: { task, error in
-                    NSLog("initial user fetch failed: \(error)")
-                    startFetchServices();
-                }
-            ) {
-                tasks.append(fetchUsersTask);
-            }
-            if tasks.count > 0 {
-                let sessionTask = SessionTask(tasks: tasks, andMaxConcurrentTasks: 1);
-                MageSessionManager.shared().add(sessionTask);
+            Task {
+                await fetchUsers()
+                NSLog("initial user fetch complete")
+                startFetchServices()
             }
         }
         else {
@@ -59,6 +46,17 @@ import Settings
         ObservationFetchService.singleton.stop();
         ObservationPushService.singleton.stop();
         AttachmentPushService.singleton().stop();
+    }
+    
+    public func fetchUsers() async {
+        do {
+            let eventID: EventID? = Server.currentEventId().map { EventID($0) }
+            let eventUserFetchUseCase = try await DependencyContainer.shared.useCaseFactory
+                .resolve(.EventUserFetchUseCase)
+            try await eventUserFetchUseCase.execute(eventID: eventID)
+        } catch {
+            UserFetchPackage.logger.error("Failed to fetch event users: \(error)")
+        }
     }
     
     public func fetchSettings() async {

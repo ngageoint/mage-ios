@@ -11,8 +11,7 @@ public class TestUtilities {
                 return path
             }
         }
-        return nil
-        //        return Bundle.main.path(forResource: filename, ofType: withExtension)
+        return Bundle.module.path(forResource: filename, ofType: withExtension)
     }
     
     @MainActor

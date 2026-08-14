@@ -116,6 +116,20 @@
         "identifier" : "SettingsTests",
         "name" : "SettingsTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:UserFetch",
+        "identifier" : "UserFetchTests",
+        "name" : "UserFetchTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:User",
+        "identifier" : "UserTests",
+        "name" : "UserTests"
+      }
     }
   ],
   "version" : 1

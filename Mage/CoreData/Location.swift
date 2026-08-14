@@ -11,6 +11,7 @@ import CoreData
 import CoreLocation
 import SimpleFeatures
 import MagicalRecord
+import ServerDTO
 
 import Persistence
 
@@ -218,7 +219,11 @@ extension Location: Navigable {
                 
                 if (newUserFound) {
                     // for now if we find at least one new user lets just go grab the users again
-                    User.operationToFetchCurrentEventUsers(success: nil, failure: nil);
+                    Task {
+                        try await DependencyContainer.shared.useCaseFactory
+                            .resolve(.EventUserFetchUseCase)
+                            .execute(eventID: EventID(currentEventId))
+                    }
                 }
             } completion: { contextDidSave, error in
                 NSLog("TIMING Saved Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")

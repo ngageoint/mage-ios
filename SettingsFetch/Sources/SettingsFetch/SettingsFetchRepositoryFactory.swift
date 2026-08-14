@@ -21,19 +21,18 @@ public class SettingsFetchRepositoryFactory {
         persistence: PersistenceProtocol
     ) -> AnyFetchRepository<Void, [MapSettingsDTO]> {
         return AnyFetchRepository(
-            FetchRepository(
-                pipeline: AnyPipeline(
-                    FetchPipelines
-                        .default(
-                            remote: SettingsFetchRemote(
-                                url: url,
-                                session: session
-                            ),
-                            local: SettingsFetchLocal(persistence: persistence),
-                            operation: SettingsFetchOperationKind
-                        )
+            FetchRepository<Void, [MapSettingsDTO]> { input in
+                let pipeline = FetchPipelines.default(
+                    remote: SettingsFetchRemote(
+                        url: url,
+                        session: session
+                    ),
+                    local: SettingsFetchLocal(persistence: persistence),
+                    operation: SettingsFetchOperationKind
                 )
-            )
+                
+                return pipeline.execute()
+            }
         )
     }
 }

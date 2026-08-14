@@ -311,6 +311,12 @@
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
 		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
 		F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7641CE3276D423A006225BA /* CanCreateObservation.swift */; };
+		F7650290302F9F5400B8414A /* User in Frameworks */ = {isa = PBXBuildFile; productRef = F765028F302F9F5400B8414A /* User */; };
+		F7650293302FA6D700B8414A /* UserFetch in Frameworks */ = {isa = PBXBuildFile; productRef = F7650292302FA6D700B8414A /* UserFetch */; };
+		F7650295302FAF7900B8414A /* UserUseCaseModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7650294302FAF7900B8414A /* UserUseCaseModule.swift */; };
+		F7650299302FB7D900B8414A /* UserFetchRemoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7650298302FB7D900B8414A /* UserFetchRemoteTests.swift */; };
+		F765029B302FBA9400B8414A /* UserFetchLocalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765029A302FBA9400B8414A /* UserFetchLocalTests.swift */; };
+		F765029D302FBAC900B8414A /* UserRepositoryFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765029C302FBAC900B8414A /* UserRepositoryFactoryTests.swift */; };
 		F7679E4E30238957009A84BD /* AttachmentSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7679E4D30238957009A84BD /* AttachmentSelectionDelegate.swift */; };
 		F7679E5030238A0D009A84BD /* AttachmentCollectionDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7679E4F30238A0D009A84BD /* AttachmentCollectionDataStore.swift */; };
 		F7679E5230238BB0009A84BD /* ObservationSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7679E5130238BB0009A84BD /* ObservationSelectionDelegate.swift */; };
@@ -1035,6 +1041,12 @@
 		F7613D5027EE03B300570145 /* ReleaseTestPlan.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReleaseTestPlan.md; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
+		F765028E302F9F1300B8414A /* User */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = User; sourceTree = "<group>"; };
+		F7650291302FA1A400B8414A /* UserFetch */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UserFetch; sourceTree = "<group>"; };
+		F7650294302FAF7900B8414A /* UserUseCaseModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCaseModule.swift; sourceTree = "<group>"; };
+		F7650298302FB7D900B8414A /* UserFetchRemoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFetchRemoteTests.swift; sourceTree = "<group>"; };
+		F765029A302FBA9400B8414A /* UserFetchLocalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFetchLocalTests.swift; sourceTree = "<group>"; };
+		F765029C302FBAC900B8414A /* UserRepositoryFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryFactoryTests.swift; sourceTree = "<group>"; };
 		F7679E4D30238957009A84BD /* AttachmentSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentSelectionDelegate.swift; sourceTree = "<group>"; };
 		F7679E4F30238A0D009A84BD /* AttachmentCollectionDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionDataStore.swift; sourceTree = "<group>"; };
 		F7679E5130238BB0009A84BD /* ObservationSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSelectionDelegate.swift; sourceTree = "<group>"; };
@@ -1384,6 +1396,7 @@
 				F74BDACB302D18CD00F3E499 /* SettingsFetch in Frameworks */,
 				F7825498302E2C4000558A4B /* Alamofire in Frameworks */,
 				F7E066892FC9CFE1008C876C /* GeoPackage in Frameworks */,
+				F7650290302F9F5400B8414A /* User in Frameworks */,
 				F74BDAC5302D18CC00F3E499 /* ProgressReportingJSONDecoder in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
 				F74BDACD302D18CD00F3E499 /* UseCaseFactory in Frameworks */,
@@ -1391,6 +1404,7 @@
 				F784500D302CE62A000A9ED5 /* FetchOperation in Frameworks */,
 				F7E0309E2FC9D2B00042A671 /* GARS in Frameworks */,
 				F74BDAC1302D18B800F3E499 /* CodableExtensions in Frameworks */,
+				F7650293302FA6D700B8414A /* UserFetch in Frameworks */,
 				F74BDADC302D1C3700F3E499 /* Settings in Frameworks */,
 				F784500F302CE62A000A9ED5 /* Pipeline in Frameworks */,
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
@@ -2146,6 +2160,7 @@
 		F74BDABB302D188500F3E499 /* DependencyContainer */ = {
 			isa = PBXGroup;
 			children = (
+				F7650294302FAF7900B8414A /* UserUseCaseModule.swift */,
 				F74BDAD9302D1C1900F3E499 /* DependencyError.swift */,
 				F74BDAD6302D1A4300F3E499 /* SettingsUseCaseModule.swift */,
 				F74BDAD4302D1A2A00F3E499 /* UseCaseModule.swift */,
@@ -2270,6 +2285,24 @@
 			path = responses;
 			sourceTree = SOURCE_ROOT;
 		};
+		F7650296302FB7C800B8414A /* UserFetch */ = {
+			isa = PBXGroup;
+			children = (
+				F765029A302FBA9400B8414A /* UserFetchLocalTests.swift */,
+				F7650298302FB7D900B8414A /* UserFetchRemoteTests.swift */,
+				F765029C302FBAC900B8414A /* UserRepositoryFactoryTests.swift */,
+			);
+			path = UserFetch;
+			sourceTree = "<group>";
+		};
+		F7650297302FB7CE00B8414A /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				F7650296302FB7C800B8414A /* UserFetch */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
 		F76949131AA6434A00CB680B /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -2373,6 +2406,7 @@
 		F784500A302CE5F8000A9ED5 /* SwiftTesting */ = {
 			isa = PBXGroup;
 			children = (
+				F7650297302FB7CE00B8414A /* Packages */,
 				F74BDAE4302E233A00F3E499 /* PersistenceTestUtilities.swift */,
 				F7874B9F302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift */,
 				F74BDAE1302E196B00F3E499 /* sdk */,
@@ -2491,6 +2525,8 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F7650291302FA1A400B8414A /* UserFetch */,
+				F765028E302F9F1300B8414A /* User */,
 				F74BDAD8302D1ADF00F3E499 /* Settings */,
 				F74BDABA302D146700F3E499 /* SettingsFetch */,
 				F7352CC7302CEFCA00EEA4D7 /* UseCaseFactory */,
@@ -3421,8 +3457,11 @@
 			files = (
 				F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */,
 				F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */,
+				F765029D302FBAC900B8414A /* UserRepositoryFactoryTests.swift in Sources */,
 				F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */,
+				F7650299302FB7D900B8414A /* UserFetchRemoteTests.swift in Sources */,
 				F7352CD7302CF80600EEA4D7 /* CoreDataContext.swift in Sources */,
+				F765029B302FBA9400B8414A /* UserFetchLocalTests.swift in Sources */,
 				F74BDAE3302E19B200F3E499 /* MageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3692,6 +3731,7 @@
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
 				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
+				F7650295302FAF7900B8414A /* UserUseCaseModule.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
@@ -4463,6 +4503,14 @@
 		F74BDAE6302E272400F3E499 /* TestUtilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TestUtilities;
+		};
+		F765028F302F9F5400B8414A /* User */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = User;
+		};
+		F7650292302FA6D700B8414A /* UserFetch */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UserFetch;
 		};
 		F76A02732FE49D0300CDBA4F /* Persistence */ = {
 			isa = XCSwiftPackageProductDependency;

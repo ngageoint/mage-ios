@@ -19,9 +19,7 @@ extension CoreDataTests {
     @MainActor
     struct ObserveSettingsUseCaseTests {
         
-        @Test(
-            .persistence()
-        )
+        @Test
         func `test observe with nothing initially in the database`() async throws {
             _ = try await PersistenceContext.current!.persistence.write { context in
                 for settings in (try? context.fetchObjects(Settings.self)) ?? [] {

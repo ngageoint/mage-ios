@@ -1,0 +1,300 @@
+[
+    {
+        "icon": {
+            "type": "none"
+        },
+        "username": "username",
+        "displayName": "username",
+        "phones": [],
+        "active": true,
+        "enabled": true,
+        "roleId": "67eed4d41bffe5c8547f4d8f",
+        "recentEventIds": [1, 14, 13, 2, 3],
+        "createdAt": "2025-09-03T21:08:08.616Z",
+        "lastUpdated": "2026-07-17T18:10:07.595Z",
+        "preferences": {
+            "events": {
+                "1": {
+                    "eventId": 1,
+                    "formPreferences": {
+                        "3": {
+                            "eventFormId": "3",
+                            "fieldPreferences": {
+                                "field0": {
+                                    "fieldId": "field0",
+                                    "recentChoices": [
+                                        "Turkey"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "email": "username@gmail.com",
+        "id": "userabc",
+        "authentication": {
+            "security": {
+                "locked": false,
+                "invalidLoginAttempts": 0,
+                "numberOfTimesLocked": 0
+            },
+            "type": "local",
+            "createdAt": "2025-09-03T21:08:08.577Z",
+            "lastUpdated": "2026-07-17T18:09:44.246Z",
+            "__v": 0,
+            "authenticationConfiguration": {
+                "enabled": true,
+                "name": "local",
+                "type": "local",
+                "title": "MAGE Username/Password",
+                "textColor": null,
+                "buttonColor": null,
+                "icon": null,
+                "settings": {
+                    "newUserEvents": [],
+                    "newUserTeams": [],
+                    "usersReqAdmin": {
+                        "enabled": true
+                    },
+                    "devicesReqAdmin": {
+                        "enabled": true
+                    },
+                    "accountLock": {
+                        "enabled": false
+                    },
+                    "passwordPolicy": {
+                        "minCharsEnabled": false,
+                        "minChars": 0,
+                        "maxConCharsEnabled": false,
+                        "maxConChars": 0,
+                        "lowLettersEnabled": false,
+                        "lowLetters": 0,
+                        "highLettersEnabled": false,
+                        "highLetters": 0,
+                        "numbersEnabled": false,
+                        "numbers": 0,
+                        "specialCharsEnabled": false,
+                        "specialChars": 0,
+                        "restrictSpecialCharsEnabled": false,
+                        "restrictSpecialChars": "",
+                        "passwordMinLength": 14,
+                        "passwordMinLengthEnabled": true,
+                        "customizeHelpText": false,
+                        "helpText": "Your password is invalid and must be at least 14 characters in length.",
+                        "helpTextTemplate": {
+                            "minChars": "have at least # letters",
+                            "maxConChars": "not contain more than # consecutive letters",
+                            "lowLetters": "have a minimum of # lowercase letters",
+                            "highLetters": "have a minimum of # uppercase letters",
+                            "numbers": "have at least # numbers",
+                            "specialChars": "have at least # special characters",
+                            "restrictSpecialChars": "be restricted to these special characters: #",
+                            "passwordMinLength": "be at least # characters in length",
+                            "passwordHistoryCount": "not be any of the past # previous passwords"
+                        },
+                        "passwordHistoryCount": 0,
+                        "passwordHistoryCountEnabled": false
+                    }
+                },
+                "id": "67eed4d51bffe5c8547f4da5"
+            },
+            "id": "68b8ae384d512b1b3d3b1e4b"
+        },
+        "avatarUrl": "http://localhost:4242/api/users/68b8ae384d512b1b3d3b1e4f/avatar"
+    },
+    {
+        "icon": {
+            "type": "none"
+        },
+        "username": "usernameuser",
+        "displayName": "usernameuser",
+        "phones": [],
+        "active": true,
+        "enabled": true,
+        "roleId": "67eed4d51bffe5c8547f4d94",
+        "recentEventIds": [1],
+        "createdAt": "2025-10-08T20:44:56.081Z",
+        "lastUpdated": "2026-02-03T17:53:23.842Z",
+        "preferences": {
+            "events": {
+                "1": {
+                    "eventId": 1,
+                    "formPreferences": {
+                        "3": {
+                            "eventFormId": "3",
+                            "fieldPreferences": {
+                                "field0": {
+                                    "fieldId": "field0",
+                                    "recentChoices": [
+                                        "Turtle"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "id": "68e6cd489efbe4caf3154217",
+        "authentication": {
+            "security": {
+                "locked": false,
+                "invalidLoginAttempts": 0,
+                "numberOfTimesLocked": 0
+            },
+            "type": "local",
+            "createdAt": "2025-10-08T20:44:56.024Z",
+            "lastUpdated": "2026-02-03T17:52:36.174Z",
+            "__v": 1,
+            "authenticationConfiguration": {
+                "enabled": true,
+                "name": "local",
+                "type": "local",
+                "title": "MAGE Username/Password",
+                "textColor": null,
+                "buttonColor": null,
+                "icon": null,
+                "settings": {
+                    "newUserEvents": [],
+                    "newUserTeams": [],
+                    "usersReqAdmin": {
+                        "enabled": true
+                    },
+                    "devicesReqAdmin": {
+                        "enabled": true
+                    },
+                    "accountLock": {
+                        "enabled": false
+                    },
+                    "passwordPolicy": {
+                        "minCharsEnabled": false,
+                        "minChars": 0,
+                        "maxConCharsEnabled": false,
+                        "maxConChars": 0,
+                        "lowLettersEnabled": false,
+                        "lowLetters": 0,
+                        "highLettersEnabled": false,
+                        "highLetters": 0,
+                        "numbersEnabled": false,
+                        "numbers": 0,
+                        "specialCharsEnabled": false,
+                        "specialChars": 0,
+                        "restrictSpecialCharsEnabled": false,
+                        "restrictSpecialChars": "",
+                        "passwordMinLength": 14,
+                        "passwordMinLengthEnabled": true,
+                        "customizeHelpText": false,
+                        "helpText": "Your password is invalid and must be at least 14 characters in length.",
+                        "helpTextTemplate": {
+                            "minChars": "have at least # letters",
+                            "maxConChars": "not contain more than # consecutive letters",
+                            "lowLetters": "have a minimum of # lowercase letters",
+                            "highLetters": "have a minimum of # uppercase letters",
+                            "numbers": "have at least # numbers",
+                            "specialChars": "have at least # special characters",
+                            "restrictSpecialChars": "be restricted to these special characters: #",
+                            "passwordMinLength": "be at least # characters in length",
+                            "passwordHistoryCount": "not be any of the past # previous passwords"
+                        },
+                        "passwordHistoryCount": 0,
+                        "passwordHistoryCountEnabled": false
+                    }
+                },
+                "id": "67eed4d51bffe5c8547f4da5"
+            },
+            "id": "68e6cd489efbe4caf3154213"
+        }
+    },
+    {
+        "icon": {
+            "type": "none"
+        },
+        "username": "username2",
+        "displayName": "user",
+        "email": "user@user.com",
+        "phones": [
+            {
+                "type": "Main",
+                "number": "303-000-0000"
+            }
+        ],
+        "active": false,
+        "enabled": true,
+        "roleId": "67eed4d41bffe5c8547f4d8d",
+        "recentEventIds": [],
+        "createdAt": "2025-10-30T21:31:17.283Z",
+        "lastUpdated": "2025-10-30T21:31:17.283Z",
+        "id": "6903d9259efbe4caf31a806f",
+        "authentication": {
+            "security": {
+                "lockedUntil": null,
+                "locked": false,
+                "invalidLoginAttempts": 0,
+                "numberOfTimesLocked": 0
+            },
+            "type": "local",
+            "createdAt": "2025-10-30T21:31:17.247Z",
+            "lastUpdated": "2025-10-30T21:31:17.247Z",
+            "__v": 0,
+            "authenticationConfiguration": {
+                "enabled": true,
+                "name": "local",
+                "type": "local",
+                "title": "MAGE Username/Password",
+                "textColor": null,
+                "buttonColor": null,
+                "icon": null,
+                "settings": {
+                    "newUserEvents": [],
+                    "newUserTeams": [],
+                    "usersReqAdmin": {
+                        "enabled": true
+                    },
+                    "devicesReqAdmin": {
+                        "enabled": true
+                    },
+                    "accountLock": {
+                        "enabled": false
+                    },
+                    "passwordPolicy": {
+                        "minCharsEnabled": false,
+                        "minChars": 0,
+                        "maxConCharsEnabled": false,
+                        "maxConChars": 0,
+                        "lowLettersEnabled": false,
+                        "lowLetters": 0,
+                        "highLettersEnabled": false,
+                        "highLetters": 0,
+                        "numbersEnabled": false,
+                        "numbers": 0,
+                        "specialCharsEnabled": false,
+                        "specialChars": 0,
+                        "restrictSpecialCharsEnabled": false,
+                        "restrictSpecialChars": "",
+                        "passwordMinLength": 14,
+                        "passwordMinLengthEnabled": true,
+                        "customizeHelpText": false,
+                        "helpText": "Your password is invalid and must be at least 14 characters in length.",
+                        "helpTextTemplate": {
+                            "minChars": "have at least # letters",
+                            "maxConChars": "not contain more than # consecutive letters",
+                            "lowLetters": "have a minimum of # lowercase letters",
+                            "highLetters": "have a minimum of # uppercase letters",
+                            "numbers": "have at least # numbers",
+                            "specialChars": "have at least # special characters",
+                            "restrictSpecialChars": "be restricted to these special characters: #",
+                            "passwordMinLength": "be at least # characters in length",
+                            "passwordHistoryCount": "not be any of the past # previous passwords"
+                        },
+                        "passwordHistoryCount": 0,
+                        "passwordHistoryCountEnabled": false
+                    }
+                },
+                "id": "67eed4d51bffe5c8547f4da5"
+            },
+            "id": "6903d9259efbe4caf31a806b"
+        }
+    }
+]
