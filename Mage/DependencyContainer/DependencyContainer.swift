@@ -14,6 +14,7 @@ import Settings
 import FetchOperation
 import ServerDTO
 import UserFetch
+import User
 
 @MainActor
 @objc public final class DependencyContainer: NSObject {
@@ -50,6 +51,12 @@ import UserFetch
                     ),
                 settingsFetch: SettingsFetchRepositoryFactory
                     .createFetchRepository(
+                        url: url,
+                        session: session,
+                        persistence: persistence
+                    ),
+                userRepository: UserRepositoryFactory
+                    .createUserRepository(
                         url: url,
                         session: session,
                         persistence: persistence

@@ -588,7 +588,7 @@ extension Observation: Navigable {
         let state = Observation.stateFromJson(json: feature);
         
 //        NSLog("TIMING create the observation \(remoteId)")
-        
+        let obs = Observation.mr_findAll(in: context)
         if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
             // if the observation is archived, delete it
             if state == .Archive {
@@ -613,26 +613,19 @@ extension Observation: Navigable {
                         existingObservation.user = user
                         if user.lastUpdated == nil {
                             // new user, go fetch
-                            let manager = MageSessionManager.shared();
-                            
-                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
-                            } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            Task {
+                                try await DependencyContainer.shared.useCaseFactory
+                                    .resolve(.RefreshUserUseCase)
+                                    .execute(userID: userId)
                             }
-                            manager?.addTask(fetchUserTask)
                         }
                     } else {
                         // new user, go fetch
-                        let manager = MageSessionManager.shared();
-                        
-                        let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                            NSLog("Fetched user \(userId) successfully.")
-                            existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
-                        } failure: { task, error in
-                            NSLog("Failed to fetch user \(userId) error \(error)")
+                        Task {
+                            try await DependencyContainer.shared.useCaseFactory
+                                .resolve(.GetUserUseCase)
+                                .execute(userID: userId)
                         }
-                        manager?.addTask(fetchUserTask)
                     }
                 }
                 
@@ -713,30 +706,24 @@ extension Observation: Navigable {
                             // but did not pull the user information because the bulk user pull failed
                             if user.lastUpdated == nil {
                                 // new user, go fetch
-                                let manager = MageSessionManager.shared();
-                                
-                                let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                    NSLog("Fetched user \(userId) successfully.")
-                                } failure: { task, error in
-                                    NSLog("Failed to fetch user \(userId) error \(error)")
+                                Task {
+                                    try await DependencyContainer.shared.useCaseFactory
+                                        .resolve(.RefreshUserUseCase)
+                                        .execute(userID: userId)
                                 }
-                                manager?.addTask(fetchUserTask)
                             }
                         } else {
                             // new user, go fetch
-                            let manager = MageSessionManager.shared();
-                            
-                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
-                                context.perform {
+                            Task {
+                                let result = try await DependencyContainer.shared.useCaseFactory
+                                    .resolve(.GetUserUseCase)
+                                    .execute(userID: userId)
+                                await context.perform {
                                     let localObservation = observation.mr_(in: context)
                                     let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
                                     localObservation?.user = user
                                 }
-                            } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
                             }
-                            manager?.addTask(fetchUserTask)
                         }
                     }
                     

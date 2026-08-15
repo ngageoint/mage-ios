@@ -317,6 +317,8 @@
 		F7650299302FB7D900B8414A /* UserFetchRemoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7650298302FB7D900B8414A /* UserFetchRemoteTests.swift */; };
 		F765029B302FBA9400B8414A /* UserFetchLocalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765029A302FBA9400B8414A /* UserFetchLocalTests.swift */; };
 		F765029D302FBAC900B8414A /* UserRepositoryFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765029C302FBAC900B8414A /* UserRepositoryFactoryTests.swift */; };
+		F76502A0302FC71400B8414A /* ObservationCoreDataCreateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765029F302FC71400B8414A /* ObservationCoreDataCreateTests.swift */; };
+		F76502A43031235F00B8414A /* LocationCoreDataCreateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76502A33031235F00B8414A /* LocationCoreDataCreateTests.swift */; };
 		F7679E4E30238957009A84BD /* AttachmentSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7679E4D30238957009A84BD /* AttachmentSelectionDelegate.swift */; };
 		F7679E5030238A0D009A84BD /* AttachmentCollectionDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7679E4F30238A0D009A84BD /* AttachmentCollectionDataStore.swift */; };
 		F7679E5230238BB0009A84BD /* ObservationSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7679E5130238BB0009A84BD /* ObservationSelectionDelegate.swift */; };
@@ -1047,6 +1049,8 @@
 		F7650298302FB7D900B8414A /* UserFetchRemoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFetchRemoteTests.swift; sourceTree = "<group>"; };
 		F765029A302FBA9400B8414A /* UserFetchLocalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFetchLocalTests.swift; sourceTree = "<group>"; };
 		F765029C302FBAC900B8414A /* UserRepositoryFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryFactoryTests.swift; sourceTree = "<group>"; };
+		F765029F302FC71400B8414A /* ObservationCoreDataCreateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCoreDataCreateTests.swift; sourceTree = "<group>"; };
+		F76502A33031235F00B8414A /* LocationCoreDataCreateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCoreDataCreateTests.swift; sourceTree = "<group>"; };
 		F7679E4D30238957009A84BD /* AttachmentSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentSelectionDelegate.swift; sourceTree = "<group>"; };
 		F7679E4F30238A0D009A84BD /* AttachmentCollectionDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionDataStore.swift; sourceTree = "<group>"; };
 		F7679E5130238BB0009A84BD /* ObservationSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSelectionDelegate.swift; sourceTree = "<group>"; };
@@ -2303,6 +2307,22 @@
 			path = Packages;
 			sourceTree = "<group>";
 		};
+		F765029E302FC6FC00B8414A /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F765029F302FC71400B8414A /* ObservationCoreDataCreateTests.swift */,
+			);
+			path = Observation;
+			sourceTree = "<group>";
+		};
+		F76502A23031235C00B8414A /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				F76502A33031235F00B8414A /* LocationCoreDataCreateTests.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
 		F76949131AA6434A00CB680B /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -2406,6 +2426,8 @@
 		F784500A302CE5F8000A9ED5 /* SwiftTesting */ = {
 			isa = PBXGroup;
 			children = (
+				F76502A23031235C00B8414A /* Location */,
+				F765029E302FC6FC00B8414A /* Observation */,
 				F7650297302FB7CE00B8414A /* Packages */,
 				F74BDAE4302E233A00F3E499 /* PersistenceTestUtilities.swift */,
 				F7874B9F302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift */,
@@ -3456,7 +3478,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */,
+				F76502A43031235F00B8414A /* LocationCoreDataCreateTests.swift in Sources */,
 				F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */,
+				F76502A0302FC71400B8414A /* ObservationCoreDataCreateTests.swift in Sources */,
 				F765029D302FBAC900B8414A /* UserRepositoryFactoryTests.swift in Sources */,
 				F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */,
 				F7650299302FB7D900B8414A /* UserFetchRemoteTests.swift in Sources */,

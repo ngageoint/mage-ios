@@ -57,7 +57,9 @@ import Persistence
         if let eventController = eventController {
             viewController?.pushViewController(eventController, animated: false)
         }
-        Mage.singleton.fetchEvents()
+        Task {
+            await Mage.singleton.fetchEvents()
+        }
     }
 
     func eventsFetched() {
