@@ -124,5 +124,51 @@ extension CoreDataTests {
             #expect(userModel.name == "username")
         }
         
+        @Test(
+            .httpStub(
+                method: .get,
+                scheme: "https",
+                host: "magetest",
+                path: "/api/users/myself",
+                responseFile: "myself.json"
+            )
+        )
+        func `test myself gets fetched`() async throws {
+            _ = try await PersistenceContext.current!.persistence.write { context in
+                for user in (try? context.fetchObjects(User.self)) ?? [] {
+                    context.delete(user)
+                }
+            }
+            await PersistenceTestUtilities
+                .waitForCountOfEntity(
+                    PersistenceContext.current!.persistence,
+                    User.self,
+                    0
+                )
+            
+            await DependencyContainer.shared.configure(
+                url: URL(string:"https://magetest")!,
+                additionalHeaders: [
+                    HTTPStubTrait.HeaderKey:
+                        Test.current?.id.description ?? ""
+                ]
+            )
+            let mage = Mage.singleton
+            await mage.fetchMyself()
+            
+            await PersistenceTestUtilities
+                .waitForCountOfEntity(
+                    PersistenceContext.current!.persistence,
+                    User.self,
+                    1
+                )
+            let userModel = try await PersistenceContext.current!.persistence.read { context in
+                let user = try #require(try context.fetchFirst(User.self, key: "remoteId", value: "userabc"))
+                #expect(user.name == "Myself")
+                return UserModel(from: user)
+            }
+            #expect(userModel.name == "Myself")
+        }
+        
     }
 }

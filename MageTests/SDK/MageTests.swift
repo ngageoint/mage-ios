@@ -180,8 +180,9 @@ class MageTests: KIFSpec {
                 NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: nil) { notification in
                     mageFormFetchedCalled = true;
                 }
-                Mage.singleton.fetchEvents()
-                
+                Task {
+                    await Mage.singleton.fetchEvents()
+                }
                 expect(usersFetchStubCalled).toEventually(beTrue());
                 expect(eventsFetchStubCalled).toEventually(beTrue());
                 expect(iconsStubCalled).toEventually(beTrue());

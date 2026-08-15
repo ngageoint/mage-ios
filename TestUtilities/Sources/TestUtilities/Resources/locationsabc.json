@@ -1,0 +1,32 @@
+[
+  {
+    "id": "userabc",
+    "locations": [
+      {
+        "type": "Feature",
+        "userId": "userabc",
+        "properties": {
+          "timestamp": "2020-07-14T19:07:36.000Z",
+          "accuracy": 266.16473,
+          "altitude": 1696.56640625,
+          "battery_level": "100",
+          "bearing": 0,
+          "provider": "gps",
+          "speed": 0,
+          "deviceId": "deviceabc"
+        },
+        "eventId": 1,
+        "_id": "locationabc",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -104.3678, 40.1085
+          ]
+        },
+        "teamIds": [
+          "teamabc"
+        ]
+      }
+    ]
+  }
+]

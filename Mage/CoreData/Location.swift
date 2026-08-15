@@ -179,14 +179,11 @@ extension Location: Navigable {
                         // but did not pull the user information because the bulk user pull failed
                         if user.lastUpdated == nil {
                             // new user, go fetch
-                            let manager = MageSessionManager.shared();
-                            
-                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
-                            } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            Task {
+                                try await DependencyContainer.shared.useCaseFactory
+                                    .resolve(.RefreshUserUseCase)
+                                    .execute(userID: userId)
                             }
-                            manager?.addTask(fetchUserTask)
                         }
                     } else {
                         if (locations.count != 0) {
@@ -203,16 +200,15 @@ extension Location: Navigable {
                                 UserKey.username.key: username,
                                 UserKey.displayName.key: displayName
                             ]
-                            _ = User.insert(json: userDicationary, context: localContext);
-                            // new user, go fetch
-                            let manager = MageSessionManager.shared();
-                            
-                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
-                            } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            let user = User.insert(json: userDicationary, context: localContext);
+                            let location = Location.mr_createEntity(in: localContext);
+                            location?.populate(json: locations[0]);
+                            user?.location = location;
+                            Task {
+                                try await DependencyContainer.shared.useCaseFactory
+                                    .resolve(.GetUserUseCase)
+                                    .execute(userID: userId)
                             }
-                            manager?.addTask(fetchUserTask)
                         }
                     }
                 }
