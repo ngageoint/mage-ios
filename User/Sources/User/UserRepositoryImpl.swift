@@ -2,9 +2,6 @@
 //  UserRepository.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 8/4/26.
-//  Copyright © 2026 National Geospatial Intelligence Agency. All rights reserved.
-//
 
 import ServerDTO
 import Persistence

@@ -2,7 +2,6 @@
 //  GetMyselfUseCase.swift
 //  User
 //
-//  Created by Daniel Barela on 8/6/26.
 //
 
 
