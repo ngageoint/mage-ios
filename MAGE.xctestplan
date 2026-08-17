@@ -97,6 +97,7 @@
       }
     },
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:MAGE.xcodeproj",
         "identifier" : "F7352CCD302CF7EA00EEA4D7",

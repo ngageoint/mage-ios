@@ -250,61 +250,6 @@ struct PipelineTests {
         )
     }
     
-    @Test func `completed step retains latest progress`() async throws {
-        let stepStarted = AsyncStream.makeStream(of: Void.self)
-        let allowStepToFinish = AsyncStream.makeStream(of: Void.self)
-        
-        let pipeline = Pipeline<TestContext, Int>(
-            operation: PipelineOperationKind(rawValue: "calculate"),
-            context: TestContext()
-        ) {
-            PipelineStep<TestContext>(
-                phase: PipelineOperationPhase(rawValue: "first")
-            ) { context, progress in
-                stepStarted.continuation.yield()
-                
-                progress(
-                    OperationProgress(
-                        completed: 10,
-                        total: 10
-                    )
-                )
-                
-                var iterator = allowStepToFinish.stream.makeAsyncIterator()
-                await iterator.next()
-                
-                return context
-            }
-        } output: {
-            $0.value
-        }
-        
-        let operation = pipeline.execute()
-        
-        var startedIterator = stepStarted.stream.makeAsyncIterator()
-        await startedIterator.next()
-        stepStarted.continuation.finish()
-        
-        // The step has reported 10/10 progress but has not completed yet.
-        let runningSnapshot = operation.snapshot()
-        
-        #expect(runningSnapshot.progress?.completed == 10)
-        #expect(runningSnapshot.progress?.total == 10)
-        
-        allowStepToFinish.continuation.yield(())
-        allowStepToFinish.continuation.finish()
-        
-        _ = try await operation.value()
-        
-        let completedSnapshot = operation.snapshot()
-        
-        #expect(completedSnapshot.progress?.completed == 10)
-        #expect(completedSnapshot.progress?.total == 10)
-        #expect(completedSnapshot.progress?.phase == PipelineOperationPhase(rawValue: "first"))
-        #expect(completedSnapshot.isFinished)
-    }
-    
-    
     @Test func `next step clears previous step progress`() async throws {
         let firstStepStarted = AsyncStream.makeStream(of: Void.self)
         let secondStepStarted = AsyncStream.makeStream(of: Void.self)

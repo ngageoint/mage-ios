@@ -69,32 +69,32 @@ import ServerDTO
         }
     }
     
-    @objc public func fetchEvents() {
+    public func fetchMyself() async {
+        do {
+            let _ = try await DependencyContainer.shared.useCaseFactory
+                .resolve(.GetMyselfUseCase)
+                .execute()
+        } catch {
+            UserFetchPackage.logger.error("Failed to fetch myself: \(error)")
+        }
+    }
+    @objc public func fetchEvents() async {
         let manager = MageSessionManager.shared();
         
-        let myselfTask = User.operationToFetchMyself { task, response in
-            let eventTask = Event.operationToFetchEvents { task, response in
-                if let events = Event.mr_findAll() as? [Event] {
-                    self.fetchFormAndStaticLayers(events: events);
-                }
-            } failure: { task, error in
-                NSLog("Failure to pull events");
-                NotificationCenter.default.post(name: .MAGEEventsFetched, object: nil);
-                if let events = Event.mr_findAll() as? [Event] {
-                    self.fetchFormAndStaticLayers(events: events);
-                }
+        await fetchMyself()
+        
+        let eventTask = Event.operationToFetchEvents { task, response in
+            if let events = Event.mr_findAll() as? [Event] {
+                self.fetchFormAndStaticLayers(events: events);
             }
-            manager?.addTask(eventTask);
         } failure: { task, error in
+            NSLog("Failure to pull events");
             NotificationCenter.default.post(name: .MAGEEventsFetched, object: nil);
             if let events = Event.mr_findAll() as? [Event] {
                 self.fetchFormAndStaticLayers(events: events);
             }
         }
-        
-        if let myselfTask = myselfTask {
-            manager?.addTask(myselfTask)
-        }
+        manager?.addTask(eventTask);
     }
     
     @objc public func fetchFormAndStaticLayers(events: [Event]) {
