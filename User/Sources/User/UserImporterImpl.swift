@@ -2,8 +2,6 @@
 //  UserImporterImpl.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 8/4/26.
-//  Copyright © 2026 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import CoreData
@@ -26,12 +24,10 @@ public final class UserImporterImpl: UserImporter, Sendable {
         
         let user: User = try {
             if let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId) {
-                print("this one is old")
                 return user
             } else {
                 let user = User(context: context)
                 try context.obtainPermanentIDs(for: [user])
-                print("This one is new")
                 return user
             }
         }()
@@ -39,7 +35,6 @@ public final class UserImporterImpl: UserImporter, Sendable {
         user.username = dto.username
         user.email = dto.email
         user.name = dto.displayName
-        print("Set the name to \(dto.displayName ?? "<nothing>")")
         if let phones = dto.phones, phones.count > 0 {
             user.phone = phones[0].number
         }

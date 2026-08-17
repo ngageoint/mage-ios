@@ -2,7 +2,6 @@
 //  UserModel.swift
 //  User
 //
-//  Created by Daniel Barela on 8/4/26.
 //
 
 
