@@ -86,10 +86,12 @@ NSInteger const kLocationPushLimit = 100;
 }
 
 - (void) stop {
-    [self.locationManager stopUpdatingLocation];
-    
-    [self pushLocations];
-    self.started = false;
+    if (_started) {
+        [self.locationManager stopUpdatingLocation];
+        
+        [self pushLocations];
+        self.started = false;
+    }
 }
 
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {

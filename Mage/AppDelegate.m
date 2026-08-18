@@ -34,6 +34,7 @@
 @property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
 @property (nonatomic, strong) GPKGGeoPackage *backgroundGeoPackage;
 @property (nonatomic, strong) GPKGGeoPackage *darkBackgroundGeoPackage;
+@property (nonatomic, assign) BOOL observingTokenExpiration;
 @end
 
 @implementation AppDelegate
@@ -75,14 +76,23 @@
     }
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
-    
     [MageInitializer initializePreferences];
     [MageInitializer setupPersistenceWithCompletionHandler:^{
         [self startMageApp];
     }];
 }
+
+- (void)startObservingTokenExpiration {
+    if (self.observingTokenExpiration) {
+        return;
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name:MAGETokenExpiredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
+    
+    self.observingTokenExpiration = YES;
+}
+
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
     NSString *filePath = [notification.userInfo valueForKey:@"filePath"];
@@ -149,6 +159,7 @@
         NSLog(@"startMageApp canary save success? %d with error %@",
               result.success,
               result.persistenceError);
+        [self startObservingTokenExpiration];
         // error should be null and contextDidSave should be true
         if (result.success && result.persistenceError == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
@@ -381,10 +392,12 @@
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {
-    [[Mage singleton] stopServices];
-    [[LocationService singleton] stop];
-    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    [self createRootView];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[Mage singleton] stopServices];
+        [[LocationService singleton] stop];
+        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+        [self createRootView];
+    });
 }
 
 #pragma mark - Application's Documents directory
