@@ -21,5 +21,6 @@
 - (BaseMapOverlay *) getBaseMap;
 - (BaseMapOverlay *) getDarkBaseMap;
 + (UIViewController*) topMostController;
+- (void)startObservingTokenExpiration;
 
 @end

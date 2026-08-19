@@ -21,6 +21,11 @@ import Foundation
             if expired {
                 return true;
             }
+            
+            if StoredPassword.retrieveStoredToken() == nil {
+                expired = true
+                return expired
+            }
             let loginParameters = UserDefaults.standard.loginParameters
             
             if let loginParameters = loginParameters,

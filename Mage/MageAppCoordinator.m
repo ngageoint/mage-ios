@@ -152,6 +152,8 @@
 
 
 - (void) startEventChooser {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate startObservingTokenExpiration];
     EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController delegate:self scheme:_scheme];
     [_childCoordinators addObject:eventChooser];
     [eventChooser start];

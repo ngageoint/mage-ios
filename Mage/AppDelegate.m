@@ -93,6 +93,22 @@
     self.observingTokenExpiration = YES;
 }
 
+- (void)stopObservingTokenExpiration {
+    if (!self.observingTokenExpiration) {
+        return;
+    }
+    
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self
+     name:MAGETokenExpiredNotification
+     object:nil];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self
+     name:Layer.GeoPackageDownloaded
+     object:nil];
+    
+    self.observingTokenExpiration = NO;
+}
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
     NSString *filePath = [notification.userInfo valueForKey:@"filePath"];
@@ -159,7 +175,6 @@
         NSLog(@"startMageApp canary save success? %d with error %@",
               result.success,
               result.persistenceError);
-        [self startObservingTokenExpiration];
         // error should be null and contextDidSave should be true
         if (result.success && result.persistenceError == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
@@ -193,6 +208,7 @@
 }
 
 - (void) logout {
+    [self stopObservingTokenExpiration];
     [self.backgroundGeoPackage close];
     [self.darkBackgroundGeoPackage close];
     self.backgroundGeoPackage = nil;
@@ -392,6 +408,7 @@
 }
 
 - (void)tokenDidExpire:(NSNotification *)notification {
+    [self stopObservingTokenExpiration];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[Mage singleton] stopServices];
         [[LocationService singleton] stop];
