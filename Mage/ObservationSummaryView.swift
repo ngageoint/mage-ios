@@ -13,6 +13,8 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
     
     private weak var observation: Observation?;
     private var didSetUpConstraints = false;
+    private var timeText: String = ""
+    private var fetchedResultsController: NSFetchedResultsController<User>?
     
     private let exclamation = UIImageView(image: UIImage(systemName: "exclamationmark", withConfiguration: UIImage.SymbolConfiguration(weight:.semibold)));
     
@@ -114,11 +116,34 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         primaryField.text = observation.primaryFeedFieldText;
         secondaryField.text = observation.secondaryFeedFieldText;
         // we do not want the date to word break so we replace all spaces with a non word breaking spaces
-        var timeText = "";
+        timeText = "";
         if let itemDate: NSDate = observation.timestamp as NSDate? {
             timeText = itemDate.formattedDisplay().uppercased().replacingOccurrences(of: " ", with: "\u{00a0}") ;
         }
-        timestamp.text = "\(observation.user?.name?.uppercased() ?? "") \u{2022} \(timeText)";
+        timestamp.text = "\(timeText)";
+        if let name = observation.user?.name {
+            timestamp.text = "\(name.uppercased()) \u{2022} \(timeText)";
+            fetchedResultsController = nil
+        } else if let remoteId = observation.user?.remoteId {
+            let request = User.fetchRequest()
+            request.predicate = NSPredicate(
+                format: "remoteId == %@",
+                remoteId
+            )
+            request.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
+            fetchedResultsController = NSFetchedResultsController(
+                fetchRequest: request,
+                managedObjectContext: PersistenceContainer.shared
+                    .get().viewContext,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            fetchedResultsController?.delegate = self
+            try? fetchedResultsController?.performFetch()
+            if let user = fetchedResultsController?.fetchedObjects?.first {
+                handleUser(userName: user.name)
+            }
+        }
         
         if (observation.error != nil) {
             self.syncBadge.isHidden = observation.hasValidationError;
@@ -126,6 +151,14 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         } else {
             self.syncBadge.isHidden = true;
             self.errorBadge.isHidden = true;
+        }
+    }
+    
+    func handleUser(userName: String?) {
+        if let userName {
+            timestamp.text = "\(userName.uppercased()) \u{2022} \(timeText)";
+            fetchedResultsController?.delegate = nil
+            fetchedResultsController = nil
         }
     }
     
@@ -137,3 +170,13 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         sync.tintColor = UIColor.white;
     }
 }
+
+extension ObservationSummaryView: NSFetchedResultsControllerDelegate {
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        if let user = anObject as? User {
+            handleUser(userName: user.name)
+        }
+    }
+}
+
