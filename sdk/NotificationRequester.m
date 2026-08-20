@@ -33,22 +33,24 @@
     
     NSMutableArray *attachments = [[NSMutableArray alloc] init];
     NSString *imageUrl = [ObservationImage imageNameWithObservation:strongObservation];
-    
-    UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
-    
-    CGFloat sideLength = image.size.height > image.size.width ? image.size.height : image.size.width;
-    
-    CGSize size = CGSizeMake(sideLength, sideLength);
-    UIGraphicsBeginImageContext(size);
-    [image drawAtPoint:CGPointMake((sideLength - image.size.width) / 2, (sideLength - image.size.height) / 2)];
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    NSString *tmpUrl = [NSTemporaryDirectory() stringByAppendingString:@"image.png"];
-    [UIImagePNGRepresentation(image) writeToFile:tmpUrl atomically:YES];
-    
-    UNNotificationAttachment *icon = [UNNotificationAttachment attachmentWithIdentifier:strongObservation.remoteId URL:[NSURL fileURLWithPath:tmpUrl] options:@{ UNNotificationAttachmentOptionsThumbnailClippingRectKey: (NSDictionary *)CFBridgingRelease(CGRectCreateDictionaryRepresentation(CGRectMake(0, 0, 1.0, 1.0)))} error:nil];
-    [attachments addObject:icon];
+    if (imageUrl) {
+        UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
+        if (image) {
+            CGFloat sideLength = image.size.height > image.size.width ? image.size.height : image.size.width;
+            
+            CGSize size = CGSizeMake(sideLength, sideLength);
+            UIGraphicsBeginImageContext(size);
+            [image drawAtPoint:CGPointMake((sideLength - image.size.width) / 2, (sideLength - image.size.height) / 2)];
+            image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            NSString *tmpUrl = [NSTemporaryDirectory() stringByAppendingString:@"image.png"];
+            [UIImagePNGRepresentation(image) writeToFile:tmpUrl atomically:YES];
+            
+            UNNotificationAttachment *icon = [UNNotificationAttachment attachmentWithIdentifier:strongObservation.remoteId URL:[NSURL fileURLWithPath:tmpUrl] options:@{ UNNotificationAttachmentOptionsThumbnailClippingRectKey: (NSDictionary *)CFBridgingRelease(CGRectCreateDictionaryRepresentation(CGRectMake(0, 0, 1.0, 1.0)))} error:nil];
+            [attachments addObject:icon];
+        }
+    }
     content.attachments = attachments;
     content.categoryIdentifier = @"ObservationPulled";
     content.sound = [UNNotificationSound defaultSound];
