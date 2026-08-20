@@ -13,6 +13,8 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import Persistence
+import CodableExtensions
+import ServerDTO
 
 @testable import MAGE
 
@@ -69,11 +71,17 @@ class MageCoreDataFixtures {
                 }
                 let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: localContext)!;
                 if let location: Location = user.location {
-                    location.populate(json: locations[0]);
+                    location
+                        .populate(
+                            dto: LocationDTO.from(jsonObject: locations[0])!
+                        );
                     l = location
                 } else {
                     let location: Location = Location.mr_createEntity(in: localContext)!;
-                    location.populate(json: locations[0]);
+                    location
+                        .populate(
+                            dto: LocationDTO.from(jsonObject: locations[0])!
+                        );
                     user.location = location;
                     l = location
                 }
@@ -86,10 +94,16 @@ class MageCoreDataFixtures {
                 let locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
                 let user: User = User.mr_findFirst(in: localContext)!;
                 if let location: Location = user.location {
-                    location.populate(json: locations[0]);
+                    location
+                        .populate(
+                            dto: LocationDTO.from(jsonObject: locations[0])!
+                        );
                 } else {
                     let location: Location = Location.mr_createEntity(in: localContext)!;
-                    location.populate(json: locations[0]);
+                    location
+                        .populate(
+                            dto: LocationDTO.from(jsonObject: locations[0])!
+                        );
                     user.location = location;
                 }
                 

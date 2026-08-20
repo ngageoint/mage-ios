@@ -10,6 +10,8 @@ import Persistence
 import TestUtilities
 import CoreData
 import Alamofire
+import UseCaseFactory
+import ServerDTO
 
 @testable import MAGE
 extension CoreDataTests {
@@ -32,14 +34,6 @@ extension CoreDataTests {
                 path: "/api/events/1/locations/users",
                 responseFile: "locationsabc.json"
             ),
-            // since there is a new user, we go fetch all the event users
-            .httpStub(
-                method: .get,
-                scheme: "https",
-                host: "magetest",
-                path: "/api/events/1/users",
-                responseFile: "eventUsers.json"
-            )
         )
         func `verify that user fetch is called when a location with a new user is inserted`() async throws {
             _ = try await PersistenceContext.current!.persistence.write { context in
@@ -66,13 +60,10 @@ extension CoreDataTests {
                         Test.current?.id.description ?? ""
                 ]
             )
-            
-            let task = Location.operationToPullLocations { task, any in
-                
-            } failure: { task, any in
-                
-            }
-            task?.resume()
+            let useCase = try await DependencyContainer.shared.useCaseFactory.resolve(
+                .EventLocationFetchUseCase
+            )
+            try await useCase.execute(eventID: EventID(1), currentUserID: "nil")
             
             await PersistenceTestUtilities
                 .waitForCountOfEntity(
@@ -85,7 +76,7 @@ extension CoreDataTests {
                 .waitForCountOfEntity(
                     PersistenceContext.current!.persistence,
                     User.self,
-                    3 // this is 3 because we went to fetch all the event users
+                    1
                 )
         }
         
@@ -144,13 +135,11 @@ extension CoreDataTests {
                     Location.self,
                     0
                 )
-            let task = Location.operationToPullLocations { task, any in
-                
-            } failure: { task, any in
-                
-            }
-            task?.resume()
             
+            let useCase = try await DependencyContainer.shared.useCaseFactory.resolve(
+                .EventLocationFetchUseCase
+            )
+            try await useCase.execute(eventID: EventID(1), currentUserID: "nil")
             await PersistenceTestUtilities
                 .waitForCountOfEntity(
                     PersistenceContext.current!.persistence,

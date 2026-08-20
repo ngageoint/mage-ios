@@ -15,6 +15,7 @@ import FetchOperation
 import ServerDTO
 import UserFetch
 import User
+import LocationFetch
 
 @MainActor
 @objc public final class DependencyContainer: NSObject {
@@ -65,7 +66,13 @@ import User
                     url: url,
                     session: session,
                     persistence: persistence
-                )
+                ),
+                locationFetch: LocationFetchRepositoryFactory
+                    .createFetchRepository(
+                        url: url,
+                        session: session,
+                        persistence: persistence
+                    )
             )
             _useCaseFactory = UseCaseComposition.build(deps: appDependencies)
         }

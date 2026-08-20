@@ -18,7 +18,8 @@ final class UseCaseComposition {
         
         let modules: [any UseCaseModule.Type] = [
             SettingsUseCaseModule.self,
-            UserUseCaseModule.self
+            UserUseCaseModule.self,
+            LocationUseCaseModule.self
         ]
         
         for module in modules {

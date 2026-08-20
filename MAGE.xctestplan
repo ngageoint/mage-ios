@@ -131,6 +131,20 @@
         "identifier" : "UserTests",
         "name" : "UserTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LocationFetch",
+        "identifier" : "LocationFetchTests",
+        "name" : "LocationFetchTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Location",
+        "identifier" : "LocationTests",
+        "name" : "LocationTests"
+      }
     }
   ],
   "version" : 1

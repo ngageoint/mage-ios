@@ -6,6 +6,9 @@
 
 import Foundation
 import Persistence
+import ServerDTO
+import UseCaseFactory
+import LocationFetch
 
 public class LocationFetchService: NSObject {
     
@@ -64,17 +67,28 @@ public class LocationFetchService: NSObject {
             return
         }
         
-        let locationFetchTask: URLSessionTask? = Location.operationToPullLocations { task, response in
-            NSLog("Scheduling the location fetch timer")
-            self.scheduleTimer()
-        } failure: { task, error in
-            NSLog("Failed to pull locations, scheduling the timer again")
-            self.scheduleTimer()
-        }
-
-        NSLog("pulling locations")
-        if let locationFetchTask = locationFetchTask {
-            MageSessionManager.shared().addTask(locationFetchTask)
+        Task { [weak self] in
+            defer {
+                self?.scheduleTimer()
+            }
+            guard let currentEvent = Server.currentEventId() else {
+                return
+            }
+            do {
+                let eventID = EventID(currentEvent)
+                let useCase = try await DependencyContainer.shared.useCaseFactory.resolve(
+                    .EventLocationFetchUseCase
+                )
+                try await useCase
+                    .execute(
+                        eventID: eventID,
+                        currentUserID: UserDefaults.standard
+                            .currentUserId
+                    )
+                LocationFetchPackage.logger.info("Successfully fetched locations")
+            } catch {
+                LocationFetchPackage.logger.error("Failed to fetch locations: \(error.localizedDescription)")
+            }
         }
     }
     

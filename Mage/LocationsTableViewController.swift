@@ -10,6 +10,9 @@ import Foundation
 import Kingfisher
 import MaterialComponents.MaterialSnackbar
 import Persistence
+import ServerDTO
+import LocationFetch
+import UseCaseFactory
 
 class LocationsTableViewController: UITableViewController {
     
@@ -184,17 +187,30 @@ class LocationsTableViewController: UITableViewController {
     
     @objc func refreshLocations() {
         refreshControl?.beginRefreshing();
-        let locationFetchTask: URLSessionDataTask? = Location.operationToPullLocations {_,_ in
-            DispatchQueue.main.async {
-                self.refreshControl?.endRefreshing();
+        Task { [weak self] in
+            defer {
+                DispatchQueue.main.async {
+                    self?.refreshControl?.endRefreshing();
+                }
             }
-        } failure: { (_,_)  in
-            DispatchQueue.main.async {
-                self.refreshControl?.endRefreshing();
+            guard let currentEvent = Server.currentEventId() else {
+                return
+            }
+            do {
+                let eventID = EventID(currentEvent)
+                let useCase = try await DependencyContainer.shared.useCaseFactory.resolve(
+                    .EventLocationFetchUseCase
+                )
+                try await useCase
+                    .execute(
+                        eventID: eventID,
+                        currentUserID: UserDefaults.standard.currentUserId
+                    )
+                LocationFetchPackage.logger.info("Successfully fetched locations")
+            } catch {
+                LocationFetchPackage.logger.error("Failed to fetch locations: \(error.localizedDescription)")
             }
         }
-        
-        MageSessionManager.shared()?.addTask(locationFetchTask);
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
