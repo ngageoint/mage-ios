@@ -17,7 +17,6 @@ class ObservationCompactView: UIView {
     private var scheme: MDCContainerScheming?;
     private var cornerRadius:CGFloat = 0.0;
     private var includeAttachments: Bool = false;
-    private var totalAttachmentCount = 0;
 
     // Set by the containing cell/view so it can play its own tap feedback (e.g. a card's ripple)
     // at the right location before navigating - falls back to navigating directly if unset.
@@ -52,47 +51,6 @@ class ObservationCompactView: UIView {
         return actions;
     }();
 
-    private lazy var failedAttachmentLabel: UILabel = {
-        let label = UILabel.newAutoLayout()
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        return label
-    }()
-
-    private lazy var failedAttachmentBadge: UIView = {
-        let badge = UIView.newAutoLayout()
-        badge.addSubview(failedAttachmentLabel)
-        failedAttachmentLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 2, left: 8, bottom:2, right: 8))
-        badge.clipsToBounds = true
-        return badge
-    }()
-
-    // Row containing the failed attachment badge, placed under the carousel and above the
-    // coordinates row. Wraps the badge (leading/top/bottom only, no trailing) so the badge
-    // keeps hugging its own content width instead of stretching with the stack's .fill alignment.
-    private lazy var failedAttachmentRow: UIView = {
-        let row = UIView.newAutoLayout()
-        row.addSubview(failedAttachmentBadge)
-        failedAttachmentBadge.autoPinEdge(toSuperviewEdge: .leading, withInset: 8)
-        failedAttachmentBadge.autoPinEdge(toSuperviewEdge: .top, withInset: 8)
-        failedAttachmentBadge.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8)
-        return row
-    }()
-
-    private lazy var attachmentCountLabel: UILabel = {
-        let label = UILabel.newAutoLayout()
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        return label
-    }()
-
-    private lazy var attachmentCountBadge: UIView = {
-        let badge = UIView.newAutoLayout()
-        badge.addSubview(attachmentCountLabel)
-        attachmentCountLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
-        return badge
-    }()
-
     private lazy var attachmentSlideshow: AttachmentSlideShow = {
         let actions = AttachmentSlideShow();
         actions.isUserInteractionEnabled = true;
@@ -125,13 +83,6 @@ class ObservationCompactView: UIView {
         observationSummaryView.applyTheme(withScheme: scheme);
         observationActionsView.applyTheme(withScheme: scheme);
         attachmentSlideshow.applyTheme(withScheme: scheme);
-
-        let errorScheme = MAGEErrorScheme.scheme()
-        failedAttachmentBadge.backgroundColor = errorScheme.colorScheme.primaryColor.withAlphaComponent(0.12)
-        failedAttachmentLabel.textColor = errorScheme.colorScheme.primaryColor
-
-        attachmentCountBadge.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.85)
-        attachmentCountLabel.textColor = .white
     }
 
     public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
@@ -148,7 +99,6 @@ class ObservationCompactView: UIView {
         attachmentSlideshow.applyTheme(withScheme: scheme)
 
         let activeAttachments = observation.attachments?.filter { !$0.markedForDeletion }
-        let failedCount = failedAttachmentCount(observation: observation)
         let hasAnyAttachment = includeAttachments && (activeAttachments?.count ?? 0) > 0
         if hasAnyAttachment {
             // No delegate here on purpose - tapping an attachment thumbnail in this list/card
@@ -159,42 +109,15 @@ class ObservationCompactView: UIView {
         attachmentSlideshow.isHidden = !hasAnyAttachment;
 
         applyTheme(withScheme: scheme);
-
-        if failedCount > 0 {
-            failedAttachmentLabel.text = failedCount > 1 ? "Attachments Failed - \(failedCount)" : "Attachment Failed"
-            failedAttachmentRow.isHidden = false
-        } else {
-            failedAttachmentRow.isHidden = true
-        }
-
-        totalAttachmentCount = activeAttachments?.count ?? 0
-        if totalAttachmentCount > 1 {
-            attachmentCountLabel.text = "1 of \(totalAttachmentCount)"
-            attachmentCountBadge.isHidden = false
-        } else {
-            attachmentCountBadge.isHidden = true
-        }
     }
 
     func prepareForReuse() {
         attachmentSlideshow.clear()
     }
 
-    func failedAttachmentCount(observation: Observation) -> Int {
-        return observation.attachments?.filter { !$0.markedForDeletion && $0.isProcessingFailed }.count ?? 0
-    }
-
     override func updateConstraints() {
         if (!didSetUpConstraints) {
             stackView.autoPinEdgesToSuperviewEdges();
-            failedAttachmentBadge.layer.cornerRadius = 12
-            attachmentCountBadge.layer.cornerRadius = 12
-            attachmentCountBadge.autoPinEdge(.bottom, to: .bottom, of: attachmentSlideshow, withOffset: -8)
-            attachmentCountBadge.autoPinEdge(.trailing, to: .trailing, of: attachmentSlideshow, withOffset: -8)
-            attachmentCountBadge.layer.shadowColor = UIColor.black.cgColor
-            attachmentCountBadge.layer.shadowOpacity = 0.25
-            attachmentCountBadge.layer.shadowRadius = 4
-            attachmentCountBadge.layer.shadowOffset = CGSize(width: 0, height: 2)
             didSetUpConstraints = true;
         }
         super.updateConstraints();
@@ -206,8 +129,6 @@ class ObservationCompactView: UIView {
             self.stackView.addArrangedSubview(importantView);
             self.stackView.addArrangedSubview(observationSummaryView);
             self.stackView.addArrangedSubview(attachmentSlideshow);
-            self.attachmentSlideshow.addSubview(attachmentCountBadge);
-            self.stackView.addArrangedSubview(failedAttachmentRow);
             self.stackView.addArrangedSubview(observationActionsView);
             // Explicit gesture rather than relying on the tap falling through the view
             // hierarchy to the card - AttachmentSlideShow and its internal scroll/stack views
@@ -215,10 +136,6 @@ class ObservationCompactView: UIView {
             // would otherwise dead-end instead of reaching the card's own tap handler.
             let attachmentSlideshowTap = UITapGestureRecognizer(target: self, action: #selector(attachmentSlideshowTapped(_:)));
             self.attachmentSlideshow.addGestureRecognizer(attachmentSlideshowTap);
-            self.attachmentSlideshow.onPageChanged = { [weak self] page in
-                guard let self = self else { return }
-                self.attachmentCountLabel.text = "\(page + 1) of \(self.totalAttachmentCount)"
-            }
             setNeedsUpdateConstraints();
             constructed = true;
         }

@@ -145,13 +145,12 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
             }
         }
         
-        if (observation.error != nil) {
-            self.syncBadge.isHidden = observation.hasValidationError;
-            self.errorBadge.isHidden = !observation.hasValidationError;
-        } else {
-            self.syncBadge.isHidden = true;
-            self.errorBadge.isHidden = true;
-        }
+        let hasFailedAttachment = observation.attachments?.contains { !$0.markedForDeletion && $0.isProcessingFailed } ?? false
+        let showErrorBadge = (observation.error != nil && observation.hasValidationError) || hasFailedAttachment
+        let showSyncBadge = observation.error != nil && !observation.hasValidationError && !hasFailedAttachment
+
+        self.errorBadge.isHidden = !showErrorBadge;
+        self.syncBadge.isHidden = !showSyncBadge;
     }
     
     func handleUser(userName: String?) {
