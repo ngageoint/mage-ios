@@ -16,6 +16,7 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
     private weak var user: User?;
     private var userActionsDelegate: UserActionsDelegate?;
     private var didSetUpConstraints = false;
+    private var fetchedResultsController: NSFetchedResultsController<User>?
     
     lazy var avatarImage: UIImageView = {
         let avatarImage = UserAvatarUIImageView(image: nil);
@@ -60,8 +61,31 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
             let cacheOnly = DataConnectionUtilities.shouldFetchAvatars();
             (avatarImage as! UserAvatarUIImageView).showImage(cacheOnly: cacheOnly);
         }
-        
-        primaryField.text = item.name;
+        if let name = item.name {
+            primaryField.text = name;
+            fetchedResultsController?.delegate = nil
+            fetchedResultsController = nil
+        } else if let remoteId = item.remoteId, fetchedResultsController == nil {
+            primaryField.text = "unknown";
+            let request = User.fetchRequest()
+            request.predicate = NSPredicate(
+                format: "remoteId == %@",
+                remoteId
+            )
+            request.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
+            fetchedResultsController = NSFetchedResultsController(
+                fetchRequest: request,
+                managedObjectContext: PersistenceContainer.shared
+                    .get().viewContext,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            fetchedResultsController?.delegate = self
+            try? fetchedResultsController?.performFetch()
+            if let user = fetchedResultsController?.fetchedObjects?.first {
+                populate(item: user, actionsDelegate: self.userActionsDelegate)
+            }
+        }
         
         // we do not want the date to word break so we replace all spaces with a non word breaking spaces
         var timeText = "";
@@ -69,5 +93,14 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
             timeText = itemDate.formattedDisplay().uppercased().replacingOccurrences(of: " ", with: "\u{00a0}") ;
         }
         timestamp.text = timeText;
+    }
+}
+
+extension UserSummaryView: NSFetchedResultsControllerDelegate {
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        if let user = anObject as? User {
+            populate(item: user, actionsDelegate: self.userActionsDelegate)
+        }
     }
 }

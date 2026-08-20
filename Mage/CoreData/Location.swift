@@ -188,17 +188,21 @@ extension Location: Navigable {
                     } else {
                         if (locations.count != 0) {
                             newUserFound = true;
-                            var displayName = "unknown";
-                            var username = userId
+                            var displayName: String? = nil
+                            var username: String? = nil
                             if let userFromJson = userJson[LocationKey.user.key] as? [AnyHashable : Any] {
-                                displayName = (userFromJson[UserKey.displayName.key] as? String) ?? "unknown"
-                                username = (userFromJson[UserKey.username.key] as? String) ?? userId;
+                                displayName = (userFromJson[UserKey.displayName.key] as? String)
+                                username = (userFromJson[UserKey.username.key] as? String);
                             }
-                            let userDicationary: [AnyHashable : Any] = [
-                                UserKey.id.key: userId,
-                                UserKey.username.key: username,
-                                UserKey.displayName.key: displayName
+                            var userDicationary: [AnyHashable : Any] = [
+                                UserKey.id.key: userId
                             ]
+                            if let displayName {
+                                userDicationary[UserKey.displayName.key] = displayName
+                            }
+                            if let username {
+                                userDicationary[UserKey.username.key] = username
+                            }
                             let user = User.insert(json: userDicationary, context: localContext);
                             let location = Location.mr_createEntity(in: localContext);
                             location?.populate(json: locations[0]);
