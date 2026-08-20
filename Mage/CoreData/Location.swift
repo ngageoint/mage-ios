@@ -187,7 +187,6 @@ extension Location: Navigable {
                         }
                     } else {
                         if (locations.count != 0) {
-                            print("Could not find user for id \(userId)")
                             newUserFound = true;
                             var displayName = "unknown";
                             var username = userId
@@ -206,7 +205,7 @@ extension Location: Navigable {
                             user?.location = location;
                             Task {
                                 try await DependencyContainer.shared.useCaseFactory
-                                    .resolve(.GetUserUseCase)
+                                    .resolve(.RefreshUserUseCase)
                                     .execute(userID: userId)
                             }
                         }

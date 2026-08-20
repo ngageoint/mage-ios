@@ -714,15 +714,14 @@ extension Observation: Navigable {
                             }
                         } else {
                             // new user, go fetch
+                            let user = User.mr_createEntity(in: context)
+                            user?.remoteId = userId
+                            observation.user = user
                             Task {
                                 let result = try await DependencyContainer.shared.useCaseFactory
-                                    .resolve(.GetUserUseCase)
+                                    .resolve(.RefreshUserUseCase)
                                     .execute(userID: userId)
-                                await context.perform {
-                                    let localObservation = observation.mr_(in: context)
-                                    let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
-                                    localObservation?.user = user
-                                }
+                                
                             }
                         }
                     }
