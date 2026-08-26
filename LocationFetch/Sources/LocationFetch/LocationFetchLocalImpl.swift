@@ -163,9 +163,6 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                             
                             user.createdAt = userFromJson.createdAt
                             user.lastUpdated = userFromJson.lastUpdated
-                            
-                            user.remoteId = userId
-                            user.name = userFromJson.displayName
                         }
                         let location = Location(context: context)
                         try? context.obtainPermanentIDs(for: [location])
