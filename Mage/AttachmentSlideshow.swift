@@ -217,13 +217,48 @@ class AttachmentSlideShow: UIView {
             guard let imageView = imageView else {
                 return;
             }
+            for view in imageView.subviews {
+                view.removeFromSuperview();
+            }
             if (attachment.isProcessingFailed) {
-                let iconConfig = UIImage.SymbolConfiguration(pointSize: 56, weight: .regular);
-                imageView.image = UIImage(systemName: "exclamationmark.circle.fill")?.withConfiguration(iconConfig);
-                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+                imageView.image = nil;
                 imageView.contentMode = .center;
                 imageView.setAttachment(attachment: attachment);
                 imageView.accessibilityLabel = "attachment \(attachment.name ?? "") upload failed";
+
+                let iconConfig = UIImage.SymbolConfiguration(pointSize: 56, weight: .regular);
+                let icon = UIImageView.newAutoLayout();
+                icon.image = UIImage(systemName: "exclamationmark.circle")?.withConfiguration(iconConfig);
+                icon.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+                icon.contentMode = .scaleAspectFit;
+                icon.autoSetDimensions(to: CGSize(width: 56, height: 56));
+
+                let titleLabel = UILabel.newAutoLayout();
+                titleLabel.text = "Upload Failed";
+                titleLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+                titleLabel.font = scheme?.typographyScheme.subtitle1;
+                titleLabel.textAlignment = .center;
+
+                let descriptionLabel = UILabel.newAutoLayout();
+                descriptionLabel.text = attachment.name;
+                descriptionLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+                descriptionLabel.font = scheme?.typographyScheme.caption;
+                descriptionLabel.textAlignment = .center;
+                descriptionLabel.numberOfLines = 1;
+                descriptionLabel.lineBreakMode = .byTruncatingTail;
+
+                let group = UIStackView(forAutoLayout: ());
+                group.axis = .vertical;
+                group.alignment = .center;
+                group.spacing = 4;
+                group.addArrangedSubview(icon);
+                group.addArrangedSubview(titleLabel);
+                group.addArrangedSubview(descriptionLabel);
+                imageView.addSubview(group);
+                group.autoCenterInSuperview();
+                group.autoPinEdge(toSuperviewEdge: .left, withInset: 16, relation: .greaterThanOrEqual);
+                group.autoPinEdge(toSuperviewEdge: .right, withInset: 16, relation: .greaterThanOrEqual);
+
                 continue;
             }
             if (attachment.isUploading) {

@@ -15,6 +15,7 @@ import MaterialComponents.MaterialRipple
     private var messageExpanded = false;
     private var hintLabel: UILabel?;
     private var hintLabelHeightConstraint: NSLayoutConstraint?;
+    private var failureIcon: UIImageView?;
 
     private lazy var imageView: AttachmentUIImageView = {
         let imageView: AttachmentUIImageView = AttachmentUIImageView(image: nil);
@@ -75,6 +76,7 @@ import MaterialComponents.MaterialRipple
         self.messageExpanded = false;
         self.hintLabel = nil;
         self.hintLabelHeightConstraint = nil;
+        self.failureIcon = nil;
         for recognizer in self.imageView.gestureRecognizers ?? [] {
             self.imageView.removeGestureRecognizer(recognizer);
         }
@@ -83,6 +85,7 @@ import MaterialComponents.MaterialRipple
     @objc func toggleFailureMessage() {
         guard let hintLabel = hintLabel, let hintLabelHeightConstraint = hintLabelHeightConstraint else { return }
         messageExpanded.toggle();
+        failureIcon?.isHidden = messageExpanded;
         if (messageExpanded) {
             hintLabel.text = attachment?.processingMessage ?? "Upload failed";
             hintLabel.numberOfLines = 0;
@@ -204,32 +207,30 @@ import MaterialComponents.MaterialRipple
             self.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleFailureMessage)));
             self.messageExpanded = false;
 
-            let label = UILabel.newAutoLayout()
-            label.text = "\(attachment.name ?? "")\nUpload Failed"
-            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            label.font = scheme?.typographyScheme.overline
-            label.textAlignment = .center
-            label.numberOfLines = 2
-            label.lineBreakMode = .byTruncatingTail
-            label.autoSetDimension(.height, toSize: label.font.lineHeight * 2)
-            imageView.addSubview(label)
-            label.autoPinEdge(toSuperviewEdge: .left, withInset: 8)
-            label.autoPinEdge(toSuperviewEdge: .right, withInset: 8)
+            let titleLabel = UILabel.newAutoLayout()
+            titleLabel.text = "Upload Failed"
+            titleLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+            titleLabel.font = scheme?.typographyScheme.subtitle1
+            titleLabel.textAlignment = .center
+            titleLabel.numberOfLines = 1
+            titleLabel.autoSetDimension(.height, toSize: titleLabel.font.lineHeight)
 
-            // A real subview pinned above `label`, rather than drawn via imageView's own
-            // contentMode = .center - that fixed the icon at a static point with no relationship
-            // to the labels below it, so it stayed put while the expanding message pushed the
-            // labels up into it. Anchoring the icon to label's top ties it into the same
-            // bottom-anchored chain as the labels, so the whole group moves together.
+            let descriptionLabel = UILabel.newAutoLayout()
+            descriptionLabel.text = attachment.name
+            descriptionLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+            descriptionLabel.font = scheme?.typographyScheme.caption
+            descriptionLabel.textAlignment = .center
+            descriptionLabel.numberOfLines = 1
+            descriptionLabel.lineBreakMode = .byTruncatingTail
+            descriptionLabel.autoSetDimension(.height, toSize: descriptionLabel.font.lineHeight)
+
             let iconConfig = UIImage.SymbolConfiguration(pointSize: 56, weight: .regular);
             let icon = UIImageView.newAutoLayout()
-            icon.image = UIImage(systemName: "exclamationmark.circle.fill")?.withConfiguration(iconConfig);
+            icon.image = UIImage(systemName: "exclamationmark.circle")?.withConfiguration(iconConfig);
             icon.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
             icon.contentMode = .scaleAspectFit;
-            imageView.addSubview(icon);
             icon.autoSetDimensions(to: CGSize(width: 56, height: 56));
-            icon.autoAlignAxis(.vertical, toSameAxisOf: imageView);
-            icon.autoPinEdge(.bottom, to: .top, of: label, withOffset: -8);
+            self.failureIcon = icon;
 
             let hintLabel = UILabel.newAutoLayout()
             hintLabel.text = "Tap for Details"
@@ -238,13 +239,30 @@ import MaterialComponents.MaterialRipple
             hintLabel.textAlignment = .center
             hintLabel.numberOfLines = 1
             let hintLabelHeightConstraint = hintLabel.autoSetDimension(.height, toSize: hintLabel.font.pointSize)
-            imageView.addSubview(hintLabel)
-            hintLabel.autoPinEdge(.top, to: .bottom, of: label, withOffset: 2)
-            hintLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 8)
-            hintLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 8)
-            hintLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16)
             self.hintLabel = hintLabel;
             self.hintLabelHeightConstraint = hintLabelHeightConstraint;
+
+            // The whole group is centered as a single unit rather than anchored from any one
+            // fixed point, so it stays centered whether or not the icon is showing. UIStackView
+            // automatically collapses a hidden arranged subview's space, so hiding the icon on
+            // tap re-centers the remaining title/description/hint group for free.
+            let group = UIStackView(forAutoLayout: ());
+            group.axis = .vertical;
+            group.alignment = .center;
+            group.spacing = 2;
+            group.addArrangedSubview(icon);
+            group.setCustomSpacing(8, after: icon);
+            group.addArrangedSubview(titleLabel);
+            group.addArrangedSubview(descriptionLabel);
+            group.addArrangedSubview(hintLabel);
+            imageView.addSubview(group);
+            group.autoCenterInSuperview();
+
+            // Width constraints against imageView are only legal now that titleLabel/
+            // descriptionLabel/hintLabel actually share a view hierarchy with it (via group).
+            titleLabel.autoMatch(.width, to: .width, of: imageView, withOffset: -16)
+            descriptionLabel.autoMatch(.width, to: .width, of: imageView, withOffset: -16)
+            hintLabel.autoMatch(.width, to: .width, of: imageView, withOffset: -16)
 
             self.backgroundColor = scheme?.colorScheme.backgroundColor
 
