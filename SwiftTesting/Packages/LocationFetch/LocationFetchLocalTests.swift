@@ -76,26 +76,26 @@ extension CoreDataTests {
         // MARK: - handleChunk
         
         @Test
-        func `returns empty result for empty chunk`() async {
-            let result = await local.handleChunk(chunk: [])
+        func `returns empty result for empty chunk`() async throws {
+            let result = try await local.handleChunk(chunk: [])
             
             #expect(result == .empty)
         }
         
         @Test
-        func `ignores dto without id`() async {
-            var dto = UserLocationDTO(locations: [])
+        func `ignores dto without id`() async throws {
+            let dto = UserLocationDTO(locations: [])
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result == .empty)
         }
         
         @Test
-        func `ignores dto without locations`() async {
-            var dto = UserLocationDTO(id: "user1")
+        func `ignores dto without locations`() async throws {
+            let dto = UserLocationDTO(id: "user1")
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result == .empty)
         }
@@ -110,7 +110,7 @@ extension CoreDataTests {
             
             let dto = makeLocationDTO(userId: "user1")
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result?.inserted == 1)
             #expect(result?.updated == 0)
@@ -138,7 +138,7 @@ extension CoreDataTests {
                 longitude: 50
             )
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result?.updated == 1)
             
@@ -158,16 +158,16 @@ extension CoreDataTests {
             
             let dto = makeLocationDTO(userId: "user1")
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result?.missingUserIds == ["user1"])
         }
         
         @Test
-        func `creates placeholder user when user information is included`() async {
+        func `creates placeholder user when user information is included`() async throws {
             let dto = makeLocationDTO(userId: "user1")
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result?.inserted == 1)
             #expect(result?.missingUserIds == ["user1"])
@@ -178,10 +178,10 @@ extension CoreDataTests {
         }
         
         @Test
-        func `ignores current user location`() async {
+        func `ignores current user location`() async throws {
             let dto = makeLocationDTO(userId: "me")
             
-            let result = await local.handleChunk(chunk: [dto])
+            let result = try await local.handleChunk(chunk: [dto])
             
             #expect(result?.ignored == 1)
             #expect(result?.inserted == 0)
@@ -198,17 +198,19 @@ extension CoreDataTests {
             
             try context.save()
             
-            var progressCalls = 0
+            var users: [UserLocationDTO] = []
+            for i in 1...(local.chunkSize+2) {
+                users.append(makeLocationDTO(userId: "user\(i)"))
+            }
             
-            let result = try await local.save(
-                [makeLocationDTO(userId: "user1")]
-            ) { _ in
+            var progressCalls = 0
+            let result = try await local.save(users) { _ in
                 progressCalls += 1
             }
             
             #expect(result.updated == 0)
-            #expect(result.inserted == 1)
-            #expect(progressCalls >= 1)
+            #expect(result.inserted == users.count)
+            #expect(progressCalls == 2)
         }
         
         @Test

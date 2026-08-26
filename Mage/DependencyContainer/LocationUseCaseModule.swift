@@ -7,7 +7,6 @@
 
 
 import UseCaseFactory
-import UserFetch
 
 @MainActor
 enum LocationUseCaseModule: UseCaseModule {

@@ -15,7 +15,7 @@ import Pipeline
 public final class LocationFetchLocalImpl: LocationFetchLocal {
     public typealias DTO = UserLocationDTO
     public typealias SaveResult = LocationSaveResult
-    
+    internal let chunkSize = 250
     let persistence: PersistenceProtocol
     let currentUserID: UserID
     
@@ -46,12 +46,12 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
     ) async throws -> SaveResult {
         let totalCount: Int64 = Int64(dto.count)
         var handled: Int = 0
-        let chunks = dto.chunked(into: 250)
+        let chunks = dto.chunked(into: chunkSize)
         
         var saveResult = LocationSaveResult.empty
         
         for chunk in chunks {
-            if let chunkSaveResult = await handleChunk(chunk: chunk) {
+            if let chunkSaveResult = try await handleChunk(chunk: chunk) {
                 saveResult.combine(with: chunkSaveResult)
                 handled += chunkSaveResult.ignored + chunkSaveResult.deleted + chunkSaveResult.inserted + chunkSaveResult.updated
             }
@@ -75,8 +75,8 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
         return saveResult
     }
     
-    func handleChunk(chunk: [UserLocationDTO]) async -> LocationSaveResult? {
-        let persistenceResult = (try? await persistence.write { context in
+    func handleChunk(chunk: [UserLocationDTO]) async throws -> LocationSaveResult? {
+        let persistenceResult = try await persistence.write { context in
             var saveResult = LocationSaveResult.empty
             
             var userIds: [String] = [];
@@ -143,9 +143,6 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                         user.remoteId = userId
                         
                         if let userFromJson = userJson.user {
-                            let displayName = userFromJson.displayName
-                            let username = userFromJson.username
-                            
                             user.username = userFromJson.username
                             user.email = userFromJson.email
                             user.name = userFromJson.displayName
@@ -168,8 +165,7 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                             user.lastUpdated = userFromJson.lastUpdated
                             
                             user.remoteId = userId;
-                            user.username = username;
-                            user.name = displayName;
+                            user.name = userFromJson.displayName ;
                         }
                         let location = Location(context: context)
                         try? context.obtainPermanentIDs(for: [location])
@@ -183,8 +179,8 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                 }
             }
             return saveResult
-        })
-        return persistenceResult?.blockReturn
+        }
+        return persistenceResult.blockReturn
     }
     
 }
