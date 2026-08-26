@@ -79,18 +79,18 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
         let persistenceResult = try await persistence.write { context in
             var saveResult = LocationSaveResult.empty
             
-            var userIds: [String] = [];
+            var userIds: [String] = []
             
             for user in chunk {
                 if let userId = user.id {
-                    userIds.append(userId);
+                    userIds.append(userId)
                 }
             }
             
             let fetchRequest = User.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds)
             let usersMatchingIDs: [User] = (try? context.fetch(fetchRequest)) ?? []
-            var userIdMap: [String : User] = [:];
+            var userIdMap: [String : User] = [:]
             for user in usersMatchingIDs {
                 if let remoteId = user.remoteId {
                     userIdMap[remoteId] = user
@@ -101,13 +101,13 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                 guard let userId = userJson.id,
                       let locations = userJson.locations
                 else {
-                    continue;
+                    continue
                 }
                 // Do not store my own location
                 if self.currentUserID == userId {
                     // need to report that we handled this user even if we did not save it
                     saveResult.ignored += 1
-                    continue;
+                    continue
                 }
                 if let user = userIdMap[userId] {
                     if let location = user.location {
@@ -122,7 +122,7 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                         try? context.obtainPermanentIDs(for: [location])
                         if let locationDTO = locations.first {
                             location.populate(dto: locationDTO)
-                            user.location = location;
+                            user.location = location
                         }
                         saveResult.inserted += 1
                     }
@@ -139,7 +139,7 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                         )
                         saveResult.missingUserIds.insert(userId)
                         
-                        let user = User(context: context);
+                        let user = User(context: context)
                         user.remoteId = userId
                         
                         if let userFromJson = userJson.user {
@@ -164,14 +164,14 @@ public final class LocationFetchLocalImpl: LocationFetchLocal {
                             user.createdAt = userFromJson.createdAt
                             user.lastUpdated = userFromJson.lastUpdated
                             
-                            user.remoteId = userId;
-                            user.name = userFromJson.displayName ;
+                            user.remoteId = userId
+                            user.name = userFromJson.displayName
                         }
                         let location = Location(context: context)
                         try? context.obtainPermanentIDs(for: [location])
                         if let locationDTO = locations.first {
                             location.populate(dto: locationDTO)
-                            user.location = location;
+                            user.location = location
                         }
                         try? context.obtainPermanentIDs(for: [user])
                         saveResult.inserted += 1
