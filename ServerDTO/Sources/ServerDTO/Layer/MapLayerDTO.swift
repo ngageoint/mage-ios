@@ -96,7 +96,7 @@ public struct MapLayerDTO: Codable, Sendable {
         self.type = try? values.decode(String.self, forKey: .type)
         self.url = try? values.decode(String.self, forKey: .url)
         self.sendableFile = try? values.decode([String: SendableValue].self, forKey: .file)
-        self.layerDescription = try? values.decode(String.self, forKey: .layerDescription)
+        self.layerDescription = try? values.decode(String.self, forKey: .description)
         self.state = try? values.decode(String.self, forKey: .state)
         self.base = (try? values.decode(Bool.self, forKey: .base)) ?? false
         self.sendableOptions = try? values.decode([String: SendableValue].self, forKey: .wms)
@@ -111,7 +111,7 @@ public struct MapLayerDTO: Codable, Sendable {
         try? container.encode(type, forKey: .type)
         try? container.encode(url, forKey: .url)
         try? container.encode(sendableFile, forKey: .file)
-        try? container.encode(layerDescription, forKey: .layerDescription)
+        try? container.encode(layerDescription, forKey: .description)
         try? container.encode(state, forKey: .state)
         try? container.encode(base, forKey: .base)
         try? container.encode(eventId, forKey: .eventId)

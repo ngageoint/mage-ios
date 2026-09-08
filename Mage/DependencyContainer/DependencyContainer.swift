@@ -17,6 +17,7 @@ import UserFetch
 import User
 import LocationFetch
 import Form
+import LayerFetch
 
 @MainActor
 @objc public final class DependencyContainer: NSObject {
@@ -78,6 +79,18 @@ import Form
                     .createFormIconFetchRepository(
                         url: url,
                         session: session
+                    ),
+                layerFetch: LayerFetchRepositoryFactory
+                    .fetchLayers(
+                        url: url,
+                        session: session,
+                        persistence: persistence
+                    ),
+                staticLayerDataFetch: LayerFetchRepositoryFactory
+                    .staticLayerData(
+                        url: url,
+                        session: session,
+                        persistence: persistence
                     )
             )
             _useCaseFactory = UseCaseComposition.build(deps: appDependencies)

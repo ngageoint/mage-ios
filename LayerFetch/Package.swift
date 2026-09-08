@@ -13,19 +13,22 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "FetchOperation", path: "../FetchOperation"),
-        .package(name: "ServerDTO", path: "../ServerDTO"),
-        .package(name: "Layer", path: "../Layer"),
-        .package(name: "APIRouter", path: "../APIRouter")
+        .package(path: "../FetchOperation"),
+        .package(path: "../ServerDTO"),
+        .package(path: "../Layer"),
+        .package(path: "../APIRouter"),
+        .package(path: "../TestUtilities"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.0"))
     ],
     targets: [
         .target(
             name: "LayerFetch",
             dependencies: [
-                .product(name: "FetchOperation", package: "FetchOperation"),
-                .product(name: "ServerDTO", package: "ServerDTO"),
-                .product(name: "Layer", package: "Layer"),
-                .product(name: "APIRouter", package: "APIRouter")
+                "FetchOperation",
+                "ServerDTO",
+                "Layer",
+                "APIRouter",
+                .product(name: "Alamofire", package: "Alamofire")
             ],
             swiftSettings: [
                 .treatAllWarnings(as: .error) // Treat all warnings as errors for this target
@@ -33,7 +36,7 @@ let package = Package(
         ),
         .testTarget(
             name: "LayerFetchTests",
-            dependencies: ["LayerFetch"]
+            dependencies: ["LayerFetch", "TestUtilities"]
         ),
     ],
     swiftLanguageModes: [.v6]

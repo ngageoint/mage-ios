@@ -34,11 +34,7 @@ struct FormRepositoryTests {
     func `fetch icons`() async throws {
         var repository: AnyFetchRepository<FormIconFetchRequest, [URL]>!
         repository = FormRepositoryFactory
-            .createFormIconFetchRepository(url: URL(string:"https://magetest")!, session: TestAPISession(
-                baseURL: URL(string: "https://magetest")!,
-                loginType: "online",
-                additionalHeaders: [HTTPStubTrait.HeaderKey:Test.current?.id.description ?? ""]
-            ))
+            .createFormIconFetchRepository(url: URL(string:"https://magetest")!, session: TestAPISession())
         
         let stream = repository.startFetch(FormIconFetchRequest(eventID: EventID(10)))
         let events = stream.events()
@@ -77,11 +73,7 @@ struct FormRepositoryTests {
     func `fetch icons token expired`() async throws {
         var repository: AnyFetchRepository<FormIconFetchRequest, [URL]>!
         repository = FormRepositoryFactory
-            .createFormIconFetchRepository(url: URL(string:"https://magetest")!, session: TestAPISession(
-                baseURL: URL(string: "https://magetest")!,
-                loginType: "online",
-                additionalHeaders: [HTTPStubTrait.HeaderKey:Test.current?.id.description ?? ""]
-            ))
+            .createFormIconFetchRepository(url: URL(string:"https://magetest")!, session: TestAPISession())
         
         let stream = repository.startFetch(FormIconFetchRequest(eventID: EventID(1)))
         let events = stream.events()

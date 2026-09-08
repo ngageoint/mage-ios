@@ -35,3 +35,15 @@ public enum StaticLayerKey: String {
         return self.rawValue
     }
 }
+
+public enum WMSLayerOptionsKey: String {
+    case layers
+    case format
+    case styles
+    case transparent
+    case version
+    
+    public var key : String {
+        return self.rawValue;
+    }
+}

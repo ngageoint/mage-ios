@@ -182,6 +182,12 @@
 		F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725A9CB195CB819002A699C /* ObservationAnnotation.swift */; };
 		F725E0B3304C4F9100C8DC3B /* Layer in Frameworks */ = {isa = PBXBuildFile; productRef = F725E0B2304C4F9100C8DC3B /* Layer */; };
 		F725E0B5304C4F9100C8DC3B /* LayerFetch in Frameworks */ = {isa = PBXBuildFile; productRef = F725E0B4304C4F9100C8DC3B /* LayerFetch */; };
+		F725E8E4304DDC5D00C8DC3B /* LayerImporterImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8E3304DDC5D00C8DC3B /* LayerImporterImplTests.swift */; };
+		F725E8E6305052A200C8DC3B /* StaticLayerFetchLocalImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8E5305052A200C8DC3B /* StaticLayerFetchLocalImplTests.swift */; };
+		F725E8E83050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8E73050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift */; };
+		F725E8EA3050B58600C8DC3B /* RefreshLayersUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8E93050B58600C8DC3B /* RefreshLayersUseCase.swift */; };
+		F725E8EC3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8EB3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift */; };
+		F725E8EE3050B96800C8DC3B /* LayerUseCaseModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8ED3050B96800C8DC3B /* LayerUseCaseModule.swift */; };
 		F727516E19C888DB006C63CB /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* Locations.m */; };
 		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
 		F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D82034CC3700C2600D /* TestingAppDelegate.h */; };
@@ -895,6 +901,12 @@
 		F725A9CB195CB819002A699C /* ObservationAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationAnnotation.swift; sourceTree = "<group>"; };
 		F725E0B0304C4E4500C8DC3B /* Layer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Layer; sourceTree = "<group>"; };
 		F725E0B1304C4E5500C8DC3B /* LayerFetch */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LayerFetch; sourceTree = "<group>"; };
+		F725E8E3304DDC5D00C8DC3B /* LayerImporterImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerImporterImplTests.swift; sourceTree = "<group>"; };
+		F725E8E5305052A200C8DC3B /* StaticLayerFetchLocalImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerFetchLocalImplTests.swift; sourceTree = "<group>"; };
+		F725E8E73050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerFetchRepositoryFactoryTests.swift; sourceTree = "<group>"; };
+		F725E8E93050B58600C8DC3B /* RefreshLayersUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshLayersUseCase.swift; sourceTree = "<group>"; };
+		F725E8EB3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerDataFetchUseCase.swift; sourceTree = "<group>"; };
+		F725E8ED3050B96800C8DC3B /* LayerUseCaseModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerUseCaseModule.swift; sourceTree = "<group>"; };
 		F727516C19C888DB006C63CB /* Locations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Locations.h; sourceTree = "<group>"; };
 		F727516D19C888DB006C63CB /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
 		F727516F19C88CAE006C63CB /* Observations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observations.h; sourceTree = "<group>"; };
@@ -1972,6 +1984,8 @@
 		F718149430376DE900E033AB /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				F725E8EB3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift */,
+				F725E8E93050B58600C8DC3B /* RefreshLayersUseCase.swift */,
 				F7CB01433048C63E00C29FE0 /* GetEventFormIconsUseCase.swift */,
 				F718149530376DEB00E033AB /* EventLocationFetchUseCase.swift */,
 			);
@@ -2010,6 +2024,16 @@
 				F723232B251CE92800AD168A /* MapSettingsTests.swift */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		F725E8E2304DDC5A00C8DC3B /* LayerFetch */ = {
+			isa = PBXGroup;
+			children = (
+				F725E8E73050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift */,
+				F725E8E5305052A200C8DC3B /* StaticLayerFetchLocalImplTests.swift */,
+				F725E8E3304DDC5D00C8DC3B /* LayerImporterImplTests.swift */,
+			);
+			path = LayerFetch;
 			sourceTree = "<group>";
 		};
 		F727516B19C888A3006C63CB /* Fetch */ = {
@@ -2214,6 +2238,7 @@
 		F74BDABB302D188500F3E499 /* DependencyContainer */ = {
 			isa = PBXGroup;
 			children = (
+				F725E8ED3050B96800C8DC3B /* LayerUseCaseModule.swift */,
 				F7CB01453048C65B00C29FE0 /* FormUseCaseModule.swift */,
 				F718149E303778BC00E033AB /* LocationUseCaseModule.swift */,
 				F7650294302FAF7900B8414A /* UserUseCaseModule.swift */,
@@ -2354,6 +2379,7 @@
 		F7650297302FB7CE00B8414A /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				F725E8E2304DDC5A00C8DC3B /* LayerFetch */,
 				F7181497303771A300E033AB /* LocationFetch */,
 				F7650296302FB7C800B8414A /* UserFetch */,
 			);
@@ -3540,10 +3566,13 @@
 				F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */,
 				F76502A43031235F00B8414A /* LocationCoreDataCreateTests.swift in Sources */,
 				F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */,
+				F725E8E83050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift in Sources */,
 				F76502A0302FC71400B8414A /* ObservationCoreDataCreateTests.swift in Sources */,
 				F765029D302FBAC900B8414A /* UserRepositoryFactoryTests.swift in Sources */,
+				F725E8E6305052A200C8DC3B /* StaticLayerFetchLocalImplTests.swift in Sources */,
 				F718149B303773C800E033AB /* LocationFetchLocalTests.swift in Sources */,
 				F718149D303774E100E033AB /* LocationFetchRepositoryFactoryTests.swift in Sources */,
+				F725E8E4304DDC5D00C8DC3B /* LayerImporterImplTests.swift in Sources */,
 				F7181499303771A500E033AB /* LocationFetchRemoteTests.swift in Sources */,
 				F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */,
 				F7650299302FB7D900B8414A /* UserFetchRemoteTests.swift in Sources */,
@@ -3585,6 +3614,7 @@
 				2F2F58F61BFA504B00B78993 /* ServerURLController.swift in Sources */,
 				F78D579627B709D4003594D3 /* FollowUser.swift in Sources */,
 				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
+				F725E8EE3050B96800C8DC3B /* LayerUseCaseModule.swift in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
@@ -3635,6 +3665,7 @@
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F74BDAD7302D1A4300F3E499 /* SettingsUseCaseModule.swift in Sources */,
 				F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */,
+				F725E8EC3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
@@ -3719,6 +3750,7 @@
 				F7EBAEBF2762400800650F4F /* MapNotifications.swift in Sources */,
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
+				F725E8EA3050B58600C8DC3B /* RefreshLayersUseCase.swift in Sources */,
 				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
 				F7679E5030238A0D009A84BD /* AttachmentCollectionDataStore.swift in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,

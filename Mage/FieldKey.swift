@@ -342,18 +342,6 @@ public enum LayerOptionsKey: String {
     }
 }
 
-public enum WMSLayerOptionsKey: String {
-    case layers
-    case format
-    case styles
-    case transparent
-    case version
-    
-    var key : String {
-        return self.rawValue;
-    }
-}
-
 public enum LayerFileKey: String {
     case name
     case contentType

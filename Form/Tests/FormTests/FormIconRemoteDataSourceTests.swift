@@ -25,11 +25,7 @@ struct FormRemoteDataSourceTests {
         )
     )
     func `fetch events`() async throws {
-        let remoteDataSource = FormIconFetchRemote(url: URL(string:"https://magetest")!, session: TestAPISession(
-            baseURL: URL(string: "https://magetest")!,
-            loginType: "online",
-            additionalHeaders: [HTTPStubTrait.HeaderKey:Test.current?.id.description ?? ""]
-        ), eventID: EventID(125))
+        let remoteDataSource = FormIconFetchRemote(url: URL(string:"https://magetest")!, session: TestAPISession(), eventID: EventID(125))
         actor ProgressTracker {
             var isFinished = false
             func updateIsFinished(isFinished: Bool) {
@@ -62,11 +58,7 @@ struct FormRemoteDataSourceTests {
         )
     )
     func `fetch events token expired`() async throws {
-        let remoteDataSource = FormIconFetchRemote(url: URL(string:"https://magetest")!, session: TestAPISession(
-            baseURL: URL(string: "https://magetest")!,
-            loginType: "online",
-            additionalHeaders: [HTTPStubTrait.HeaderKey:Test.current?.id.description ?? ""]
-        ), eventID: EventID(11))
+        let remoteDataSource = FormIconFetchRemote(url: URL(string:"https://magetest")!, session: TestAPISession(), eventID: EventID(11))
         
         await #expect(throws: GeneralError.expiredToken) {
             let fetched = try await remoteDataSource.fetch() { progress in

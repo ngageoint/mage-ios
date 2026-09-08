@@ -18,6 +18,7 @@ let package = Package(
         .package(name: "APIRouter", path: "../APIRouter"),
         .package(name: "UseCaseFactory", path: "../UseCaseFactory"),
         .package(url: "https://github.com/ngageoint/simple-features-ios", from: "5.0.0"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.0"))
     ],
     targets: [
         .target(
@@ -28,6 +29,7 @@ let package = Package(
                 .product(name: "APIRouter", package: "APIRouter"),
                 .product(name: "UseCaseFactory", package: "UseCaseFactory"),
                 .product(name: "SimpleFeatures", package: "simple-features-ios"),
+                .product(name: "Alamofire", package: "Alamofire")
             ],
             swiftSettings: [
                 .treatAllWarnings(as: .error) // Treat all warnings as errors for this target
