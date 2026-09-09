@@ -17,6 +17,7 @@
 #import "MageConstants.h"
 #import "XYZDirectoryCacheOverlay.h"
 @import ZipArchive;
+@import Layer;
 //#import <SSZipArchive/SSZipArchive.h>
 
 @interface GeoPackageImporter() <SSZipArchiveDelegate>

@@ -16,6 +16,7 @@ import Persistence
 import CodableExtensions
 import ServerDTO
 
+import Layer
 @testable import MAGE
 
 class MageCoreDataFixtures {

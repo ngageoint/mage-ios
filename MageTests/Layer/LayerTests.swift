@@ -13,6 +13,7 @@ import Kingfisher
 import OHHTTPStubs
 import Persistence
 
+import Layer
 @testable import MAGE
 import CoreData
 

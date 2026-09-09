@@ -25,7 +25,8 @@ let package = Package(
                 .product(name: "Persistence", package: "Persistence"),
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "OHHTTPStubs", package: "OHHTTPStubs"),
-                .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
+                .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs"),
+                "APIRouter"
             ],
             resources: [.process("Resources")]
         ),

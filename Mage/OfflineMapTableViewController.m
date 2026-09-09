@@ -13,6 +13,7 @@
 #import "XYZDirectoryCacheOverlay.h"
 #import "GeoPackageCacheOverlay.h"
 @import GeoPackage;
+@import Layer;
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
 

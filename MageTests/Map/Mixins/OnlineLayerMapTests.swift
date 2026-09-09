@@ -12,7 +12,7 @@ import Nimble
 import MagicalRecord
 import OHHTTPStubs
 import Persistence
-
+import Layer
 @testable import MAGE
 import CoreLocation
 import MapKit

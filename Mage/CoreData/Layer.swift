@@ -8,26 +8,13 @@
 
 import Foundation
 import CoreData
-
-public enum LayerType : String {
-    case Feature
-    case GeoPackage
-    case Imagery
-    
-    var key : String {
-        return self.rawValue;
-    }
-}
-
+import Layer
 import Persistence
+import ServerDTO
 
 extension Layer {
     
     @objc public static let GeoPackageDownloaded = "mil.nga.giat.mage.geopackage.downloaded";
-    @objc public static let OFFLINE_LAYER_LOADED = 1.0;
-    @objc public static let OFFLINE_LAYER_NOT_DOWNLOADED = 0.0;
-    @objc public static let EXTERNAL_LAYER_LOADED = 0.5;
-    @objc public static let EXTERNAL_LAYER_PROCESSING = -1.0;
     
     @objc public static func layerType(json: [AnyHashable : Any]) -> String? {
         return json[LayerKey.type.key] as? String;
@@ -43,71 +30,6 @@ extension Layer {
         self.state = json[LayerKey.state.key] as? String
         self.base = json[LayerKey.base.key] as? Bool ?? false
         self.eventId = eventId;
-    }
-    
-    @objc public static func operationToPullLayers(eventId: NSNumber, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        guard let manager = MageSessionManager.shared(), let baseURL = MageServer.baseURL() else {
-            return nil;
-        }
-        let url = "\(baseURL)/api/events/\(eventId)/layers";
-        
-        let task = manager.get_TASK(url, parameters: nil, progress: nil) { task, response in
-            guard let response = response as? [[AnyHashable : Any]] else {
-                return;
-            }
-
-            MagicalRecord.save { context in
-                let layerRemoteIds = Layer.populateLayers(json: response, eventId: eventId, context: context)
-                Layer.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@", layerRemoteIds, eventId), in: context);
-                
-                var selectedOnlineLayers = UserDefaults.standard.selectedOnlineLayers ?? [:]
-                
-                // get the currently selected online layers, remove all existing layers and then delete the ones that are left
-                var removedSelectedOnlineLayers: [NSNumber] = selectedOnlineLayers[eventId.stringValue] ?? [];
-                removedSelectedOnlineLayers.removeAll { layerRemoteId in
-                    layerRemoteIds.contains(layerRemoteId)
-                }
-                
-                var selectedEventOnlineLayers = selectedOnlineLayers[eventId.stringValue] ?? [];
-                selectedEventOnlineLayers.removeAll { layerRemoteId in
-                    removedSelectedOnlineLayers.contains(layerRemoteId)
-                }
-                
-                selectedOnlineLayers[eventId.stringValue] = selectedEventOnlineLayers;
-                UserDefaults.standard.selectedOnlineLayers = selectedOnlineLayers;
-                
-                
-                StaticLayer.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@", layerRemoteIds, eventId), in: context);
-                
-                var selectedStaticLayers = UserDefaults.standard.selectedStaticLayers ?? [:]
-                
-                // get the currently selected online layers, remove all existing layers and then delete the ones that are left
-                var removedSelectedStaticLayers: [NSNumber] = selectedStaticLayers[eventId.stringValue] ?? [];
-                removedSelectedStaticLayers.removeAll { layerRemoteId in
-                    layerRemoteIds.contains(layerRemoteId)
-                }
-                
-                var selectedEventStaticLayers = selectedStaticLayers[eventId.stringValue] ?? [];
-                selectedEventStaticLayers.removeAll { layerRemoteId in
-                    removedSelectedStaticLayers.contains(layerRemoteId)
-                }
-                
-                selectedStaticLayers[eventId.stringValue] = selectedEventStaticLayers;
-                UserDefaults.standard.selectedStaticLayers = selectedStaticLayers;
-                
-            } completion: { contextDidSave, error in
-                if let error = error {
-                    failure?(task, error);
-                } else {
-                    success?(task, response);
-                }
-            }
-        } failure: { task, error in
-            NSLog("Error \(error)")
-            failure?(task, error);
-        };
-
-        return task;
     }
     
     @discardableResult
@@ -154,9 +76,14 @@ extension Layer {
     }
     
     @objc public static func refreshLayers(eventId: NSNumber) {
-        let manager = MageSessionManager.shared();
-        if let task = Layer.operationToPullLayers(eventId: eventId, success: nil, failure: nil) {
-            manager?.addTask(task);
+        Task {
+            do {
+                try await DependencyContainer.shared.useCaseFactory
+                    .resolve(.RefreshLayersUseCase)
+                    .execute(eventID: EventID(eventId))
+            } catch {
+                NSLog("Failed to refresh layers: \(error.localizedDescription)")
+            }
         }
     }
     

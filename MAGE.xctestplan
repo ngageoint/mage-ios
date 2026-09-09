@@ -152,6 +152,20 @@
         "identifier" : "FormTests",
         "name" : "FormTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Layer",
+        "identifier" : "LayerTests",
+        "name" : "LayerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LayerFetch",
+        "identifier" : "LayerFetchTests",
+        "name" : "LayerFetchTests"
+      }
     }
   ],
   "version" : 1

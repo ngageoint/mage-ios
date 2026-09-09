@@ -32,6 +32,7 @@ public struct HTTPStubTrait: TestTrait, TestScoping, @unchecked Sendable {
     var responseError: NSError? = nil
     var responseHeaders: [String: String]? = nil
     var statusCode: Int32
+    var ignoreSpecialHeader: Bool = false
     var callCount: Int = 1
     var waitTime: TimeInterval = 0
     var file: String
@@ -56,6 +57,7 @@ public struct HTTPStubTrait: TestTrait, TestScoping, @unchecked Sendable {
         responseData: Data? = nil,
         responseHeaders: [String: String]? = nil,
         statusCode: Int32 = 200,
+        ignoreSpecialHeader: Bool = false,
         callCount: Int = 1,
         waitTime: TimeInterval = 1,
         file: String = #file,
@@ -79,6 +81,7 @@ public struct HTTPStubTrait: TestTrait, TestScoping, @unchecked Sendable {
         self.responseError = responseError
         self.responseHeaders = responseHeaders
         self.statusCode = statusCode
+        self.ignoreSpecialHeader = ignoreSpecialHeader
         self.callCount = callCount
         self.waitTime = waitTime
         self.file = file
@@ -133,7 +136,9 @@ public struct HTTPStubTrait: TestTrait, TestScoping, @unchecked Sendable {
             }
         }
 
-        testBlock = testBlock && hasHttpStubTraitHeaderKey(test.id.description)
+        if !ignoreSpecialHeader {
+            testBlock = testBlock && hasHttpStubTraitHeaderKey(test.id.description)
+        }
         
         let descriptor = stub(condition: testBlock
         ) { (request) -> HTTPStubsResponse in
@@ -257,6 +262,7 @@ public extension Trait where Self == HTTPStubTrait {
         responseError: NSError? = nil,
         responseHeaders: [String: String]? = nil,
         statusCode: Int32 = 200,
+        ignoreSpecialHeader: Bool = false,
         callCount: Int = 1,
         waitTime: TimeInterval = 0,
         file: String = #file,
@@ -280,6 +286,7 @@ public extension Trait where Self == HTTPStubTrait {
         responseData: responseData,
         responseHeaders: responseHeaders,
         statusCode: statusCode,
+        ignoreSpecialHeader: ignoreSpecialHeader,
         callCount: callCount,
         waitTime: waitTime,
         file: file,
@@ -324,13 +331,10 @@ public struct TestAPISession: TokenAPISession {
     public let session: Session
     
     public init(
-        baseURL: URL,
-        loginType: String?,
-        additionalHeaders: [String: String]? = nil,
         notificationCenter: NotificationCenter = .default
     ) {
-        self.loginType = loginType
-        self.baseURL = baseURL
+        baseURL = URL(string: "https://magetest")!
+        loginType = "local"
         self.notificationCenter = notificationCenter
         
         trustManager.addTrustedHost("osm-nominatim.gs.mil")
@@ -340,7 +344,7 @@ public struct TestAPISession: TokenAPISession {
         let configuration = URLSessionConfiguration.af.default
         configuration.httpMaximumConnectionsPerHost = 4
         configuration.timeoutIntervalForRequest = 120
-        configuration.httpAdditionalHeaders = additionalHeaders
+        configuration.httpAdditionalHeaders = [HTTPStubTrait.HeaderKey:Test.current?.id.description ?? ""]
         self.session = Session(
             configuration: configuration,
             serverTrustManager: trustManager

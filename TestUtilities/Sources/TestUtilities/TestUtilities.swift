@@ -41,6 +41,23 @@ public class TestUtilities {
     public static func urlForFile(_ filename: String, withExtension: String? = nil) -> URL? {
         return Bundle.module.url(forResource: filename, withExtension: withExtension)
     }
+    
+    public static func loadJSON<T: Decodable>(filename: String, fileExtension: String = "json", type: T.Type) -> T? {
+        guard let url = TestUtilities.urlForFile(filename, withExtension: fileExtension) else {
+            return nil
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            
+            let decoder = JSONDecoder()
+            let decodedData = try decoder.decode(T.self, from: data)
+            return decodedData
+            
+        } catch {
+            return nil
+        }
+    }
 }
 
 // Don't do this in real code, only for tests
