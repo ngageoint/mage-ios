@@ -21,7 +21,8 @@ final class UseCaseComposition {
             UserUseCaseModule.self,
             LocationUseCaseModule.self,
             FormUseCaseModule.self,
-            LayerUseCaseModule.self
+            LayerUseCaseModule.self,
+            EventUseCaseModeule.self
         ]
         
         for module in modules {

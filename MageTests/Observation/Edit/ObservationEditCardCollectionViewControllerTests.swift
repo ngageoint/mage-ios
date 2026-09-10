@@ -10,6 +10,7 @@ import Foundation
 import Quick
 import Nimble
 import Persistence
+import ServerDTO
 
 @testable import MAGE
 import CoreData
@@ -498,8 +499,19 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
-                
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
+                                
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 ObservationBuilder.addFormToObservation(observation: observation, form: forms[0], values: [
@@ -533,7 +545,18 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -572,7 +595,18 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 ObservationBuilder.addFormToObservation(observation: observation, form: forms[0], values: [
@@ -611,8 +645,18 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
-                
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 ObservationBuilder.addFormToObservation(observation: observation, form: forms[0], values: [

@@ -13,6 +13,8 @@ import User
 import LocationFetch
 import Form
 import LayerFetch
+import EventFetch
+import Event
 
 struct AppDependencies {
     let settingsRepository: SettingsRepository
@@ -23,4 +25,6 @@ struct AppDependencies {
     let formIconFetch: AnyFetchRepository<FormIconFetchRequest, [URL]>
     let layerFetch: AnyFetchRepository<LayerFetchRequest, [MapLayerDTO]>
     let staticLayerDataFetch: AnyFetchRepository<StaticLayerDataFetchRequest, StaticLayerRepositoryFetchResult>
+    let eventRepository: EventRepository
+    let eventFetch: AnyFetchRepository<Void, EventRepositoryFetchResult>
 }

@@ -18,6 +18,8 @@ import User
 import LocationFetch
 import Form
 import LayerFetch
+import EventFetch
+import Event
 
 @MainActor
 @objc public final class DependencyContainer: NSObject {
@@ -88,6 +90,18 @@ import LayerFetch
                     ),
                 staticLayerDataFetch: LayerFetchRepositoryFactory
                     .staticLayerData(
+                        url: url,
+                        session: session,
+                        persistence: persistence
+                    ),
+                eventRepository: EventRepositoryFactory
+                    .createRepository(
+                        url: url,
+                        session: session,
+                        persistence: persistence
+                    ),
+                eventFetch: EventFetchRepositoryFactory
+                    .make(
                         url: url,
                         session: session,
                         persistence: persistence

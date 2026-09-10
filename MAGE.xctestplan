@@ -166,6 +166,20 @@
         "identifier" : "LayerFetchTests",
         "name" : "LayerFetchTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:EventFetch",
+        "identifier" : "EventFetchTests",
+        "name" : "EventFetchTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Event",
+        "identifier" : "EventTests",
+        "name" : "EventTests"
+      }
     }
   ],
   "version" : 1

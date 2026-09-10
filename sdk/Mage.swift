@@ -10,6 +10,8 @@ import Settings
 import UserFetch
 import ServerDTO
 import Form
+import EventFetch
+import Event
 
 @objc public class Mage: NSObject {
     
@@ -79,27 +81,19 @@ import Form
         }
     }
     @objc public func fetchEvents() async {
-        let manager = MageSessionManager.shared();
-        
         await fetchMyself()
-        
-        let eventTask = Event.operationToFetchEvents { [weak self] task, response in
-            Task { [weak self] in
-                await self?.fetchFormIcons()
-            }
-        } failure: { [weak self] task, error in
-            NSLog("Failure to pull events");
-            NotificationCenter.default.post(name: .MAGEEventsFetched, object: nil);
-            Task { [weak self] in
-                await self?.fetchFormIcons()
-            }
+        do {
+            let eventsFetched = try await DependencyContainer.shared.useCaseFactory
+                .resolve(.FetchEventsUseCase)
+                .execute()
+            await fetchFormIcons(events: eventsFetched.events)
+        } catch {
+            EventFetchPackage.logger.error("Failed to fetch events: \(error)")
         }
-        manager?.addTask(eventTask);
+        NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
     }
     
-    @objc public func fetchFormIcons() async {
-        guard let events = Event.mr_findAll() as? [Event] else { return }
-        
+    public func fetchFormIcons(events: [EventModel]) async {
         for e in events {
             guard let remoteId = e.remoteId else {
                 continue;
@@ -107,7 +101,7 @@ import Form
             do {
                 let _ = try await DependencyContainer.shared.useCaseFactory
                     .resolve(.GetEventFormIconsUseCase)
-                    .execute(eventID: EventID(remoteId))
+                    .execute(eventID: remoteId)
             } catch {
                 FormPackage.logger.error("Failed to fetch form icons: \(error)")
             }
