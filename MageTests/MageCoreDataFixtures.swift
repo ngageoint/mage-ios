@@ -162,7 +162,9 @@ class MageCoreDataFixtures {
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
                 if (existingRole == nil) {
-                    existingRole = Role.insert(json: roleJson, context: localContext);
+                    existingRole = Role(context: localContext);
+                    existingRole?.remoteId = roleJson["id"] as? String
+                    existingRole?.permissions = roleJson["permissions"] as? [String]
                     print("inserting a role");
                 } else {
                     print("role already existed")
@@ -179,7 +181,9 @@ class MageCoreDataFixtures {
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
                 if (existingRole == nil) {
-                    existingRole = Role.insert(json: roleJson, context: localContext);
+                    existingRole = Role(context: localContext);
+                    existingRole?.remoteId = roleJson["id"] as? String
+                    existingRole?.permissions = roleJson["permissions"] as? [String]
                     print("inserting a role");
                 } else {
                     print("role already existed")
@@ -203,36 +207,65 @@ class MageCoreDataFixtures {
     
     public static func addImageryLayer(eventId: NSNumber = 1, layerId: NSNumber = 1, format: String = "XYZ", url: String = "https://magetest/xyzlayer/{z}/{x}/{y}.png", base: Bool = true, options: [String:Any]? = nil, completion: MRSaveCompletionHandler? = nil) {
         if (completion == nil) {
-            MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+            MagicalRecord.save( blockAndWait: { (localContext: NSManagedObjectContext) in
                 let layer = ImageryLayer.mr_createEntity(in: localContext)
-                let json: [AnyHashable : Any?] = [
-                    LayerKey.base.key: base,
-                    LayerKey.description.key: "layer description",
-                    LayerKey.format.key: format,
-                    LayerKey.id.key: layerId,
-                    LayerKey.name.key: "layer name",
-                    LayerKey.state.key: "available",
-                    LayerKey.type.key: "Imagery",
-                    LayerKey.url.key: url,
-                    LayerKey.wms.key: options
-                ]
-                layer?.populate(json, eventId: eventId)
+                let dto = MapLayerDTO(
+                    remoteId: LayerID(layerId),
+                    name: "layer name",
+                    type: "Imagery",
+                    url: url,
+                    sendableFile: nil,
+                    layerDescription: "layer description",
+                    state: "available",
+                    base: base,
+                    eventId: EventID(eventId),
+                    sendableOptions: nil,
+                    format: format
+                )
+                layer?.applyImageryLayer(dto: dto, eventID: EventID(eventId))
+//                let json: [AnyHashable : Any?] = [
+//                    LayerKey.base.key: base,
+//                    LayerKey.description.key: "layer description",
+//                    LayerKey.format.key: format,
+//                    LayerKey.id.key: layerId,
+//                    LayerKey.name.key: "layer name",
+//                    LayerKey.state.key: "available",
+//                    LayerKey.type.key: "Imagery",
+//                    LayerKey.url.key: url,
+//                    LayerKey.wms.key: options
+//                ]
+                
+//                layer?.populate(json, eventId: eventId)
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let layer = ImageryLayer.mr_createEntity(in: localContext)
-                let json: [AnyHashable : Any?] = [
-                    LayerKey.base.key: base,
-                    LayerKey.description.key: "layer description",
-                    LayerKey.format.key: format,
-                    LayerKey.id.key: layerId,
-                    LayerKey.name.key: "layer name",
-                    LayerKey.state.key: "available",
-                    LayerKey.type.key: "Imagery",
-                    LayerKey.url.key: url,
-                    LayerKey.wms.key: options
-                ]
-                layer?.populate(json, eventId: eventId)
+                let dto = MapLayerDTO(
+                    remoteId: LayerID(layerId),
+                    name: "layer name",
+                    type: "Imagery",
+                    url: url,
+                    sendableFile: nil,
+                    layerDescription: "layer description",
+                    state: "available",
+                    base: base,
+                    eventId: EventID(eventId),
+                    sendableOptions: nil,
+                    format: format
+                )
+                layer?.applyImageryLayer(dto: dto, eventID: EventID(eventId))
+//                let json: [AnyHashable : Any?] = [
+//                    LayerKey.base.key: base,
+//                    LayerKey.description.key: "layer description",
+//                    LayerKey.format.key: format,
+//                    LayerKey.id.key: layerId,
+//                    LayerKey.name.key: "layer name",
+//                    LayerKey.state.key: "available",
+//                    LayerKey.type.key: "Imagery",
+//                    LayerKey.url.key: url,
+//                    LayerKey.wms.key: options
+//                ]
+//                layer?.populate(json, eventId: eventId)
             }, completion: completion);
         }
     }
@@ -395,7 +428,19 @@ class MageCoreDataFixtures {
                     ]
                     let team = Team.insert(json: teamJson, context: localContext)!;
                     e.addToTeams(team);
-                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
+                    localContext.deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", remoteId))
+                    
+                    for form in formsJson {
+                        let coreDataForm = Form(
+                            formDTO: EventFormDTO.from(jsonObject: form)!,
+                            eventId: EventID(remoteId),
+                            index: 0,
+                            writeContext: NSManagedObjectContext.mr_default()
+                        )
+                        try? localContext.obtainPermanentIDs(for: [coreDataForm])
+                    }
+                    
+//                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
                 }
             })
         } else {
@@ -413,7 +458,18 @@ class MageCoreDataFixtures {
                     ]
                     let team = Team.insert(json: teamJson, context: localContext)!;
                     e.addToTeams(team);
-                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
+                    localContext.deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", remoteId))
+                    
+                    for form in formsJson {
+                        let coreDataForm = Form(
+                            formDTO: EventFormDTO.from(jsonObject: form)!,
+                            eventId: EventID(remoteId),
+                            index: 0,
+                            writeContext: NSManagedObjectContext.mr_default()
+                        )
+                        try? localContext.obtainPermanentIDs(for: [coreDataForm])
+                    }
+//                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
                 }
             }, completion: completion)
         }

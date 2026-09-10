@@ -75,27 +75,6 @@ extension StaticLayer {
     
     @objc public static let StaticLayerLoaded = "mil.nga.giat.mage.static.layer.loaded";
     
-    @objc public static func createOrUpdate(json: [AnyHashable : Any], eventId: NSNumber, context: NSManagedObjectContext) {
-        guard let remoteLayerId = Layer.layerId(json: json) else {
-            return;
-        }
-        
-        var l = StaticLayer.mr_findFirst(with: NSPredicate(format:"(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
-        if l == nil {
-            l = StaticLayer.mr_createEntity(in: context);
-            l?.populate(json, eventId: eventId);
-            l?.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
-            NSLog("Inserting layer with id: \(l?.remoteId ?? -1) into event \(eventId)")
-        } else {
-            NSLog("Updating layer with id: \(l?.remoteId ?? -1) into event \(eventId)")
-            l?.populate(json, eventId: eventId);
-        }
-        guard let l = l else {
-            return;
-        }
-        NSLog("layer loaded \(l.name ?? "unkonwn")? \(l.loaded ?? -1.0)")
-    }
-    
     @objc public static func fetchStaticLayerData(eventId: NSNumber, staticLayer: StaticLayer) {
         Task {
             try await DependencyContainer.shared.useCaseFactory

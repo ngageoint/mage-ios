@@ -83,9 +83,19 @@ public struct EventID: Hashable, Sendable, CustomStringConvertible, Codable {
 public enum LayerIDTag: Sendable {}
 public enum StaticLayerFeatureIDTag: Sendable {}
 
-public typealias TeamID = String
 public typealias UserID = String
 public typealias LayerID = ID<LayerIDTag>
 public typealias StaticLayerFeatureID = StringID<StaticLayerFeatureIDTag>
-public typealias FeedID = String
 public typealias FormID = NSNumber
+
+public enum EventFormIDTag: Sendable {}
+public enum FormIDTag: Sendable {}
+public enum UserIDTag: Sendable {}
+public enum TeamIDTag: Sendable {}
+public enum FeedIDTag: Sendable {}
+public enum ObservationIDTag: Sendable {}
+
+public typealias EventFormID = ID<EventFormIDTag>
+public typealias TeamID = StringID<TeamIDTag>
+public typealias FeedID = StringID<FeedIDTag>
+public typealias ObservationID = StringID<ObservationIDTag>

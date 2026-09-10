@@ -51,3 +51,4 @@ extension UseCaseKey {
     static var GetUserUseCase: UseCaseKey<GetUserUseCase> { .init() }
     static var RefreshUserUseCase: UseCaseKey<RefreshUserUseCase> { .init() }
 }
+

@@ -13,6 +13,7 @@ import Nimble
 import OHHTTPStubs
 import MaterialComponents.MaterialBottomSheet
 import Persistence
+import ServerDTO
 
 @testable import MAGE
 
@@ -69,7 +70,18 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
                 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -105,7 +117,18 @@ class FormPickerTests: KIFSpec {
                     "id": 4
                 ]]
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -168,7 +191,18 @@ class FormPickerTests: KIFSpec {
                 ]]
                 let delegate = MockFormPickerDelegate();
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
 
                 formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -220,7 +254,18 @@ class FormPickerTests: KIFSpec {
                 
                 let delegate = MockFormPickerDelegate();
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
 
                 formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -240,7 +285,18 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -280,7 +336,18 @@ class FormPickerTests: KIFSpec {
                 
                 let delegate = MockFormPickerDelegate();
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
                 
                 Server.setCurrentEventId(1)
                 
@@ -352,7 +419,18 @@ class FormPickerTests: KIFSpec {
                 
                 let delegate = MockFormPickerDelegate();
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                NSManagedObjectContext.mr_default().deleteAll(Form.self, matching: NSPredicate(format: "eventId == %@", NSNumber(1)))
+                var forms: [Form] = []
+                for form in formsJson {
+                    let coreDataForm = Form(
+                        formDTO: EventFormDTO.from(jsonObject: form)!,
+                        eventId: EventID(1),
+                        index: 0,
+                        writeContext: NSManagedObjectContext.mr_default()
+                    )
+                    try? NSManagedObjectContext.mr_default().obtainPermanentIDs(for: [coreDataForm])
+                    forms.append(coreDataForm)
+                }
                 
                 Server.setCurrentEventId(1)
                 
