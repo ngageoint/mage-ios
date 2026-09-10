@@ -162,7 +162,9 @@ class MageCoreDataFixtures {
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
                 if (existingRole == nil) {
-                    existingRole = Role.insert(json: roleJson, context: localContext);
+                    existingRole = Role(context: localContext);
+                    existingRole?.remoteId = roleJson["id"] as? String
+                    existingRole?.permissions = roleJson["permissions"] as? [String]
                     print("inserting a role");
                 } else {
                     print("role already existed")
@@ -179,7 +181,9 @@ class MageCoreDataFixtures {
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
                 if (existingRole == nil) {
-                    existingRole = Role.insert(json: roleJson, context: localContext);
+                    existingRole = Role(context: localContext);
+                    existingRole?.remoteId = roleJson["id"] as? String
+                    existingRole?.permissions = roleJson["permissions"] as? [String]
                     print("inserting a role");
                 } else {
                     print("role already existed")

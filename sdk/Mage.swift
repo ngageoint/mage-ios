@@ -87,6 +87,7 @@ import Event
                 .resolve(.FetchEventsUseCase)
                 .execute()
             await fetchFormIcons(events: eventsFetched.events)
+            await refreshFeeds(events: eventsFetched.events)
         } catch {
             EventFetchPackage.logger.error("Failed to fetch events: \(error)")
         }
@@ -104,6 +105,14 @@ import Event
                     .execute(eventID: remoteId)
             } catch {
                 FormPackage.logger.error("Failed to fetch form icons: \(error)")
+            }
+        }
+    }
+    
+    public func refreshFeeds(events: [EventModel]) async {
+        for event in events {
+            if let remoteId = event.remoteId {
+                Feed.refreshFeeds(eventId: remoteId.rawValue)
             }
         }
     }
