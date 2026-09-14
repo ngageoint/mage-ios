@@ -188,6 +188,12 @@
 		F725E8EA3050B58600C8DC3B /* RefreshLayersUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8E93050B58600C8DC3B /* RefreshLayersUseCase.swift */; };
 		F725E8EC3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8EB3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift */; };
 		F725E8EE3050B96800C8DC3B /* LayerUseCaseModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8ED3050B96800C8DC3B /* LayerUseCaseModule.swift */; };
+		F725E8F73052EEE200C8DC3B /* TeamFetchLocalImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8F63052EEE200C8DC3B /* TeamFetchLocalImplTests.swift */; };
+		F725E8F93052EF0000C8DC3B /* EventFetch in Frameworks */ = {isa = PBXBuildFile; productRef = F725E8F83052EF0000C8DC3B /* EventFetch */; };
+		F725E8FC3052FBAC00C8DC3B /* Event in Frameworks */ = {isa = PBXBuildFile; productRef = F725E8FB3052FBAC00C8DC3B /* Event */; };
+		F725E8FE3053045800C8DC3B /* EventFormImporterImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8FD3053045800C8DC3B /* EventFormImporterImplTests.swift */; };
+		F725E90030531DEC00C8DC3B /* EventFetchLocalImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E8FF30531DEC00C8DC3B /* EventFetchLocalImplTests.swift */; };
+		F725E9023053497A00C8DC3B /* EventUseCaseModeule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F725E9013053497A00C8DC3B /* EventUseCaseModeule.swift */; };
 		F727516E19C888DB006C63CB /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* Locations.m */; };
 		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
 		F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D82034CC3700C2600D /* TestingAppDelegate.h */; };
@@ -227,7 +233,6 @@
 		F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429D2694B60300F9AC3B /* ObservationRoutes.m */; };
 		F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.swift */; };
 		F72D43122694B60300F9AC3B /* MageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.swift */; };
-		F72D43132694B60300F9AC3B /* ImageryLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.swift */; };
 		F72D43142694B60300F9AC3B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.swift */; };
 		F72D43152694B60300F9AC3B /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.swift */; };
 		F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */; };
@@ -236,7 +241,6 @@
 		F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BF2694B60300F9AC3B /* StaticLayer.swift */; };
 		F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C22694B60300F9AC3B /* NotificationRequester.m */; };
 		F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */; };
-		F72D43252694B60300F9AC3B /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C72694B60300F9AC3B /* Role.swift */; };
 		F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */; };
 		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
 		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
@@ -907,6 +911,12 @@
 		F725E8E93050B58600C8DC3B /* RefreshLayersUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshLayersUseCase.swift; sourceTree = "<group>"; };
 		F725E8EB3050B59A00C8DC3B /* StaticLayerDataFetchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerDataFetchUseCase.swift; sourceTree = "<group>"; };
 		F725E8ED3050B96800C8DC3B /* LayerUseCaseModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerUseCaseModule.swift; sourceTree = "<group>"; };
+		F725E8F43052EB7100C8DC3B /* EventFetch */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EventFetch; sourceTree = "<group>"; };
+		F725E8F63052EEE200C8DC3B /* TeamFetchLocalImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamFetchLocalImplTests.swift; sourceTree = "<group>"; };
+		F725E8FA3052F15500C8DC3B /* Event */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Event; sourceTree = "<group>"; };
+		F725E8FD3053045800C8DC3B /* EventFormImporterImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormImporterImplTests.swift; sourceTree = "<group>"; };
+		F725E8FF30531DEC00C8DC3B /* EventFetchLocalImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFetchLocalImplTests.swift; sourceTree = "<group>"; };
+		F725E9013053497A00C8DC3B /* EventUseCaseModeule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUseCaseModeule.swift; sourceTree = "<group>"; };
 		F727516C19C888DB006C63CB /* Locations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Locations.h; sourceTree = "<group>"; };
 		F727516D19C888DB006C63CB /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
 		F727516F19C88CAE006C63CB /* Observations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observations.h; sourceTree = "<group>"; };
@@ -964,7 +974,6 @@
 		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
 		F72D42A42694B60300F9AC3B /* MageServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageServer.swift; sourceTree = "<group>"; };
 		F72D42A52694B60300F9AC3B /* Authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authentication.h; sourceTree = "<group>"; };
-		F72D42A72694B60300F9AC3B /* ImageryLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageryLayer.swift; sourceTree = "<group>"; };
 		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		F72D42A92694B60300F9AC3B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		F72D42AB2694B60300F9AC3B /* Form.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
@@ -977,7 +986,6 @@
 		F72D42BF2694B60300F9AC3B /* StaticLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticLayer.swift; sourceTree = "<group>"; };
 		F72D42C22694B60300F9AC3B /* NotificationRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationRequester.m; sourceTree = "<group>"; };
 		F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Iso8601.m"; sourceTree = "<group>"; };
-		F72D42C72694B60300F9AC3B /* Role.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
 		F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometrySerializer.swift; sourceTree = "<group>"; };
 		F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "preferences-sdk.plist"; sourceTree = "<group>"; };
 		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
@@ -1442,6 +1450,7 @@
 				F7650290302F9F5400B8414A /* User in Frameworks */,
 				F74BDAC5302D18CC00F3E499 /* ProgressReportingJSONDecoder in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
+				F725E8FC3052FBAC00C8DC3B /* Event in Frameworks */,
 				F71814933037699100E033AB /* LocationFetch in Frameworks */,
 				F74BDACD302D18CD00F3E499 /* UseCaseFactory in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
@@ -1455,6 +1464,7 @@
 				F7CB01423048BFB200C29FE0 /* Form in Frameworks */,
 				F74BDAC3302D18B800F3E499 /* Pipeline in Frameworks */,
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
+				F725E8F93052EF0000C8DC3B /* EventFetch in Frameworks */,
 				F732E73B2FC9E8F600EA1D49 /* MGRS in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 				F74BDABF302D18B800F3E499 /* APIRouter in Frameworks */,
@@ -2036,6 +2046,16 @@
 			path = LayerFetch;
 			sourceTree = "<group>";
 		};
+		F725E8F53052EED300C8DC3B /* EventFetch */ = {
+			isa = PBXGroup;
+			children = (
+				F725E8FF30531DEC00C8DC3B /* EventFetchLocalImplTests.swift */,
+				F725E8FD3053045800C8DC3B /* EventFormImporterImplTests.swift */,
+				F725E8F63052EEE200C8DC3B /* TeamFetchLocalImplTests.swift */,
+			);
+			path = EventFetch;
+			sourceTree = "<group>";
+		};
 		F727516B19C888A3006C63CB /* Fetch */ = {
 			isa = PBXGroup;
 			children = (
@@ -2238,6 +2258,7 @@
 		F74BDABB302D188500F3E499 /* DependencyContainer */ = {
 			isa = PBXGroup;
 			children = (
+				F725E9013053497A00C8DC3B /* EventUseCaseModeule.swift */,
 				F725E8ED3050B96800C8DC3B /* LayerUseCaseModule.swift */,
 				F7CB01453048C65B00C29FE0 /* FormUseCaseModule.swift */,
 				F718149E303778BC00E033AB /* LocationUseCaseModule.swift */,
@@ -2379,6 +2400,7 @@
 		F7650297302FB7CE00B8414A /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				F725E8F53052EED300C8DC3B /* EventFetch */,
 				F725E8E2304DDC5A00C8DC3B /* LayerFetch */,
 				F7181497303771A300E033AB /* LocationFetch */,
 				F7650296302FB7C800B8414A /* UserFetch */,
@@ -2607,13 +2629,11 @@
 				F72D42AB2694B60300F9AC3B /* Form.swift */,
 				F752B5EF275FF80C00BFA6EC /* FormJson.swift */,
 				F72D42D22694B60300F9AC3B /* GPSLocation.swift */,
-				F72D42A72694B60300F9AC3B /* ImageryLayer.swift */,
 				F72D42BD2694B60300F9AC3B /* Layer.swift */,
 				F72D42792694B60300F9AC3B /* Location.swift */,
 				F72D42D02694B60300F9AC3B /* Observation.swift */,
 				F72D42D12694B60300F9AC3B /* ObservationFavorite.swift */,
 				F72D42942694B60300F9AC3B /* ObservationImportant.swift */,
-				F72D42C72694B60300F9AC3B /* Role.swift */,
 				F72D42922694B60300F9AC3B /* Server.swift */,
 				F72D42BF2694B60300F9AC3B /* StaticLayer.swift */,
 				F72D427F2694B60300F9AC3B /* Team.swift */,
@@ -2626,6 +2646,8 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F725E8FA3052F15500C8DC3B /* Event */,
+				F725E8F43052EB7100C8DC3B /* EventFetch */,
 				F725E0B1304C4E5500C8DC3B /* LayerFetch */,
 				F725E0B0304C4E4500C8DC3B /* Layer */,
 				F7CB01403048BE9B00C29FE0 /* Form */,
@@ -3566,6 +3588,7 @@
 				F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */,
 				F76502A43031235F00B8414A /* LocationCoreDataCreateTests.swift in Sources */,
 				F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */,
+				F725E90030531DEC00C8DC3B /* EventFetchLocalImplTests.swift in Sources */,
 				F725E8E83050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift in Sources */,
 				F76502A0302FC71400B8414A /* ObservationCoreDataCreateTests.swift in Sources */,
 				F765029D302FBAC900B8414A /* UserRepositoryFactoryTests.swift in Sources */,
@@ -3577,8 +3600,10 @@
 				F7352CD8302CF80D00EEA4D7 /* ExampleTest.swift in Sources */,
 				F7650299302FB7D900B8414A /* UserFetchRemoteTests.swift in Sources */,
 				F7352CD7302CF80600EEA4D7 /* CoreDataContext.swift in Sources */,
+				F725E8FE3053045800C8DC3B /* EventFormImporterImplTests.swift in Sources */,
 				F765029B302FBA9400B8414A /* UserFetchLocalTests.swift in Sources */,
 				F74BDAE3302E19B200F3E499 /* MageTests.swift in Sources */,
+				F725E8F73052EEE200C8DC3B /* TeamFetchLocalImplTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3706,7 +3731,6 @@
 				F78D578F27B58901003594D3 /* SingleUserMapView.swift in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
 				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
-				F72D43132694B60300F9AC3B /* ImageryLayer.swift in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
 				F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */,
 				2F6D80D52B1FAB9900545221 /* Geocoder.swift in Sources */,
@@ -3830,6 +3854,7 @@
 				F78D579C27BE9A4F003594D3 /* SFGeometryMap.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
+				F725E9023053497A00C8DC3B /* EventUseCaseModeule.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
@@ -3909,7 +3934,6 @@
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
-				F72D43252694B60300F9AC3B /* Role.swift in Sources */,
 				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
@@ -4597,6 +4621,14 @@
 		F725E0B4304C4F9100C8DC3B /* LayerFetch */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LayerFetch;
+		};
+		F725E8F83052EF0000C8DC3B /* EventFetch */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EventFetch;
+		};
+		F725E8FB3052FBAC00C8DC3B /* Event */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Event;
 		};
 		F732E73A2FC9E8F600EA1D49 /* MGRS */ = {
 			isa = XCSwiftPackageProductDependency;

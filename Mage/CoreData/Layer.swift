@@ -19,62 +19,7 @@ extension Layer {
     @objc public static func layerType(json: [AnyHashable : Any]) -> String? {
         return json[LayerKey.type.key] as? String;
     }
-    
-    @objc public func populate(_ json: [AnyHashable : Any], eventId: NSNumber) {
-        self.remoteId = json[LayerKey.id.key] as? NSNumber
-        self.name = json[LayerKey.name.key] as? String
-        self.type = json[LayerKey.type.key] as? String
-        self.url = json[LayerKey.url.key] as? String
-        self.file = json[LayerKey.file.key] as? [AnyHashable : Any]
-        self.layerDescription = json[LayerKey.description.key] as? String
-        self.state = json[LayerKey.state.key] as? String
-        self.base = json[LayerKey.base.key] as? Bool ?? false
-        self.eventId = eventId;
-    }
-    
-    @discardableResult
-    @objc public static func populateLayers(json: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [NSNumber] {
-        var layerRemoteIds: [NSNumber] = [];
-        for layer in json {
-            guard let remoteLayerId = Layer.layerId(json: layer) else {
-                continue;
-            }
-            layerRemoteIds.append(remoteLayerId);
-            
-            if let layerType = Layer.layerType(json: layer), layerType == LayerType.Feature.key {
-                StaticLayer.createOrUpdate(json: layer, eventId: eventId, context: context);
-            } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.GeoPackage.key {
-                var l = Layer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context)
-                if l == nil {
-                    l = Layer.mr_createEntity(in: context);
-                    l?.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
-                }
-                guard let l = l else {
-                    continue
-                }
-                l.populate(layer, eventId: eventId);
-                
-                // If this layer already exists but for a different event, set it's downloaded status
-                if let existing = Layer.mr_findFirst(with: NSPredicate(format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) != %@", remoteLayerId, eventId), in: context) {
-                    l.loaded = existing.loaded
-                }
-            } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.Imagery.key {
-                var l = ImageryLayer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
-                if l == nil {
-                    l = ImageryLayer.mr_createEntity(in: context);
-                }
-                l?.populate(layer, eventId: eventId);
-            } else {
-                var l = Layer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
-                if l == nil {
-                    l = Layer.mr_createEntity(in: context)
-                }
-                l?.populate(layer, eventId: eventId);
-            }
-        }
-        return layerRemoteIds;
-    }
-    
+
     @objc public static func refreshLayers(eventId: NSNumber) {
         Task {
             do {

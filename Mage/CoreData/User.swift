@@ -117,9 +117,12 @@ extension User: Navigable {
                 self.role = role;
                 role.addToUsers(self);
             } else {
-                let role = Role.insert(json: userRole, context: context);
+                let role = Role(context: context);
+                role.remoteId = userRole["id"] as? String
+                role.permissions = userRole["permissions"] as? [String]
+//                let role = Role.insert(json: userRole, context: context);
                 self.role = role;
-                role?.addToUsers(self);
+                role.addToUsers(self);
             }
         }
     }

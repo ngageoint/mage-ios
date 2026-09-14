@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  Persistence
-//
-//  Created by Daniel Barela on 6/19/26.
-//
-
 import Foundation
 import CoreData
 
@@ -14,6 +7,10 @@ public extension NSManagedObjectContext {
                                          predicate: NSPredicate? = nil) throws -> T? {
         let result = try self.fetchObjects(entityClass, sortBy: sortBy, fetchLimit: 1, predicate: predicate)
         return result?.first
+    }
+    
+    func fetchAll<T: NSManagedObject>(_ entityClass: T.Type) -> [T]? {
+        return try? self.fetchObjects(entityClass)
     }
     
     func fetchObjects <T: NSManagedObject>(_ entityClass: T.Type,
@@ -45,8 +42,23 @@ public extension NSManagedObjectContext {
     
     func fetchFirst<T: NSManagedObject>(_ entityClass: T.Type,
                                         key: String,
+                                        value: Int) -> T? {
+        let predicate = NSPredicate(format: "%K = %d", key, value)
+        return try? self.fetchFirst(entityClass, sortBy: nil, predicate: predicate)
+    }
+    
+    func fetchFirst<T: NSManagedObject>(_ entityClass: T.Type,
+                                        key: String,
                                         value: NSNumber) -> T? {
         let predicate = NSPredicate(format: "%K = %@", key, value)
         return try? self.fetchFirst(entityClass, sortBy: nil, predicate: predicate)
+    }
+    
+    func deleteAll<T: NSManagedObject>(_ entityClass: T.Type, matching: NSPredicate) -> Int {
+        let objects = (try? fetchObjects(entityClass, predicate: matching)) ?? []
+        for object in objects{
+            self.delete(object)
+        }
+        return objects.count
     }
 }
