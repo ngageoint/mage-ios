@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '13.0'
+platform :ios, '18.0'
 
 workspace 'MAGE'
 project 'MAGE.xcodeproj'
