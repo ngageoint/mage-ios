@@ -3,12 +3,18 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## Pending on develop
+## 4.4.0
+
 ##### Features
-* ClamAV Attachment Scanning & UI
-* Attachment carousel & attachment count
-* 'Attachment(s) Failed' count on thumbnail with placeholder for failed attachments
-* Removable placeholders like any other attachment
+* ClamAV attachment scanning with approval/denial UI and placeholder states for in-progress and failed scans
+* Attachment carousel with attachment count
+
+##### Refactoring
+* Core Data models moved into a Persistence package
+* Pipeline and FetchOperation packages introduced
+* SettingsFetch package
+* UserFetch package
+* Location, Form icon, Layer, and Event fetch operations migrated to modular Swift package pipeline architecture
 
 ##### Bug Fixes
 
