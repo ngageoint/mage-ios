@@ -35,6 +35,8 @@
 @property (nonatomic, strong) GPKGGeoPackage *backgroundGeoPackage;
 @property (nonatomic, strong) GPKGGeoPackage *darkBackgroundGeoPackage;
 @property (nonatomic, assign) BOOL observingTokenExpiration;
+@property (nonatomic, assign) BOOL persistenceReady;
+@property (nonatomic, strong) NSURL *pendingImportURL;
 @end
 
 @implementation AppDelegate
@@ -81,7 +83,14 @@
     
     [MageInitializer initializePreferences];
     [MageInitializer setupPersistenceWithCompletionHandler:^{
+        self.persistenceReady = YES;
         [self startMageApp];
+
+        if (self.pendingImportURL) {
+            NSURL *url = self.pendingImportURL;
+            self.pendingImportURL = nil;
+            [self handleOpenURL:url];
+        }
     }];
 }
 
@@ -127,6 +136,11 @@
 
 - (void) handleOpenURL:(NSURL *)url {
     if (!url) {
+        return;
+    }
+
+    if (!self.persistenceReady) {
+        self.pendingImportURL = url;
         return;
     }
 
@@ -235,7 +249,7 @@
 }
 
 - (void) sceneDidEnterBackground {
-    NSLog(@"applicationDidEnterBackground");
+    NSLog(@"sceneDidEnterBackground");
 
     self.splashView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
     [self.splashView applyThemeWithContainerScheme:[MAGEScheme scheme]];
@@ -251,9 +265,15 @@
 }
 
 - (void) sceneWillEnterForeground {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    NSLog(@"applicationWillEnterForeground");
-    if (![[UserUtility singleton] isTokenExpired]) {
+    // On cold launch, UIKit also calls this once during the scene's initial connect sequence,
+    // before setupMageApplication: has finished setting up Core Data. Guard on persistenceReady
+    // rather than call order, since a fast background/foreground flick right after launch could
+    // also race Core Data setup. MageRootViewController/MageSplitViewController's viewDidLoad
+    // already starts services (initial: true) once on cold launch, so skipping this call here
+    // loses nothing -- viewDidLoad never runs again on resume, which is why this method is the
+    // one that has to restart services (initial: false) after backgrounding.
+    NSLog(@"sceneWillEnterForeground");
+    if (self.persistenceReady && ![[UserUtility singleton] isTokenExpired]) {
         [[Mage singleton] startServicesWithInitial:NO eventId:[Server currentEventId]];
     }
 }
