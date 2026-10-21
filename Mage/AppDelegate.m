@@ -52,22 +52,25 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
+	return YES;
+}
 
-    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+- (void) sceneDidConnectWithWindow:(UIWindow *)window {
+    BOOL protectedDataAvailable = [[UIApplication sharedApplication] isProtectedDataAvailable];
+
+    self.window = window;
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];
     self.window.overrideUserInterfaceStyle = [[NSUserDefaults standardUserDefaults] integerForKey:@"themeOverride"];
-    
-    [self createLoadingView];
-    
-    NSLog(@"Finish Launching Protected data is available? %d", protectedDataAvailable);
-    
-    if (protectedDataAvailable) {
-        [self setupMageApplication:application];
-    }
 
-	return YES;
+    [self createLoadingView];
+
+    NSLog(@"Finish Launching Protected data is available? %d", protectedDataAvailable);
+
+    if (protectedDataAvailable && !_applicationStarted) {
+        _applicationStarted = YES;
+        [self setupMageApplication:[UIApplication sharedApplication]];
+    }
 }
 
 - (void) setupMageApplication: (UIApplication *) application {
@@ -118,23 +121,24 @@
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary *)options {
-    
+    [self handleOpenURL:url];
+    return YES;
+}
+
+- (void) handleOpenURL:(NSURL *)url {
     if (!url) {
-        return NO;
+        return;
     }
-    
+
     NSLog(@"Application Open URL %@", url);
     if (url.isFileURL) {
         NSString * filePath = [url path];
-        
+
         // Handle GeoPackage files
         [self.gpImporter handleGeoPackageImport:filePath];
     } else if ([[url scheme] isEqualToString:@"mage"] && [[url host] isEqualToString:@"app"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MageAppLink" object:url];
     }
-    
-    
-    return YES;
 }
 
 + (UIViewController*) topMostController
@@ -230,23 +234,23 @@
     }];
 }
 
-- (void) applicationDidEnterBackground:(UIApplication *) application {
+- (void) sceneDidEnterBackground {
     NSLog(@"applicationDidEnterBackground");
 
     self.splashView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
     [self.splashView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     self.splashView.view.frame = [self.window frame];
     [self.window addSubview:self.splashView.view];
-    
+
     [[Mage singleton] stopServices];
 }
 
-- (void) applicationWillResignActive:(UIApplication *)application {
-    application.applicationIconBadgeNumber = [MageOfflineObservationManager offlineObservationCount];
+- (void) sceneWillResignActive {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [MageOfflineObservationManager offlineObservationCount];
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
-- (void) applicationWillEnterForeground:(UIApplication *) application {
+- (void) sceneWillEnterForeground {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![[UserUtility singleton] isTokenExpired]) {
@@ -254,7 +258,7 @@
     }
 }
 
-- (void) applicationDidBecomeActive:(UIApplication *) application {
+- (void) sceneDidBecomeActive {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
     if (_applicationStarted) {
@@ -266,8 +270,8 @@
         }
         return;
     }
-    
-    BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
+
+    BOOL protectedDataAvailable = _applicationStarted = [[UIApplication sharedApplication] isProtectedDataAvailable];
     
     NSLog(@"Did Become Active Protected data is available? %d", protectedDataAvailable);
     

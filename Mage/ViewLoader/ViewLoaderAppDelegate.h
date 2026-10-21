@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ViewLoaderAppDelegate : UIResponder <UIApplicationDelegate>
+@interface ViewLoaderAppDelegate : UIResponder <UIApplicationDelegate, SceneWindowConnecting>
 @property (strong, nonatomic) UIWindow *window;
 
 @end
