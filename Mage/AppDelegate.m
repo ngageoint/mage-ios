@@ -35,6 +35,8 @@
 @property (nonatomic, strong) GPKGGeoPackage *backgroundGeoPackage;
 @property (nonatomic, strong) GPKGGeoPackage *darkBackgroundGeoPackage;
 @property (nonatomic, assign) BOOL observingTokenExpiration;
+@property (nonatomic, assign) BOOL persistenceReady;
+@property (nonatomic, strong) NSURL *pendingImportURL;
 @end
 
 @implementation AppDelegate
@@ -52,22 +54,25 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
+	return YES;
+}
 
-    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+- (void) sceneDidConnectWithWindow:(UIWindow *)window {
+    BOOL protectedDataAvailable = [[UIApplication sharedApplication] isProtectedDataAvailable];
+
+    self.window = window;
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];
     self.window.overrideUserInterfaceStyle = [[NSUserDefaults standardUserDefaults] integerForKey:@"themeOverride"];
-    
-    [self createLoadingView];
-    
-    NSLog(@"Finish Launching Protected data is available? %d", protectedDataAvailable);
-    
-    if (protectedDataAvailable) {
-        [self setupMageApplication:application];
-    }
 
-	return YES;
+    [self createLoadingView];
+
+    NSLog(@"Finish Launching Protected data is available? %d", protectedDataAvailable);
+
+    if (protectedDataAvailable && !_applicationStarted) {
+        _applicationStarted = YES;
+        [self setupMageApplication:[UIApplication sharedApplication]];
+    }
 }
 
 - (void) setupMageApplication: (UIApplication *) application {
@@ -78,7 +83,14 @@
     
     [MageInitializer initializePreferences];
     [MageInitializer setupPersistenceWithCompletionHandler:^{
+        self.persistenceReady = YES;
         [self startMageApp];
+
+        if (self.pendingImportURL) {
+            NSURL *url = self.pendingImportURL;
+            self.pendingImportURL = nil;
+            [self handleOpenURL:url];
+        }
     }];
 }
 
@@ -118,23 +130,29 @@
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary *)options {
-    
+    [self handleOpenURL:url];
+    return YES;
+}
+
+- (void) handleOpenURL:(NSURL *)url {
     if (!url) {
-        return NO;
+        return;
     }
-    
+
+    if (!self.persistenceReady) {
+        self.pendingImportURL = url;
+        return;
+    }
+
     NSLog(@"Application Open URL %@", url);
     if (url.isFileURL) {
         NSString * filePath = [url path];
-        
+
         // Handle GeoPackage files
         [self.gpImporter handleGeoPackageImport:filePath];
     } else if ([[url scheme] isEqualToString:@"mage"] && [[url host] isEqualToString:@"app"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MageAppLink" object:url];
     }
-    
-    
-    return YES;
 }
 
 + (UIViewController*) topMostController
@@ -230,31 +248,37 @@
     }];
 }
 
-- (void) applicationDidEnterBackground:(UIApplication *) application {
-    NSLog(@"applicationDidEnterBackground");
+- (void) sceneDidEnterBackground {
+    NSLog(@"sceneDidEnterBackground");
 
     self.splashView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
     [self.splashView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     self.splashView.view.frame = [self.window frame];
     [self.window addSubview:self.splashView.view];
-    
+
     [[Mage singleton] stopServices];
 }
 
-- (void) applicationWillResignActive:(UIApplication *)application {
-    application.applicationIconBadgeNumber = [MageOfflineObservationManager offlineObservationCount];
+- (void) sceneWillResignActive {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [MageOfflineObservationManager offlineObservationCount];
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
-- (void) applicationWillEnterForeground:(UIApplication *) application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    NSLog(@"applicationWillEnterForeground");
-    if (![[UserUtility singleton] isTokenExpired]) {
+- (void) sceneWillEnterForeground {
+    // On cold launch, UIKit also calls this once during the scene's initial connect sequence,
+    // before setupMageApplication: has finished setting up Core Data. Guard on persistenceReady
+    // rather than call order, since a fast background/foreground flick right after launch could
+    // also race Core Data setup. MageRootViewController/MageSplitViewController's viewDidLoad
+    // already starts services (initial: true) once on cold launch, so skipping this call here
+    // loses nothing -- viewDidLoad never runs again on resume, which is why this method is the
+    // one that has to restart services (initial: false) after backgrounding.
+    NSLog(@"sceneWillEnterForeground");
+    if (self.persistenceReady && ![[UserUtility singleton] isTokenExpired]) {
         [[Mage singleton] startServicesWithInitial:NO eventId:[Server currentEventId]];
     }
 }
 
-- (void) applicationDidBecomeActive:(UIApplication *) application {
+- (void) sceneDidBecomeActive {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
     if (_applicationStarted) {
@@ -266,8 +290,8 @@
         }
         return;
     }
-    
-    BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
+
+    BOOL protectedDataAvailable = _applicationStarted = [[UIApplication sharedApplication] isProtectedDataAvailable];
     
     NSLog(@"Did Become Active Protected data is available? %d", protectedDataAvailable);
     
