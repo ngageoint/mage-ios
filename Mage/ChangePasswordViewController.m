@@ -59,11 +59,21 @@
     [self.passwordField applyThemeWithScheme:containerScheme];
     [self.currentPasswordField applyThemeWithScheme:containerScheme];
     [self.confirmPasswordField applyThemeWithScheme:containerScheme];
+    UIColor *placeholderTextColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [self.usernameField setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.passwordField setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.currentPasswordField setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
+    [self.confirmPasswordField setFloatingLabelColor:placeholderTextColor forState:MDCTextControlStateEditing];
     
     self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.confirmPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.currentPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    
+    self.usernameField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.passwordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.currentPasswordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    self.confirmPasswordField.tintColor = self.scheme.colorScheme.onSurfaceColor;
 
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
