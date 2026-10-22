@@ -12,10 +12,13 @@
 @implementation ViewLoaderAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id> *)launchOptions {
-    self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    return true;
+}
+
+- (void) sceneDidConnectWithWindow:(UIWindow *)window {
+    self.window = window;
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];
     self.window.rootViewController = [ViewLoader createRootViewController];
-    return true;
 }
 @end
