@@ -146,10 +146,8 @@
 
     NSLog(@"Application Open URL %@", url);
     if (url.isFileURL) {
-        NSString * filePath = [url path];
-
         // Handle GeoPackage files
-        [self.gpImporter handleGeoPackageImport:filePath];
+        [self.gpImporter handleGeoPackageImport:url];
     } else if ([[url scheme] isEqualToString:@"mage"] && [[url host] isEqualToString:@"app"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MageAppLink" object:url];
     }
