@@ -314,7 +314,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
 
 extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
     func selectedAttachment(_ attachment: Attachment) {
-        if (attachment.url == nil) {
+        if (attachment.url == nil && !attachment.hasLocalFile) {
             return;
         }
         guard let nav = self.navigationController else {

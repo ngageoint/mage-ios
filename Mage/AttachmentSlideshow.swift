@@ -261,22 +261,17 @@ class AttachmentSlideShow: UIView {
 
                 continue;
             }
-            if (attachment.isUploading) {
-                let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
-                imageView.image = UIImage(systemName: "arrow.up.circle")?.withConfiguration(iconConfig);
-                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-                imageView.contentMode = .center;
+            let isInFlight = attachment.isUploading || attachment.isProcessingPending;
+            if (isInFlight && !attachment.hasLocalFile) {
+                imageView.image = nil;
                 imageView.setAttachment(attachment: attachment);
-                imageView.accessibilityLabel = "attachment \(attachment.name ?? "") uploading";
-                continue;
-            }
-            if (attachment.isProcessingPending) {
-                let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
-                imageView.image = UIImage(systemName: "icloud.and.arrow.up")?.withConfiguration(iconConfig);
-                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-                imageView.contentMode = .center;
-                imageView.setAttachment(attachment: attachment);
-                imageView.accessibilityLabel = "attachment \(attachment.name ?? "") upload pending";
+                imageView.accessibilityLabel = "attachment \(attachment.name ?? "") \(attachment.isUploading ? "uploading" : "upload pending")";
+
+                let placeholder = AttachmentStatusView.placeholder(for: attachment, scheme: scheme);
+                imageView.addSubview(placeholder);
+                placeholder.autoCenterInSuperview();
+                placeholder.autoPinEdge(toSuperviewEdge: .left, withInset: 16, relation: .greaterThanOrEqual);
+                placeholder.autoPinEdge(toSuperviewEdge: .right, withInset: 16, relation: .greaterThanOrEqual);
                 continue;
             }
             if (attachment.contentType?.hasPrefix("image") ?? false) {
@@ -299,8 +294,7 @@ class AttachmentSlideShow: UIView {
                             switch result {
                             case .success(_):
                                 imageView.contentMode = .scaleAspectFill;
-                                let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"));
-                                overlay.contentMode = .scaleAspectFit;
+                                let overlay = AttachmentStatusView.playOverlay(diameter: 64);
                                 imageView.addSubview(overlay);
                                 overlay.autoCenterInSuperview();
                                 if (attachmentSelectionDelegate != nil) {
@@ -343,9 +337,16 @@ class AttachmentSlideShow: UIView {
                     imageView.addGestureRecognizer(tapGesture);
                 }
             }
-            
+
+            if (isInFlight) {
+                let badge = AttachmentStatusView.badge(for: attachment);
+                imageView.addSubview(badge);
+                badge.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
+                badge.autoPinEdge(toSuperviewEdge: .left, withInset: 8);
+                badge.autoPinEdge(toSuperviewEdge: .right, withInset: 8, relation: .greaterThanOrEqual);
+            }
         }
-        
+
         slidescroll.contentSize = CGSize(width: CGFloat(attachments.count) * CGFloat(self.bounds.width), height: height)
         pageControl.numberOfPages = attachments.count;
     }
