@@ -722,6 +722,7 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
     
     func attachmentFabTapped(_ attachment: Attachment, completionHandler handler: @escaping ((Bool) -> Void)) {
         // delete the attachment
+        let wasDirty = attachment.dirty;
         attachment.markedForDeletion = true;
         attachment.dirty = true;
         handler(true);
@@ -730,7 +731,8 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         messageAction.title = "UNDO";
         let actionHandler = {() in
             attachment.markedForDeletion = false;
-            attachment.dirty = false;
+            // restore rather than clear, an attachment that was still uploading needs to stay queued
+            attachment.dirty = wasDirty;
             handler(false);
         }
         messageAction.handler = actionHandler;
