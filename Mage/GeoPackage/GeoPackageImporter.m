@@ -26,36 +26,37 @@
 
 @implementation GeoPackageImporter
 
-- (BOOL) handleGeoPackageImport: (NSString *) filePath {
-    
+- (BOOL) handleGeoPackageImport: (NSURL *) fileURL {
+    NSString *filePath = [fileURL path];
+
     if (![GPKGGeoPackageValidate hasGeoPackageExtension:filePath]) {
         return false;
     }
-        
+
     if ([self isGeoPackageAlreadyImported:[[filePath lastPathComponent] stringByDeletingPathExtension]]) {
-        
+
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Overwrite Existing GeoPackage?"
                                                                        message:[NSString stringWithFormat:@"A GeoPackage with the name %@ already exists.  You can import it as a new GeoPackage, or overwrite the existing GeoPackage.", [[filePath lastPathComponent] stringByDeletingPathExtension]]
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
-        
+
         [alert addAction:[UIAlertAction actionWithTitle:@"Import As New" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             // rename it and import
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyyy-MM-dd_HH:mm:ss"];
             NSLocale *posix = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
             [formatter setLocale:posix];
-            
-            [self importGeoPackageFile:filePath withName:[NSString stringWithFormat:@"%@_%@", [[filePath lastPathComponent] stringByDeletingPathExtension], [formatter stringFromDate:[NSDate date]]] andOverwrite:NO];
+
+            [self importGeoPackageFile:fileURL withName:[NSString stringWithFormat:@"%@_%@", [[filePath lastPathComponent] stringByDeletingPathExtension], [formatter stringFromDate:[NSDate date]]] andOverwrite:NO];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Overwrite Existing GeoPackage" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            [self importGeoPackageFile: filePath andOverwrite:YES];
+            [self importGeoPackageFile: fileURL andOverwrite:YES];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Do Not Import" style:UIAlertActionStyleCancel handler:nil]];
-        
+
         [[AppDelegate topMostController] presentViewController:alert animated:YES completion:nil];
     } else {
         // Import the GeoPackage file
-        [self importGeoPackageFile: filePath andOverwrite:NO];
+        [self importGeoPackageFile: fileURL andOverwrite:NO];
     }
     return true;
 }
@@ -74,10 +75,14 @@
     return [[manager databasesLike:name] count] != 0;
 }
 
--(BOOL) importGeoPackageFile: (NSString *) path withName: (NSString *) name andOverwrite: (BOOL) overwrite {
+-(BOOL) importGeoPackageFile: (NSURL *) fileURL withName: (NSString *) name andOverwrite: (BOOL) overwrite {
     // Import the GeoPackage file
+    NSString *path = [fileURL path];
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
+    // fileURL may be security-scoped (e.g. delivered from Files/iCloud via a share); this is a
+    // no-op and returns NO for URLs that aren't, so it's safe to call unconditionally.
+    BOOL didStartAccessing = [fileURL startAccessingSecurityScopedResource];
     @try {
         BOOL alreadyImported = [self isGeoPackageAlreadyImported:name];
         imported = [manager importGeoPackageFromPath:path withName:name andOverride:overwrite andMove:true];
@@ -114,23 +119,26 @@
     }
     @finally {
         [manager close];
+        if (didStartAccessing) {
+            [fileURL stopAccessingSecurityScopedResource];
+        }
     }
-    
+
     if(!imported){
         NSLog(@"Error importing GeoPackage file: %@", path);
     } else {
         [self processOfflineMapArchives];
     }
-    
+
     return imported;
 }
 
--(BOOL) importGeoPackageFile: (NSString *) path andOverwrite: (BOOL) overwrite{
-    return [self importGeoPackageFile:path withName:[[path lastPathComponent] stringByDeletingPathExtension] andOverwrite:overwrite];
+-(BOOL) importGeoPackageFile: (NSURL *) fileURL andOverwrite: (BOOL) overwrite{
+    return [self importGeoPackageFile:fileURL withName:[[fileURL.path lastPathComponent] stringByDeletingPathExtension] andOverwrite:overwrite];
 }
 
--(BOOL) importGeoPackageFile: (NSString *) path {
-    return [self importGeoPackageFile:path andOverwrite:YES];
+-(BOOL) importGeoPackageFile: (NSURL *) fileURL {
+    return [self importGeoPackageFile:fileURL andOverwrite:YES];
 }
 
 -(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSString *) remoteId {
@@ -355,7 +363,7 @@
     for(NSString * geoPackageFile in geoPackageFiles){
         // Import the GeoPackage file
         NSString * geoPackagePath = [documentsDirectory stringByAppendingPathComponent:geoPackageFile];
-        [self importGeoPackageFile:geoPackagePath andOverwrite:NO];
+        [self importGeoPackageFile:[NSURL fileURLWithPath:geoPackagePath] andOverwrite:NO];
     }
     
     // Add the GeoPackage cache overlays
