@@ -70,14 +70,16 @@ import Persistence
 extension EventChooserCoordinator : EventSelectionDelegate {
     func didSelectEvent(event: Event) {
         eventToSegueTo = event
-        if let remoteId = event.remoteId {
+        let remoteId = event.remoteId
+        if let remoteId {
             Server.setCurrentEventId(remoteId)
         }
         MagicalRecord.save { localContext in
             // Save this event as the most recent one
-            // this will get changed once it re-pulls form the server but that is fine
-            let localEvent = event.mr_(in: localContext)
-            localEvent?.recentSortOrder = -1
+            // this will get changed once it re-pulls the user from the server but that is fine
+            if let remoteId {
+                User.fetchCurrentUser(context: localContext)?.addRecentEvent(eventId: remoteId)
+            }
         } completion: { [weak self] didSave, error in
             self?.viewController?.isNavigationBarHidden = true
             self?.eventController?.dismiss(animated: false, completion: { [weak self] in

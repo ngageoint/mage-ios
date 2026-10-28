@@ -79,7 +79,11 @@ extension User: Navigable {
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
         return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: UserDefaults.standard.currentUserId ?? "", in: context);
     }
-    
+
+    @objc public func addRecentEvent(eventId: NSNumber) {
+        self.recentEventIds = [eventId] + (self.recentEventIds ?? []).filter { $0 != eventId }
+    }
+
     @objc public func update(json: [AnyHashable : Any], context: NSManagedObjectContext) {
         self.remoteId = json[UserKey.id.key] as? String
         self.username = json[UserKey.username.key] as? String

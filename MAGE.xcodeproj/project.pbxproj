@@ -315,6 +315,7 @@
 		F74BDADC302D1C3700F3E499 /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = F74BDADB302D1C3700F3E499 /* Settings */; };
 		F74BDAE3302E19B200F3E499 /* MageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74BDAE2302E19B200F3E499 /* MageTests.swift */; };
 		F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74BDAE4302E233A00F3E499 /* PersistenceTestUtilities.swift */; };
+		A1B2C3D4E5F6071829304A5C /* RecentEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6071829304A5B /* RecentEventsTests.swift */; };
 		F74BDAE7302E272400F3E499 /* TestUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = F74BDAE6302E272400F3E499 /* TestUtilities */; };
 		F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */; };
 		F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7521DE72672317700C52318 /* GeometryEditViewControllerTests.swift */; };
@@ -1067,6 +1068,7 @@
 		F74BDAD9302D1C1900F3E499 /* DependencyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyError.swift; sourceTree = "<group>"; };
 		F74BDAE2302E19B200F3E499 /* MageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageTests.swift; sourceTree = "<group>"; };
 		F74BDAE4302E233A00F3E499 /* PersistenceTestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTestUtilities.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6071829304A5B /* RecentEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEventsTests.swift; sourceTree = "<group>"; };
 		F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplaySettingsHeader.m; sourceTree = "<group>"; };
 		F74F025F25DF0280006BCF23 /* DisplaySettingsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplaySettingsHeader.h; sourceTree = "<group>"; };
 		F7521DE72672317700C52318 /* GeometryEditViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditViewControllerTests.swift; sourceTree = "<group>"; };
@@ -2533,6 +2535,7 @@
 				F765029E302FC6FC00B8414A /* Observation */,
 				F7650297302FB7CE00B8414A /* Packages */,
 				F74BDAE4302E233A00F3E499 /* PersistenceTestUtilities.swift */,
+				A1B2C3D4E5F6071829304A5B /* RecentEventsTests.swift */,
 				F7874B9F302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift */,
 				F74BDAE1302E196B00F3E499 /* sdk */,
 				F784500B302CE60F000A9ED5 /* CoreDataContext.swift */,
@@ -3591,6 +3594,7 @@
 				F7874BA0302F66EF001C5FC9 /* ObserveSettingsUseCaseTests.swift in Sources */,
 				F76502A43031235F00B8414A /* LocationCoreDataCreateTests.swift in Sources */,
 				F74BDAE5302E233A00F3E499 /* PersistenceTestUtilities.swift in Sources */,
+				A1B2C3D4E5F6071829304A5C /* RecentEventsTests.swift in Sources */,
 				F725E90030531DEC00C8DC3B /* EventFetchLocalImplTests.swift in Sources */,
 				F725E8E83050AE4C00C8DC3B /* LayerFetchRepositoryFactoryTests.swift in Sources */,
 				F76502A0302FC71400B8414A /* ObservationCoreDataCreateTests.swift in Sources */,
