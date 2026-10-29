@@ -999,6 +999,14 @@ extension Observation: Navigable {
         get {
             if let error = self.error {
                 if let errorMessage = error[ObservationPushService.ObservationErrorMessage] as? String {
+                    // try to parse as json
+                    if let jsonData = errorMessage.data(using: .utf8) {
+                        if let jsonObject = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                            if let message = jsonObject["message"] as? String {
+                                return message
+                            }
+                        }
+                    }
                     return errorMessage
                 } else if let errorMessage = error[ObservationPushService.ObservationErrorDescription] as? String {
                     return errorMessage
