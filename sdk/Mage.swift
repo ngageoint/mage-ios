@@ -86,12 +86,15 @@ import Event
             let eventsFetched = try await DependencyContainer.shared.useCaseFactory
                 .resolve(.FetchEventsUseCase)
                 .execute()
+
+            NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
+            
             await fetchFormIcons(events: eventsFetched.events)
             await refreshFeeds(events: eventsFetched.events)
         } catch {
             EventFetchPackage.logger.error("Failed to fetch events: \(error)")
+            NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
         }
-        NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
     }
     
     public func fetchFormIcons(events: [EventModel]) async {
