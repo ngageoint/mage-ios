@@ -26,7 +26,6 @@ class ObservationViewCardCollectionViewController: UIViewController {
     var bottomSheet: MDCBottomSheetController?;
     var scheme: MDCContainerScheming?;
     var attachmentCard: ObservationAttachmentCard?;
-    var observationUpdatedObserver: NSObjectProtocol?;
     let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
     let formsHeader = FormsHeader(forAutoLayout: ());
     
@@ -138,15 +137,6 @@ class ObservationViewCardCollectionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         ObservationPushService.singleton.addDelegate(delegate: self);
-        if let observationUpdatedObserver = observationUpdatedObserver {
-            NotificationCenter.default.removeObserver(observationUpdatedObserver);
-        }
-        observationUpdatedObserver = NotificationCenter.default.addObserver(forName: .ObservationUpdated, object: nil, queue: .main) { [weak self] notification in
-            guard let self = self, let updatedRemoteId = notification.userInfo?["remoteId"] as? String, updatedRemoteId == self.observation?.remoteId else {
-                return;
-            }
-            self.setupObservation();
-        }
         setupObservation();
         if let scheme = self.scheme {
             applyTheme(withContainerScheme: scheme);
@@ -168,9 +158,6 @@ class ObservationViewCardCollectionViewController: UIViewController {
         }
         cards = [];
         ObservationPushService.singleton.removeDelegate(delegate: self);
-        if let observationUpdatedObserver = observationUpdatedObserver {
-            NotificationCenter.default.removeObserver(observationUpdatedObserver);
-        }
     }
     
     func setupObservation() {
@@ -314,7 +301,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
 
 extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
     func selectedAttachment(_ attachment: Attachment) {
-        if (attachment.url == nil) {
+        if (attachment.url == nil && !attachment.hasLocalFile) {
             return;
         }
         guard let nav = self.navigationController else {

@@ -151,8 +151,7 @@ import MaterialComponents.MaterialRipple
             self.imageView.accessibilityLabel = "attachment \(localPath) loaded"
         } else if (contentType.hasPrefix("video")) {
             let provider: VideoImageProvider = VideoImageProvider(localPath: localPath);
-            let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"))
-            overlay.contentMode = .scaleAspectFit
+            let overlay = AttachmentStatusView.playOverlay()
             self.imageView.addSubview(overlay)
             overlay.autoCenterInSuperview()
             DispatchQueue.main.async {
@@ -275,47 +274,24 @@ import MaterialComponents.MaterialRipple
             return;
         }
 
-        if (attachment.isUploading) {
-            let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
-            self.imageView.image = UIImage(systemName: "arrow.up.circle")?.withConfiguration(iconConfig);
-            self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-            self.imageView.contentMode = .center;
-            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") uploading";
+        let isInFlight = attachment.isUploading || attachment.isProcessingPending;
+        if (isInFlight && !attachment.hasLocalFile) {
+            self.imageView.image = nil;
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") \(attachment.isUploading ? "uploading" : "upload pending")";
 
-            let label = UILabel.newAutoLayout()
-            label.text = "\(attachment.name ?? "")\nUploading..."
-            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            label.font = scheme?.typographyScheme.overline
-            label.textAlignment = .center
-            label.numberOfLines = 2
-            label.lineBreakMode = .byTruncatingTail
-            label.autoSetDimension(.height, toSize: label.font.lineHeight * 2)
-            imageView.addSubview(label)
-            label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .top)
+            let placeholder = AttachmentStatusView.placeholder(for: attachment, scheme: scheme);
+            imageView.addSubview(placeholder);
+            placeholder.autoCenterInSuperview();
+            placeholder.autoPinEdge(toSuperviewEdge: .left, withInset: 8, relation: .greaterThanOrEqual);
+            placeholder.autoPinEdge(toSuperviewEdge: .right, withInset: 8, relation: .greaterThanOrEqual);
 
             self.backgroundColor = scheme?.colorScheme.backgroundColor
-            return;
-        }
 
-        if (attachment.isProcessingPending) {
-            let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
-            self.imageView.image = UIImage(systemName: "icloud.and.arrow.up")?.withConfiguration(iconConfig);
-            self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-            self.imageView.contentMode = .center;
-            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") upload pending";
-
-            let label = UILabel.newAutoLayout()
-            label.text = "\(attachment.name ?? "")\nUpload pending..."
-            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-            label.font = scheme?.typographyScheme.overline
-            label.textAlignment = .center
-            label.numberOfLines = 2
-            label.lineBreakMode = .byTruncatingTail
-            label.autoSetDimension(.height, toSize: label.font.lineHeight * 2)
-            imageView.addSubview(label)
-            label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .top)
-
-            self.backgroundColor = scheme?.colorScheme.backgroundColor
+            if let button = button {
+                self.addSubview(button);
+                button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
+                button.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
+            }
             return;
         }
 
@@ -359,8 +335,7 @@ import MaterialComponents.MaterialRipple
                         case .success(_):
                             self.imageView.contentMode = .scaleAspectFill;
                             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-                            let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"));
-                            overlay.contentMode = .scaleAspectFit;
+                            let overlay = AttachmentStatusView.playOverlay();
                             self.imageView.addSubview(overlay);
                             overlay.autoCenterInSuperview();
                         case .failure(let error):
@@ -394,5 +369,66 @@ import MaterialComponents.MaterialRipple
             button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
             button.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
         }
+    }
+}
+
+extension Attachment {
+    var hasLocalFile: Bool {
+        guard let localPath = localPath else { return false }
+        return FileManager.default.fileExists(atPath: localPath);
+    }
+}
+
+// Shared upload-status UI for attachments that are still uploading or waiting on server processing.
+enum AttachmentStatusView {
+
+    private static func statusText(for attachment: Attachment) -> String {
+        return attachment.isUploading ? "Uploading" : "Upload Pending";
+    }
+
+    private static func statusSymbol(for attachment: Attachment) -> String {
+        return attachment.isUploading ? "arrow.up.circle" : "icloud.and.arrow.up";
+    }
+
+    static func playOverlay(diameter: CGFloat = 48) -> UIView {
+        let config = UIImage.SymbolConfiguration(pointSize: diameter, weight: .regular)
+            .applying(UIImage.SymbolConfiguration(paletteColors: [.white, UIColor.black.withAlphaComponent(0.6)]));
+        let icon = UIImageView(image: UIImage(systemName: "play.circle.fill", withConfiguration: config));
+        icon.configureForAutoLayout();
+        icon.contentMode = .scaleAspectFit;
+        icon.isUserInteractionEnabled = false;
+        icon.autoSetDimensions(to: CGSize(width: diameter, height: diameter));
+        icon.accessibilityLabel = "play";
+        return icon;
+    }
+
+    static func placeholder(for attachment: Attachment, scheme: MDCContainerScheming?) -> UIView {
+        let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
+        let icon = UIImageView(image: UIImage(systemName: statusSymbol(for: attachment), withConfiguration: iconConfig));
+        icon.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        icon.contentMode = .scaleAspectFit;
+
+        let titleLabel = UILabel();
+        titleLabel.text = statusText(for: attachment);
+        titleLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        titleLabel.font = scheme?.typographyScheme.subtitle2;
+        titleLabel.textAlignment = .center;
+        titleLabel.numberOfLines = 1;
+
+        let nameLabel = UILabel();
+        nameLabel.text = attachment.name;
+        nameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        nameLabel.font = scheme?.typographyScheme.caption;
+        nameLabel.textAlignment = .center;
+        nameLabel.numberOfLines = 1;
+        nameLabel.lineBreakMode = .byTruncatingMiddle;
+
+        let group = UIStackView(arrangedSubviews: [icon, titleLabel, nameLabel]);
+        group.configureForAutoLayout();
+        group.axis = .vertical;
+        group.alignment = .center;
+        group.spacing = 4;
+        group.isUserInteractionEnabled = false;
+        return group;
     }
 }

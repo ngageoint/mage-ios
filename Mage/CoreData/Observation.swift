@@ -696,10 +696,6 @@ extension Observation: Navigable {
                         $0.mr_deleteEntity(in: context)
                     }
                 }
-                let updatedRemoteId = existingObservation.remoteId
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: .ObservationUpdated, object: nil, userInfo: ["remoteId": updatedRemoteId as Any])
-                }
             }
         } else {
             if state != .Archive {

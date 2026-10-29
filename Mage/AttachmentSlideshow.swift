@@ -55,9 +55,6 @@ class AttachmentSlideShow: UIView {
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private var scheme: MDCContainerScheming?;
 
-    // Called with the new zero-based page index whenever the carousel settles on a page.
-    var onPageChanged: ((Int) -> Void)?
-    
     private lazy var slidescroll: UIScrollView = {
         let slidescroll = UIScrollView(forAutoLayout: ());
         slidescroll.isPagingEnabled = true;
@@ -261,22 +258,17 @@ class AttachmentSlideShow: UIView {
 
                 continue;
             }
-            if (attachment.isUploading) {
-                let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
-                imageView.image = UIImage(systemName: "arrow.up.circle")?.withConfiguration(iconConfig);
-                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-                imageView.contentMode = .center;
+            let isInFlight = attachment.isUploading || attachment.isProcessingPending;
+            if (isInFlight && !attachment.hasLocalFile) {
+                imageView.image = nil;
                 imageView.setAttachment(attachment: attachment);
-                imageView.accessibilityLabel = "attachment \(attachment.name ?? "") uploading";
-                continue;
-            }
-            if (attachment.isProcessingPending) {
-                let iconConfig = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular);
-                imageView.image = UIImage(systemName: "icloud.and.arrow.up")?.withConfiguration(iconConfig);
-                imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-                imageView.contentMode = .center;
-                imageView.setAttachment(attachment: attachment);
-                imageView.accessibilityLabel = "attachment \(attachment.name ?? "") upload pending";
+                imageView.accessibilityLabel = "attachment \(attachment.name ?? "") \(attachment.isUploading ? "uploading" : "upload pending")";
+
+                let placeholder = AttachmentStatusView.placeholder(for: attachment, scheme: scheme);
+                imageView.addSubview(placeholder);
+                placeholder.autoCenterInSuperview();
+                placeholder.autoPinEdge(toSuperviewEdge: .left, withInset: 16, relation: .greaterThanOrEqual);
+                placeholder.autoPinEdge(toSuperviewEdge: .right, withInset: 16, relation: .greaterThanOrEqual);
                 continue;
             }
             if (attachment.contentType?.hasPrefix("image") ?? false) {
@@ -299,8 +291,7 @@ class AttachmentSlideShow: UIView {
                             switch result {
                             case .success(_):
                                 imageView.contentMode = .scaleAspectFill;
-                                let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"));
-                                overlay.contentMode = .scaleAspectFit;
+                                let overlay = AttachmentStatusView.playOverlay(diameter: 64);
                                 imageView.addSubview(overlay);
                                 overlay.autoCenterInSuperview();
                                 if (attachmentSelectionDelegate != nil) {
@@ -343,9 +334,8 @@ class AttachmentSlideShow: UIView {
                     imageView.addGestureRecognizer(tapGesture);
                 }
             }
-            
         }
-        
+
         slidescroll.contentSize = CGSize(width: CGFloat(attachments.count) * CGFloat(self.bounds.width), height: height)
         pageControl.numberOfPages = attachments.count;
     }
@@ -404,6 +394,5 @@ extension AttachmentSlideShow : UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
-        onPageChanged?(pageControl.currentPage);
     }
 }
