@@ -55,9 +55,6 @@ class AttachmentSlideShow: UIView {
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private var scheme: MDCContainerScheming?;
 
-    // Called with the new zero-based page index whenever the carousel settles on a page.
-    var onPageChanged: ((Int) -> Void)?
-    
     private lazy var slidescroll: UIScrollView = {
         let slidescroll = UIScrollView(forAutoLayout: ());
         slidescroll.isPagingEnabled = true;
@@ -337,14 +334,6 @@ class AttachmentSlideShow: UIView {
                     imageView.addGestureRecognizer(tapGesture);
                 }
             }
-
-            if (isInFlight) {
-                let badge = AttachmentStatusView.badge(for: attachment);
-                imageView.addSubview(badge);
-                badge.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
-                badge.autoPinEdge(toSuperviewEdge: .left, withInset: 8);
-                badge.autoPinEdge(toSuperviewEdge: .right, withInset: 8, relation: .greaterThanOrEqual);
-            }
         }
 
         slidescroll.contentSize = CGSize(width: CGFloat(attachments.count) * CGFloat(self.bounds.width), height: height)
@@ -405,6 +394,5 @@ extension AttachmentSlideShow : UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
-        onPageChanged?(pageControl.currentPage);
     }
 }

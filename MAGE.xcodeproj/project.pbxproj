@@ -97,7 +97,6 @@
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.swift */; };
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
-		435B5B53302B548200C173B6 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B5B52302B548200C173B6 /* ToastView.swift */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
@@ -802,7 +801,6 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
-		435B5B52302B548200C173B6 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
 		4C546FEB195A27F4000CF230 /* LocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationAnnotation.m; sourceTree = "<group>"; };
@@ -2723,7 +2721,6 @@
 			isa = PBXGroup;
 			children = (
 				F718149430376DE900E033AB /* UseCase */,
-				435B5B52302B548200C173B6 /* ToastView.swift */,
 				F74BDABB302D188500F3E499 /* DependencyContainer */,
 				F76A02752FE49F2B00CDBA4F /* Persistence */,
 				2FAE23FB2B5596A900629721 /* Search */,
@@ -3646,7 +3643,6 @@
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
-				435B5B53302B548200C173B6 /* ToastView.swift in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
 				F7CB01463048C65B00C29FE0 /* FormUseCaseModule.swift in Sources */,
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,

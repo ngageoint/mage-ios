@@ -369,14 +369,6 @@ import MaterialComponents.MaterialRipple
             button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
             button.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
         }
-        if (isInFlight) {
-            let badge = AttachmentStatusView.badge(for: attachment);
-            imageView.addSubview(badge);
-            // bottom-left, leaving room for the delete button pinned bottom-right
-            badge.autoPinEdge(toSuperviewEdge: .bottom, withInset: 8);
-            badge.autoPinEdge(toSuperviewEdge: .left, withInset: 8);
-            badge.autoPinEdge(toSuperviewEdge: .right, withInset: button != nil ? 56 : 8, relation: .greaterThanOrEqual);
-        }
     }
 }
 
@@ -396,37 +388,6 @@ enum AttachmentStatusView {
 
     private static func statusSymbol(for attachment: Attachment) -> String {
         return attachment.isUploading ? "arrow.up.circle" : "icloud.and.arrow.up";
-    }
-
-    // Small pill overlaid on top of the attachment's real preview.
-    static func badge(for attachment: Attachment) -> UIView {
-        let container = UIView.newAutoLayout();
-        container.backgroundColor = UIColor.black.withAlphaComponent(0.6);
-        container.layer.cornerRadius = 10;
-        container.isUserInteractionEnabled = false;
-
-        let font = UIFont.systemFont(ofSize: 11, weight: .semibold);
-        let icon = UIImageView(image: UIImage(systemName: statusSymbol(for: attachment), withConfiguration: UIImage.SymbolConfiguration(font: font)));
-        icon.tintColor = .white;
-        icon.contentMode = .scaleAspectFit;
-        icon.setContentHuggingPriority(.required, for: .horizontal);
-        icon.setContentCompressionResistancePriority(.required, for: .horizontal);
-
-        let label = UILabel();
-        label.text = statusText(for: attachment);
-        label.textColor = .white;
-        label.font = font;
-        label.numberOfLines = 1;
-        label.lineBreakMode = .byTruncatingTail;
-
-        let stack = UIStackView(arrangedSubviews: [icon, label]);
-        stack.configureForAutoLayout();
-        stack.axis = .horizontal;
-        stack.alignment = .center;
-        stack.spacing = 4;
-        container.addSubview(stack);
-        stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8));
-        return container;
     }
 
     static func playOverlay(diameter: CGFloat = 48) -> UIView {
