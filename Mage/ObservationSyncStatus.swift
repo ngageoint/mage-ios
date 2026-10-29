@@ -23,6 +23,8 @@ class ObservationSyncStatus: UIView {
         syncStatusView.trailingButton.isHidden = true;
         syncStatusView.imageView.isHidden = false;
         syncStatusView.imageView.contentMode = .center;
+        syncStatusView.textView.textContainer.maximumNumberOfLines = 0
+        syncStatusView.textView.textContainer.lineBreakMode = .byWordWrapping
         return syncStatusView;
     }();
     
@@ -73,7 +75,12 @@ class ObservationSyncStatus: UIView {
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            syncStatusView.autoSetDimension(.height, toSize: 36);
+            syncStatusView
+                .autoSetDimension(
+                    .height,
+                    toSize: 36,
+                    relation: .greaterThanOrEqual
+                );
             syncStatusView.autoPinEdgesToSuperviewEdges();
             didSetupConstraints = true;
         }
