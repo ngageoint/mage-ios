@@ -12,9 +12,24 @@ import MaterialComponents.MDCTextField;
 class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
+    
+    private var min: NSNumber?;
+    private var max: NSNumber?;
 
     private let fieldUndoManager = UndoManager()
     private var sessionStartValue: String?
+    
+    lazy var helperText: String? = {
+        var helper: String? = nil;
+        if let min, let max {
+            helper = "Must be between \(min) and \(max) characters.";
+        } else if let min {
+            helper = "Must be at least \(min) characters.";
+        } else if let max {
+            helper = "Must be \(max) or fewer characters";
+        }
+        return helper;
+    }()
 
     lazy var multilineTextField: MDCFilledTextArea  = {
         let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
@@ -28,7 +43,7 @@ class TextFieldView : BaseFieldView {
         multilineTextField.textView.autocapitalizationType = .none;
         multilineTextField.textView.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         multilineTextField.placeholder = field[FieldKey.title.key] as? String
-        multilineTextField.leadingAssistiveLabel.text = " ";
+        multilineTextField.leadingAssistiveLabel.text = helperText ?? " ";
         setPlaceholder(textArea: multilineTextField);
         if (value != nil) {
             multilineTextField.textView.text = value as? String;
@@ -54,7 +69,7 @@ class TextFieldView : BaseFieldView {
         }
         textField.autocapitalizationType = .none;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
-        textField.leadingAssistiveLabel.text = " ";
+        textField.leadingAssistiveLabel.text = helperText ?? " ";
         setPlaceholder(textField: textField);
         if (value != nil) {
             textField.text = value as? String;
@@ -112,6 +127,10 @@ class TextFieldView : BaseFieldView {
 
     init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: String?, multiline: Bool = false, keyboardType: UIKeyboardType = .default) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
+        
+        self.min = self.field[FieldKey.min.key] as? NSNumber;
+        self.max = self.field[FieldKey.max.key] as? NSNumber;
+        
         self.multiline = multiline;
         self.keyboardType = keyboardType;
         self.addFieldView();
@@ -212,15 +231,41 @@ class TextFieldView : BaseFieldView {
     }
 
     override func isEmpty() -> Bool {
+        return getCount() == 0
+    }
+    
+    func getCount() -> Int {
         if (self.multiline) {
-            return (multilineTextField.textView.text ?? "").count == 0;
+            return (multilineTextField.textView.text ?? "").count;
         } else {
-            return (textField.text ?? "").count == 0;
+            return (textField.text ?? "").count;
         }
     }
 
     override func getErrorMessage() -> String {
+        if let helperText = getCountText() {
+            return helperText
+        }
+
         return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
+    }
+    
+    override func isValid(enforceRequired: Bool = false) -> Bool {
+        return super.isValid(enforceRequired: enforceRequired) && isCharacterCountValid();
+    }
+    
+    func isCharacterCountValid() -> Bool {
+        let count = getCount()
+        
+        if let min, count < min.intValue {
+            return false
+        }
+        
+        if let max, count > max.intValue {
+            return false
+        }
+        
+        return true
     }
 
     override func setValid(_ valid: Bool) {
@@ -247,6 +292,31 @@ class TextFieldView : BaseFieldView {
             }
         }
     }
+    
+    func getCountText() -> String? {
+        if let min, let max {
+            return "\(getCount()) characters (minimum \(min), maximum \(max))";
+        } else if let min {
+            return  "\(getCount()) characters (minimum \(min))";
+        } else if let max {
+            return "\(getCount()) characters (maximum \(max))"
+        }
+        return nil
+    }
+    
+    func updateHelperText() {
+        let helper: String? = getCountText()
+        multilineTextField.leadingAssistiveLabel.text = helper ?? " ";
+        textField.leadingAssistiveLabel.text = helper ?? " ";
+        
+        if !isCharacterCountValid() {
+            multilineTextField.applyErrorTheme(withScheme: globalErrorContainerScheme())
+            textField.applyErrorTheme(withScheme: globalErrorContainerScheme())
+        } else if let scheme {
+            multilineTextField.applyTheme(withScheme: scheme)
+            textField.applyTheme(withScheme: scheme)
+        }
+    }
 }
 
 extension TextFieldView {
@@ -261,6 +331,7 @@ extension TextFieldView {
     @objc func textFieldDidChange() {
         showAccessoryView();
         refreshUndoRedoButtons()
+        updateHelperText()
     }
 
     func showAccessoryView() {
@@ -323,6 +394,7 @@ extension TextFieldView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         showAccessoryView();
         refreshUndoRedoButtons()
+        updateHelperText()
     }
 
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
