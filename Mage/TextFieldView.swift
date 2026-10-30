@@ -370,6 +370,7 @@ extension TextFieldView {
         }
         sessionStartValue = value as? String
         refreshUndoRedoButtons()
+        updateHelperText()
     }
 
     @objc func redoPressed() {
@@ -378,6 +379,7 @@ extension TextFieldView {
         }
         sessionStartValue = value as? String
         refreshUndoRedoButtons()
+        updateHelperText()
     }
 }
 
