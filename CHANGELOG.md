@@ -3,11 +3,14 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## Pending on develop
+
 ## 4.4.0
 
 ##### Features
 * ClamAV attachment scanning with approval/denial UI and placeholder states for in-progress and failed scans
 * Attachment carousel with attachment count
+* Text fields and text areas validate minimum and maximum character counts
 
 ##### Refactoring
 * Core Data models moved into a Persistence package
@@ -15,8 +18,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * SettingsFetch package
 * UserFetch package
 * Location, Form icon, Layer, and Event fetch operations migrated to modular Swift package pipeline architecture
+* Adopted UIScene lifecycle
 
 ##### Bug Fixes
+* Fixed observation sync errors showing raw JSON and long messages getting cut off
+* Fixed GeoPackage imports from Files and iCloud
 
 ## 4.3.0
 
