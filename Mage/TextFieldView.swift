@@ -236,9 +236,16 @@ class TextFieldView : BaseFieldView {
     
     func getCount() -> Int {
         if (self.multiline) {
-            return (multilineTextField.textView.text ?? "").count;
+            return (multilineTextField.textView.text ?? "")
+                .trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                ).count
         } else {
-            return (textField.text ?? "").count;
+            return (textField.text ?? "")
+                .trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+                .count;
         }
     }
 
