@@ -250,11 +250,15 @@ class TextFieldView : BaseFieldView {
     }
 
     override func getErrorMessage() -> String {
+        if ((field[FieldKey.required.key] as? Bool) == true && isEmpty()) {
+            return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required"
+        }
+        
         if let helperText = getCountText() {
             return helperText
         }
-
-        return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
+        
+        return "";
     }
     
     override func isValid(enforceRequired: Bool = false) -> Bool {
@@ -263,6 +267,10 @@ class TextFieldView : BaseFieldView {
     
     func isCharacterCountValid() -> Bool {
         let count = getCount()
+        
+        guard count > 0 else {
+            return true
+        }
         
         if let min, count < min.intValue {
             return false
@@ -279,12 +287,12 @@ class TextFieldView : BaseFieldView {
         super.setValid(valid);
         if (valid) {
             if (multiline) {
-                multilineTextField.leadingAssistiveLabel.text = " ";
+                multilineTextField.leadingAssistiveLabel.text = getCountText() ?? helperText ?? " ";
                 if let scheme = scheme {
                     multilineTextField.applyTheme(withScheme: scheme);
                 }
             } else {
-                textField.leadingAssistiveLabel.text = " ";
+                textField.leadingAssistiveLabel.text = getCountText() ?? helperText ?? " ";
                 if let scheme = scheme {
                     textField.applyTheme(withScheme: scheme);
                 }
@@ -301,20 +309,23 @@ class TextFieldView : BaseFieldView {
     }
     
     func getCountText() -> String? {
-        if let min, let max {
-            return "\(getCount()) characters (minimum \(min), maximum \(max))";
-        } else if let min {
-            return  "\(getCount()) characters (minimum \(min))";
-        } else if let max {
-            return "\(getCount()) characters (maximum \(max))"
+        let count = getCount()
+        if count > 0 {
+            if let min, let max {
+                return "\(count) characters (minimum \(min), maximum \(max))";
+            } else if let min {
+                return  "\(count) characters (minimum \(min))";
+            } else if let max {
+                return "\(count) characters (maximum \(max))"
+            }
         }
         return nil
     }
     
     func updateHelperText() {
         let helper: String? = getCountText()
-        multilineTextField.leadingAssistiveLabel.text = helper ?? " ";
-        textField.leadingAssistiveLabel.text = helper ?? " ";
+        multilineTextField.leadingAssistiveLabel.text = helper ?? helperText ?? " ";
+        textField.leadingAssistiveLabel.text = helper ?? helperText ?? " ";
         
         if !isCharacterCountValid() {
             multilineTextField.applyErrorTheme(withScheme: globalErrorContainerScheme())
