@@ -330,6 +330,14 @@ class TextFieldView : BaseFieldView {
         if !isCharacterCountValid() {
             multilineTextField.applyErrorTheme(withScheme: globalErrorContainerScheme())
             textField.applyErrorTheme(withScheme: globalErrorContainerScheme())
+        } else if ((field[FieldKey.required.key] as? Bool) == true && isEmpty()) {
+            if (multiline) {
+                multilineTextField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+                multilineTextField.leadingAssistiveLabel.text = getErrorMessage();
+            } else {
+                textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+                textField.leadingAssistiveLabel.text = getErrorMessage();
+            }
         } else if let scheme {
             multilineTextField.applyTheme(withScheme: scheme)
             textField.applyTheme(withScheme: scheme)
