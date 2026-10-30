@@ -52,13 +52,27 @@ static const NSInteger LEGAL_SECTION = 8;
             NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
             [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
             [recentRequest setIncludesSubentities:NO];
-            NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
-            [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
-            
+
             NSError *error = nil;
-            self.recentEvents = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:recentRequest error:&error];
+            NSArray *events = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:recentRequest error:&error];
             if (error != nil) {
                 self.recentEvents = [[NSArray alloc] init];
+            } else {
+                // merge the fetched events with the user's recentEventIds, which are ordered most recent first
+                NSMutableDictionary *eventsById = [[NSMutableDictionary alloc] init];
+                for (Event *event in events) {
+                    if (event.remoteId != nil) {
+                        eventsById[event.remoteId] = event;
+                    }
+                }
+                NSMutableArray *orderedEvents = [[NSMutableArray alloc] init];
+                for (NSNumber *eventId in recentEventIds) {
+                    Event *event = eventsById[eventId];
+                    if (event != nil) {
+                        [orderedEvents addObject:event];
+                    }
+                }
+                self.recentEvents = orderedEvents;
             }
         } else {
             self.recentEvents = [[NSArray alloc] init];

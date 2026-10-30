@@ -13,6 +13,7 @@ class EventTableDataSource: NSObject {
     var eventSelectionDelegate: EventSelectionDelegate?
     var otherFetchedResultsController: NSFetchedResultsController<Event>?
     var recentFetchedResultsController:NSFetchedResultsController<Event>?
+    var recentEvents: [Event] = []
     var filteredFetchedResultsController:NSFetchedResultsController<Event>?
     
     var disclosureIndicator: UICellAccessory?
@@ -107,7 +108,7 @@ class EventTableDataSource: NSObject {
         }
         recentRequest.predicate = NSPredicate(format: "(remoteId IN %@)", recentEventIds)
         recentRequest.includesSubentities = false
-        let sortBy = NSSortDescriptor(key: "recentSortOrder", ascending: true)
+        let sortBy = NSSortDescriptor(key: "remoteId", ascending: true)
         recentRequest.sortDescriptors = [sortBy]
         recentFetchedResultsController = recentFetchedResultsController ?? {
             let frc = NSFetchedResultsController(fetchRequest: recentRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
@@ -119,6 +120,12 @@ class EventTableDataSource: NSObject {
         } catch {
             NSLog("Error fetching recent events \(error)")
         }
+        // merge the fetched events with the user's recentEventIds, which are ordered most recent first
+        let eventsById = Dictionary(
+            (recentFetchedResultsController?.fetchedObjects ?? []).compactMap { event in event.remoteId.map { ($0, event) } },
+            uniquingKeysWith: { first, _ in first }
+        )
+        recentEvents = recentEventIds.compactMap { eventsById[$0] }
     }
     
     func setEventFilter(filter: String?, delegate: NSFetchedResultsControllerDelegate?) {
@@ -170,11 +177,11 @@ extension EventTableDataSource : UICollectionViewDataSource {
         if let filteredFetchedResultsController = filteredFetchedResultsController {
             event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
         } else if indexPath.section == 1 {
-            event = recentFetchedResultsController?.fetchedObjects?[indexPath.row]
+            event = recentEvents[indexPath.row]
         } else if indexPath.section == 2 {
             event = otherFetchedResultsController?.fetchedObjects?[indexPath.row]
         }
-        
+
         let cell = collectionView.dequeueConfiguredReusableCell(
             using: cellRegistration!, for: indexPath, item: EventScheme(event: event, scheme: scheme))
         return cell
@@ -204,11 +211,11 @@ extension EventTableDataSource : UICollectionViewDelegate {
         if let filteredFetchedResultsController = filteredFetchedResultsController {
             event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
         } else if indexPath.section == 1 {
-            event = recentFetchedResultsController?.fetchedObjects?[indexPath.row]
+            event = recentEvents[indexPath.row]
         } else if indexPath.section == 2 {
             event = otherFetchedResultsController?.fetchedObjects?[indexPath.row]
         }
-        
+
         if let event = event, let remoteId = event.remoteId {
             Server.setCurrentEventId(remoteId)
             eventSelectionDelegate?.didSelectEvent(event: event)

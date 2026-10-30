@@ -19,7 +19,6 @@ public extension Event {
     
     @NSManaged var eventDescription: String?
     @NSManaged var name: String?
-    @NSManaged var recentSortOrder: NSNumber?
     @NSManaged var remoteId: NSNumber?
     @NSManaged var maxObservationForms: NSNumber?
     @NSManaged var minObservationForms: NSNumber?
