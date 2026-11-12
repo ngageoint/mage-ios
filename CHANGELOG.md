@@ -8,6 +8,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Features
 * IdP and LDAP sign in buttons show the server's custom button text when set
 
+##### Bug Fixes
+* Fixed observation line and polygon styles set per type or variant in MAGE admin not being applied
+
 ## 4.4.0
 
 ##### Features
