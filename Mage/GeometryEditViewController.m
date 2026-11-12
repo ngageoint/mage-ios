@@ -266,11 +266,11 @@ static NSString *garsTitle = @"GARS";
     BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
     if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
         [self.map removeOverlay:backgroundOverlay];
-        [self.map addOverlay:darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
+        [self.map insertOverlay:darkBackgroundOverlay atIndex:0 level:MKOverlayLevelAboveRoads];
     } else {
         NSLog(@"Adding the background map");
         [self.map removeOverlay:darkBackgroundOverlay];
-        [self.map addOverlay:backgroundOverlay level:MKOverlayLevelAboveRoads];
+        [self.map insertOverlay:backgroundOverlay atIndex:0 level:MKOverlayLevelAboveRoads];
     }
 }
 
