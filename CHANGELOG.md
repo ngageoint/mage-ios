@@ -5,6 +5,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## Pending on develop
 
+##### Bug Fixes
+* Fixed observation line and polygon styles set per type or variant in MAGE admin not being applied
+
 ## 4.4.0
 
 ##### Features
