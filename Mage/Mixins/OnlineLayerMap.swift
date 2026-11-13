@@ -99,8 +99,10 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
         }
         
         // Add the layers in the proper order ot the map
-        for overlay in baseLayers {
-            onlineLayerMap.mapView?.addOverlay(overlay)
+        // Base layers go at the bottom, above only the offline base map background
+        let backgroundCount = onlineLayerMap.mapView?.overlays(in: .aboveRoads).prefix(while: { $0 is BaseMapOverlay }).count ?? 0
+        for (index, overlay) in baseLayers.enumerated() {
+            onlineLayerMap.mapView?.insertOverlay(overlay, at: backgroundCount + index, level: .aboveRoads)
         }
         for overlay in nonBaseLayers {
             onlineLayerMap.mapView?.addOverlay(overlay)
