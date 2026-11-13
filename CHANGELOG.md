@@ -5,6 +5,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## Pending on develop
 
+##### Features
+* IdP and LDAP sign in buttons show the server's custom button text when set
+
 ## 4.4.0
 
 ##### Features

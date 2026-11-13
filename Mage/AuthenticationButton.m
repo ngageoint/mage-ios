@@ -42,7 +42,12 @@
     NSDictionary *strategy = [strategy1 objectForKey:@"strategy"];
     
     NSString *title = [strategy objectForKey:@"title"];
-    self.loginButtonLabel.text = [NSString stringWithFormat:@"Sign in with %@", title];
+    NSString *buttonText = [strategy objectForKey:@"buttonText"];
+    if ([buttonText isKindOfClass:[NSString class]] && buttonText.length > 0) {
+        self.loginButtonLabel.text = buttonText;
+    } else {
+        self.loginButtonLabel.text = [NSString stringWithFormat:@"Sign in with %@", title];
+    }
     
     if ([strategy objectForKey:@"icon"] != NULL) {
         NSData *data = [[NSData alloc]initWithBase64EncodedString:[strategy valueForKey:@"icon"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
