@@ -5,6 +5,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## Pending on develop
 
+##### Bug Fixes
+* Fixed observation lines and polygons drawing under GeoPackage imagery and other map layers
+
 ## 4.4.0
 
 ##### Features
