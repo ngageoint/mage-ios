@@ -327,6 +327,7 @@
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
 		F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */; };
 		F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */; };
+		B41BEB4AFC29E98E5B745DAC /* ObservationShapeStyleParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6695EEC4357EAB02475F1CE8 /* ObservationShapeStyleParserTests.swift */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
@@ -1079,6 +1080,7 @@
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewController.swift; sourceTree = "<group>"; };
 		F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAnnotationTests.swift; sourceTree = "<group>"; };
+		6695EEC4357EAB02475F1CE8 /* ObservationShapeStyleParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationShapeStyleParserTests.swift; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
@@ -2945,6 +2947,7 @@
 				F7BEF68027D69DA1000E8CDE /* Mixins */,
 				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
 				F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */,
+				6695EEC4357EAB02475F1CE8 /* ObservationShapeStyleParserTests.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -4004,6 +4007,7 @@
 				F71EFE4C2757F824001E6134 /* DataConnectionUtilitiesTests.swift in Sources */,
 				F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */,
 				F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */,
+				B41BEB4AFC29E98E5B745DAC /* ObservationShapeStyleParserTests.swift in Sources */,
 				F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */,
 				F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */,
 				F7E5749027DA8D21009A6E0D /* CanCreateObservationTests.swift in Sources */,

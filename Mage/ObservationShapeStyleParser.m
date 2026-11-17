@@ -32,8 +32,12 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
         // Found the top level style
         NSString *type = [strongObservation primaryFieldText];
         
-        // Check for a type within the style
-        NSDictionary *typeField = [styleField objectForKey:type];
+        // Check for a type within the style.
+        // Server style JSON problem: type and variant names are keys in the same object as
+        // the style properties, so an option named "fill", "stroke", etc. collides with a
+        // property and finds a value like "#ff0000" instead of a style. Guard against it by
+        // only using entries that are dictionaries, otherwise fall back to the parent style.
+        NSDictionary *typeField = [ObservationShapeStyleParser styleIn:styleField forKey:type];
         if(typeField != nil && typeField.count > 0){
             
             // Found the type level style
@@ -44,7 +48,7 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
             NSString *variant = [strongObservation secondaryFieldText];
             if (variant != nil) {
                 // Check for a variant within the style type
-                NSDictionary *typeVariantField = [styleField objectForKey:variant];
+                NSDictionary *typeVariantField = [ObservationShapeStyleParser styleIn:styleField forKey:variant];
                 if(typeVariantField != nil && typeVariantField.count > 0){
                     
                     // Found the variant level style
@@ -73,6 +77,14 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
     }
     
     return style;
+}
+
++(NSDictionary *) styleIn: (NSDictionary *) style forKey: (NSString *) key{
+    if (key == nil) {
+        return nil;
+    }
+    id value = [style objectForKey:key];
+    return [value isKindOfClass:[NSDictionary class]] ? value : nil;
 }
 
 @end
