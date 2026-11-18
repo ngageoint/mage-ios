@@ -220,7 +220,7 @@
             // Handle tile and feature tables
             switch([tableCacheOverlay getType]){
                 case GEOPACKAGE_TILE_TABLE:
-                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageTileTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage andLinkedToFeatures:false];
+                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageTileTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage];
                     break;
                 case GEOPACKAGE_FEATURE_TABLE:
                     [self addGeoPackageFeatureCacheOverlay:enabledCacheOverlays andCacheOverlay:(GeoPackageFeatureTableCacheOverlay *)tableCacheOverlay andGeoPackage:geoPackage];
@@ -259,9 +259,8 @@
  *  @param enabledCacheOverlays  enabled cache overlays to add to
  *  @param tileTableCacheOverlay tile table cache overlay
  *  @param geoPackage            GeoPackage
- *  @param linkedToFeatures false if a normal tile table, true if linked to a feature table
  */
--(void) addGeoPackageTileCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageTileTableCacheOverlay *) tileTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage andLinkedToFeatures: (BOOL) linkedToFeatures{
+-(void) addGeoPackageTileCacheOverlay: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (GeoPackageTileTableCacheOverlay *) tileTableCacheOverlay andGeoPackage: (GPKGGeoPackage *) geoPackage{
     
     // Retrieve the cache overlay if it already exists (and remove from cache overlays)
     NSString * cacheName = [tileTableCacheOverlay getCacheName];
@@ -312,7 +311,7 @@
         
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         if (self.mapView != nil) {
-                            [self.mapView addOverlay:geoPackageTileOverlay level:(linkedToFeatures ? MKOverlayLevelAboveLabels: MKOverlayLevelAboveRoads)];
+                            [self.mapView addOverlay:geoPackageTileOverlay level:MKOverlayLevelAboveRoads];
                         }
                     });
         
@@ -366,13 +365,13 @@
                 for(GeoPackageTileTableCacheOverlay * linkedTileTable in linkedTileTables){
                     if(cacheOverlay != nil){
                         // Add the existing linked tile cache overlays
-                        [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+                        [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage];
                     }
                     [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
                 }
             } else if ([featureTableCacheOverlay tileOverlay] != nil) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [self.mapView addOverlay:[featureTableCacheOverlay tileOverlay] level:MKOverlayLevelAboveLabels];
+                    [self.mapView addOverlay:[featureTableCacheOverlay tileOverlay] level:MKOverlayLevelAboveRoads];
                 });
             }
         }
@@ -414,7 +413,7 @@
                 [featureOverlay setMaxZoom:[NSNumber numberWithInt:21]];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [self.mapView addOverlay:featureOverlay level:MKOverlayLevelAboveLabels];
+                    [self.mapView addOverlay:featureOverlay level:MKOverlayLevelAboveRoads];
                 });
                 cacheOverlay = featureTableCacheOverlay;
             }
@@ -475,7 +474,7 @@
 
             // Add linked tile tables
             for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
-                [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+                [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage];
             }
 
             cacheOverlay = featureTableCacheOverlay;

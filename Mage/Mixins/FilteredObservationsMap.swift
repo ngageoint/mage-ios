@@ -241,7 +241,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolyline.observation = observation
                     lineObservationsByObjectID[objectID] = styledPolyline
                     registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
-                    filteredObservationsMap?.mapView?.addOverlay(styledPolyline)
+                    filteredObservationsMap?.mapView?.addOverlay(styledPolyline, level: .aboveLabels)
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
                     styledPolygon.lineColor = style?.strokeColor ?? .black
@@ -251,7 +251,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolygon.observationRemoteId = observation.remoteId
                     polygonObservationsByObjectID[objectID] = styledPolygon
                     registerRemoteAlias(objectID: objectID, remoteId: observation.remoteId)
-                    filteredObservationsMap?.mapView?.addOverlay(styledPolygon)
+                    filteredObservationsMap?.mapView?.addOverlay(styledPolygon, level: .aboveLabels)
                 }
             }
         }

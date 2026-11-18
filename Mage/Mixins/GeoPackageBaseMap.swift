@@ -52,9 +52,9 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
             let overrideStyle = mapView?.window?.overrideUserInterfaceStyle ?? UITraitCollection.current.userInterfaceStyle
             let style = overrideStyle == .unspecified ? UITraitCollection.current.userInterfaceStyle : overrideStyle
             if style == .dark {
-                mapView?.addOverlay(darkBackgroundOverlay, level: .aboveRoads)
+                mapView?.insertOverlay(darkBackgroundOverlay, at: 0, level: .aboveRoads)
             } else {
-                mapView?.addOverlay(backgroundOverlay, level: .aboveRoads)
+                mapView?.insertOverlay(backgroundOverlay, at: 0, level: .aboveRoads)
             }
         } else {
             mapView?.mapType = MKMapType(rawValue: UInt(UserDefaults.standard.mapType)) ?? .standard
