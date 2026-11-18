@@ -5,7 +5,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## Pending on develop
 
+##### Features
+* IdP and LDAP sign in buttons show the server's custom button text when set
+
 ##### Bug Fixes
+* Fixed observation line and polygon styles set per type or variant in MAGE admin not being applied
 * Fixed observation lines and polygons drawing under GeoPackage imagery and other map layers
 
 ## 4.4.0

@@ -51,4 +51,24 @@ public extension StyleDTO {
         }
         fieldStyles = tempExtraData
     }
+
+    // Synthesized encoding only covers CodingKeys, which would drop the nested
+    // per-type/variant styles in fieldStyles. Write them back out as sibling keys
+    // so the stored form JSON matches the server's style shape.
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(strokeWidth, forKey: .strokeWidth)
+        try container.encodeIfPresent(strokeOpacity, forKey: .strokeOpacity)
+        try container.encodeIfPresent(stroke, forKey: .stroke)
+        try container.encodeIfPresent(fillOpacity, forKey: .fillOpacity)
+        try container.encodeIfPresent(fill, forKey: .fill)
+
+        var fieldContainer = encoder.container(keyedBy: DynamicCodingKey.self)
+        for (name, style) in fieldStyles ?? [:] {
+            // Never let a nested style overwrite a built-in style property
+            guard CodingKeys(stringValue: name) == nil,
+                  let fieldKey = DynamicCodingKey(stringValue: name) else { continue }
+            try fieldContainer.encode(style, forKey: fieldKey)
+        }
+    }
 }
